@@ -1,3 +1,4 @@
+import 'package:app/app/utils/helper/echo.dart';
 import 'package:get_storage/get_storage.dart';
 
 class YemenyPrefs {
@@ -14,6 +15,7 @@ class YemenyPrefs {
 
   /// **********    FirstTimeVisit     ****************/
   setFirstTimeVisit(bool? firstTimeVisit) {
+    Echo('setFirstTimeVisit $firstTimeVisit');
     box.write('firstTimeVisit', firstTimeVisit);
   }
 
