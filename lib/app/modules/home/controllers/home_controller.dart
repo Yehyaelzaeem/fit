@@ -10,9 +10,9 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    slider.add(
-        'https://cdn.shortpixel.ai/spai/q_lossless+ret_img/https://planetpaleo.co/wp-content/uploads/2020/11/PALEO-DIET-SLIDER.png');
-    slider.add('https://webhostingbuddy.com/wp-content/uploads/2016/12/fastest-web-hosting.jpg');
+    slider.add('assets/img/ic_slider_1.png');
+    slider.add('assets/img/ic_slider_2.png');
+    slider.add('assets/img/ic_slider_3.png');
 
     servicesList.add(SingleSevice(name: 'service 1', icon: Icons.mediation));
     servicesList.add(SingleSevice(name: 'service 2', icon: Icons.medical_services));

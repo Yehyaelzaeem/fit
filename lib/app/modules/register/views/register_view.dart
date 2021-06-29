@@ -32,6 +32,8 @@ class RegisterView extends GetView<RegisterController> {
                     ),
                     Container(
                         width: double.infinity, child: kTextHeader(Strings().register, size: 24, align: TextAlign.start)),
+                   SizedBox(height: 12),
+                    EditText(value: '', hint: 'ID', type: TextInputType.number),
                     SizedBox(height: 12),
                     EditText(value: '', hint: Strings().name, type: TextInputType.name),
                     SizedBox(height: 12),

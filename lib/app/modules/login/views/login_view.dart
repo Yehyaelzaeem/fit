@@ -31,7 +31,7 @@ class LoginView extends GetView<LoginController> {
                 ),
                 Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
                 SizedBox(height: 12),
-                EditText(value: '', hint: Strings().phone, type: TextInputType.phone),
+                EditText(value: '', hint: 'ID', type: TextInputType.number),
                 SizedBox(height: 8),
                 EditTextPassword(value: '', hint: Strings().password),
                 SizedBox(height: 4),

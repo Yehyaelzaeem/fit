@@ -22,12 +22,11 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: controller.currentIndex.value,
-      fixedColor: Colors.white,
-      backgroundColor: kColorPrimary,
-      unselectedItemColor: Colors.white70,
+      fixedColor: kColorPrimary,
+      backgroundColor: Colors.white,
+      unselectedItemColor: Colors.grey,
       onTap: controller.updateCurrentIndex,
       items: [
-        
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: Strings().home,
@@ -39,7 +38,6 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: Strings().sessions,
-
         ),
       ],
     );

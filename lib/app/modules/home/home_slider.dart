@@ -32,16 +32,20 @@ class _HomeSliderState extends State<HomeSlider> {
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: CachedNetworkImage(
-                        imageUrl: singleSlider,
-                        errorWidget: (vtx, url, obj) {
-                          return Container();
-                        },
-                        placeholder: (ctx, url) {
-                          return CircularLoadingWidget();
-                        },
+                      child: Image.asset(
+                        singleSlider,
                         fit: BoxFit.fill,
                       ),
+                      // child: CachedNetworkImage(
+                      //   imageUrl: singleSlider,
+                      //   errorWidget: (vtx, url, obj) {
+                      //     return Container();
+                      //   },
+                      //   placeholder: (ctx, url) {
+                      //     return CircularLoadingWidget();
+                      //   },
+                      //   fit: BoxFit.fill,
+                      // ),
                     ),
                   ),
                 ],
