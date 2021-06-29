@@ -1,12 +1,26 @@
 import 'package:get/get.dart';
 
 class NotificationsController extends GetxController {
-  //TODO: Implement NotificationsController
-
-  final count = 0.obs;
+  RxList<NotificationModel> list = RxList();
   @override
   void onInit() {
     super.onInit();
+    list.add(NotificationModel(
+        'Lorem inpsum',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text',
+        '2021-01-01 03:49'));
+    list.add(NotificationModel(
+        'Lorem inpsum',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text',
+        '2021-01-01 03:49'));
+    list.add(NotificationModel(
+        'Lorem inpsum',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text',
+        '2021-01-01 03:49'));
+    list.add(NotificationModel(
+        'Lorem inpsum',
+        'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text',
+        '2021-01-01 03:49'));
   }
 
   @override
@@ -16,5 +30,11 @@ class NotificationsController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+}
+
+class NotificationModel {
+  String title;
+  String desc;
+  String date;
+  NotificationModel(this.title, this.desc, this.date);
 }

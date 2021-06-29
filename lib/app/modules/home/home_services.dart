@@ -1,3 +1,4 @@
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
@@ -52,7 +53,7 @@ class HomeServices extends GetView<HomeController> {
                             child: Icon(
                               controller.servicesList[i].icon,
                               color: kColorPrimary,
-                              size: 24,
+                              size: 32,
                             ),
                           ),
                           kTextbody(
@@ -85,7 +86,9 @@ class HomeServices extends GetView<HomeController> {
               color: kColorPrimary,
               paddingH: 8,
               paddingV: 0,
-              func: () {},
+              func: () {
+                Get.toNamed(Routes.ORIENTATION_REGISTER);
+              },
             )
           ],
         ),

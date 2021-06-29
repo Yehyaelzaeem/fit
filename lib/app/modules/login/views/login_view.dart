@@ -40,9 +40,15 @@ class LoginView extends GetView<LoginController> {
                     Get.toNamed(Routes.FORGET_PASSWORD);
                   },
                   child: Container(
-                      width: double.infinity,
-                      child:
-                          kTextfooter(Strings().forgetPassword, size: 12, align: TextAlign.end, paddingH: 8, paddingV: 2)),
+                    width: double.infinity,
+                    child: kTextfooter(
+                      '${Strings().forgetPassword}?',
+                      size: 12,
+                      align: TextAlign.end,
+                      paddingH: 8,
+                      paddingV: 2,
+                    ),
+                  ),
                 ),
                 kButtonDefault(
                   Strings().login,
@@ -51,20 +57,38 @@ class LoginView extends GetView<LoginController> {
                     Get.offAllNamed(Routes.HOME);
                   },
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     kTextfooter(Strings().doNotHaveAnAccount),
                     GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.REGISTER);
-                        },
-                        child: kTextfooter(Strings().register,
-                            size: 14, bold: true, color: kColorPrimary, paddingH: 4, paddingV: 4)),
+                      onTap: () {
+                        Get.toNamed(Routes.REGISTER);
+                      },
+                      child: kTextfooter(
+                        Strings().register,
+                        size: 14,
+                        bold: true,
+                        color: kColorPrimary,
+                        paddingH: 4,
+                        paddingV: 4,
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.HOME);
+                  },
+                  child: kTextfooter(
+                    Strings().skip,
+                    size: 12,
+                    paddingH: 4,
+                    paddingV: 4,
+                  ),
+                ),
               ],
             ),
           ),

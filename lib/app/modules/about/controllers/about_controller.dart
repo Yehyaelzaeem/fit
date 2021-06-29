@@ -1,12 +1,18 @@
+import 'package:app/app/utils/translations/strings.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AboutController extends GetxController {
-  //TODO: Implement AboutController
+  // final response = new AboutResponse().obs;
+  final error = ''.obs;
+  var storage = GetStorage();
 
-  final count = 0.obs;
+  String about = '<h1> Title </h1><p>${Strings().longText}</p>';
   @override
   void onInit() {
     super.onInit();
+
+    // getNetworkData();
   }
 
   @override
@@ -16,5 +22,14 @@ class AboutController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
+  getNetworkData() async {
+    // error.value = '';
+    // try {
+    //   response.value = await networkAbout();
+    // } catch (e) {
+    //   Echo('error response $e');
+    //   error.value = '$e';
+    // }
+  }
 }

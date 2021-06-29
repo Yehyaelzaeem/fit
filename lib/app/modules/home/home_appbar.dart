@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,11 +34,13 @@ class HomeAppbar extends GetView<HomeController> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(Routes.NOTIFICATIONS);
+              },
               child: Container(
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
-                  Icons.notifications,
+                  Icons.chat,
                   color: Colors.black87,
                 ),
               ),

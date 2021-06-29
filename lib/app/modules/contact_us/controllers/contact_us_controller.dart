@@ -1,10 +1,17 @@
 import 'package:get/get.dart';
 
 class ContactUsController extends GetxController {
-  //TODO: Implement ContactUsController
 
-  final count = 0.obs;
-  @override
+
+  final contactEmail = ''.obs;
+  final contactFirstName = ''.obs;
+  final contactLastName = ''.obs;
+  final contactPhone = ''.obs;
+  final contactMessage = ''.obs;
+
+  final contactLoading = false.obs;
+
+    @override
   void onInit() {
     super.onInit();
   }
@@ -16,5 +23,4 @@ class ContactUsController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
 }

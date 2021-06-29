@@ -18,6 +18,7 @@ abstract class Routes {
   static const NOTIFICATIONS = _Paths.NOTIFICATIONS;
   static const SHOW_PAGES = _Paths.SHOW_PAGES;
   static const INTRODUCTION_SCREEN = _Paths.INTRODUCTION_SCREEN;
+  static const ORIENTATION_REGISTER = _Paths.ORIENTATION_REGISTER;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const NOTIFICATIONS = '/notifications';
   static const SHOW_PAGES = '/show-pages';
   static const INTRODUCTION_SCREEN = '/introduction-screen';
+  static const ORIENTATION_REGISTER = '/orientation-register';
 }

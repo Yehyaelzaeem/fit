@@ -25,24 +25,24 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
         elevation: 0,
         centerTitle: false,
         toolbarHeight: 30,
-        title: Obx(() => GestureDetector(
-            onTap: () {
-              controller.changeLang();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
-                controller.lang.value,
-                style: TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-            ))),
+        // title: Obx(() => GestureDetector(
+        //     onTap: () {
+        //       controller.changeLang();
+        //     },
+        //     child: Padding(
+        //       padding: const EdgeInsets.all(4.0),
+        //       child: Text(
+        //         controller.lang.value,
+        //         style: TextStyle(fontSize: 12, color: Colors.grey),
+        //       ),
+        //     ))),
       ),
       body: Obx(
         () => Container(
           width: double.infinity,
           padding: const EdgeInsets.only(top: 16),
           child: IntroductionScreen(
-            rtl: controller.lang.value.contains('Englis') ? false : true,
+            rtl: controller.lang.value.contains('عربي') ?  true: false,
             pages: [
               ...controller.walkThroughList.map((singleItem) {
                 return PageViewModel(

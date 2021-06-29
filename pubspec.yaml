@@ -13,6 +13,7 @@ dependencies:
   introduction_screen: ^2.1.0
   animated_text_kit: ^4.2.1
   carousel_slider: ^4.0.0
+  flutter_widget_from_html: ^0.6.1
 
   flutter:
     sdk: flutter
@@ -26,7 +27,7 @@ dev_dependencies:
 flutter_icons:
   android: "ic_launcher"
   ios: true
-  image_path: "assets/img/logo.png"
+  image_path: "assets/img/ic_logo.png"
 ##flutter pub run flutter_launcher_icons:main
 flutter:
   uses-material-design: true

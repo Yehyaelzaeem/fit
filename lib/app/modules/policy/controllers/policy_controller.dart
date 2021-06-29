@@ -1,12 +1,18 @@
+import 'package:app/app/utils/translations/strings.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class PolicyController extends GetxController {
-  //TODO: Implement PolicyController
+  // final response = new PolicyResponse().obs;
+  final error = ''.obs;
+  var storage = GetStorage();
 
-  final count = 0.obs;
+  String policy = '<h1> Title </h1><p>${Strings().longText}</p>';
   @override
   void onInit() {
     super.onInit();
+
+    // getNetworkData();
   }
 
   @override
@@ -16,5 +22,14 @@ class PolicyController extends GetxController {
 
   @override
   void onClose() {}
-  void increment() => count.value++;
+
+  getNetworkData() async {
+    // error.value = '';
+    // try {
+    //   response.value = await networkPolicy();
+    // } catch (e) {
+    //   Echo('error response $e');
+    //   error.value = '$e';
+    // }
+  }
 }

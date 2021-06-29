@@ -17,11 +17,11 @@ class HomeController extends GetxController {
     servicesList.add(SingleSevice(name: 'service 1', icon: Icons.mediation));
     servicesList.add(SingleSevice(name: 'service 2', icon: Icons.medical_services));
     servicesList.add(SingleSevice(name: 'service 3', icon: Icons.workspaces_outline));
-    servicesList.add(SingleSevice(name: 'service 4', icon: Icons.work));
-    servicesList.add(SingleSevice(name: 'service 1', icon: Icons.mediation));
-    servicesList.add(SingleSevice(name: 'service 2', icon: Icons.medical_services));
-    servicesList.add(SingleSevice(name: 'service 3', icon: Icons.workspaces_outline));
-    servicesList.add(SingleSevice(name: 'service 4', icon: Icons.work));
+    servicesList.add(SingleSevice(name: 'service 4', icon: Icons.mediation));
+    servicesList.add(SingleSevice(name: 'service 5', icon: Icons.medical_services));
+    servicesList.add(SingleSevice(name: 'service 6', icon: Icons.workspaces_outline));
+    servicesList.add(SingleSevice(name: 'service 7', icon: Icons.mediation));
+    servicesList.add(SingleSevice(name: 'service 8', icon: Icons.medical_services));
   }
 
   @override

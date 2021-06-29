@@ -20,8 +20,8 @@ class Strings {
   String passwordHint = 'passwordHint'.tr;
   String passwordError = 'passwordError'.tr;
   String phoneIsTooShort = 'phoneIsTooShort'.tr;
-  String firstName = 'firsName'.tr;
-  String lastName = 'lastName'.tr;
+  String firstName = 'First Name';
+  String lastName = 'Last Name';
   String name = 'name'.tr;
   String nameErrorLengthTooShort = 'nameErrorLengthTooShort'.tr;
   String emailNotValid = 'emailNotValid'.tr;

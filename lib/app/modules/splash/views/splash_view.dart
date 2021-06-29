@@ -35,7 +35,7 @@ class SplashView extends GetView<SplashController> {
                             child: AnimatedTextKit(
                               totalRepeatCount: 1,
                               animatedTexts: [
-                                TyperAnimatedText('Dr/ Ramy Mansour', speed: Duration(milliseconds: 60)),
+                                TyperAnimatedText('Dr/ Ramy Mansour', speed: Duration(milliseconds: 90)),
                               ],
                               onFinished: () {
                                 controller.navigateNextPage();

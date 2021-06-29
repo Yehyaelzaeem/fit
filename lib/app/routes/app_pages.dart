@@ -16,6 +16,8 @@ import 'package:app/app/modules/login/bindings/login_binding.dart';
 import 'package:app/app/modules/login/views/login_view.dart';
 import 'package:app/app/modules/notifications/bindings/notifications_binding.dart';
 import 'package:app/app/modules/notifications/views/notifications_view.dart';
+import 'package:app/app/modules/orientation_register/bindings/orientation_register_binding.dart';
+import 'package:app/app/modules/orientation_register/views/orientation_register_view.dart';
 import 'package:app/app/modules/otp/bindings/otp_binding.dart';
 import 'package:app/app/modules/otp/views/otp_view.dart';
 import 'package:app/app/modules/policy/bindings/policy_binding.dart';
@@ -107,6 +109,11 @@ class AppPages {
       name: _Paths.INTRODUCTION_SCREEN,
       page: () => IntroductionScreenView(),
       binding: IntroductionScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORIENTATION_REGISTER,
+      page: () => OrientationRegisterView(),
+      binding: OrientationRegisterBinding(),
     ),
   ];
 }

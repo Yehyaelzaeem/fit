@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.company.name">
    <application
-        android:label="name"
+        android:label="FIT over FAT"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

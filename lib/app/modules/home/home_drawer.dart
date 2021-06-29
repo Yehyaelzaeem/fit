@@ -1,7 +1,9 @@
 import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +19,7 @@ class HomeDrawer extends GetView<HomeController> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            if (prefs.getUserId() != null)
+            // if (prefs.getUserId() != null)
               Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -40,10 +42,45 @@ class HomeDrawer extends GetView<HomeController> {
                                   },
                                 )
                               : profileImageHolder()),
-                      if (prefs.getName() != null && prefs.getName()!.isNotEmpty) Text(prefs.getName()!)
+                      // if (prefs.getName() != null && prefs.getName()!.isNotEmpty) 
+                      // Text(prefs.getName()!)
+                      kTextHeader('John Doe'),
+                      kTextfooter('ID:1682947'),
+
                     ],
                   )),
 
+          
+            //Profile
+            singleDrawerItem(
+                title: Strings().profile,
+                icon: Icons.person,
+                action: () {
+                  // Get.toNamed(Routes.PROFILE);
+                }),
+          
+            //Messages
+            singleDrawerItem(
+                title: 'Messages', //todo transulate
+                icon: Icons.chat,
+                action: () {
+                  Get.toNamed(Routes.NOTIFICATIONS);
+                }),
+            //Messages
+            singleDrawerItem(
+                title: 'FAQ', //todo transulate
+                icon: Icons.question_answer,
+                action: () {
+                  // Get.toNamed(Routes.PROFILE);
+                }),
+          
+            //Transformation
+            singleDrawerItem(
+                title: 'Transformation', //todo transulate
+                icon: Icons.photo_library,
+                action: () {
+                  // Get.toNamed(Routes.PROFILE);
+                }),
           
             //Contact
             singleDrawerItem(
@@ -59,21 +96,29 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.ABOUT);
                 }),
-           
-            //Change_language
+              //Setting
             singleDrawerItem(
-                title: Strings().changeLanguage,
-                icon: Icons.language,
+                title: 'Settings',
+                icon: Icons.settings,
                 action: () {
-                  String? lang = prefs.getLanguage();
-                  if (lang == null || lang.contains('ar')) {
-                    prefs.setLanguage('en');
-                    Get.updateLocale(Locale('en'));
-                  } else {
-                    prefs.setLanguage('ar');
-                    Get.updateLocale(Locale('ar'));
-                  }
+                  // Get.toNamed(Routes.ABOUT);
                 }),
+           
+            // //Change_language
+            // singleDrawerItem(
+            //     title: Strings().changeLanguage,
+            //     icon: Icons.language,
+            //     action: () {
+            //       String? lang = prefs.getLanguage();
+            //       if (lang == null || lang.contains('ar')) {
+            //         prefs.setLanguage('en');
+            //         Get.updateLocale(Locale('en'));
+            //       } else {
+            //         prefs.setLanguage('ar');
+            //         Get.updateLocale(Locale('ar'));
+            //       }
+            //     }),
+            
             //LogOut
             singleDrawerItem(
                 title: Strings().logout,
@@ -131,8 +176,8 @@ class HomeDrawer extends GetView<HomeController> {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text(title),
-            leading: Icon(icon),
+            title: Text(title,style: TextStyle(color: Colors.black87),),
+            leading: Icon(icon,color: title.contains('Logout')?Colors.red:kColorPrimary,),
           ),
           Divider(),
         ],
