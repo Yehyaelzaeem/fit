@@ -14,7 +14,8 @@ dependencies:
   animated_text_kit: ^4.2.1
   carousel_slider: ^4.0.0
   flutter_widget_from_html: ^0.6.1
-
+  flutter_svg: ^0.22.0
+  google_fonts: ^2.1.0
   flutter:
     sdk: flutter
 
@@ -28,6 +29,7 @@ flutter_icons:
   android: "ic_launcher"
   ios: true
   image_path: "assets/img/ic_logo.png"
+
 ##flutter pub run flutter_launcher_icons:main
 flutter:
   uses-material-design: true

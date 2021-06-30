@@ -13,8 +13,9 @@ class HomeMenu extends GetView<HomeController> {
     return Obx(
       () => Container(
         width: double.infinity,
-        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        decoration: BoxDecoration(color: kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
+        margin: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(color: kColorAccent, borderRadius:
+         BorderRadius.circular(64), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.4),
             blurRadius: 2,

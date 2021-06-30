@@ -7,6 +7,7 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'controllers/home_controller.dart';
 
@@ -17,6 +18,7 @@ class HomeServices extends GetView<HomeController> {
       () => Container(
         width: double.infinity,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -28,45 +30,83 @@ class HomeServices extends GetView<HomeController> {
                       onTap: () {
                         controller.selectedService.value = i;
                       },
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                            margin: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
-                                width: controller.selectedService.value == i ? 1 : 0.4,
+                      child: Container(
+                        height: 130,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                              margin: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
+                                  width: controller.selectedService.value == i ? 1 : 0.4,
+                                ),
+                                boxShadow: [
+                                  if (controller.selectedService.value == i)
+                                    BoxShadow(
+                                      color: kColorPrimary,
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                      offset: Offset(0, 0),
+                                    ),
+                                ],
                               ),
-                              boxShadow: [
-                                if (controller.selectedService.value == i)
-                                  BoxShadow(
-                                    color: kColorPrimary,
-                                    blurRadius: 1,
-                                    spreadRadius: 1,
-                                    offset: Offset(0, 0),
-                                  ),
-                              ],
+                              child: Image.asset(
+                                controller.servicesList[i].image,
+                                color: kColorPrimary,
+                                width: 50,
+                                height: 40,
+                              ),
                             ),
-                            child: Icon(
-                              controller.servicesList[i].icon,
-                              color: kColorPrimary,
-                              size: 32,
+                            Expanded(
+                              child: kTextbody(
+                                controller.servicesList[i].name,
+                                color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
+                                bold: controller.selectedService.value == i,
+                                maxLines: 2,
+                              ),
                             ),
-                          ),
-                          kTextbody(
-                            controller.servicesList[i].name,
-                            color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
-                            bold: controller.selectedService.value == i,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                 ],
               ),
             ),
+
+            // Group: Group 783
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 12),
+              alignment: Alignment(-0.14, -1.0),
+              width: 146.0,
+              height: 30.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.horizontal(
+                  right: Radius.circular(15.0),
+                ),
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF414042).withOpacity(0.35),
+                    offset: Offset(0, 1.0),
+                    blurRadius: 6.0,
+                  ),
+                ],
+              ),
+              child: Text(
+                'Roof Workout',
+                style: GoogleFonts.cairo(
+                  fontSize: 16.0,
+                  color: const Color(0xFF7FC902),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+
             Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               padding: EdgeInsets.all(8),
@@ -75,21 +115,24 @@ class HomeServices extends GetView<HomeController> {
               child: kTextbody(Strings().longText, align: TextAlign.start),
             ),
             Image.asset(
-              kImgTestSlider,
+              kFitServices,
               width: double.infinity,
               height: Get.height / 4,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitWidth,
             ),
-            kButtonDefault(
+            kButton(
               'Prientation Registration',
               textColor: Colors.white,
               color: kColorPrimary,
               paddingH: 8,
-              paddingV: 0,
+              paddingV: 4,
+              marginV: 12,
+              marginH: Get.width / 10,
               func: () {
                 Get.toNamed(Routes.ORIENTATION_REGISTER);
               },
-            )
+            ),
+            SizedBox(height: 16),
           ],
         ),
       ),

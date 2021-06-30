@@ -19,78 +19,20 @@ class HomeAppbar extends GetView<HomeController> {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
+        margin: EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.symmetric(horizontal: 8),
         width: Get.width,
-        height: kToolbarHeight,
-        margin: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        height: 56,
         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.4),
-            blurRadius: 3,
-            spreadRadius: 3,
-            offset: Offset(3, 3),
+            blurRadius: 2,
+            spreadRadius: 2,
+            offset: Offset(0, 0),
           ),
         ]),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.NOTIFICATIONS);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.chat,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(child: SizedBox(width: 1)),
-                  Image.asset(
-                    kImgLogoIcon,
-                  ),
-                  SizedBox(width: 4),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      DefaultTextStyle(
-                        key: Key('DefaultTextStyle1'),
-                        style: const TextStyle(fontFamily: 'appFont', color: Colors.black87),
-                        child: AnimatedTextKit(
-                          repeatForever: true,
-                          animatedTexts: [
-                            ColorizeAnimatedText(
-                              'Fit over FAT',
-                              textStyle: TextStyle(fontSize: 14),
-                              colors: colorizeColors,
-                            ),
-                          ],
-                        ),
-                      ),
-                      DefaultTextStyle(
-                        key: Key('DefaultTextStyle2'),
-                        style: const TextStyle(fontFamily: 'appFont', color: Colors.black87),
-                        child: AnimatedTextKit(
-                          repeatForever: true,
-                          animatedTexts: [
-                            ColorizeAnimatedText(
-                              'Dr/ Ramy Mansour',
-                              textStyle: TextStyle(fontSize: 10),
-                              colors: colorizeColors,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(child: SizedBox(width: 1)),
-                ],
-              ),
-            ),
             GestureDetector(
               onTap: () {
                 Scaffold.of(context).openDrawer();
@@ -101,6 +43,32 @@ class HomeAppbar extends GetView<HomeController> {
                   Icons.menu,
                   color: Colors.black87,
                 ),
+              ),
+            ),
+            Expanded(
+              child: Image.asset(
+                kLogoRow,
+                height: 44,
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.NOTIFICATIONS);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.chat_bubble_outline,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                kAvatar,
+                height: 32,
+                width: 32,
               ),
             ),
           ],

@@ -1,14 +1,13 @@
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -16,84 +15,109 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SafeArea(
-        child: Scaffold(
-          body: Container(
-            color: Colors.white,
-            width: Get.width,
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  kImgLogoWhiteNoBk,
-                  width: Get.width / 2,
-                ),
-                Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
-                SizedBox(height: 12),
-                EditText(value: '', hint: 'ID', type: TextInputType.number),
-                SizedBox(height: 8),
-                EditTextPassword(value: '', hint: Strings().password),
-                SizedBox(height: 4),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.FORGET_PASSWORD);
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    child: kTextfooter(
-                      '${Strings().forgetPassword}?',
-                      size: 12,
-                      align: TextAlign.end,
-                      paddingH: 8,
-                      paddingV: 2,
+        child: SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(kLogoRow, height: 54),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 18),
+                width: double.infinity,
+                color: kColorAccent,
+                child: Center(
+                  child: Text(
+                    'Sign in',
+                    style: GoogleFonts.cairo(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
-                kButtonDefault(
-                  Strings().login,
-                  marginH: Get.width / 10,
-                  func: () {
-                    Get.offAllNamed(Routes.HOME);
-                  },
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    kTextfooter(Strings().doNotHaveAnAccount),
+                    //id
+                    kTextbody('ID', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.number,
+                    ),
+                    SizedBox(height: 12),
+
+                    //Password
+                    kTextbody('Password', size: 18),
+                    EditTextPassword(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                    ),
+
+                    //Forget password
+                    SizedBox(height: 4),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(Routes.REGISTER);
+                        Get.toNamed(Routes.FORGET_PASSWORD);
                       },
-                      child: kTextfooter(
-                        Strings().register,
-                        size: 14,
-                        bold: true,
-                        color: kColorPrimary,
-                        paddingH: 4,
-                        paddingV: 4,
+                      child: Container(
+                        width: double.infinity,
+                        child: kTextfooter(
+                          'Forget password ?',
+                          size: 12,
+                          align: TextAlign.end,
+                          paddingH: 8,
+                          paddingV: 2,
+                        ),
                       ),
                     ),
+
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: Get.width / 14),
+                          kButton('Sign in', marginH: Get.width / 5, paddingV: 0, func: () {
+                            Get.toNamed(Routes.HOME);
+                          }),
+                          SizedBox(height: 16),
+                          Row(
+                            children: [
+                              kTextbody('Remeber Me', size: 16),
+                              Checkbox(
+                                value: true,
+                                activeColor: kColorPrimary,
+                                onChanged: (value) {},
+                              )
+                            ],
+                          ),
+                          SizedBox(height: Get.width / 14),
+                          GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.REGISTER);
+                              },
+                              child: kTextHeader('Sign Up', color: kColorAccent)),
+                          SizedBox(height: Get.width / 14),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-                SizedBox(height: 8),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(Routes.HOME);
-                  },
-                  child: kTextfooter(
-                    Strings().skip,
-                    size: 12,
-                    paddingH: 4,
-                    paddingV: 4,
-                  ),
-                ),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
-    );
+    ));
   }
 }

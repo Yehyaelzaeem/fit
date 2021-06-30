@@ -1,51 +1,78 @@
-import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:flutter/material.dart';
+import 'package:app/app/modules/forget_password/controllers/forget_password_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../controllers/forget_password_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ForgetPasswordView extends GetView<ForgetPasswordController> {
   @override
   Widget build(BuildContext context) {
-      return Container(
-      child: SafeArea(
-        child: Scaffold(
-          body: Container(
-            color: Colors.white,
-            width: Get.width,
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  kImgLogoWhiteNoBk,
-                  width: Get.width / 2,
+    return Container(
+        child: SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(kLogoRow, height: 54),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 18),
+                width: double.infinity,
+                color: kColorAccent,
+                child: Center(
+                  child: Text(
+                    'Forget password',
+                    style: GoogleFonts.cairo(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                 ),
-                Container(width: double.infinity, child: kTextHeader(Strings().forgetPassword, size: 24, align: TextAlign.start)),
-                SizedBox(height: 12),
-                EditText(value: '', hint: Strings().email, type: TextInputType.emailAddress),
-                SizedBox(height: 8),
-                
-                kButtonDefault(
-                  Strings().send,
-                  marginH: Get.width / 10,
-                  func: () {
-                    Get.offAllNamed(Routes.HOME);
-                  },
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //Email
+                    kTextbody('Email', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.emailAddress,
+                    ),
+                    SizedBox(height: 12),
+
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: Get.width / 14),
+                          kButton('Send', marginH: Get.width / 5, paddingV: 0, func: () {
+                            Get.toNamed(Routes.HOME);
+                          }),
+                          SizedBox(height: Get.width / 14),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                SizedBox(height: 20),
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
-    );
+    ));
   }
 }

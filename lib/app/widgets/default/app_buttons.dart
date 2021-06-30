@@ -10,6 +10,7 @@ Widget kButton(
   double paddingH = 6,
   double marginV = 6,
   double marginH = 6,
+  double textSize = 16,
   bool bold = true,
   bool loading = false,
   var func,
@@ -37,7 +38,9 @@ Widget kButton(
                   ),
                 ),
               )
-            : Center(child: kTextHeader(message, color: textColor == null ? Colors.white : textColor, bold: bold)),
+            : Center(
+                child:
+                    kTextHeader(message, size: textSize, color: textColor == null ? Colors.white : textColor, bold: bold)),
       ),
     ),
   );

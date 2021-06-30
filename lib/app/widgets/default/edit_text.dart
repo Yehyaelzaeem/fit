@@ -13,6 +13,7 @@ class EditText extends StatelessWidget {
   final Function? updateFunc;
   final Function? validateFunc;
   final IconData? iconData;
+  final IconData? suffixIconData;
   final double fontSize;
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
@@ -23,10 +24,11 @@ class EditText extends StatelessWidget {
     required this.hint,
     this.autoValidate = false,
     this.enable = true,
-    this.label = true,
+    this.label = false,
     this.lines = 1,
     this.fontSize = 14,
     this.updateFunc,
+    this.suffixIconData,
     this.validateFunc,
     this.suffixText,
     this.formatter,
@@ -44,6 +46,7 @@ class EditText extends StatelessWidget {
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(64),
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
+    
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(64),
@@ -60,6 +63,12 @@ class EditText extends StatelessWidget {
             hintText: hint,
             counterStyle: TextStyle(color: Colors.green),
             suffixText: suffixText,
+            suffixIcon:suffixIconData == null
+                ? null
+                : Icon(
+                    suffixIconData,
+                    color: Colors.grey,
+                  ),
             suffixStyle: TextStyle(
               color: Colors.grey,
               fontSize: 12,
@@ -71,7 +80,7 @@ class EditText extends StatelessWidget {
                     iconData,
                     color: Colors.grey,
                   ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16)),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0)),
         keyboardType: type,
         validator: (text) {
           if (validateFunc != null) return validateFunc!(text);

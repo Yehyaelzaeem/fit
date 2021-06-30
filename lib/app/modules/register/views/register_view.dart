@@ -1,13 +1,13 @@
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/register_controller.dart';
 
@@ -15,32 +15,69 @@ class RegisterView extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: SafeArea(
-        child: Scaffold(
-          body: Obx(
-            () => Container(
-              color: Colors.white,
-              width: Get.width,
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      kImgLogoWhiteNoBk,
-                      width: Get.width / 2,
+        child: SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(kLogoRow, height: 54),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 18),
+                width: double.infinity,
+                color: kColorAccent,
+                child: Center(
+                  child: Text(
+                    'Sign Up',
+                    style: GoogleFonts.cairo(
+                      fontSize: 24.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
                     ),
-                    Container(
-                        width: double.infinity, child: kTextHeader(Strings().register, size: 24, align: TextAlign.start)),
-                   SizedBox(height: 12),
-                    EditText(value: '', hint: 'ID', type: TextInputType.number),
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //id
+                    kTextbody('ID', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.number,
+                    ),
                     SizedBox(height: 12),
-                    EditText(value: '', hint: Strings().name, type: TextInputType.name),
+
+                    //User name
+                    kTextbody('User name', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.text,
+                    ),
                     SizedBox(height: 12),
-                    EditText(value: '', hint: Strings().email, type: TextInputType.emailAddress),
+
+                    //Mobile Number
+                    kTextbody('Mobile Number', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.phone,
+                    ),
                     SizedBox(height: 12),
-                    EditText(value: '', hint: Strings().phone, type: TextInputType.phone),
-                    SizedBox(height: 12),
+
+                    //Birth date
+                    kTextbody('Birth date', size: 18),
                     GestureDetector(
                         onTap: () async {
                           await controller.selectDate();
@@ -51,68 +88,105 @@ class RegisterView extends GetView<RegisterController> {
                             key: Key('birthdate_${controller.birthDate.value}'),
                             child: EditText(
                               value: '${controller.birthDate.value}',
-                              hint: Strings().birthdate,
+                              suffixIconData: Icons.date_range,
+                              hint: '',
                               type: TextInputType.text,
                               enable: false,
                             ),
                           ),
                         ))),
-                    SizedBox(height: 4),
+                    SizedBox(height: 12),
+                    //Gender
+                    kTextbody('Gender', size: 18),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            controller.genderIsMale.value = true;
-                          },
-                          child: Chip(
-                            label: kTextbody(Strings().male, color: Colors.white, bold: controller.genderIsMale.value),
-                            backgroundColor: controller.genderIsMale.value ? kColorPrimary : kColorAccent,
+                        SizedBox(width: 4),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(64),
+                          ),
+                          child: Row(
+                            children: [
+                              Radio(
+                                value: '',
+                                groupValue: '1',
+                                onChanged: (value) {},
+                              ),
+                              kTextbody('Male', size: 16),
+                              SizedBox(width: 16),
+                            ],
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            controller.genderIsMale.value = false;
-                          },
-                          child: Chip(
-                            label: kTextbody(Strings().female, color: Colors.white, bold: !controller.genderIsMale.value),
-                            backgroundColor: !controller.genderIsMale.value ? kColorPrimary : kColorAccent,
+                        SizedBox(
+                          width: Get.width / 6,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1),
+                            borderRadius: BorderRadius.circular(64),
+                          ),
+                          child: Row(
+                            children: [
+                              Radio(
+                                value: '',
+                                groupValue: '1',
+                                onChanged: (value) {},
+                              ),
+                              kTextbody('Female', size: 16),
+                              SizedBox(width: 16),
+                            ],
                           ),
                         ),
                       ],
-                    ),
-                    SizedBox(height: 8),
-                    EditTextPassword(value: '', hint: Strings().password),
-                    SizedBox(height: 4),
-                    EditTextPassword(value: '', hint: Strings().confitmPassword),
-                    kButtonDefault(
-                      Strings().register,
-                      marginH: Get.width / 10,
-                      func: () {
-                        Get.offAllNamed(Routes.HOME);
-                      },
                     ),
                     SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        kTextfooter(Strings().alreadyHaveAccount),
-                        GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.LOGIN);
-                            },
-                            child: kTextfooter(Strings().login,
-                                size: 14, bold: true, color: kColorPrimary, paddingH: 4, paddingV: 4)),
-                      ],
+                    //Password
+                    kTextbody('Password', size: 18),
+                    EditTextPassword(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 12),
+
+                    //Password
+                    kTextbody('Confirm password', size: 18),
+                    EditTextPassword(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                    ),
+                    SizedBox(height: 12),
+
+                    Container(
+                      width: double.infinity,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: Get.width / 14),
+                          kButton('Sign Up', marginH: Get.width / 5, paddingV: 0, func: () {
+                            Get.toNamed(Routes.HOME);
+                          }),
+                          SizedBox(height: Get.width / 14),
+                          GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.LOGIN);
+                              },
+                              child: kTextHeader('Sign in', color: kColorAccent)),
+                          SizedBox(height: Get.width / 14),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
-    );
+    ));
   }
 }

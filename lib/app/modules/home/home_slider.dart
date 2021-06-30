@@ -21,14 +21,14 @@ class _HomeSliderState extends State<HomeSlider> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: Stack(
+      child: Column(
         children: <Widget>[
           CarouselSlider(
             items: widget.sliders.map((singleSlider) {
               return Stack(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    margin: EdgeInsets.symmetric( vertical: 4),
                     width: MediaQuery.of(context).size.width,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
@@ -52,7 +52,7 @@ class _HomeSliderState extends State<HomeSlider> {
               );
             }).toList(),
             options: CarouselOptions(
-              aspectRatio: 3,
+              aspectRatio: 360/125,
               viewportFraction: 1.0,
               autoPlayInterval: Duration(seconds: 3),
               autoPlayAnimationDuration: Duration(milliseconds: 650),
@@ -72,24 +72,20 @@ class _HomeSliderState extends State<HomeSlider> {
               },
             ),
           ),
-          Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ...widget.sliders.map((singleString) {
-                    var index = widget.sliders.indexOf(singleString);
-                    return Container(
-                        width: 8.0,
-                        height: 8.0,
-                        margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: _currentPage == index ? kColorPrimary : Colors.white));
-                  }),
-                ],
-              )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ...widget.sliders.map((singleString) {
+                var index = widget.sliders.indexOf(singleString);
+                return Container(
+                    width: 8.0,
+                    height: 8.0,
+                    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: _currentPage == index ? kColorPrimary : Colors.grey));
+              }),
+            ],
+          ),
         ],
       ),
     );
