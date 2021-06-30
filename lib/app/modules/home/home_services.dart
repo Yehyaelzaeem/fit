@@ -53,6 +53,13 @@ class HomeServices extends GetView<HomeController> {
                                       spreadRadius: 1,
                                       offset: Offset(0, 0),
                                     ),
+                                  if (controller.selectedService.value != i)
+                                    BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                      offset: Offset(0, 0),
+                                    ),
                                 ],
                               ),
                               child: Image.asset(
@@ -82,8 +89,7 @@ class HomeServices extends GetView<HomeController> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 12),
               alignment: Alignment(-0.14, -1.0),
-              width: 146.0,
-              height: 30.0,
+              width: Get.width / 2.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.horizontal(
                   right: Radius.circular(15.0),
@@ -97,12 +103,14 @@ class HomeServices extends GetView<HomeController> {
                   ),
                 ],
               ),
-              child: Text(
-                'Roof Workout',
-                style: GoogleFonts.cairo(
-                  fontSize: 16.0,
-                  color: const Color(0xFF7FC902),
-                  fontWeight: FontWeight.w600,
+              child: Center(
+                child: Text(
+                  'Roof Workout',
+                  style: GoogleFonts.cairo(
+                    fontSize: 16.0,
+                    color: const Color(0xFF7FC902),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
@@ -121,7 +129,7 @@ class HomeServices extends GetView<HomeController> {
               fit: BoxFit.fitWidth,
             ),
             kButton(
-              'Prientation Registration',
+              'Orientation Registration',
               textColor: Colors.white,
               color: kColorPrimary,
               paddingH: 8,

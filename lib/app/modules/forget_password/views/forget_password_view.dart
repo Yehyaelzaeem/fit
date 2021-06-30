@@ -25,6 +25,7 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
                 margin: EdgeInsets.symmetric(vertical: 18),
                 width: double.infinity,
                 color: kColorAccent,
+                padding: EdgeInsets.all(6),
                 child: Center(
                   child: Text(
                     'Forget password',
@@ -59,7 +60,7 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButton('Send', marginH: Get.width / 5, paddingV: 0, func: () {
+                          kButton('Send', marginH: Get.width / 5, paddingV: 6, func: () {
                             Get.toNamed(Routes.HOME);
                           }),
                           SizedBox(height: Get.width / 14),
