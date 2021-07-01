@@ -15,6 +15,7 @@ class EditText extends StatelessWidget {
   final IconData? iconData;
   final IconData? suffixIconData;
   final double fontSize;
+  final double radius;
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
 
@@ -27,6 +28,7 @@ class EditText extends StatelessWidget {
     this.label = false,
     this.lines = 1,
     this.fontSize = 14,
+    this.radius = 64,
     this.updateFunc,
     this.suffixIconData,
     this.validateFunc,
@@ -44,16 +46,16 @@ class EditText extends StatelessWidget {
         initialValue: value,
         decoration: InputDecoration(
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(64),
+              borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
     
             ),
             disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(64),
+              borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(64),
+              borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: kColorPrimary, width: 2),
             ),
             errorStyle: TextStyle(fontSize: 10),

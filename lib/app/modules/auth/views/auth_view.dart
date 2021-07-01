@@ -51,7 +51,9 @@ class AuthView extends GetView<AuthController> {
               ),
             ],
           ),
-          kTextHeader('Skip', color: kColorPrimary, size: 20)
+          GestureDetector(
+            onTap: (){Get.toNamed(Routes.HOME);},
+            child: kTextHeader('Skip', color: kColorPrimary, size: 20))
         ],
       ),
     );
