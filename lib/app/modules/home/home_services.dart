@@ -40,10 +40,10 @@ class HomeServices extends GetView<HomeController> {
                               margin: EdgeInsets.all(8),
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                borderRadius: BorderRadius.circular(25),
                                 border: Border.all(
                                   color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
-                                  width: controller.selectedService.value == i ? 1 : 0.4,
+                                  width: controller.selectedService.value == i ? 1 : 0.2,
                                 ),
                                 boxShadow: [
                                   if (controller.selectedService.value == i)
@@ -55,10 +55,10 @@ class HomeServices extends GetView<HomeController> {
                                     ),
                                   if (controller.selectedService.value != i)
                                     BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 1,
+                                      color: Colors.grey.withOpacity(0.6),
+                                      blurRadius: 2,
                                       spreadRadius: 1,
-                                      offset: Offset(0, 0),
+                                      offset: Offset(0, 2),
                                     ),
                                 ],
                               ),

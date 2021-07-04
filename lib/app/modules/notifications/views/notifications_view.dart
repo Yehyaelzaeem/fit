@@ -77,7 +77,7 @@ class NotificationsView extends GetView<NotificationsController> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(),
-                    child: kTextfooter(element.date, paddingH: 0, paddingV: 0, align: TextAlign.end),
+                    child: kTextfooter(element.date, paddingH: 0, paddingV: 0, align: TextAlign.end,color: kColorPrimary),
                   ),
                   SizedBox(height: 16),
                 ],

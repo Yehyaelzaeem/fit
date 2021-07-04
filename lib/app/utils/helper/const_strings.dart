@@ -4,6 +4,7 @@ const String kStringWhatsApp = '';
 const String kStringFacebook = '';
 const double kChildAspectRatio = 0.8;
 const double kPixelFactor = 1;
+const double kTextPixelFactor = kPixelFactor*0.9;
 
 const appName = '';
 const siteUrl = '';

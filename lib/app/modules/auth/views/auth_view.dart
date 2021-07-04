@@ -18,6 +18,7 @@ class AuthView extends GetView<AuthController> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          SizedBox(height: 30),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
             child: Image.asset(

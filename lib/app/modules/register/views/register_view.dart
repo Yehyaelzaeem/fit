@@ -1,5 +1,6 @@
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
@@ -21,17 +22,18 @@ class RegisterView extends GetView<RegisterController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(kLogoRow, height: 54),
+              SizedBox(height: 27 * kPixelFactor),
+              Image.asset(kLogoRow, height: 54 * kPixelFactor),
+              SizedBox(height: 27 * kPixelFactor),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 18),
+                height: 45 * kPixelFactor,
                 width: double.infinity,
-                padding: EdgeInsets.all(6),
                 color: kColorAccent,
                 child: Center(
                   child: Text(
                     'Sign Up',
                     style: GoogleFonts.cairo(
-                      fontSize: 24.0,
+                      fontSize: 27.0 * kTextPixelFactor,
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
                     ),
@@ -44,6 +46,7 @@ class RegisterView extends GetView<RegisterController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 18 * kPixelFactor),
                     //id
                     kTextbody('ID', size: 18),
                     EditText(
@@ -63,6 +66,17 @@ class RegisterView extends GetView<RegisterController> {
                       updateFunc: (text) {},
                       validateFunc: (text) {},
                       type: TextInputType.text,
+                    ),
+                    SizedBox(height: 12),
+
+                    //User name
+                    kTextbody('Email', size: 18),
+                    EditText(
+                      value: '',
+                      hint: '',
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 12),
 

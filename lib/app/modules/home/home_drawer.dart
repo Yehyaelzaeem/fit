@@ -16,10 +16,12 @@ class HomeDrawer extends GetView<HomeController> {
     YemenyPrefs prefs = YemenyPrefs();
 
     return Drawer(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // if (prefs.getUserId() != null)
+      child: Container(
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              // if (prefs.getUserId() != null)
               Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
@@ -42,119 +44,126 @@ class HomeDrawer extends GetView<HomeController> {
                                   },
                                 )
                               : profileImageHolder()),
-                      // if (prefs.getName() != null && prefs.getName()!.isNotEmpty) 
+                      // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
                       // Text(prefs.getName()!)
-                      kTextHeader('John Doe'),
-                      kTextfooter('ID:1682947'),
-
+                      kTextHeader('Mostafa Mohamed'),
+                      kTextfooter('ID:1682947', size: 14, color: Colors.black87, paddingV: 0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.circle, size: 13, color: kColorPrimary),
+                          kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                        ],
+                      ),
                     ],
                   )),
 
-          
-            //Profile
-            singleDrawerItem(
-                title: Strings().profile,
-                icon: Icons.person,
-                action: () {
-                  // Get.toNamed(Routes.PROFILE);
-                }),
-          
-            //Messages
-            singleDrawerItem(
-                title: 'Messages', //todo transulate
-                icon: Icons.chat,
-                action: () {
-                  Get.toNamed(Routes.NOTIFICATIONS);
-                }),
-            //Messages
-            singleDrawerItem(
-                title: 'FAQ', //todo transulate
-                icon: Icons.question_answer,
-                action: () {
-                  // Get.toNamed(Routes.PROFILE);
-                }),
-          
-            //Transformation
-            singleDrawerItem(
-                title: 'Transformation', //todo transulate
-                icon: Icons.photo_library,
-                action: () {
-                  // Get.toNamed(Routes.PROFILE);
-                }),
-          
-            //Contact
-            singleDrawerItem(
-                title: Strings().contactUs,
-                icon: Icons.contact_phone,
-                action: () {
-                  Get.toNamed(Routes.CONTACT_US);
-                }),
-            //About
-            singleDrawerItem(
-                title: Strings().about,
-                icon: Icons.info_outline,
-                action: () {
-                  Get.toNamed(Routes.ABOUT);
-                }),
+              SizedBox(height: 14),
+
+              //Profile
+              singleDrawerItem(
+                  title: Strings().profile,
+                  image: 'assets/img/ic_menu_person.png',
+                  action: () {
+                    Get.toNamed(Routes.PROFILE);
+                  }),
+
+              //Messages
+              singleDrawerItem(
+                  title: 'Messages', //todo transulate
+                  image: 'assets/img/ic_menu_messages.png',
+                  action: () {
+                    Get.toNamed(Routes.NOTIFICATIONS);
+                  }),
+              //Messages
+              singleDrawerItem(
+                  title: 'FAQ', //todo transulate
+                  image: 'assets/img/ic_menu_faq.png',
+                  action: () {
+                    // Get.toNamed(Routes.PROFILE);
+                  }),
+
+              //Transformation
+              singleDrawerItem(
+                  title: 'Transformation', //todo transulate
+                  image: 'assets/img/ic_menu_images.png',
+                  action: () {
+                    // Get.toNamed(Routes.PROFILE);
+                  }),
+
+              //Contact
+              singleDrawerItem(
+                  title: Strings().contactUs,
+                  image: 'assets/img/ic_menu_contact.png',
+                  action: () {
+                    Get.toNamed(Routes.CONTACT_US);
+                  }),
+              //About
+              singleDrawerItem(
+                  title: Strings().about,
+                  image: 'assets/img/ic_menu_information.png',
+                  action: () {
+                    Get.toNamed(Routes.ABOUT);
+                  }),
               //Setting
-            singleDrawerItem(
-                title: 'Settings',
-                icon: Icons.settings,
-                action: () {
-                  // Get.toNamed(Routes.ABOUT);
-                }),
-           
-            // //Change_language
-            // singleDrawerItem(
-            //     title: Strings().changeLanguage,
-            //     icon: Icons.language,
-            //     action: () {
-            //       String? lang = prefs.getLanguage();
-            //       if (lang == null || lang.contains('ar')) {
-            //         prefs.setLanguage('en');
-            //         Get.updateLocale(Locale('en'));
-            //       } else {
-            //         prefs.setLanguage('ar');
-            //         Get.updateLocale(Locale('ar'));
-            //       }
-            //     }),
-            
-            //LogOut
-            singleDrawerItem(
-                title: Strings().logout,
-                icon: Icons.logout,
-                action: () {
-                  Get.defaultDialog(
-                    title: Strings().notification,
-                    middleText: Strings().logoutMessageConfirm,
-                    confirm: GestureDetector(
-                      onTap: () {
-                        prefs.logout();
-                        Get.offAllNamed(Routes.SPLASH);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          Strings().confirm,
-                          style: TextStyle(color: Colors.red),
+              singleDrawerItem(
+                  title: 'Settings',
+                  image: 'assets/img/ic_menu_setting.png',
+                  action: () {
+                    // Get.toNamed(Routes.ABOUT);
+                  }),
+
+              // //Change_language
+              // singleDrawerItem(
+              //     title: Strings().changeLanguage,
+              //     icon: Icons.language,
+              //     action: () {
+              //       String? lang = prefs.getLanguage();
+              //       if (lang == null || lang.contains('ar')) {
+              //         prefs.setLanguage('en');
+              //         Get.updateLocale(Locale('en'));
+              //       } else {
+              //         prefs.setLanguage('ar');
+              //         Get.updateLocale(Locale('ar'));
+              //       }
+              //     }),
+
+              //LogOut
+              singleDrawerItem(
+                  title: Strings().logout,
+                  image: 'assets/img/ic_menu_logout.png',
+                  action: () {
+                    Get.defaultDialog(
+                      title: Strings().notification,
+                      middleText: Strings().logoutMessageConfirm,
+                      confirm: GestureDetector(
+                        onTap: () {
+                          prefs.logout();
+                          Get.offAllNamed(Routes.SPLASH);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          margin: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(
+                            Strings().confirm,
+                            style: TextStyle(color: Colors.red),
+                          ),
                         ),
                       ),
-                    ),
-                    cancel: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(Strings().dismiss),
+                      cancel: GestureDetector(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          margin: EdgeInsets.symmetric(horizontal: 12),
+                          child: Text(Strings().dismiss),
+                        ),
                       ),
-                    ),
-                  );
-                }),
-
-          ],
+                    );
+                  }),
+            ],
+          ),
         ),
       ),
     );
@@ -170,16 +179,27 @@ class HomeDrawer extends GetView<HomeController> {
     );
   }
 
-  Widget singleDrawerItem({required String title,required IconData icon, var action}) {
+  Widget singleDrawerItem({required String title, required String image, var action}) {
     return GestureDetector(
       onTap: action,
       child: Column(
         children: <Widget>[
-          ListTile(
-            title: Text(title,style: TextStyle(color: Colors.black87),),
-            leading: Icon(icon,color: title.contains('Logout')?Colors.red:kColorPrimary,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(width: 40),
+              Image.asset(
+                image,
+                width: 24,
+              ),
+              SizedBox(width: 16),
+              Text(
+                title,
+                style: TextStyle(color: Colors.black, fontSize: 18),
+              )
+            ],
           ),
-          Divider(),
+          SizedBox(height: 16),
         ],
       ),
     );
