@@ -9,6 +9,7 @@ class EditText extends StatelessWidget {
   final bool enable;
   final bool label;
   final bool autoValidate;
+  final bool noBorder;
   final int lines;
   final Function? updateFunc;
   final Function? validateFunc;
@@ -18,13 +19,16 @@ class EditText extends StatelessWidget {
   final double radius;
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
+  final Color? background;
 
   EditText({
+    this.background,
     this.iconData,
     required this.value,
     required this.hint,
     this.autoValidate = false,
     this.enable = true,
+    this.noBorder = false,
     this.label = false,
     this.lines = 1,
     this.fontSize = 14,
@@ -40,6 +44,7 @@ class EditText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: background,
       padding: EdgeInsets.all(4),
       child: TextFormField(
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
@@ -57,7 +62,7 @@ class EditText extends StatelessWidget {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: kColorPrimary, width: 2),
-            ),
+            ),enabledBorder: !noBorder?null:InputBorder.none,
             errorStyle: TextStyle(fontSize: 10),
             labelStyle: TextStyle(fontSize: fontSize,color: kColorAccent),
             hintStyle: TextStyle(fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w300),

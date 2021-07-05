@@ -68,54 +68,129 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         children: [
                           //First name
                           kTextbody('First Name', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.text,
+                          Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.name,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
                           //Middle Name
                           kTextbody('Middle Name', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.text,
+                          Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.name,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
                           //Last name
                           kTextbody('Last Name', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.text,
+                          Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.name,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
                           //First name
                           kTextbody('Mobile Number', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.phone,
+                          Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.phone,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
 
                           //Age
                           kTextbody('Age', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.number,
+                           Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.number,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
 
                           kTextbody('What is your target?', size: 18, bold: true),
@@ -131,15 +206,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Weight loss (ideal weight and ideal shape)',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Weight loss (ideal weight and ideal shape)', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Weight loss (ideal weight and ideal shape)', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Weight loss (ideal weight and ideal shape)', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -152,15 +219,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Reshaping (fat burning and muscle gaining)',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Reshaping (fat burning and muscle gaining)', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Reshaping (fat burning and muscle gaining)', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Reshaping (fat burning and muscle gaining)', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -173,15 +232,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Weight gain (ideal weight and ideal shape)',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Weight gain (ideal weight and ideal shape)', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Weight gain (ideal weight and ideal shape)', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Weight gain (ideal weight and ideal shape)', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -194,15 +245,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Increase fitness level',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Increase fitness level', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Increase fitness level', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Increase fitness level', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -215,15 +258,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Healthy lifetsyle',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Healthy lifetsyle', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Healthy lifetsyle', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Healthy lifetsyle', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -236,15 +271,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Other',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedTarget.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Other', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Other', activeColor: kColorPrimary, groupValue: controller.selectedTarget.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Other', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -256,13 +283,28 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         children: [
                           //Age
                           kTextbody('What is your country?', size: 18, bold: true),
-                          EditText(
-                            value: '',
-                            hint: '',
-                            radius: 4,
-                            updateFunc: (text) {},
-                            validateFunc: (text) {},
-                            type: TextInputType.number,
+                         Container(
+                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Row(
+                              children: [
+                                SizedBox(width: 20),
+                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                SizedBox(width: 8),
+                                Expanded(
+                                  child: EditText(
+                                    value: '',
+                                    hint: '',
+                                    radius: 4,
+                                    noBorder: true,
+                                    background: Color(0xffeeeeee),
+                                    updateFunc: (text) {},
+                                    validateFunc: (text) {},
+                                    type: TextInputType.name,
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                              ],
+                            ),
                           ),
                           SizedBox(height: 12),
                           kTextbody('Where did you hear about us?', size: 18, bold: true),
@@ -278,15 +320,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Facebook',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedSocial.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Facebook', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Facebook', activeColor: kColorPrimary, groupValue: controller.selectedSocial.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Facebook', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -299,15 +333,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Instagram',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedSocial.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Instagram', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Instagram', activeColor: kColorPrimary, groupValue: controller.selectedSocial.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Instagram', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -320,15 +346,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Family / Friends',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedSocial.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Family / Friends', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Family / Friends', activeColor: kColorPrimary, groupValue: controller.selectedSocial.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Family / Friends', bold: true, size: 14)],
                         ),
                       ),
                     ),
@@ -341,28 +359,24 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         width: double.infinity,
                         color: Color(0xffeeeeee),
                         child: Row(
-                          children: [
-                            Radio(
-                                value: 'Other',
-                                activeColor: kColorPrimary,
-                                groupValue: controller.selectedSocial.value,
-                                onChanged: (value) {}),
-                            SizedBox(width: 4),
-                            kTextbody('Other', bold: true, size: 14)
-                          ],
+                          children: [Radio(value: 'Other', activeColor: kColorPrimary, groupValue: controller.selectedSocial.value, onChanged: (value) {}), SizedBox(width: 4), kTextbody('Other', bold: true, size: 14)],
                         ),
                       ),
                     ),
                     SizedBox(height: 6),
                     SizedBox(height: 4),
 
-                    kButtonDefault(
-                      'Done',
-                      fullWidth: true,
-                      paddingV: 0,
-                      marginH: Get.width / 10,
-                      func: () {},
+                    Center(
+                      child: kButtonDefault(
+                        'Done',
+                        paddingV: 0,
+                        paddingH: 40,
+                        marginH: Get.width / 10,
+                        func: () {},
+                        shadow: true,
+                      ),
                     ),
+                    SizedBox(height: 20),
                   ],
                 ),
               ),

@@ -19,6 +19,8 @@ abstract class Routes {
   static const SHOW_PAGES = _Paths.SHOW_PAGES;
   static const INTRODUCTION_SCREEN = _Paths.INTRODUCTION_SCREEN;
   static const ORIENTATION_REGISTER = _Paths.ORIENTATION_REGISTER;
+  static const SESSIONS = _Paths.SESSIONS;
+  static const DIARY = _Paths.DIARY;
 }
 
 abstract class _Paths {
@@ -37,4 +39,6 @@ abstract class _Paths {
   static const SHOW_PAGES = '/show-pages';
   static const INTRODUCTION_SCREEN = '/introduction-screen';
   static const ORIENTATION_REGISTER = '/orientation-register';
+  static const SESSIONS = '/sessions';
+  static const DIARY = '/diary';
 }

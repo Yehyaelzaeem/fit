@@ -1,3 +1,4 @@
+import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,8 @@ class HomeController extends GetxController {
   RxList<SingleSevice> servicesList = RxList();
   @override
   void onInit() {
+    Get.put(SessionsController(), tag: 'SessionsController');
+
     super.onInit();
     slider.add('assets/img/ic_slider_1.png');
     slider.add('assets/img/ic_slider_2.png');
@@ -18,7 +21,7 @@ class HomeController extends GetxController {
     servicesList.add(SingleSevice(name: 'Nutrition and Workout plans', image: kDoctor));
     servicesList.add(SingleSevice(name: 'Roof Workout', image: kDumbell));
     servicesList.add(SingleSevice(name: 'Physiotherapy', image: kRuning));
- servicesList.add(SingleSevice(name: 'Nutrition and Workout plans', image: kDoctor));
+    servicesList.add(SingleSevice(name: 'Nutrition and Workout plans', image: kDoctor));
     servicesList.add(SingleSevice(name: 'Roof Workout', image: kDumbell));
     servicesList.add(SingleSevice(name: 'Physiotherapy', image: kRuning));
   }

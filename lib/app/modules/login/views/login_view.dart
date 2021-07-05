@@ -16,8 +16,10 @@ class LoginView extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
         child: SafeArea(
       child: Scaffold(
+      backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,7 +33,7 @@ class LoginView extends GetView<LoginController> {
                 color: kColorAccent,
                 child: Center(
                   child: Text(
-                    'Sign Up',
+                    'Sign In',
                     style: GoogleFonts.cairo(
                       fontSize: 27.0 * kTextPixelFactor,
                       color: Colors.white,
@@ -46,6 +48,7 @@ class LoginView extends GetView<LoginController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 20),
                     //id
                     kTextbody('ID', size: 18),
                     EditText(
@@ -90,9 +93,16 @@ class LoginView extends GetView<LoginController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButton('Sign in', marginH: Get.width / 5, paddingV: 6, func: () {
-                            Get.toNamed(Routes.HOME);
-                          }),
+                          kButtonDefault(
+                            'Sign in',
+                            marginH: Get.width / 5,
+                            paddingV: 6,
+                            func: () {
+                              Get.toNamed(Routes.HOME);
+                            },
+                            shadow: true,
+                            paddingH: 40,
+                          ),
                           SizedBox(height: 16),
                           Row(
                             children: [

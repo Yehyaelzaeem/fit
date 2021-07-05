@@ -54,8 +54,13 @@ class NotificationsView extends GetView<NotificationsController> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: kTextHeader('Subject:${element.title}',
-                              paddingH: 12, paddingV: 12, color: kColorPrimary, align: TextAlign.start),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 6),
+                              kTextHeader('Subject:', paddingV: 12, color: kColorPrimary, align: TextAlign.start),
+                              kTextHeader('${element.title}', paddingV: 12, color: Colors.black, align: TextAlign.start),
+                            ],
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -77,7 +82,7 @@ class NotificationsView extends GetView<NotificationsController> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(),
-                    child: kTextfooter(element.date, paddingH: 0, paddingV: 0, align: TextAlign.end,color: kColorPrimary),
+                    child: kTextfooter(element.date, paddingH: 0, paddingV: 0, align: TextAlign.end, color: kColorPrimary),
                   ),
                   SizedBox(height: 16),
                 ],

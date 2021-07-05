@@ -7,12 +7,12 @@ import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.white,
-    systemNavigationBarColor: Colors.white,
-    systemNavigationBarDividerColor: Colors.black,
-    systemNavigationBarIconBrightness: Brightness.dark,
-  ));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //   statusBarColor: Colors.white,
+  //   systemNavigationBarColor: Colors.white,
+  //   systemNavigationBarDividerColor: Colors.black,
+  //   systemNavigationBarIconBrightness: Brightness.dark,
+  // ));
 
   runApp(
     GetMaterialApp(

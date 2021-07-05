@@ -1,4 +1,5 @@
 import 'package:app/app/data/database/shared_pref.dart';
+import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,9 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
     super.onInit();
     animationController = AnimationController(vsync: this, duration: Duration(seconds: 3));
     animation = new CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn);
+
+
+
   }
 
   @override

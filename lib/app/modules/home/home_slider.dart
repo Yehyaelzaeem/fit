@@ -20,7 +20,7 @@ class _HomeSliderState extends State<HomeSlider> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      width: double.infinity,
       child: Column(
         children: <Widget>[
           CarouselSlider(
@@ -28,8 +28,7 @@ class _HomeSliderState extends State<HomeSlider> {
               return Stack(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.symmetric( vertical: 4),
-                    width: MediaQuery.of(context).size.width,
+                    width: double.infinity,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.asset(
@@ -52,8 +51,8 @@ class _HomeSliderState extends State<HomeSlider> {
               );
             }).toList(),
             options: CarouselOptions(
-              aspectRatio: 360/125,
-              viewportFraction: 1.0,
+              aspectRatio: 2.6,
+              viewportFraction: 1.05,
               autoPlayInterval: Duration(seconds: 3),
               autoPlayAnimationDuration: Duration(milliseconds: 650),
               enlargeCenterPage: false,

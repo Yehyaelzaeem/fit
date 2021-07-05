@@ -4,6 +4,7 @@ import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/home/home_menu.dart';
 import 'package:app/app/modules/home/home_services.dart';
 import 'package:app/app/modules/home/home_slider.dart';
+import 'package:app/app/modules/sessions/views/sessions_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,19 +16,34 @@ class HomeView extends GetView<HomeController> {
     return Container(
       child: SafeArea(
         child: Scaffold(
-          bottomNavigationBar: HomeBottomNavigationBar(),
           drawer: HomeDrawer(),
-          body: SingleChildScrollView(
-            child: Column(
+          body: Obx(
+            () => Column(
               children: [
                 HomeAppbar(),
-                HomeSlider(sliders: controller.slider),
-                HomeMenu(),
-                HomeServices(),
+                Expanded(
+                  child: currentPage(),
+                ),
+                HomeBottomNavigationBar(),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget currentPage() {
+    if (controller.currentIndex == 2) {
+      return SessionsView();
+    }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          HomeSlider(sliders: controller.slider),
+          HomeMenu(),
+          HomeServices(),
+        ],
       ),
     );
   }
