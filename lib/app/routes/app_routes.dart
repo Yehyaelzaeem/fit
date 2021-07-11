@@ -21,6 +21,9 @@ abstract class Routes {
   static const ORIENTATION_REGISTER = _Paths.ORIENTATION_REGISTER;
   static const SESSIONS = _Paths.SESSIONS;
   static const DIARY = _Paths.DIARY;
+  static const FAQ = _Paths.FAQ;
+  static const TRANSFORMATION = _Paths.TRANSFORMATION;
+  static const TRANSFORM = _Paths.TRANSFORM;
 }
 
 abstract class _Paths {
@@ -41,4 +44,7 @@ abstract class _Paths {
   static const ORIENTATION_REGISTER = '/orientation-register';
   static const SESSIONS = '/sessions';
   static const DIARY = '/diary';
+  static const FAQ = '/faq';
+  static const TRANSFORMATION = '/transformation';
+  static const TRANSFORM = '/transform';
 }

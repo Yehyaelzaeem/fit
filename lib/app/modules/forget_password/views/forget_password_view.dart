@@ -60,9 +60,9 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButton('Send', marginH: Get.width / 5, paddingV: 6, func: () {
+                          kButtonDefault('Send', marginH: Get.width / 5, paddingV: 0, func: () {
                             Get.toNamed(Routes.HOME);
-                          }),
+                          }, shadow: true, paddingH: 50),
                           SizedBox(height: Get.width / 14),
                         ],
                       ),

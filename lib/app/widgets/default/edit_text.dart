@@ -17,6 +17,7 @@ class EditText extends StatelessWidget {
   final IconData? suffixIconData;
   final double fontSize;
   final double radius;
+  final double contentPaddingH;
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
   final Color? background;
@@ -30,6 +31,7 @@ class EditText extends StatelessWidget {
     this.enable = true,
     this.noBorder = false,
     this.label = false,
+    this.contentPaddingH = 16,
     this.lines = 1,
     this.fontSize = 14,
     this.radius = 64,
@@ -50,16 +52,16 @@ class EditText extends StatelessWidget {
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         initialValue: value,
         decoration: InputDecoration(
-            border: OutlineInputBorder(
+            border: noBorder?InputBorder.none:OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
     
             ),
-            disabledBorder: OutlineInputBorder(
+            disabledBorder: noBorder?InputBorder.none:OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: Colors.grey, width: 1.5),
             ),
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: noBorder?InputBorder.none:OutlineInputBorder(
               borderRadius: BorderRadius.circular(radius),
               borderSide: BorderSide(color: kColorPrimary, width: 2),
             ),enabledBorder: !noBorder?null:InputBorder.none,
@@ -87,7 +89,7 @@ class EditText extends StatelessWidget {
                     iconData,
                     color: Colors.grey,
                   ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0)),
+            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: 0)),
         keyboardType: type,
         validator: (text) {
           if (validateFunc != null) return validateFunc!(text);

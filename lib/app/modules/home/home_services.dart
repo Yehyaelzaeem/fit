@@ -43,7 +43,7 @@ class HomeServices extends GetView<HomeController> {
                                 borderRadius: BorderRadius.circular(25),
                                 border: Border.all(
                                   color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
-                                  width: controller.selectedService.value == i ? 1 : 0.2,
+                                  width: controller.selectedService.value == i ? 1 : 0.02,
                                 ),
                                 boxShadow: [
                                   if (controller.selectedService.value == i)
@@ -55,10 +55,9 @@ class HomeServices extends GetView<HomeController> {
                                     ),
                                   if (controller.selectedService.value != i)
                                     BoxShadow(
-                                      color: Colors.grey.withOpacity(0.6),
-                                      blurRadius: 2,
-                                      spreadRadius: 1,
-                                      offset: Offset(0, 2),
+                                      color: const Color(0xFF414042).withOpacity(0.35),
+                                      offset: Offset(0, 1.0),
+                                      blurRadius: 6.0,
                                     ),
                                 ],
                               ),
@@ -89,6 +88,7 @@ class HomeServices extends GetView<HomeController> {
             Container(
               margin: EdgeInsets.symmetric(vertical: 12),
               alignment: Alignment(-0.14, -1.0),
+              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
               width: Get.width / 2.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.horizontal(

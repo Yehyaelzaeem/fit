@@ -1,161 +1,335 @@
-import 'package:app/app/utils/styles/app_text_theme.dart';
+import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
-import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
+import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/contact_us_controller.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ContactUsView extends GetView<ContactUsController> {
-  final _contactFormKey = GlobalKey<FormState>();
-
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kColorPrimary,
-        title: Text(Strings().contactUs),
-        centerTitle: true,
-      ),
-      body: Obx(() {
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              contactFormView(),
-            ],
+        body: SingleChildScrollView(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(height: 24),
+      HomeAppbar(),
+      SizedBox(height: 12),
+      Container(
+        alignment: Alignment(0.01, -1.0),
+        height: 30.0,
+        width: Get.width / 2.4,
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.horizontal(
+            right: Radius.circular(15.0),
           ),
-        );
-      }),
-    );
-  }
-
-  Widget contactFormView() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Form(
-        key: _contactFormKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //first name
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: EditText(
-                  type: TextInputType.name,
-                  iconData: Icons.person,
-                  validateFunc: (text) {
-                    controller.contactFirstName.value = text;
-                    return text.length > 1 ? null : Strings().nameErrorLengthTooShort;
-                  },
-                  updateFunc: (text) {
-                    controller.contactFirstName.value = text;
-                  },
-                  value: controller.contactFirstName.value,
-                  hint: Strings().firstName,
-                ),
-              ),
-              //last name
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: EditText(
-                  type: TextInputType.name,
-                  iconData: Icons.person,
-                  validateFunc: (text) {
-                    controller.contactLastName.value = text;
-                    return text.length > 1 ? null : '';
-                  },
-                  updateFunc: (text) {
-                    controller.contactLastName.value = text;
-                  },
-                  value: controller.contactLastName.value,
-                  hint: Strings().lastName,
-                ),
-              ),
-              //email
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: EditText(
-                  type: TextInputType.emailAddress,
-                  iconData: Icons.email,
-                  validateFunc: (text) {
-                    controller.contactEmail.value = text;
-                    return text.length > 1 ? null : Strings().emailNotValid;
-                  },
-                  updateFunc: (text) {
-                    controller.contactEmail.value = text;
-                  },
-                  value: controller.contactEmail.value,
-                  hint: Strings().email,
-                ),
-              ),
-              //phone
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: EditText(
-                  type: TextInputType.phone,
-                  iconData: Icons.phone_iphone,
-                  validateFunc: (text) {
-                    String phone = text;
-                    controller.contactPhone.value = text;
-                    return phone.length >= 8 ? null : '';
-                  },
-                  updateFunc: (text) {
-                    controller.contactPhone.value = text;
-                  },
-                  value: controller.contactPhone.value,
-                  hint: Strings().phone,
-                ),
-              ),
-              //message
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                child: EditText(
-                  type: TextInputType.text,
-                  iconData: Icons.text_fields,
-                  lines: 2,
-                  validateFunc: (text) {
-                    String phone = text;
-                    controller.contactMessage.value = text;
-                    return phone.length > 2 ? null : '';
-                  },
-                  updateFunc: (text) {
-                    controller.contactMessage.value = text;
-                  },
-                  value: controller.contactMessage.value,
-                  hint: 'Message',
-                ),
-              ),
-              SizedBox(height: 4),
-              Obx(
-                () => Container(
-                    decoration: kButtonPrimaryStyle,
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: controller.contactLoading.value
-                          ? Container(
-                              child: Center(
-                                  child: CircularProgressIndicator(
-                              backgroundColor: Colors.white,
-                              strokeWidth: 1.5,
-                            )))
-                          : Text(
-                              Strings().send,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                    )),
-              ),
-              SizedBox(height: 12),
-            ],
+          color: const Color(0xFF414042),
+        ),
+        child: Center(
+          child: Text(
+            'Contact us',
+            style: GoogleFonts.cairo(
+              fontSize: 16.0,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
-    );
+
+      //* phone
+      SizedBox(height: 12),
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: EdgeInsets.symmetric(vertical: 4),
+        color: Color(0xffF1F1F1),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            kTextHeader('Phone', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
+            kTextbody('(+2)0101 545 1616', align: TextAlign.start, color: Colors.black, bold: true),
+          ],
+        ),
+      ),
+
+      //* email
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: EdgeInsets.symmetric(vertical: 4),
+        color: Color(0xffF1F1F1),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            kTextHeader('Email Address', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
+            kTextbody('clinicfof@gmail.com', align: TextAlign.start, color: Colors.black, bold: true),
+          ],
+        ),
+      ),
+
+      // * location
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        margin: EdgeInsets.symmetric(vertical: 4),
+        color: Color(0xffF1F1F1),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            kTextHeader('Our Location', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
+            kTextbody('140 El-Saaqah St. Intersection with EL-Autostrad, El-Moltaka EL-Arabi, Sheraton Heliopolis, Near City Center Almaza, Cairo', align: TextAlign.start, color: Colors.black, bold: true),
+          ],
+        ),
+      ),
+
+      //* Working hours
+      Container(
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        margin: EdgeInsets.symmetric(vertical: 4),
+        color: Color(0xffF1F1F1),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            kTextHeader('Working Hours', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
+            kTextbody('Mondays-Tuesdays-Thursdays-Fridays ( 3-6 p.m )', align: TextAlign.start, color: Colors.black, bold: true),
+          ],
+        ),
+      ),
+
+      //* title text
+      SizedBox(height: 12),
+      Container(
+        alignment: Alignment(0.01, -1.0),
+        height: 30.0,
+        width: Get.width / 1.6,
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.horizontal(
+            right: Radius.circular(15.0),
+          ),
+          color: const Color(0xFF414042),
+        ),
+        child: Center(
+          child: Text(
+            'Kindly leave your message',
+            style: GoogleFonts.cairo(
+              fontSize: 16.0,
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ),
+
+      //* User name
+      Container(
+        color: Colors.white,
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //First name
+                  kTextbody('User name', size: 18, bold: true),
+                  Container(
+                    color: Color(0xffeeeeee),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: EditText(
+                      value: '',
+                      hint: '',
+                      radius: 4,
+                      noBorder: true,
+                      background: Color(0xffeeeeee),
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      //* Email
+      Container(
+        color: Colors.white,
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //First name
+                  kTextbody('Email', size: 18, bold: true),
+                  Container(
+                    color: Color(0xffeeeeee),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: EditText(
+                      value: '',
+                      hint: '',
+                      radius: 4,
+                      noBorder: true,
+                      background: Color(0xffeeeeee),
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.emailAddress,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      //* Mobile Number
+      Container(
+        color: Colors.white,
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //First name
+                  kTextbody('Mobile Numder', size: 18, bold: true),
+                  Container(
+                    color: Color(0xffeeeeee),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: EditText(
+                      value: '',
+                      hint: '',
+                      radius: 4,
+                      noBorder: true,
+                      background: Color(0xffeeeeee),
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      //* Subhect
+      Container(
+        color: Colors.white,
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //First name
+                  kTextbody('Subject', size: 18, bold: true),
+                  Container(
+                    color: Color(0xffeeeeee),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: EditText(
+                      value: '',
+                      hint: '',
+                      radius: 4,
+                      noBorder: true,
+                      background: Color(0xffeeeeee),
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      //* Description
+      Container(
+        color: Colors.white,
+        width: Get.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //First name
+                  kTextbody('Description', size: 18, bold: true),
+                  Container(
+                    color: Color(0xffeeeeee),
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: EditText(
+                      value: '',
+                      hint: '',
+                      radius: 4,
+                      lines: 3,
+                      noBorder: true,
+                      background: Color(0xffeeeeee),
+                      updateFunc: (text) {},
+                      validateFunc: (text) {},
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      //* Send Button
+      Center(child: kButtonDefault('Send', paddingV: 0, func: () {}, shadow: true, paddingH: 50)),
+
+      Center(child: kTextbody('Our Social media links', size: 14)),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.facebook, size: 50, color: Colors.blueAccent),
+          SizedBox(width: 8),
+          Icon(Icons.facebook, size: 50, color: Colors.blueAccent),
+          SizedBox(width: 8),
+          Icon(Icons.facebook, size: 50, color: Colors.blueAccent),
+        ],
+      ),
+      SizedBox(height: Get.width / 14),
+    ])));
   }
 }

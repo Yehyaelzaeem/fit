@@ -74,7 +74,7 @@ class _EditTextState extends State<EditTextPassword> {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Icon(
                   obscurePassword ? Icons.remove_red_eye : Icons.security,
-                  color: kColorPrimary,
+                  color: Colors.grey,
                 ),
               ),
               onTap: changePasswordVisibility,

@@ -108,7 +108,7 @@ class HomeDrawer extends GetView<HomeController> {
                 title: 'FAQ', //todo transulate
                 image: 'assets/img/ic_menu_faq.png',
                 action: () {
-                  // Get.toNamed(Routes.PROFILE);
+                  Get.toNamed(Routes.FAQ);
                 }),
 
             //Transformation
@@ -116,7 +116,7 @@ class HomeDrawer extends GetView<HomeController> {
                 title: 'Transformation', //todo transulate
                 image: 'assets/img/ic_menu_images.png',
                 action: () {
-                  // Get.toNamed(Routes.PROFILE);
+                  Get.toNamed(Routes.TRANSFORM);
                 }),
 
             //Contact

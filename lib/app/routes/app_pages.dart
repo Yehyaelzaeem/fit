@@ -8,6 +8,8 @@ import 'package:app/app/modules/contact_us/bindings/contact_us_binding.dart';
 import 'package:app/app/modules/contact_us/views/contact_us_view.dart';
 import 'package:app/app/modules/diary/bindings/diary_binding.dart';
 import 'package:app/app/modules/diary/views/diary_view.dart';
+import 'package:app/app/modules/faq/bindings/faq_binding.dart';
+import 'package:app/app/modules/faq/views/faq_view.dart';
 import 'package:app/app/modules/forget_password/bindings/forget_password_binding.dart';
 import 'package:app/app/modules/forget_password/views/forget_password_view.dart';
 import 'package:app/app/modules/home/bindings/home_binding.dart';
@@ -34,6 +36,8 @@ import 'package:app/app/modules/show_pages/bindings/show_pages_binding.dart';
 import 'package:app/app/modules/show_pages/views/show_pages_view.dart';
 import 'package:app/app/modules/splash/bindings/splash_binding.dart';
 import 'package:app/app/modules/splash/views/splash_view.dart';
+import 'package:app/app/modules/transform/bindings/transform_binding.dart';
+import 'package:app/app/modules/transform/views/transform_view.dart';
 
 part 'app_routes.dart';
 
@@ -128,6 +132,17 @@ class AppPages {
       name: _Paths.DIARY,
       page: () => DiaryView(),
       binding: DiaryBinding(),
+    ),
+    GetPage(
+      name: _Paths.FAQ,
+      page: () => FaqView(),
+      binding: FaqBinding(),
+    ),
+
+    GetPage(
+      name: _Paths.TRANSFORM,
+      page: () => TransformView(),
+      binding: TransformBinding(),
     ),
   ];
 }

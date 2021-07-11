@@ -96,12 +96,12 @@ class LoginView extends GetView<LoginController> {
                           kButtonDefault(
                             'Sign in',
                             marginH: Get.width / 5,
-                            paddingV: 6,
+                            paddingV: 0,
                             func: () {
                               Get.toNamed(Routes.HOME);
                             },
                             shadow: true,
-                            paddingH: 40,
+                            paddingH: 50,
                           ),
                           SizedBox(height: 16),
                           Row(

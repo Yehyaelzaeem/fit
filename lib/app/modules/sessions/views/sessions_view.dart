@@ -53,7 +53,7 @@ class SessionsView extends GetView<SessionsController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         kTextbody(
-                          'My session',
+                          'Next session',
                           color: Colors.black,
                           size: 16,
                         ),

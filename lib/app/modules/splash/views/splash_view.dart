@@ -25,7 +25,7 @@ class SplashView extends GetView<SplashController> {
                     children: [
                       Image.asset(
                         kImgLogoWhiteNoBk,
-                        width: Get.width / 2,
+                        width: Get.width / 1.9,
                       ),
                       Container(
                         width: Get.width,
