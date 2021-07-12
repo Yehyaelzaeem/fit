@@ -1,3 +1,4 @@
+import 'package:app/app/modules/diary/views/diary_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/home/home_bottom_navigation_bar.dart';
 import 'package:app/app/modules/home/home_drawer.dart';
@@ -37,6 +38,9 @@ class HomeView extends GetView<HomeController> {
     if (controller.currentIndex == 2) {
       return SessionsView();
     }
+    if (controller.currentIndex == 1) {
+      return DiaryView();
+    } 
     return SingleChildScrollView(
       child: Column(
         children: [

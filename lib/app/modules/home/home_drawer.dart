@@ -70,6 +70,7 @@ class HomeDrawer extends GetView<HomeController> {
                   controller.currentIndex.value = 0;
                 }),
 
+
             //Diary
             singleDrawerItem(
                 title: 'Diary',
@@ -226,7 +227,7 @@ class HomeDrawer extends GetView<HomeController> {
               )
             ],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: 22),
         ],
       ),
     );

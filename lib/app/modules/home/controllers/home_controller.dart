@@ -1,3 +1,4 @@
+import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     Get.put(SessionsController(), tag: 'SessionsController');
+    Get.put(DiaryController(), tag: 'DiaryController');
 
     super.onInit();
     slider.add('assets/img/ic_slider_1.png');

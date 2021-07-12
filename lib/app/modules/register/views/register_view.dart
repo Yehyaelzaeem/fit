@@ -117,6 +117,7 @@ class RegisterView extends GetView<RegisterController> {
                       children: [
                         SizedBox(width: 4),
                         Container(
+                          width: Get.width/3,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(64),
@@ -134,9 +135,10 @@ class RegisterView extends GetView<RegisterController> {
                           ),
                         ),
                         SizedBox(
-                          width: Get.width / 6,
+                          width: Get.width / 8,
                         ),
                         Container(
+                          width: Get.width/3,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(64),
@@ -182,9 +184,9 @@ class RegisterView extends GetView<RegisterController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButtonDefault('Sign Up', marginH: Get.width / 5, paddingV: 0, func: () {
+                          kButtonDefault('  Sign Up  ', marginH: Get.width / 7, paddingV: 0, func: () {
                             Get.toNamed(Routes.HOME);
-                          }, paddingH: 50,shadow: true),
+                          }, paddingH: 20,shadow: true),
                           SizedBox(height: Get.width / 14),
                           GestureDetector(
                               onTap: () {

@@ -50,11 +50,12 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 controller.currentIndex.value = 0;
               },
               child: Container(
+                height: 60,
                 width: double.infinity,
                 child: Center(
                   child: Column(
                     children: [
-                      Image.asset(controller.currentIndex == 0 ? kHomePrimary : kHomeBlack, height: 35),
+                      Expanded(child: Image.asset(controller.currentIndex == 0 ? kHomePrimary : kHomeBlack, height: double.infinity)),
                       kTextbody('Home', color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
                     ],
                   ),
@@ -69,11 +70,12 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 controller.currentIndex.value = 1;
               },
               child: Container(
+                height: 60,
                 width: double.infinity,
                 child: Center(
                   child: Column(
                     children: [
-                      Image.asset(controller.currentIndex == 1 ? kDiaryPrimary : kDiaryBlack, height: 35),
+                      Expanded(child: Image.asset(controller.currentIndex == 1 ? kDiaryPrimary : kDiaryBlack, height: double.infinity)),
                       kTextbody('Diary', color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
                     ],
                   ),
@@ -88,11 +90,12 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 controller.currentIndex.value = 2;
               },
               child: Container(
+                height: 60,
                 width: double.infinity,
                 child: Center(
                   child: Column(
                     children: [
-                      Image.asset(controller.currentIndex == 2 ? kSessionsDiary : kSessionsBlack, height: 35),
+                      Expanded(child: Image.asset(controller.currentIndex == 2 ? kSessionsDiary : kSessionsBlack, height: double.infinity)),
                       kTextbody('Serssions', color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
                     ],
                   ),
