@@ -35,8 +35,7 @@ class ProfileView extends GetView<ProfileController> {
             // profile title
             Container(
               alignment: Alignment(0.01, -1.0),
-              height: 30.0,
-              width: Get.width / 2,
+              width: Get.width / 2.6,
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.horizontal(
@@ -189,8 +188,7 @@ class ProfileView extends GetView<ProfileController> {
             SizedBox(height: 18),
             Container(
               alignment: Alignment(0.01, -1.0),
-              height: 30.0,
-              width: Get.width / 2,
+              width: Get.width / 2.6,
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.horizontal(
@@ -262,7 +260,6 @@ class ProfileView extends GetView<ProfileController> {
               children: [
                 Container(
                   alignment: Alignment(0.01, -1.0),
-                  height: 30.0,
                   width: Get.width / 1.7,
                   padding: EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(

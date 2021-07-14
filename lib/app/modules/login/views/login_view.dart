@@ -93,15 +93,15 @@ class LoginView extends GetView<LoginController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButtonDefault(
-                            'Sign in',
-                            marginH: Get.width / 5,
+                              kButtonDefault(
+                            '  Sign in  ',
+                            marginH: Get.width / 4.5,
                             paddingV: 0,
                             func: () {
                               Get.toNamed(Routes.HOME);
                             },
                             shadow: true,
-                            paddingH: 50,
+                            paddingH: 30,
                           ),
                           SizedBox(height: 16),
                           Row(

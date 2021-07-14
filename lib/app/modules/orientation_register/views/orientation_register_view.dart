@@ -69,11 +69,12 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           //First name
                           kTextbody('First Name', size: 18, bold: true),
                           Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                //SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(
@@ -95,11 +96,12 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           //Middle Name
                           kTextbody('Middle Name', size: 18, bold: true),
                           Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                //SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(
@@ -121,11 +123,12 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           //Last name
                           kTextbody('Last Name', size: 18, bold: true),
                           Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                //SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(
@@ -147,11 +150,12 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           //First name
                           kTextbody('Mobile Number', size: 18, bold: true),
                           Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                //SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(
@@ -173,12 +177,13 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           SizedBox(height: 8),
                           //Age
                           kTextbody('Age', size: 18, bold: true),
-                           Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                          Container(
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                // SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(
@@ -203,7 +208,6 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                         ],
                       ),
                     ),
-
                     GestureDetector(
                       onTap: () {
                         controller.selectedTarget.value = 'Weight loss (ideal weight and ideal shape)';
@@ -290,12 +294,13 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                           //Age
                           SizedBox(height: 8),
                           kTextbody('What is your country?', size: 18, bold: true),
-                         Container(
-                            color: Color(0xffeeeeee),margin: EdgeInsets.symmetric(horizontal: 8),
+                          Container(
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Row(
                               children: [
-                                SizedBox(width: 20),
-                                Container(height: 30, width: 1, color: Color(0xFF666565)),
+                                //SizedBox(width: 20),
+                                // Container(height: 30, width: 1, color: Color(0xFF666565)),
                                 SizedBox(width: 4),
                                 Expanded(
                                   child: EditText(

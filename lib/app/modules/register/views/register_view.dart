@@ -184,9 +184,16 @@ class RegisterView extends GetView<RegisterController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                          kButtonDefault('  Sign Up  ', marginH: Get.width / 7, paddingV: 0, func: () {
-                            Get.toNamed(Routes.HOME);
-                          }, paddingH: 20,shadow: true),
+                   kButtonDefault(
+                            '  Sign up  ',
+                            marginH: Get.width / 4.5,
+                            paddingV: 0,
+                            func: () {
+                              Get.toNamed(Routes.HOME);
+                            },
+                            shadow: true,
+                            paddingH: 30,
+                          ),
                           SizedBox(height: Get.width / 14),
                           GestureDetector(
                               onTap: () {

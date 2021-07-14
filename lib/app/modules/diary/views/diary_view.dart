@@ -490,7 +490,7 @@ class DiaryView extends GetView<DiaryController> {
               ),
               SizedBox(height: 24),
 
-              kButtonDefault('Send', marginH: Get.width / 5, paddingV: 0, shadow: true, paddingH: 50),
+              kButtonDefault('Save', marginH: Get.width / 5, paddingV: 0, shadow: true, paddingH: 50),
 
               SizedBox(height: 12),
               Divider(),

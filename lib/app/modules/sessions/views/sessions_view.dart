@@ -20,7 +20,6 @@ class SessionsView extends GetView<SessionsController> {
           SizedBox(height: 12),
           Container(
             alignment: Alignment(0.01, -1.0),
-            height: 30.0,
             width: Get.width / 2.4,
             padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
             decoration: BoxDecoration(
@@ -82,7 +81,6 @@ class SessionsView extends GetView<SessionsController> {
           SizedBox(height: 12),
           Container(
             alignment: Alignment(0.01, -1.0),
-            height: 30.0,
             width: Get.width / 2.4,
             padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
             decoration: BoxDecoration(
