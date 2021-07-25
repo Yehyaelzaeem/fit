@@ -79,7 +79,7 @@ class _EditTextState extends State<EditTextPassword> {
               ),
               onTap: changePasswordVisibility,
             ),
-            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16)),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0)),
         validator: (text) {
           if (widget.validateFunc != null) return widget.validateFunc!(text);
           return null;
