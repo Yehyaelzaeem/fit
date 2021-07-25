@@ -8,7 +8,6 @@ import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/register_controller.dart';
 
@@ -32,7 +31,7 @@ class RegisterView extends GetView<RegisterController> {
                 child: Center(
                   child: Text(
                     'Sign Up',
-                    style: GoogleFonts.cairo(
+                    style:TextStyle(
                       fontSize: 27.0 * kTextPixelFactor,
                       color: Colors.white,
                       fontWeight: FontWeight.w700,

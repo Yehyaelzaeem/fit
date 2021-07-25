@@ -1,14 +1,11 @@
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/orientation_register_controller.dart';
 
@@ -38,7 +35,7 @@ class OrientationRegisterView extends GetView<OrientationRegisterController> {
                 child: Center(
                   child: Text(
                     'Orientation Registration',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,

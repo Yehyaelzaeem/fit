@@ -4,9 +4,7 @@ import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -46,7 +44,7 @@ class ProfileView extends GetView<ProfileController> {
               child: Center(
                 child: Text(
                   'Profile',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 16.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -199,7 +197,7 @@ class ProfileView extends GetView<ProfileController> {
               child: Center(
                 child: Text(
                   'Target',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 16.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -271,7 +269,7 @@ class ProfileView extends GetView<ProfileController> {
                   child: Center(
                     child: Text(
                       'Last Body Composition',
-                      style: GoogleFonts.cairo(
+                      style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.white,
                         fontWeight: FontWeight.w600,

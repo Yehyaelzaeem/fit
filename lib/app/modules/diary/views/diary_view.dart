@@ -3,7 +3,6 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/diary_controller.dart';
 
@@ -32,7 +31,7 @@ class DiaryView extends GetView<DiaryController> {
                     Expanded(
                       child: Text(
                         'Calories Calculator',
-                        style: GoogleFonts.cairo(
+                        style:TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
                           fontWeight: FontWeight.w800,
@@ -155,7 +154,7 @@ class DiaryView extends GetView<DiaryController> {
                       SizedBox(width: 8),
                       Text(
                         'Proteins',
-                        style: GoogleFonts.cairo(
+                        style:TextStyle(
                           fontSize: 18.0,
                           color: Colors.white,
                           fontWeight: FontWeight.w800,

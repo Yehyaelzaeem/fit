@@ -1,8 +1,6 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/transform_controller.dart';
 
@@ -29,7 +27,7 @@ class TransformView extends GetView<TransformController> {
           child: Center(
             child: Text(
               'Transformations',
-              style: GoogleFonts.cairo(
+              style:TextStyle(
                 fontSize: 16.0,
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

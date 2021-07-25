@@ -7,7 +7,6 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'controllers/home_controller.dart';
 
@@ -106,7 +105,7 @@ class HomeServices extends GetView<HomeController> {
               child: Center(
                 child: Text(
                   'Roof Workout',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 16.0,
                     color: const Color(0xFF7FC902),
                     fontWeight: FontWeight.w600,

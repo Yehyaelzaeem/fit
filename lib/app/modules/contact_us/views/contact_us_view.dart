@@ -1,14 +1,11 @@
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 import '../controllers/contact_us_controller.dart';
-import 'package:get/get.dart';
 
 class ContactUsView extends GetView<ContactUsController> {
   @override
@@ -33,7 +30,7 @@ class ContactUsView extends GetView<ContactUsController> {
         child: Center(
           child: Text(
             'Contact us',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
               fontSize: 16.0,
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -118,7 +115,7 @@ class ContactUsView extends GetView<ContactUsController> {
         child: Center(
           child: Text(
             'Kindly leave your message',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
               fontSize: 16.0,
               color: Colors.white,
               fontWeight: FontWeight.w600,

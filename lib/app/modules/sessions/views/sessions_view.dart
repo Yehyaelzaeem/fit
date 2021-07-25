@@ -2,9 +2,7 @@ import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/sessions_controller.dart';
 
@@ -21,7 +19,7 @@ class SessionsView extends GetView<SessionsController> {
           Container(
             alignment: Alignment(0.01, -1.0),
             width: Get.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
                 right: Radius.circular(15.0),
@@ -31,7 +29,7 @@ class SessionsView extends GetView<SessionsController> {
             child: Center(
               child: Text(
                 'My Sessions',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -82,7 +80,7 @@ class SessionsView extends GetView<SessionsController> {
           Container(
             alignment: Alignment(0.01, -1.0),
             width: Get.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
                 right: Radius.circular(15.0),
@@ -92,7 +90,7 @@ class SessionsView extends GetView<SessionsController> {
             child: Center(
               child: Text(
                 'Completed',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

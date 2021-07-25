@@ -1,9 +1,7 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/faq_controller.dart';
 
@@ -33,7 +31,7 @@ class FaqView extends GetView<FaqController> {
               child: Center(
                 child: Text(
                   'FAQ',
-                  style: GoogleFonts.cairo(
+                  style: TextStyle(
                     fontSize: 16.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -76,12 +74,7 @@ class FaqView extends GetView<FaqController> {
             if (controller.showFaq.value)
               Container(
                 width: double.infinity,
-                child: kTextbody(
-                  'FitoverfaT is the first Medical Center in Egypt using Indirect Calorimeter to assessthe actual real basal',
-                  color: Colors.black,
-                  align: TextAlign.start,
-                  paddingH: 18
-                ),
+                child: kTextbody('FitoverfaT is the first Medical Center in Egypt using Indirect Calorimeter to assessthe actual real basal', color: Colors.black, align: TextAlign.start, paddingH: 18),
               ),
 
             SizedBox(height: Get.width / 14),

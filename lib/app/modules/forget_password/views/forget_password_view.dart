@@ -4,11 +4,9 @@ import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
-import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ForgetPasswordView extends GetView<ForgetPasswordController> {
   @override
@@ -29,7 +27,7 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
                 child: Center(
                   child: Text(
                     'Forget password',
-                    style: GoogleFonts.cairo(
+                    style: TextStyle(
                       fontSize: 24.0,
                       color: Colors.white,
                       fontWeight: FontWeight.w700,

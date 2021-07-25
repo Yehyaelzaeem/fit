@@ -1,11 +1,8 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/notifications_controller.dart';
 
@@ -33,7 +30,7 @@ class NotificationsView extends GetView<NotificationsController> {
             child: Center(
               child: Text(
                 'Messages',
-                style: GoogleFonts.cairo(
+                style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,

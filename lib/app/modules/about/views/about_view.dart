@@ -1,12 +1,8 @@
 import 'package:app/app/modules/about/controllers/about_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/translations/strings.dart';
-import 'package:app/app/widgets/default/app_buttons.dart';
-import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import 'package:get/get.dart';
 
 class AboutView extends GetView<AboutController> {
@@ -32,7 +28,7 @@ class AboutView extends GetView<AboutController> {
         child: Center(
           child: Text(
             'About',
-            style: GoogleFonts.cairo(
+            style: TextStyle(
               fontSize: 16.0,
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -56,7 +52,6 @@ class AboutView extends GetView<AboutController> {
         ),
       ),
 
-     
       SizedBox(height: Get.width / 14),
     ])));
   }
