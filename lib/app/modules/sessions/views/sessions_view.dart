@@ -124,6 +124,7 @@ class SessionsView extends GetView<SessionsController> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
+                              Expanded(child: SizedBox(width: 1)),
                               Column(
                                 children: [
                                   kTextbody(
@@ -138,8 +139,9 @@ class SessionsView extends GetView<SessionsController> {
                                   ),
                                 ],
                               ),
-                              SizedBox(width: 16),
-                              kButton('Details', paddingH: 16, paddingV: 0),
+                              Expanded(child: SizedBox(width: 1)),
+                              kButton('Details', paddingH: 20, paddingV: 0),
+                              SizedBox(width: 12),
                             ],
                           ),
                         ],

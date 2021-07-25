@@ -23,19 +23,21 @@ class NotificationsView extends GetView<NotificationsController> {
           Container(
             alignment: Alignment(0.01, -1.0),
             width: 150.0,
-            height: 30.0,
+            height: 36.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
                 right: Radius.circular(15.0),
               ),
               color: const Color(0xFF414042),
             ),
-            child: Text(
-              'Messages',
-              style: GoogleFonts.cairo(
-                fontSize: 16.0,
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
+            child: Center(
+              child: Text(
+                'Messages',
+                style: GoogleFonts.cairo(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),

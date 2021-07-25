@@ -132,10 +132,10 @@ class HomeServices extends GetView<HomeController> {
               'Orientation Registration',
               textColor: Colors.white,
               color: kColorPrimary,
-              paddingH: 8,
+              paddingH: 4,
               paddingV: 4,
               marginV: 12,
-              marginH: Get.width / 10,
+              marginH: Get.width / 9,
               func: () {
                 Get.toNamed(Routes.ORIENTATION_REGISTER);
               },

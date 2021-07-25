@@ -117,7 +117,7 @@ class RegisterView extends GetView<RegisterController> {
                       children: [
                         SizedBox(width: 4),
                         Container(
-                          width: Get.width/3,
+                          width: Get.width / 3,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(64),
@@ -138,7 +138,7 @@ class RegisterView extends GetView<RegisterController> {
                           width: Get.width / 8,
                         ),
                         Container(
-                          width: Get.width/3,
+                          width: Get.width / 3,
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.grey, width: 1),
                             borderRadius: BorderRadius.circular(64),
@@ -184,7 +184,7 @@ class RegisterView extends GetView<RegisterController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: Get.width / 14),
-                   kButtonDefault(
+                          kButtonDefault(
                             '  Sign up  ',
                             marginH: Get.width / 4.5,
                             paddingV: 0,
@@ -199,7 +199,23 @@ class RegisterView extends GetView<RegisterController> {
                               onTap: () {
                                 Get.toNamed(Routes.LOGIN);
                               },
-                              child: kTextHeader('Sign in', color: kColorAccent)),
+                              child: Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: kTextHeader('Sign in', color: kColorAccent),
+                                  ),
+                                  Positioned(
+                                      bottom: 8,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 1,
+                                        color: Colors.black87,
+                                      ))
+                                ],
+                              )),
                           SizedBox(height: Get.width / 14),
                         ],
                       ),

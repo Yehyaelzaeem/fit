@@ -28,7 +28,7 @@ class DiaryView extends GetView<DiaryController> {
                 ),
                 child: Row(
                   children: [
-                    SizedBox(width: 12),
+                    SizedBox(width: 8),
                     Expanded(
                       child: Text(
                         'Calories Calculator',
@@ -40,7 +40,7 @@ class DiaryView extends GetView<DiaryController> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         children: [
                           Icon(
@@ -53,7 +53,7 @@ class DiaryView extends GetView<DiaryController> {
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
-                      margin: EdgeInsets.symmetric(horizontal: 24),
+                      margin: EdgeInsets.symmetric(horizontal: 18),
                       height: double.infinity,
                       decoration: BoxDecoration(
                         color: kColorPrimary,
@@ -115,7 +115,7 @@ class DiaryView extends GetView<DiaryController> {
                                 //   width: 1,
                                 // )),
                                 child: Image.asset(
-                              item.imagePath,
+                              item.selected ? 'assets/img/im_holder1_active.png' : item.imagePath,
                               height: double.infinity,
                               width: double.infinity,
                               fit: BoxFit.fill,
@@ -124,9 +124,12 @@ class DiaryView extends GetView<DiaryController> {
                               Positioned(
                                   top: 0,
                                   right: 0,
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    color: kColorPrimary,
+                                  child: Container(
+                                    color: Colors.white,
+                                    child: Icon(
+                                      Icons.check_circle,
+                                      color: kColorPrimary,
+                                    ),
                                   )),
                           ],
                         ),
@@ -149,7 +152,7 @@ class DiaryView extends GetView<DiaryController> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(width: 12),
+                      SizedBox(width: 8),
                       Text(
                         'Proteins',
                         style: GoogleFonts.cairo(
@@ -234,6 +237,20 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
+                          flex: 1,
+                          child: Container(
+                            height: 30,
+                            width: double.infinity,
+                            decoration: BoxDecoration(color: Colors.white, boxShadow: []),
+                            child: kTextbody('Unit', color: Colors.black, bold: true),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 1.4,
+                          decoration: BoxDecoration(color: Colors.grey[700]),
+                        ),
+                        Flexible(
                           flex: 2,
                           child: Container(
                             height: 30,
@@ -288,6 +305,17 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
+                          flex: 1,
+                          child: SizedBox(
+                            width: double.infinity,
+                          ),
+                        ),
+                        Container(
+                          height: 16,
+                          width: 1.4,
+                          decoration: BoxDecoration(color: Colors.grey[700]),
+                        ),
+                        Flexible(
                           flex: 2,
                           child: SizedBox(
                             width: double.infinity,
@@ -328,6 +356,20 @@ class DiaryView extends GetView<DiaryController> {
                           width: double.infinity,
                           decoration: BoxDecoration(color: Color(0xffE6E6E6)),
                           child: kTextbody('2', color: Colors.black, bold: true),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 1.4,
+                        decoration: BoxDecoration(color: Colors.grey[700]),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          height: 30,
+                          width: double.infinity,
+                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+                          child: kTextbody('Kg', color: Colors.black, bold: true),
                         ),
                       ),
                       Container(
@@ -396,6 +438,17 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
+                          flex: 1,
+                          child: SizedBox(
+                            width: double.infinity,
+                          ),
+                        ),
+                        Container(
+                          height: 16,
+                          width: 1.4,
+                          decoration: BoxDecoration(color: Colors.grey[700]),
+                        ),
+                        Flexible(
                           flex: 2,
                           child: SizedBox(
                             width: double.infinity,
@@ -436,6 +489,20 @@ class DiaryView extends GetView<DiaryController> {
                           width: double.infinity,
                           decoration: BoxDecoration(color: Color(0xffE6E6E6)),
                           child: kTextbody('2', color: Colors.black, bold: true),
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                        width: 1.4,
+                        decoration: BoxDecoration(color: Colors.grey[700]),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          height: 30,
+                          width: double.infinity,
+                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+                          child: kTextbody('Kg', color: Colors.black, bold: true),
                         ),
                       ),
                       Container(
