@@ -91,7 +91,7 @@ class HomeServices extends GetView<HomeController> {
               width: Get.width / 2.3,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.horizontal(
-                  right: Radius.circular(15.0),
+                  right: Radius.circular(64.0),
                 ),
                 color: Colors.white,
                 boxShadow: [
