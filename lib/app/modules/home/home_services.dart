@@ -127,22 +127,23 @@ class HomeServices extends GetView<HomeController> {
               height: Get.height / 4,
               fit: BoxFit.fitWidth,
             ),
-            Center(
-              child: Container(
-                margin: EdgeInsets.symmetric(vertical: 24),
-                decoration: BoxDecoration(
-                  color: kColorPrimary,
-                  borderRadius: BorderRadius.circular(64),
-                  boxShadow: [
-                     BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                        offset: Offset(0, 1),
-                      ),
-                  ]
+            GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.ORIENTATION_REGISTER);
+              },
+              child: Center(
+                child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 24),
+                  decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      blurRadius: 1,
+                      spreadRadius: 1,
+                      offset: Offset(0, 1),
+                    ),
+                  ]),
+                  child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                 ),
-                child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16,paddingV: 4),
               ),
             ),
             // kButton(

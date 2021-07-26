@@ -42,17 +42,14 @@ class DiaryView extends GetView<DiaryController> {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.picture_as_pdf_sharp,
-                            color: Colors.white,
-                          ),
+                          Image.asset('assets/img/ic_pdf.png'),
                           kTextHeader('PDF', color: Colors.white)
                         ],
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 18),
-                      margin: EdgeInsets.symmetric(horizontal: 18),
+                      margin: EdgeInsets.symmetric(horizontal: 18,vertical: 4),
                       height: double.infinity,
                       decoration: BoxDecoration(
                         color: kColorPrimary,

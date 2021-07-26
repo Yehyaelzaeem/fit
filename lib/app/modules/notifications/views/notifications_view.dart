@@ -23,7 +23,7 @@ class NotificationsView extends GetView<NotificationsController> {
             height: 36.0,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
+                right: Radius.circular(64.0),
               ),
               color: const Color(0xFF414042),
             ),

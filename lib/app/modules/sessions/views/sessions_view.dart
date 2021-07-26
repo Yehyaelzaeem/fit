@@ -22,7 +22,7 @@ class SessionsView extends GetView<SessionsController> {
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
+                right: Radius.circular(64.0),
               ),
               color: const Color(0xFF414042),
             ),
@@ -58,6 +58,7 @@ class SessionsView extends GetView<SessionsController> {
                           'Thursday',
                           color: kColorPrimary,
                           size: 16,
+                          bold: true
                         ),
                         kTextbody(
                           '03/06/2021  11:50 PM',
@@ -83,7 +84,7 @@ class SessionsView extends GetView<SessionsController> {
             padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
+                right: Radius.circular(64.0),
               ),
               color: const Color(0xFF414042),
             ),
@@ -129,6 +130,7 @@ class SessionsView extends GetView<SessionsController> {
                                     'Thursday',
                                     color: kColorPrimary,
                                     size: 16,
+                          bold: true
                                   ),
                                   kTextbody(
                                     '03/06/2021  11:50 PM',
