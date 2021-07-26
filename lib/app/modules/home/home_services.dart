@@ -30,7 +30,7 @@ class HomeServices extends GetView<HomeController> {
                         controller.selectedService.value = i;
                       },
                       child: Container(
-                        height: 130,
+                        height: 150,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -127,18 +127,36 @@ class HomeServices extends GetView<HomeController> {
               height: Get.height / 4,
               fit: BoxFit.fitWidth,
             ),
-            kButton(
-              'Orientation Registration',
-              textColor: Colors.white,
-              color: kColorPrimary,
-              paddingH: 4,
-              paddingV: 4,
-              marginV: 12,
-              marginH: Get.width / 9,
-              func: () {
-                Get.toNamed(Routes.ORIENTATION_REGISTER);
-              },
+            Center(
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 24),
+                decoration: BoxDecoration(
+                  color: kColorPrimary,
+                  borderRadius: BorderRadius.circular(64),
+                  boxShadow: [
+                     BoxShadow(
+                        color: Colors.grey.withOpacity(0.4),
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                  ]
+                ),
+                child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16,paddingV: 4),
+              ),
             ),
+            // kButton(
+            //   'Orientation Registration',
+            //   textColor: Colors.white,
+            //   color: kColorPrimary,
+            //   paddingH: 4,
+            //   paddingV: 4,
+            //   marginV: 12,
+            //   marginH: Get.width / 9,
+            //   func: () {
+            //     Get.toNamed(Routes.ORIENTATION_REGISTER);
+            //   },
+            // ),
             SizedBox(height: 16),
           ],
         ),
