@@ -12,7 +12,7 @@ class TransformView extends GetView<TransformController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 24),
-        HomeAppbar(),
+        HomeAppbar(type :null),
         SizedBox(height: 12),
         Container(
           alignment: Alignment(0.01, -1.0),

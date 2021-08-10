@@ -1,3 +1,4 @@
+import 'package:app/app/modules/session_details/session_details.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -8,6 +9,7 @@ import '../controllers/sessions_controller.dart';
 
 class SessionsView extends GetView<SessionsController> {
   final controller = Get.find(tag: 'SessionsController');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,12 +56,7 @@ class SessionsView extends GetView<SessionsController> {
                           color: Colors.black,
                           size: 16,
                         ),
-                        kTextbody(
-                          'Thursday',
-                          color: kColorPrimary,
-                          size: 16,
-                          bold: true
-                        ),
+                        kTextbody('Thursday', color: kColorPrimary, size: 16, bold: true),
                         kTextbody(
                           '03/06/2021  11:50 PM',
                           color: Colors.black,
@@ -126,12 +123,7 @@ class SessionsView extends GetView<SessionsController> {
                               Expanded(child: SizedBox(width: 1)),
                               Column(
                                 children: [
-                                  kTextbody(
-                                    'Thursday',
-                                    color: kColorPrimary,
-                                    size: 16,
-                          bold: true
-                                  ),
+                                  kTextbody('Thursday', color: kColorPrimary, size: 16, bold: true),
                                   kTextbody(
                                     '03/06/2021  11:50 PM',
                                     color: Colors.black,
@@ -140,7 +132,10 @@ class SessionsView extends GetView<SessionsController> {
                                 ],
                               ),
                               Expanded(child: SizedBox(width: 1)),
-                              kButton('Details', paddingH: 20, paddingV: 0),
+                              kButton('Details', paddingH: 20, paddingV: 0, func: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => SessionDetails()));
+                              }),
                               SizedBox(width: 12),
                             ],
                           ),

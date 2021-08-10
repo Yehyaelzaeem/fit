@@ -16,6 +16,13 @@ dependencies:
   flutter_widget_from_html: ^0.6.1
   flutter_svg: ^0.22.0
   google_fonts: ^2.1.0
+  dio: ^4.0.0
+  lottie: ^1.1.0
+  fluttertoast: ^8.0.8
+  url_launcher: ^6.0.9
+  flutter_html: ^2.1.1
+
+
   flutter:
     sdk: flutter
 
@@ -35,6 +42,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/img/
 
   fonts:

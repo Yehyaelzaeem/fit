@@ -38,7 +38,11 @@ Widget kButton(
                   ),
                 ),
               )
-            : Center(child: kTextHeader(message, size: textSize, color: textColor == null ? Colors.white : textColor, bold: bold)),
+            : Center(
+                child: kTextHeader(message,
+                    size: textSize,
+                    color: textColor == null ? Colors.white : textColor,
+                    bold: bold)),
       ),
     ),
   );
@@ -88,7 +92,10 @@ Widget kButtonDefault(
                   ),
                 ),
               )
-            : Container(padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV), child: kTextHeader(message, color: textColor == null ? Colors.white : textColor, bold: bold)),
+            : Container(
+                padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+                child: kTextHeader(message,
+                    color: textColor == null ? Colors.white : textColor, bold: bold)),
       ));
 }
 
@@ -127,7 +134,9 @@ Widget kButtonWithIcon(
                   ),
                 ),
               )
-            : Center(child: kTextHeader(message, color: textColor == null ? Colors.white : textColor, bold: bold)),
+            : Center(
+                child: kTextHeader(message,
+                    color: textColor == null ? Colors.white : textColor, bold: bold)),
       ),
     ),
   );

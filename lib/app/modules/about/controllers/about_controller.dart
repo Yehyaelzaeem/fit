@@ -1,18 +1,15 @@
-import 'package:app/app/utils/translations/strings.dart';
+import 'package:app/app/models/about_response.dart';
+import 'package:app/app/network_util/api_provider.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class AboutController extends GetxController {
-  // final response = new AboutResponse().obs;
-  final error = ''.obs;
-  var storage = GetStorage();
+  final aboutResponse = AboutResponse().obs;
 
-  String about = '<h1> Title </h1><p>${Strings().longText}</p>';
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
-
-    // getNetworkData();
+    aboutResponse.value = await ApiProvider().getAboutData();
   }
 
   @override
@@ -23,13 +20,4 @@ class AboutController extends GetxController {
   @override
   void onClose() {}
 
-  getNetworkData() async {
-    // error.value = '';
-    // try {
-    //   response.value = await networkAbout();
-    // } catch (e) {
-    //   Echo('error response $e');
-    //   error.value = '$e';
-    // }
-  }
 }

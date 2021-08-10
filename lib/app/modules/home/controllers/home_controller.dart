@@ -1,31 +1,33 @@
+import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
-import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:flutter/material.dart';
+import 'package:app/app/network_util/api_provider.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final currentIndex = 0.obs;
   final selectedService = 0.obs;
   final currectMenuIdex = 1.obs;
+  final homeResponse = HomePageResponse().obs;
+
   RxList<String> slider = RxList();
-  RxList<SingleSevice> servicesList = RxList();
+  RxList<Services> servicesList = RxList();
+
   @override
-  void onInit() {
+  void onInit() async {
+    homeResponse.value = await ApiProvider().getHomeData();
     Get.put(SessionsController(), tag: 'SessionsController');
     Get.put(DiaryController(), tag: 'DiaryController');
 
     super.onInit();
-    slider.add('assets/img/ic_slider_1.png');
-    slider.add('assets/img/ic_slider_2.png');
-    slider.add('assets/img/ic_slider_3.png');
-
-    servicesList.add(SingleSevice(name: 'Nutrition and Workout plans', image: kDoctor));
-    servicesList.add(SingleSevice(name: 'Roof Workout', image: kDumbell));
-    servicesList.add(SingleSevice(name: 'Physiotherapy', image: kRuning));
-    servicesList.add(SingleSevice(name: 'Nutrition and Workout plans', image: kDoctor));
-    servicesList.add(SingleSevice(name: 'Roof Workout', image: kDumbell));
-    servicesList.add(SingleSevice(name: 'Physiotherapy', image: kRuning));
+    homeResponse.value.data!.slider!.forEach((v) {
+      slider.add(v.image ??
+          "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
+    });
+    print(slider);
+    homeResponse.value.data!.services!.forEach((v) {
+      servicesList.add(Services(id: v.id, title: v.title, items: v.items));
+    });
   }
 
   @override
@@ -39,10 +41,4 @@ class HomeController extends GetxController {
   void updateCurrentIndex(int value) {
     currentIndex.value = value;
   }
-}
-
-class SingleSevice {
-  String name;
-  String image;
-  SingleSevice({required this.name, required this.image});
 }

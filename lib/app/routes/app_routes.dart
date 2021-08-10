@@ -24,6 +24,7 @@ abstract class Routes {
   static const FAQ = _Paths.FAQ;
   static const TRANSFORMATION = _Paths.TRANSFORMATION;
   static const TRANSFORM = _Paths.TRANSFORM;
+  static const  MY_OTHER_CALORIES= _Paths.MY_OTHER_CALORIES;
 }
 
 abstract class _Paths {
@@ -47,4 +48,5 @@ abstract class _Paths {
   static const FAQ = '/faq';
   static const TRANSFORMATION = '/transformation';
   static const TRANSFORM = '/transform';
+  static const MY_OTHER_CALORIES = '/my-other-calories';
 }

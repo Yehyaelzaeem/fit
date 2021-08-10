@@ -15,7 +15,7 @@ class NotificationsView extends GetView<NotificationsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 24),
-          HomeAppbar(),
+          HomeAppbar(type :null),
           SizedBox(height: 10),
           Container(
             alignment: Alignment(0.01, -1.0),

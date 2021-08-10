@@ -43,13 +43,16 @@ class LoginView extends GetView<LoginController> {
                   ),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         //id
-                        kTextbody('ID', size: 18),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: kTextbody('ID', size: 18),
+                        ),
                         EditText(
                           value: '',
                           hint: '',
@@ -60,7 +63,10 @@ class LoginView extends GetView<LoginController> {
                         SizedBox(height: 12),
 
                         //Password
-                        kTextbody('Password', size: 18),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: kTextbody('Password', size: 18),
+                        ),
                         EditTextPassword(
                           value: '',
                           hint: '',

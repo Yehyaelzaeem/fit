@@ -1,3 +1,5 @@
+import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
+import 'package:app/home_page_view.dart';
 import 'package:get/get.dart';
 
 import 'package:app/app/modules/about/bindings/about_binding.dart';
@@ -69,6 +71,11 @@ class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
+      name: _Paths.MY_OTHER_CALORIES,
+      page: () => MyOtherCalories(),
+      // binding: LoginBinding(),
+    ),
+    GetPage(
       name: _Paths.REGISTER,
       page: () => RegisterView(),
       binding: RegisterBinding(),
@@ -118,11 +125,11 @@ class AppPages {
       page: () => IntroductionScreenView(),
       binding: IntroductionScreenBinding(),
     ),
-    GetPage(
-      name: _Paths.ORIENTATION_REGISTER,
-      page: () => OrientationRegisterView(),
-      binding: OrientationRegisterBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.ORIENTATION_REGISTER,
+    //   page: () => OrientationRegisterView(),
+    //   binding: OrientationRegisterBinding(),
+    // ),
     GetPage(
       name: _Paths.SESSIONS,
       page: () => SessionsView(),

@@ -96,7 +96,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   child: Column(
                     children: [
                       Expanded(child: Image.asset(controller.currentIndex == 2 ? kSessionsDiary : kSessionsBlack, height: double.infinity)),
-                      kTextbody('Serssions', color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
+                      kTextbody('Sessions', color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
                     ],
                   ),
                 ),

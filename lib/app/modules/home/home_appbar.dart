@@ -1,19 +1,13 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controllers/home_controller.dart';
+class HomeAppbar extends StatelessWidget {
+  final String? type;
 
-const colorizeColors = [
-  Colors.purple,
-  Colors.blue,
-  Colors.yellow,
-  Colors.red,
-];
+  const HomeAppbar({Key? key, this.type}) : super(key: key);
 
-class HomeAppbar extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -21,9 +15,10 @@ class HomeAppbar extends GetView<HomeController> {
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 6),
         padding: EdgeInsets.symmetric(horizontal: 8),
-        width: Get.width,
+        width: MediaQuery.of(context).size.width,
         height: 56,
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
+        decoration:
+            BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.4),
             blurRadius: 2,
@@ -33,18 +28,31 @@ class HomeAppbar extends GetView<HomeController> {
         ]),
         child: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                Scaffold.of(context).openDrawer();
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.menu,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
+            type == null
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.menu,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ),
             Expanded(
               child: Image.asset(
                 kLogoRow,

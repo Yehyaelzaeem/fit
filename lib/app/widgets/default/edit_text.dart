@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 
 class EditText extends StatelessWidget {
   final String? suffixText;
-  final String hint;
-  final String value;
+  final String? hint;
+  final String? value;
   final bool enable;
   final bool label;
   final bool autoValidate;
@@ -21,12 +21,13 @@ class EditText extends StatelessWidget {
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
   final Color? background;
+  final TextEditingController? controller;
 
   EditText({
     this.background,
     this.iconData,
-    required this.value,
-    required this.hint,
+    this.value,
+    this.hint,
     this.autoValidate = false,
     this.enable = true,
     this.noBorder = false,
@@ -41,6 +42,7 @@ class EditText extends StatelessWidget {
     this.suffixText,
     this.formatter,
     this.type = TextInputType.text,
+    this.controller,
   });
 
   @override
@@ -49,30 +51,37 @@ class EditText extends StatelessWidget {
       color: background,
       padding: EdgeInsets.all(4),
       child: TextFormField(
+        controller: controller,
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-        initialValue: value,
         decoration: InputDecoration(
-            border: noBorder?InputBorder.none:OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-    
-            ),
-            disabledBorder: noBorder?InputBorder.none:OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(color: Colors.grey, width: 1.5),
-            ),
-            focusedBorder: noBorder?InputBorder.none:OutlineInputBorder(
-              borderRadius: BorderRadius.circular(radius),
-              borderSide: BorderSide(color: kColorPrimary, width: 2),
-            ),enabledBorder: !noBorder?null:InputBorder.none,
+            border: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(radius),
+                    borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                  ),
+            disabledBorder: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(radius),
+                    borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                  ),
+            focusedBorder: noBorder
+                ? InputBorder.none
+                : OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(radius),
+                    borderSide: BorderSide(color: kColorPrimary, width: 2),
+                  ),
+            enabledBorder: !noBorder ? null : InputBorder.none,
             errorStyle: TextStyle(fontSize: 10),
-            labelStyle: TextStyle(fontSize: fontSize,color: kColorAccent),
-            hintStyle: TextStyle(fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w300),
+            labelStyle: TextStyle(fontSize: fontSize, color: kColorAccent),
+            hintStyle:
+                TextStyle(fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w300),
             labelText: label ? hint : null,
             hintText: hint,
             counterStyle: TextStyle(color: Colors.green),
             suffixText: suffixText,
-            suffixIcon:suffixIconData == null
+            suffixIcon: suffixIconData == null
                 ? null
                 : Icon(
                     suffixIconData,

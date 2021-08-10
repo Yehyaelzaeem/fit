@@ -25,29 +25,21 @@ class _HomeSliderState extends State<HomeSlider> {
         children: <Widget>[
           CarouselSlider(
             items: widget.sliders.map((singleSlider) {
-              return Stack(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.asset(
-                        singleSlider,
-                        fit: BoxFit.fill,
-                      ),
-                      // child: CachedNetworkImage(
-                      //   imageUrl: singleSlider,
-                      //   errorWidget: (vtx, url, obj) {
-                      //     return Container();
-                      //   },
-                      //   placeholder: (ctx, url) {
-                      //     return CircularLoadingWidget();
-                      //   },
-                      //   fit: BoxFit.fill,
-                      // ),
-                    ),
-                  ),
-                ],
+              return Container(
+                width: double.infinity,
+                child: CachedNetworkImage(
+                  imageUrl: singleSlider,
+
+                  fadeInDuration: Duration(seconds: 2),
+
+                  errorWidget: (vtx, url, obj) {
+                    return Container();
+                  },
+                  placeholder: (ctx, url) {
+                    return CircularLoadingWidget();
+                  },
+                  fit: BoxFit.cover,
+                ),
               );
             }).toList(),
             options: CarouselOptions(
@@ -71,6 +63,7 @@ class _HomeSliderState extends State<HomeSlider> {
               },
             ),
           ),
+          SizedBox(height: 16,) ,
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -81,10 +74,12 @@ class _HomeSliderState extends State<HomeSlider> {
                     height: 8.0,
                     margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: _currentPage == index ? kColorPrimary : Colors.grey));
+                        shape: BoxShape.circle,
+                        color: _currentPage == index ? kColorPrimary : Colors.grey));
               }),
             ],
           ),
+
         ],
       ),
     );
