@@ -1,6 +1,7 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 
 class MyOtherCalories extends StatefulWidget {
@@ -23,58 +24,80 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
               type: null,
             ),
             SizedBox(height: 12),
-            Container(
-              alignment: Alignment(0.01, -1.0),
-              width: MediaQuery.of(context).size.width / 2.4,
-              padding: EdgeInsets.symmetric(horizontal: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.horizontal(
-                  right: Radius.circular(15.0),
-                ),
-                color: const Color(0xFF414042),
-              ),
-              child: Center(
-                child: Text(
-                  'My Other Calories',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
+            PageLable(name: "My Other Calories"),
             ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: 3,
+                itemCount: 1,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Column(
                       children: [
                         Container(
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24),
-                                child: Text(
-                                  "Proteins",
-                                  style: TextStyle(
-                                      color: kColorPrimary,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Icon(
-                                Icons.add_box_sharp,
-                                color: kColorPrimary,
-                              )
-                            ],
+                          alignment: Alignment(0.01, -1.0),
+                          margin: EdgeInsets.symmetric(vertical: 10),
+                          height: 50.0,
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF414042),
                           ),
-                          width: double.infinity,
-                          height: 45,
-                          color: Colors.grey[300],
+                          child: Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(width: 8),
+                                Text(
+                                  'Carbs & Fats',
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                SizedBox(width: 12),
+                                Container(
+                                    decoration: BoxDecoration(color: kColorPrimary),
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Color(0xFF414042),
+                                    )),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          height: 10,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(64),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          bottom: 0,
+                                          left: 0,
+                                          right: 100,
+                                          child: Container(
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF0088FF),
+                                              borderRadius: BorderRadius.circular(64),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 6),
+                                kTextHeader('89 / 350', color: Colors.white),
+                                SizedBox(width: 6),
+                              ],
+                            ),
+                          ),
                         ),
                         ListView.builder(
                             itemCount: 1,
@@ -84,172 +107,81 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                               return Column(
                                 children: [
                                   Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                    ),
+                                    decoration: BoxDecoration(boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        blurRadius: 2,
+                                        spreadRadius: 2,
+                                        offset: Offset(0, 0),
+                                      ),
+                                    ]),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Flexible(
-                                          flex: 5,
+                                          flex: 4,
                                           child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(),
-                                            child:
-                                                kTextbody('Title', color: Colors.white, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(),
-                                            child: kTextbody('Quantity',
-                                                color: Colors.white, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(),
-                                            child:
-                                                kTextbody('Unit', color: Colors.white, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(),
-                                            child: kTextbody('Calories',
-                                                color: Colors.white, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 3,
-                                          child: Container(
+                                            height: 45,
                                             width: double.infinity,
                                             decoration:
-                                                BoxDecoration(color: Colors.black, boxShadow: []),
-                                            child: kTextbody('', color: Colors.black, bold: true),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 24),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                                            child: kTextbody('Kitkat',
-                                                color: Colors.black, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                                            child: kTextbody('2', color: Colors.black, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                                            child: kTextbody('GM', color: Colors.black, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 5,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                                            child:
-                                                kTextbody('253', color: Colors.black, bold: true),
-                                          ),
-                                        ),
-                                        Container(
-                                          height: 30,
-                                          width: 1.4,
-                                          decoration: BoxDecoration(color: Colors.grey[700]),
-                                        ),
-                                        Flexible(
-                                          flex: 3,
-                                          child: Container(
-                                            height: 30,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.delete,
-                                                  color: Colors.redAccent,
-                                                  size: 24,
-                                                ),
-                                                Icon(
-                                                  Icons.edit,
-                                                  color: kColorPrimary,
-                                                  size: 24,
-                                                ),
-                                              ],
+                                                BoxDecoration(color: kColorAccent, boxShadow: []),
+                                            child: Center(
+                                              child: kTextbody('Quantity',
+                                                  color: Colors.white, bold: true),
                                             ),
                                           ),
                                         ),
+                                        Flexible(
+                                          flex: 4,
+                                          child: Container(
+                                            height: 45,
+                                            width: double.infinity,
+                                            decoration:
+                                                BoxDecoration(color: kColorAccent, boxShadow: []),
+                                            child: Center(
+                                                child: kTextbody('Unit',
+                                                    color: Colors.white, bold: true)),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 4,
+                                          child: Container(
+                                            height: 45,
+                                            width: double.infinity,
+                                            decoration:
+                                                BoxDecoration(color: kColorAccent, boxShadow: []),
+                                            child: Center(
+                                                child: kTextbody('Quality',
+                                                    color: Colors.white, bold: true)),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          flex: 4,
+                                          child: Container(
+                                            height: 45,
+                                            width: double.infinity,
+                                            decoration:
+                                                BoxDecoration(color: kColorAccent, boxShadow: []),
+                                            child: Center(
+                                                child: kTextbody('Calories',
+                                                    color: Colors.white, bold: true)),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 30,
+                                          width: 1.4,
+                                          decoration: BoxDecoration(color: kColorAccent),
+                                        ),
                                       ],
                                     ),
                                   ),
+                                  rowItem(),
+                                  rowItem(),
+                                  rowItem(),
+                                  rowItem(),
+                                  rowItem(),
+                                  rowItem(),
+                                  rowItem(),
                                 ],
                               );
                             })
@@ -259,6 +191,68 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 })
           ],
         ),
+      ),
+    );
+  }
+
+  Widget rowItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 45,
+              width: double.infinity,
+              decoration: BoxDecoration(color: kColorPrimary),
+              child: Center(child: kTextbody('2', color: Colors.white, bold: true)),
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 45,
+              width: double.infinity,
+              decoration: BoxDecoration(color: kColorPrimary),
+              child: Center(child: kTextbody('Gm', color: Colors.white, bold: true)),
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 45,
+              width: double.infinity,
+              decoration: BoxDecoration(color: kColorPrimary),
+              child: Center(child: kTextbody('Chicken Liver', color: Colors.white, bold: true)),
+            ),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 45,
+              width: double.infinity,
+              decoration: BoxDecoration(color: kColorPrimary),
+              child: Center(child: kTextbody('253', color: Colors.white, bold: true)),
+            ),
+          ),
+          // Flexible(
+          //   flex: 1,
+          //   child: Container(
+          //     height: 30,
+          //     width: double.infinity,
+          //     decoration: BoxDecoration(color: kColorPrimary),
+          //     child: Center(
+          //       child: Icon(
+          //         Icons.delete,
+          //         color: Colors.redAccent,
+          //         size: 24,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+        ],
       ),
     );
   }

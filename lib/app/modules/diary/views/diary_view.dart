@@ -223,7 +223,7 @@ class DiaryView extends GetView<DiaryController> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Flexible(
-                          flex: 3,
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -237,7 +237,21 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
-                          flex: 3,
+                          flex: 4,
+                          child: Container(
+                            height: 30,
+                            width: double.infinity,
+                            decoration: BoxDecoration(color: Colors.white, boxShadow: []),
+                            child: kTextbody('Unit', color: Colors.black, bold: true),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 1.4,
+                          decoration: BoxDecoration(color: Colors.grey[700]),
+                        ),
+                        Flexible(
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -251,7 +265,7 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
-                          flex: 3,
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -275,158 +289,10 @@ class DiaryView extends GetView<DiaryController> {
                       ],
                     ),
                   ),
-                  Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          height: 16,
-                          width: 1.4,
-                          decoration: BoxDecoration(color: Colors.grey[700]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('2', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('Chicken Liver', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('253', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: Center(
-                            child: Icon(
-                              Icons.delete,
-                              color: Colors.redAccent,
-                              size: 24,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          height: 16,
-                          width: 1.4,
-                          decoration: BoxDecoration(color: Colors.grey[700]),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('2', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('Chicken Liver', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('253', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  rowItem()
                 ],
               ),
-              SizedBox(height: 24),
-
-              //* Proteins 01151792321 zahra
-              Container(
+ Container(
                 alignment: Alignment(0.01, -1.0),
                 height: 50.0,
                 width: Get.width,
@@ -484,7 +350,7 @@ class DiaryView extends GetView<DiaryController> {
                         ),
                       ),
                       SizedBox(width: 6),
-                      kTextHeader('270 / 350', color: Colors.white),
+                      kTextHeader('89 / 350', color: Colors.white),
                       SizedBox(width: 6),
                     ],
                   ),
@@ -507,7 +373,7 @@ class DiaryView extends GetView<DiaryController> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Flexible(
-                          flex: 3,
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -521,7 +387,21 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
-                          flex: 3,
+                          flex: 4,
+                          child: Container(
+                            height: 30,
+                            width: double.infinity,
+                            decoration: BoxDecoration(color: Colors.white, boxShadow: []),
+                            child: kTextbody('Unit', color: Colors.black, bold: true),
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 1.4,
+                          decoration: BoxDecoration(color: Colors.grey[700]),
+                        ),
+                        Flexible(
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -535,7 +415,7 @@ class DiaryView extends GetView<DiaryController> {
                           decoration: BoxDecoration(color: Colors.grey[700]),
                         ),
                         Flexible(
-                          flex: 3,
+                          flex: 4,
                           child: Container(
                             height: 30,
                             width: double.infinity,
@@ -559,134 +439,9 @@ class DiaryView extends GetView<DiaryController> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Flexible(
-                          flex: 3,
-                          child: Container(
-                            height: 30,
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                            child: kTextbody('2', color: Colors.black, bold: true),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 1.4,
-                          decoration: BoxDecoration(color: Colors.grey[700]),
-                        ),
-                        Flexible(
-                          flex: 3,
-                          child: Container(
-                            height: 30,
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                            child: kTextbody('Chicken Liver', color: Colors.black, bold: true),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 1.4,
-                          decoration: BoxDecoration(color: Colors.grey[700]),
-                        ),
-                        Flexible(
-                          flex: 3,
-                          child: Container(
-                            height: 30,
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                            child: kTextbody('253', color: Colors.black, bold: true),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 1.4,
-                          decoration: BoxDecoration(color: Colors.grey[700]),
-                        ),
-                        Flexible(
-                          flex: 1,
-                          child: Container(
-                            height: 30,
-                            width: double.infinity,
-                            decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                            child: Center(
-                              child: Icon(
-                                Icons.delete,
-                                color: Colors.redAccent,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('2', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('Chicken Liver', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 3,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: kTextbody('253', color: Colors.black, bold: true),
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                        width: 1.4,
-                        decoration: BoxDecoration(color: Colors.grey[700]),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          height: 30,
-                          width: double.infinity,
-                          decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                            size: 24,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
+                  rowItem()
                 ],
               ),
-              SizedBox(height: 24),
 
               kButtonDefault('Save',
                   marginH: Get.width / 5, paddingV: 0, shadow: true, paddingH: 50),
@@ -711,6 +466,7 @@ class DiaryView extends GetView<DiaryController> {
               Divider(),
               SizedBox(height: 12),
               Container(
+                width: double.infinity,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -811,6 +567,88 @@ class DiaryView extends GetView<DiaryController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget rowItem() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+              child: kTextbody('2', color: Colors.black, bold: true),
+            ),
+          ),
+          Container(
+            height: 30,
+            width: 1.4,
+            decoration: BoxDecoration(color: Colors.grey[700]),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+              child: kTextbody('Gm', color: Colors.black, bold: true),
+            ),
+          ),
+          Container(
+            height: 30,
+            width: 1.4,
+            decoration: BoxDecoration(color: Colors.grey[700]),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+              child: kTextbody('Chicken Liver', color: Colors.black, bold: true),
+            ),
+          ),
+          Container(
+            height: 30,
+            width: 1.4,
+            decoration: BoxDecoration(color: Colors.grey[700]),
+          ),
+          Flexible(
+            flex: 4,
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+              child: kTextbody('253', color: Colors.black, bold: true),
+            ),
+          ),
+          Container(
+            height: 30,
+            width: 1.4,
+            decoration: BoxDecoration(color: Colors.grey[700]),
+          ),
+          Flexible(
+            flex: 1,
+            child: Container(
+              height: 30,
+              width: double.infinity,
+              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
+              child: Center(
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.redAccent,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

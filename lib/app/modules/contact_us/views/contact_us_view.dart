@@ -16,7 +16,7 @@ class ContactUsView extends GetView<ContactUsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SingleChildScrollView(child: Obx(() {
-      if (controller.contactResponse.value.code == 200) {
+      if (controller.contactResponse.value.success == true) {
         ContactResponse ress = controller.contactResponse.value;
         return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           SizedBox(height: 24),

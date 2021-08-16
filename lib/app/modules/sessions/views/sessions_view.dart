@@ -2,6 +2,7 @@ import 'package:app/app/modules/session_details/session_details.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,27 +19,7 @@ class SessionsView extends GetView<SessionsController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 12),
-          Container(
-            alignment: Alignment(0.01, -1.0),
-            width: Get.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(64.0),
-              ),
-              color: const Color(0xFF414042),
-            ),
-            child: Center(
-              child: Text(
-                'My Sessions',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
+          PageLable(name: "My Sessions"),
           Container(
             width: double.infinity,
             margin: EdgeInsets.symmetric(vertical: 12),
@@ -75,27 +56,7 @@ class SessionsView extends GetView<SessionsController> {
             ),
           ),
           SizedBox(height: 12),
-          Container(
-            alignment: Alignment(0.01, -1.0),
-            width: Get.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(64.0),
-              ),
-              color: const Color(0xFF414042),
-            ),
-            child: Center(
-              child: Text(
-                'Completed',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
+          PageLable(name: "Completed"),
           for (int i = 0; i < 3; i++)
             Container(
               width: double.infinity,
@@ -132,7 +93,7 @@ class SessionsView extends GetView<SessionsController> {
                                 ],
                               ),
                               Expanded(child: SizedBox(width: 1)),
-                              kButton('Details', paddingH: 20, paddingV: 0, func: () {
+                              kButton('Details', hight: 35, func: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) => SessionDetails()));
                               }),

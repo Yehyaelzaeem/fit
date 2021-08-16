@@ -7,6 +7,7 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -27,7 +28,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
 
   void getData() async {
     await ApiProvider().getOritationSelletionsData().then((value) {
-      if (value.code == 200) {
+      if (value.success == true) {
         setState(() {
           ress = value;
           isLoading = false;
@@ -56,7 +57,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
             mobile: mobile,
             target: target)
         .then((value) {
-      if (value.code == 200) {
+      if (value.success == true) {
         setState(() {
           sendResponse = value;
           showLoader = false;
@@ -94,28 +95,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                 SizedBox(height: 24),
                 HomeAppbar(type: null),
                 SizedBox(height: 12),
-                Container(
-                  alignment: Alignment(0.01, -1.0),
-                  height: 30.0,
-                  width: MediaQuery.of(context).size.width / 1.6,
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.horizontal(
-                      right: Radius.circular(15.0),
-                    ),
-                    color: const Color(0xFF414042),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Orientation Registration',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ),
+                PageLable(name: "Orientation Registration"),
                 SizedBox(height: 12),
                 isLoading == true
                     ? CircularLoadingWidget()
@@ -126,7 +106,12 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             padding: EdgeInsets.all(8),
                             color: Colors.grey[300],
                             width: double.infinity,
-                            child: kTextbody("${ress.data!.intro}", align: TextAlign.start),
+                            child: kTextbody(
+                              "${ress.data!.intro}",
+                              align: TextAlign.center,
+                              size: 15,
+                              bold: true,
+                            ),
                           ),
                           Container(
                             color: Colors.white,
@@ -356,6 +341,9 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                               color: Color(0xffeeeeee),
                                               child: Row(
                                                 children: [
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
                                                   ress.data!.targets![index].isSellected == false
                                                       ? Icon(
                                                           Icons.radio_button_off,
@@ -369,7 +357,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                                     padding:
                                                         const EdgeInsets.symmetric(horizontal: 10),
                                                     child: Text(
-                                                        ress.data!.targets![index].title ?? ""),
+                                                      ress.data!.targets![index].title ?? "",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 14),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -417,7 +409,6 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                           ],
                                         ),
                                       ),
-                                      SizedBox(height: 12),
                                       kTextbody('Where did you hear about us?',
                                           size: 18, bold: true),
                                       ListView.builder(
@@ -446,6 +437,9 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                                 color: Color(0xffeeeeee),
                                                 child: Row(
                                                   children: [
+                                                    SizedBox(
+                                                      width: 20,
+                                                    ),
                                                     ress.data!.hearingFrom![index].isSellected ==
                                                             false
                                                         ? Icon(
@@ -461,7 +455,10 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                                           horizontal: 10),
                                                       child: Text(
                                                           ress.data!.hearingFrom![index].title ??
-                                                              ""),
+                                                              "",
+                                                          style: TextStyle(
+                                                              fontWeight: FontWeight.bold,
+                                                              fontSize: 14)),
                                                     ),
                                                   ],
                                                 ),

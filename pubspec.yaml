@@ -21,6 +21,7 @@ dependencies:
   fluttertoast: ^8.0.8
   url_launcher: ^6.0.9
   flutter_html: ^2.1.1
+  shared_preferences: ^2.0.6
 
 
   flutter:
@@ -48,8 +49,8 @@ flutter:
   fonts:
     - family: appFont
       fonts:
-        - asset: assets/fonts/f-regular.ttf
-        - asset: assets/fonts/f-light.ttf
+        - asset: assets/fonts/f-regular.otf
+        - asset: assets/fonts/f-light.otf
           weight: 100
-        - asset: assets/fonts/f-bold.ttf
+        - asset: assets/fonts/f-bold.otf
           weight: 700

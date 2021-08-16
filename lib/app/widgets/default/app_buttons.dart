@@ -12,16 +12,18 @@ Widget kButton(
   double marginH = 6,
   double textSize = 16,
   bool bold = true,
+  double? hight,
   bool loading = false,
   var func,
 }) {
   return Container(
-    margin: EdgeInsets.symmetric(horizontal: marginH, vertical: marginV),
+    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: InkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: func,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+        height:hight?? 45,
+        // padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
         decoration: BoxDecoration(
           color: color == null ? kColorPrimary : color,
           borderRadius: BorderRadius.circular(250),
@@ -39,10 +41,16 @@ Widget kButton(
                 ),
               )
             : Center(
-                child: kTextHeader(message,
-                    size: textSize,
-                    color: textColor == null ? Colors.white : textColor,
-                    bold: bold)),
+                child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  message,
+                  style: TextStyle(
+                      fontSize: textSize,
+                      fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
+                      color: textColor ?? Colors.white),
+                ),
+              )),
       ),
     ),
   );
@@ -63,22 +71,16 @@ Widget kButtonDefault(
   var func,
 }) {
   return Container(
-      margin: EdgeInsets.symmetric(horizontal: marginH, vertical: marginV),
-      width: fullWidth ? double.infinity : null,
-      child: TextButton(
-        onPressed: func,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateColor.resolveWith((states) => kColorPrimary),
-          // foregroundColor: MaterialStateColor.resolveWith((states) => kColorAccent),
-          // overlayColor:  MaterialStateColor.resolveWith((states) => kColorAccent),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(64.0),
-              // side: BorderSide(color: Colors.red),
-            ),
-          ),
-          shadowColor: MaterialStateColor.resolveWith((states) => Colors.grey.shade300),
-          elevation: !shadow ? null : MaterialStateProperty.resolveWith((states) => 4),
+    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    child: InkWell(
+      borderRadius: BorderRadius.circular(20),
+      onTap: func,
+      child: Container(
+        height: 45,
+        // padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+        decoration: BoxDecoration(
+          color: color == null ? kColorPrimary : color,
+          borderRadius: BorderRadius.circular(250),
         ),
         child: loading
             ? Center(
@@ -92,11 +94,17 @@ Widget kButtonDefault(
                   ),
                 ),
               )
-            : Container(
-                padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-                child: kTextHeader(message,
-                    color: textColor == null ? Colors.white : textColor, bold: bold)),
-      ));
+            : Center(
+                child: Text(
+                message,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
+                    color: textColor ?? Colors.white),
+              )),
+      ),
+    ),
+  );
 }
 
 Widget kButtonWithIcon(

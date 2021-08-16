@@ -16,7 +16,7 @@ class AuthView extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 26),
           Container(
@@ -33,18 +33,15 @@ class AuthView extends GetView<AuthController> {
                 marginH: 20,
                 bold: true,
                 paddingH: 0,
-                textSize: 24,
+                textSize: 20,
                 func: () {
                   Get.toNamed(Routes.LOGIN);
                 },
               ),
-              SizedBox(height: 8),
               kButton(
                 'Sign up',
                 color: kColorAccent,
-                marginH: 20,
-                paddingH: 0,
-                textSize: 24,
+                textSize: 20,
                 bold: true,
                 func: () {
                   Get.toNamed(Routes.REGISTER);

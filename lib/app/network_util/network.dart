@@ -1,3 +1,4 @@
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:dio/dio.dart';
 
 class NetworkUtil {
@@ -11,10 +12,14 @@ class NetworkUtil {
   factory NetworkUtil() => _instance;
 
   Future<Response> get(String url) async {
+    var _token = await SharedHelper().readString(CachingKey.TOKEN);
+    print('Token >>> $_token');
+
     Map<String, dynamic> headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "x-api-key": "FitoverfaT_clinic_api_key"
+      "x-api-key": "FitoverfaT_clinic_api_key",
+      'Authorization': 'Bearer $_token',
     };
 
     var response;
@@ -28,15 +33,20 @@ class NetworkUtil {
       } else {
         print("Error " + e.stackTrace.toString());
       }
+
     }
     return handleResponse(response);
   }
 
   Future<Response> post(String url, {FormData? body, encoding}) async {
+    var _token = await SharedHelper().readString(CachingKey.TOKEN);
+    print('Token >>> $_token');
+
     Map<String, dynamic> headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "x-api-key": "FitoverfaT_clinic_api_key"
+      "x-api-key": "FitoverfaT_clinic_api_key",
+      'Authorization': 'Bearer $_token',
     };
 
     var response;

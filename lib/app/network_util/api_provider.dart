@@ -3,7 +3,11 @@ import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/faq_response.dart';
 import 'package:app/app/models/general_response.dart';
 import 'package:app/app/models/home_page_response.dart';
+import 'package:app/app/models/message_details_response.dart';
+import 'package:app/app/models/messages_response.dart';
 import 'package:app/app/models/orintation_response.dart';
+import 'package:app/app/models/transformation_response.dart';
+import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:dio/dio.dart';
 
@@ -16,6 +20,45 @@ class ApiProvider {
       return HomePageResponse.fromJson(response.data);
     } else {
       return HomePageResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MessagesResponse> getMessagesData() async {
+    Response response = await _utils.get("messages");
+    if (response.statusCode == 200) {
+      return MessagesResponse.fromJson(response.data);
+    } else {
+      return MessagesResponse.fromJson(response.data);
+    }
+  }
+
+  Future<TransformationsResponse> getTransformationData() async {
+    Response response = await _utils.get("transformations");
+    if (response.statusCode == 200) {
+      return TransformationsResponse.fromJson(response.data);
+    } else {
+      return TransformationsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> deleteMessage(int id) async {
+    FormData body = FormData.fromMap({
+      'delete': id,
+    });
+    Response response = await _utils.post("delete_message", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MessageDetailsResponse> getMessagesDetailsData(int id) async {
+    Response response = await _utils.get("message/$id");
+    if (response.statusCode == 200) {
+      return MessageDetailsResponse.fromJson(response.data);
+    } else {
+      return MessageDetailsResponse.fromJson(response.data);
     }
   }
 
@@ -60,6 +103,35 @@ class ApiProvider {
     FormData body = FormData.fromMap(
         {'name': name, 'email': email, 'phone': phone, 'subject': subject, 'message': message});
     Response response = await _utils.post("contact_form", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<UserResponse> login(String id, String password) async {
+    FormData body = FormData.fromMap({'patient_id': id, 'password': password});
+    Response response = await _utils.post("login", body: body);
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> signUpApi(String id, String password, String name, String email,
+      String date, String phone, String password_confirmation) async {
+    FormData body = FormData.fromMap({
+      "patient_id": id,
+      "name": name,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": password_confirmation
+    });
+    Response response = await _utils.post("register", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
     } else {

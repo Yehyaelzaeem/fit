@@ -1,6 +1,7 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,57 +24,32 @@ class _SessionDetailsState extends State<SessionDetails> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                child: Center(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Body Composition",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Icon(
-                          Icons.download,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                height: 45,
-                width: MediaQuery.of(context).size.width / 2,
-                decoration: BoxDecoration(
-                    color: kColorAccent,
-                    borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(50), bottomRight: Radius.circular(50))),
-              ),
+              PageLable(name: "Body Composition"),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18),
-                child: Text(
-                  "${DateTime.now().toString().substring(0, 10)} - 11 : 50 PM",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(
+                  Icons.download_sharp,
+                  color: kColorPrimary,
+                  size: 35,
                 ),
               ),
             ],
           ),
-          SizedBox(
-            height: 20,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+              child: Text(
+                "${DateTime.now().toString().substring(0, 10)} - 11 : 50 PM",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+            ),
           ),
           infoRow("Height :", "160 Cm"),
           infoRow("Total Weight :", "70 KG"),
           infoRow("Fat Percentage :", "30%"),
           infoRow("Muscles Percentage :", "20%"),
           infoRow("Water Percentage :", "50%"),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(),
-              kButton("Follow Up", paddingH: 20),
-            ],
-          ),
+
           Container(
               color: kColorAccent,
               child: Row(
@@ -156,6 +132,8 @@ class _SessionDetailsState extends State<SessionDetails> {
           tableItem(),
           tableItem(),
           tableItem(),
+          Center(child: kButton("Follow Up",hight: 45)),
+
         ],
       ),
     );

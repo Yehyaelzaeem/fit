@@ -42,7 +42,7 @@
 //             ),
 //           ),
 //           Obx(() {
-//             if (controller.faqResponse.value.code == 200) {
+//             if (controller.faqResponse.value.success == true) {
 //               for (int i = 0; i < controller.faqResponse.value.data.length; i++)
 //                 GestureDetector(
 //                   onTap: () {
@@ -172,7 +172,7 @@ class _FaqViewState extends State<FaqView> {
 
   void getFaq() async {
     await ApiProvider().getFaqtData().then((value) {
-      if (value.code == 200) {
+      if (value.success == true) {
         setState(() {
           ress = value;
           isLoading = false;

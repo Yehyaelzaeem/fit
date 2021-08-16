@@ -5,7 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import 'app/modules/home/home_slider.dart';
+
 // import 'app/modules/orientation_register/views/orientation_register_view.dart';
 import 'app/network_util/api_provider.dart';
 import 'app/utils/theme/app_colors.dart';
@@ -27,7 +29,7 @@ class _HomePageViewState extends State<HomePageView> {
 
   void getHomeData() async {
     await ApiProvider().getHomeData().then((value) {
-      if (value.code == 200) {
+      if (value.success == true) {
         setState(() {
           ress = value;
           isLoading = false;
@@ -72,6 +74,7 @@ class _HomePageViewState extends State<HomePageView> {
                         onTap: () {
                           setState(() {
                             pageIndex = index;
+                            serviceIndex = 0;
                           });
                           print(index);
                         },
@@ -81,15 +84,17 @@ class _HomePageViewState extends State<HomePageView> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
                           child: Container(
                             width: MediaQuery.of(context).size.width / 3,
-                            padding: EdgeInsets.all(4),
+                            // padding: EdgeInsets.only(top: 8),
                             decoration: BoxDecoration(
                               color: pageIndex == index ? Colors.white : ACCENT_COLOR,
                               borderRadius: BorderRadius.circular(64),
                             ),
-                            child: kTextHeader(
-                              "${ress.data!.services![index].title}",
-                              color: pageIndex == index ? kColorPrimary : Colors.white,
-                              bold: pageIndex == index,
+                            child: Center(
+                              child: kTextHeader(
+                                "${ress.data!.services![index].title}",
+                                color: pageIndex == index ? kColorPrimary : Colors.white,
+                                bold: pageIndex == index,
+                              ),
                             ),
                           ),
                         ),
@@ -169,13 +174,13 @@ class _HomePageViewState extends State<HomePageView> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 12),
                     alignment: Alignment(-0.14, -1.0),
-                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                    width: MediaQuery.of(context).size.width / 2.3,
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+                    width: MediaQuery.of(context).size.width / 1.8,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.horizontal(
                         right: Radius.circular(64.0),
                       ),
-                      color: Colors.white,
+                      color: kColorAccent,
                       boxShadow: [
                         BoxShadow(
                           color: const Color(0xFF414042).withOpacity(0.35),
@@ -188,9 +193,9 @@ class _HomePageViewState extends State<HomePageView> {
                       child: Text(
                         '${ress.data!.services![pageIndex].items![serviceIndex].title}',
                         style: TextStyle(
-                          fontSize: 12.0,
-                          color: const Color(0xFF7FC902),
-                          fontWeight: FontWeight.w600,
+                          fontSize: 15.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                     ),
@@ -198,10 +203,10 @@ class _HomePageViewState extends State<HomePageView> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 8),
                     padding: EdgeInsets.all(8),
-                    color: Colors.grey[300],
+                    // color: Colors.grey[300],
                     width: double.infinity,
                     child: kTextbody('${ress.data!.services![pageIndex].items![serviceIndex].text}',
-                        align: TextAlign.start),
+                        align: TextAlign.start , size: 15),
                   ),
                   ress.data!.services![pageIndex].items![serviceIndex].cover!.type == "image"
                       ? CachedNetworkImage(
@@ -240,11 +245,14 @@ class _HomePageViewState extends State<HomePageView> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => OrientationRegisterView()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => OrientationRegisterView()));
                     },
                     child: Center(
                       child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 16 , vertical: 8),
+
+                        margin: EdgeInsets.symmetric(vertical: 16),
                         decoration: BoxDecoration(
                             color: kColorPrimary,
                             borderRadius: BorderRadius.circular(64),

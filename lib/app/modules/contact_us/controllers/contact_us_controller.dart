@@ -29,7 +29,7 @@ class ContactUsController extends GetxController {
         .sendContactData(contactFirstName.text, contactEmail.text, contactPhone.text, subject.text,
             contactMessage.text)
         .then((value) {
-      if (value.code == 200) {
+      if (value.success == true) {
         Get.offAllNamed(Routes.HOME);
         Fluttertoast.showToast(msg: "${value.message}");
       } else {

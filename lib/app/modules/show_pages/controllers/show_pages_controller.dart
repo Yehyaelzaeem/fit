@@ -16,7 +16,8 @@ class ShowPagesController extends GetxController {
 
   List<Widget> defaultWidgets = [];
   RxList<WidgetView> selectedWidget = RxList();
-  String text = 'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى';
+  String text =
+      'هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى';
 
   init() {
     pages.clear();
@@ -27,13 +28,22 @@ class ShowPagesController extends GetxController {
     pages.add(PageView(pageName: "About", route: Routes.ABOUT, color: Colors.greenAccent));
     pages.add(PageView(pageName: "Policy", route: Routes.POLICY, color: Colors.redAccent));
 
-    widgets.add(WidgetView(widgetName: "Auth err", widget: AuthErrorWidget(refresh: () {}), color: Colors.red));
-    widgets.add(WidgetView(widgetName: "Server err", widget: ServerErrorWidget(refresh: () {}), color: Colors.orange));
-    widgets
-        .add(WidgetView(widgetName: "Network err", widget: NoInternetConnection(refresh: () {}), color: Colors.redAccent));
-    widgets.add(WidgetView(widgetName: "Empty err", widget: EmptyErrorWidget(refresh: () {}), color: Colors.blueAccent));
     widgets.add(WidgetView(
-        widgetName: "Message err", widget: MessageErrorWidget(message: text, refresh: () {}), color: Colors.greenAccent));
+        widgetName: "Auth err", widget: AuthErrorWidget(refresh: () {}), color: Colors.red));
+    widgets.add(WidgetView(
+        widgetName: "Server err", widget: ServerErrorWidget(refresh: () {}), color: Colors.orange));
+    widgets.add(WidgetView(
+        widgetName: "Network err",
+        widget: NoInternetConnection(refresh: () {}),
+        color: Colors.redAccent));
+    widgets.add(WidgetView(
+        widgetName: "Empty err",
+        widget: EmptyErrorWidget(refresh: () {}),
+        color: Colors.blueAccent));
+    widgets.add(WidgetView(
+        widgetName: "Message err",
+        widget: MessageErrorWidget(message: text, refresh: () {}),
+        color: Colors.greenAccent));
 
     defaultWidgets.add(EditText(value: 'value', hint: 'hint'));
     defaultWidgets.add(kTextHeader(text));
@@ -71,6 +81,7 @@ class PageView {
   late String pageName;
   late String route;
   late Color color;
+
   PageView({required this.pageName, required this.color, required this.route});
 }
 
@@ -78,5 +89,6 @@ class WidgetView {
   late String widgetName;
   late Widget widget;
   late Color color;
+
   WidgetView({required this.widgetName, required this.color, required this.widget});
 }

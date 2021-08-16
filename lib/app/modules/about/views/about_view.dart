@@ -41,7 +41,7 @@ class AboutView extends GetView<AboutController> {
 
       //* phone
       Obx(() {
-        if (controller.aboutResponse.value.code == 200) {
+        if (controller.aboutResponse.value.success == true) {
           AboutResponse response = controller.aboutResponse.value;
           return ListView.builder(
               shrinkWrap: true,
