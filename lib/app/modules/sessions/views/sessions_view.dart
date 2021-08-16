@@ -1,112 +1,196 @@
+import 'package:app/app/models/session_response.dart';
+import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/session_details/session_details.dart';
+import 'package:app/app/modules/un_auth_view.dart';
+import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-import '../controllers/sessions_controller.dart';
+class SessionsView extends StatefulWidget {
+  const SessionsView({Key? key}) : super(key: key);
 
-class SessionsView extends GetView<SessionsController> {
-  final controller = Get.find(tag: 'SessionsController');
+  @override
+  _SessionsViewState createState() => _SessionsViewState();
+}
+
+class _SessionsViewState extends State<SessionsView> {
+  bool isLoading = true;
+
+  UserResponse ress = UserResponse();
+
+  void getUserData() async {
+    await ApiProvider().getProfile().then((value) {
+      if (value.success == true) {
+        setState(() {
+          ress = value;
+        });
+        getAllSessionData();
+      } else {
+        Fluttertoast.showToast(msg: "$value");
+        print("error");
+      }
+    });
+  }
+
+  SessionResponse sessionResponse = SessionResponse();
+
+  void getAllSessionData() async {
+    await ApiProvider().getSessions().then((value) {
+      if (value.success == true) {
+        setState(() {
+          sessionResponse = value;
+          isLoading = false;
+        });
+      } else {
+        // Fluttertoast.showToast(msg: "${sessionResponse}");
+        print("error");
+      }
+    });
+  }
+
+  void getFromCash() async {
+    bool IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    if (IsLogggd != true) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UnAuthView(),
+          ),
+          (Route<dynamic> route) => false);
+    } else {
+      getUserData();
+    }
+  }
+
+  @override
+  void initState() {
+    getFromCash();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 12),
-          PageLable(name: "My Sessions"),
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(vertical: 12),
-            padding: EdgeInsets.symmetric(vertical: 8),
-            color: Color(0xffF1F1F1),
-            child: Stack(
-              children: [
-                Container(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        kTextbody(
-                          'Next session',
-                          color: Colors.black,
-                          size: 16,
-                        ),
-                        kTextbody('Thursday', color: kColorPrimary, size: 16, bold: true),
-                        kTextbody(
-                          '03/06/2021  11:50 PM',
-                          color: Colors.black,
-                          size: 16,
-                        ),
-                      ],
-                    )),
-                Positioned(
-                    right: 26,
-                    top: 3,
-                    child: kTextfooter(
-                      'Pending',
-                      color: Colors.black87,
-                    )),
-              ],
-            ),
-          ),
-          SizedBox(height: 12),
-          PageLable(name: "Completed"),
-          for (int i = 0; i < 3; i++)
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.symmetric(vertical: 12),
-              padding: EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.8),
-                  blurRadius: 3,
-                  offset: Offset(0, 1),
-                  spreadRadius: 3,
-                )
-              ]),
-              child: Stack(
+        body: ListView(
+      children: [
+        Row(
+          children: [
+            PageLable(name: "My Sessions"),
+          ],
+        ),
+        isLoading == true
+            ? CircularLoadingWidget()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    color: Color(0xffF1F1F1),
+                    child: Stack(
+                      children: [
+                        Container(
+                            width: double.infinity,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                kTextbody(
+                                  'Next session',
+                                  color: Colors.black,
+                                  size: 16,
+                                ),
+                                kTextbody('${ress.data!.nextSession!.day}',
+                                    color: kColorPrimary, size: 16, bold: true),
+                                kTextbody(
+                                  '${ress.data!.nextSession!.sessionDate}',
+                                  color: Colors.black,
+                                  size: 16,
+                                ),
+                              ],
+                            )),
+                        Positioned(
+                            right: 26,
+                            top: 3,
+                            child: kTextfooter(
+                              '${ress.data!.nextSession!.status}',
+                              color: Colors.black87,
+                            )),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  PageLable(name: "Completed"),
+                  for (int i = 0; i < sessionResponse.data!.length; i++)
+                    Container(
                       width: double.infinity,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                      margin: EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.8),
+                          blurRadius: 3,
+                          offset: Offset(0, 1),
+                          spreadRadius: 3,
+                        )
+                      ]),
+                      child: Stack(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Expanded(child: SizedBox(width: 1)),
-                              Column(
+                          Container(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  kTextbody('Thursday', color: kColorPrimary, size: 16, bold: true),
-                                  kTextbody(
-                                    '03/06/2021  11:50 PM',
-                                    color: Colors.black,
-                                    size: 16,
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Expanded(child: SizedBox(width: 1)),
+                                      Column(
+                                        children: [
+                                          kTextbody('${sessionResponse.data![i].day ?? "Monday"}',
+                                              color: kColorPrimary, size: 16, bold: true),
+                                          kTextbody(
+                                            '${sessionResponse.data![i].date}',
+                                            color: Colors.black,
+                                            size: 16,
+                                          ),
+                                        ],
+                                      ),
+                                      Expanded(child: SizedBox(width: 1)),
+                                      kButton(
+                                          '${sessionResponse.data![i].status == "Pending" ? "Pending" : "Details"}',
+                                          hight: 35,
+                                          color: sessionResponse.data![i].status == "Pending"
+                                              ? Colors.grey
+                                              : kColorPrimary, func: () {
+                                        if (sessionResponse.data![i].status == "Pending") {
+                                          print("Pending Item");
+                                        } else {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => SessionDetails(
+                                                      id: sessionResponse.data![i].id)));
+                                        }
+                                      }),
+                                      SizedBox(width: 12),
+                                    ],
                                   ),
                                 ],
-                              ),
-                              Expanded(child: SizedBox(width: 1)),
-                              kButton('Details', hight: 35, func: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => SessionDetails()));
-                              }),
-                              SizedBox(width: 12),
-                            ],
-                          ),
+                              )),
                         ],
-                      )),
+                      ),
+                    ),
                 ],
               ),
-            ),
-        ],
-      ),
+      ],
     ));
   }
 }

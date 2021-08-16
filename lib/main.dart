@@ -17,7 +17,7 @@ void main() {
     GetMaterialApp(
       title: "FIT over FAT",
       enableLog: true,
-      initialRoute: AppPages.INITIAL,
+      initialRoute: Routes.SPLASH,
       getPages: AppPages.routes,
       theme: lightTheme,
       themeMode: ThemeMode.light,

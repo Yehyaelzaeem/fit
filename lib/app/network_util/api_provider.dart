@@ -6,6 +6,8 @@ import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/models/message_details_response.dart';
 import 'package:app/app/models/messages_response.dart';
 import 'package:app/app/models/orintation_response.dart';
+import 'package:app/app/models/session_response.dart';
+import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
@@ -117,6 +119,33 @@ class ApiProvider {
       return UserResponse.fromJson(response.data);
     } else {
       return UserResponse.fromJson(response.data);
+    }
+  }
+
+  Future<UserResponse> getProfile() async {
+    Response response = await _utils.get("profile");
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data);
+    }
+  }
+
+  Future<SessionResponse> getSessions() async {
+    Response response = await _utils.get("sessions");
+    if (response.data["success"] == true) {
+      return SessionResponse.fromJson(response.data);
+    } else {
+      return SessionResponse.fromJson(response.data);
+    }
+  }
+
+  Future<SessionDetailsResponse> getSessionDetails(int? id) async {
+    Response response = await _utils.get("session/$id");
+    if (response.data["success"] == true) {
+      return SessionDetailsResponse.fromJson(response.data);
+    } else {
+      return SessionDetailsResponse.fromJson(response.data);
     }
   }
 

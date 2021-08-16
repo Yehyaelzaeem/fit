@@ -1,5 +1,5 @@
-import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
@@ -13,7 +13,11 @@ class HomeDrawer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    YemenyPrefs prefs = YemenyPrefs();
+    return itemBuilder();
+  }
+
+  Widget itemBuilder() {
+    SharedHelper prefs = SharedHelper();
 
     return Container(
       width: Get.width / 1.5,
@@ -31,9 +35,9 @@ class HomeDrawer extends GetView<HomeController> {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(250),
-                        child: prefs.getImage() != null
+                        child: prefs.readString(CachingKey.AVATAR) != null
                             ? CachedNetworkImage(
-                                imageUrl: prefs.getImage()!,
+                                imageUrl: controller.avatar,
                                 fit: BoxFit.cover,
                                 height: 80,
                                 width: 80,
@@ -47,8 +51,9 @@ class HomeDrawer extends GetView<HomeController> {
                             : profileImageHolder()),
                     // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
                     // Text(prefs.getName()!)
-                    kTextHeader('Mostafa Mohamed'),
-                    kTextfooter('ID:1682947', size: 14, color: Colors.black87, paddingV: 0),
+                    kTextHeader('${controller.name}'),
+                    kTextfooter('ID:${controller.phone}',
+                        size: 14, color: Colors.black87, paddingV: 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -70,40 +75,47 @@ class HomeDrawer extends GetView<HomeController> {
                   controller.currentIndex.value = 0;
                 }),
 
-
             //Diary
-            singleDrawerItem(
-                title: 'Diary',
-                image: 'assets/img/ic_diary_primary.png',
-                action: () {
-                  Get.back();
-                  controller.currentIndex.value = 1;
-                }),
+            controller.isLogggd == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: 'Diary',
+                    image: 'assets/img/ic_diary_primary.png',
+                    action: () {
+                      Get.back();
+                      controller.currentIndex.value = 1;
+                    }),
 
             //Doctor
-            singleDrawerItem(
-                title: 'Sessions',
-                image: 'assets/img/ic_menu_doctor.png',
-                action: () {
-                  Get.back();
-                  controller.currentIndex.value = 2;
-                }),
+            controller.isLogggd == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: 'Sessions',
+                    image: 'assets/img/ic_menu_doctor.png',
+                    action: () {
+                      Get.back();
+                      controller.currentIndex.value = 2;
+                    }),
 
             //Profile
-            singleDrawerItem(
-                title: Strings().profile,
-                image: 'assets/img/ic_menu_person.png',
-                action: () {
-                  Get.toNamed(Routes.PROFILE);
-                }),
+            controller.isLogggd == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: Strings().profile,
+                    image: 'assets/img/ic_menu_person.png',
+                    action: () {
+                      Get.toNamed(Routes.PROFILE);
+                    }),
 
             //Messages
-            singleDrawerItem(
-                title: 'Messages', //todo transulate
-                image: 'assets/img/ic_menu_messages.png',
-                action: () {
-                  Get.toNamed(Routes.NOTIFICATIONS);
-                }),
+            controller.isLogggd == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: 'Messages', //todo transulate
+                    image: 'assets/img/ic_menu_messages.png',
+                    action: () {
+                      Get.toNamed(Routes.NOTIFICATIONS);
+                    }),
             //Messages
             singleDrawerItem(
                 title: 'FAQ', //todo transulate
@@ -113,12 +125,14 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
             //Transformation
-            singleDrawerItem(
-                title: 'Transformation', //todo transulate
-                image: 'assets/img/ic_menu_images.png',
-                action: () {
-                  Get.toNamed(Routes.TRANSFORM);
-                }),
+            controller.isLogggd == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: 'Transformation', //todo transulate
+                    image: 'assets/img/ic_menu_images.png',
+                    action: () {
+                      Get.toNamed(Routes.TRANSFORM);
+                    }),
 
             //Contact
             singleDrawerItem(
@@ -139,7 +153,10 @@ class HomeDrawer extends GetView<HomeController> {
                 title: 'Settings',
                 image: 'assets/img/ic_menu_setting.png',
                 action: () {
-                  // Get.toNamed(Routes.ABOUT);
+                  SharedHelper helper = SharedHelper();
+                  helper.logout();
+
+                  Get.toNamed(Routes.SPLASH);
                 }),
 
             // //Change_language
@@ -195,6 +212,7 @@ class HomeDrawer extends GetView<HomeController> {
         ),
       ),
     );
+    ;
   }
 
   Widget profileImageHolder() {

@@ -8,11 +8,7 @@ class UserResponse {
 
   UserResponse.fromJson(Map<String, dynamic> json) {
     code = json['code'];
-    data = json['success'] == false
-        ? null
-        : json['data'] != null
-            ? new Data.fromJson(json['data'])
-            : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     success = json['success'];
     message = json['message'];
   }
@@ -39,6 +35,7 @@ class Data {
   String? gender;
   String? packageRenewalDate;
   NextSession? nextSession;
+  Target? target;
   LastBodyComposition? lastBodyComposition;
   String? image;
   int? newMessages;
@@ -54,6 +51,7 @@ class Data {
       this.gender,
       this.packageRenewalDate,
       this.nextSession,
+      this.target,
       this.lastBodyComposition,
       this.image,
       this.newMessages,
@@ -70,6 +68,7 @@ class Data {
     packageRenewalDate = json['package_renewal_date'];
     nextSession =
         json['next_session'] != null ? new NextSession.fromJson(json['next_session']) : null;
+    target = json['target'] != null ? new Target.fromJson(json['target']) : null;
     lastBodyComposition = json['last_body_composition'] != null
         ? new LastBodyComposition.fromJson(json['last_body_composition'])
         : null;
@@ -90,6 +89,9 @@ class Data {
     data['package_renewal_date'] = this.packageRenewalDate;
     if (this.nextSession != null) {
       data['next_session'] = this.nextSession!.toJson();
+    }
+    if (this.target != null) {
+      data['target'] = this.target!.toJson();
     }
     if (this.lastBodyComposition != null) {
       data['last_body_composition'] = this.lastBodyComposition!.toJson();
@@ -119,6 +121,31 @@ class NextSession {
     data['status'] = this.status;
     data['day'] = this.day;
     data['session_date'] = this.sessionDate;
+    return data;
+  }
+}
+
+class Target {
+  String? totalWeight;
+  String? fats;
+  String? muscles;
+  String? water;
+
+  Target({this.totalWeight, this.fats, this.muscles, this.water});
+
+  Target.fromJson(Map<String, dynamic> json) {
+    totalWeight = json['total_weight'];
+    fats = json['fats'];
+    muscles = json['muscles'];
+    water = json['water'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['total_weight'] = this.totalWeight;
+    data['fats'] = this.fats;
+    data['muscles'] = this.muscles;
+    data['water'] = this.water;
     return data;
   }
 }
