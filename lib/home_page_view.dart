@@ -130,7 +130,7 @@ class _HomePageViewState extends State<HomePageView> {
                                   borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
                                     color: serviceIndex == index ? kColorPrimary : Colors.black87,
-                                    width: serviceIndex == index ? 1 : 0.02,
+                                    width: serviceIndex == index ? 1 : 1,
                                   ),
                                   boxShadow: [
                                     if (serviceIndex == index)
@@ -143,8 +143,8 @@ class _HomePageViewState extends State<HomePageView> {
                                     if (serviceIndex != index)
                                       BoxShadow(
                                         color: const Color(0xFF414042).withOpacity(0.35),
-                                        offset: Offset(0, 1.0),
-                                        blurRadius: 6.0,
+                                        offset: Offset(1, 1.0),
+                                        blurRadius: 3.0,
                                       ),
                                   ],
                                 ),
@@ -156,10 +156,10 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                               Expanded(
                                 child: kTextbody(
-                                  ress.data!.services![pageIndex].items![index].title ?? "",
+                                  ress.data!.services![pageIndex].items![index].title!,
                                   color: serviceIndex == index ? kColorPrimary : Colors.black87,
-                                  bold: serviceIndex == index,
-                                  maxLines: 2,
+                                  bold: true,
+
                                 ),
                               ),
                             ],

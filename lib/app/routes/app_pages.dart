@@ -100,11 +100,11 @@ class AppPages {
       page: () => AboutView(),
       binding: AboutBinding(),
     ),
-    GetPage(
-      name: _Paths.POLICY,
-      page: () => PolicyView(),
-      binding: PolicyBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.POLICY,
+    //   page: () => PolicyView(),
+    //   binding: PolicyBinding(),
+    // ),
     GetPage(
       name: _Paths.CONTACT_US,
       page: () => ContactUsView(),

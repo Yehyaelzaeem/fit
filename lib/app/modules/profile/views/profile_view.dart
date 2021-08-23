@@ -1,5 +1,6 @@
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -53,245 +54,256 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               PageLable(name: "Profile"),
             ],
-          ), SizedBox(height: 12),
+          ),
+          SizedBox(height: 12),
           //profile card
           isLoading == true
               ? CircularLoadingWidget()
-              :    Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 34,
-                ),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(9),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      blurRadius: 1,
-                      spreadRadius: 1,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                  border: Border.all(
-                    width: 0.5,
-                    color: Color(0xff707070),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(height: 14),
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(250),
-                        child: CachedNetworkImage(
-                          imageUrl: "${ress.data!.image}",
-                          fit: BoxFit.cover,
-                          height: 80,
-                          width: 80,
-                          placeholder: (ctx, url) {
-                            return profileImageHolder();
-                          },
-                          errorWidget: (context, url, error) {
-                            return profileImageHolder();
-                          },
-                        )),
-                    kTextHeader('${ress.data!.name!.toUpperCase()}'),
-                    kTextfooter('ID:${ress.data!.patientId!.toUpperCase()}',
-                        size: 14, color: Colors.black87, paddingV: 0),
-                    SizedBox(height: 14),
-                  ],
-                ),
-              ),
-
-              // edit your profile
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    kTextbody('Edit your profile', color: kColorPrimary),
-                    SizedBox(width: 6),
-                    Icon(Icons.edit, size: 16, color: kColorPrimary),
-                  ],
-                ),
-              ),
-
-              //Next session
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(vertical: 12),
-                padding: EdgeInsets.symmetric(vertical: 8),
-                color: Color(0xffF1F1F1),
-                child: Stack(
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            kTextbody(
-                              'Next session',
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                            kTextbody(
-                              '${ress.data!.nextSession!.day}',
-                              color: kColorPrimary,
-                              size: 16,
-                            ),
-                            kTextbody(
-                              '${ress.data!.nextSession!.sessionDate}',
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ],
-                        )),
-                    Positioned(
-                        right: 26,
-                        top: 3,
-                        child: kTextfooter(
-                          '${ress.data!.nextSession!.status}',
-                          color: Colors.black87,
-                        )),
-                  ],
-                ),
-              ),
-
-              //Package renewal date
-              Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.history, size: 20, color: kColorPrimary),
-                    SizedBox(width: 6),
-                    kTextbody('Package Renewal Date', color: Colors.black87),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(6),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 34,
+                      ),
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(9),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.6),
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                        border: Border.all(
+                          width: 0.5,
+                          color: Color(0xff707070),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 14),
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(250),
+                              child: CachedNetworkImage(
+                                imageUrl: "${ress.data!.image}",
+                                fit: BoxFit.cover,
+                                height: 80,
+                                width: 80,
+                                placeholder: (ctx, url) {
+                                  return profileImageHolder();
+                                },
+                                errorWidget: (context, url, error) {
+                                  return profileImageHolder();
+                                },
+                              )),
+                          kTextHeader('${ress.data!.name!.toUpperCase()}'),
+                          kTextfooter('ID:${ress.data!.patientId!.toUpperCase()}',
+                              size: 14, color: Colors.black87, paddingV: 0),
+                          SizedBox(height: 14),
+                        ],
+                      ),
                     ),
-                    child: kTextbody('${ress.data!.packageRenewalDate}'),
-                  ),
-                ],
-              ),
-              // Target
-              SizedBox(height: 18),
 
-              PageLable(name: "Target"), SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Total Weight:', bold: true),
-                    kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
+                    // edit your profile
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => EditProfileView()));
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            kTextbody('Edit your profile', color: kColorPrimary),
+                            SizedBox(width: 6),
+                            Icon(Icons.edit, size: 16, color: kColorPrimary),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    //Next session
+                    ress.data!.nextSession== null ?SizedBox():     Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(vertical: 12),
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      color: Color(0xffF1F1F1),
+                      child: Stack(
+                        children: [
+                          Container(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  kTextbody(
+                                    'Next session',
+                                    color: Colors.black,
+                                    size: 16,
+                                  ),
+                                  kTextbody(
+                                    '${ress.data!.nextSession!.day}',
+                                    color: kColorPrimary,
+                                    size: 16,
+                                  ),
+                                  kTextbody(
+                                    '${ress.data!.nextSession!.sessionDate}',
+                                    color: Colors.black,
+                                    size: 16,
+                                  ),
+                                ],
+                              )),
+                          Positioned(
+                              right: 26,
+                              top: 3,
+                              child: kTextfooter(
+                                '${ress.data!.nextSession!.status}',
+                                color: kColorPrimary,
+                              )),
+                        ],
+                      ),
+                    ),
+
+                    //Package renewal date
+                    Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.history, size: 20, color: kColorPrimary),
+                          SizedBox(width: 6),
+                          kTextbody('Package Renewal Date', color: Colors.black87),
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: kTextbody('${ress.data!.packageRenewalDate}'),
+                        ),
+                      ],
+                    ),
+                    // Target
+                    SizedBox(height: 18),
+
+                    PageLable(name: "Target"), SizedBox(height: 12),
+                    ress.data!.nextSession== null ?SizedBox():       Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Total Weight:', bold: true),
+                          kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():
+                    ress.data!.nextSession== null ?SizedBox():  Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Fats Percentage:', bold: true),
+                          kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():  Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Muscles Percentage:', bold: true),
+                          kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():   Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Water Percentage:', bold: true),
+                          kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    // Last Body Composition
+                    SizedBox(height: 18),
+                    ress.data!.nextSession== null ?SizedBox():   Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PageLable(name: "Last Body Composition"),
+                        kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    ress.data!.nextSession== null ?SizedBox():  Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Total Weight:', bold: true),
+                          kTextbody('${ress.data!.lastBodyComposition!.totalWeight}',
+                              color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():  Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Fats Percentage:', bold: true),
+                          kTextbody('${ress.data!.lastBodyComposition!.fats}',
+                              color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():   Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Muscles Percentage:', bold: true),
+                          kTextbody('${ress.data!.lastBodyComposition!.muscles}',
+                              color: kColorPrimary),
+                        ],
+                      ),
+                    ),
+                    ress.data!.nextSession== null ?SizedBox():  Container(
+                      width: double.infinity,
+                      color: Colors.grey[200],
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        children: [
+                          kTextbody('Water Percentage:', bold: true),
+                          kTextbody('${ress.data!.lastBodyComposition!.water}',
+                              color: kColorPrimary),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Fats Percentage:', bold: true),
-                    kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Muscles Percentage:', bold: true),
-                    kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Water Percentage:', bold: true),
-                    kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
-                  ],
-                ),
-              ),
-              // Last Body Composition
-              SizedBox(height: 18),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  PageLable(name: "Last Body Composition"),
-                  kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
-                ],
-              ),
-              SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Total Weight:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.totalWeight}',
-                        color: kColorPrimary),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Fats Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.fats}', color: kColorPrimary),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Muscles Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.muscles}', color: kColorPrimary),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                color: Colors.grey[200],
-                margin: EdgeInsets.symmetric(vertical: 4),
-                child: Row(
-                  children: [
-                    kTextbody('Water Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.water}', color: kColorPrimary),
-                  ],
-                ),
-              )
-            ],
-          ),
         ],
       ),
     );

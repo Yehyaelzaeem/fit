@@ -2,6 +2,7 @@ import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -12,7 +13,7 @@ import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:get/get.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -51,10 +52,9 @@ class _LoginViewState extends State<LoginView> {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  HomeView(),
+              builder: (context) => HomeView(),
             ),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       } else {
         setState(() {
           loginResponse = value;
@@ -86,15 +86,12 @@ class _LoginViewState extends State<LoginView> {
                     width: double.infinity,
                     color: kColorAccent,
                     child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Text(
-                          'Sign In',
-                          style: TextStyle(
-                            fontSize: 27.0 * kTextPixelFactor,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          fontSize: 27.0 * kTextPixelFactor,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
@@ -121,9 +118,7 @@ class _LoginViewState extends State<LoginView> {
                             print(text);
                           },
                           validateFunc: (text) {
-                            if (text
-                                .toString()
-                                .length < 4) {
+                            if (text.toString().length < 4) {
                               return "Enter Valid Id";
                             }
                           },
@@ -145,9 +140,7 @@ class _LoginViewState extends State<LoginView> {
                             print(text);
                           },
                           validateFunc: (text) {
-                            if (text
-                                .toString()
-                                .length < 6) {
+                            if (text.toString().length < 6) {
                               return "Enter Valid Password";
                             }
                           },
@@ -174,16 +167,10 @@ class _LoginViewState extends State<LoginView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width / 14),
+                              SizedBox(height: MediaQuery.of(context).size.width / 14),
                               kButtonDefault(
                                 '  Sign in  ',
-                                marginH: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 4.5,
+                                marginH: MediaQuery.of(context).size.width / 4.5,
                                 paddingV: 0,
                                 func: () {
                                   if (!key.currentState!.validate()) {
@@ -210,7 +197,7 @@ class _LoginViewState extends State<LoginView> {
                               // ),
                               InkWell(
                                 onTap: () {
-                                  // Get.toNamed(Routes.REGISTER);
+                                  Get.toNamed(Routes.REGISTER);
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 4),
@@ -247,13 +234,13 @@ class _LoginViewState extends State<LoginView> {
           showLoader == false
               ? SizedBox()
               : Container(
-            child: Center(
-              child: CircularLoadingWidget(),
-            ),
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.black.withOpacity(.9),
-          )
+                  child: Center(
+                    child: CircularLoadingWidget(),
+                  ),
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: Colors.black.withOpacity(.9),
+                )
         ],
       ),
     );

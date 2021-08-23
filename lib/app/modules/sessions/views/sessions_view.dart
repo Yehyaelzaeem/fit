@@ -89,105 +89,129 @@ class _SessionsViewState extends State<SessionsView> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: 12),
-                    padding: EdgeInsets.symmetric(vertical: 8),
-                    color: Color(0xffF1F1F1),
-                    child: Stack(
-                      children: [
-                        Container(
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                kTextbody(
-                                  'Next session',
-                                  color: Colors.black,
-                                  size: 16,
-                                ),
-                                kTextbody('${ress.data!.nextSession!.day}',
-                                    color: kColorPrimary, size: 16, bold: true),
-                                kTextbody(
-                                  '${ress.data!.nextSession!.sessionDate}',
-                                  color: Colors.black,
-                                  size: 16,
-                                ),
-                              ],
-                            )),
-                        Positioned(
-                            right: 26,
-                            top: 3,
-                            child: kTextfooter(
-                              '${ress.data!.nextSession!.status}',
-                              color: Colors.black87,
-                            )),
-                      ],
-                    ),
-                  ),
+                  ress.data!.nextSession == null
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 18),
+                          child:
+                              Center(child: Text(" You Have No Sessions, Book Your Next Session")),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          margin: EdgeInsets.symmetric(vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          color: Color(0xffF1F1F1),
+                          child: Stack(
+                            children: [
+                              Container(
+                                  width: double.infinity,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      kTextbody(
+                                        'Next session',
+                                        color: Colors.black,
+                                        size: 16,
+                                      ),
+                                      kTextbody('${ress.data!.nextSession!.day}',
+                                          color: kColorPrimary, size: 16, bold: true),
+                                      kTextbody(
+                                        '${ress.data!.nextSession!.sessionDate}',
+                                        color: Colors.black,
+                                        size: 16,
+                                      ),
+                                    ],
+                                  )),
+                              Positioned(
+                                  right: 26,
+                                  top: 3,
+                                  child: kTextfooter(
+                                    '${ress.data!.nextSession!.status}',
+                                    color: kColorPrimary,
+                                  )),
+                            ],
+                          ),
+                        ),
                   SizedBox(height: 12),
                   PageLable(name: "Completed"),
-                  for (int i = 0; i < sessionResponse.data!.length; i++)
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 12),
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.8),
-                          blurRadius: 3,
-                          offset: Offset(0, 1),
-                          spreadRadius: 3,
+                  sessionResponse.data!.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            child: Text("No Sessions Yet"),
+                          )),
                         )
-                      ]),
-                      child: Stack(
-                        children: [
-                          Container(
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: sessionResponse.data!.length,
+                          itemBuilder: (context, i) {
+                            return Container(
                               width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  blurRadius: 3,
+                                  offset: Offset(0, 1),
+                                  spreadRadius: 3,
+                                )
+                              ]),
+                              child: Stack(
                                 children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Expanded(child: SizedBox(width: 1)),
-                                      Column(
+                                  Container(
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          kTextbody('${sessionResponse.data![i].day ?? "Monday"}',
-                                              color: kColorPrimary, size: 16, bold: true),
-                                          kTextbody(
-                                            '${sessionResponse.data![i].date}',
-                                            color: Colors.black,
-                                            size: 16,
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                            children: [
+                                              Expanded(child: SizedBox(width: 1)),
+                                              Column(
+                                                children: [
+                                                  kTextbody(
+                                                      '${sessionResponse.data![i].day ?? "Monday"}',
+                                                      color: kColorPrimary,
+                                                      size: 16,
+                                                      bold: true),
+                                                  kTextbody(
+                                                    '${sessionResponse.data![i].date}',
+                                                    color: Colors.black,
+                                                    size: 16,
+                                                  ),
+                                                ],
+                                              ),
+                                              Expanded(child: SizedBox(width: 1)),
+                                              kButton(
+                                                  '${sessionResponse.data![i].status == "Pending" ? "Pending" : "Details"}',
+                                                  hight: 35,
+                                                  color:
+                                                      sessionResponse.data![i].status == "Pending"
+                                                          ? Colors.grey
+                                                          : kColorPrimary, func: () {
+                                                if (sessionResponse.data![i].status == "Pending") {
+                                                  print("Pending Item");
+                                                } else {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => SessionDetails(
+                                                              id: sessionResponse.data![i].id)));
+                                                }
+                                              }),
+                                              SizedBox(width: 12),
+                                            ],
                                           ),
                                         ],
-                                      ),
-                                      Expanded(child: SizedBox(width: 1)),
-                                      kButton(
-                                          '${sessionResponse.data![i].status == "Pending" ? "Pending" : "Details"}',
-                                          hight: 35,
-                                          color: sessionResponse.data![i].status == "Pending"
-                                              ? Colors.grey
-                                              : kColorPrimary, func: () {
-                                        if (sessionResponse.data![i].status == "Pending") {
-                                          print("Pending Item");
-                                        } else {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => SessionDetails(
-                                                      id: sessionResponse.data![i].id)));
-                                        }
-                                      }),
-                                      SizedBox(width: 12),
-                                    ],
-                                  ),
+                                      )),
                                 ],
-                              )),
-                        ],
-                      ),
-                    ),
+                              ),
+                            );
+                          })
                 ],
               ),
       ],

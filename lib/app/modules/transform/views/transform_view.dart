@@ -54,23 +54,26 @@ class _TransformViewState extends State<TransformView> {
       isLoading == true
           ? CircularLoadingWidget()
           : Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 0,
-                mainAxisSpacing: 8,
-                childAspectRatio: 2,
-                children: List.generate(ressponse.data!.length, (index) {
-                  return Container(
-                      color: Colors.black,
-                      width: MediaQuery.of(context).size.width / 2.3,
-                      height: MediaQuery.of(context).size.width / 2.3,
-                      child: ressponse.data![index].type == "image"
-                          ? Image.network(
+              child: ListView.builder(
+                itemCount: ressponse.data!.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: ressponse.data![index].type == "image"
+                        ? Container(
+                            height: MediaQuery.of(context).size.height / 4,
+                            color: Colors.grey[200],
+                            child: Image.network(
                               "${ressponse.data![index].content}",
                               fit: BoxFit.cover,
-                            )
-                          : Html(data: """${ressponse.data![index].content}"""));
-                }),
+                            ),
+                          )
+                        : Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            height: MediaQuery.of(context).size.height /2.2,
+                            child: Html(data: """${ressponse.data![index].content}""")),
+                  );
+                },
               ),
             )
     ]));

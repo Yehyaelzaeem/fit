@@ -1,6 +1,7 @@
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -27,42 +28,55 @@ class HomeDrawer extends GetView<HomeController> {
         child: Column(
           children: <Widget>[
             // if (prefs.getUserId() != null)
-            Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    ClipRRect(
-                        borderRadius: BorderRadius.circular(250),
-                        child: prefs.readString(CachingKey.AVATAR) != null
-                            ? CachedNetworkImage(
-                                imageUrl: controller.avatar,
-                                fit: BoxFit.cover,
-                                height: 80,
-                                width: 80,
-                                placeholder: (ctx, url) {
-                                  return profileImageHolder();
-                                },
-                                errorWidget: (context, url, error) {
-                                  return profileImageHolder();
-                                },
-                              )
-                            : profileImageHolder()),
-                    // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
-                    // Text(prefs.getName()!)
-                    kTextHeader('${controller.name}'),
-                    kTextfooter('ID:${controller.phone}',
-                        size: 14, color: Colors.black87, paddingV: 0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            controller.isLogggd == false
+                ? Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Image.asset(
+                          kImgLogoWhiteNoBk,
+                          width: Get.width / 3,
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    color: Colors.white,
+                    child: Column(
                       children: [
-                        Icon(Icons.circle, size: 13, color: kColorPrimary),
-                        kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(250),
+                            child: prefs.readString(CachingKey.AVATAR) != null
+                                ? CachedNetworkImage(
+                                    imageUrl: controller.avatar,
+                                    fit: BoxFit.cover,
+                                    height: 80,
+                                    width: 80,
+                                    placeholder: (ctx, url) {
+                                      return profileImageHolder();
+                                    },
+                                    errorWidget: (context, url, error) {
+                                      return profileImageHolder();
+                                    },
+                                  )
+                                : profileImageHolder()),
+                        // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
+                        // Text(prefs.getName()!)
+                        kTextHeader('${controller.name}' , size: 18),
+                        kTextfooter('ID:${controller.id}',
+                            size: 14, color: Colors.black87, paddingV: 0),
+                        SizedBox(height: 24,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.circle, size: 13, color: kColorPrimary),
+                            kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
-                )),
+                    )),
 
             SizedBox(height: 14),
 
@@ -128,7 +142,7 @@ class HomeDrawer extends GetView<HomeController> {
             controller.isLogggd == false
                 ? SizedBox()
                 : singleDrawerItem(
-                    title: 'Transformation', //todo transulate
+                    title: 'Transformations', //todo transulate
                     image: 'assets/img/ic_menu_images.png',
                     action: () {
                       Get.toNamed(Routes.TRANSFORM);
@@ -175,39 +189,46 @@ class HomeDrawer extends GetView<HomeController> {
             //     }),
 
             //LogOut
-            singleDrawerItem(
-                title: Strings().logout,
-                image: 'assets/img/ic_menu_logout.png',
-                action: () {
-                  Get.defaultDialog(
-                    title: Strings().notification,
-                    middleText: Strings().logoutMessageConfirm,
-                    confirm: GestureDetector(
-                      onTap: () {
-                        prefs.logout();
-                        Get.offAllNamed(Routes.SPLASH);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(
-                          Strings().confirm,
-                          style: TextStyle(color: Colors.red),
+            controller.isLogggd == false
+                ? singleDrawerItem(
+                    title: "Login",
+                    image: "assets/img/ic_menu_logout.png",
+                    action: () {
+                      Get.offAllNamed(Routes.AUTH);
+                    })
+                : singleDrawerItem(
+                    title: Strings().logout,
+                    image: 'assets/img/ic_menu_logout.png',
+                    action: () {
+                      Get.defaultDialog(
+                        title: Strings().notification,
+                        middleText: Strings().logoutMessageConfirm,
+                        confirm: GestureDetector(
+                          onTap: () {
+                            prefs.logout();
+                            Get.offAllNamed(Routes.SPLASH);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              Strings().confirm,
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    cancel: GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        margin: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text(Strings().dismiss),
-                      ),
-                    ),
-                  );
-                }),
+                        cancel: GestureDetector(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(4),
+                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(Strings().dismiss),
+                          ),
+                        ),
+                      );
+                    }),
           ],
         ),
       ),
@@ -237,6 +258,7 @@ class HomeDrawer extends GetView<HomeController> {
               Image.asset(
                 image,
                 width: 24,
+                color: title == "Login" ? kColorPrimary : null,
               ),
               SizedBox(width: 16),
               Text(

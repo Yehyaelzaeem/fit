@@ -5,6 +5,7 @@ import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -43,14 +44,13 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   GeneralResponse deleteRessponse = GeneralResponse();
 
-  void deleteMessage(int? id , int? index) async {
+  void deleteMessage(int? id, int? index) async {
     await ApiProvider().deleteMessage(id ?? 0).then((value) async {
       if (value.success == true) {
         setState(() {
           deleteRessponse = value;
           isLoading = false;
-          ressponse.data!.removeAt(index??0);
-
+          ressponse.data!.removeAt(index ?? 0);
         });
       } else {
         setState(() {
@@ -73,62 +73,41 @@ class _NotificationsViewState extends State<NotificationsView> {
     return Scaffold(
         body: Stack(
       children: [
-        SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 24),
-              HomeAppbar(type: null),
-              SizedBox(height: 10),
-              Container(
-                alignment: Alignment(0.01, -1.0),
-                width: 150.0,
-                height: 36.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.horizontal(
-                    right: Radius.circular(64.0),
-                  ),
-                  color: const Color(0xFF414042),
-                ),
-                child: Center(
-                  child: Text(
-                    'Messages',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-              isLoading == true
-                  ? CircularLoadingWidget()
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: ressponse.data!.length,
-                      itemBuilder: (context, index) {
-                        return messageRow(ressponse.data![index] , index);
-                      })
-            ],
-          ),
+        ListView(
+          children: [
+            HomeAppbar(type: null),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                PageLable(name: "Messages"),
+              ],
+            ),
+            isLoading == true
+                ? CircularLoadingWidget()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: ressponse.data!.length,
+                    itemBuilder: (context, index) {
+                      return messageRow(ressponse.data![index], index);
+                    })
+          ],
         ),
         showLoader == false
             ? SizedBox()
             : Container(
-          child: Center(
-            child: CircularLoadingWidget(),
-          ),
-          width: double.infinity,
-          height: double.infinity,
-          color: Colors.black.withOpacity(.9),
-        )
-
+                child: Center(
+                  child: CircularLoadingWidget(),
+                ),
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.black.withOpacity(.9),
+              )
       ],
     ));
   }
 
-  Widget messageRow(Data element , int index) {
+  Widget messageRow(Data element, int index) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -163,7 +142,7 @@ class _NotificationsViewState extends State<NotificationsView> {
                   ),
                   InkWell(
                     onTap: () {
-                      deleteMessage(element.id , index);
+                      deleteMessage(element.id, index);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -179,10 +158,33 @@ class _NotificationsViewState extends State<NotificationsView> {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: element.viewStatus == false ? kColorPrimary : Colors.grey[300],
               ),
-              child: kTextbody("Click To See Info",
-                  paddingH: 12, paddingV: 12, align: TextAlign.start),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  kTextbody(element.viewStatus == false ? "Click To See Info" : "Seen",
+                      paddingH: 12,
+                      paddingV: 12,
+                      align: TextAlign.start,
+                      color: element.viewStatus == true ? Colors.black : Colors.white),
+                  element.viewStatus == false
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(
+                            Icons.circle,
+                            color: kColorPrimary,
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(
+                            Icons.check,
+                            color: kColorPrimary,
+                          ),
+                        ),
+                ],
+              ),
             ),
             Container(
               width: double.infinity,

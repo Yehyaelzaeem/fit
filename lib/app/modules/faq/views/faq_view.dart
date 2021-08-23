@@ -156,6 +156,7 @@ import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -200,27 +201,7 @@ class _FaqViewState extends State<FaqView> {
           SizedBox(height: 48),
           HomeAppbar(type: null),
           SizedBox(height: 12),
-          Container(
-            alignment: Alignment(0.01, -1.0),
-            width: MediaQuery.of(context).size.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
-              ),
-              color: const Color(0xFF414042),
-            ),
-            child: Center(
-              child: Text(
-                'FAQ',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
+          PageLable(name: "FAQ"),
           isLoading == true
               ? Padding(
                   padding: const EdgeInsets.symmetric(vertical: 100),

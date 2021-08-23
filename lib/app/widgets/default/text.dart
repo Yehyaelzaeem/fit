@@ -63,7 +63,7 @@ Widget kTextHeader(String message,
       style: TextStyle(
         color: white ? Colors.white : color,
         fontSize: size,
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontWeight: bold ? FontWeight.bold : FontWeight.bold,
       ),
       textAlign: align,
       maxLines: maxLines,

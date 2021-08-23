@@ -1,12 +1,42 @@
+import 'package:app/app/models/user_response.dart';
+import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeAppbar extends StatelessWidget {
+class HomeAppbar extends StatefulWidget {
   final String? type;
 
   const HomeAppbar({Key? key, this.type}) : super(key: key);
+
+  @override
+  _HomeAppbarState createState() => _HomeAppbarState();
+}
+
+class _HomeAppbarState extends State<HomeAppbar> {
+  UserResponse ress = UserResponse();
+  late int newMessage = 0;
+
+  void getUserData() async {
+    await ApiProvider().getProfile().then((value) {
+      if (value.success == true) {
+        setState(() {
+          ress = value;
+          newMessage = ress.data!.newMessages!;
+        });
+      } else {
+        print("error");
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +58,7 @@ class HomeAppbar extends StatelessWidget {
         ]),
         child: Row(
           children: [
-            type == null
+            widget.type == null
                 ? GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
@@ -59,28 +89,68 @@ class HomeAppbar extends StatelessWidget {
                 height: 44,
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.NOTIFICATIONS);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.chat_bubble_outline,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                kAvatar,
-                height: 32,
-                width: 32,
-              ),
-            ),
+            ress.data == null
+                ? SizedBox()
+                : Container(
+                    width: 50,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.NOTIFICATIONS);
+                      },
+                      child: Stack(
+                        children: [
+                          Icon(
+                            Icons.chat_bubble_outline,
+                            color: Colors.black87,
+                            size: 30,
+                          ),
+                          Positioned(
+                            top: 8,
+                            left: 16,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  "$newMessage",
+                                  style: TextStyle(color: Colors.white, fontSize: 16),
+                                ),
+                              ),
+                              decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+            ress.data == null
+                ? SizedBox()
+                : CachedNetworkImage(
+                    imageUrl: "${ress.data!.image}",
+                    fit: BoxFit.cover,
+                    height: 32,
+                    width: 32,
+                    placeholder: (ctx, url) {
+                      return profileImageHolder();
+                    },
+                    errorWidget: (context, url, error) {
+                      return profileImageHolder();
+                    },
+                  )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget profileImageHolder() {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.blueGrey,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(Icons.person, size: 16, color: Colors.grey[200]),
       ),
     );
   }

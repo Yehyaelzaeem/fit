@@ -1,7 +1,5 @@
 import 'package:app/app/modules/home/controllers/home_controller.dart';
-import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,8 +53,19 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 child: Center(
                   child: Column(
                     children: [
-                      Expanded(child: Image.asset(controller.currentIndex == 0 ? kHomePrimary : kHomeBlack, height: double.infinity)),
-                      kTextbody('Home', color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
+                      controller.currentIndex == 0
+                          ? Icon(
+                              Icons.home,
+                              color: kColorPrimary,
+                              size: 30,
+                            )
+                          : Icon(
+                              Icons.home_outlined,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                      kTextbody('Home',
+                          color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
                     ],
                   ),
                 ),
@@ -75,8 +84,19 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 child: Center(
                   child: Column(
                     children: [
-                      Expanded(child: Image.asset(controller.currentIndex == 1 ? kDiaryPrimary : kDiaryBlack, height: double.infinity)),
-                      kTextbody('Diary', color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
+                      controller.currentIndex == 1
+                          ? Icon(
+                              Icons.receipt_long,
+                              color: kColorPrimary,
+                              size: 30,
+                            )
+                          : Icon(
+                              Icons.receipt_long_outlined,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                      kTextbody('Diary',
+                          color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
                     ],
                   ),
                 ),
@@ -95,8 +115,19 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                 child: Center(
                   child: Column(
                     children: [
-                      Expanded(child: Image.asset(controller.currentIndex == 2 ? kSessionsDiary : kSessionsBlack, height: double.infinity)),
-                      kTextbody('Sessions', color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
+                      controller.currentIndex == 2
+                          ? Icon(
+                              Icons.person,
+                              color: kColorPrimary,
+                              size: 30,
+                            )
+                          : Icon(
+                              Icons.person_outline,
+                              color: Colors.black,
+                              size: 30,
+                            ),
+                      kTextbody('Sessions',
+                          color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
                     ],
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:app/app/modules/about/controllers/about_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,29 +16,9 @@ class AboutView extends GetView<AboutController> {
         body: SingleChildScrollView(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       SizedBox(height: 48),
-      HomeAppbar(type :null),
+      HomeAppbar(type: null),
       SizedBox(height: 12),
-      Container(
-        // alignment: Alignment(0.01, -1.0),
-        width: Get.width / 2.4,
-        // padding: EdgeInsets.symmetric(horizontal: 4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.horizontal(
-            right: Radius.circular(15.0),
-          ),
-          color: const Color(0xFF414042),
-        ),
-        child: Center(
-          child: Text(
-            'About',
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ),
+      PageLable(name: "About"),
 
       //* phone
       Obx(() {

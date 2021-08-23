@@ -23,7 +23,7 @@ class _RegisterViewState extends State<RegisterView> {
   late String password;
   late String name;
   late String email;
-  late String date;
+  String date = " Sellect Date";
   late String phone;
   late String password_confirmation;
   String gender = "male";
@@ -36,8 +36,8 @@ class _RegisterViewState extends State<RegisterView> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
+        firstDate: DateTime(1980, 8),
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
@@ -100,18 +100,16 @@ class _RegisterViewState extends State<RegisterView> {
                 Image.asset(kLogoRow, height: 54 * kPixelFactor),
                 SizedBox(height: 27 * kPixelFactor),
                 Container(
+                  height: 50,
                   width: double.infinity,
                   color: kColorAccent,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Center(
-                      child: Text(
-                        'Sign Up',
-                        style: TextStyle(
-                          fontSize: 25.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
+                  child: Center(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                        fontSize: 27.0 * kTextPixelFactor,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
@@ -202,11 +200,14 @@ class _RegisterViewState extends State<RegisterView> {
                       SizedBox(height: 12),
                       //Birth date
                       kTextbody('Birth date', size: 18),
-                      Container(
+                      InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
                         child: EditText(
                           value: "",
                           suffixIconData: Icons.date_range,
-                          hint: '',
+                          hint: '${date}',
                           type: TextInputType.text,
                           enable: false,
                         ),
@@ -217,43 +218,79 @@ class _RegisterViewState extends State<RegisterView> {
                       Row(
                         children: [
                           SizedBox(width: 4),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(64),
-                            ),
-                            child: Row(
-                              children: [
-                                Radio(
-                                  value: '',
-                                  groupValue: '1',
-                                  onChanged: (value) {},
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                gender = "Female";
+                              });
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey, width: 1),
+                                borderRadius: BorderRadius.circular(64),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    gender == "Female"
+                                        ? Icon(
+                                            Icons.radio_button_checked,
+                                            color: kColorPrimary,
+                                          )
+                                        : Icon(
+                                            Icons.radio_button_off,
+                                            color: kColorPrimary,
+                                          ),
+                                    kTextbody('Female', size: 16),
+                                    SizedBox(
+                                      width: 16,
+                                      height: 50,
+                                    ),
+                                  ],
                                 ),
-                                kTextbody('Male', size: 16),
-                                SizedBox(width: 16),
-                              ],
+                              ),
                             ),
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width / 8,
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1),
-                              borderRadius: BorderRadius.circular(64),
-                            ),
-                            child: Row(
-                              children: [
-                                Radio(
-                                  value: '',
-                                  groupValue: '1',
-                                  onChanged: (value) {},
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                gender = "Male";
+                              });
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey, width: 1),
+                                borderRadius: BorderRadius.circular(64),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    gender == "Male"
+                                        ? Icon(
+                                            Icons.radio_button_checked,
+                                            color: kColorPrimary,
+                                          )
+                                        : Icon(
+                                            Icons.radio_button_off,
+                                            color: kColorPrimary,
+                                          ),
+                                    kTextbody('Male', size: 16),
+                                    SizedBox(
+                                      width: 16,
+                                      height: 50,
+                                    ),
+                                  ],
                                 ),
-                                kTextbody('Female', size: 16),
-                                SizedBox(width: 16),
-                              ],
+                              ),
                             ),
                           ),
                         ],
@@ -266,7 +303,7 @@ class _RegisterViewState extends State<RegisterView> {
                         hint: '',
                         updateFunc: (text) {
                           setState(() {
-                            password_confirmation = text;
+                            password = text;
                           });
                           print(text);
                         },
@@ -304,9 +341,10 @@ class _RegisterViewState extends State<RegisterView> {
                               marginH: MediaQuery.of(context).size.width / 4,
                               paddingV: 0,
                               func: () {
-                                if (key.currentState!.validate()) {
+                                if (!key.currentState!.validate()) {
                                   return;
                                 } else {
+                                  SendData();
                                   print("Done");
                                 }
                               },

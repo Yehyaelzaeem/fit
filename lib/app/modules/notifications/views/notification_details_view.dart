@@ -89,11 +89,11 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                 ),
           isLoading == true
               ? SizedBox()
-              :  Center(
-            child: Html(
-              data: """${ressponse.data!.message}""",
-            ),
-          ),
+              : Center(
+                  child: Html(
+                    data: """${ressponse.data!.message}""",
+                  ),
+                ),
         ],
       ),
     );

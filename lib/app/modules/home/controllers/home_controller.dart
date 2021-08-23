@@ -1,4 +1,5 @@
 import 'package:app/app/models/home_page_response.dart';
+import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -10,20 +11,21 @@ class HomeController extends GetxController {
   final selectedService = 0.obs;
   final currectMenuIdex = 1.obs;
   final homeResponse = HomePageResponse().obs;
+  final userData = UserResponse().obs;
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
   late String name;
-
   late String phone;
-
   late String avatar;
   late bool isLogggd;
+  late String id;
 
   _onDoneLoading() async {
     isLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     String token = await SharedHelper().readString(CachingKey.TOKEN);
     phone = await SharedHelper().readString(CachingKey.MOBILE_NUMBER);
+    id = await SharedHelper().readString(CachingKey.USER_ID);
     name = await SharedHelper().readString(CachingKey.USER_NAME);
     avatar = await SharedHelper().readString(CachingKey.AVATAR);
     print(
@@ -34,10 +36,12 @@ class HomeController extends GetxController {
   void onInit() async {
     _onDoneLoading();
     homeResponse.value = await ApiProvider().getHomeData();
+
     Get.put(SessionsController(), tag: 'SessionsController');
     Get.put(DiaryController(), tag: 'DiaryController');
 
     super.onInit();
+
     homeResponse.value.data!.slider!.forEach((v) {
       slider.add(v.image ??
           "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");

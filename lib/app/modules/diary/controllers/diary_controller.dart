@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class DiaryController extends GetxController {
   RxList<SingleImageItem> list = RxList();
   final listKey = 200.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -27,5 +28,6 @@ class SingleImageItem {
   int id;
   String imagePath;
   bool selected;
+
   SingleImageItem({required this.id, required this.imagePath, required this.selected});
 }

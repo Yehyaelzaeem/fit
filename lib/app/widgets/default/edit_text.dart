@@ -15,6 +15,7 @@ class EditText extends StatelessWidget {
   final Function? validateFunc;
   final IconData? iconData;
   final IconData? suffixIconData;
+  final Widget? suffixData;
   final double fontSize;
   final double radius;
   final double contentPaddingH;
@@ -43,12 +44,16 @@ class EditText extends StatelessWidget {
     this.formatter,
     this.type = TextInputType.text,
     this.controller,
+    this.suffixData,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: background,
+      decoration: BoxDecoration(
+        color: background,
+      borderRadius: BorderRadius.circular(radius)
+      ),
       padding: EdgeInsets.all(4),
       child: TextFormField(
         controller: controller,
@@ -80,13 +85,15 @@ class EditText extends StatelessWidget {
             labelText: label ? hint : null,
             hintText: hint,
             counterStyle: TextStyle(color: Colors.green),
-            suffixText: suffixText,
-            suffixIcon: suffixIconData == null
-                ? null
-                : Icon(
-                    suffixIconData,
-                    color: Colors.grey,
-                  ),
+            suffixText: suffixText ?? null,
+            suffixIcon: suffixData != null
+                ? suffixData
+                : suffixIconData == null
+                    ? null
+                    : Icon(
+                        suffixIconData,
+                        color: Colors.grey,
+                      ),
             suffixStyle: TextStyle(
               color: Colors.grey,
               fontSize: 12,
@@ -98,7 +105,7 @@ class EditText extends StatelessWidget {
                     iconData,
                     color: Colors.grey,
                   ),
-            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: 0)),
+            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: 8)),
         keyboardType: type,
         validator: (text) {
           if (validateFunc != null) return validateFunc!(text);

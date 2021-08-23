@@ -4,6 +4,7 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,27 +23,7 @@ class ContactUsView extends GetView<ContactUsController> {
           SizedBox(height: 24),
           HomeAppbar(type: null),
           SizedBox(height: 12),
-          Container(
-            alignment: Alignment(0.01, -1.0),
-            width: Get.width / 2.4,
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
-              ),
-              color: const Color(0xFF414042),
-            ),
-            child: Center(
-              child: Text(
-                'Contact us',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
+          PageLable(name: "Contact us"),
           //* phone
           SizedBox(height: 12),
           Container(
@@ -109,28 +90,7 @@ class ContactUsView extends GetView<ContactUsController> {
           ),
           //* title text
           SizedBox(height: 12),
-          Container(
-            alignment: Alignment(0.01, -1.0),
-            width: Get.width / 1.6,
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.horizontal(
-                right: Radius.circular(15.0),
-              ),
-              color: const Color(0xFF414042),
-            ),
-            child: Center(
-              child: Text(
-                'Kindly leave your message',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
-          //* User name
+          PageLable(name: "Kindly leave your message"), //* User name
           Container(
             color: Colors.white,
             width: Get.width,

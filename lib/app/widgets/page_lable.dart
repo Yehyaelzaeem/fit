@@ -8,7 +8,7 @@ class PageLable extends StatelessWidget {
    return Container(
 
       alignment: Alignment(0.01, -1.0),
-      width: MediaQuery.of(context).size.width / 1.6,
+      width: MediaQuery.of(context).size.width / 1.9,
       padding: EdgeInsets.symmetric(horizontal: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.horizontal(
@@ -29,6 +29,7 @@ class PageLable extends StatelessWidget {
               ),
             ),
             SizedBox(height: 2,),
+
           ],
         ),
       ),

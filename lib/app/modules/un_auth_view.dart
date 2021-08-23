@@ -1,6 +1,7 @@
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,28 +13,30 @@ class UnAuthView extends StatelessWidget {
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          SizedBox(height: MediaQuery.of(context).size.width/3,),
           Center(
             child: Image.asset(
               "assets/img/block-user.png",
               width: MediaQuery.of(context).size.width / 2,
               height: MediaQuery.of(context).size.width / 2,
-              color: Colors.red,
+              color: kColorPrimary,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Center(
                 child: Text(
-              "Sorry  ,, Illegal Access \n\ Please Login First",
-              style: TextStyle(color: Colors.red, fontSize: 22),
+              "Sorry, Illegal Access \n\ Please Sign In First",
+              style: TextStyle(color: kColorPrimary, fontSize: 22),
             )),
           ),
           kButton(
             'Sign in',
             hight: 55,
             marginH: 20,
+            color: kColorAccent,
             bold: true,
             paddingH: 0,
             textSize: 20,
@@ -46,7 +49,7 @@ class UnAuthView extends StatelessWidget {
             child: kButton(
               'Sign up',
               hight: 55,
-              color: kColorAccent,
+              color: kColorPrimary,
               textSize: 20,
               bold: true,
               func: () {
@@ -54,6 +57,15 @@ class UnAuthView extends StatelessWidget {
               },
             ),
           ),
+          GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.HOME);
+              },
+              child: kTextHeader('Go Back To Home', color: kColorPrimary, size: 20)),
+
+
+          SizedBox(height: MediaQuery.of(context).size.width/4,),
+
         ],
       ),
     );

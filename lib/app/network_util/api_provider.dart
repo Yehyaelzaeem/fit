@@ -1,17 +1,23 @@
+import 'dart:io';
+
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/contact_response.dart';
+import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/models/faq_response.dart';
 import 'package:app/app/models/general_response.dart';
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/models/message_details_response.dart';
 import 'package:app/app/models/messages_response.dart';
+import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/orintation_response.dart';
+import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/models/session_response.dart';
 import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:dio/dio.dart';
+// import 'package:dio/dio.dart';
 
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
@@ -140,12 +146,102 @@ class ApiProvider {
     }
   }
 
+  Future<DayDetailsResponse> getDiaryView() async {
+    Response response = await _utils.get("calories_day_details");
+    if (response.data["success"] == true) {
+      return DayDetailsResponse.fromJson(response.data);
+    } else {
+      return DayDetailsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MyOtherCaloriesResponse> getOtherCaloreis() async {
+    Response response = await _utils.get("other_calories");
+    if (response.data["success"] == true) {
+      return MyOtherCaloriesResponse.fromJson(response.data);
+    } else {
+      return MyOtherCaloriesResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MyOtherCaloriesUnitsResponse> getOtherCaloriesUnit() async {
+    Response response = await _utils.get("other_calories_units");
+    if (response.data["success"] == true) {
+      return MyOtherCaloriesUnitsResponse.fromJson(response.data);
+    } else {
+      return MyOtherCaloriesUnitsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> deleteCalorie(String endPoint, int id) async {
+    FormData body = FormData.fromMap({"id": id});
+    Response response = await _utils.post("${endPoint}", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> addOtherCalories(
+      {required String? title,
+      required String? calPerUnti,
+      required int? unit,
+      String? unitQuantity,
+      String? unitName,
+      int? type}) async {
+    FormData body = FormData.fromMap({
+      "title": title,
+      "calorie_per_unit": calPerUnti,
+      "unit": unit,
+      "unit_qty": unitQuantity,
+      "unit_name": unitName,
+      "type": type,
+    });
+    Response response = await _utils.post("new_other_calories", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
   Future<SessionDetailsResponse> getSessionDetails(int? id) async {
     Response response = await _utils.get("session/$id");
     if (response.data["success"] == true) {
       return SessionDetailsResponse.fromJson(response.data);
     } else {
       return SessionDetailsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<UserResponse> editProfileApi({
+    File? image,
+    String? password,
+    String? name,
+    String? email,
+    String? date,
+    String? phone,
+    String? password_confirmation,
+    required String gender,
+  }) async {
+    FormData body = FormData.fromMap({
+      "image": image == null
+          ? null
+          : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'),
+      "name": name,
+      "gender": gender,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": password_confirmation
+    });
+    Response response = await _utils.post("update_profile", body: body);
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data);
     }
   }
 
@@ -189,6 +285,33 @@ class ApiProvider {
     });
     Response response = await _utils.post(
       "orientation_registeration",
+      body: body,
+    );
+
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> updateDiaryData(
+      {String? water,
+      int? foodProtine,
+      int? qtyProtiene,
+      // int? foodCarb,
+      // int? qtyCarb,
+      int? workOut,
+      String? workout_desc}) async {
+    FormData body = FormData.fromMap({
+      "water": water,
+      "food": foodProtine,
+      "qty": qtyProtiene,
+      "workout": workOut,
+      "workout_desc": workout_desc,
+    });
+    Response response = await _utils.post(
+      "save_calories_details",
       body: body,
     );
 

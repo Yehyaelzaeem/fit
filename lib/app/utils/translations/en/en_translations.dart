@@ -38,7 +38,7 @@ final Map<String, String> enTranslation = {
   'wallet': 'Wallet',
   'invoice': 'Invoice',
   'help': 'Help',
-  'logoutMessageConfirm': 'Config LOGOUT',
+  'logoutMessageConfirm': 'Confirm LOGOUT',
   'dismiss': 'Dismiss',
   'update': 'Update',
   'updateProfileSuccessfully': 'Successfully update profile ',
