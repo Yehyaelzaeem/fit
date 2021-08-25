@@ -3,9 +3,11 @@ import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 
 void main() {
+
   // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
   //   statusBarColor: Colors.white,
   //   systemNavigationBarColor: Colors.white,

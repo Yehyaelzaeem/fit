@@ -1,5 +1,4 @@
-import 'package:app/app/data/database/shared_pref.dart';
-import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
@@ -50,15 +49,18 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   }
 
   navigateNextPage() async {
-    bool IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    var token = await SharedHelper().readString(CachingKey.TOKEN);
-    print("Status  Logged : ${IsLogggd} ,  Token : ${token}");
-    if (IsLogggd == true) {
+    final controller = Get.put(HomeController());
+    String id = await SharedHelper().readString(CachingKey.USER_ID);
+    print("Controller Data ===> Logged : ${controller.isLogggd.value} ,  Name : ${controller.name
+        .value},  Id : ${controller.id.value},  Image : ${controller.avatar.value}");
+    controller.isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    controller.name.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    controller.avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
+    controller.id.value = await SharedHelper().readString(CachingKey.USER_ID);
+    if (controller.isLogggd.value == true) {
       Get.offAllNamed(Routes.HOME);
     } else {
       Get.offAllNamed(Routes.AUTH);
-
     }
   }
-
 }

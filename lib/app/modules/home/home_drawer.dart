@@ -1,4 +1,3 @@
-import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
@@ -8,6 +7,8 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
   final controller = Get.put(HomeController());
@@ -46,28 +47,35 @@ class HomeDrawer extends GetView<HomeController> {
                     color: Colors.white,
                     child: Column(
                       children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(250),
-                            child: prefs.readString(CachingKey.AVATAR) != null
-                                ? CachedNetworkImage(
-                                    imageUrl: controller.avatar,
-                                    fit: BoxFit.cover,
-                                    height: 80,
-                                    width: 80,
-                                    placeholder: (ctx, url) {
-                                      return profileImageHolder();
-                                    },
-                                    errorWidget: (context, url, error) {
-                                      return profileImageHolder();
-                                    },
-                                  )
-                                : profileImageHolder()),
+                        Obx(() {
+                          return ClipRRect(
+                              borderRadius: BorderRadius.circular(250),
+                              child: prefs.readString(CachingKey.AVATAR) != null
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller.avatar.value,
+                                      fit: BoxFit.cover,
+                                      height: 80,
+                                      width: 80,
+                                      placeholder: (ctx, url) {
+                                        return profileImageHolder();
+                                      },
+                                      errorWidget: (context, url, error) {
+                                        return profileImageHolder();
+                                      },
+                                    )
+                                  : profileImageHolder());
+                        })
                         // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
                         // Text(prefs.getName()!)
-                        kTextHeader('${controller.name}' , size: 18),
-                        kTextfooter('ID:${controller.id}',
+                        ,
+                        Obx(() {
+                          return kTextHeader('${controller.name.value}', size: 18);
+                        }),
+                        kTextfooter('ID:${controller.id.value}',
                             size: 14, color: Colors.black87, paddingV: 0),
-                        SizedBox(height: 24,),
+                        SizedBox(
+                          height: 24,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

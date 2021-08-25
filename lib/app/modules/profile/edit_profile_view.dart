@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/app/models/user_response.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
@@ -16,6 +17,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -40,7 +42,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   DateTime selectedDate = DateTime.now();
   bool isLoading = true;
 
-   XFile? _imageFile;
+  XFile? _imageFile;
   var _pickImageError;
 
   Future<void> _selectDate(BuildContext context) async {
@@ -76,14 +78,56 @@ class _EditProfileViewState extends State<EditProfileView> {
           loginResponse = value;
           showLoader = false;
         });
+        final controller = Get.put(HomeController());
+        controller.avatar.value = loginResponse.data!.image!;
+        controller.name.value = loginResponse.data!.name!;
+        controller.id.value = loginResponse.data!.patientId!;
+
         Fluttertoast.showToast(msg: "${value.message}");
-        SharedHelper _shared = SharedHelper();
-        await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
-        await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
-        await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
-        await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
-        await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
-        await _shared.writeData(CachingKey.IS_LOGGED, true);
+        // SharedHelper _shared = SharedHelper();
+        // await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
+        // await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
+        // await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
+        // await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
+        // await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
+        // await _shared.writeData(CachingKey.IS_LOGGED, true);
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        setState(() {
+          loginResponse = value;
+          showLoader = false;
+        });
+        Fluttertoast.showToast(msg: "${value.message}");
+        print("error");
+      }
+    });
+  }
+
+  void updatePhoto() async {
+    setState(() {
+      showLoader = true;
+    });
+    await ApiProvider()
+        .editProfileApi(
+            image: File(_imageFile!.path),
+            name: name ?? ress.data!.name,
+            email: email ?? ress.data!.email,
+            date: date ?? ress.data!.dateOfBirth,
+            phone: phone ?? ress.data!.phone,
+            gender: gender)
+        .then((value) async {
+      if (value.success == true) {
+        setState(() {
+          loginResponse = value;
+          showLoader = false;
+        });
+        final controller = Get.put(HomeController());
+        controller.avatar.value = loginResponse.data!.image!;
+        controller.name.value = loginResponse.data!.name!;
+        controller.id.value = loginResponse.data!.patientId!;
+        controller.isLogggd.value = true;
+        Fluttertoast.showToast(msg: "${value.message}");
+        Get.offAllNamed(Routes.HOME);
       } else {
         setState(() {
           loginResponse = value;
@@ -112,7 +156,6 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   Future getImage() async {
     final ImagePicker _picker = ImagePicker();
-
     try {
       final pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
@@ -123,6 +166,10 @@ class _EditProfileViewState extends State<EditProfileView> {
       setState(() {
         _imageFile = pickedFile;
       });
+      if (_imageFile == null) {
+      } else {
+        updatePhoto();
+      }
     } catch (e) {
       setState(() {
         _pickImageError = e;

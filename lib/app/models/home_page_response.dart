@@ -104,14 +104,15 @@ class Services {
 }
 
 class Items {
-  int ? id;
-  String ?title;
+  int? id;
+  String? title;
   String? text;
   String? link;
+  bool? hasOrientation;
   String? image;
   Cover? cover;
 
-  Items({this.id, this.title, this.text, this.link, this.image, this.cover});
+  Items({this.hasOrientation, this.id, this.title, this.text, this.link, this.image, this.cover});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -120,6 +121,7 @@ class Items {
     link = json['link'];
     image = json['image'];
     cover = json['cover'] != null ? new Cover.fromJson(json['cover']) : null;
+    hasOrientation = json['has_orientation'];
   }
 
   Map<String, dynamic> toJson() {
@@ -129,6 +131,7 @@ class Items {
     data['text'] = this.text;
     data['link'] = this.link;
     data['image'] = this.image;
+    data['has_orientation'] = this.hasOrientation;
     if (this.cover != null) {
       data['cover'] = this.cover!.toJson();
     }

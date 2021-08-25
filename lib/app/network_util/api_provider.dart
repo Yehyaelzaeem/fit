@@ -88,8 +88,8 @@ class ApiProvider {
     }
   }
 
-  Future<OrintationResponse> getOritationSelletionsData() async {
-    Response response = await _utils.get("orientation_settings");
+  Future<OrintationResponse> getOritationSelletionsData(int id) async {
+    Response response = await _utils.get("orientation_settings/$id");
     if (response.statusCode == 200) {
       return OrintationResponse.fromJson(response.data);
     } else {
@@ -146,8 +146,8 @@ class ApiProvider {
     }
   }
 
-  Future<DayDetailsResponse> getDiaryView() async {
-    Response response = await _utils.get("calories_day_details");
+  Future<DayDetailsResponse> getDiaryView(String? date) async {
+    Response response = await _utils.get("calories_day_details?date=$date");
     if (response.data["success"] == true) {
       return DayDetailsResponse.fromJson(response.data);
     } else {
@@ -223,7 +223,7 @@ class ApiProvider {
     String? date,
     String? phone,
     String? password_confirmation,
-    required String gender,
+    String? gender,
   }) async {
     FormData body = FormData.fromMap({
       "image": image == null

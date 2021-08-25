@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
 
     <application
-        android:label="FIT over FAT"
+        android:label="Fit over faT"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

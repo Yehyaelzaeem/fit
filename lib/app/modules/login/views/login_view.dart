@@ -1,4 +1,5 @@
 import 'package:app/app/models/user_response.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
@@ -41,7 +42,6 @@ class _LoginViewState extends State<LoginView> {
           showLoader = false;
         });
         SharedHelper _shared = SharedHelper();
-
         await _shared.writeData(CachingKey.TOKEN, loginResponse.data!.accessToken);
         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
@@ -147,21 +147,6 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         //Forget password
                         SizedBox(height: 4),
-                        GestureDetector(
-                          onTap: () {
-                            // Get.toNamed(Routes.FORGET_PASSWORD);
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            child: kTextfooter(
-                              'Forget password ?',
-                              size: 12,
-                              align: TextAlign.end,
-                              paddingH: 8,
-                              paddingV: 2,
-                            ),
-                          ),
-                        ),
                         Container(
                           width: double.infinity,
                           child: Column(

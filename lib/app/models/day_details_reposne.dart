@@ -17,7 +17,7 @@ class DayDetailsResponse {
 class Data {
   Proteins? proteins;
   Proteins? carbsFats;
-  String? water;
+  int? water;
   List<Workouts>? workouts;
   DayWorkouts? dayWorkouts;
   String? pdf;
@@ -111,7 +111,7 @@ class Progress {
 class CaloriesDetails {
   int? id;
   int? qty;
-  int? quality;
+  String? quality;
   int? calories;
   String? createdAt;
   String? unit;

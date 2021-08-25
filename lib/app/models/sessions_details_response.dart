@@ -100,7 +100,7 @@ class FollowUpTable {
   ProteinsCalories? proteinsCalories;
   ProteinsCalories? carbsFatsCalories;
   String? date;
-  String? water;
+  int? water;
   // Null workout;
   // CaloriesTable? caloriesTable;
 

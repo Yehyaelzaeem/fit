@@ -17,12 +17,13 @@ class AuthView extends GetView<AuthController> {
         children: [
           SizedBox(height: 26),
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: EdgeInsets.symmetric(horizontal: 100),
             child: Image.asset(
               kLogoColumn,
               width: double.infinity,
             ),
           ),
+          SizedBox(height: 66),
           Column(
             children: [
               kButton(

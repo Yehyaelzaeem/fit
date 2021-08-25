@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../home_page_view.dart';
 import '../controllers/home_controller.dart';
-import '../home_services.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
@@ -39,6 +38,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget currentPage() {
+    final controller = Get.put(HomeController());
     if (controller.currentIndex == 2) {
       return SessionsView();
     }

@@ -54,16 +54,8 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   child: Column(
                     children: [
                       controller.currentIndex == 0
-                          ? Icon(
-                              Icons.home,
-                              color: kColorPrimary,
-                              size: 30,
-                            )
-                          : Icon(
-                              Icons.home_outlined,
-                              color: Colors.black,
-                              size: 30,
-                            ),
+                          ? Image.asset("assets/img/home0.png" , width: 30,height: 30,)
+                          : Image.asset("assets/img/home1.png" , width: 30,height: 30,),
                       kTextbody('Home',
                           color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
                     ],
@@ -85,16 +77,8 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   child: Column(
                     children: [
                       controller.currentIndex == 1
-                          ? Icon(
-                              Icons.receipt_long,
-                              color: kColorPrimary,
-                              size: 30,
-                            )
-                          : Icon(
-                              Icons.receipt_long_outlined,
-                              color: Colors.black,
-                              size: 30,
-                            ),
+                          ? Image.asset("assets/img/notebook.png" , width: 30,height: 30,)
+                          : Image.asset("assets/img/notebook1.png" , width: 30,height: 30,),
                       kTextbody('Diary',
                           color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
                     ],
@@ -116,16 +100,8 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   child: Column(
                     children: [
                       controller.currentIndex == 2
-                          ? Icon(
-                              Icons.person,
-                              color: kColorPrimary,
-                              size: 30,
-                            )
-                          : Icon(
-                              Icons.person_outline,
-                              color: Colors.black,
-                              size: 30,
-                            ),
+                          ? Image.asset("assets/img/doctor0.png" , width: 30,height: 30,)
+                          : Image.asset("assets/img/doctor.png" , width: 30,height: 30,),
                       kTextbody('Sessions',
                           color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
                     ],

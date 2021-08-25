@@ -26,8 +26,9 @@ class Data {
   String? intro;
   List<Targets>? targets;
   List<Targets>? hearingFrom;
+  List<Targets>? packages;
 
-  Data({this.intro, this.targets, this.hearingFrom});
+  Data({this.intro, this.targets, this.hearingFrom, this.packages});
 
   Data.fromJson(Map<String, dynamic> json) {
     intro = json['intro'];
@@ -41,6 +42,12 @@ class Data {
       hearingFrom = <Targets>[];
       json['hearing_from'].forEach((v) {
         hearingFrom!.add(new Targets.fromJson(v));
+      });
+    }
+    if (json['packages'] != null) {
+      packages = <Targets>[];
+      json['packages'].forEach((v) {
+        packages!.add(new Targets.fromJson(v));
       });
     }
   }

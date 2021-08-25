@@ -2,7 +2,7 @@ import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -124,18 +124,14 @@ class _HomeAppbarState extends State<HomeAppbar> {
                   ),
             ress.data == null
                 ? SizedBox()
-                : CachedNetworkImage(
-                    imageUrl: "${ress.data!.image}",
-                    fit: BoxFit.cover,
-                    height: 32,
-                    width: 32,
-                    placeholder: (ctx, url) {
-                      return profileImageHolder();
-                    },
-                    errorWidget: (context, url, error) {
-                      return profileImageHolder();
-                    },
-                  )
+                : Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.purpleAccent,
+                        shape: BoxShape.circle,
+                        image: DecorationImage(image: NetworkImage("${ress.data!.image}") , fit: BoxFit.cover)),
+                  ),
           ],
         ),
       ),

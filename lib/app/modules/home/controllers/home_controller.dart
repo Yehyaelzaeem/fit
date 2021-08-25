@@ -15,26 +15,19 @@ class HomeController extends GetxController {
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
-  late String name;
-  late String phone;
-  late String avatar;
-  late bool isLogggd;
-  late String id;
-
-  _onDoneLoading() async {
-    isLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    String token = await SharedHelper().readString(CachingKey.TOKEN);
-    phone = await SharedHelper().readString(CachingKey.MOBILE_NUMBER);
-    id = await SharedHelper().readString(CachingKey.USER_ID);
-    name = await SharedHelper().readString(CachingKey.USER_NAME);
-    avatar = await SharedHelper().readString(CachingKey.AVATAR);
-    print(
-        "{ Status  Logged : ${isLogggd} , Name : ${name} ,Phone : ${phone} , Avatar Link : ${avatar}  }");
-  }
+  var name = "".obs;
+  var phone = "".obs;
+  var avatar = "".obs;
+  var isLogggd = false.obs;
+  var id = "".obs;
 
   @override
   void onInit() async {
-    _onDoneLoading();
+    isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    name.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
+    id.value = await SharedHelper().readString(CachingKey.USER_ID);
+
     homeResponse.value = await ApiProvider().getHomeData();
 
     Get.put(SessionsController(), tag: 'SessionsController');
