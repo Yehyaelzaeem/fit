@@ -41,71 +41,86 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                controller.currentIndex.value = 0;
-              },
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                child: Center(
-                  child: Column(
-                    children: [
-                      controller.currentIndex == 0
-                          ? Image.asset("assets/img/home0.png" , width: 30,height: 30,)
-                          : Image.asset("assets/img/home1.png" , width: 30,height: 30,),
-                      kTextbody('Home',
-                          color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
-                    ],
-                  ),
+          InkWell(
+            onTap: () {
+              controller.currentIndex.value = 0;
+            },
+            child: Container(
+              height: 60,
+              width: 100,
+              child: Center(
+                child: Column(
+                  children: [
+                    controller.currentIndex == 0
+                        ? Image.asset(
+                            "assets/img/home0.png",
+                            width: 30,
+                            height: 30,
+                          )
+                        : Image.asset(
+                            "assets/img/home1.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                    kTextbody('Home',
+                        color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
+                  ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                controller.currentIndex.value = 1;
-              },
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                child: Center(
-                  child: Column(
-                    children: [
-                      controller.currentIndex == 1
-                          ? Image.asset("assets/img/notebook.png" , width: 30,height: 30,)
-                          : Image.asset("assets/img/notebook1.png" , width: 30,height: 30,),
-                      kTextbody('Diary',
-                          color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
-                    ],
-                  ),
+          InkWell(
+            onTap: () {
+              controller.currentIndex.value = 1;
+            },
+            child: Container(
+              height: 60,
+              width: 100,
+              child: Center(
+                child: Column(
+                  children: [
+                    controller.currentIndex == 1
+                        ? Image.asset(
+                            "assets/img/notebook.png",
+                            width: 30,
+                            height: 30,
+                          )
+                        : Image.asset(
+                            "assets/img/notebook1.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                    kTextbody('Diary',
+                        color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
+                  ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 1,
-            child: GestureDetector(
-              onTap: () {
-                controller.currentIndex.value = 2;
-              },
-              child: Container(
-                height: 60,
-                width: double.infinity,
-                child: Center(
-                  child: Column(
-                    children: [
-                      controller.currentIndex == 2
-                          ? Image.asset("assets/img/doctor0.png" , width: 30,height: 30,)
-                          : Image.asset("assets/img/doctor.png" , width: 30,height: 30,),
-                      kTextbody('Sessions',
-                          color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
-                    ],
-                  ),
+          InkWell(
+            onTap: () {
+              controller.currentIndex.value = 2;
+            },
+            child: Container(
+              height: 60,
+              width: 100,
+              child: Center(
+                child: Column(
+                  children: [
+                    controller.currentIndex == 2
+                        ? Image.asset(
+                            "assets/img/doctor0.png",
+                            width: 30,
+                            height: 30,
+                          )
+                        : Image.asset(
+                            "assets/img/doctor.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                    kTextbody('Sessions',
+                        color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
+                  ],
                 ),
               ),
             ),

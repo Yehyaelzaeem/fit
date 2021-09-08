@@ -4,8 +4,10 @@ import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -64,19 +66,27 @@ class _SessionDetailsState extends State<SessionDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PageLable(name: "Body Composition"),
-                        InkWell(
-                          onTap: () {
-                            downloadFile(sessionResponse.data!.bodyComposition!);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Icon(
-                              Icons.download_sharp,
-                              color: kColorPrimary,
-                              size: 35,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                downloadFile(sessionResponse.data!.bodyComposition!);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                child: Icon(
+                                  Icons.download_sharp,
+                                  color: kColorPrimary,
+                                  size: 30,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                          ],
+                        )
                       ],
                     ),
                     Padding(
@@ -88,7 +98,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             child: Text(
-                              "${DateTime.now().toString().substring(0, 10)} - 11 : 50 PM",
+                              "${sessionResponse.data!.date}",
                               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ),
@@ -158,7 +168,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                                   SizedBox(),
                                   Text(
                                     "Carbs & Fats",
-                                    style: TextStyle(color: Colors.white, fontSize: 15),
+                                    style: TextStyle(color: Colors.white, fontSize: 14),
                                   ),
                                   Container(
                                     width: 1,
@@ -193,7 +203,87 @@ class _SessionDetailsState extends State<SessionDetails> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: sessionResponse.data!.followUpTable!.length,
                         itemBuilder: (context, index) {
-                          return tableItem(sessionResponse.data!.followUpTable![index]);
+                          return InkWell(
+                            onTap: () {
+                              CustomSheet(
+                                  context: context,
+                                  widget: ListView(
+                                    padding: EdgeInsets.all(16),
+                                    children: [
+                                      Text(
+                                        "Water : ${sessionResponse.data!.followUpTable![index].water}",
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      ),
+                                      Divider(),
+                                      Text(
+                                        "Workout : ${sessionResponse.data!.followUpTable![index].workout!.workoutType!}",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: kColorPrimary),
+                                      ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Text(
+                                        " ${sessionResponse.data!.followUpTable![index].workout!.workoutDesc!}",
+                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                      ),
+                                      Divider(),
+                                      Text(
+                                        "Proteins",
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      ),
+                                      sessionResponse.data!.followUpTable![index].caloriesTable!
+                                              .proteinsCaloriesTable!.isEmpty
+                                          ? Padding(
+                                              padding: EdgeInsets.symmetric(vertical: 50),
+                                              child: Center(
+                                                child: Text("No Data To Show"),
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics: NeverScrollableScrollPhysics(),
+                                              itemCount: sessionResponse.data!.followUpTable![index]
+                                                  .caloriesTable!.proteinsCaloriesTable!.length,
+                                              itemBuilder: (context, inIndex) {
+                                                return rowItem(sessionResponse
+                                                    .data!
+                                                    .followUpTable![index]
+                                                    .caloriesTable!
+                                                    .proteinsCaloriesTable![inIndex]);
+                                              }),
+                                      Divider(),
+                                      Text(
+                                        "Carbs & Fats",
+                                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      ),
+                                      sessionResponse.data!.followUpTable![index].caloriesTable!
+                                              .proteinsCaloriesTable!.isEmpty
+                                          ? Padding(
+                                              padding: EdgeInsets.symmetric(vertical: 50),
+                                              child: Center(
+                                                child: Text("No Data To Show"),
+                                              ),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              physics: NeverScrollableScrollPhysics(),
+                                              itemCount: sessionResponse.data!.followUpTable![index]
+                                                  .caloriesTable!.carbsFatsTable!.length,
+                                              itemBuilder: (context, inIndex) {
+                                                return rowItem(sessionResponse
+                                                    .data!
+                                                    .followUpTable![index]
+                                                    .caloriesTable!
+                                                    .carbsFatsTable![inIndex]);
+                                              }),
+                                    ],
+                                  ));
+                            },
+                            child: tableItem(sessionResponse.data!.followUpTable![index]),
+                          );
                         }),
                   ],
                 )
@@ -218,12 +308,44 @@ class _SessionDetailsState extends State<SessionDetails> {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 "${value}",
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17, color: kColorPrimary),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget rowItem(CarbsFatsTable item) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              kTextbody(' ${item.qty} ',
+                  color: Color(int.parse("0xFF${item.color}")), bold: false, size: 14),
+              Container(
+                  width: MediaQuery.of(context).size.width / 2.3,
+                  padding: EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.grey[500]!)),
+                  child: kTextbody('${item.quality}', color: Colors.black, bold: false, size: 12)),
+              kTextbody('${item.calories} Cal', color: Colors.black, bold: false, size: 16),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
     );
   }
 
@@ -247,8 +369,9 @@ class _SessionDetailsState extends State<SessionDetails> {
                     Container(
                       width: 1,
                       height: 30,
-                      color: Colors.black,
+                      color: Colors.black87,
                     )
+
                   ],
                 ),
               ),
@@ -260,8 +383,8 @@ class _SessionDetailsState extends State<SessionDetails> {
                     SizedBox(),
                     Text(
                       "${table.proteinsCalories!.taken}/${table.proteinsCalories!.imposed}",
-                      style:
-                          TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),
                     ),
                     Container(
                       width: 1,
@@ -279,8 +402,8 @@ class _SessionDetailsState extends State<SessionDetails> {
                     SizedBox(),
                     Text(
                       "${table.carbsFatsCalories!.taken}/${table.carbsFatsCalories!.imposed}",
-                      style:
-                          TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),
                     ),
                     Container(
                       width: 1,
@@ -299,8 +422,8 @@ class _SessionDetailsState extends State<SessionDetails> {
                     Text(
                       "${table.proteinsCalories!.taken! + table.carbsFatsCalories!.taken!}/"
                       "${table.proteinsCalories!.imposed! + table.carbsFatsCalories!.imposed!}",
-                      style:
-                          TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.normal, fontSize: 15),
                     ),
                     Container(
                       width: 1,

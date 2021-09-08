@@ -15,14 +15,26 @@ class DayDetailsResponse {
 }
 
 class Data {
+  List<Days>? days;
   Proteins? proteins;
   Proteins? carbsFats;
   int? water;
   List<Workouts>? workouts;
   DayWorkouts? dayWorkouts;
   String? pdf;
+  String? workoutDetails;
+  String? workoutDetailsType;
 
-  Data({this.proteins, this.carbsFats, this.water, this.workouts, this.dayWorkouts, this.pdf});
+  Data(
+      {this.proteins,
+      this.carbsFats,
+      this.water,
+      this.workouts,
+      this.dayWorkouts,
+      this.pdf,
+      this.workoutDetails,
+      this.days,
+      this.workoutDetailsType});
 
   Data.fromJson(Map<String, dynamic> json) {
     proteins = json['proteins'] != null ? new Proteins.fromJson(json['proteins']) : null;
@@ -34,9 +46,39 @@ class Data {
         workouts!.add(new Workouts.fromJson(v));
       });
     }
+    if (json['days'] != null) {
+      days = <Days>[];
+      json['days'].forEach((v) {
+        days!.add(new Days.fromJson(v));
+      });
+    }
     dayWorkouts =
         json['day_workouts'] != null ? new DayWorkouts.fromJson(json['day_workouts']) : null;
     pdf = json['pdf'];
+    workoutDetails = json['workout_details'] ?? "";
+    workoutDetailsType = json['workout_details_type'] ?? "";
+  }
+}
+
+class Days {
+  String? date;
+  String? dateFormat;
+  bool? active;
+
+  Days({this.date, this.dateFormat, this.active});
+
+  Days.fromJson(Map<String, dynamic> json) {
+    date = json['date'];
+    dateFormat = json['date_format'];
+    active = json['active'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['date'] = this.date;
+    data['date_format'] = this.dateFormat;
+    data['active'] = this.active;
+    return data;
   }
 }
 
@@ -110,13 +152,15 @@ class Progress {
 
 class CaloriesDetails {
   int? id;
-  int? qty;
+  var qty;
   String? quality;
   int? calories;
   String? createdAt;
   String? unit;
+  String? color;
 
-  CaloriesDetails({this.id, this.qty, this.quality, this.calories, this.createdAt, this.unit});
+  CaloriesDetails(
+      {this.id, this.qty, this.quality, this.calories, this.createdAt, this.unit, this.color});
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -125,6 +169,7 @@ class CaloriesDetails {
     calories = json['calories'];
     createdAt = json['created_at'];
     unit = json['unit'] ?? "GM";
+    color = json['color'] ?? "FFFFFF";
   }
 
   Map<String, dynamic> toJson() {
@@ -144,8 +189,9 @@ class Food {
   String? unit;
   int? caloriePerUnit;
   String? color;
+  bool? isSellected;
 
-  Food({this.id, this.title, this.unit, this.caloriePerUnit, this.color});
+  Food({this.id, this.title, this.unit, this.caloriePerUnit, this.color, this.isSellected});
 
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -153,6 +199,7 @@ class Food {
     unit = json['unit'];
     caloriePerUnit = json['calorie_per_unit'];
     color = json['color'];
+    isSellected = false;
   }
 
   Map<String, dynamic> toJson() {

@@ -1,5 +1,5 @@
 const String kImgLogo = "assets/img/ic_logo.png";
-const String kImgLogoWhiteNoBk = "assets/img/ic_logo_white_nobk.png";
+const String kImgLogoWhiteNoBk = "assets/img/ic_logo.png";
 const String kImgLogoPrimiaryNoBk = "assets/img/ic_logo_primary_nobk.png";
 const String kImgLogoAppBar = "assets/img/ic_logo_appbar.png";
 const String kImgLogoIcon = "assets/img/ic_logo_icon.png";
@@ -11,7 +11,7 @@ const String kImgIntro3 = "assets/img/ic_intro_3.png";
 const String kAvatar = 'assets/img/ic_avatar.png';
 const String kLogoIcon = 'assets/img/ic_logo_icon.png';
 const String kCalender = 'assets/img/ic_calender.png';
-const String kLogoPrimaryNobk = 'assets/img/ic_logo_primary_nobk.png';
+// const String kLogoPrimaryNobk = 'assets/img/ic_logo_primary_nobk.png';
 const String kDiaryBlack = 'assets/img/ic_diary_black.png';
 const String kLogoRow = 'assets/img/ic_logo_row.png';
 const String kDiaryPrimary = 'assets/img/ic_diary_primary.png';

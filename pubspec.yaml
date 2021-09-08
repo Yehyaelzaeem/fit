@@ -27,6 +27,8 @@ dependencies:
   image_picker: ^0.8.3+2
   flutter_rating_bar: ^4.0.0
   flutter_launcher_icons: ^0.9.2
+  flutter_staggered_animations: ^1.0.0
+  photo_view: ^0.12.0
 
 
 dev_dependencies:
@@ -37,7 +39,10 @@ dev_dependencies:
 flutter_icons:
   android: "ic_launcher"
   ios: true
-  image_path: "assets/FitFatAppIcon.png"
+#  image_path: "assets/FitFatAppIcon.png"
+#  image_path: "assets/fitoverfat-logo.png"
+#  image_path: "assets/logo_transperrant.png"
+  image_path: "assets/app_logo.png"
 
 ##flutter pub run flutter_launcher_icons:main
 flutter:

@@ -16,6 +16,7 @@ import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:dio/dio.dart';
 // import 'package:dio/dio.dart';
 
@@ -26,7 +27,12 @@ class ApiProvider {
     Response response = await _utils.get("home");
     if (response.statusCode == 200) {
       return HomePageResponse.fromJson(response.data);
-    } else {
+    }
+    // else if (response.statusCode == 401) {
+    //   SharedHelper sharedHelper = SharedHelper();
+    //   sharedHelper.logout();
+    // }
+    else {
       return HomePageResponse.fromJson(response.data);
     }
   }
@@ -271,8 +277,11 @@ class ApiProvider {
       String? mobile,
       String? age,
       String? country,
+      String? whats,
       int? hear_from,
-      int? target}) async {
+      int? target,
+      int? package,
+      int? id}) async {
     FormData body = FormData.fromMap({
       "first_name": first_name,
       "middle_name": middle_name,
@@ -281,10 +290,12 @@ class ApiProvider {
       "age": age,
       "target": target,
       "country": country,
-      "hear_from": hear_from
+      "hear_from": hear_from,
+      "package": package,
+      "whatsapp": whats
     });
     Response response = await _utils.post(
-      "orientation_registeration",
+      "orientation_registeration/$id",
       body: body,
     );
 
@@ -296,15 +307,18 @@ class ApiProvider {
   }
 
   Future<GeneralResponse> updateDiaryData(
-      {String? water,
+      {required String date,
+      String? water,
       int? foodProtine,
       int? qtyProtiene,
       // int? foodCarb,
       // int? qtyCarb,
       int? workOut,
       String? workout_desc}) async {
+    print(date);
     FormData body = FormData.fromMap({
       "water": water,
+      "date": date,
       "food": foodProtine,
       "qty": qtyProtiene,
       "workout": workOut,

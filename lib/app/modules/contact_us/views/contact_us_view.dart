@@ -16,16 +16,15 @@ class ContactUsView extends GetView<ContactUsController> {
   @override
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: SingleChildScrollView(child: Obx(() {
+    return Scaffold(body:     Obx(() {
       if (controller.contactResponse.value.success == true) {
         ContactResponse ress = controller.contactResponse.value;
-        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(height: 24),
+        return ListView(children: [
           HomeAppbar(type: null),
-          SizedBox(height: 12),
+          SizedBox(height: 4),
           PageLable(name: "Contact us"),
           //* phone
-          SizedBox(height: 12),
+          SizedBox(height: 4),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             margin: EdgeInsets.symmetric(vertical: 4),
@@ -283,8 +282,8 @@ class ContactUsView extends GetView<ContactUsController> {
           //* Send Button
           Center(
               child: kButtonDefault('Send', paddingV: 0, func: () {
-            controller.sendMessage();
-          }, shadow: true, paddingH: 50)),
+                controller.sendMessage();
+              }, shadow: true, paddingH: 50)),
           Center(child: kTextbody('Our Social media links', size: 14)),
 
           Container(
@@ -300,7 +299,7 @@ class ContactUsView extends GetView<ContactUsController> {
         ]);
       }
       return Center(child: CircularLoadingWidget());
-    })));
+    }));
   }
 
   Widget socoialItem(SocialMedia data) {

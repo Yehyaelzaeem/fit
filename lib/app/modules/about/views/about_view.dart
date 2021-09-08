@@ -13,9 +13,7 @@ class AboutView extends GetView<AboutController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      SizedBox(height: 48),
+        body: ListView(children: [
       HomeAppbar(type: null),
       SizedBox(height: 12),
       PageLable(name: "About"),
@@ -91,6 +89,6 @@ class AboutView extends GetView<AboutController> {
         return Center(child: CircularLoadingWidget());
       }),
       SizedBox(height: Get.width / 14),
-    ])));
+    ]));
   }
 }

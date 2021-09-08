@@ -6,10 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'controllers/home_controller.dart';
+
 class HomeAppbar extends StatefulWidget {
   final String? type;
+  final Function? onBack;
 
-  const HomeAppbar({Key? key, this.type}) : super(key: key);
+  const HomeAppbar({Key? key, this.type, this.onBack}) : super(key: key);
 
   @override
   _HomeAppbarState createState() => _HomeAppbarState();
@@ -40,6 +43,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(HomeController());
+
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
@@ -57,18 +62,22 @@ class _HomeAppbarState extends State<HomeAppbar> {
           ),
         ]),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             widget.type == null
                 ? GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      if (widget.onBack == null) {
+                        Navigator.pop(context);
+                      } else {
+                        Get.offAllNamed(Routes.HOME);
+                        controller.currentIndex.value = 1;
+                      }
+                      ;
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black87,
-                      ),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.black87,
                     ),
                   )
                 : GestureDetector(
@@ -83,55 +92,66 @@ class _HomeAppbarState extends State<HomeAppbar> {
                       ),
                     ),
                   ),
-            Expanded(
-              child: Image.asset(
-                kLogoRow,
-                height: 44,
-              ),
+            SizedBox(
+              width: 25,
             ),
-            ress.data == null
-                ? SizedBox()
-                : Container(
-                    width: 50,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.NOTIFICATIONS);
-                      },
-                      child: Stack(
-                        children: [
-                          Icon(
-                            Icons.chat_bubble_outline,
-                            color: Colors.black87,
-                            size: 30,
-                          ),
-                          Positioned(
-                            top: 8,
-                            left: 16,
-                            child: Container(
-                              child: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  "$newMessage",
-                                  style: TextStyle(color: Colors.white, fontSize: 16),
-                                ),
+            Image.asset(
+              kLogoRow,
+              height: 44,
+            ),
+            Row(
+              children: [
+                ress.data == null
+                    ? SizedBox(
+                        width: 50,
+                      )
+                    : Container(
+                        width: 50,
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.NOTIFICATIONS);
+                          },
+                          child: Stack(
+                            children: [
+                              Icon(
+                                Icons.chat_bubble_outline,
+                                color: Colors.black87,
+                                size: 30,
                               ),
-                              decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                            ),
-                          )
-                        ],
+                              Positioned(
+                                top: 8,
+                                left: 16,
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      "$newMessage",
+                                      style: TextStyle(color: Colors.white, fontSize: 16),
+                                    ),
+                                  ),
+                                  decoration:
+                                      BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-            ress.data == null
-                ? SizedBox()
-                : Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.purpleAccent,
-                        shape: BoxShape.circle,
-                        image: DecorationImage(image: NetworkImage("${ress.data!.image}") , fit: BoxFit.cover)),
-                  ),
+                ress.data == null
+                    ? SizedBox(
+                        width: 40,
+                      )
+                    : Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                                image: NetworkImage("${ress.data!.image}"), fit: BoxFit.cover)),
+                      ),
+              ],
+            )
           ],
         ),
       ),

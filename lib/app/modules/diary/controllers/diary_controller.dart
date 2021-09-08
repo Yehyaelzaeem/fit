@@ -7,12 +7,12 @@ class DiaryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    list.add(SingleImageItem(id: 1, imagePath: 'assets/img/im_holder1.png', selected: false));
-    list.add(SingleImageItem(id: 2, imagePath: 'assets/img/im_holder1.png', selected: false));
-    list.add(SingleImageItem(id: 3, imagePath: 'assets/img/im_holder1.png', selected: false));
-    list.add(SingleImageItem(id: 4, imagePath: 'assets/img/im_holder1.png', selected: false));
-    list.add(SingleImageItem(id: 5, imagePath: 'assets/img/im_holder1.png', selected: false));
-    list.add(SingleImageItem(id: 6, imagePath: 'assets/img/im_holder1.png', selected: false));
+    list.add(SingleImageItem(id: 1, imagePath: 'assets/img/im_holder1.jpg', selected: false));
+    list.add(SingleImageItem(id: 2, imagePath: 'assets/img/im_holder1.jpg', selected: false));
+    list.add(SingleImageItem(id: 3, imagePath: 'assets/img/im_holder1.jpg', selected: false));
+    list.add(SingleImageItem(id: 4, imagePath: 'assets/img/im_holder1.jpg', selected: false));
+    list.add(SingleImageItem(id: 5, imagePath: 'assets/img/im_holder1.jpg', selected: false));
+    list.add(SingleImageItem(id: 6, imagePath: 'assets/img/im_holder1.jpg', selected: false));
   }
 
   @override

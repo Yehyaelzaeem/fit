@@ -4,6 +4,7 @@ import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -30,6 +31,11 @@ class HomeController extends GetxController {
 
     homeResponse.value = await ApiProvider().getHomeData();
 
+    if (homeResponse.value.success == false && homeResponse.value.code == 401) {
+      SharedHelper().logout();
+      Get.offAllNamed(Routes.SPLASH);
+
+    }
     Get.put(SessionsController(), tag: 'SessionsController');
     Get.put(DiaryController(), tag: 'DiaryController');
 

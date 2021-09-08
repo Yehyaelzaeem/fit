@@ -108,7 +108,7 @@ class _SessionsViewState extends State<SessionsView> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       kTextbody(
-                                        'Next session',
+                                        'Next Session',
                                         color: Colors.black,
                                         size: 16,
                                       ),

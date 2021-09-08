@@ -59,7 +59,7 @@ class Proteins {
   int? id;
   String? title;
   String? qty;
-  int? calories;
+  var calories;
 
   Proteins({this.id, this.title, this.qty, this.calories});
 

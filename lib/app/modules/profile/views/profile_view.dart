@@ -100,8 +100,8 @@ class _ProfileViewState extends State<ProfileView> {
                                   return profileImageHolder();
                                 },
                               )),
-                          kTextHeader('${ress.data!.name!.toUpperCase()}'),
-                          kTextfooter('ID:${ress.data!.patientId!.toUpperCase()}',
+                          kTextHeader('${ress.data!.name!}'),
+                          kTextfooter('ID : ${ress.data!.patientId!}',
                               size: 14, color: Colors.black87, paddingV: 0),
                           SizedBox(height: 14),
                         ],
@@ -129,45 +129,47 @@ class _ProfileViewState extends State<ProfileView> {
                     ),
 
                     //Next session
-                    ress.data!.nextSession== null ?SizedBox():     Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 12),
-                      padding: EdgeInsets.symmetric(vertical: 8),
-                      color: Color(0xffF1F1F1),
-                      child: Stack(
-                        children: [
-                          Container(
-                              width: double.infinity,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  kTextbody(
-                                    'Next session',
-                                    color: Colors.black,
-                                    size: 16,
-                                  ),
-                                  kTextbody(
-                                    '${ress.data!.nextSession!.day}',
-                                    color: kColorPrimary,
-                                    size: 16,
-                                  ),
-                                  kTextbody(
-                                    '${ress.data!.nextSession!.sessionDate}',
-                                    color: Colors.black,
-                                    size: 16,
-                                  ),
-                                ],
-                              )),
-                          Positioned(
-                              right: 26,
-                              top: 3,
-                              child: kTextfooter(
-                                '${ress.data!.nextSession!.status}',
-                                color: kColorPrimary,
-                              )),
-                        ],
-                      ),
-                    ),
+                    ress.data!.nextSession == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.symmetric(vertical: 12),
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            color: Color(0xffF1F1F1),
+                            child: Stack(
+                              children: [
+                                Container(
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        kTextbody(
+                                          'Next Session',
+                                          color: Colors.black,
+                                          size: 16,
+                                        ),
+                                        kTextbody(
+                                          '${ress.data!.nextSession!.day}',
+                                          color: kColorPrimary,
+                                          size: 16,
+                                        ),
+                                        kTextbody(
+                                          '${ress.data!.nextSession!.sessionDate}',
+                                          color: Colors.black,
+                                          size: 16,
+                                        ),
+                                      ],
+                                    )),
+                                Positioned(
+                                    right: 26,
+                                    top: 3,
+                                    child: kTextfooter(
+                                      '${ress.data!.nextSession!.status}',
+                                      color: kColorPrimary,
+                                    )),
+                              ],
+                            ),
+                          ),
 
                     //Package renewal date
                     Container(
@@ -198,110 +200,131 @@ class _ProfileViewState extends State<ProfileView> {
                     // Target
                     SizedBox(height: 18),
 
-                    PageLable(name: "Target"), SizedBox(height: 12),
-                    ress.data!.nextSession== null ?SizedBox():       Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Total Weight:', bold: true),
-                          kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():
-                    ress.data!.nextSession== null ?SizedBox():  Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Fats Percentage:', bold: true),
-                          kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():  Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Muscles Percentage:', bold: true),
-                          kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():   Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Water Percentage:', bold: true),
-                          kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
-                        ],
-                      ),
-                    ),
+                    ress.data!.target == null ? SizedBox() : PageLable(name: "Target"),
+                    SizedBox(height: 12),
+                    ress.data!.target == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Total Weight:', bold: true),
+                                kTextbody(' ${ress.data!.target!.totalWeight}',
+                                    color: kColorPrimary),
+                              ],
+                            ),
+                          ),
+                    ress.data!.target == null
+                        ? SizedBox()
+                        : ress.data!.target == null
+                            ? SizedBox()
+                            : Container(
+                                width: double.infinity,
+                                color: Colors.grey[200],
+                                margin: EdgeInsets.symmetric(vertical: 4),
+                                child: Row(
+                                  children: [
+                                    kTextbody('Fats Percentage:', bold: true),
+                                    kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
+                                  ],
+                                ),
+                              ),
+                    ress.data!.target == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Muscles Percentage:', bold: true),
+                                kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
+                              ],
+                            ),
+                          ),
+                    ress.data!.target == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Water Percentage:', bold: true),
+                                kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
+                              ],
+                            ),
+                          ),
                     // Last Body Composition
                     SizedBox(height: 18),
-                    ress.data!.nextSession== null ?SizedBox():   Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        PageLable(name: "Last Body Composition"),
-                        kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
-                      ],
-                    ),
+                    ress.data!.nextSession == null
+                        ? SizedBox()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              PageLable(name: "Last Body Composition"),
+                              ress.data!.lastBodyComposition == null ?   kTextbody(' Unknown', paddingH: 36):   kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
+                            ],
+                          ),
                     SizedBox(height: 12),
-                    ress.data!.nextSession== null ?SizedBox():  Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Total Weight:', bold: true),
-                          kTextbody('${ress.data!.lastBodyComposition!.totalWeight}',
-                              color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():  Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Fats Percentage:', bold: true),
-                          kTextbody('${ress.data!.lastBodyComposition!.fats}',
-                              color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():   Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Muscles Percentage:', bold: true),
-                          kTextbody('${ress.data!.lastBodyComposition!.muscles}',
-                              color: kColorPrimary),
-                        ],
-                      ),
-                    ),
-                    ress.data!.nextSession== null ?SizedBox():  Container(
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          kTextbody('Water Percentage:', bold: true),
-                          kTextbody('${ress.data!.lastBodyComposition!.water}',
-                              color: kColorPrimary),
-                        ],
-                      ),
-                    )
+                    ress.data!.lastBodyComposition == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Total Weight:', bold: true),
+                                kTextbody('${ress.data!.lastBodyComposition!.totalWeight}',
+                                    color: kColorPrimary),
+                              ],
+                            ),
+                          ),
+                    ress.data!.lastBodyComposition == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Fats Percentage:', bold: true),
+                                kTextbody('${ress.data!.lastBodyComposition!.fats}',
+                                    color: kColorPrimary),
+                              ],
+                            ),
+                          ),
+                    ress.data!.lastBodyComposition == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Muscles Percentage:', bold: true),
+                                kTextbody('${ress.data!.lastBodyComposition!.muscles}',
+                                    color: kColorPrimary),
+                              ],
+                            ),
+                          ),
+                    ress.data!.lastBodyComposition == null
+                        ? SizedBox()
+                        : Container(
+                            width: double.infinity,
+                            color: Colors.grey[200],
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: Row(
+                              children: [
+                                kTextbody('Water Percentage:', bold: true),
+                                kTextbody('${ress.data!.lastBodyComposition!.water}',
+                                    color: kColorPrimary),
+                              ],
+                            ),
+                          )
                   ],
                 ),
         ],

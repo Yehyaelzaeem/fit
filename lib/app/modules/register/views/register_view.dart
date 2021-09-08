@@ -1,6 +1,7 @@
 import 'package:app/app/models/general_response.dart';
 import 'package:app/app/modules/login/views/login_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -10,6 +11,7 @@ import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -354,7 +356,7 @@ class _RegisterViewState extends State<RegisterView> {
                             SizedBox(height: MediaQuery.of(context).size.width / 14),
                             GestureDetector(
                                 onTap: () {
-                                  // Get.toNamed(Routes.LOGIN);
+                                  Get.toNamed(Routes.LOGIN);
                                 },
                                 child: Stack(
                                   children: [

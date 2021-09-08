@@ -82,351 +82,185 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                     ),
                   ],
                 ),
-                Container(
-                  alignment: Alignment(0.01, -1.0),
-                  height: 50.0,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF414042),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Proteins',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                            ),
+                rowWithProgressBar("Proteins", 1),
+                staticBar(),
+                otherCaloriesResponse.data!.proteins!.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 24),
+                              Text("No Proteins Added Yet"),
+                            ],
                           ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddNewCalorie(
-                                            type: 1,
-                                          )));
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(color: kColorPrimary),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF414042),
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                //* table
-                SizedBox(height: 24),
-                Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          blurRadius: 2,
-                          spreadRadius: 2,
-                          offset: Offset(0, 0),
                         ),
-                      ]),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Title', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Unit', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Calories', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: Icon(Icons.more_horiz),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    otherCaloriesResponse.data!.proteins!.isEmpty
-                        ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 24),
-                            Text("No Proteins Added Yet"),
-                          ],
-                        ),
-                      ),
-                    )
-                        :   ListView.builder(
+                      )
+                    : ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: otherCaloriesResponse.data!.proteins!.length,
                         itemBuilder: (context, indedx) {
                           return rowItem(otherCaloriesResponse.data!.proteins![indedx]);
+                        }),
+                SizedBox(height: 20,),
+
+                rowWithProgressBar("Carbs And Fats", 2), //*
+                staticBar(),
+                otherCaloriesResponse.data!.carbsFats!.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Column(
+                            children: [
+                              SizedBox(height: 24),
+                              Text("No Carbs Fats Added Yet"),
+                            ],
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: otherCaloriesResponse.data!.carbsFats!.length,
+                        itemBuilder: (context, indedx) {
+                          return rowItem(otherCaloriesResponse.data!.carbsFats![indedx]);
                         })
-                  ],
-                ),
-                SizedBox(height: 24),
-                Divider(),
-                Container(
-                  alignment: Alignment(0.01, -1.0),
-                  height: 50.0,
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF414042),
-                  ),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Carbs & Fats',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddNewCalorie(
-                                            type: 2,
-                                          )));
-                            },
-                            child: Container(
-                                decoration: BoxDecoration(color: kColorPrimary),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Color(0xFF414042),
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                //* table
-                SizedBox(height: 24),
-                Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.4),
-                          blurRadius: 2,
-                          spreadRadius: 2,
-                          offset: Offset(0, 0),
-                        ),
-                      ]),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Title', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Unit', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              height: 30,
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: kTextbody('Calories', color: Colors.black, bold: true),
-                            ),
-                          ),
-                          Container(
-                            height: 30,
-                            width: 1.4,
-                            decoration: BoxDecoration(color: Colors.grey[700]),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(color: Colors.white, boxShadow: []),
-                              child: Icon(Icons.more_horiz),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    otherCaloriesResponse.data!.carbsFats!.isEmpty
-                        ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 24),
-                            Text("No Carbs % Fats Added Yet"),
-                          ],
-                        ),
-                      ),
-                    )
-                        : ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: otherCaloriesResponse.data!.carbsFats!.length,
-                            itemBuilder: (context, indedx) {
-                              return rowItem(otherCaloriesResponse.data!.carbsFats![indedx]);
-                            })
-                  ],
-                ),
               ],
             ),
     );
   }
 
   Widget rowItem(Proteins item) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Flexible(
-            flex: 3,
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-              child: kTextbody('${item.title}', color: Colors.black, bold: true),
-            ),
-          ),
-          Container(
-            height: 30,
-            width: 1.4,
-            decoration: BoxDecoration(color: Colors.grey[700]),
-          ),
-          Flexible(
-            flex: 3,
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-              child: kTextbody('${item.qty}', color: Colors.black, bold: true),
-            ),
-          ),
-          Container(
-            height: 30,
-            width: 1.4,
-            decoration: BoxDecoration(color: Colors.grey[700]),
-          ),
-          Flexible(
-            flex: 3,
-            child: Container(
-              height: 30,
-              width: double.infinity,
-              decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-              child: kTextbody('${item.calories}', color: Colors.black, bold: true, size: 12),
-            ),
-          ),
-          Container(
-            height: 30,
-            width: 1.4,
-            decoration: BoxDecoration(color: Colors.grey[700]),
-          ),
-          Flexible(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                deleteItem(item.id!);
-              },
-              child: Container(
-                height: 30,
-                width: double.infinity,
-                decoration: BoxDecoration(color: Color(0xffE6E6E6)),
-                child: Center(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 2.5,
+                child: Container(
+                    padding: EdgeInsets.all(4),
+                    child: Center(
+                        child: kTextbody('${item.title}',
+                            color: Colors.black, bold: false, size: 16))),
+              ),
+              Container(
+                width: 2,
+                color: Colors.grey,
+                height: 25,
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width / 5,
+                  padding: EdgeInsets.all(4),
+                  child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 16)),
+              Container(
+                width: 2,
+                color: Colors.grey,
+                height: 25,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 5,
+                child: kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
+              ),
+              Container(
+                width: 2,
+                color: Colors.grey,
+                height: 25,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width / 10,
+                child: InkWell(
+                  onTap: () {
+                    deleteItem(item.id!);
+                  },
                   child: Icon(
                     Icons.delete,
                     color: Colors.redAccent,
-                    size: 24,
+                    size: 30,
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
+        Divider(
+          thickness: 2,
+          color: Colors.grey,
+        ),
+      ],
+    );
+  }
+
+  Widget rowWithProgressBar(String Title, int type) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AddNewCalorie(type: type)));
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              '${Title}',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.black87,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Icon(
+                  Icons.add_box,
+                  color: kColorPrimary,
+                  size: 30,
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget staticBar() {
+    return Container(
+      color: Color(0xFF414042),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width / 2.5,
+              child: Center(child: kTextbody('Title', color: Colors.white, bold: true, size: 16)),
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width / 5,
+                child: Center(child: kTextbody('Unit', color: Colors.white, bold: true, size: 16))),
+            Container(
+              width: MediaQuery.of(context).size.width / 5,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  kTextbody('Calories', color: Colors.white, bold: true, size: 16),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 10,
+            ),
+          ],
+        ),
       ),
     );
   }

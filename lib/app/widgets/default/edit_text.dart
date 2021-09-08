@@ -13,6 +13,7 @@ class EditText extends StatelessWidget {
   final int lines;
   final Function? updateFunc;
   final Function? validateFunc;
+  final Function? onSubmit;
   final IconData? iconData;
   final IconData? suffixIconData;
   final Widget? suffixData;
@@ -45,15 +46,13 @@ class EditText extends StatelessWidget {
     this.type = TextInputType.text,
     this.controller,
     this.suffixData,
+    this.onSubmit,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: background,
-      borderRadius: BorderRadius.circular(radius)
-      ),
+      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(radius)),
       padding: EdgeInsets.all(4),
       child: TextFormField(
         controller: controller,
@@ -116,6 +115,10 @@ class EditText extends StatelessWidget {
         inputFormatters: formatter,
         onChanged: (newValue) {
           if (updateFunc != null) return updateFunc!(newValue);
+          return null;
+        },
+        onFieldSubmitted: (newValue) {
+          if (onSubmit != null) return onSubmit!(newValue);
           return null;
         },
         onSaved: (newValue) {

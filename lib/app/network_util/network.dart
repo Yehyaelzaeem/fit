@@ -34,7 +34,6 @@ class NetworkUtil {
       } else {
         print("Error " + e.stackTrace.toString());
       }
-
     }
     return handleResponse(response);
   }
@@ -100,6 +99,8 @@ class NetworkUtil {
     int? statusCode = response.statusCode;
     print("RESPONSE : " + response.toString());
     if (statusCode == 401) {
+      SharedHelper helper = SharedHelper();
+      helper.logout();
       throw new Exception("Unauthorized");
     } else if (statusCode != 200) {
 //      throw new Exception("Error while fetching data");

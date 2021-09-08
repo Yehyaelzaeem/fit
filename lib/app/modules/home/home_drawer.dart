@@ -71,18 +71,25 @@ class HomeDrawer extends GetView<HomeController> {
                         Obx(() {
                           return kTextHeader('${controller.name.value}', size: 18);
                         }),
-                        kTextfooter('ID:${controller.id.value}',
+                        kTextfooter('ID :  ${controller.id.value}',
                             size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.circle, size: 13, color: kColorPrimary),
-                            kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Icon(Icons.circle, size: 13, color: kColorPrimary),
+                        //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                        //   ],
+                        // ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     Icon(Icons.circle, size: 13, color: kColorPrimary),
+                        //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                        //   ],
+                        // ),
                       ],
                     )),
 
@@ -98,26 +105,22 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
             //Diary
-            controller.isLogggd == false
-                ? SizedBox()
-                : singleDrawerItem(
-                    title: 'Diary',
-                    image: 'assets/img/ic_diary_primary.png',
-                    action: () {
-                      Get.back();
-                      controller.currentIndex.value = 1;
-                    }),
+            singleDrawerItem(
+                title: 'Diary',
+                image: 'assets/img/ic_diary_primary.png',
+                action: () {
+                  Get.back();
+                  controller.currentIndex.value = 1;
+                }),
 
             //Doctor
-            controller.isLogggd == false
-                ? SizedBox()
-                : singleDrawerItem(
-                    title: 'Sessions',
-                    image: 'assets/img/ic_menu_doctor.png',
-                    action: () {
-                      Get.back();
-                      controller.currentIndex.value = 2;
-                    }),
+            singleDrawerItem(
+                title: 'Sessions',
+                image: 'assets/img/ic_menu_doctor.png',
+                action: () {
+                  Get.back();
+                  controller.currentIndex.value = 2;
+                }),
 
             //Profile
             controller.isLogggd == false
@@ -147,9 +150,7 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
             //Transformation
-            controller.isLogggd == false
-                ? SizedBox()
-                : singleDrawerItem(
+             singleDrawerItem(
                     title: 'Transformations', //todo transulate
                     image: 'assets/img/ic_menu_images.png',
                     action: () {
@@ -171,15 +172,15 @@ class HomeDrawer extends GetView<HomeController> {
                   Get.toNamed(Routes.ABOUT);
                 }),
             //Setting
-            singleDrawerItem(
-                title: 'Settings',
-                image: 'assets/img/ic_menu_setting.png',
-                action: () {
-                  SharedHelper helper = SharedHelper();
-                  helper.logout();
-
-                  Get.toNamed(Routes.SPLASH);
-                }),
+            // singleDrawerItem(
+            //     title: 'Settings',
+            //     image: 'assets/img/ic_menu_setting.png',
+            //     action: () {
+            //       SharedHelper helper = SharedHelper();
+            //       helper.logout();
+            //
+            //       Get.toNamed(Routes.SPLASH);
+            //     }),
 
             // //Change_language
             // singleDrawerItem(
@@ -209,7 +210,7 @@ class HomeDrawer extends GetView<HomeController> {
                     image: 'assets/img/ic_menu_logout.png',
                     action: () {
                       Get.defaultDialog(
-                        title: Strings().notification,
+                        title: "Log Out",
                         middleText: Strings().logoutMessageConfirm,
                         confirm: GestureDetector(
                           onTap: () {
@@ -220,7 +221,7 @@ class HomeDrawer extends GetView<HomeController> {
                             padding: EdgeInsets.all(4),
                             margin: EdgeInsets.symmetric(horizontal: 12),
                             child: Text(
-                              Strings().confirm,
+                              "Yes",
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
@@ -232,7 +233,7 @@ class HomeDrawer extends GetView<HomeController> {
                           child: Container(
                             padding: EdgeInsets.all(4),
                             margin: EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(Strings().dismiss),
+                            child: Text("No"),
                           ),
                         ),
                       );

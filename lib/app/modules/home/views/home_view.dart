@@ -10,6 +10,7 @@ import 'package:app/app/modules/home/home_slider.dart';
 import 'package:app/app/modules/sessions/views/sessions_view.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../../home_page_view.dart';
 import '../controllers/home_controller.dart';
@@ -17,12 +18,12 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WillPopScope(child: Container(
       child: SafeArea(
         child: Scaffold(
           drawer: HomeDrawer(),
           body: Obx(
-            () => Column(
+                () => Column(
               children: [
                 HomeAppbar(type: "home",),
                 Expanded(
@@ -34,7 +35,27 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ),
+    ), onWillPop: _willPopCallback);
+  }
+
+
+  Future<bool> _willPopCallback() async {
+    Get.defaultDialog(
+      title: 'Exit',
+      content: Text('Are you sure you want to exit?'),
+      confirm: TextButton(
+          onPressed: () {
+            SystemNavigator.pop();
+          },
+          child: Text('Yes')),
+      cancel: TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text('No')),
     );
+    return false;
+
   }
 
   Widget currentPage() {

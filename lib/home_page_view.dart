@@ -26,7 +26,6 @@ class _HomePageViewState extends State<HomePageView> {
   List<String> homeSliderList = [];
   int pageIndex = 0;
   int serviceIndex = 0;
-
   void getHomeData() async {
     await ApiProvider().getHomeData().then((value) {
       if (value.success == true) {

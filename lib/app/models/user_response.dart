@@ -60,12 +60,12 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     patientId = json['patient_id'];
-    name = json['name'];
-    email = json['email'];
-    phone = json['phone'];
-    dateOfBirth = json['date_of_birth'];
-    gender = json['gender'];
-    packageRenewalDate = json['package_renewal_date'];
+    name = json['name']??"Enter your Name ";
+    email = json['email']??"Enter your Email ";
+    phone = json['phone']??" Enter your Phone";
+    dateOfBirth = json['date_of_birth'] ?? " Enter your Date Of Birth";
+    gender = json['gender'] ?? " Select Gender";
+    packageRenewalDate = json['package_renewal_date'] ?? " ";
     nextSession =
         json['next_session'] != null ? new NextSession.fromJson(json['next_session']) : null;
     target = json['target'] != null ? new Target.fromJson(json['target']) : null;
@@ -134,10 +134,10 @@ class Target {
   Target({this.totalWeight, this.fats, this.muscles, this.water});
 
   Target.fromJson(Map<String, dynamic> json) {
-    totalWeight = json['total_weight'];
-    fats = json['fats'];
-    muscles = json['muscles'];
-    water = json['water'];
+    totalWeight = json['total_weight']??"unknown";
+    fats = json['fats']??"unknown";
+    muscles = json['muscles']??"unknown";
+    water = json['water']??"unknown";
   }
 
   Map<String, dynamic> toJson() {
@@ -160,11 +160,11 @@ class LastBodyComposition {
   LastBodyComposition({this.date, this.totalWeight, this.fats, this.muscles, this.water});
 
   LastBodyComposition.fromJson(Map<String, dynamic> json) {
-    date = json['date'];
-    totalWeight = json['total_weight'];
-    fats = json['fats'];
-    muscles = json['muscles'];
-    water = json['water'];
+    date = json['date'] ??"unknown";
+    totalWeight = json['total_weight']??"unknown";
+    fats = json['fats']??"unknown";
+    muscles = json['muscles']??"unknown";
+    water = json['water']??"unknown";
   }
 
   Map<String, dynamic> toJson() {

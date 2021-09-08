@@ -24,9 +24,16 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
   OrintationResponse ress = OrintationResponse();
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
-  String? first_name, middle_name, last_name, mobile, age, country;
-  int? hear_from, target;
+  String? first_name, middle_name, last_name, mobile, age, country, whats;
+  int? hear_from, target, package;
   bool showLoader = false;
+  TextEditingController Fnamecontroller = TextEditingController();
+  TextEditingController Mnamecontroller = TextEditingController();
+  TextEditingController Lnamecontroller = TextEditingController();
+  TextEditingController Phonecontroller = TextEditingController();
+  TextEditingController Agecontroller = TextEditingController();
+  TextEditingController Countrycontroller = TextEditingController();
+  TextEditingController Whatscontroller = TextEditingController();
 
   void getData() async {
     await ApiProvider().getOritationSelletionsData(widget.id!).then((value) {
@@ -50,6 +57,8 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
     });
     await ApiProvider()
         .sendOrintaionData(
+            id: widget.id,
+            package: package,
             age: age,
             country: country,
             first_name: first_name,
@@ -57,6 +66,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
             last_name: last_name,
             middle_name: middle_name,
             mobile: mobile,
+            whats: whats,
             target: target)
         .then((value) {
       if (value.success == true) {
@@ -64,6 +74,12 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
           sendResponse = value;
           showLoader = false;
         });
+        Fnamecontroller.clear();
+        Mnamecontroller.clear();
+        Lnamecontroller.clear();
+        Phonecontroller.clear();
+        Agecontroller.clear();
+        Countrycontroller.clear();
         Fluttertoast.showToast(msg: "${value.message}");
         // Navigator.pop(context);
       } else {
@@ -116,10 +132,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Fnamecontroller,
                           value: '',
                           hint: 'First Name',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               first_name = text;
@@ -137,10 +154,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Mnamecontroller,
                           value: '',
                           hint: 'Middle Name',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               middle_name = text;
@@ -158,10 +176,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Lnamecontroller,
                           value: '',
                           hint: 'Last Name',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               last_name = text;
@@ -179,10 +198,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Phonecontroller,
                           value: '',
                           hint: 'Mobile Number',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               mobile = text;
@@ -200,10 +220,28 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Whatscontroller,
+                          value: '',
+                          hint: 'WhatsApp Number (optional)',
+                          radius: 5,
+                          // background: Color(0xffeeeeee),
+                          updateFunc: (text) {
+                            setState(() {
+                              whats = text;
+                            });
+                            print(text);
+                          },
+                          type: TextInputType.phone,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        EditText(
+                          controller: Agecontroller,
                           value: '',
                           hint: 'Age ',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               age = text;
@@ -221,10 +259,11 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                           height: 8,
                         ),
                         EditText(
+                          controller: Countrycontroller,
                           value: '',
                           hint: 'Where Do You Come From ?',
                           radius: 5,
-                          background: Color(0xffeeeeee),
+                          // background: Color(0xffeeeeee),
                           updateFunc: (text) {
                             setState(() {
                               country = text;
@@ -243,7 +282,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                         ),
                         Row(
                           children: [
-                            PageLable(name: "What is Your Target ? "),
+                            PageLable(name: "What is Your Target ?"),
                           ],
                         ),
                         ListView.builder(
@@ -260,7 +299,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                   }
                                   setState(() {
                                     ress.data!.targets![index].isSellected = true;
-                                    hear_from = ress.data!.targets![index].id;
+                                    target = ress.data!.targets![index].id;
                                   });
                                 },
                                 child: Container(
@@ -295,7 +334,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             }),
                         Row(
                           children: [
-                            PageLable(name: "What is Your Target ? "),
+                            PageLable(name: "How Did know about Us? "),
                           ],
                         ),
                         ListView.builder(
@@ -364,7 +403,7 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                   }
                                   setState(() {
                                     ress.data!.packages![index].isSellected = true;
-                                    hear_from = ress.data!.packages![index].id;
+                                    package = ress.data!.packages![index].id;
                                   });
                                 },
                                 child: Container(

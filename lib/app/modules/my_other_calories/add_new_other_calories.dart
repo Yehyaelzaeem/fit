@@ -157,9 +157,16 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                               },
                               child: Column(
                                 children: [
-                                  Text(
-                                    "${otherCaloriesResponse.data![index].title}",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 16),
+                                    child: Text(
+                                      "${otherCaloriesResponse.data![index].title}",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                   Divider()
                                 ],

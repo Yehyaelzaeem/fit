@@ -1,3 +1,5 @@
+import 'package:app/app/routes/app_pages.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Enum<T> {
@@ -49,8 +51,7 @@ class SharedHelper {
   logout() async {
     _shared = await SharedPreferences.getInstance();
     _shared.clear();
-    // CustomNavigator().push(Routes.SPLASH , clean: true);
-
+    // Get.offAllNamed(Routes.SPLASH);
   }
 
   writeData(CachingKey key, value) async {

@@ -146,6 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           ress = value;
           date = ress.data!.dateOfBirth!.toUpperCase();
           isLoading = false;
+          gender = ress.data!.gender!;
         });
       } else {
         Fluttertoast.showToast(msg: "Check Internet Connection");
@@ -251,7 +252,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         kTextbody('User name', size: 18),
                         EditText(
                           value: '',
-                          hint: '${ress.data!.name!.toUpperCase()}',
+                          hint: '${ress.data!.name!}',
                           updateFunc: (text) {
                             setState(() {
                               name = text;
