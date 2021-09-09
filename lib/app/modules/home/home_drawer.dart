@@ -256,7 +256,7 @@ class HomeDrawer extends GetView<HomeController> {
   }
 
   Widget singleDrawerItem({required String title, required String image, var action}) {
-    return GestureDetector(
+    return InkWell(
       onTap: action,
       child: Column(
         children: <Widget>[
