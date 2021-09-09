@@ -69,10 +69,10 @@ class _DiaryViewState extends State<DiaryView> {
             length = response.data!.water! + 3;
             workOut = response.data!.workouts![0].id;
             workDesc = response.data!.dayWorkouts == null
-                ? "Enter Desc"
+                ? " "
                 : response.data!.dayWorkouts!.workoutDesc!;
             WorkOutData = response.data!.dayWorkouts == null
-                ? "Sellect Data"
+                ? " "
                 : response.data!.dayWorkouts!.workoutType!;
             list.clear();
           });
