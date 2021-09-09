@@ -351,12 +351,12 @@ class _DiaryViewState extends State<DiaryView> {
                               height: 16,
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    " Water : ${response.data!.water ?? "0"}",
+                                    "Water : ${response.data!.water ?? "0"}",
                                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   // SizedBox(),
@@ -371,7 +371,6 @@ class _DiaryViewState extends State<DiaryView> {
                             Container(
                                 width: double.infinity,
                                 height: MediaQuery.of(context).size.height / 3,
-                                padding: EdgeInsets.all(12.0),
                                 child: GridView.builder(
                                   itemCount: length,
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -412,7 +411,9 @@ class _DiaryViewState extends State<DiaryView> {
                                         ));
                                   },
                                 )),
-                            Divider(thickness: 2,color: kColorPrimary,),
+                            Divider(
+                              thickness: 2,
+                            ),
                             rowWithProgressBar("Proteins", response.data!.proteins),
                             staticBar(1),
                             ListView.builder(
@@ -470,19 +471,20 @@ class _DiaryViewState extends State<DiaryView> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
+                                    SizedBox(width: 16,),
                                     Text(
                                       "Workout Details",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 20),
+                                          fontSize: 15),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Icon(
-                                      Icons.upload_sharp,
-                                      color: Colors.white,
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(horizontal: 8),
+                                      child: Icon(
+                                        Icons.upload_sharp,
+                                        color: Colors.white,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -546,7 +548,7 @@ class _DiaryViewState extends State<DiaryView> {
                                     ));
                               },
                               child: Padding(
-                                padding: const EdgeInsets.all(16.0),
+                                padding: EdgeInsets.symmetric(horizontal: 12 , vertical: 5),
                                 child: Container(
                                   width: double.infinity,
                                   child: Padding(
@@ -577,7 +579,7 @@ class _DiaryViewState extends State<DiaryView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
-
+SizedBox(height: 20,),
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 8),
                                     child: Column(
@@ -668,7 +670,8 @@ class _DiaryViewState extends State<DiaryView> {
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.black87)),
                       child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 14),
-                    ),                  ],
+                    ),
+                  ],
                 ),
               ),
               Container(

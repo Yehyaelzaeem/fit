@@ -31,11 +31,11 @@ class _AddNewFoodState extends State<AddNewFood> {
   String food = "Choose Food";
   bool ShowLoader = false;
   int? foodId;
-  int? quantity = null;
+  double? quantity;
 
   GlobalKey<FormState> key = GlobalKey();
   String? unit = "";
-  int? calories = 0;
+  double? calories = 0;
   List<Food> searchResult = [];
   List<Food>? data;
   late String keyword;
@@ -198,9 +198,9 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                 ),
                                                 radius: 12,
                                                 type: TextInputType.phone,
-                                                updateFunc: (text) {
+                                                updateFunc: (String text) {
                                                   setState(() {
-                                                    quantity = int.parse(text);
+                                                    quantity =double.tryParse(text);
                                                   });
                                                   print(quantity);
                                                 },
@@ -233,7 +233,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                         if (!key.currentState!.validate()) {
                                                           return;
                                                         } else {
-                                                          updateProtineData(foodId, quantity);
+                                                          updateProtineData(foodId, quantity!);
                                                         }
                                                       },
                                                       shadow: true,
@@ -272,7 +272,8 @@ class _AddNewFoodState extends State<AddNewFood> {
     return Future.value(true);
   }
 
-  void updateProtineData(int? food, int? _quantity) async {
+  void updateProtineData(int? food, double _quantity) async {
+
     setState(() {
       ShowLoader = true;
     });

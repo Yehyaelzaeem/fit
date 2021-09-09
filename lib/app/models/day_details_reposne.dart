@@ -108,8 +108,8 @@ class Proteins {
 }
 
 class CaloriesTotal {
-  int? taken;
-  int? imposed;
+  var taken;
+  var imposed;
   Progress? progress;
 
   CaloriesTotal({this.taken, this.imposed, this.progress});
@@ -154,7 +154,7 @@ class CaloriesDetails {
   int? id;
   var qty;
   String? quality;
-  int? calories;
+  var calories;
   String? createdAt;
   String? unit;
   String? color;
@@ -187,7 +187,7 @@ class Food {
   int? id;
   String? title;
   String? unit;
-  int? caloriePerUnit;
+  var caloriePerUnit;
   String? color;
   bool? isSellected;
 
@@ -197,7 +197,7 @@ class Food {
     id = json['id'];
     title = json['title'];
     unit = json['unit'];
-    caloriePerUnit = json['calorie_per_unit'];
+    caloriePerUnit = json['calorie_per_unit'].toDouble();
     color = json['color'];
     isSellected = false;
   }

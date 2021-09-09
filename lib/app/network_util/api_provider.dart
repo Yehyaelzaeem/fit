@@ -57,7 +57,7 @@ class ApiProvider {
 
   Future<GeneralResponse> deleteMessage(int id) async {
     FormData body = FormData.fromMap({
-      'delete': id,
+      'id': id,
     });
     Response response = await _utils.post("delete_message", body: body);
     if (response.data["success"] == true) {
@@ -310,7 +310,7 @@ class ApiProvider {
       {required String date,
       String? water,
       int? foodProtine,
-      int? qtyProtiene,
+      double? qtyProtiene,
       // int? foodCarb,
       // int? qtyCarb,
       int? workOut,
@@ -324,6 +324,9 @@ class ApiProvider {
       "workout": workOut,
       "workout_desc": workout_desc,
     });
+    print("${body}");
+
+
     Response response = await _utils.post(
       "save_calories_details",
       body: body,

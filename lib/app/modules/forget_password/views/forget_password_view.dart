@@ -51,7 +51,6 @@ class ForgetPasswordView extends GetView<ForgetPasswordController> {
                       type: TextInputType.emailAddress,
                     ),
                     SizedBox(height: 12),
-
                     Container(
                       width: double.infinity,
                       child: Column(

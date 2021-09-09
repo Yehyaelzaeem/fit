@@ -159,7 +159,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 16),
+                                        horizontal: 8, vertical: 4),
                                     child: Text(
                                       "${otherCaloriesResponse.data![index].title}",
                                       style: TextStyle(

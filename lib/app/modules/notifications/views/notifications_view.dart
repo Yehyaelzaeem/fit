@@ -46,7 +46,7 @@ class _NotificationsViewState extends State<NotificationsView> {
 
   void deleteMessage(int? id, int? index) async {
     print(id);
-    await ApiProvider().deleteMessage(id ?? 0).then((value) async {
+    await ApiProvider().deleteMessage(id!).then((value) async {
       if (value.success == true) {
         setState(() {
           deleteRessponse = value;
