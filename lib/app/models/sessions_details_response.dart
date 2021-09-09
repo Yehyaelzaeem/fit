@@ -127,12 +127,10 @@ class FollowUpTable {
         : null;
     date = json['date'];
     water = json['water'];
-    workout =
-    json['workout'] != null ? new DayWorkouts.fromJson(json['workout']) : null;
+    workout = json['workout'] != null ? new DayWorkouts.fromJson(json['workout']) : null;
 
-    caloriesTable = json['calories_table'] != null
-        ? new CaloriesTable.fromJson(json['calories_table'])
-        : null;
+    caloriesTable =
+        json['calories_table'] != null ? new CaloriesTable.fromJson(json['calories_table']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -155,13 +153,15 @@ class FollowUpTable {
 }
 
 class ProteinsCalories {
-  int? taken;
+  String? taken;
   int? imposed;
 
   ProteinsCalories({this.taken, this.imposed});
 
   ProteinsCalories.fromJson(Map<String, dynamic> json) {
-    taken = json['taken'];
+    taken = json['taken'].toString().length > 3
+        ? taken = json['taken'].toString().substring(0, 3)
+        : taken = json['taken'];
     imposed = json['imposed'];
   }
 
@@ -209,7 +209,7 @@ class CaloriesTable {
 class CarbsFatsTable {
   String? qty;
   String? quality;
-  int? calories;
+  var calories;
   String? color;
 
   CarbsFatsTable({this.qty, this.quality, this.calories, this.color});
