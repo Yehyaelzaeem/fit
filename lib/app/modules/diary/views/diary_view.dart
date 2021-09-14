@@ -7,6 +7,7 @@ import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/p;df_viewr.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -43,7 +44,7 @@ class _DiaryViewState extends State<DiaryView> {
   late String workDesc;
   late bool isToday;
   bool noSessions = false;
-
+TextEditingController controller = TextEditingController();
   List<SingleImageItem> list = [];
 
   String? apiDate;
@@ -68,12 +69,12 @@ class _DiaryViewState extends State<DiaryView> {
             ShowLoader = false;
             length = response.data!.water! + 3;
             workOut = response.data!.workouts![0].id;
-            workDesc = response.data!.dayWorkouts == null
-                ? " "
-                : response.data!.dayWorkouts!.workoutDesc!;
-            WorkOutData = response.data!.dayWorkouts == null
-                ? " "
-                : response.data!.dayWorkouts!.workoutType!;
+            workDesc =
+                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
+            controller.text =
+                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
+            WorkOutData =
+                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutType!;
             list.clear();
           });
 
@@ -236,17 +237,30 @@ class _DiaryViewState extends State<DiaryView> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                       child: Row(
                         children: [
-                          Image.asset('assets/img/ic_pdf.png'),
+                          Image.asset(
+                            'assets/img/pdf.png',
+                            width: 25,
+                            height: 25,
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
                           kTextHeader('PDF', color: Colors.white)
                         ],
                       ),
                     ),
                     InkWell(
                       onTap: () {
-                        downloadFile(response.data!.pdf!);
+                        // downloadFile(response.data!.pdf!);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PDFPreview(
+                                      res: response.data!.pdf!,
+                                    )));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -459,7 +473,7 @@ class _DiaryViewState extends State<DiaryView> {
                             InkWell(
                               onTap: () {
                                 if (response.data!.workoutDetailsType == "") {
-                                  Fluttertoast.showToast(msg: "Nthing To Show ");
+                                  Fluttertoast.showToast(msg: "Nothing To Show ");
                                 } else if (response.data!.workoutDetailsType == "link") {
                                   _launchURL(response.data!.workoutDetails);
                                 } else {
@@ -471,7 +485,9 @@ class _DiaryViewState extends State<DiaryView> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    SizedBox(width: 16,),
+                                    SizedBox(
+                                      width: 16,
+                                    ),
                                     Text(
                                       "Workout Details",
                                       style: TextStyle(
@@ -548,7 +564,7 @@ class _DiaryViewState extends State<DiaryView> {
                                     ));
                               },
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12 , vertical: 5),
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                                 child: Container(
                                   width: double.infinity,
                                   child: Padding(
@@ -579,7 +595,9 @@ class _DiaryViewState extends State<DiaryView> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
-SizedBox(height: 20,),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
                                   Container(
                                     padding: EdgeInsets.symmetric(horizontal: 8),
                                     child: Column(
@@ -587,10 +605,11 @@ SizedBox(height: 20,),
                                       children: [
                                         kTextbody('Workout Description', size: 20, bold: true),
                                         EditText(
+                                          // controller: controller,
                                           radius: 12,
                                           lines: 5,
-                                          value: '',
-                                          hint: '${workDesc}',
+                                          value: '${workDesc}',
+                                          // hint: '${workDesc}',
                                           updateFunc: (text) {
                                             setState(() {
                                               workDesc = text;

@@ -159,9 +159,7 @@ class ProteinsCalories {
   ProteinsCalories({this.taken, this.imposed});
 
   ProteinsCalories.fromJson(Map<String, dynamic> json) {
-    taken = json['taken'].toString().length > 3
-        ? taken = json['taken'].toString().substring(0, 3)
-        : taken = json['taken'];
+    taken = json['taken'];
     imposed = json['imposed'];
   }
 

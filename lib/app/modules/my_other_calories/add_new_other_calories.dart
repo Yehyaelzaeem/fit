@@ -145,7 +145,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                         itemCount: otherCaloriesResponse.data!.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            padding: EdgeInsets.only(top: 16),
                             child: InkWell(
                               onTap: () {
                                 setState(() {
@@ -159,9 +159,9 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 4),
+                                        horizontal: 8, vertical: 16),
                                     child: Text(
-                                      "${otherCaloriesResponse.data![index].title}",
+                                      "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,

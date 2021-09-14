@@ -194,37 +194,45 @@ class _FaqViewState extends State<FaqView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body:  ListView(
-          children: [
-            HomeAppbar(type: null),
-            SizedBox(height: 12),
-            PageLable(name: "FAQ"),
-            isLoading == true
-                ? Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100),
-              child: Center(child: CircularLoadingWidget()),
-            )
-                : ListView.builder(
+        body: ListView(
+      children: [
+        HomeAppbar(type: null),
+        SizedBox(height: 12),
+        PageLable(name: "FAQ"),
+        SizedBox(height: 12),
+        isLoading == true
+            ? Padding(
+                padding: const EdgeInsets.symmetric(vertical: 100),
+                child: Center(child: CircularLoadingWidget()),
+              )
+
+            : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: ress.data!.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                       onTap: () {
-                        for (int i = 0; i < ress.data!.length; i++) {
+                        // for (int i = 0; i < ress.data!.length; i++) {
+                        //   setState(() {
+                        //     ress.data![i].isSellected = false;
+                        //   });
+                        // }
+                        if (ress.data![index].isSellected == false) {
                           setState(() {
-                            ress.data![i].isSellected = false;
+                            ress.data![index].isSellected = true;
                           });
-                        }
+                        }else{
+                          setState(() {
+                            ress.data![index].isSellected = false;
+                          });
 
-                        setState(() {
-                          ress.data![index].isSellected = true;
-                        });
+                        }
                       },
                       child: questionRow(ress.data![index]));
                 })
-          ],
-        ));
+      ],
+    ));
   }
 
   Widget questionRow(Data? question) {

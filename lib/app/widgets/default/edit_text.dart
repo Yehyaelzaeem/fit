@@ -55,7 +55,8 @@ class EditText extends StatelessWidget {
       decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(radius)),
       padding: EdgeInsets.all(4),
       child: TextFormField(
-        controller: controller,
+        initialValue: value,
+        // controller: controller,
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         decoration: InputDecoration(
             border: noBorder
