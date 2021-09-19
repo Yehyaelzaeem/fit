@@ -100,6 +100,7 @@ class FollowUpTable {
   int? id;
   ProteinsCalories? proteinsCalories;
   ProteinsCalories? carbsFatsCalories;
+  ProteinsCalories? total;
   String? date;
   int? water;
   bool? isSellected;
@@ -124,6 +125,9 @@ class FollowUpTable {
         : null;
     carbsFatsCalories = json['carbs_fats_calories'] != null
         ? new ProteinsCalories.fromJson(json['carbs_fats_calories'])
+        : null;
+   total = json['total_calories'] != null
+        ? new ProteinsCalories.fromJson(json['total_calories'])
         : null;
     date = json['date'];
     water = json['water'];

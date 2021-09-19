@@ -240,8 +240,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         //id
                         kTextbody('ID', size: 18),
                         EditText(
-                          value: '',
-                          hint: '${ress.data!.patientId!.toUpperCase()}',
+                          value: '${ress.data!.patientId!.toUpperCase()}',
                           updateFunc: (text) {},
                           validateFunc: (text) {},
                           enable: false,
@@ -251,8 +250,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         //User name
                         kTextbody('User name', size: 18),
                         EditText(
-                          value: '',
-                          hint: '${ress.data!.name!}',
+                          value: '${ress.data!.name!}',
                           updateFunc: (text) {
                             setState(() {
                               name = text;
@@ -271,8 +269,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         //User name
                         kTextbody('Email', size: 18),
                         EditText(
-                          value: '',
-                          hint: '${ress.data!.email}',
+                          value: '${ress.data!.email}',
                           updateFunc: (text) {
                             setState(() {
                               email = text;
@@ -290,8 +287,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                         //Mobile Number
                         kTextbody('Mobile Number', size: 18),
                         EditText(
-                          value: '',
-                          hint: '${ress.data!.phone!.toUpperCase()}',
+                          value: '${ress.data!.phone!.toUpperCase()}',
                           updateFunc: (text) {
                             setState(() {
                               phone = text;

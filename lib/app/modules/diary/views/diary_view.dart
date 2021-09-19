@@ -44,7 +44,7 @@ class _DiaryViewState extends State<DiaryView> {
   late String workDesc;
   late bool isToday;
   bool noSessions = false;
-TextEditingController controller = TextEditingController();
+  TextEditingController controller = TextEditingController();
   List<SingleImageItem> list = [];
 
   String? apiDate;
@@ -260,6 +260,7 @@ TextEditingController controller = TextEditingController();
                             MaterialPageRoute(
                                 builder: (context) => PDFPreview(
                                       res: response.data!.pdf!,
+                                      name: "Calories Calculator",
                                     )));
                       },
                       child: Container(
