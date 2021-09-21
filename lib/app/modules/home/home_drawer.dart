@@ -166,38 +166,11 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
             //About
             singleDrawerItem(
-                title: Strings().about,
+                title: "About Us",
                 image: 'assets/img/ic_menu_information.png',
                 action: () {
                   Get.toNamed(Routes.ABOUT);
                 }),
-            //Setting
-            // singleDrawerItem(
-            //     title: 'Settings',
-            //     image: 'assets/img/ic_menu_setting.png',
-            //     action: () {
-            //       SharedHelper helper = SharedHelper();
-            //       helper.logout();
-            //
-            //       Get.toNamed(Routes.SPLASH);
-            //     }),
-
-            // //Change_language
-            // singleDrawerItem(
-            //     title: Strings().changeLanguage,
-            //     icon: Icons.language,
-            //     action: () {
-            //       String? lang = prefs.getLanguage();
-            //       if (lang == null || lang.contains('ar')) {
-            //         prefs.setLanguage('en');
-            //         Get.updateLocale(Locale('en'));
-            //       } else {
-            //         prefs.setLanguage('ar');
-            //         Get.updateLocale(Locale('ar'));
-            //       }
-            //     }),
-
-            //LogOut
             controller.isLogggd == false
                 ? singleDrawerItem(
                     title: "Login",

@@ -16,7 +16,7 @@ class AboutView extends GetView<AboutController> {
         body: ListView(children: [
       HomeAppbar(type: null),
       SizedBox(height: 12),
-      PageLable(name: "About"),
+      PageLable(name: "About Us"),
 
       //* phone
       Obx(() {

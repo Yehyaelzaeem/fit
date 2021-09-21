@@ -7,7 +7,7 @@ import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
-import 'package:app/app/p;df_viewr.dart';
+import 'package:app/app/pdf_viewr.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -254,14 +254,14 @@ class _DiaryViewState extends State<DiaryView> {
                     ),
                     InkWell(
                       onTap: () {
-                        // downloadFile(response.data!.pdf!);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PDFPreview(
-                                      res: response.data!.pdf!,
-                                      name: "Calories Calculator",
-                                    )));
+                        downloadFile(response.data!.pdf!);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => PDFPreview(
+                        //               res: response.data!.pdf!,
+                        //               name: "Calories Calculator",
+                        //             )));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -736,7 +736,8 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  Future download2(Dio dio, String url, String savePath) async {
+  Future download2(String url, String savePath) async {
+    Dio dio = Dio();
     try {
       Response response = await dio.get(
         url,
@@ -775,7 +776,7 @@ class _DiaryViewState extends State<DiaryView> {
       var tempDir = await getTemporaryDirectory();
       String fullPath = tempDir.path + "/File.pdf'";
       print('full path ${fullPath}');
-      download2(dio, file, fullPath);
+      download2(file, fullPath);
       Fluttertoast.showToast(msg: "File downloaded At ${fullPath} ");
     }
   }
