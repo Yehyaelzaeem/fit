@@ -23,15 +23,16 @@ class HomeView extends GetView<HomeController> {
         child: Scaffold(
           drawer: HomeDrawer(),
           body: Obx(
-                () => Column(
-              children: [
-                HomeAppbar(type: "home",),
-                Expanded(
-                  child: currentPage(),
+                () =>
+                Column(
+                  children: [
+                    HomeAppbar(type: "home",),
+                    Expanded(
+                      child: currentPage(),
+                    ),
+                    HomeBottomNavigationBar(),
+                  ],
                 ),
-                HomeBottomNavigationBar(),
-              ],
-            ),
           ),
         ),
       ),
@@ -55,7 +56,6 @@ class HomeView extends GetView<HomeController> {
           child: Text('No')),
     );
     return false;
-
   }
 
   Widget currentPage() {

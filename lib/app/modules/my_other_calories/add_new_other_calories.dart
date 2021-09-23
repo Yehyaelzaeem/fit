@@ -47,7 +47,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
     });
   }
 
-
   void addItem() async {
     setState(() {
       showLoader = true;
@@ -158,8 +157,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 16),
+                                    padding: const EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
                                       "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
                                       style: TextStyle(

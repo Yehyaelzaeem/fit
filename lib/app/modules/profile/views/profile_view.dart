@@ -259,7 +259,7 @@ class _ProfileViewState extends State<ProfileView> {
                           ),
                     // Last Body Composition
                     SizedBox(height: 18),
-                    ress.data!.nextSession == null
+                    ress.data!.lastBodyComposition == null
                         ? SizedBox()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

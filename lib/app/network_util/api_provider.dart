@@ -133,6 +133,15 @@ class ApiProvider {
       return UserResponse.fromJson(response.data);
     }
   }
+  Future<GeneralResponse> forgetPassword(String email) async {
+    FormData body = FormData.fromMap({'email': email});
+    Response response = await _utils.post("forget_password", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
 
   Future<UserResponse> getProfile() async {
     Response response = await _utils.get("profile");

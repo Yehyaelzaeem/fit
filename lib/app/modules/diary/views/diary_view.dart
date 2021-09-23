@@ -7,7 +7,6 @@ import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
-import 'package:app/app/pdf_viewr.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -17,7 +16,8 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get_storage/get_storage.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../un_auth_view.dart';
@@ -253,16 +253,7 @@ class _DiaryViewState extends State<DiaryView> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {
-                        downloadFile(response.data!.pdf!);
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => PDFPreview(
-                        //               res: response.data!.pdf!,
-                        //               name: "Calories Calculator",
-                        //             )));
-                      },
+                      onTap: onClick,
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
@@ -736,48 +727,34 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  Future download2(String url, String savePath) async {
-    Dio dio = Dio();
+  void onClick() async {
+    Permission permission = Permission.storage;
+    bool status = await permission.status.isGranted;
+    if (status) {
+      downloadFile('${response.data!.pdf}');
+    } else {
+      print('Permission is granted: $status');
+      final requestStatus = permission.request();
+      print('Request Status: ${await requestStatus.isGranted}');
+    }
+  }
+
+  void downloadFile(String url) async {
     try {
-      Response response = await dio.get(
-        url,
-        onReceiveProgress: showDownloadProgress,
-        //Received data with List<int>
-        options: Options(
-            responseType: ResponseType.bytes,
-            followRedirects: false,
-            validateStatus: (status) {
-              return status! < 500;
-            }),
-      );
-      print(response.headers);
-      File file = File(savePath);
-      var raf = file.openSync(mode: FileMode.write);
-      // response.data is List<int> type
-      raf.writeFromSync(response.data);
-      await raf.close();
+      Dio dio = Dio();
+      List<Directory>? directories = await getExternalStorageDirectories();
+      directories!.forEach((element) {
+        print(element.path);
+      });
+      // print(directory!.path);
+      String filePath = '/sdcard/download/downloaded_file.pdf';
+      await dio.download(url, filePath, onReceiveProgress: (received, total) {
+        String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
+        print('Progress: $received');
+        Fluttertoast.showToast(msg: "Downloaded Successfully");
+      });
     } catch (e) {
       print(e);
-    }
-  }
-
-  void showDownloadProgress(received, total) {
-    if (total != -1) {
-      print((received / total * 100).toStringAsFixed(0) + "%");
-    }
-  }
-
-  void downloadFile(String file) async {
-    print("Downloading File ====>${file}");
-    if (file == "") {
-      Fluttertoast.showToast(msg: "No File Exists To Download");
-    } else {
-      Dio dio = Dio();
-      var tempDir = await getTemporaryDirectory();
-      String fullPath = tempDir.path + "/File.pdf'";
-      print('full path ${fullPath}');
-      download2(file, fullPath);
-      Fluttertoast.showToast(msg: "File downloaded At ${fullPath} ");
     }
   }
 

@@ -51,9 +51,7 @@ class Strings {
   String welcomeBack = 'welcomeBack'.tr;
   String passwordErrorLengthLessThan6 = 'passwordErrorLengthLessThan6'.tr;
   String phoneErrorLengthLessThan10 = 'phoneErrorLengthLessThan10'.tr;
-
   String description = 'description'.tr;
-
   String continueWord = 'continue'.tr;
   String updatingData = 'updatingData'.tr;
 

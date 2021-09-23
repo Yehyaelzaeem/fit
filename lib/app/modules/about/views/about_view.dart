@@ -6,6 +6,7 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 class AboutView extends GetView<AboutController> {
@@ -16,7 +17,7 @@ class AboutView extends GetView<AboutController> {
         body: ListView(children: [
       HomeAppbar(type: null),
       SizedBox(height: 12),
-      PageLable(name: "About Us"),
+      PageLable(name: "About us"),
 
       //* phone
       Obx(() {
@@ -50,15 +51,9 @@ class AboutView extends GetView<AboutController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
                                 width: Get.width,
-                                child: Text(
-                                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus eget ornare ex. Fusce tincidunt, elit a finibus semper, dui dui pharetra lectus, vel dapibus lacus tortor id ex. Mauris sodales condimentum hendrerit. Donec sodales nulla eu malesuada tempus. Pellentesque ultrices mauris et suscipit pharetra. Aliquam rutrum elit vel efficitur placerat. Quisque mattis congue accumsan. Integer dignissim eleifend sapien vel consequat. Fusce eleifend ante sit amet venenatis tincidunt. Nunc rhoncus quam sit amet porta tempus. Morbi euismod eleifend tempor.",
-                                  // "${response.data![index].text}",
-                                  style: TextStyle(
-                                      color: Color(0xFF414042),
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 14),
-                                ),
+                                child: Html(data: """${response.data![index].text}""")
                               ),
                               Container(
                                 width: Get.width,

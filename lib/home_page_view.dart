@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'app/modules/home/home_slider.dart';
 
@@ -26,6 +27,7 @@ class _HomePageViewState extends State<HomePageView> {
   List<String> homeSliderList = [];
   int pageIndex = 0;
   int serviceIndex = 0;
+
   void getHomeData() async {
     await ApiProvider().getHomeData().then((value) {
       if (value.success == true) {
@@ -128,7 +130,8 @@ class _HomePageViewState extends State<HomePageView> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
-                                    color: serviceIndex == index ? kColorPrimary : Colors.transparent,
+                                    color:
+                                        serviceIndex == index ? kColorPrimary : Colors.transparent,
                                     width: serviceIndex == index ? 1 : 1,
                                   ),
                                   boxShadow: [
@@ -245,9 +248,8 @@ class _HomePageViewState extends State<HomePageView> {
                   SizedBox(
                     height: 50,
                   ),
-                  ress.data!.services![pageIndex].items![serviceIndex].hasOrientation != true
-                      ? SizedBox()
-                      : GestureDetector(
+                  ress.data!.services![pageIndex].items![serviceIndex].hasOrientation == true
+                      ? GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
@@ -279,7 +281,40 @@ class _HomePageViewState extends State<HomePageView> {
                                   paddingV: 4),
                             ),
                           ),
-                        ),
+                        )
+                      : ress.data!.services![pageIndex].items![serviceIndex].hasOrientation ==
+                                  false &&
+                              ress.data!.services![pageIndex].items![serviceIndex].link != null
+                          ? GestureDetector(
+                              onTap: () {
+                                _launchURL(
+                                    ress.data!.services![pageIndex].items![serviceIndex].link);
+                              },
+                              child: Center(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  margin: EdgeInsets.symmetric(vertical: 16),
+                                  decoration: BoxDecoration(
+                                      color: kColorPrimary,
+                                      borderRadius: BorderRadius.circular(64),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.4),
+                                          blurRadius: 1,
+                                          spreadRadius: 1,
+                                          offset: Offset(0, 1),
+                                        ),
+                                      ]),
+                                  child: kTextHeader('  Registration  ',
+                                      size: 16,
+                                      color: Colors.white,
+                                      bold: true,
+                                      paddingH: 16,
+                                      paddingV: 4),
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
                   SizedBox(
                     height: 50,
                   ),
@@ -288,4 +323,7 @@ class _HomePageViewState extends State<HomePageView> {
             ],
           );
   }
+
+  void _launchURL(_url) async =>
+      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 }

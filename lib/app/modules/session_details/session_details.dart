@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -7,11 +9,13 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../../pdf_viewr.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SessionDetails extends StatefulWidget {
   final int? id;
@@ -68,15 +72,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
-                              onTap: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => PDFPreview(
-                                //               res: sessionResponse.data!.followUp!,
-                                //               name: "Body Composition",
-                                //             )));
-                              },
+                              onTap: onClick,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5),
                                 child: Icon(
@@ -120,14 +116,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         SizedBox(),
                         Center(
                             child: kButton("Follow Up", hight: 45, func: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => PDFPreview(
-                          //               res: sessionResponse.data!.followUp!,
-                          //               name: "Follow Up",
-                          //             ))
-                          // );
+                          _launchURL(sessionResponse.data!.followUp!);
                         })),
                       ],
                     ),
@@ -216,7 +205,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
-                              if (sessionResponse.data!.followUpTable![index].workout == null) {
+                              if (sessionResponse.data!.followUpTable!.isEmpty) {
                                 Fluttertoast.showToast(msg: "No Data To Preview");
                               } else {
                                 CustomSheet(
@@ -470,48 +459,38 @@ class _SessionDetailsState extends State<SessionDetails> {
           )),
     );
   }
-//
-// Future download2(Dio dio, String url, String savePath) async {
-//   try {
-//     Response response = await dio.get(
-//       url,
-//       onReceiveProgress: showDownloadProgress,
-//       //Received data with List<int>
-//       options: Options(
-//           responseType: ResponseType.bytes,
-//           followRedirects: false,
-//           validateStatus: (status) {
-//             return status! < 500;
-//           }),
-//     );
-//     print(response.headers);
-//     File file = File(savePath);
-//     var raf = file.openSync(mode: FileMode.write);
-//     // response.data is List<int> type
-//     raf.writeFromSync(response.data);
-//     await raf.close();
-//   } catch (e) {
-//     print(e);
-//   }
-// }
-//
-// void showDownloadProgress(received, total) {
-//   if (total != -1) {
-//     print((received / total * 100).toStringAsFixed(0) + "%");
-//   }
-// }
-//
-// void downloadFile(String file) async {
-//   print("Downloading File ====>${file}");
-//   if (file == "") {
-//     Fluttertoast.showToast(msg: "No File Exists To Download");
-//   } else {
-//     Dio dio = Dio();
-//     var tempDir = await getTemporaryDirectory();
-//     String fullPath = tempDir.path + "/File.pdf'";
-//     print('full path ${fullPath}');
-//     download2(dio, file, fullPath);
-//     Fluttertoast.showToast(msg: "File downloaded At ${fullPath} ");
-//   }
-// }
+
+  void onClick() async {
+    Permission permission = Permission.storage;
+    bool status = await permission.status.isGranted;
+    if (status) {
+      downloadFile('${sessionResponse.data!.followUp}');
+    } else {
+      print('Permission is granted: $status');
+      final requestStatus = permission.request();
+      print('Request Status: ${await requestStatus.isGranted}');
+    }
+  }
+
+  void downloadFile(String url) async {
+    try {
+      Dio dio = Dio();
+      List<Directory>? directories = await getExternalStorageDirectories();
+      directories!.forEach((element) {
+        print(element.path);
+      });
+      // print(directory!.path);
+      String filePath = '/sdcard/download/downloaded_file.pdf';
+      await dio.download(url, filePath, onReceiveProgress: (received, total) {
+        String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
+        print('Progress: $received');
+        Fluttertoast.showToast(msg: "Downloaded Successfully");
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void _launchURL(_url) async =>
+      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 }

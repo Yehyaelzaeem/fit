@@ -1,5 +1,5 @@
 import 'package:app/app/models/user_response.dart';
-import 'package:app/app/modules/home/controllers/home_controller.dart';
+import 'package:app/app/modules/forget_password/views/forget_password_view.dart';
 import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
@@ -145,7 +145,25 @@ class _LoginViewState extends State<LoginView> {
                             }
                           },
                         ),
-                        //Forget password
+                        SizedBox(height: 16),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(height: 4),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) => ForgetPassword()));
+                              },
+                              child: Text(
+                                "Forgot Password?",
+                                textAlign: TextAlign.end,
+                              ),
+                            )
+                          ],
+                        ),
+
                         SizedBox(height: 4),
                         Container(
                           width: double.infinity,

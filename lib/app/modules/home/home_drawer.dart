@@ -96,33 +96,33 @@ class HomeDrawer extends GetView<HomeController> {
             SizedBox(height: 14),
 
             //Home
-            singleDrawerItem(
-                title: 'Home',
-                image: 'assets/img/ic_menu_home.png',
-                action: () {
-                  Get.back();
-                  controller.currentIndex.value = 0;
-                }),
-
-            //Diary
-            singleDrawerItem(
-                title: 'Diary',
-                image: 'assets/img/ic_diary_primary.png',
-                action: () {
-                  Get.back();
-                  controller.currentIndex.value = 1;
-                }),
-
-            //Doctor
-            singleDrawerItem(
-                title: 'Sessions',
-                image: 'assets/img/ic_menu_doctor.png',
-                action: () {
-                  Get.back();
-                  controller.currentIndex.value = 2;
-                }),
-
-            //Profile
+            // singleDrawerItem(
+            //     title: 'Home',
+            //     image: 'assets/img/ic_menu_home.png',
+            //     action: () {
+            //       Get.back();
+            //       controller.currentIndex.value = 0;
+            //     }),
+            //
+            // //Diary
+            // singleDrawerItem(
+            //     title: 'Diary',
+            //     image: 'assets/img/ic_diary_primary.png',
+            //     action: () {
+            //       Get.back();
+            //       controller.currentIndex.value = 1;
+            //     }),
+            //
+            // //Doctor
+            // singleDrawerItem(
+            //     title: 'Sessions',
+            //     image: 'assets/img/ic_menu_doctor.png',
+            //     action: () {
+            //       Get.back();
+            //       controller.currentIndex.value = 2;
+            //     }),
+            //
+            // //Profile
             controller.isLogggd == false
                 ? SizedBox()
                 : singleDrawerItem(
@@ -166,7 +166,7 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
             //About
             singleDrawerItem(
-                title: "About Us",
+                title: "About us",
                 image: 'assets/img/ic_menu_information.png',
                 action: () {
                   Get.toNamed(Routes.ABOUT);
@@ -183,7 +183,7 @@ class HomeDrawer extends GetView<HomeController> {
                     image: 'assets/img/ic_menu_logout.png',
                     action: () {
                       Get.defaultDialog(
-                        title: "Log Out",
+                        title: "Logout",
                         middleText: Strings().logoutMessageConfirm,
                         confirm: GestureDetector(
                           onTap: () {
