@@ -246,9 +246,6 @@ class _DiaryViewState extends State<DiaryView> {
                             width: 25,
                             height: 25,
                           ),
-                          SizedBox(
-                            width: 8,
-                          ),
                           kTextHeader('PDF', color: Colors.white)
                         ],
                       ),
@@ -777,8 +774,8 @@ class _DiaryViewState extends State<DiaryView> {
             NotificationDetails(android: androidPlatformChannelSpecifics);
         await FlutterLocalNotificationsPlugin().show(
           0,
-          'Body Composition',
-          'Image Downloaded',
+          'Calories Calculator',
+          'File Downloaded',
           platformChannelSpecifics,
           payload: 'item x',
         );

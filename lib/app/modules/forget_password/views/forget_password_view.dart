@@ -72,7 +72,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     color: kColorAccent,
                     child: Center(
                       child: Text(
-                        'Forget Password',
+                        'Forgot Password',
                         style: TextStyle(
                           fontSize: 27.0 * kTextPixelFactor,
                           color: Colors.white,
