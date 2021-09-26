@@ -12,10 +12,13 @@ import 'package:app/app/widgets/page_lable.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../pdf_viewr.dart';
 
 class SessionDetails extends StatefulWidget {
   final int? id;
@@ -72,6 +75,9 @@ class _SessionDetailsState extends State<SessionDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             InkWell(
+                              /*  onTap: (){
+                                _launchURL(sessionResponse.data!.bodyComposition);
+                              },*/
                               onTap: onClick,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(vertical: 5),
@@ -116,7 +122,14 @@ class _SessionDetailsState extends State<SessionDetails> {
                         SizedBox(),
                         Center(
                             child: kButton("Follow Up", hight: 45, func: () {
-                          _launchURL(sessionResponse.data!.followUp!);
+                          // _launchURL(sessionResponse.data!.followUp!);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PDFPreview(
+                                        name: "Follow Up table",
+                                        res: sessionResponse.data!.followUp!,
+                                      )));
                         })),
                       ],
                     ),
@@ -464,7 +477,7 @@ class _SessionDetailsState extends State<SessionDetails> {
     Permission permission = Permission.storage;
     bool status = await permission.status.isGranted;
     if (status) {
-      downloadFile('${sessionResponse.data!.followUp}');
+      downloadFile('${sessionResponse.data!.bodyComposition}');
     } else {
       print('Permission is granted: $status');
       final requestStatus = permission.request();
@@ -479,18 +492,49 @@ class _SessionDetailsState extends State<SessionDetails> {
       directories!.forEach((element) {
         print(element.path);
       });
-      // print(directory!.path);
-      String filePath = '/sdcard/download/downloaded_file.pdf';
+      String filePath = '/sdcard/download/${url.split("/").last}.jpeg';
+      print(filePath);
       await dio.download(url, filePath, onReceiveProgress: (received, total) {
         String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-        print('Progress: $received');
-        Fluttertoast.showToast(msg: "Downloaded Successfully");
+        print('Progress: $progress');
+        _showProgressNotification();
       });
     } catch (e) {
-      print(e);
+      if (e.hashCode == 17) {
+        print("Exist");
+      } else {
+        print(e);
+      }
     }
   }
 
   void _launchURL(_url) async =>
       await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+
+  Future<void> _showProgressNotification() async {
+    const int maxProgress = 5;
+    for (int i = 0; i <= maxProgress; i++) {
+      await Future<void>.delayed(const Duration(seconds: 1), () async {
+        final AndroidNotificationDetails androidPlatformChannelSpecifics =
+            AndroidNotificationDetails(
+                'progress channel', 'progress channel', 'progress channel description',
+                channelShowBadge: false,
+                importance: Importance.defaultImportance,
+                priority: Priority.defaultPriority,
+                showProgress: false,
+                onlyAlertOnce: true,
+                maxProgress: maxProgress,
+                progress: i);
+        final NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        await FlutterLocalNotificationsPlugin().show(
+          0,
+          'Body Composition',
+          'Image Downloaded',
+          platformChannelSpecifics,
+          payload: 'item x',
+        );
+      });
+    }
+  }
 }

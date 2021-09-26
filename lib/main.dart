@@ -1,19 +1,31 @@
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
-import 'app/modules/home/controllers/home_controller.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
+Future selectNotification(payload) async {
+  if (payload != null) {
+    debugPrint('notification payload: $payload');
+  }
+  // await Navigator.push(
+  //   context,
+  //   MaterialPageRoute<void>(builder: (context) => SecondScreen(payload)),
+  // );
+}
 
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-  //   statusBarColor: Colors.white,
-  //   systemNavigationBarColor: Colors.white,
-  //   systemNavigationBarDividerColor: Colors.black,
-  //   systemNavigationBarIconBrightness: Brightness.dark,
-  // ));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+  await FlutterLocalNotificationsPlugin()
+      .initialize(initializationSettings, onSelectNotification: selectNotification);
 
   runApp(
     GetMaterialApp(

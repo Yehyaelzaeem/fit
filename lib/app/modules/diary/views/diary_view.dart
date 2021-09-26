@@ -15,6 +15,7 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -732,6 +733,7 @@ class _DiaryViewState extends State<DiaryView> {
     bool status = await permission.status.isGranted;
     if (status) {
       downloadFile('${response.data!.pdf}');
+      _showProgressNotification();
     } else {
       print('Permission is granted: $status');
       final requestStatus = permission.request();
@@ -747,14 +749,40 @@ class _DiaryViewState extends State<DiaryView> {
         print(element.path);
       });
       // print(directory!.path);
-      String filePath = '/sdcard/download/downloaded_file.pdf';
+      String filePath = '/sdcard/download/${url.split("/").last}.pdf';
       await dio.download(url, filePath, onReceiveProgress: (received, total) {
         String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-        print('Progress: $received');
-        Fluttertoast.showToast(msg: "Downloaded Successfully");
+        print('Progress: $progress');
       });
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> _showProgressNotification() async {
+    const int maxProgress = 2;
+    for (int i = 0; i <= maxProgress; i++) {
+      await Future<void>.delayed(const Duration(seconds: 1), () async {
+        final AndroidNotificationDetails androidPlatformChannelSpecifics =
+            AndroidNotificationDetails(
+                'progress channel', 'progress channel', 'progress channel description',
+                channelShowBadge: false,
+                importance: Importance.defaultImportance,
+                priority: Priority.defaultPriority,
+                showProgress: false,
+                onlyAlertOnce: true,
+                maxProgress: maxProgress,
+                progress: i);
+        final NotificationDetails platformChannelSpecifics =
+            NotificationDetails(android: androidPlatformChannelSpecifics);
+        await FlutterLocalNotificationsPlugin().show(
+          0,
+          'Body Composition',
+          'Image Downloaded',
+          platformChannelSpecifics,
+          payload: 'item x',
+        );
+      });
     }
   }
 
@@ -901,14 +929,21 @@ class _DiaryViewState extends State<DiaryView> {
         context: context,
         builder: (BuildContext context) {
           return Dialog(
-            insetPadding: EdgeInsets.all(8),
-            child: Center(
-              child: Text(
-                "${text}",
-                style: TextStyle(
-                    color: Colors.green, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-              ),
-            ),
+            child: Container(
+                height: MediaQuery.of(context).size.height / 3,
+                padding: EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Text(
+                      "${text}",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                )),
           );
         });
   }
