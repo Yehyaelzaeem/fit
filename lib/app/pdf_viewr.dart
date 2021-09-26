@@ -1,3 +1,4 @@
+import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 
@@ -21,7 +22,7 @@ class _PDFPreviewState extends State<PDFPreview> {
           PDF().fromUrl(
             widget.res,
             placeholder: (double progress) => Center(
-              child: Text("Loading PDF  ... "),
+              child: Center(child: CircularLoadingWidget()),
             ),
             errorWidget: (dynamic error) => Center(child: Text(error.toString())),
           ),
