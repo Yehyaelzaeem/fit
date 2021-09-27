@@ -13,7 +13,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -121,13 +120,13 @@ class _SessionDetailsState extends State<SessionDetails> {
                       children: [
                         SizedBox(),
                         Center(
-                            child: kButton("Follow Up", hight: 45, func: () {
+                            child: kButton("Follow up", hight: 45, func: () {
                           // _launchURL(sessionResponse.data!.followUp!);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PDFPreview(
-                                        name: "Follow Up table",
+                                        name: "Follow up table",
                                         res: sessionResponse.data!.followUp!,
                                       )));
                         })),
@@ -216,103 +215,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: sessionResponse.data!.followUpTable!.length,
                         itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              if (sessionResponse.data!.followUpTable!.isEmpty) {
-                                Fluttertoast.showToast(msg: "No Data To Preview");
-                              } else {
-                                CustomSheet(
-                                    context: context,
-                                    widget: ListView(
-                                      padding: EdgeInsets.all(16),
-                                      children: [
-                                        Text(
-                                          "Water : ${sessionResponse.data!.followUpTable![index].water} ml",
-                                          style:
-                                              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                        ),
-                                        Divider(),
-                                        Text(
-                                          "Workout : ${sessionResponse.data!.followUpTable![index].workout!.workoutType!}",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: kColorPrimary),
-                                        ),
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Text(
-                                          " ${sessionResponse.data!.followUpTable![index].workout!.workoutDesc!}",
-                                          style:
-                                              TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                                        ),
-                                        Divider(),
-                                        Text(
-                                          "Proteins",
-                                          style:
-                                              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                        ),
-                                        sessionResponse.data!.followUpTable![index].caloriesTable!
-                                                .proteinsCaloriesTable!.isEmpty
-                                            ? Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 50),
-                                                child: Center(
-                                                  child: Text("No Data To Show"),
-                                                ),
-                                              )
-                                            : ListView.builder(
-                                                shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                itemCount: sessionResponse
-                                                    .data!
-                                                    .followUpTable![index]
-                                                    .caloriesTable!
-                                                    .proteinsCaloriesTable!
-                                                    .length,
-                                                itemBuilder: (context, inIndex) {
-                                                  return rowItem(sessionResponse
-                                                      .data!
-                                                      .followUpTable![index]
-                                                      .caloriesTable!
-                                                      .proteinsCaloriesTable![inIndex]);
-                                                }),
-                                        Divider(),
-                                        Text(
-                                          "Carbs & Fats",
-                                          style:
-                                              TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                        ),
-                                        sessionResponse.data!.followUpTable![index].caloriesTable!
-                                                .proteinsCaloriesTable!.isEmpty
-                                            ? Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 50),
-                                                child: Center(
-                                                  child: Text("No Data To Show"),
-                                                ),
-                                              )
-                                            : ListView.builder(
-                                                shrinkWrap: true,
-                                                physics: NeverScrollableScrollPhysics(),
-                                                itemCount: sessionResponse
-                                                    .data!
-                                                    .followUpTable![index]
-                                                    .caloriesTable!
-                                                    .carbsFatsTable!
-                                                    .length,
-                                                itemBuilder: (context, inIndex) {
-                                                  return rowItem(sessionResponse
-                                                      .data!
-                                                      .followUpTable![index]
-                                                      .caloriesTable!
-                                                      .carbsFatsTable![inIndex]);
-                                                }),
-                                      ],
-                                    ));
-                              }
-                            },
-                            child: tableItem(sessionResponse.data!.followUpTable![index]),
-                          );
+                          return tableItem(sessionResponse.data!.followUpTable![index]);
                         }),
                   ],
                 )
@@ -379,97 +282,165 @@ class _SessionDetailsState extends State<SessionDetails> {
   }
 
   Widget tableItem(FollowUpTable table) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Container(
-          color: Colors.grey[300],
-          child: Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    table.workout != null ? Icon(Icons.keyboard_arrow_down_outlined) : SizedBox(),
-                    Text(
-                      "${table.date}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 30,
-                      color: Colors.black87,
-                    )
-                  ],
+    return InkWell(
+      onTap: () {
+        CustomSheet(
+            context: context,
+            widget: ListView(
+              padding: EdgeInsets.all(16),
+              children: [
+                Text(
+                  "Water : ${table.water} ml",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(),
-                    Text(
-                      "${table.proteinsCalories!.taken}/${table.proteinsCalories!.imposed}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 30,
-                      color: Colors.black87,
-                    )
-                  ],
+                Divider(),
+                Text(
+                  "Workout : ${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kColorPrimary),
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(),
-                    Text(
-                      "${table.carbsFatsCalories!.taken}/${table.carbsFatsCalories!.imposed}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Container(
-                      width: 1,
-                      height: 30,
-                      color: Colors.black87,
-                    )
-                  ],
+                SizedBox(
+                  height: 8,
                 ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width / 4,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(),
-                    Text(
-                      "${table.total!.taken!} / ${table.total!.imposed}",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
+                Text(
+                  "${table.workout != null ? table.workout!.workoutDesc : "   "}",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                 ),
-              ),
-            ],
-          )),
+                Divider(),
+                Text(
+                  "Proteins",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                table.caloriesTable!.proteinsCaloriesTable!.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 50),
+                        child: Center(
+                          child: Text("No Data To Show"),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: table.caloriesTable!.proteinsCaloriesTable!.length,
+                        itemBuilder: (context, inIndex) {
+                          return rowItem(table.caloriesTable!.proteinsCaloriesTable![inIndex]);
+                        }),
+                Divider(),
+                Text(
+                  "Carbs & Fats",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                table.caloriesTable!.carbsFatsTable!.isEmpty
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(vertical: 50),
+                        child: Center(
+                          child: Text("No Data To Show"),
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: table.caloriesTable!.carbsFatsTable!.length,
+                        itemBuilder: (context, inIndex) {
+                          return rowItem(table.caloriesTable!.carbsFatsTable![inIndex]);
+                        }),
+              ],
+            ));
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Container(
+            color: Colors.grey[300],
+            child: Row(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      table.caloriesTable!.carbsFatsTable!.isNotEmpty ||
+                              table.caloriesTable!.proteinsCaloriesTable!.isNotEmpty
+                          ? Icon(Icons.keyboard_arrow_down_outlined)
+                          : SizedBox(),
+                      Text(
+                        "${table.date}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 30,
+                        color: Colors.black87,
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(),
+                      Text(
+                        "${table.proteinsCalories!.taken}/${table.proteinsCalories!.imposed}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 30,
+                        color: Colors.black87,
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(),
+                      Text(
+                        "${table.carbsFatsCalories!.taken}/${table.carbsFatsCalories!.imposed}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 30,
+                        color: Colors.black87,
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width / 4,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(),
+                      Text(
+                        "${table.total!.taken!} / ${table.total!.imposed}",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
+      ),
     );
   }
 
