@@ -7,7 +7,7 @@ class NetworkUtil {
 
   NetworkUtil.internal();
 
-  String base_url = "https://dev.matrixclouds.com/fitoverfat/public/api/";
+  String base_url = "https://fofclinic.com/api/";
   Dio dio = Dio();
 
   factory NetworkUtil() => _instance;

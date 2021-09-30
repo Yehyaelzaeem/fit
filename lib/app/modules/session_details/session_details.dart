@@ -269,7 +269,8 @@ class _SessionDetailsState extends State<SessionDetails> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.grey[500]!)),
-                  child: kTextbody('${item.quality}', color: Colors.black, bold: false, size: 12)),
+                  child: kTextbody('${item.quality}',
+                      color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
               kTextbody('${item.calories} Cal', color: Colors.black, bold: false, size: 16),
             ],
           ),

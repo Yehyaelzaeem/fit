@@ -604,6 +604,7 @@ class _DiaryViewState extends State<DiaryView> {
                                             setState(() {
                                               workDesc = text;
                                             });
+                                            print("$workDesc");
                                           },
                                           validateFunc: (text) {},
                                         ),
@@ -612,7 +613,7 @@ class _DiaryViewState extends State<DiaryView> {
                                           child: kButtonDefault('Save',
                                               marginH: MediaQuery.of(context).size.width / 5,
                                               paddingV: 0, func: () {
-                                            if (workDesc == null || workOut == null) {
+                                            if (workDesc == "" || workOut == null) {
                                               Fluttertoast.showToast(msg: "Please Complete Data");
                                             } else {
                                               updateWork();
@@ -657,7 +658,7 @@ class _DiaryViewState extends State<DiaryView> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width / 3,
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -670,7 +671,7 @@ class _DiaryViewState extends State<DiaryView> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.black87)),
-                      child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 14),
+                      child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 12),
                     ),
                     kTextbody('x', color: Colors.black, bold: false, size: 10),
                     Container(
@@ -678,13 +679,13 @@ class _DiaryViewState extends State<DiaryView> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(color: Colors.black87)),
-                      child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 14),
+                      child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
                     ),
                   ],
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 2.3,
+                  width: MediaQuery.of(context).size.width / 3,
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -693,8 +694,7 @@ class _DiaryViewState extends State<DiaryView> {
                       color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
               Row(
                 children: [
-                  kTextbody('${item.calories}',
-                      color: Color(int.parse("0xFF${item.color}")), bold: false, size: 16),
+                  kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
                   SizedBox(
                     width: 10,
                   ),
