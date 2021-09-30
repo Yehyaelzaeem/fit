@@ -630,6 +630,8 @@ class _DiaryViewState extends State<DiaryView> {
                         )
             ],
           ),
+
+
           ShowLoader == false
               ? SizedBox()
               : Container(
