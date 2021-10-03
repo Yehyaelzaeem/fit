@@ -29,20 +29,19 @@ class _HomeSliderState extends State<HomeSlider> {
                 width: double.infinity,
                 child: CachedNetworkImage(
                   imageUrl: singleSlider,
-
                   fadeInDuration: Duration(seconds: 2),
-
                   errorWidget: (vtx, url, obj) {
                     return Container();
                   },
                   placeholder: (ctx, url) {
                     return CircularLoadingWidget();
                   },
-                  fit: BoxFit.cover,
+                  // fit: BoxFit.c,
                 ),
               );
             }).toList(),
             options: CarouselOptions(
+              height: MediaQuery.of(context).size.height / 3,
               aspectRatio: 2.6,
               viewportFraction: 1.05,
               autoPlayInterval: Duration(seconds: 3),
@@ -63,7 +62,9 @@ class _HomeSliderState extends State<HomeSlider> {
               },
             ),
           ),
-          SizedBox(height: 16,) ,
+          SizedBox(
+            height: 16,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -79,7 +80,6 @@ class _HomeSliderState extends State<HomeSlider> {
               }),
             ],
           ),
-
         ],
       ),
     );

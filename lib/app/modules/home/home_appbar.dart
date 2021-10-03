@@ -119,7 +119,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 size: 30,
                               ),
                               Positioned(
-                                top: 8,
+                                top: 4,
                                 left: 16,
                                 child: Container(
                                   child: Padding(
