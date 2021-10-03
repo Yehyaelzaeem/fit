@@ -41,8 +41,9 @@ class _HomeSliderState extends State<HomeSlider> {
               );
             }).toList(),
             options: CarouselOptions(
-              height: MediaQuery.of(context).size.height / 3,
+              height: MediaQuery.of(context).size.height / 2,
               aspectRatio: 2.6,
+
               viewportFraction: 1.05,
               autoPlayInterval: Duration(seconds: 3),
               autoPlayAnimationDuration: Duration(milliseconds: 650),

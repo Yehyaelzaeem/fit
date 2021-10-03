@@ -660,7 +660,7 @@ class _DiaryViewState extends State<DiaryView> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 3,
+                width: MediaQuery.of(context).size.width / 3.5,
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -687,7 +687,7 @@ class _DiaryViewState extends State<DiaryView> {
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 3,
+                  width: MediaQuery.of(context).size.width / 2.5,
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -908,6 +908,7 @@ class _DiaryViewState extends State<DiaryView> {
                       }
                     },
                     child: Container(
+                      margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(color: kColorPrimary),
                         child: Icon(
                           Icons.add,
