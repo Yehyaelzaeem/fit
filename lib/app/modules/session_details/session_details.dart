@@ -121,14 +121,14 @@ class _SessionDetailsState extends State<SessionDetails> {
                         SizedBox(),
                         Center(
                             child: kButton("Follow up", hight: 45, func: () {
-                          // _launchURL(sessionResponse.data!.followUp!);
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PDFPreview(
-                                        name: "Follow up table",
-                                        res: sessionResponse.data!.followUp!,
-                                      )));
+                          _launchURL(sessionResponse.data!.followUp!);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => PDFPreview(
+                          //               name: "Follow up table",
+                          //               res: sessionResponse.data!.followUp!,
+                          //             )));
                         })),
                       ],
                     ),
@@ -262,7 +262,7 @@ class _SessionDetailsState extends State<SessionDetails> {
             mainAxisSize: MainAxisSize.max,
             children: [
               kTextbody(' ${item.qty} ',
-                  color: Color(int.parse("0xFF${item.color}")), bold: false, size: 14),
+                  color: Colors.black, bold: false, size: 14),
               Container(
                   width: MediaQuery.of(context).size.width / 2.3,
                   padding: EdgeInsets.all(2),
@@ -480,8 +480,8 @@ class _SessionDetailsState extends State<SessionDetails> {
     }
   }
 
-  void _launchURL(_url) async =>
-      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  void _launchURL(_url) async =>await launch(_url);
+
 
   Future<void> _showProgressNotification() async {
     const int maxProgress = 5;

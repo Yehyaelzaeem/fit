@@ -16,7 +16,6 @@ import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
-import 'package:app/app/network_util/shared_helper.dart';
 import 'package:dio/dio.dart';
 // import 'package:dio/dio.dart';
 
@@ -27,12 +26,7 @@ class ApiProvider {
     Response response = await _utils.get("home");
     if (response.statusCode == 200) {
       return HomePageResponse.fromJson(response.data);
-    }
-    // else if (response.statusCode == 401) {
-    //   SharedHelper sharedHelper = SharedHelper();
-    //   sharedHelper.logout();
-    // }
-    else {
+    } else {
       return HomePageResponse.fromJson(response.data);
     }
   }
@@ -133,6 +127,7 @@ class ApiProvider {
       return UserResponse.fromJson(response.data);
     }
   }
+
   Future<GeneralResponse> forgetPassword(String email) async {
     FormData body = FormData.fromMap({'email': email});
     Response response = await _utils.post("forget_password", body: body);
@@ -334,7 +329,6 @@ class ApiProvider {
       "workout_desc": workout_desc,
     });
     print("${body}");
-
 
     Response response = await _utils.post(
       "save_calories_details",

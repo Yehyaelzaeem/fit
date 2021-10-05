@@ -324,6 +324,6 @@ class _HomePageViewState extends State<HomePageView> {
           );
   }
 
-  void _launchURL(_url) async =>
-      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  void _launchURL(_url) async =>await launch(_url);
+      // await canLaunch(_url) == false ?  : throw 'Could not launch $_url';
 }

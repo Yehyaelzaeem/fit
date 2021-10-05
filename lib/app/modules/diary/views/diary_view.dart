@@ -630,8 +630,6 @@ class _DiaryViewState extends State<DiaryView> {
                         )
             ],
           ),
-
-
           ShowLoader == false
               ? SizedBox()
               : Container(
@@ -875,11 +873,11 @@ class _DiaryViewState extends State<DiaryView> {
                   Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
             ),
             Container(
-                width: MediaQuery.of(context).size.width / 2.2,
+                width: MediaQuery.of(context).size.width / 2.5,
                 child:
                     Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
             Container(
-              width: MediaQuery.of(context).size.width / 4.5,
+              width: MediaQuery.of(context).size.width / 3.5,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -908,7 +906,7 @@ class _DiaryViewState extends State<DiaryView> {
                       }
                     },
                     child: Container(
-                      margin: EdgeInsets.only(right: 12),
+                        margin: EdgeInsets.only(right: 12),
                         decoration: BoxDecoration(color: kColorPrimary),
                         child: Icon(
                           Icons.add,
@@ -933,21 +931,18 @@ class _DiaryViewState extends State<DiaryView> {
                 height: MediaQuery.of(context).size.height / 3,
                 padding: EdgeInsets.all(16),
                 child: SingleChildScrollView(
-                  child: Center(
-                    child: Text(
-                      "${text}",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic),
-                    ),
+                  child: Text(
+                    "${text}",
+                    // textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic),
                   ),
                 )),
           );
         });
   }
 
-  void _launchURL(_url) async =>
-      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
+  void _launchURL(_url) async => await launch(_url);
 }

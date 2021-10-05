@@ -103,7 +103,9 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                         itemBuilder: (context, indedx) {
                           return rowItem(otherCaloriesResponse.data!.proteins![indedx]);
                         }),
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
 
                 rowWithProgressBar("Carbs And Fats", 2), //*
                 staticBar(),
@@ -248,16 +250,13 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 width: MediaQuery.of(context).size.width / 5,
                 child: Center(child: kTextbody('Unit', color: Colors.white, bold: true, size: 16))),
             Container(
-              width: MediaQuery.of(context).size.width / 5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  kTextbody('Calories', color: Colors.white, bold: true, size: 16),
-                ],
-              ),
-            ),
+                // color: Colors.red,
+                width: MediaQuery.of(context).size.width / 5,
+                child: Center(
+                  child: kTextbody('Calories', color: Colors.white, bold: true, size: 16),
+                )),
             SizedBox(
-              width: MediaQuery.of(context).size.width / 10,
+              width: MediaQuery.of(context).size.width / 9,
             ),
           ],
         ),
