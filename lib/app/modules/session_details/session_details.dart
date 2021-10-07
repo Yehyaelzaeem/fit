@@ -458,26 +458,29 @@ class _SessionDetailsState extends State<SessionDetails> {
   }
 
   void downloadFile(String url) async {
-    try {
-      Dio dio = Dio();
-      List<Directory>? directories = await getExternalStorageDirectories();
-      directories!.forEach((element) {
-        print(element.path);
-      });
-      String filePath = '/sdcard/download/${url.split("/").last}.jpeg';
-      print(filePath);
-      await dio.download(url, filePath, onReceiveProgress: (received, total) {
-        String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-        print('Progress: $progress');
-        _showProgressNotification();
-      });
-    } catch (e) {
-      if (e.hashCode == 17) {
-        print("Exist");
-      } else {
-        print(e);
-      }
-    }
+    // try {
+      // Dio dio = Dio();
+      // List<Directory>? directories = await getExternalStorageDirectories();
+      // directories!.forEach((element) {
+      //   print(element.path);
+      // });
+      // String filePath = '/sdcard/download/${url.split("/").last}.jpeg';
+      // print(filePath);
+      // await dio.download(url, filePath, onReceiveProgress: (received, total) {
+      //   String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
+      //   print('Progress: $progress');
+      //   _showProgressNotification();
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>PDFPreview(res: "$url", name: "Body Composition") ));
+
+
+      // });
+    // } catch (e) {
+    //   if (e.hashCode == 17) {
+    //     print("Exist");
+    //   } else {
+    //     print(e);
+    //   }
+    // }
   }
 
   void _launchURL(_url) async =>await launch(_url);

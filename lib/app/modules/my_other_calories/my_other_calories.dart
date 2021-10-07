@@ -253,7 +253,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 // color: Colors.red,
                 width: MediaQuery.of(context).size.width / 5,
                 child: Center(
-                  child: kTextbody('Calories', color: Colors.white, bold: true, size: 16),
+                  child: kTextbody('  Calories', color: Colors.white, bold: true, size: 16),
                 )),
             SizedBox(
               width: MediaQuery.of(context).size.width / 9,

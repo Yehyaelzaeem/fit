@@ -21,6 +21,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../pdf_viewr.dart';
 import '../../un_auth_view.dart';
 
 class DiaryView extends StatefulWidget {
@@ -739,21 +740,25 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
   void downloadFile(String url) async {
-    try {
-      Dio dio = Dio();
-      List<Directory>? directories = await getExternalStorageDirectories();
-      directories!.forEach((element) {
-        print(element.path);
-      });
-      // print(directory!.path);
-      String filePath = '/sdcard/download/${url.split("/").last}.pdf';
-      await dio.download(url, filePath, onReceiveProgress: (received, total) {
-        String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-        print('Progress: $progress');
-      });
-    } catch (e) {
-      print(e);
-    }
+    // try {
+    //   Dio dio = Dio();
+    //   List<Directory>? directories = await getExternalStorageDirectories();
+    //   directories!.forEach((element) {
+    //     print(element.path);
+    //   });
+    //   // print(directory!.path);
+    //   String filePath = '/sdcard/download/${url.split("/").last}.pdf';
+    //   await dio.download(url, filePath, onReceiveProgress: (received, total) {
+    //     String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
+    //     print('Progress: $progress');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
+      // });
+    // } catch (e) {
+    //   print(e);
+    // }
   }
 
   Future<void> _showProgressNotification() async {
@@ -875,7 +880,7 @@ class _DiaryViewState extends State<DiaryView> {
             Container(
                 width: MediaQuery.of(context).size.width / 2.5,
                 child:
-                    Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
+                    Center(child: kTextbody('        Quality', color: Colors.white, bold: true, size: 16))),
             Container(
               width: MediaQuery.of(context).size.width / 3.5,
               child: Row(
