@@ -18,7 +18,7 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   @override
   void onInit() {
     super.onInit();
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 3));
+    animationController = AnimationController(vsync: this, duration: Duration(seconds: 2));
     animation = new CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn);
   }
 

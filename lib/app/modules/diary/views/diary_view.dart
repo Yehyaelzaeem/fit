@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/modules/diary/add_new_food.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
@@ -13,12 +11,9 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../pdf_viewr.dart';
@@ -217,58 +212,61 @@ class _DiaryViewState extends State<DiaryView> {
         children: [
           ListView(
             children: [
-              Container(
-                alignment: Alignment(0.01, -1.0),
-                height: 50.0,
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF414042),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Calories Calculator',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                        ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    // padding: EdgeInsets.symmetric(horizontal:16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.horizontal(
+                        right: Radius.circular(15.0),
                       ),
+                      color: const Color(0xFF414042),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                      child: Row(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Column(
                         children: [
-                          Image.asset(
-                            'assets/img/pdf.png',
-                            width: 25,
-                            height: 25,
+                          SizedBox(
+                            height: 2,
                           ),
-                          kTextHeader('PDF', color: Colors.white)
+                          Text(
+                            '         Calories Calculator       ',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
                         ],
                       ),
                     ),
-                    InkWell(
-                      onTap: onClick,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
-                        margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                        height: double.infinity,
-                        decoration: BoxDecoration(
-                          color: kColorPrimary,
-                          borderRadius: BorderRadius.circular(64),
-                        ),
-                        child: Icon(
-                          Icons.download,
-                          color: Colors.white,
-                        ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      downloadFile(response.data!.pdf!);
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                      // height: double.infinity,
+                      decoration: BoxDecoration(
+                        // color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(64),
                       ),
-                    )
-                  ],
-                ),
+                      child: Image.asset(
+                        "assets/img/view.png",
+                        color: kColorPrimary,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  )
+                ],
               ),
               isLoading == true
                   ? CircularLoadingWidget()
@@ -726,18 +724,18 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  void onClick() async {
-    Permission permission = Permission.storage;
-    bool status = await permission.status.isGranted;
-    if (status) {
-      downloadFile('${response.data!.pdf}');
-      _showProgressNotification();
-    } else {
-      print('Permission is granted: $status');
-      final requestStatus = permission.request();
-      print('Request Status: ${await requestStatus.isGranted}');
-    }
-  }
+  // void onClick() async {
+  //   Permission permission = Permission.storage;
+  //   bool status = await permission.status.isGranted;
+  //   if (status) {
+  //     downloadFile('${response.data!.pdf}');
+  //     // _showProgressNotification();
+  //   } else {
+  //     print('Permission is granted: $status');
+  //     final requestStatus = permission.request();
+  //     print('Request Status: ${await requestStatus.isGranted}');
+  //   }
+  // }
 
   void downloadFile(String url) async {
     // try {
@@ -751,11 +749,11 @@ class _DiaryViewState extends State<DiaryView> {
     //   await dio.download(url, filePath, onReceiveProgress: (received, total) {
     //     String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
     //     print('Progress: $progress');
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
-      // });
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
+    // });
     // } catch (e) {
     //   print(e);
     // }
@@ -879,44 +877,47 @@ class _DiaryViewState extends State<DiaryView> {
             ),
             Container(
                 width: MediaQuery.of(context).size.width / 2.5,
-                child:
-                    Center(child: kTextbody('        Quality', color: Colors.white, bold: true, size: 16))),
+                child: Center(
+                    child:
+                        kTextbody('         Quality', color: Colors.white, bold: true, size: 16))),
             Container(
               width: MediaQuery.of(context).size.width / 3.5,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      if (type == 1) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddNewFood(
-                                      date: apiDate!,
-                                      list: response.data!.proteins!.food,
-                                    )));
-                      } else {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddNewFood(
-                                      date: apiDate!,
-                                      list: response.data!.carbsFats!.food,
-                                    )));
-                      }
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(right: 12),
-                        decoration: BoxDecoration(color: kColorPrimary),
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.black87,
-                        )),
+                  Row(
+                    children: [
+                      // SizedBox(width: ,),
+                      kTextbody('          Cal.', color: Colors.white, bold: true, size: 16),
+                      InkWell(
+                        onTap: () {
+                          if (type == 1) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddNewFood(
+                                          date: apiDate!,
+                                          list: response.data!.proteins!.food,
+                                        )));
+                          } else {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddNewFood(
+                                          date: apiDate!,
+                                          list: response.data!.carbsFats!.food,
+                                        )));
+                          }
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(right: 12),
+                            decoration: BoxDecoration(color: kColorPrimary),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.black87,
+                            )),
+                      ),
+                    ],
                   ),
                 ],
               ),

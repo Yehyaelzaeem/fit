@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/transform/views/image_viewr.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
@@ -9,11 +8,8 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,28 +65,56 @@ class _SessionDetailsState extends State<SessionDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PageLable(name: "Body Composition"),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            InkWell(
-                              /*  onTap: (){
-                                _launchURL(sessionResponse.data!.bodyComposition);
-                              },*/
-                              onTap: onClick,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
-                                child: Icon(
-                                  Icons.download_sharp,
-                                  color: kColorPrimary,
-                                  size: 30,
+                        Container(
+                          // padding: EdgeInsets.symmetric(horizontal:16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(15.0),
+                            ),
+                            color: const Color(0xFF414042),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 2,
                                 ),
-                              ),
+                                Text(
+                                  '         Body Composition       ',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              width: 30,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            downloadFile(sessionResponse.data!.bodyComposition!);
+                          },
+                          child: Container(
+                            width: 80,
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                            // height: double.infinity,
+                            decoration: BoxDecoration(
+                              // color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(64),
                             ),
-                          ],
+                            child: Image.asset(
+                              "assets/img/view.png",
+                              color: kColorPrimary,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -122,13 +146,6 @@ class _SessionDetailsState extends State<SessionDetails> {
                         Center(
                             child: kButton("Follow up", hight: 45, func: () {
                           _launchURL(sessionResponse.data!.followUp!);
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => PDFPreview(
-                          //               name: "Follow up table",
-                          //               res: sessionResponse.data!.followUp!,
-                          //             )));
                         })),
                       ],
                     ),
@@ -261,8 +278,7 @@ class _SessionDetailsState extends State<SessionDetails> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             mainAxisSize: MainAxisSize.max,
             children: [
-              kTextbody(' ${item.qty} ',
-                  color: Colors.black, bold: false, size: 14),
+              kTextbody(' ${item.qty} ', color: Colors.black, bold: false, size: 14),
               Container(
                   width: MediaQuery.of(context).size.width / 2.3,
                   padding: EdgeInsets.all(2),
@@ -459,21 +475,21 @@ class _SessionDetailsState extends State<SessionDetails> {
 
   void downloadFile(String url) async {
     // try {
-      // Dio dio = Dio();
-      // List<Directory>? directories = await getExternalStorageDirectories();
-      // directories!.forEach((element) {
-      //   print(element.path);
-      // });
-      // String filePath = '/sdcard/download/${url.split("/").last}.jpeg';
-      // print(filePath);
-      // await dio.download(url, filePath, onReceiveProgress: (received, total) {
-      //   String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-      //   print('Progress: $progress');
-      //   _showProgressNotification();
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>PDFPreview(res: "$url", name: "Body Composition") ));
+    // Dio dio = Dio();
+    // List<Directory>? directories = await getExternalStorageDirectories();
+    // directories!.forEach((element) {
+    //   print(element.path);
+    // });
+    // String filePath = '/sdcard/download/${url.split("/").last}.jpeg';
+    // print(filePath);
+    // await dio.download(url, filePath, onReceiveProgress: (received, total) {
+    //   String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
+    //   print('Progress: $progress');
+    //   _showProgressNotification();
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => PDFPreview(res: "$url", name: "Body Composition")));
 
-
-      // });
+    // });
     // } catch (e) {
     //   if (e.hashCode == 17) {
     //     print("Exist");
@@ -483,33 +499,32 @@ class _SessionDetailsState extends State<SessionDetails> {
     // }
   }
 
-  void _launchURL(_url) async =>await launch(_url);
+  void _launchURL(_url) async => await launch(_url);
 
-
-  Future<void> _showProgressNotification() async {
-    const int maxProgress = 5;
-    for (int i = 0; i <= maxProgress; i++) {
-      await Future<void>.delayed(const Duration(seconds: 1), () async {
-        final AndroidNotificationDetails androidPlatformChannelSpecifics =
-            AndroidNotificationDetails(
-                'progress channel', 'progress channel', 'progress channel description',
-                channelShowBadge: false,
-                importance: Importance.defaultImportance,
-                priority: Priority.defaultPriority,
-                showProgress: false,
-                onlyAlertOnce: true,
-                maxProgress: maxProgress,
-                progress: i);
-        final NotificationDetails platformChannelSpecifics =
-            NotificationDetails(android: androidPlatformChannelSpecifics);
-        await FlutterLocalNotificationsPlugin().show(
-          0,
-          'Body Composition',
-          'Image Downloaded',
-          platformChannelSpecifics,
-          payload: 'item x',
-        );
-      });
-    }
-  }
+// Future<void> _showProgressNotification() async {
+//   const int maxProgress = 5;
+//   for (int i = 0; i <= maxProgress; i++) {
+//     await Future<void>.delayed(const Duration(seconds: 1), () async {
+//       final AndroidNotificationDetails androidPlatformChannelSpecifics =
+//           AndroidNotificationDetails(
+//               'progress channel', 'progress channel', 'progress channel description',
+//               channelShowBadge: false,
+//               importance: Importance.defaultImportance,
+//               priority: Priority.defaultPriority,
+//               showProgress: false,
+//               onlyAlertOnce: true,
+//               maxProgress: maxProgress,
+//               progress: i);
+//       final NotificationDetails platformChannelSpecifics =
+//           NotificationDetails(android: androidPlatformChannelSpecifics);
+//       await FlutterLocalNotificationsPlugin().show(
+//         0,
+//         'Body Composition',
+//         'Image Downloaded',
+//         platformChannelSpecifics,
+//         payload: 'item x',
+//       );
+//     });
+//   }
+// }
 }
