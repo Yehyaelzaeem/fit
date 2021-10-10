@@ -12,6 +12,7 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -647,23 +648,19 @@ class _DiaryViewState extends State<DiaryView> {
   Widget rowItem(CaloriesDetails item) {
     return Column(
       children: [
-        SizedBox(
-          height: 10,
-        ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: MediaQuery.of(context).size.width / 3,
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
                       padding: EdgeInsets.all(4),
@@ -673,52 +670,50 @@ class _DiaryViewState extends State<DiaryView> {
                       child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 12),
                     ),
                     kTextbody('x', color: Colors.black, bold: false, size: 10),
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black87)),
-                      child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
-                    ),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.black87)),
+                        child:
+                            kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
+                      ),
+
+                    )
                   ],
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 2.5,
+                  width: MediaQuery.of(context).size.width / 3,
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(color: Colors.grey[500]!)),
                   child: kTextbody('${item.quality}',
                       color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
-              Row(
-                children: [
-                  kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      deleteItem(item.id!, date);
-                    },
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.redAccent,
-                      size: 30,
+              Container(
+                width: MediaQuery.of(context).size.width / 3,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
+                    InkWell(
+                      onTap: () {
+                        deleteItem(item.id!, date);
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.redAccent,
+                        size: 30,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: double.infinity,
-          height: 2,
-          color: Colors.grey[500],
         ),
       ],
     );
@@ -864,66 +859,58 @@ class _DiaryViewState extends State<DiaryView> {
 
   Widget staticBar(int type) {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
       color: Color(0xFF414042),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width / 3.5,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width / 3,
+            child: Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
+          ),
+          Container(
+              width: MediaQuery.of(context).size.width / 3,
               child:
-                  Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
+                  Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
+          Container(
+            width: MediaQuery.of(context).size.width / 3,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // SizedBox(width: ,),
+                kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
+                InkWell(
+                  onTap: () {
+                    if (type == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewFood(
+                                    date: apiDate!,
+                                    list: response.data!.proteins!.food,
+                                  )));
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewFood(
+                                    date: apiDate!,
+                                    list: response.data!.carbsFats!.food,
+                                  )));
+                    }
+                  },
+                  child: Container(
+                      margin: EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(color: kColorPrimary),
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.black87,
+                      )),
+                ),
+              ],
             ),
-            Container(
-                width: MediaQuery.of(context).size.width / 2.5,
-                child: Center(
-                    child:
-                        kTextbody('         Quality', color: Colors.white, bold: true, size: 16))),
-            Container(
-              width: MediaQuery.of(context).size.width / 3.5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      // SizedBox(width: ,),
-                      kTextbody('          Cal.', color: Colors.white, bold: true, size: 16),
-                      InkWell(
-                        onTap: () {
-                          if (type == 1) {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddNewFood(
-                                          date: apiDate!,
-                                          list: response.data!.proteins!.food,
-                                        )));
-                          } else {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddNewFood(
-                                          date: apiDate!,
-                                          list: response.data!.carbsFats!.food,
-                                        )));
-                          }
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(right: 12),
-                            decoration: BoxDecoration(color: kColorPrimary),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.black87,
-                            )),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
