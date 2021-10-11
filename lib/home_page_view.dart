@@ -240,10 +240,7 @@ class _HomePageViewState extends State<HomePageView> {
                                   """${ress.data!.services![pageIndex].items![serviceIndex].cover!.content} """,
                             ))
                           : Center(
-                              child: Text(
-                                " Sorry ,, No Media Available",
-                                style: TextStyle(color: kColorPrimary, fontWeight: FontWeight.bold),
-                              ),
+                              child: SizedBox(),
                             ),
                   SizedBox(
                     height: 50,

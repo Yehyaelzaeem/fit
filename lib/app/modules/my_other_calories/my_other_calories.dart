@@ -137,7 +137,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
     return Column(
       children: [
         Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -155,7 +155,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 height: 25,
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 3.1,
+                  width: MediaQuery.of(context).size.width / 4,
                   padding: EdgeInsets.all(4),
                   child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 16)),
               Container(
@@ -164,26 +164,26 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 height: 25,
               ),
               Container(
-                  width: MediaQuery.of(context).size.width / 3.1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 10,
-                        child: InkWell(
-                          onTap: () {
-                            deleteItem(item.id!);
-                          },
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                            size: 30,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )),
+                  width: MediaQuery.of(context).size.width / 4,
+                  padding: EdgeInsets.all(4),
+                  child: kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16)),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 8),
+                width: 2,
+                color: Colors.grey,
+                height: 25,
+              ),
+              InkWell(
+                onTap: () {
+                  deleteItem(item.id!);
+                },
+                child: Icon(
+                  Icons.delete,
+                  color: Colors.redAccent,
+                  size: 24,
+                ),
+              ),
+              SizedBox(width: 4,),
             ],
           ),
         ),
@@ -239,22 +239,51 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+
             Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Center(child: kTextbody('Title', color: Colors.white, bold: true, size: 16)),
+              width: MediaQuery.of(context).size.width / 3.1,
+              child: Container(
+                  padding: EdgeInsets.all(4),
+                  child: Center(
+                      child: kTextbody('Title',
+                          color: Colors.white, bold: false, size: 16))),
             ),
             Container(
-                width: MediaQuery.of(context).size.width / 3,
-                child: Center(child: kTextbody('Unit', color: Colors.white, bold: true, size: 16))),
+              width: 2,
+              color:Color(0xFF414042) ,
+              height: 25,
+            ),
             Container(
-                // color: Colors.red,
-                width: MediaQuery.of(context).size.width / 3,
-                child: Center(
-                  child: kTextbody('  Calories', color: Colors.white, bold: true, size: 16),
-                )),
-            // SizedBox(
-            //   width: MediaQuery.of(context).size.width / 9,
-            // ),
+                width: MediaQuery.of(context).size.width / 4,
+                padding: EdgeInsets.all(4),
+                child: kTextbody('Unit', color: Colors.white, bold: false, size: 16)),
+            Container(
+              width: 2,
+              color:Color(0xFF414042) ,
+              height: 25,
+            ),
+            Container(
+                width: MediaQuery.of(context).size.width / 4,
+                padding: EdgeInsets.all(4),
+                child: kTextbody('Calories', color: Colors.white, bold: false, size: 16)),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 8),
+              width: 2,
+              color:Color(0xFF414042) ,
+              height: 25,
+            ),
+            InkWell(
+              onTap: () {
+                // deleteItem(item.id!);
+              },
+              child: Icon(
+                Icons.delete,
+                color:Color(0xFF414042) ,
+                size: 24,
+              ),
+            ),
+            SizedBox(width: 4,),
+
           ],
         ));
   }

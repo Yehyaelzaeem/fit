@@ -139,7 +139,7 @@ class _SessionDetailsState extends State<SessionDetails> {
               ),
               infoRow("Height :", "${sessionResponse.data!.height} "),
               infoRow("Total Weight :", "${sessionResponse.data!.totalWeight}"),
-              infoRow("Fat Percentage :", "${sessionResponse.data!.fats}"),
+              infoRow("Fats Percentage :", "${sessionResponse.data!.fats}"),
               infoRow("Muscles Percentage :", "${sessionResponse.data!.muscles}"),
               infoRow("Water Percentage :", "${sessionResponse.data!.water}"),
               Row(

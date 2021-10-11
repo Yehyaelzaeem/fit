@@ -194,7 +194,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
           Row(
             children: [
-              PageLable(name: "EditProfile"),
+              PageLable(name: "Edit Profile"),
             ],
           ),
           isLoading == true

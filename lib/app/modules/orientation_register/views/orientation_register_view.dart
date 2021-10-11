@@ -280,11 +280,13 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: [
-                            PageLable(name: "What is Your Target ?"),
-                          ],
-                        ),
+                        ress.data!.targets!.isEmpty
+                            ? SizedBox()
+                            : Row(
+                                children: [
+                                  PageLable(name: "What is your target?"),
+                                ],
+                              ),
                         ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
@@ -332,11 +334,13 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                 ),
                               );
                             }),
-                        Row(
-                          children: [
-                            PageLable(name: "How Did know about Us? "),
-                          ],
-                        ),
+                        ress.data!.hearingFrom!.isEmpty
+                            ? SizedBox()
+                            : Row(
+                                children: [
+                                  PageLable(name: "How did you hear about us?"),
+                                ],
+                              ),
                         ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
@@ -384,11 +388,13 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                 ),
                               );
                             }),
-                        Row(
-                          children: [
-                            PageLable(name: "Choose Package ? "),
-                          ],
-                        ),
+                        ress.data!.packages!.isEmpty
+                            ? SizedBox()
+                            : Row(
+                                children: [
+                                  PageLable(name: "Choose package?"),
+                                ],
+                              ),
                         ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
