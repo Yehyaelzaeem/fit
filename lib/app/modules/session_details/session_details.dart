@@ -404,7 +404,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                       Container(
@@ -429,7 +429,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                       Container(
@@ -454,7 +454,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                       Container(
@@ -479,7 +479,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
-                          fontSize: 13,
+                          fontSize: 12,
                         ),
                       ),
                     ],
