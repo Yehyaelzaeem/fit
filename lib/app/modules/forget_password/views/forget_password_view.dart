@@ -43,6 +43,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
             (Route<dynamic> route) => false);
       } else {
+        Fluttertoast.showToast(msg: "${value.message}");
+
         setState(() {
           showLoader = false;
         });

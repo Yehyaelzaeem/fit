@@ -118,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
                             print(text);
                           },
                           validateFunc: (text) {
-                            if (text.toString().length < 4) {
+                            if (text.toString().isEmpty) {
                               return "Enter Valid Id";
                             }
                           },

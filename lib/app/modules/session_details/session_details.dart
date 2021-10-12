@@ -425,7 +425,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                     children: [
                       SizedBox(),
                       Text(
-                        "${table.proteinsCalories!.taken}/${table.proteinsCalories!.imposed}",
+                        "${table.proteinsCalories!.taken} / ${table.proteinsCalories!.imposed}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
@@ -450,7 +450,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                     children: [
                       SizedBox(),
                       Text(
-                        "${table.carbsFatsCalories!.taken}/${table.carbsFatsCalories!.imposed}",
+                        "${table.carbsFatsCalories!.taken} / ${table.carbsFatsCalories!.imposed}",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w500,
