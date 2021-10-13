@@ -135,7 +135,7 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 4) {
+                          if (text.toString().isEmpty) {
                             return "Enter Valid Id";
                           }
                         },
