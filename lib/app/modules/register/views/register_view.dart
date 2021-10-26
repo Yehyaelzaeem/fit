@@ -38,7 +38,7 @@ class _RegisterViewState extends State<RegisterView> {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1980, 8),
+        firstDate: DateTime(1950, 8),
         lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {

@@ -13,6 +13,7 @@ class HomeController extends GetxController {
   final currectMenuIdex = 1.obs;
   final homeResponse = HomePageResponse().obs;
   final userData = UserResponse().obs;
+  late bool login = false;
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
@@ -28,13 +29,13 @@ class HomeController extends GetxController {
     name.value = await SharedHelper().readString(CachingKey.USER_NAME);
     avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
+    login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
 
     homeResponse.value = await ApiProvider().getHomeData();
 
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
-
     }
     Get.put(SessionsController(), tag: 'SessionsController');
     Get.put(DiaryController(), tag: 'DiaryController');

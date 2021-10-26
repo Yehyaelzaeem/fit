@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 class OrientationRegisterController extends GetxController {
-  //TODO: Implement OrientationRegisterController
 
   final selectedTarget = ''.obs;
   final selectedSocial = ''.obs;

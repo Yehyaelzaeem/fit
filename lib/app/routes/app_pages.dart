@@ -1,7 +1,5 @@
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
-import 'package:app/home_page_view.dart';
 import 'package:get/get.dart';
-
 import 'package:app/app/modules/about/bindings/about_binding.dart';
 import 'package:app/app/modules/about/views/about_view.dart';
 import 'package:app/app/modules/auth/bindings/auth_binding.dart';
@@ -22,12 +20,8 @@ import 'package:app/app/modules/login/bindings/login_binding.dart';
 import 'package:app/app/modules/login/views/login_view.dart';
 import 'package:app/app/modules/notifications/bindings/notifications_binding.dart';
 import 'package:app/app/modules/notifications/views/notifications_view.dart';
-import 'package:app/app/modules/orientation_register/bindings/orientation_register_binding.dart';
-import 'package:app/app/modules/orientation_register/views/orientation_register_view.dart';
 import 'package:app/app/modules/otp/bindings/otp_binding.dart';
 import 'package:app/app/modules/otp/views/otp_view.dart';
-import 'package:app/app/modules/policy/bindings/policy_binding.dart';
-import 'package:app/app/modules/policy/views/policy_view.dart';
 import 'package:app/app/modules/profile/bindings/profile_binding.dart';
 import 'package:app/app/modules/profile/views/profile_view.dart';
 import 'package:app/app/modules/register/bindings/register_binding.dart';

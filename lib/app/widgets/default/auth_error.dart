@@ -1,5 +1,4 @@
 import 'package:app/app/routes/app_pages.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:flutter/material.dart';

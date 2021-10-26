@@ -1,5 +1,4 @@
-import 'package:app/app/utils/helper/echo.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 
 class RegisterController extends GetxController {

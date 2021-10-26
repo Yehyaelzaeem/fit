@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
 
+// ignore: must_be_immutable
 class HomeServices extends GetView<HomeController> {
   var sellectedIndex = 0.obs;
 

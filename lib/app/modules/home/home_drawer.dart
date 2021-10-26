@@ -50,6 +50,7 @@ class HomeDrawer extends GetView<HomeController> {
                         Obx(() {
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
+                              // ignore: unnecessary_null_comparison
                               child: prefs.readString(CachingKey.AVATAR) != null
                                   ? CachedNetworkImage(
                                       imageUrl: controller.avatar.value,
@@ -215,7 +216,6 @@ class HomeDrawer extends GetView<HomeController> {
         ),
       ),
     );
-    ;
   }
 
   Widget profileImageHolder() {

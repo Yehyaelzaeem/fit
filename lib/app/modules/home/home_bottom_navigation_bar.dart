@@ -53,17 +53,19 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   children: [
                     controller.currentIndex == 0
                         ? Image.asset(
-                            "assets/img/home0.png",
+                            "assets/img/notebook.png",
                             width: 30,
                             height: 30,
                           )
                         : Image.asset(
-                            "assets/img/home1.png",
-                            width: 30,
+                            "assets/img/notebook1.png",
+                            width: 30,  
                             height: 30,
                           ),
-                    kTextbody('Home',
-                        color: controller.currentIndex == 0 ? kColorPrimary : Colors.black87),
+                    kTextbody('Diary',
+                        color: controller.currentIndex == 0
+                            ? kColorPrimary
+                            : Colors.black87),
                   ],
                 ),
               ),
@@ -81,17 +83,19 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   children: [
                     controller.currentIndex == 1
                         ? Image.asset(
-                            "assets/img/notebook.png",
+                            "assets/img/home0.png",
                             width: 30,
                             height: 30,
                           )
                         : Image.asset(
-                            "assets/img/notebook1.png",
+                            "assets/img/home1.png",
                             width: 30,
                             height: 30,
                           ),
-                    kTextbody('Diary',
-                        color: controller.currentIndex == 1 ? kColorPrimary : Colors.black87),
+                    kTextbody('Home',
+                        color: controller.currentIndex == 1
+                            ? kColorPrimary
+                            : Colors.black87),
                   ],
                 ),
               ),
@@ -119,7 +123,9 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                             height: 30,
                           ),
                     kTextbody('Sessions',
-                        color: controller.currentIndex == 2 ? kColorPrimary : Colors.black87),
+                        color: controller.currentIndex == 2
+                            ? kColorPrimary
+                            : Colors.black87),
                   ],
                 ),
               ),

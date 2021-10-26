@@ -1,5 +1,6 @@
 import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'add_new_other_calories.dart';
+import 'edit_other_calory.dart';
 
 class MyOtherCalories extends StatefulWidget {
   const MyOtherCalories({Key? key}) : super(key: key);
@@ -42,7 +44,9 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   }
 
   void deleteItem(int id) async {
-    await ApiProvider().deleteCalorie("delete_other_calories", id).then((value) {
+    await ApiProvider()
+        .deleteCalorie("delete_other_calories", id)
+        .then((value) {
       if (value.success == true) {
         setState(() {
           isLoading = false;
@@ -66,132 +70,144 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: isLoading == true
-          ? CircularLoadingWidget()
-          : ListView(
-              children: [
-                HomeAppbar(
-                  type: null,
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: PageLable(name: "My Other Calories"),
-                    ),
-                  ],
-                ),
-                rowWithProgressBar("Proteins", 1),
-                staticBar(),
-                otherCaloriesResponse.data!.proteins!.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 24),
-                              Text("No Proteins Added Yet"),
-                            ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (c) => HomeView()), (route) => false);
+        return false;
+      },
+      child: Scaffold(
+        body: isLoading == true
+            ? CircularLoadingWidget()
+            : ListView(
+                children: [
+                  HomeAppbar(
+                    type: null,
+                    onBack: () {
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (c) => HomeView()),
+                          (route) => false);
+                    },
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: PageLable(name: "My Other Calories"),
+                      ),
+                    ],
+                  ),
+                  rowWithProgressBar("Proteins", 1),
+                  staticBar(),
+                  otherCaloriesResponse.data!.proteins!.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 24),
+                                Text("No Proteins Added Yet"),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: otherCaloriesResponse.data!.proteins!.length,
-                        itemBuilder: (context, indedx) {
-                          return rowItem(otherCaloriesResponse.data!.proteins![indedx]);
-                        }),
-                SizedBox(
-                  height: 20,
-                ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              otherCaloriesResponse.data!.proteins!.length,
+                          itemBuilder: (context, indedx) {
+                            return rowItem(
+                                otherCaloriesResponse.data!.proteins![indedx],
+                                1);
+                          }),
+                  SizedBox(height: 20),
 
-                rowWithProgressBar("Carbs And Fats", 2), //*
-                staticBar(),
-                otherCaloriesResponse.data!.carbsFats!.isEmpty
-                    ? Center(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 24),
-                              Text("No Carbs Fats Added Yet"),
-                            ],
+                  rowWithProgressBar("Carbs & Fats", 2), //*
+                  staticBar(),
+                  otherCaloriesResponse.data!.carbsFats!.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 24),
+                                Text("No Carbs Fats Added Yet"),
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: otherCaloriesResponse.data!.carbsFats!.length,
-                        itemBuilder: (context, indedx) {
-                          return rowItem(otherCaloriesResponse.data!.carbsFats![indedx]);
-                        })
-              ],
-            ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount:
+                              otherCaloriesResponse.data!.carbsFats!.length,
+                          itemBuilder: (context, indedx) {
+                            return rowItem(
+                                otherCaloriesResponse.data!.carbsFats![indedx],
+                                2);
+                          })
+                ],
+              ),
+      ),
     );
   }
 
-  Widget rowItem(Proteins item) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 3.1,
-                child: Container(
-                    padding: EdgeInsets.all(4),
-                    child: Center(
-                        child: kTextbody('${item.title}',
-                            color: Colors.black, bold: false, size: 16))),
-              ),
-              Container(
-                width: 2,
-                color: Colors.grey,
-                height: 25,
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  padding: EdgeInsets.all(4),
-                  child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 16)),
-              Container(
-                width: 2,
-                color: Colors.grey,
-                height: 25,
-              ),
-              Container(
-                  width: MediaQuery.of(context).size.width / 4,
-                  padding: EdgeInsets.all(4),
-                  child: kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16)),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                width: 2,
-                color: Colors.grey,
-                height: 25,
-              ),
-              InkWell(
-                onTap: () {
-                  deleteItem(item.id!);
-                },
-                child: Icon(
-                  Icons.delete,
-                  color: Colors.redAccent,
-                  size: 24,
+  Widget rowItem(Proteins item, int type) {
+    return GestureDetector(
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (c) => EditNewCalorie(
+                    type: type,
+                    proteins: item,
+                  ))),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3.1,
+                  child: Container(
+                      padding: EdgeInsets.all(4),
+                      child: Center(
+                          child: kTextbody('${item.title}',
+                              color: Colors.black, bold: false, size: 16))),
                 ),
-              ),
-              SizedBox(width: 4,),
-            ],
+                Container(width: 2, color: Colors.grey, height: 25),
+                Container(
+                    width: MediaQuery.of(context).size.width / 4,
+                    padding: EdgeInsets.all(4),
+                    child: kTextbody('${item.qty}',
+                        color: Colors.black, bold: false, size: 16)),
+                Container(width: 2, color: Colors.grey, height: 25),
+                Container(
+                    width: MediaQuery.of(context).size.width / 4,
+                    padding: EdgeInsets.all(4),
+                    child: kTextbody('${item.calories}',
+                        color: Colors.black, bold: false, size: 16)),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    width: 2,
+                    color: Colors.grey,
+                    height: 25),
+                InkWell(
+                  onTap: () {
+                    deleteItem(item.id!);
+                  },
+                  child: Icon(Icons.delete, color: Colors.redAccent, size: 24),
+                ),
+                SizedBox(width: 4),
+              ],
+            ),
           ),
-        ),
-        Divider(
-          thickness: 2,
-          color: Colors.grey,
-        ),
-      ],
+          Divider(thickness: 2, color: Colors.grey),
+        ],
+      ),
     );
   }
 
@@ -201,7 +217,9 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
       child: InkWell(
         onTap: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddNewCalorie(type: type)));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewCalorie(type: type)));
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -210,21 +228,14 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
             Text(
               '${Title}',
               style: TextStyle(
-                fontSize: 20.0,
-                color: Colors.black87,
-                fontWeight: FontWeight.w800,
-              ),
+                  fontSize: 20.0,
+                  color: Colors.black87,
+                  fontWeight: FontWeight.w800),
             ),
             Row(
               children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Icon(
-                  Icons.add_box,
-                  color: kColorPrimary,
-                  size: 30,
-                )
+                SizedBox(width: 10),
+                Icon(Icons.add_box, color: kColorPrimary, size: 30)
               ],
             ),
           ],
@@ -239,7 +250,6 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-
             Container(
               width: MediaQuery.of(context).size.width / 3.1,
               child: Container(
@@ -248,28 +258,22 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       child: kTextbody('Title',
                           color: Colors.white, bold: false, size: 16))),
             ),
-            Container(
-              width: 2,
-              color:Color(0xFF414042) ,
-              height: 25,
-            ),
+            Container(width: 2, color: Color(0xFF414042), height: 25),
             Container(
                 width: MediaQuery.of(context).size.width / 4,
                 padding: EdgeInsets.all(4),
-                child: kTextbody('Unit', color: Colors.white, bold: false, size: 16)),
-            Container(
-              width: 2,
-              color:Color(0xFF414042) ,
-              height: 25,
-            ),
+                child: kTextbody('Unit',
+                    color: Colors.white, bold: false, size: 16)),
+            Container(width: 2, color: Color(0xFF414042), height: 25),
             Container(
                 width: MediaQuery.of(context).size.width / 4,
                 padding: EdgeInsets.all(4),
-                child: kTextbody('Calories', color: Colors.white, bold: false, size: 16)),
+                child: kTextbody('Calories',
+                    color: Colors.white, bold: false, size: 16)),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 8),
               width: 2,
-              color:Color(0xFF414042) ,
+              color: Color(0xFF414042),
               height: 25,
             ),
             InkWell(
@@ -278,12 +282,13 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
               },
               child: Icon(
                 Icons.delete,
-                color:Color(0xFF414042) ,
+                color: Color(0xFF414042),
                 size: 24,
               ),
             ),
-            SizedBox(width: 4,),
-
+            SizedBox(
+              width: 4,
+            ),
           ],
         ));
   }

@@ -1,3 +1,4 @@
+import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
@@ -8,16 +9,18 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class AddNewCalorie extends StatefulWidget {
+class EditNewCalorie extends StatefulWidget {
   final int type;
+  final Proteins proteins;
 
-  const AddNewCalorie({Key? key, required this.type}) : super(key: key);
+  const EditNewCalorie({Key? key, required this.type, required this.proteins})
+      : super(key: key);
 
   @override
-  _AddNewCalorieState createState() => _AddNewCalorieState();
+  _EditNewCalorieState createState() => _EditNewCalorieState();
 }
 
-class _AddNewCalorieState extends State<AddNewCalorie> {
+class _EditNewCalorieState extends State<EditNewCalorie> {
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
   MyOtherCaloriesUnitsResponse otherCaloriesResponse =
@@ -49,35 +52,30 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
   }
 
   void addItem() async {
-    setState(() {
-      showLoader = true;
-    });
+    // ignore: unnecessary_null_comparison
+    if (unit_name == null) {
+      Fluttertoast.showToast(msg: "Please Choose Unit");
+    }
+    setState(() => showLoader = true);
 
     await ApiProvider()
-        .addOtherCalories(
+        .updateOtherCalories(
             title: title,
             calPerUnti: calorie_per_unit,
             unit: unitID,
             unitQuantity: unit_qty,
             unitName: unit_name,
-            type: widget.type)
+            type: widget.type,
+            id: widget.proteins.id)
         .then((value) {
       if (value.success == true) {
-        setState(() {
-          showLoader = false;
-        });
+        setState(() => showLoader = false);
         Fluttertoast.showToast(msg: "${value.message}");
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => MyOtherCalories()));
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyOtherCalories()),
-        );
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => MyOtherCalories()));
         print("OK");
       } else {
-        setState(() {
-          showLoader = false;
-        });
-
+        setState(() => showLoader = false);
         print("error");
         Fluttertoast.showToast(msg: "${value.message}");
         print("error");
@@ -87,6 +85,10 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
 
   @override
   void initState() {
+    title = widget.proteins.title;
+    calorie_per_unit = "${widget.proteins.calories}";
+    unitName = "Choose Unit";
+    unitID = 1000000002130;
     getUnits();
     super.initState();
   }
@@ -104,16 +106,11 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: EditText(
-                value: '',
+                value: '${widget.proteins.title}',
                 hint: 'Title',
                 radius: 12,
                 type: TextInputType.emailAddress,
-                updateFunc: (text) {
-                  setState(() {
-                    title = text;
-                  });
-                  print(title);
-                },
+                updateFunc: (text) => setState(() => title = text),
                 validateFunc: (text) {
                   if (text.toString().isEmpty) {
                     return "Enter Title";
@@ -124,7 +121,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: EditText(
-                value: '',
+                value: '${widget.proteins.calories}',
                 hint: 'Calories Per Unit',
                 radius: 12,
                 type: TextInputType.number,
@@ -208,9 +205,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                       radius: 12,
                       type: TextInputType.emailAddress,
                       updateFunc: (text) {
-                        setState(() {
-                          unit_qty = text;
-                        });
+                        setState(() => unit_qty = text);
                         print(unit_qty);
                       },
                       validateFunc: (text) {

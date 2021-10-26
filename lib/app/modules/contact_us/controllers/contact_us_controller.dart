@@ -1,5 +1,4 @@
 import 'package:app/app/models/contact_response.dart';
-import 'package:app/app/models/general_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:flutter/cupertino.dart';

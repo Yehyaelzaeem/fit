@@ -59,15 +59,18 @@ class Proteins {
   int? id;
   String? title;
   String? qty;
+  num? calorie_per_unit;
   var calories;
 
-  Proteins({this.id, this.title, this.qty, this.calories});
+  Proteins(
+      {this.id, this.title, this.qty, this.calories, this.calorie_per_unit});
 
   Proteins.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     qty = json['qty'];
     calories = json['calories'];
+    calorie_per_unit = json['calorie_per_unit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +79,7 @@ class Proteins {
     data['title'] = this.title;
     data['qty'] = this.qty;
     data['calories'] = this.calories;
+    data['calorie_per_unit'] = this.calorie_per_unit;
     return data;
   }
 }

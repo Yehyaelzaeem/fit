@@ -1,5 +1,4 @@
-import 'package:app/app/routes/app_pages.dart';
-import 'package:get/get.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Enum<T> {

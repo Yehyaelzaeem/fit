@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 class SessionsController extends GetxController {
-  //TODO: Implement SessionsController
 
   final count = 0.obs;
   @override

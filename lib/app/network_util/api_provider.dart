@@ -106,10 +106,15 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendContactData(
-      String name, String email, String phone, String subject, String message) async {
-    FormData body = FormData.fromMap(
-        {'name': name, 'email': email, 'phone': phone, 'subject': subject, 'message': message});
+  Future<GeneralResponse> sendContactData(String name, String email,
+      String phone, String subject, String message) async {
+    FormData body = FormData.fromMap({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'subject': subject,
+      'message': message
+    });
     Response response = await _utils.post("contact_form", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
@@ -215,6 +220,28 @@ class ApiProvider {
       return GeneralResponse.fromJson(response.data);
     }
   }
+  Future<GeneralResponse> updateOtherCalories(
+      {required String? title,
+      required String? calPerUnti,
+      required int? unit,
+      String? unitQuantity,
+      String? unitName,
+      int? type,int? id}) async {
+    FormData body = FormData.fromMap({
+      "title": title,
+      "calorie_per_unit": calPerUnti,
+      "unit": unit,
+      "unit_qty": unitQuantity,
+      "unit_name": unitName,
+      "type": type,
+    });
+    Response response = await _utils.post("update_other_calories/$id", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
 
   Future<SessionDetailsResponse> getSessionDetails(int? id) async {
     Response response = await _utils.get("session/$id");
@@ -238,7 +265,8 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       "image": image == null
           ? null
-          : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'),
+          : await MultipartFile.fromFile('${image.path}',
+              filename: '${image.path}.png'),
       "name": name,
       "gender": gender,
       "email": email,
@@ -255,8 +283,14 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> signUpApi(String id, String password, String name, String email,
-      String date, String phone, String password_confirmation) async {
+  Future<GeneralResponse> signUpApi(
+      String id,
+      String password,
+      String name,
+      String email,
+      String date,
+      String phone,
+      String password_confirmation) async {
     FormData body = FormData.fromMap({
       "patient_id": id,
       "name": name,
@@ -315,8 +349,6 @@ class ApiProvider {
       String? water,
       int? foodProtine,
       double? qtyProtiene,
-      // int? foodCarb,
-      // int? qtyCarb,
       int? workOut,
       String? workout_desc}) async {
     print(date);
@@ -332,6 +364,37 @@ class ApiProvider {
 
     Response response = await _utils.post(
       "save_calories_details",
+      body: body,
+    );
+
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> editDiaryData(
+      {required String date,
+      String? water,
+      int? foodProtine,
+      double? qtyProtiene,
+      int? workOut,
+      String? workout_desc,
+      int? id}) async {
+    print(date);
+    FormData body = FormData.fromMap({
+      "water": water,
+      "date": date,
+      "food": foodProtine,
+      "qty": qtyProtiene,
+      "workout": workOut,
+      "workout_desc": workout_desc,
+    });
+    print("${body}");
+
+    Response response = await _utils.post(
+      "update_calories_details/$id",
       body: body,
     );
 

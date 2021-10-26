@@ -1,5 +1,4 @@
 import 'package:app/app/models/user_response.dart';
-import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/modules/login/views/login_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/helper/assets_path.dart';

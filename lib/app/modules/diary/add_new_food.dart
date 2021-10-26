@@ -16,10 +16,13 @@ import 'package:get/get.dart';
 
 class AddNewFood extends StatefulWidget {
   final String? date;
+  final bool? edit;
+  final int? id;
 
   final List<Food>? list;
 
-  const AddNewFood({Key? key, this.list, this.date}) : super(key: key);
+  const AddNewFood({Key? key, this.list, this.date, this.edit, this.id = 0})
+      : super(key: key);
 
   @override
   _AddNewFoodState createState() => _AddNewFoodState();
@@ -42,7 +45,9 @@ class _AddNewFoodState extends State<AddNewFood> {
 
   void search(String keyWord) {
     for (int i = 0; i < widget.list!.length; i++) {
-      if (widget.list![i].title!.toUpperCase().contains(keyWord.toUpperCase())) {
+      if (widget.list![i].title!
+          .toUpperCase()
+          .contains(keyWord.toUpperCase())) {
         setState(() {
           searchResult.add(widget.list![i]);
         });
@@ -72,8 +77,9 @@ class _AddNewFoodState extends State<AddNewFood> {
                   children: [
                     HomeAppbar(
                       onBack: () {
-                        Get.offAllNamed(Routes.HOME);
-                        controller.currentIndex.value = 1;
+                        // Get.offAllNamed(Routes.HOME);
+                        // controller.currentIndex.value = 0;
+                        Navigator.pop(context);
                       },
                     ),
                     EditText(
@@ -131,7 +137,9 @@ class _AddNewFoodState extends State<AddNewFood> {
                     ListView.builder(
                         shrinkWrap: true,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: searchResult.isEmpty ? data!.length : searchResult.length,
+                        itemCount: searchResult.isEmpty
+                            ? data!.length
+                            : searchResult.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
@@ -149,17 +157,20 @@ class _AddNewFoodState extends State<AddNewFood> {
                               });
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "${data![index].title}",
                                         style: TextStyle(
-                                            color: Color(int.parse("0xFF${data![index].color}")),
+                                            color: Color(int.parse(
+                                                "0xFF${data![index].color}")),
                                             fontSize: 17),
                                       ),
                                       Icon(
@@ -173,34 +184,40 @@ class _AddNewFoodState extends State<AddNewFood> {
                                   Text(
                                     "${data![index].caloriePerUnit} Per ${data![index].unit}",
                                     style: TextStyle(
-                                        color: Color(int.parse("0xFF${data![index].color}")),
+                                        color: Color(int.parse(
+                                            "0xFF${data![index].color}")),
                                         fontSize: 12,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Divider(),
                                   data![index].isSellected == true
                                       ? Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
                                           child: Column(
                                             children: [
                                               EditText(
                                                 value: '',
                                                 hint: 'Enter Quantity',
                                                 suffixData: Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 16, vertical: 8),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
                                                   child: Column(
                                                     children: [
                                                       Text("${unit}"),
-                                                      Text("${calories} Calories"),
+                                                      Text(
+                                                          "${calories} Calories"),
                                                     ],
                                                   ),
                                                 ),
                                                 radius: 12,
-                                                type: TextInputType.phone,
+                                                type: TextInputType.number,
                                                 updateFunc: (String text) {
                                                   setState(() {
-                                                    quantity =double.tryParse(text);
+                                                    quantity =
+                                                        double.tryParse(text);
                                                   });
                                                   print(quantity);
                                                 },
@@ -213,13 +230,17 @@ class _AddNewFoodState extends State<AddNewFood> {
                                               quantity == null
                                                   ? SizedBox()
                                                   : Padding(
-                                                      padding: const EdgeInsets.symmetric(
-                                                          horizontal: 16, vertical: 16),
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 16),
                                                       child: Text(
                                                         "Total Calories : ${quantity! * calories!} Calories",
                                                         style: TextStyle(
                                                             fontSize: 14,
-                                                            fontWeight: FontWeight.bold),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                               quantity == null
@@ -227,13 +248,19 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   : kButtonDefault(
                                                       '  Save  ',
                                                       marginH:
-                                                          MediaQuery.of(context).size.width / 4.5,
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              4.5,
                                                       paddingV: 0,
                                                       func: () {
-                                                        if (!key.currentState!.validate()) {
+                                                        if (!key.currentState!
+                                                            .validate()) {
                                                           return;
                                                         } else {
-                                                          updateProtineData(foodId, quantity!);
+                                                          updateProtineData(
+                                                              foodId,
+                                                              quantity!);
                                                         }
                                                       },
                                                       shadow: true,
@@ -268,32 +295,55 @@ class _AddNewFoodState extends State<AddNewFood> {
   Future<bool> _willPopCallback() async {
     Get.back();
     Get.offAllNamed(Routes.HOME);
-    controller.currentIndex.value = 1;
+    controller.currentIndex.value = 0;
     return Future.value(true);
   }
 
   void updateProtineData(int? food, double _quantity) async {
-
-    setState(() {
-      ShowLoader = true;
-    });
-    await ApiProvider()
-        .updateDiaryData(foodProtine: food, qtyProtiene: _quantity, date: widget.date!)
-        .then((value) {
-      if (value.success == true) {
-        setState(() {
-          ShowLoader = false;
-          foodId = null;
-          quantity == null;
-        });
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        setState(() {
-          ShowLoader = false;
-        });
-        Fluttertoast.showToast(msg: "Server Error");
-        print("error");
-      }
-    });
+    setState(() => ShowLoader = true);
+    if (widget.edit == false) {
+      await ApiProvider()
+          .updateDiaryData(
+              foodProtine: food, qtyProtiene: _quantity, date: widget.date!)
+          .then((value) {
+        if (value.success == true) {
+          setState(() {
+            ShowLoader = false;
+            foodId = null;
+            quantity == null;
+          });
+          Fluttertoast.showToast(msg: "${value.message}");
+        } else {
+          setState(() {
+            ShowLoader = false;
+          });
+          Fluttertoast.showToast(msg: "Server Error");
+          print("error");
+        }
+      });
+    } else {
+      await ApiProvider()
+          .editDiaryData(
+              foodProtine: food,
+              qtyProtiene: _quantity,
+              date: widget.date!,
+              id: widget.id)
+          .then((value) {
+        if (value.success == true) {
+          setState(() {
+            ShowLoader = false;
+            foodId = null;
+            quantity == null;
+          });
+          Fluttertoast.showToast(msg: "${value.message}");
+        } else {
+          setState(() {
+            ShowLoader = false;
+          });
+          Fluttertoast.showToast(msg: "Server Error");
+          print("error");
+        }
+      });
+    }
   }
 }

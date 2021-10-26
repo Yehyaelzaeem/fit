@@ -254,7 +254,7 @@ class _ContactUsViewState extends State<ContactUsView> {
 
                             },
                             validateFunc: (text) {},
-                            type: TextInputType.name,
+                            type: TextInputType.number,
                           ),
                         ),
                         SizedBox(height: 8),

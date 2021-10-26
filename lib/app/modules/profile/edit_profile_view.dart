@@ -43,13 +43,12 @@ class _EditProfileViewState extends State<EditProfileView> {
   bool isLoading = true;
 
   XFile? _imageFile;
-  var _pickImageError;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        firstDate: DateTime(1980, 8),
+        firstDate: DateTime(1950, 8),
         lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {
@@ -173,7 +172,6 @@ class _EditProfileViewState extends State<EditProfileView> {
       }
     } catch (e) {
       setState(() {
-        _pickImageError = e;
       });
     }
   }

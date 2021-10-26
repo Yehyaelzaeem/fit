@@ -71,7 +71,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         Navigator.pop(context);
                       } else {
                         Get.offAllNamed(Routes.HOME);
-                        controller.currentIndex.value = 1;
+                        controller.currentIndex.value = 0;
                       }
                       ;
                     },

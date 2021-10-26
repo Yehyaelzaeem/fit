@@ -13,12 +13,10 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../../pdf_viewr.dart';
-import '../../un_auth_view.dart';
+import '../../main_un_auth.dart';
 
 class DiaryView extends StatefulWidget {
   const DiaryView({Key? key}) : super(key: key);
@@ -67,12 +65,15 @@ class _DiaryViewState extends State<DiaryView> {
             ShowLoader = false;
             length = response.data!.water! + 3;
             workOut = response.data!.workouts![0].id;
-            workDesc =
-                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
-            controller.text =
-                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
-            WorkOutData =
-                response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutType!;
+            workDesc = response.data!.dayWorkouts == null
+                ? " "
+                : response.data!.dayWorkouts!.workoutDesc!;
+            controller.text = response.data!.dayWorkouts == null
+                ? " "
+                : response.data!.dayWorkouts!.workoutDesc!;
+            WorkOutData = response.data!.dayWorkouts == null
+                ? " "
+                : response.data!.dayWorkouts!.workoutType!;
             list.clear();
           });
 
@@ -98,13 +99,19 @@ class _DiaryViewState extends State<DiaryView> {
             if (i <= response.data!.water!) {
               setState(() {
                 list.add(
-                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: true),
+                  SingleImageItem(
+                      id: i,
+                      imagePath: 'assets/img/im_holder1.png',
+                      selected: true),
                 );
               });
             } else {
               setState(() {
                 list.add(
-                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: false),
+                  SingleImageItem(
+                      id: i,
+                      imagePath: 'assets/img/im_holder1.png',
+                      selected: false),
                 );
               });
             }
@@ -126,7 +133,9 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
   void deleteItem(int id, String _date) async {
-    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
+    await ApiProvider()
+        .deleteCalorie("delete_calories_details", id)
+        .then((value) {
       if (value.success == true) {
         setState(() {
           isLoading = false;
@@ -148,7 +157,9 @@ class _DiaryViewState extends State<DiaryView> {
     setState(() {
       ShowLoader = true;
     });
-    await ApiProvider().updateDiaryData(water: water, date: apiDate!).then((value) {
+    await ApiProvider()
+        .updateDiaryData(water: water, date: apiDate!)
+        .then((value) {
       if (value.success == true) {
         setState(() {
           ShowLoader = false;
@@ -168,7 +179,8 @@ class _DiaryViewState extends State<DiaryView> {
     });
 
     await ApiProvider()
-        .updateDiaryData(workOut: workOut, workout_desc: workDesc, date: apiDate!)
+        .updateDiaryData(
+            workOut: workOut, workout_desc: workDesc, date: apiDate!)
         .then((value) {
       if (value.success == true) {
         setState(() {
@@ -185,15 +197,20 @@ class _DiaryViewState extends State<DiaryView> {
     });
   }
 
+  bool IsLogggd = false;
+  bool getLog = true;
   void getFromCash() async {
-    bool IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    setState(() {
+      getLog = false;
+    });
     if (IsLogggd != true) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UnAuthView(),
-          ),
-          (Route<dynamic> route) => false);
+      // Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => UnAuthView(),
+      //     ),
+      //     (Route<dynamic> route) => false);
     } else {
       getDiaryData(DateTime.now().toString().substring(0, 10));
     }
@@ -209,513 +226,713 @@ class _DiaryViewState extends State<DiaryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: HomeDrawer(),
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    // padding: EdgeInsets.symmetric(horizontal:16),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(15.0),
-                      ),
-                      color: const Color(0xFF414042),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            '         Calories Calculator       ',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      downloadFile(response.data!.pdf!);
-                    },
-                    child: Container(
-                      width: 80,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                      // height: double.infinity,
-                      decoration: BoxDecoration(
-                        // color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(64),
-                      ),
-                      child: Image.asset(
-                        "assets/img/view.png",
-                        color: kColorPrimary,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              isLoading == true
-                  ? CircularLoadingWidget()
-                  : isLoading == false && noSessions == true
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(vertical: 200),
-                          child: Center(
-                            child: Text(
-                              "Book Your Next Session",
-                              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 17),
-                            ),
-                          ),
-                        )
-                      : Column(
+      body: getLog
+          ? Center()
+          : !IsLogggd
+              ? MainUnAuth()
+              : Stack(
+                  children: [
+                    ListView(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            SizedBox(
-                              height: 16,
-                            ),
-                            isToday == true
-                                ? Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          print(response.data!.days![1].date!);
-                                          getDiaryData(response.data!.days![1].date!);
-                                        },
-                                        child: Container(
-                                            width: MediaQuery.of(context).size.width / 4,
-                                            height: 50,
-                                            margin:
-                                                EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                                            decoration: BoxDecoration(
-                                                color: kColorPrimary,
-                                                borderRadius: BorderRadius.circular(5)),
-                                            child: Center(
-                                                child: kTextHeader('Yesterday',
-                                                    color: Colors.white, bold: true, size: 14))),
-                                      ),
-                                      Container(
-                                          width: MediaQuery.of(context).size.width / 1.5,
-                                          height: 50,
-                                          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius: BorderRadius.circular(5)),
-                                          child: Center(
-                                              child: kTextHeader('${date}',
-                                                  color: Colors.black87, bold: true, size: 14))),
-                                    ],
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                          width: MediaQuery.of(context).size.width / 1.5,
-                                          height: 50,
-                                          margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                                          decoration: BoxDecoration(
-                                              color: Colors.grey[200],
-                                              borderRadius: BorderRadius.circular(5)),
-                                          child: Center(
-                                              child: kTextHeader('${date}',
-                                                  color: Colors.black87, bold: true, size: 14))),
-                                      InkWell(
-                                        onTap: () {
-                                          print(response.data!.days![0].date!);
-                                          getDiaryData(response.data!.days![0].date!);
-                                        },
-                                        child: Container(
-                                            width: MediaQuery.of(context).size.width / 4,
-                                            height: 50,
-                                            margin:
-                                                EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                                            decoration: BoxDecoration(
-                                                color: kColorPrimary,
-                                                borderRadius: BorderRadius.circular(5)),
-                                            child: Center(
-                                                child: kTextHeader('Today',
-                                                    color: Colors.white, bold: true, size: 14))),
-                                      ),
-                                    ],
-                                  ),
-                            SizedBox(
-                              height: 16,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Water : ${response.data!.water ?? "0"}",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  // SizedBox(),
-                                  Icon(
-                                    Icons.swap_vert,
-                                    size: 25,
-                                    color: kColorPrimary,
-                                  )
-                                ],
-                              ),
-                            ),
                             Container(
-                                width: double.infinity,
-                                height: MediaQuery.of(context).size.height / 3,
-                                child: GridView.builder(
-                                  itemCount: length,
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 4.0,
-                                      mainAxisSpacing: 4.0),
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return InkWell(
-                                        onTap: () {
-                                          updateWaterData("${index + 1}");
-                                        },
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                      image: AssetImage(list[index].imagePath),
-                                                      fit: BoxFit.cover)),
-                                            ),
-                                            list[index].selected == false
-                                                ? SizedBox()
-                                                : Padding(
-                                                    padding: const EdgeInsets.only(
-                                                        right: 5, left: 5, bottom: 8, top: 3),
-                                                    child: Container(
-                                                      child: Center(
-                                                        child: Icon(
-                                                          Icons.check_circle,
-                                                          size: 50,
-                                                          color: kColorPrimary,
-                                                        ),
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.black.withOpacity(0.5)),
-                                                    ),
-                                                  ),
-                                          ],
-                                        ));
-                                  },
-                                )),
-                            Divider(
-                              thickness: 2,
-                            ),
-                            rowWithProgressBar("Proteins", response.data!.proteins),
-                            staticBar(1),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: response.data!.proteins!.caloriesDetails!.length,
-                                itemBuilder: (context, indedx) {
-                                  return rowItem(response.data!.proteins!.caloriesDetails![indedx]);
-                                }),
-                            SizedBox(height: 24),
-                            rowWithProgressBar("Carbs & Fats", response.data!.carbsFats),
-                            staticBar(2),
-                            ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: response.data!.carbsFats!.caloriesDetails!.length,
-                                itemBuilder: (context, indedx) {
-                                  return rowItem(
-                                      response.data!.carbsFats!.caloriesDetails![indedx]);
-                                }),
-                            SizedBox(height: 12),
-                            Divider(),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => MyOtherCalories()));
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                padding: EdgeInsets.symmetric(vertical: 16),
-                                decoration: BoxDecoration(
-                                  color: Color(0xffF1F9E3),
+                              // padding: EdgeInsets.symmetric(horizontal:16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.horizontal(
+                                  right: Radius.circular(15.0),
                                 ),
-                                child: kButtonDefault('My other calories',
-                                    marginH: MediaQuery.of(context).size.width / 6,
-                                    paddingV: 0,
-                                    shadow: true,
-                                    paddingH: 12),
+                                color: const Color(0xFF414042),
                               ),
-                            ),
-                            Divider(),
-                            SizedBox(height: 12),
-                            InkWell(
-                              onTap: () {
-                                if (response.data!.workoutDetailsType == "") {
-                                  Fluttertoast.showToast(msg: "Nothing To Show ");
-                                } else if (response.data!.workoutDetailsType == "link") {
-                                  _launchURL(response.data!.workoutDetails);
-                                } else {
-                                  showPobUp(response.data!.workoutDetails!);
-                                }
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4),
+                                child: Column(
                                   children: [
                                     SizedBox(
-                                      width: 16,
+                                      height: 2,
                                     ),
                                     Text(
-                                      "Workout Details",
+                                      '         Calories Calculator       ',
                                       style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 8),
-                                      child: Icon(
-                                        Icons.upload_sharp,
+                                        fontSize: 16.0,
                                         color: Colors.white,
+                                        fontWeight: FontWeight.w600,
                                       ),
-                                    )
+                                    ),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                   ],
                                 ),
-                                height: 45,
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: 72,
-                                ),
-                                decoration: BoxDecoration(
-                                    color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
-                              ),
-                            ),
-                            SizedBox(height: MediaQuery.of(context).size.width / 14),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Workout",
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ],
                               ),
                             ),
                             InkWell(
                               onTap: () {
-                                CustomSheet(
-                                    context: context,
-                                    widget: Padding(
-                                      padding: EdgeInsets.only(top: 16),
-                                      child: ListView.builder(
-                                          itemCount: response.data!.workouts!.length,
-                                          itemBuilder: (context, index) {
-                                            return InkWell(
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                                setState(() {
-                                                  WorkOutData =
-                                                      response.data!.workouts![index].title!;
-                                                  workOut = response.data!.workouts![index].id!;
-                                                });
-                                              },
-                                              child: Column(
-                                                children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                        horizontal: 8, vertical: 16),
-                                                    child: Text(
-                                                      "${response.data!.workouts![index].title}",
-                                                      style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                  Divider()
-                                                ],
-                                              ),
-                                            );
-                                          }),
-                                    ));
+                                downloadFile(response.data!.pdf!);
                               },
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                                child: Container(
-                                  width: double.infinity,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${WorkOutData}",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        Icon(Icons.arrow_drop_down)
-                                      ],
-                                    ),
-                                  ),
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.black)),
+                              child: Container(
+                                width: 80,
+                                height: 40,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 0),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 18, vertical: 4),
+                                // height: double.infinity,
+                                decoration: BoxDecoration(
+                                  // color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(64),
+                                ),
+                                child: Image.asset(
+                                  "assets/img/view.png",
+                                  color: kColorPrimary,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
-                            ),
-                            Container(
-                              color: Colors.white,
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 8),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        kTextbody('Workout Description', size: 20, bold: true),
-                                        EditText(
-                                          // controller: controller,
-                                          radius: 12,
-                                          lines: 5,
-                                          value: '${workDesc}',
-                                          // hint: '${workDesc}',
-                                          updateFunc: (text) {
-                                            setState(() {
-                                              workDesc = text;
-                                            });
-                                            print("$workDesc");
-                                          },
-                                          validateFunc: (text) {},
-                                        ),
-                                        SizedBox(height: 8),
-                                        Center(
-                                          child: kButtonDefault('Save',
-                                              marginH: MediaQuery.of(context).size.width / 5,
-                                              paddingV: 0, func: () {
-                                            if (workDesc == "" || workOut == null) {
-                                              Fluttertoast.showToast(msg: "Please Complete Data");
-                                            } else {
-                                              updateWork();
-                                            }
-                                          }, shadow: true, paddingH: 50),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            )
                           ],
-                        )
-            ],
-          ),
-          ShowLoader == false
-              ? SizedBox()
-              : Container(
-                  child: Center(
-                    child: CircularLoadingWidget(),
-                  ),
-                  width: double.infinity,
-                  height: double.infinity,
-                  color: Colors.black.withOpacity(.9),
-                )
-        ],
-      ),
+                        ),
+                        isLoading == true
+                            ? CircularLoadingWidget()
+                            : isLoading == false && noSessions == true
+                                ? Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 200),
+                                    child: Center(
+                                      child: Text(
+                                        "Book Your Next Session",
+                                        style: TextStyle(
+                                            fontStyle: FontStyle.italic,
+                                            fontSize: 17),
+                                      ),
+                                    ),
+                                  )
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      isToday == true
+                                          ? Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    print(response
+                                                        .data!.days![1].date!);
+                                                    getDiaryData(response
+                                                        .data!.days![1].date!);
+                                                  },
+                                                  child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              4,
+                                                      height: 50,
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 0),
+                                                      decoration: BoxDecoration(
+                                                          color: kColorPrimary,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5)),
+                                                      child: Center(
+                                                          child: kTextHeader(
+                                                              'Yesterday',
+                                                              color:
+                                                                  Colors.white,
+                                                              bold: true,
+                                                              size: 14))),
+                                                ),
+                                                Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            1.5,
+                                                    height: 50,
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 0),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.grey[200],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: Center(
+                                                        child: kTextHeader(
+                                                            '${date}',
+                                                            color:
+                                                                Colors.black87,
+                                                            bold: true,
+                                                            size: 14))),
+                                              ],
+                                            )
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width /
+                                                            1.5,
+                                                    height: 50,
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 8,
+                                                            vertical: 0),
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.grey[200],
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: Center(
+                                                        child: kTextHeader(
+                                                            '${date}',
+                                                            color:
+                                                                Colors.black87,
+                                                            bold: true,
+                                                            size: 14))),
+                                                InkWell(
+                                                  onTap: () {
+                                                    print(response
+                                                        .data!.days![0].date!);
+                                                    getDiaryData(response
+                                                        .data!.days![0].date!);
+                                                  },
+                                                  child: Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              4,
+                                                      height: 50,
+                                                      margin:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 0),
+                                                      decoration: BoxDecoration(
+                                                          color: kColorPrimary,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5)),
+                                                      child: Center(
+                                                          child: kTextHeader(
+                                                              'Today',
+                                                              color:
+                                                                  Colors.white,
+                                                              bold: true,
+                                                              size: 14))),
+                                                ),
+                                              ],
+                                            ),
+                                      SizedBox(
+                                        height: 16,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Water : ${response.data!.water ?? "0"}",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                            ),
+                                            // SizedBox(),
+                                            Icon(
+                                              Icons.swap_vert,
+                                              size: 25,
+                                              color: kColorPrimary,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                          width: double.infinity,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              3,
+                                          child: GridView.builder(
+                                            itemCount: length,
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 3,
+                                                    crossAxisSpacing: 4.0,
+                                                    mainAxisSpacing: 4.0),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return InkWell(
+                                                  onTap: () {
+                                                    updateWaterData(
+                                                        "${index + 1}");
+                                                  },
+                                                  child: Stack(
+                                                    children: [
+                                                      Container(
+                                                        decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                                image: AssetImage(
+                                                                    list[index]
+                                                                        .imagePath),
+                                                                fit: BoxFit
+                                                                    .cover)),
+                                                      ),
+                                                      list[index].selected ==
+                                                              false
+                                                          ? SizedBox()
+                                                          : Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      right: 5,
+                                                                      left: 5,
+                                                                      bottom: 8,
+                                                                      top: 3),
+                                                              child: Container(
+                                                                child: Center(
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .check_circle,
+                                                                    size: 50,
+                                                                    color:
+                                                                        kColorPrimary,
+                                                                  ),
+                                                                ),
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
+                                                                            0.5)),
+                                                              ),
+                                                            ),
+                                                    ],
+                                                  ));
+                                            },
+                                          )),
+                                      Divider(
+                                        thickness: 2,
+                                      ),
+                                      rowWithProgressBar(
+                                          "Proteins", response.data!.proteins),
+                                      staticBar(1),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: response.data!.proteins!
+                                              .caloriesDetails!.length,
+                                          itemBuilder: (context, indedx) {
+                                            return rowItem(
+                                                response.data!.proteins!
+                                                    .caloriesDetails![indedx],
+                                                1);
+                                          }),
+                                      SizedBox(height: 24),
+                                      rowWithProgressBar("Carbs & Fats",
+                                          response.data!.carbsFats),
+                                      staticBar(2),
+                                      ListView.builder(
+                                          shrinkWrap: true,
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          itemCount: response.data!.carbsFats!
+                                              .caloriesDetails!.length,
+                                          itemBuilder: (context, indedx) {
+                                            return rowItem(
+                                                response.data!.carbsFats!
+                                                    .caloriesDetails![indedx],
+                                                2);
+                                          }),
+                                      SizedBox(height: 12),
+                                      Divider(),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MyOtherCalories()));
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffF1F9E3),
+                                          ),
+                                          child: kButtonDefault(
+                                              'My other calories',
+                                              marginH: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  6,
+                                              paddingV: 0,
+                                              shadow: true,
+                                              paddingH: 12),
+                                        ),
+                                      ),
+                                      Divider(),
+                                      SizedBox(height: 12),
+                                      InkWell(
+                                        onTap: () {
+                                          if (response
+                                                  .data!.workoutDetailsType ==
+                                              "") {
+                                            Fluttertoast.showToast(
+                                                msg: "Nothing To Show ");
+                                          } else if (response
+                                                  .data!.workoutDetailsType ==
+                                              "link") {
+                                            _launchURL(
+                                                response.data!.workoutDetails);
+                                          } else {
+                                            showPobUp(
+                                                response.data!.workoutDetails!);
+                                          }
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              SizedBox(
+                                                width: 16,
+                                              ),
+                                              Text(
+                                                "Workout Details",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 8),
+                                                child: Icon(
+                                                  Icons.upload_sharp,
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          height: 45,
+                                          margin: EdgeInsets.symmetric(
+                                            horizontal: 72,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              color: kColorPrimary,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              14),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Workout",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                              textAlign: TextAlign.start,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          CustomSheet(
+                                              context: context,
+                                              widget: Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 16),
+                                                child: ListView.builder(
+                                                    itemCount: response
+                                                        .data!.workouts!.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return InkWell(
+                                                        onTap: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                          setState(() {
+                                                            WorkOutData =
+                                                                response
+                                                                    .data!
+                                                                    .workouts![
+                                                                        index]
+                                                                    .title!;
+                                                            workOut = response
+                                                                .data!
+                                                                .workouts![
+                                                                    index]
+                                                                .id!;
+                                                          });
+                                                        },
+                                                        child: Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 16),
+                                                              child: Text(
+                                                                "${response.data!.workouts![index].title}",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                            ),
+                                                            Divider()
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }),
+                                              ));
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 12, vertical: 5),
+                                          child: Container(
+                                            width: double.infinity,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 16),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    "${WorkOutData}",
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                  Icon(Icons.arrow_drop_down)
+                                                ],
+                                              ),
+                                            ),
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                border: Border.all(
+                                                    color: Colors.black)),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        color: Colors.white,
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  kTextbody(
+                                                      'Workout Description',
+                                                      size: 20,
+                                                      bold: true),
+                                                  EditText(
+                                                    // controller: controller,
+                                                    radius: 12,
+                                                    lines: 5,
+                                                    value: '${workDesc}',
+                                                    // hint: '${workDesc}',
+                                                    updateFunc: (text) {
+                                                      setState(() {
+                                                        workDesc = text;
+                                                      });
+                                                      print("$workDesc");
+                                                    },
+                                                    validateFunc: (text) {},
+                                                  ),
+                                                  SizedBox(height: 8),
+                                                  Center(
+                                                    child: kButtonDefault(
+                                                        'Save',
+                                                        marginH: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width /
+                                                            5,
+                                                        paddingV: 0, func: () {
+                                                      if (workDesc == "" ||
+                                                          workOut == null) {
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "Please Complete Data");
+                                                      } else {
+                                                        updateWork();
+                                                      }
+                                                    },
+                                                        shadow: true,
+                                                        paddingH: 50),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                      ],
+                    ),
+                    ShowLoader == false
+                        ? SizedBox()
+                        : Container(
+                            child: Center(
+                              child: CircularLoadingWidget(),
+                            ),
+                            width: double.infinity,
+                            height: double.infinity,
+                            color: Colors.black.withOpacity(.9),
+                          )
+                  ],
+                ),
     );
   }
 
-  Widget rowItem(CaloriesDetails item) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 3,
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black87)),
-                      child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 12),
-                    ),
-                    kTextbody('x', color: Colors.black, bold: false, size: 10),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
+  Widget rowItem(CaloriesDetails item, int type) {
+    return GestureDetector(
+      onTap: () {
+        if (type == 1) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewFood(
+                      date: apiDate!,
+                      list: response.data!.proteins!.food,
+                      edit: true,
+                      id: item.id)));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewFood(
+                      date: apiDate!,
+                      list: response.data!.carbsFats!.food,
+                      edit: true,
+                      id: item.id)));
+        }
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
                         padding: EdgeInsets.all(4),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: Colors.black87)),
-                        child:
-                            kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
+                        child: kTextbody('${item.qty}',
+                            color: Colors.black, bold: false, size: 12),
                       ),
-
-                    )
-                  ],
+                      kTextbody('x',
+                          color: Colors.black, bold: false, size: 10),
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.black87)),
+                          child: kTextbody('${item.unit}',
+                              color: Colors.black, bold: false, size: 12),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
+                Container(
+                    width: MediaQuery.of(context).size.width / 3,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.grey[500]!)),
+                    child: kTextbody('${item.quality}',
+                        color: Color(int.parse("0xFF${item.color}")),
+                        bold: false,
+                        size: 12)),
+                Container(
                   width: MediaQuery.of(context).size.width / 3,
-                  padding: EdgeInsets.all(2),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.grey[500]!)),
-                  child: kTextbody('${item.quality}',
-                      color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
-              Container(
-                width: MediaQuery.of(context).size.width / 3,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
-                    InkWell(
-                      onTap: () {
-                        deleteItem(item.id!, date);
-                      },
-                      child: Icon(
-                        Icons.delete,
-                        color: Colors.redAccent,
-                        size: 30,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      kTextbody('${item.calories}',
+                          color: Colors.black, bold: false, size: 16),
+                      InkWell(
+                        onTap: () {
+                          deleteItem(item.id!, date);
+                        },
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.redAccent,
+                          size: 30,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -747,38 +964,12 @@ class _DiaryViewState extends State<DiaryView> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
+            builder: (context) =>
+                PDFPreview(res: "$url", name: "Calories Calculator")));
     // });
     // } catch (e) {
     //   print(e);
     // }
-  }
-
-  Future<void> _showProgressNotification() async {
-    const int maxProgress = 2;
-    for (int i = 0; i <= maxProgress; i++) {
-      await Future<void>.delayed(const Duration(seconds: 1), () async {
-        final AndroidNotificationDetails androidPlatformChannelSpecifics =
-            AndroidNotificationDetails(
-                'progress channel', 'progress channel', 'progress channel description',
-                channelShowBadge: false,
-                importance: Importance.defaultImportance,
-                priority: Priority.defaultPriority,
-                showProgress: false,
-                onlyAlertOnce: true,
-                maxProgress: maxProgress,
-                progress: i);
-        final NotificationDetails platformChannelSpecifics =
-            NotificationDetails(android: androidPlatformChannelSpecifics);
-        await FlutterLocalNotificationsPlugin().show(
-          0,
-          'Calories Calculator',
-          'File Downloaded',
-          platformChannelSpecifics,
-          payload: 'item x',
-        );
-      });
-    }
   }
 
   Widget rowWithProgressBar(String Title, Proteins? item) {
@@ -821,8 +1012,11 @@ class _DiaryViewState extends State<DiaryView> {
                   // ),
                 ],
               ),
-              kTextHeader('${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
-                  bold: false, size: 20, color: Colors.black),
+              kTextHeader(
+                  '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
+                  bold: false,
+                  size: 20,
+                  color: Colors.black),
             ],
           ),
         ),
@@ -841,9 +1035,11 @@ class _DiaryViewState extends State<DiaryView> {
               Container(
                 height: 20,
                 width: MediaQuery.of(context).size.width *
-                    (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                    (item.caloriesTotal!.progress!.percentage!.toDouble() /
+                        100),
                 decoration: BoxDecoration(
-                  color: Color(int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
+                  color: Color(
+                      int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -866,12 +1062,15 @@ class _DiaryViewState extends State<DiaryView> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width / 3,
-            child: Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
+            child: Center(
+                child: kTextbody('Quantity',
+                    color: Colors.white, bold: true, size: 16)),
           ),
           Container(
               width: MediaQuery.of(context).size.width / 3,
-              child:
-                  Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
+              child: Center(
+                  child: kTextbody('Quality',
+                      color: Colors.white, bold: true, size: 16))),
           Container(
             width: MediaQuery.of(context).size.width / 3,
             child: Row(
@@ -888,6 +1087,7 @@ class _DiaryViewState extends State<DiaryView> {
                               builder: (context) => AddNewFood(
                                     date: apiDate!,
                                     list: response.data!.proteins!.food,
+                                    edit: false,
                                   )));
                     } else {
                       Navigator.push(
@@ -896,6 +1096,7 @@ class _DiaryViewState extends State<DiaryView> {
                               builder: (context) => AddNewFood(
                                     date: apiDate!,
                                     list: response.data!.carbsFats!.food,
+                                    edit: false,
                                   )));
                     }
                   },
