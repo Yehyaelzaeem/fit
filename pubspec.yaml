@@ -1,5 +1,5 @@
 name: app
-version: 1.0.0+3
+version: 1.0.0+5
 publish_to: none
 description: A new project create by md.hurab@gmail.com .
 environment:
@@ -41,10 +41,10 @@ dev_dependencies:
 
 flutter_icons:
   android: "ic_launcher"
-  ios: true
-#  image_path: "assets/FitFatAppIcon.png"
-#  image_path: "assets/fitoverfat-logo.png"
-#  image_path: "assets/logo_transperrant.png"
+  ios: false
+  #  image_path: "assets/FitFatAppIcon.png"
+  #  image_path: "assets/fitoverfat-logo.png"
+  #  image_path: "assets/logo_transperrant.png"
   image_path: "assets/app_logo.png"
 
 ##flutter pub run flutter_launcher_icons:main
