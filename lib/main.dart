@@ -1,3 +1,6 @@
+
+import 'dart:io';
+
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,13 +22,10 @@ Future selectNotification(payload) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  final InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await FlutterLocalNotificationsPlugin()
-      .initialize(initializationSettings, onSelectNotification: selectNotification);
+  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+  if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings, onSelectNotification: selectNotification);
 
   runApp(
     GetMaterialApp(
