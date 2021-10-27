@@ -98,7 +98,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                     onTap: () {
                       Navigator.push(
                           context, MaterialPageRoute(builder: (context) => CustomImageViewer(
-                          image: "${sessionResponse.data!.bodyComposition}")));
+                          image: "${sessionResponse.data!.bodyComposition}",tite: "Body Composition",)));
                       // downloadFile(sessionResponse.data!.bodyComposition!);
                     },
                     child: Container(

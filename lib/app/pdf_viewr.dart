@@ -1,3 +1,4 @@
+import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
@@ -16,6 +17,7 @@ class _PDFPreviewState extends State<PDFPreview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: PRIMART_COLOR,
           title: Text('${widget.name}', style: TextStyle(color: Colors.white)), centerTitle: true),
       body: Stack(
         children: [

@@ -75,6 +75,7 @@ class _TransformViewState extends State<TransformView> {
                     MaterialPageRoute(
                         builder: (context) => CustomImageViewer(
                           image: ressponse.data![index].content!,
+                          tite: "Transformations",
                         )));
               },
               child: Padding(
