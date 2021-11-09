@@ -1101,10 +1101,11 @@ class _DiaryViewState extends State<DiaryView> {
                     }
                   },
                   child: Container(
-                      margin: EdgeInsets.only(right: 12),
+                      margin: EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(color: kColorPrimary),
                       child: Icon(
                         Icons.add,
+                        size: 30,
                         color: Colors.black87,
                       )),
                 ),

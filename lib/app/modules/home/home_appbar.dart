@@ -52,15 +52,17 @@ class _HomeAppbarState extends State<HomeAppbar> {
         padding: EdgeInsets.symmetric(horizontal: 8),
         width: MediaQuery.of(context).size.width,
         height: 65,
-        decoration:
-            BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.4),
-            blurRadius: 2,
-            spreadRadius: 2,
-            offset: Offset(0, 0),
-          ),
-        ]),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.4),
+                blurRadius: 2,
+                spreadRadius: 2,
+                offset: Offset(0, 0),
+              ),
+            ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -73,10 +75,10 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         Get.offAllNamed(Routes.HOME);
                         controller.currentIndex.value = 0;
                       }
-                      ;
                     },
                     child: Icon(
                       Icons.arrow_back_ios,
+                      size: 30,
                       color: Colors.black87,
                     ),
                   )
@@ -126,11 +128,13 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                     padding: const EdgeInsets.all(4.0),
                                     child: Text(
                                       "$newMessage",
-                                      style: TextStyle(color: Colors.white, fontSize: 16),
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16),
                                     ),
                                   ),
-                                  decoration:
-                                      BoxDecoration(color: Colors.red, shape: BoxShape.circle),
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      shape: BoxShape.circle),
                                 ),
                               )
                             ],
@@ -148,7 +152,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                             color: Colors.white,
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                                image: NetworkImage("${ress.data!.image}"), fit: BoxFit.cover)),
+                                image: NetworkImage("${ress.data!.image}"),
+                                fit: BoxFit.cover)),
                       ),
               ],
             )

@@ -65,6 +65,8 @@ class _AddNewFoodState extends State<AddNewFood> {
     super.initState();
   }
 
+  TextEditingController _controller = new TextEditingController();
+  TextEditingController _controller2 = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -83,6 +85,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                       },
                     ),
                     EditText(
+                      controller: _controller,
                       updateFunc: (val) {
                         setState(() {
                           searchResult.clear();
@@ -97,7 +100,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                         //   }
                         // });
                       },
-                      value: '',
+                      value: null,
                       hint: 'Search',
                       suffixData: Icon(Icons.search),
                       radius: 12,
@@ -197,7 +200,8 @@ class _AddNewFoodState extends State<AddNewFood> {
                                           child: Column(
                                             children: [
                                               EditText(
-                                                value: '',
+                                                controller: _controller2,
+                                                value: null,
                                                 hint: 'Enter Quantity',
                                                 suffixData: Padding(
                                                   padding: const EdgeInsets
@@ -259,8 +263,8 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                           return;
                                                         } else {
                                                           updateProtineData(
-                                                              foodId,
-                                                              quantity!);
+                                                              foodId, quantity!,
+                                                              index: index);
                                                         }
                                                       },
                                                       shadow: true,
@@ -299,7 +303,7 @@ class _AddNewFoodState extends State<AddNewFood> {
     return Future.value(true);
   }
 
-  void updateProtineData(int? food, double _quantity) async {
+  void updateProtineData(int? food, double _quantity, {int? index}) async {
     setState(() => ShowLoader = true);
     if (widget.edit == false) {
       await ApiProvider()
@@ -312,6 +316,11 @@ class _AddNewFoodState extends State<AddNewFood> {
             foodId = null;
             quantity == null;
           });
+          _controller.clear();
+          _controller2.clear();
+          if (index != null) {
+            data![index].isSellected = false;
+          }
           Fluttertoast.showToast(msg: "${value.message}");
         } else {
           setState(() {
@@ -335,6 +344,11 @@ class _AddNewFoodState extends State<AddNewFood> {
             foodId = null;
             quantity == null;
           });
+          _controller.clear();
+          _controller2.clear();
+          if (index != null) {
+            data![index].isSellected = false;
+          }
           Fluttertoast.showToast(msg: "${value.message}");
         } else {
           setState(() {

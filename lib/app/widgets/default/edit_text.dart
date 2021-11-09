@@ -56,7 +56,7 @@ class EditText extends StatelessWidget {
       padding: EdgeInsets.all(4),
       child: TextFormField(
         initialValue: value,
-        // controller: controller,
+        controller: controller,
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         decoration: InputDecoration(
             border: noBorder
