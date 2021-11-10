@@ -217,7 +217,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   ),
                                                 ),
                                                 radius: 12,
-                                                type: TextInputType.number,
+                                                type: TextInputType.numberWithOptions(decimal: true),
                                                 updateFunc: (String text) {
                                                   setState(() {
                                                     quantity =
