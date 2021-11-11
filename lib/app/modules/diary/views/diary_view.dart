@@ -499,10 +499,10 @@ class _DiaryViewState extends State<DiaryView> {
                                                               padding:
                                                                   const EdgeInsets
                                                                           .only(
-                                                                      right: 5,
-                                                                      left: 5,
-                                                                      bottom: 8,
-                                                                      top: 3),
+                                                                      right: 0,
+                                                                      left: 0,
+                                                                      bottom: 0,
+                                                                      top: 0),
                                                               child: Container(
                                                                 child: Center(
                                                                   child: Icon(
@@ -542,7 +542,7 @@ class _DiaryViewState extends State<DiaryView> {
                                                     .caloriesDetails![indedx],
                                                 1);
                                           }),
-                                      SizedBox(height: 24),
+                                      Divider(thickness: 2),
                                       rowWithProgressBar("Carbs & Fats",
                                           response.data!.carbsFats),
                                       staticBar(2),
