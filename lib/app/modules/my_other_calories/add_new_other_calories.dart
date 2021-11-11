@@ -127,7 +127,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                 value: '',
                 hint: 'Calories Per Unit',
                 radius: 12,
-                type: TextInputType.number,
+                type: TextInputType.numberWithOptions(decimal: true),
                 updateFunc: (text) {
                   setState(() {
                     calorie_per_unit = text;
