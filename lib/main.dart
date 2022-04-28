@@ -1,8 +1,8 @@
-
 import 'dart:io';
 
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
+import 'package:app/globale_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,7 +26,7 @@ Future<void> main() async {
 
   final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
   if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings, onSelectNotification: selectNotification);
-
+  Get.put(GlobalController(), tag: "global");
   runApp(
     GetMaterialApp(
       title: "FIT over FAT",

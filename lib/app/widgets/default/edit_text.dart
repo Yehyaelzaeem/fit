@@ -20,12 +20,16 @@ class EditText extends StatelessWidget {
   final double fontSize;
   final double radius;
   final double contentPaddingH;
+  final double contentPaddingV;
+  final double padding;
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
   final Color? background;
+  final Color hintColor;
   final TextEditingController? controller;
 
   EditText({
+    this.hintColor = Colors.black,
     this.background,
     this.iconData,
     this.value,
@@ -35,6 +39,8 @@ class EditText extends StatelessWidget {
     this.noBorder = false,
     this.label = false,
     this.contentPaddingH = 16,
+    this.contentPaddingV = 8,
+    this.padding = 4,
     this.lines = 1,
     this.fontSize = 14,
     this.radius = 64,
@@ -53,7 +59,7 @@ class EditText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(radius)),
-      padding: EdgeInsets.all(4),
+      padding: EdgeInsets.all(padding),
       child: TextFormField(
         initialValue: value,
         controller: controller,
@@ -80,8 +86,7 @@ class EditText extends StatelessWidget {
             enabledBorder: !noBorder ? null : InputBorder.none,
             errorStyle: TextStyle(fontSize: 10),
             labelStyle: TextStyle(fontSize: fontSize, color: kColorAccent),
-            hintStyle:
-                TextStyle(fontSize: fontSize, color: Colors.black, fontWeight: FontWeight.w300),
+            hintStyle: TextStyle(fontSize: fontSize, color: hintColor, fontWeight: FontWeight.w300),
             labelText: label ? hint : null,
             hintText: hint,
             counterStyle: TextStyle(color: Colors.green),
@@ -105,7 +110,7 @@ class EditText extends StatelessWidget {
                     iconData,
                     color: Colors.grey,
                   ),
-            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: 8)),
+            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: contentPaddingV)),
         keyboardType: type,
         validator: (text) {
           if (validateFunc != null) return validateFunc!(text);

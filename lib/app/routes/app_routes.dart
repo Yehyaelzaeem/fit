@@ -24,7 +24,13 @@ abstract class Routes {
   static const FAQ = _Paths.FAQ;
   static const TRANSFORMATION = _Paths.TRANSFORMATION;
   static const TRANSFORM = _Paths.TRANSFORM;
-  static const  MY_OTHER_CALORIES= _Paths.MY_OTHER_CALORIES;
+  static const MY_OTHER_CALORIES = _Paths.MY_OTHER_CALORIES;
+  static const ORDERS = _Paths.ORDERS;
+  static const CART = _Paths.CART;
+  static const MY_MEALS = _Paths.MY_MEALS;
+  static const MAKE_MEALS = _Paths.MAKE_MEALS;
+  static const SHIPPING_DETAILS = _Paths.SHIPPING_DETAILS;
+  static const CHEER_FULL = _Paths.CHEER_FULL;
 }
 
 abstract class _Paths {
@@ -49,4 +55,10 @@ abstract class _Paths {
   static const TRANSFORMATION = '/transformation';
   static const TRANSFORM = '/transform';
   static const MY_OTHER_CALORIES = '/my-other-calories';
+  static const ORDERS = '/orders';
+  static const CART = '/cart';
+  static const MY_MEALS = '/my-meals';
+  static const MAKE_MEALS = '/make-meals';
+  static const SHIPPING_DETAILS = '/shipping-details';
+  static const CHEER_FULL = '/cheer-full';
 }

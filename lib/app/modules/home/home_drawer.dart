@@ -72,8 +72,7 @@ class HomeDrawer extends GetView<HomeController> {
                         Obx(() {
                           return kTextHeader('${controller.name.value}', size: 18);
                         }),
-                        kTextfooter('ID :  ${controller.id.value}',
-                            size: 14, color: Colors.black87, paddingV: 0),
+                        kTextfooter('ID :  ${controller.id.value}', size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
@@ -151,12 +150,12 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
             //Transformation
-             singleDrawerItem(
-                    title: 'Transformations', //todo transulate
-                    image: 'assets/img/ic_menu_images.png',
-                    action: () {
-                      Get.toNamed(Routes.TRANSFORM);
-                    }),
+            singleDrawerItem(
+                title: 'Transformations', //todo transulate
+                image: 'assets/img/ic_menu_images.png',
+                action: () {
+                  Get.toNamed(Routes.TRANSFORM);
+                }),
 
             //Contact
             singleDrawerItem(
@@ -165,6 +164,15 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.CONTACT_US);
                 }),
+            //About
+            singleDrawerItem(
+                title: "Cheer-Full",
+                image: 'assets/img/ic_meals.png',
+                action: () {
+                  Get.toNamed(Routes.CHEER_FULL);
+                }),
+            //Orders
+            singleDrawerItem(title: "My Orders", image: 'assets/img/ic_orders.png', action: () {}),
             //About
             singleDrawerItem(
                 title: "About us",

@@ -1,9 +1,13 @@
-import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:get/get.dart';
+
 import 'package:app/app/modules/about/bindings/about_binding.dart';
 import 'package:app/app/modules/about/views/about_view.dart';
 import 'package:app/app/modules/auth/bindings/auth_binding.dart';
 import 'package:app/app/modules/auth/views/auth_view.dart';
+import 'package:app/app/modules/cart/bindings/cart_binding.dart';
+import 'package:app/app/modules/cart/views/cart_view.dart';
+import 'package:app/app/modules/cheerFull/bindings/cheer_full_binding.dart';
+import 'package:app/app/modules/cheerFull/views/cheer_full_view.dart';
 import 'package:app/app/modules/contact_us/bindings/contact_us_binding.dart';
 import 'package:app/app/modules/contact_us/views/contact_us_view.dart';
 import 'package:app/app/modules/diary/bindings/diary_binding.dart';
@@ -18,8 +22,15 @@ import 'package:app/app/modules/introduction_screen/bindings/introduction_screen
 import 'package:app/app/modules/introduction_screen/views/introduction_screen_view.dart';
 import 'package:app/app/modules/login/bindings/login_binding.dart';
 import 'package:app/app/modules/login/views/login_view.dart';
+import 'package:app/app/modules/makeMeals/bindings/make_meals_binding.dart';
+import 'package:app/app/modules/makeMeals/views/make_meals_view.dart';
+import 'package:app/app/modules/myMeals/bindings/my_meals_binding.dart';
+import 'package:app/app/modules/myMeals/views/my_meals_view.dart';
+import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/modules/notifications/bindings/notifications_binding.dart';
 import 'package:app/app/modules/notifications/views/notifications_view.dart';
+import 'package:app/app/modules/orders/bindings/orders_binding.dart';
+import 'package:app/app/modules/orders/views/orders_view.dart';
 import 'package:app/app/modules/otp/bindings/otp_binding.dart';
 import 'package:app/app/modules/otp/views/otp_view.dart';
 import 'package:app/app/modules/profile/bindings/profile_binding.dart';
@@ -28,6 +39,8 @@ import 'package:app/app/modules/register/bindings/register_binding.dart';
 import 'package:app/app/modules/register/views/register_view.dart';
 import 'package:app/app/modules/sessions/bindings/sessions_binding.dart';
 import 'package:app/app/modules/sessions/views/sessions_view.dart';
+import 'package:app/app/modules/shippingDetails/bindings/shipping_details_binding.dart';
+import 'package:app/app/modules/shippingDetails/views/shipping_details_view.dart';
 import 'package:app/app/modules/show_pages/bindings/show_pages_binding.dart';
 import 'package:app/app/modules/show_pages/views/show_pages_view.dart';
 import 'package:app/app/modules/splash/bindings/splash_binding.dart';
@@ -144,6 +157,36 @@ class AppPages {
       name: _Paths.TRANSFORM,
       page: () => TransformView(),
       binding: TransformBinding(),
+    ),
+    GetPage(
+      name: _Paths.ORDERS,
+      page: () => OrdersView(),
+      binding: OrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.CART,
+      page: () => CartView(),
+      binding: CartBinding(),
+    ),
+    GetPage(
+      name: _Paths.MY_MEALS,
+      page: () => MyMealsView(),
+      binding: MyMealsBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAKE_MEALS,
+      page: () => MakeMealsView(),
+      binding: MakeMealsBinding(),
+    ),
+    GetPage(
+      name: _Paths.SHIPPING_DETAILS,
+      page: () => ShippingDetailsView(),
+      binding: ShippingDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHEER_FULL,
+      page: () => CheerFullView(),
+      binding: CheerFullBinding(),
     ),
   ];
 }

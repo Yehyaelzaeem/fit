@@ -1,14 +1,20 @@
 import 'dart:io';
 
 import 'package:app/app/models/about_response.dart';
+import 'package:app/app/models/basic_response.dart';
 import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/models/faq_response.dart';
 import 'package:app/app/models/general_response.dart';
 import 'package:app/app/models/home_page_response.dart';
+import 'package:app/app/models/meal_details_response.dart';
+import 'package:app/app/models/meal_features_home_response.dart';
+import 'package:app/app/models/meal_features_status_response.dart';
+import 'package:app/app/models/meal_food_list_response.dart';
 import 'package:app/app/models/message_details_response.dart';
 import 'package:app/app/models/messages_response.dart';
 import 'package:app/app/models/my_other_calories_response.dart';
+import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/models/orintation_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/models/session_response.dart';
@@ -106,15 +112,8 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendContactData(String name, String email,
-      String phone, String subject, String message) async {
-    FormData body = FormData.fromMap({
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'subject': subject,
-      'message': message
-    });
+  Future<GeneralResponse> sendContactData(String name, String email, String phone, String subject, String message) async {
+    FormData body = FormData.fromMap({'name': name, 'email': email, 'phone': phone, 'subject': subject, 'message': message});
     Response response = await _utils.post("contact_form", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
@@ -198,13 +197,7 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> addOtherCalories(
-      {required String? title,
-      required String? calPerUnti,
-      required int? unit,
-      String? unitQuantity,
-      String? unitName,
-      int? type}) async {
+  Future<GeneralResponse> addOtherCalories({required String? title, required String? calPerUnti, required int? unit, String? unitQuantity, String? unitName, int? type}) async {
     FormData body = FormData.fromMap({
       "title": title,
       "calorie_per_unit": calPerUnti,
@@ -220,13 +213,8 @@ class ApiProvider {
       return GeneralResponse.fromJson(response.data);
     }
   }
-  Future<GeneralResponse> updateOtherCalories(
-      {required String? title,
-      required String? calPerUnti,
-      required int? unit,
-      String? unitQuantity,
-      String? unitName,
-      int? type,int? id}) async {
+
+  Future<GeneralResponse> updateOtherCalories({required String? title, required String? calPerUnti, required int? unit, String? unitQuantity, String? unitName, int? type, int? id}) async {
     FormData body = FormData.fromMap({
       "title": title,
       "calorie_per_unit": calPerUnti,
@@ -262,19 +250,7 @@ class ApiProvider {
     String? password_confirmation,
     String? gender,
   }) async {
-    FormData body = FormData.fromMap({
-      "image": image == null
-          ? null
-          : await MultipartFile.fromFile('${image.path}',
-              filename: '${image.path}.png'),
-      "name": name,
-      "gender": gender,
-      "email": email,
-      "phone": phone,
-      "date_of_birth": date,
-      "password": password,
-      "password_confirmation": password_confirmation
-    });
+    FormData body = FormData.fromMap({"image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'), "name": name, "gender": gender, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
     Response response = await _utils.post("update_profile", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -283,23 +259,8 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> signUpApi(
-      String id,
-      String password,
-      String name,
-      String email,
-      String date,
-      String phone,
-      String password_confirmation) async {
-    FormData body = FormData.fromMap({
-      "patient_id": id,
-      "name": name,
-      "email": email,
-      "phone": phone,
-      "date_of_birth": date,
-      "password": password,
-      "password_confirmation": password_confirmation
-    });
+  Future<GeneralResponse> signUpApi(String id, String password, String name, String email, String date, String phone, String password_confirmation) async {
+    FormData body = FormData.fromMap({"patient_id": id, "name": name, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
     Response response = await _utils.post("register", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
@@ -308,30 +269,8 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendOrintaionData(
-      {String? first_name,
-      String? middle_name,
-      String? last_name,
-      String? mobile,
-      String? age,
-      String? country,
-      String? whats,
-      int? hear_from,
-      int? target,
-      int? package,
-      int? id}) async {
-    FormData body = FormData.fromMap({
-      "first_name": first_name,
-      "middle_name": middle_name,
-      "last_name": last_name,
-      "mobile": mobile,
-      "age": age,
-      "target": target,
-      "country": country,
-      "hear_from": hear_from,
-      "package": package,
-      "whatsapp": whats
-    });
+  Future<GeneralResponse> sendOrintaionData({String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
+    FormData body = FormData.fromMap({"first_name": first_name, "middle_name": middle_name, "last_name": last_name, "mobile": mobile, "age": age, "target": target, "country": country, "hear_from": hear_from, "package": package, "whatsapp": whats});
     Response response = await _utils.post(
       "orientation_registeration/$id",
       body: body,
@@ -344,13 +283,7 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> updateDiaryData(
-      {required String date,
-      String? water,
-      int? foodProtine,
-      double? qtyProtiene,
-      int? workOut,
-      String? workout_desc}) async {
+  Future<GeneralResponse> updateDiaryData({required String date, String? water, int? foodProtine, double? qtyProtiene, int? workOut, String? workout_desc}) async {
     print(date);
     FormData body = FormData.fromMap({
       "water": water,
@@ -374,14 +307,7 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> editDiaryData(
-      {required String date,
-      String? water,
-      int? foodProtine,
-      double? qtyProtiene,
-      int? workOut,
-      String? workout_desc,
-      int? id}) async {
+  Future<GeneralResponse> editDiaryData({required String date, String? water, int? foodProtine, double? qtyProtiene, int? workOut, String? workout_desc, int? id}) async {
     print(date);
     FormData body = FormData.fromMap({
       "water": water,
@@ -402,6 +328,101 @@ class ApiProvider {
       return GeneralResponse.fromJson(response.data);
     } else {
       return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
+    Response response = await _utils.post("meals_features_home");
+    if (response.statusCode == 200) {
+      return MealFeatureHomeResponse.fromJson(response.data);
+    } else {
+      return MealFeatureHomeResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MealFeatureStatusResponse> getMealFeaturesStatus() async {
+    Response response = await _utils.post("meals_features_status");
+    if (response.statusCode == 200) {
+      return MealFeatureStatusResponse.fromJson(response.data);
+    } else {
+      return MealFeatureStatusResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MealFoodListResponse> getMealFoodList() async {
+    Response response = await _utils.post("meals_food_list");
+    if (response.statusCode == 200) {
+      return MealFoodListResponse.fromJson(response.data);
+    } else {
+      return MealFoodListResponse.fromJson(response.data);
+    }
+  }
+
+  Future<bool> createNewMeal({
+    required String name,
+    required String foodIds,
+    required String amountsId,
+  }) async {
+    FormData body = FormData.fromMap({
+      "name": name,
+      "food": foodIds,
+      "amount": amountsId,
+    });
+    Response response = await _utils.post("new_meal", body: body);
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<MealFoodListResponse> updateNewMeal({
+    required String id,
+    required String name,
+    required String foodIds,
+    required String amount,
+  }) async {
+    FormData body = FormData.fromMap({
+      "name": name,
+      "food": foodIds,
+      "amount": amount,
+    });
+    Response response = await _utils.post("update_meal/$id", body: body);
+    if (response.statusCode == 200) {
+      return MealFoodListResponse.fromJson(response.data);
+    } else {
+      return MealFoodListResponse.fromJson(response.data);
+    }
+  }
+
+  Future<BasicResponse> deleteMeal({
+    required String id,
+  }) async {
+    Response response = await _utils.post("delete_meal/$id");
+    if (response.statusCode == 200) {
+      return BasicResponse.fromJson(response.data);
+    } else {
+      return BasicResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MyMealResponse> getMyMeals() async {
+    Response response = await _utils.post("my_meals");
+    if (response.statusCode == 200) {
+      return MyMealResponse.fromJson(response.data);
+    } else {
+      return MyMealResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MealDetailsResponse> getMealDetails({
+    required String id,
+  }) async {
+    Response response = await _utils.post("meal_details/$id");
+    if (response.statusCode == 200) {
+      return MealDetailsResponse.fromJson(response.data);
+    } else {
+      return MealDetailsResponse.fromJson(response.data);
     }
   }
 }
