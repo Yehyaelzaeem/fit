@@ -13,6 +13,7 @@ import 'package:app/app/models/meal_features_status_response.dart';
 import 'package:app/app/models/meal_food_list_response.dart';
 import 'package:app/app/models/message_details_response.dart';
 import 'package:app/app/models/messages_response.dart';
+import 'package:app/app/models/my_orders_response.dart';
 import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/models/orintation_response.dart';
@@ -22,6 +23,7 @@ import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/network.dart';
+import 'package:app/app/utils/helper/echo.dart';
 import 'package:dio/dio.dart';
 // import 'package:dio/dio.dart';
 
@@ -376,22 +378,22 @@ class ApiProvider {
     }
   }
 
-  Future<MealFoodListResponse> updateNewMeal({
+  Future<bool> updateNewMeal({
     required String id,
     required String name,
     required String foodIds,
-    required String amount,
+    required String amountsId,
   }) async {
     FormData body = FormData.fromMap({
       "name": name,
       "food": foodIds,
-      "amount": amount,
+      "amount": amountsId,
     });
     Response response = await _utils.post("update_meal/$id", body: body);
     if (response.statusCode == 200) {
-      return MealFoodListResponse.fromJson(response.data);
+      return true;
     } else {
-      return MealFoodListResponse.fromJson(response.data);
+      return false;
     }
   }
 
@@ -408,10 +410,10 @@ class ApiProvider {
 
   Future<MyMealResponse> getMyMeals() async {
     Response response = await _utils.post("my_meals");
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && response.data['success'] == true) {
       return MyMealResponse.fromJson(response.data);
     } else {
-      return MyMealResponse.fromJson(response.data);
+      return Future.error(response.data['message']);
     }
   }
 
@@ -423,6 +425,57 @@ class ApiProvider {
       return MealDetailsResponse.fromJson(response.data);
     } else {
       return MealDetailsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<bool> createShoppingCart({
+    required String name,
+    required String phone,
+    required String email,
+    required String address,
+    required String latitude,
+    required String longitude,
+    required String meals,
+    required String deliveryMethod,
+  }) async {
+    Echo("meals $meals");
+    try {
+      FormData body = FormData.fromMap({
+        'name': name,
+        'phone': phone,
+        'email': email,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'meals': meals,
+      });
+      Response response = await _utils.post("create_shopping_cart", body: body);
+      if (response.statusCode == 200) {
+        String id = '${response.data['data']['cart']['id']}';
+        FormData body2 = FormData.fromMap({
+          'delivery_method': deliveryMethod,
+        });
+        await _utils.post("checkout/$id", body: body2);
+        return true;
+      } else
+        return false;
+    } catch (e) {
+      Echo('error $e');
+      return Future.error(e);
+    }
+  }
+
+  Future<MyOrdersResponse> myOrders() async {
+    try {
+      Response response = await _utils.post("my_orders");
+      if (response.statusCode == 200) {
+        MyOrdersResponse myOrdersResponse = MyOrdersResponse.fromJson(response.data);
+        return myOrdersResponse;
+      } else
+        return Future.error("server");
+    } catch (e) {
+      Echo('error $e');
+      return Future.error(e);
     }
   }
 }

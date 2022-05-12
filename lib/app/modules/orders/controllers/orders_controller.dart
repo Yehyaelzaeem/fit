@@ -1,20 +1,39 @@
+import 'package:app/app/models/my_orders_response.dart';
+import 'package:app/app/network_util/api_provider.dart';
 import 'package:get/get.dart';
 
 class OrdersController extends GetxController {
-  //TODO: Implement OrdersController
-
-  final count = 0.obs;
+  final response = MyOrdersResponse(code: 200, success: false, data: null).obs;
+  final error = ''.obs;
+  final loading = false.obs;
+  final requiredAuth = false.obs;
+  final selectedTap = 1.obs;
+  final getMyMealsLoading = false.obs;
   @override
-  void onInit() {
+  void onInit() async {
+    getNetworkData();
+
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  getNetworkData() async {
+    if (requiredAuth.value) return;
+    error.value = '';
+    getMyMealsLoading.value = true;
+    try {
+      response.value = await ApiProvider().myOrders();
+    } catch (e) {
+      error.value = '$e';
+    }
+    getMyMealsLoading.value = false;
   }
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+  String getMealsName(List<Meal> meals) {
+    String mealsName = '';
+    meals.forEach((element) {
+      mealsName += '${element.name}, ';
+    });
+    mealsName = mealsName.substring(0, mealsName.length - 2);
+    return mealsName;
+  }
 }

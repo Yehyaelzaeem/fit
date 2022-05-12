@@ -54,12 +54,13 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               GestureDetector(
                                 onTap: () {
                                   controller.proteinSelected.add(Food(
+                                      amounts: [],
                                       selectedAmount: Amount(
-                                    id: 0,
-                                    calories: "",
-                                    name: "",
-                                    price: "",
-                                  )));
+                                        id: 0,
+                                        calories: "",
+                                        name: "",
+                                        price: "",
+                                      )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(6),
@@ -137,7 +138,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   onTap: () {
                                     if (controller.protein.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.protein.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.protein.firstWhere((element) => element.id == e.id).amounts!.isEmpty) return;
+                                    if (controller.protein.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -150,7 +151,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
                                               SizedBox(height: 12),
-                                              ...controller.protein.firstWhere((element) => element.id == e.id).amounts!.map((item) {
+                                              ...controller.protein.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     e.selectedAmount = Amount(
@@ -204,12 +205,13 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               GestureDetector(
                                 onTap: () {
                                   controller.carbSelected.add(Food(
+                                      amounts: [],
                                       selectedAmount: Amount(
-                                    id: 0,
-                                    calories: "",
-                                    name: "",
-                                    price: "",
-                                  )));
+                                        id: 0,
+                                        calories: "",
+                                        name: "",
+                                        price: "",
+                                      )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(6),
@@ -287,7 +289,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   onTap: () {
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts!.isEmpty) return;
+                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -300,7 +302,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
                                               SizedBox(height: 12),
-                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts!.map((item) {
+                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     e.selectedAmount = Amount(
@@ -354,12 +356,13 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               GestureDetector(
                                 onTap: () {
                                   controller.fatSelected.add(Food(
+                                      amounts: [],
                                       selectedAmount: Amount(
-                                    id: 0,
-                                    calories: "",
-                                    name: "",
-                                    price: "",
-                                  )));
+                                        id: 0,
+                                        calories: "",
+                                        name: "",
+                                        price: "",
+                                      )));
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(6),
@@ -437,7 +440,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   onTap: () {
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts!.isEmpty) return;
+                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -450,7 +453,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
                                               SizedBox(height: 12),
-                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts!.map((item) {
+                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
                                                     e.selectedAmount = Amount(

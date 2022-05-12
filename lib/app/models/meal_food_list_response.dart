@@ -28,17 +28,17 @@ class SingleMeal {
   SingleMeal({
     this.id,
     this.title,
-    this.food,
+    required this.food,
   });
 
   final int? id;
   final String? title;
-  final List<Food>? food;
+  final List<Food> food;
 
   factory SingleMeal.fromJson(Map<String, dynamic> json) => SingleMeal(
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
-        food: json["food"] == null ? null : List<Food>.from(json["food"].map((x) => Food.fromJson(x))),
+        food: json["food"] == null ? [] : List<Food>.from(json["food"].map((x) => Food.fromJson(x))),
       );
 }
 
@@ -46,19 +46,19 @@ class Food {
   Food({
     this.id,
     this.title,
-    this.amounts,
+    required this.amounts,
     required this.selectedAmount,
   });
 
   int? id;
   String? title;
-  List<Amount>? amounts;
+  List<Amount> amounts;
   Amount selectedAmount;
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
-        amounts: json["amounts"] == null ? null : List<Amount>.from(json["amounts"].map((x) => Amount.fromJson(x))),
+        amounts: json["amounts"] == null ? [] : List<Amount>.from(json["amounts"].map((x) => Amount.fromJson(x))),
         selectedAmount: Amount(
           id: 0,
           calories: "",

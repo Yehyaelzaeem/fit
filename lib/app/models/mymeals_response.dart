@@ -27,24 +27,27 @@ class MyMealResponse {
 class SingleMyMeal {
   SingleMyMeal({
     this.id,
-    this.name,
+    required this.name,
+    required this.note,
     this.price,
-    this.items,
+    required this.items,
     required this.selected,
   });
 
   bool selected;
   final int? id;
-  final String? name;
-  final int? price;
-  final List<SingleMyMealItem>? items;
+  final String name;
+  final String? note;
+  final String? price;
+  final List<SingleMyMealItem> items;
 
   factory SingleMyMeal.fromJson(Map<String, dynamic> json) => SingleMyMeal(
         selected: false,
         id: json["id"] == null ? null : json["id"],
-        name: json["name"] == null ? null : json["name"],
-        price: json["price"] == null ? null : json["price"],
-        items: json["items"] == null ? null : List<SingleMyMealItem>.from(json["items"].map((x) => SingleMyMealItem.fromJson(x))),
+        name: json["name"] == null ? '' : json["name"],
+        note: json["note"] == null ? '' : json["note"],
+        price: json["price"] == null ? null : '${json["price"]}',
+        items: json["items"] == null ? [] : List<SingleMyMealItem>.from(json["items"].map((x) => SingleMyMealItem.fromJson(x))),
       );
 }
 
@@ -52,20 +55,20 @@ class SingleMyMealItem {
   SingleMyMealItem({
     this.id,
     this.title,
-    this.items,
+    required this.items,
     this.error,
   });
 
   final int? id;
   final String? title;
   final bool? error;
-  final List<MealItem>? items;
+  final List<MealItem> items;
 
   factory SingleMyMealItem.fromJson(Map<String, dynamic> json) => SingleMyMealItem(
         error: false,
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
-        items: json["items"] == null ? null : List<MealItem>.from(json["items"].map((x) => MealItem.fromJson(x))),
+        items: json["items"] == null ? [] : List<MealItem>.from(json["items"].map((x) => MealItem.fromJson(x))),
       );
 }
 
@@ -80,16 +83,16 @@ class MealItem {
 
   final int? id;
   final String? title;
-  final int? price;
+  final String? price;
   final int? calories;
-  final int? amount;
+  final String? amount;
 
   factory MealItem.fromJson(Map<String, dynamic> json) => MealItem(
         id: json["id"] == null ? null : json["id"],
-        title: json["title"] == null ? null : json["title"],
-        price: json["price"] == null ? null : json["price"],
+        title: json["food"] == null ? null : json["food"],
+        price: json["price"] == null ? null : '${json["price"]}',
         calories: json["calories"] == null ? null : json["calories"],
-        amount: json["amount"] == null ? null : json["amount"],
+        amount: json["amount"] == null ? null : '${json["amount"]}',
       );
 
   Map<String, dynamic> toJson() => {

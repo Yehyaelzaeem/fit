@@ -172,7 +172,12 @@ class HomeDrawer extends GetView<HomeController> {
                   Get.toNamed(Routes.CHEER_FULL);
                 }),
             //Orders
-            singleDrawerItem(title: "My Orders", image: 'assets/img/ic_orders.png', action: () {}),
+            singleDrawerItem(
+                title: "My Orders",
+                image: 'assets/img/ic_orders.png',
+                action: () {
+                  Get.toNamed(Routes.ORDERS);
+                }),
             //About
             singleDrawerItem(
                 title: "About us",

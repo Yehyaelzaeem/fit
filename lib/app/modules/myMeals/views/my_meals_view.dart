@@ -1,3 +1,4 @@
+import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/modules/myMeals/controllers/my_meals_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
@@ -7,6 +8,7 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:app/app/widgets/page_lable.dart';
+import 'package:app/un_coplete_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,8 +23,15 @@ class MyMealsView extends GetView<MyMealsController> {
           backgroundColor: Colors.white,
           body: Obx(() {
             if (controller.loading.value) return Center(child: CircularLoadingWidget());
-
-            if (controller.error.value.isNotEmpty) return errorHandler(controller.error.value, controller);
+            if (controller.requiredAuth.value) return IncompleteData();
+            if (controller.error.value.isNotEmpty)
+              return Container(
+                  margin: EdgeInsets.only(top: Get.height / 3),
+                  child: Center(
+                      child: errorHandler(
+                    controller.error.value,
+                    controller,
+                  )));
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -32,7 +41,7 @@ class MyMealsView extends GetView<MyMealsController> {
                   header(),
                   SizedBox(height: 4),
                   if (controller.getMyMealsLoading.value) Container(height: 100, child: CircularLoadingWidget()),
-                  if (!controller.getMyMealsLoading.value && controller.response.value.data!.isEmpty)
+                  if (!controller.getMyMealsLoading.value && controller.response.value.data != null && controller.response.value.data!.isEmpty)
                     Text(
                       'No meals added',
                       style: GoogleFonts.cairo(
@@ -41,14 +50,9 @@ class MyMealsView extends GetView<MyMealsController> {
                         color: Colors.black,
                       ),
                     ),
-                  if (!controller.getMyMealsLoading.value)
+                  if (!controller.getMyMealsLoading.value && controller.response.value.data != null)
                     ...controller.response.value.data!.map((e) {
-                      return singleItem(
-                        id: e.id!,
-                        title: "${e.name}",
-                        price: "${e.price} L.E",
-                        status: e.selected,
-                      );
+                      return singleItem(meal: e);
                     }).toList(),
                   SizedBox(height: 12),
                   Row(
@@ -58,7 +62,17 @@ class MyMealsView extends GetView<MyMealsController> {
                           "Order Now",
                           color: controller.response.value.data != null && controller.response.value.data!.isEmpty ? Colors.grey : kColorPrimary,
                           func: () {
-                            if (controller.response.value.data != null && controller.response.value.data!.isEmpty) Get.toNamed(Routes.CART);
+                            List<SingleMyMeal> meals = controller.response.value.data == null ? [] : controller.response.value.data!.where((element) => element.selected).toList();
+                            if (meals.isEmpty) {
+                              Get.snackbar(
+                                'Error',
+                                'Please select at least one meal',
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                              );
+                              return;
+                            }
+                            Get.toNamed(Routes.SHIPPING_DETAILS, arguments: meals);
                           },
                         ),
                       ),
@@ -160,12 +174,7 @@ class MyMealsView extends GetView<MyMealsController> {
     );
   }
 
-  Widget singleItem({
-    required int id,
-    required String title,
-    required String price,
-    required bool status,
-  }) {
+  Widget singleItem({required SingleMyMeal meal}) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -175,17 +184,29 @@ class MyMealsView extends GetView<MyMealsController> {
       child: Row(
         children: [
           Checkbox(
-              value: status,
+              value: meal.selected,
               onChanged: (sts) {
                 controller.response.update((val) {
                   val!.data!.forEach((e) {
-                    if (e.id == id) e.selected = sts!;
+                    if (e.id == meal.id) e.selected = sts!;
                   });
                 });
               }),
-          Expanded(child: kTextbody("$title $id", color: kColorPrimary, align: TextAlign.start, bold: true)),
-          kTextbody(price, color: Colors.black),
-          Container(padding: EdgeInsets.all(6), margin: EdgeInsets.symmetric(horizontal: 6), child: Icon(Icons.edit, size: 18)),
+          Expanded(child: kTextbody("${meal.name}", color: kColorPrimary, align: TextAlign.start, bold: true)),
+          kTextbody("${meal.price} L.E", color: Colors.black),
+          GestureDetector(
+            onTap: () async {
+              dynamic val = await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
+              if (val != null) controller.getNetworkData();
+            },
+            child: Container(
+                padding: EdgeInsets.all(6),
+                margin: EdgeInsets.symmetric(horizontal: 6),
+                child: Icon(
+                  Icons.edit,
+                  size: 18,
+                )),
+          ),
         ],
       ),
     );

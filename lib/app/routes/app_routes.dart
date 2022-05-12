@@ -31,6 +31,7 @@ abstract class Routes {
   static const MAKE_MEALS = _Paths.MAKE_MEALS;
   static const SHIPPING_DETAILS = _Paths.SHIPPING_DETAILS;
   static const CHEER_FULL = _Paths.CHEER_FULL;
+  static const MY_ORDERS = _Paths.MY_ORDERS;
 }
 
 abstract class _Paths {
@@ -61,4 +62,5 @@ abstract class _Paths {
   static const MAKE_MEALS = '/make-meals';
   static const SHIPPING_DETAILS = '/shipping-details';
   static const CHEER_FULL = '/cheer-full';
+  static const MY_ORDERS = '/my-orders';
 }
