@@ -33,6 +33,7 @@ dependencies:
   path_provider: ^2.0.4
   permission_handler: ^8.1.6
   flutter_local_notifications: ^8.2.0
+  flutter_math_fork: ^0.4.2
 
 dev_dependencies:
   flutter_test:
