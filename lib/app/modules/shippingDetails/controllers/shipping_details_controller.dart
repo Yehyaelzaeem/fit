@@ -80,6 +80,14 @@ class ShippingDetailsController extends GetxController {
   void onClose() {}
 
   void submit() {
+    if (kDebugMode) {
+      latitude.value = '0';
+      longitude.value = '0';
+    }
+    if (latitude.value.toString().isEmpty) {
+      Get.snackbar('Error', 'Please select location', backgroundColor: Colors.red, colorText: Colors.white);
+      return;
+    }
     Get.toNamed(Routes.CART, arguments: meals, parameters: {
       'name': name.value,
       'email': email.value,

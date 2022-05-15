@@ -61,9 +61,12 @@ class CartView extends GetView<CartController> {
 
                   Row(
                     children: [
-                      Expanded(child: kButtonDefault("Delivery", func: () {})),
                       Expanded(
-                          child: kButtonDefault("Pick up ", color: Color(0xffF1F1F1), textColor: kColorPrimary, border: Border.all(color: Color(0xffF1F1F1), width: 1), func: () {
+                          child: kButtonDefault("Delivery", func: () {
+                        controller.createOrder("delivery");
+                      })),
+                      Expanded(
+                          child: kButtonDefault("Pick up ", func: () {
                         Get.dialog(Dialog(
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 16),
@@ -163,8 +166,8 @@ class CartView extends GetView<CartController> {
                                   ),
                                   SizedBox(height: 12),
                                   kButtonDefault("Submit",
-                                      color: Color(0xffF1F1F1),
-                                      textColor: Colors.black,
+                                      color: kColorPrimary,
+                                      textColor: Colors.white,
                                       border: Border.all(
                                         color: Color(0xffF1F1F1),
                                         width: 1,
@@ -260,7 +263,7 @@ class CartView extends GetView<CartController> {
       child: Row(
         children: [
           SizedBox(width: 12),
-          Expanded(child: kTextbody("$title $id", color: kColorPrimary, align: TextAlign.start, bold: true)),
+          Expanded(child: kTextbody("$title", color: kColorPrimary, align: TextAlign.start, bold: true)),
           kTextbody(price, color: Colors.black, paddingV: 12),
           SizedBox(width: 4),
           GestureDetector(

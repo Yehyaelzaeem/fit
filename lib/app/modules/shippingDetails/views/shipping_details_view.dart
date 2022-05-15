@@ -245,12 +245,13 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                     margin: EdgeInsets.symmetric(horizontal: 8),
                                     width: Get.width,
                                     height: 50,
-                                    child: Row(
-                                      children: [
-                                        kTextbody(
-                                          "${controller.latitude.value}, ${controller.longitude.value}",
-                                        ),
-                                      ],
+                                    child: FittedBox(
+                                      child: Row(
+                                        children: [
+                                          if (controller.textController.text.isEmpty && controller.latitude.value.isNotEmpty) kTextbody("${controller.latitude.value}, ${controller.longitude.value}"),
+                                          if (controller.textController.text.isNotEmpty) kTextbody("${controller.textController.text}"),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -304,7 +305,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
         children: [
           Center(
             child: Image.asset(
-              kImgLogo,
+              kLogoChellFullRow,
               height: 80,
             ),
           ),
