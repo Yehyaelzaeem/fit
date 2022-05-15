@@ -192,21 +192,28 @@ class MyMealsView extends GetView<MyMealsController> {
                   });
                 });
               }),
+          SizedBox(width: 8),
           Expanded(child: kTextbody("${meal.name}", color: kColorPrimary, align: TextAlign.start, bold: true)),
           kTextbody("${meal.price} L.E", color: Colors.black),
+          SizedBox(width: 12),
           GestureDetector(
             onTap: () async {
               dynamic val = await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
               if (val != null) controller.getNetworkData();
             },
             child: Container(
-                padding: EdgeInsets.all(6),
-                margin: EdgeInsets.symmetric(horizontal: 6),
+                padding: EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(color: Colors.black, width: 1),
+                ),
+                margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                 child: Icon(
                   Icons.edit,
                   size: 18,
                 )),
           ),
+          SizedBox(width: 8),
         ],
       ),
     );

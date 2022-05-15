@@ -36,11 +36,14 @@ class MakeMealsController extends GetxController {
     try {
       if (globalController.response.value.data == null) globalController.response.value = await ApiProvider().getMealFoodList();
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Protien").isNotEmpty) protein.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Protien").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Protien").isNotEmpty)
+        protein.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Protien").food;
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Carb").isNotEmpty) carb.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Carb").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Carb").isNotEmpty)
+        carb.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Carb").food;
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Fats").isNotEmpty) fat.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Fats").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Fats").isNotEmpty)
+        fat.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Fats").food;
 
       if (Get.arguments != null) meal = Get.arguments;
       if (meal != null) {
@@ -119,12 +122,14 @@ class MakeMealsController extends GetxController {
           name: mealName.value,
           amountsId: amountIds,
           foodIds: foodIds,
+          note: note.value,
         );
       } else
         await ApiProvider().createNewMeal(
           name: mealName.value,
           amountsId: amountIds,
           foodIds: foodIds,
+          note: note.value,
         );
 
       Get.back(result: true);

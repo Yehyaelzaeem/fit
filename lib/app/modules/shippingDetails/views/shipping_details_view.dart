@@ -1,3 +1,4 @@
+import 'package:app/app/modules/shippingDetails/views/pick_map.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
@@ -231,18 +232,26 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                     kTextbody('Location', size: 18, bold: true),
                                   ],
                                 ),
-                                Container(
-                                  color: Color(0xffeeeeee),
-                                  margin: EdgeInsets.symmetric(horizontal: 8),
-                                  child: EditText(
-                                    value: '',
-                                    hint: '',
-                                    radius: 4,
-                                    noBorder: true,
-                                    background: Color(0xffeeeeee),
-                                    updateFunc: (text) {},
-                                    validateFunc: (text) {},
-                                    type: TextInputType.text,
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (controller.mapLoading.value == true) return;
+                                    controller.mapLoading.value = true;
+                                    await controller.requestPermission();
+                                    Get.dialog(PickMap());
+                                    controller.mapLoading.value = false;
+                                  },
+                                  child: Container(
+                                    color: Color(0xffeeeeee),
+                                    margin: EdgeInsets.symmetric(horizontal: 8),
+                                    width: Get.width,
+                                    height: 50,
+                                    child: Row(
+                                      children: [
+                                        kTextbody(
+                                          "${controller.latitude.value}, ${controller.longitude.value}",
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 SizedBox(height: 8),

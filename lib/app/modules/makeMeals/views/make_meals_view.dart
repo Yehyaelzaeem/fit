@@ -646,7 +646,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
 
   Widget header(String title, Widget action) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 0),
       color: Color(0xFF414042),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

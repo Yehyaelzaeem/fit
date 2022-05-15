@@ -1,4 +1,3 @@
-import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -62,12 +61,9 @@ class CartView extends GetView<CartController> {
 
                   Row(
                     children: [
+                      Expanded(child: kButtonDefault("Delivery", func: () {})),
                       Expanded(
-                          child: kButtonDefault("Delivery", func: () {
-                        Get.toNamed(Routes.CART);
-                      })),
-                      Expanded(
-                          child: kButtonDefault("Pick up ", color: Color(0xffF1F1F1), textColor: Colors.black, border: Border.all(color: Color(0xffF1F1F1), width: 1), func: () {
+                          child: kButtonDefault("Pick up ", color: Color(0xffF1F1F1), textColor: kColorPrimary, border: Border.all(color: Color(0xffF1F1F1), width: 1), func: () {
                         Get.dialog(Dialog(
                           child: Container(
                             padding: EdgeInsets.symmetric(vertical: 16),
@@ -263,8 +259,10 @@ class CartView extends GetView<CartController> {
       margin: EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
+          SizedBox(width: 12),
           Expanded(child: kTextbody("$title $id", color: kColorPrimary, align: TextAlign.start, bold: true)),
           kTextbody(price, color: Colors.black, paddingV: 12),
+          SizedBox(width: 4),
           GestureDetector(
             onTap: () {
               controller.deleteMeal(id);
@@ -278,6 +276,7 @@ class CartView extends GetView<CartController> {
                   color: Colors.red,
                 )),
           ),
+          SizedBox(width: 4),
         ],
       ),
     );

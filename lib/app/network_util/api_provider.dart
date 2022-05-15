@@ -252,7 +252,16 @@ class ApiProvider {
     String? password_confirmation,
     String? gender,
   }) async {
-    FormData body = FormData.fromMap({"image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'), "name": name, "gender": gender, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
+    FormData body = FormData.fromMap({
+      "image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'),
+      "name": name,
+      "gender": gender,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": password_confirmation
+    });
     Response response = await _utils.post("update_profile", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -271,8 +280,20 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendOrintaionData({String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
-    FormData body = FormData.fromMap({"first_name": first_name, "middle_name": middle_name, "last_name": last_name, "mobile": mobile, "age": age, "target": target, "country": country, "hear_from": hear_from, "package": package, "whatsapp": whats});
+  Future<GeneralResponse> sendOrintaionData(
+      {String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
+    FormData body = FormData.fromMap({
+      "first_name": first_name,
+      "middle_name": middle_name,
+      "last_name": last_name,
+      "mobile": mobile,
+      "age": age,
+      "target": target,
+      "country": country,
+      "hear_from": hear_from,
+      "package": package,
+      "whatsapp": whats
+    });
     Response response = await _utils.post(
       "orientation_registeration/$id",
       body: body,
@@ -364,11 +385,13 @@ class ApiProvider {
     required String name,
     required String foodIds,
     required String amountsId,
+    required String note,
   }) async {
     FormData body = FormData.fromMap({
       "name": name,
       "food": foodIds,
       "amount": amountsId,
+      "note": note,
     });
     Response response = await _utils.post("new_meal", body: body);
     if (response.statusCode == 200) {
@@ -383,11 +406,13 @@ class ApiProvider {
     required String name,
     required String foodIds,
     required String amountsId,
+    required String note,
   }) async {
     FormData body = FormData.fromMap({
       "name": name,
       "food": foodIds,
       "amount": amountsId,
+      "note": note,
     });
     Response response = await _utils.post("update_meal/$id", body: body);
     if (response.statusCode == 200) {

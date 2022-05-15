@@ -157,14 +157,7 @@ class HomeDrawer extends GetView<HomeController> {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
 
-            //Contact
-            singleDrawerItem(
-                title: Strings().contactUs,
-                image: 'assets/img/ic_menu_contact.png',
-                action: () {
-                  Get.toNamed(Routes.CONTACT_US);
-                }),
-            //About
+            //CHEER_FULL
             singleDrawerItem(
                 title: "Cheer-Full",
                 image: 'assets/img/ic_meals.png',
@@ -177,6 +170,13 @@ class HomeDrawer extends GetView<HomeController> {
                 image: 'assets/img/ic_orders.png',
                 action: () {
                   Get.toNamed(Routes.ORDERS);
+                }),
+            //Contact
+            singleDrawerItem(
+                title: Strings().contactUs,
+                image: 'assets/img/ic_menu_contact.png',
+                action: () {
+                  Get.toNamed(Routes.CONTACT_US);
                 }),
             //About
             singleDrawerItem(

@@ -34,6 +34,9 @@ dependencies:
   permission_handler: ^8.1.6
   flutter_local_notifications: ^8.2.0
   flutter_math_fork: ^0.4.2
+  google_maps_flutter: ^2.0.0
+  map_picker: ^0.0.3
+  geolocator: ^7.0.0
 
 dev_dependencies:
   flutter_test:

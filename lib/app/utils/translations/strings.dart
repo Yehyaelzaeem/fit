@@ -5,6 +5,7 @@ class Strings {
   /*                                  Defaults                                  */
   /* -------------------------------------------------------------------------- */
   String appName = 'name'.tr;
+  String pickLocation = 'pickLocation'.tr;
   String walkThroughTitle1 = 'walkThroughTitle1'.tr;
   String walkThroughTitle2 = 'walkThroughTitle2'.tr;
   String walkThroughTitle3 = 'walkThroughTitle3'.tr;
@@ -168,26 +169,6 @@ class Strings {
   String blog = 'blog'.tr;
 
   String longText = 'longText'.tr;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //App Strings
 

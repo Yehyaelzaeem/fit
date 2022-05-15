@@ -64,7 +64,7 @@ class Completed {
         status: json["status"] == null ? null : json["status"],
         deliveryMethod: json["delivery_method"] == null ? null : json["delivery_method"],
         userInfo: json["user_info"] == null ? null : UserInfo.fromJson(json["user_info"]),
-        note: json["note"] == null ? null : json["note"],
+        note: json["note"] == null ? '' : json["note"],
         meals: json["meals"] == null ? [] : List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x))),
       );
 }

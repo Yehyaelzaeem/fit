@@ -137,10 +137,7 @@ class CheerFullView extends GetView<CheerFullController> {
       child: Stack(
         children: [
           Center(
-            child: Image.asset(
-              kLogoChellFullRow,
-              height: 44,
-            ),
+            child: Image.asset(kLogoChellFullRow, height: 44),
           ),
           GestureDetector(
             onTap: () {

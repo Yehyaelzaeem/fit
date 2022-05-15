@@ -42,11 +42,11 @@ android {
 
     defaultConfig {
         applicationId "com.fofclinic"
-        minSdkVersion 19
+        minSdkVersion 20
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        // multiDexEnabled true
+        multiDexEnabled true
     }
 
         signingConfigs {

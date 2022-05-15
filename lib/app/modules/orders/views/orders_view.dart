@@ -48,81 +48,76 @@ class OrdersView extends GetView<OrdersController> {
       SizedBox(height: 12),
       PageLable(name: "My Orders"),
       SizedBox(height: 12),
-
-      //* phone
       Obx(() {
         if (controller.loading.value) return Center(child: CircularLoadingWidget());
         if (controller.requiredAuth.value) return IncompleteData();
-
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFF414042),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0xFF414042),
-                      blurRadius: 5,
-                      spreadRadius: 1,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(200),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          controller.selectedTap.value = 1;
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
-                            borderRadius: BorderRadius.circular(200),
-                          ),
-                          child: kTextbody(
-                            "Completed",
-                            paddingV: 8,
-                            color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          controller.selectedTap.value = 2;
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: controller.selectedTap.value == 2 ? Colors.white : Color(0xFF414042),
-                            borderRadius: BorderRadius.circular(200),
-                          ),
-                          child: kTextbody(
-                            "Pennding",
-                            paddingV: 8,
-                            color: controller.selectedTap.value == 2 ? kColorPrimary : Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+        return Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF414042),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xFF414042),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(200),
               ),
-              if (controller.response.value.data != null)
-                if (controller.selectedTap.value == 1)
-                  ...controller.response.value.data!.completed.map((e) {
-                    return singleOrderCard(e);
-                  }).toList(),
-              if (controller.response.value.data != null)
-                if (controller.selectedTap.value == 2)
-                  ...controller.response.value.data!.pending.map((e) {
-                    return singleOrderCard(e);
-                  }).toList(),
-            ],
-          ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.selectedTap.value = 1;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
+                          borderRadius: BorderRadius.circular(200),
+                        ),
+                        child: kTextbody(
+                          "Completed",
+                          paddingV: 8,
+                          color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.selectedTap.value = 2;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: controller.selectedTap.value == 2 ? Colors.white : Color(0xFF414042),
+                          borderRadius: BorderRadius.circular(200),
+                        ),
+                        child: kTextbody(
+                          "Pennding",
+                          paddingV: 8,
+                          color: controller.selectedTap.value == 2 ? kColorPrimary : Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (controller.response.value.data != null)
+              if (controller.selectedTap.value == 1)
+                ...controller.response.value.data!.completed.map((e) {
+                  return singleOrderCard(e);
+                }).toList(),
+            if (controller.response.value.data != null)
+              if (controller.selectedTap.value == 2)
+                ...controller.response.value.data!.pending.map((e) {
+                  return singleOrderCard(e);
+                }).toList(),
+          ],
         );
       }),
       SizedBox(height: Get.width / 14),
@@ -163,12 +158,34 @@ class OrdersView extends GetView<OrdersController> {
             children: [
               SizedBox(width: 20),
               Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: kColorPrimary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: kTextbody("Location", color: Colors.white, paddingV: 8)),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.dialog(
+                      Dialog(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 12),
+                              kTextbody("Delivery method : ${e.deliveryMethod}", color: Colors.black, bold: true, align: TextAlign.start),
+                              kTextbody(e.userInfo == null ? '' : "${e.userInfo!.address}", color: Colors.black, bold: true),
+                              SizedBox(height: 12),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: kColorPrimary,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: kTextbody("Location", color: Colors.white, paddingV: 8)),
+                ),
               ),
               SizedBox(width: 10),
               Expanded(
