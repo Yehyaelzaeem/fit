@@ -263,25 +263,6 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                       ),
                     ),
 
-                    //* Subhect
-                    Container(
-                      width: double.infinity,
-                      child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
-                    ),
-                    SizedBox(height: 6),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 12),
-                      child: EditText(
-                        value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
-                        hintColor: Color(0xff8D8D8D),
-                        enable: false,
-                        background: Color(0xffF1F1F1),
-                        updateFunc: (value) {},
-                        noBorder: true,
-                        radius: 4,
-                        lines: 3,
-                      ),
-                    ),
                     SizedBox(height: 8),
                     Container(
                       width: double.infinity,

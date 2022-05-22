@@ -82,7 +82,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                           ...controller.proteinSelected.map((e) {
                             return body([
                               Expanded(
-                                flex: 2,
+                                flex: 3,
                                 child: GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
@@ -594,7 +594,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
 
   Widget item({required String title, bool showDropDownArrow = false}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
+      margin: EdgeInsets.symmetric(horizontal: 2),
       padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),

@@ -3,6 +3,7 @@ import 'package:app/app/modules/orders/controllers/orders_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
+import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:app/un_coplete_session.dart';
@@ -140,6 +141,26 @@ class OrdersView extends GetView<OrdersController> {
                   ],
                 );
               }),
+              //* Subhect
+              SizedBox(height: Get.width / 14),
+              Container(
+                width: double.infinity,
+                child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+              ),
+              SizedBox(height: 6),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                child: EditText(
+                  value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
+                  hintColor: Color(0xff8D8D8D),
+                  enable: false,
+                  background: Color(0xffF1F1F1),
+                  updateFunc: (value) {},
+                  noBorder: true,
+                  radius: 4,
+                  lines: 3,
+                ),
+              ),
               SizedBox(height: Get.width / 14),
             ])),
       ),
