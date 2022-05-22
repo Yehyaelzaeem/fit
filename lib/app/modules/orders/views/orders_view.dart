@@ -12,7 +12,18 @@ import 'package:get/get.dart';
 class OrdersView extends GetView<OrdersController> {
   Widget appBar() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: MediaQuery.of(Get.context!).size.width,
+      height: 65,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.4),
+          blurRadius: 2,
+          spreadRadius: 2,
+          offset: Offset(0, 0),
+        ),
+      ]),
       child: Stack(
         children: [
           Center(
@@ -21,20 +32,25 @@ class OrdersView extends GetView<OrdersController> {
               height: 44,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 26,
-                color: Colors.black87,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 26,
+                  color: Colors.black87,
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -42,86 +58,92 @@ class OrdersView extends GetView<OrdersController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: ListView(children: [
-      appBar(),
-      SizedBox(height: 12),
-      PageLable(name: "My Orders"),
-      SizedBox(height: 12),
-      Obx(() {
-        if (controller.loading.value) return Center(child: CircularLoadingWidget());
-        if (controller.requiredAuth.value) return IncompleteData();
-        return Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Color(0xFF414042),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF414042),
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                    offset: Offset(0, 0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(200),
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        controller.selectedTap.value = 1;
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
-                          borderRadius: BorderRadius.circular(200),
-                        ),
-                        child: kTextbody(
-                          "Completed",
-                          paddingV: 8,
-                          color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
-                        ),
+    return Container(
+      color: kColorPrimary,
+      child: SafeArea(
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            body: ListView(children: [
+              appBar(),
+              SizedBox(height: 12),
+              PageLable(name: "My Orders"),
+              SizedBox(height: 12),
+              Obx(() {
+                if (controller.loading.value) return Center(child: CircularLoadingWidget());
+                if (controller.requiredAuth.value) return IncompleteData();
+                return Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF414042),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF414042),
+                            blurRadius: 5,
+                            spreadRadius: 1,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(200),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.selectedTap.value = 1;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
+                                  borderRadius: BorderRadius.circular(200),
+                                ),
+                                child: kTextbody(
+                                  "Completed",
+                                  paddingV: 8,
+                                  color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.selectedTap.value = 2;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: controller.selectedTap.value == 2 ? Colors.white : Color(0xFF414042),
+                                  borderRadius: BorderRadius.circular(200),
+                                ),
+                                child: kTextbody(
+                                  "Pending",
+                                  paddingV: 8,
+                                  color: controller.selectedTap.value == 2 ? kColorPrimary : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        controller.selectedTap.value = 2;
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: controller.selectedTap.value == 2 ? Colors.white : Color(0xFF414042),
-                          borderRadius: BorderRadius.circular(200),
-                        ),
-                        child: kTextbody(
-                          "Pennding",
-                          paddingV: 8,
-                          color: controller.selectedTap.value == 2 ? kColorPrimary : Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (controller.response.value.data != null)
-              if (controller.selectedTap.value == 1)
-                ...controller.response.value.data!.completed.map((e) {
-                  return singleOrderCard(e);
-                }).toList(),
-            if (controller.response.value.data != null)
-              if (controller.selectedTap.value == 2)
-                ...controller.response.value.data!.pending.map((e) {
-                  return singleOrderCard(e);
-                }).toList(),
-          ],
-        );
-      }),
-      SizedBox(height: Get.width / 14),
-    ]));
+                    if (controller.response.value.data != null)
+                      if (controller.selectedTap.value == 1)
+                        ...controller.response.value.data!.completed.map((e) {
+                          return singleOrderCard(e);
+                        }).toList(),
+                    if (controller.response.value.data != null)
+                      if (controller.selectedTap.value == 2)
+                        ...controller.response.value.data!.pending.map((e) {
+                          return singleOrderCard(e);
+                        }).toList(),
+                  ],
+                );
+              }),
+              SizedBox(height: Get.width / 14),
+            ])),
+      ),
+    );
   }
 
   Widget singleOrderCard(Completed e) {
@@ -148,7 +170,7 @@ class OrdersView extends GetView<OrdersController> {
               Column(
                 children: [
                   kTextbody("${e.price} L.E", color: kColorPrimary, bold: true),
-                  kTextbody("${e.deliveryMethod}", color: Colors.black, bold: true),
+                  kTextbody("${controller.getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
                 ],
               )
             ],

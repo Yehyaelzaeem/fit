@@ -99,7 +99,18 @@ class MyMealsView extends GetView<MyMealsController> {
 
   Widget appBar() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: MediaQuery.of(Get.context!).size.width,
+      height: 65,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.4),
+          blurRadius: 2,
+          spreadRadius: 2,
+          offset: Offset(0, 0),
+        ),
+      ]),
       child: Stack(
         children: [
           Center(
@@ -108,20 +119,25 @@ class MyMealsView extends GetView<MyMealsController> {
               height: 44,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 26,
-                color: Colors.black87,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 26,
+                  color: Colors.black87,
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

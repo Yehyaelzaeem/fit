@@ -4,6 +4,69 @@ import 'package:get_storage/get_storage.dart';
 class YemenyPrefs {
   final box = GetStorage();
 
+  /// **********    ShippingName     ****************/
+  setShippingName(String? val) {
+    box.write('ShippingName', val);
+  }
+
+  String? getShippingName() {
+    return box.read('ShippingName');
+  }
+
+  /// **********    ShippingEmail     ****************/
+  setShippingEmail(String? val) {
+    box.write('ShippingEmail', val);
+  }
+
+  String? getShippingEmail() {
+    return box.read('ShippingEmail');
+  }
+
+  /// **********    ShippingPhone     ****************/
+  setShippingPhone(String? val) {
+    box.write('ShippingPhone', val);
+  }
+
+  String? getShippingPhone() {
+    return box.read('ShippingPhone');
+  }
+
+  /// **********    ShippingAddress     ****************/
+  setShippingAddress(String? val) {
+    box.write('ShippingAddress', val);
+  }
+
+  String? getShippingAddress() {
+    return box.read('ShippingAddress');
+  }
+
+  /// **********    ShippingAddress     ****************/
+  setShippingLat(String? val) {
+    box.write('ShippingLat', val);
+  }
+
+  String? getShippingLat() {
+    return box.read('ShippingLat');
+  }
+
+  /// **********    ShippingAddress     ****************/
+  setShippingLng(String? val) {
+    box.write('ShippingLng', val);
+  }
+
+  String? getShippingLng() {
+    return box.read('ShippingLng');
+  }
+
+  /// **********    ShippingCoordinatesAddress     ****************/
+  setShippingCoordinatesAddress(String? val) {
+    box.write('ShippingCoordinatesAddress', val);
+  }
+
+  String? getShippingCoordinatesAddress() {
+    return box.read('ShippingCoordinatesAddress');
+  }
+
   /// **********    UserLang     ****************/
   setLanguage(String? language) {
     box.write('language', language);
@@ -121,7 +184,6 @@ class YemenyPrefs {
   String? getGender() {
     return box.read('gender');
   }
-
 
   /// **********   Plan ID     ****************/
   setPlanId(String? id) {

@@ -264,7 +264,25 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                     ),
 
                     //* Subhect
-
+                    Container(
+                      width: double.infinity,
+                      child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+                    ),
+                    SizedBox(height: 6),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 12),
+                      child: EditText(
+                        value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
+                        hintColor: Color(0xff8D8D8D),
+                        enable: false,
+                        background: Color(0xffF1F1F1),
+                        updateFunc: (value) {},
+                        noBorder: true,
+                        radius: 4,
+                        lines: 3,
+                      ),
+                    ),
+                    SizedBox(height: 8),
                     Container(
                       width: double.infinity,
                       child: Column(
@@ -300,7 +318,18 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
 
   Widget appBar() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: MediaQuery.of(Get.context!).size.width,
+      height: 65,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.4),
+          blurRadius: 2,
+          spreadRadius: 2,
+          offset: Offset(0, 0),
+        ),
+      ]),
       child: Stack(
         children: [
           Center(
@@ -309,20 +338,25 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
               height: 80,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 26,
-                color: Colors.black87,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 26,
+                  color: Colors.black87,
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

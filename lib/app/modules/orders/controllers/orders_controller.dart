@@ -36,4 +36,15 @@ class OrdersController extends GetxController {
     mealsName = mealsName.substring(0, mealsName.length - 2);
     return mealsName;
   }
+
+  getDelivertMethod(String deliveryMethod) {
+    switch (deliveryMethod) {
+      case 'delivery':
+        return 'Delivery';
+      case 'pick_up':
+        return 'Pick up';
+      default:
+        return deliveryMethod;
+    }
+  }
 }

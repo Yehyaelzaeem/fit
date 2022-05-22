@@ -6,7 +6,6 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -129,33 +128,14 @@ class CartView extends GetView<CartController> {
                                                   color: const Color(0xFF7FC902),
                                                 ),
                                               ),
-                                              child: SizedBox(
-                                                width: 307.0,
-                                                height: 36.0,
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Spacer(flex: 103),
-                                                    Align(
-                                                      alignment: Alignment(0.0, 0.1),
-                                                      child: SvgPicture.string(
-                                                        // Icon material-location-on
-                                                        '<svg viewBox="130.4 401.0 11.2 16.0" ><path transform="translate(122.9, 398.0)" d="M 13.10000038146973 3 C 10.00399971008301 3 7.5 5.504000186920166 7.5 8.600000381469727 C 7.5 12.80000019073486 13.10000038146973 19 13.10000038146973 19 C 13.10000038146973 19 18.70000076293945 12.80000019073486 18.70000076293945 8.600000381469727 C 18.70000076293945 5.504000186920166 16.19600105285645 3 13.10000038146973 3 Z M 13.10000038146973 10.60000038146973 C 11.99600028991699 10.60000038146973 11.10000038146973 9.703999519348145 11.10000038146973 8.600000381469727 C 11.10000038146973 7.49600076675415 11.99600028991699 6.600000381469727 13.10000038146973 6.600000381469727 C 14.20400047302246 6.600000381469727 15.10000038146973 7.49600076675415 15.10000038146973 8.600000381469727 C 15.10000038146973 9.703999519348145 14.20400047302246 10.60000038146973 13.10000038146973 10.60000038146973 Z" fill="#7fc902" stroke="none" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
-                                                        width: 11.2,
-                                                        height: 16.0,
-                                                      ),
-                                                    ),
-                                                    Spacer(flex: 10),
-                                                    Text(
-                                                      'Location',
-                                                      style: GoogleFonts.cairo(
-                                                        fontSize: 19.0,
-                                                        color: const Color(0xFF7FC902),
-                                                        fontWeight: FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    Spacer(flex: 112),
-                                                  ],
-                                                ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Icon(Icons.location_on, color: kColorPrimary),
+                                                  SizedBox(width: 4),
+                                                  kTextbody('Location', size: 18, color: kColorPrimary),
+                                                ],
                                               ),
                                             ),
                                           ),
@@ -221,7 +201,18 @@ class CartView extends GetView<CartController> {
 
   Widget appBar() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 6),
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: MediaQuery.of(Get.context!).size.width,
+      height: 65,
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.4),
+          blurRadius: 2,
+          spreadRadius: 2,
+          offset: Offset(0, 0),
+        ),
+      ]),
       child: Stack(
         children: [
           Center(
@@ -230,20 +221,25 @@ class CartView extends GetView<CartController> {
               height: 44,
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 26,
-                color: Colors.black87,
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 26,
+                  color: Colors.black87,
+                ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

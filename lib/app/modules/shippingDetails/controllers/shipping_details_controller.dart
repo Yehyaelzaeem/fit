@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/globale_controller.dart';
@@ -42,6 +43,15 @@ class ShippingDetailsController extends GetxController {
       email.value = 'email@email.com';
       phone.value = 'phome';
     }
+
+    YemenyPrefs yemenyPrefs = YemenyPrefs();
+    name.value = yemenyPrefs.getShippingName() ?? '';
+    email.value = yemenyPrefs.getShippingEmail() ?? '';
+    phone.value = yemenyPrefs.getShippingPhone() ?? '';
+    detailedAddress.value = yemenyPrefs.getShippingAddress() ?? '';
+    latitude.value = yemenyPrefs.getShippingLat() ?? '';
+    longitude.value = yemenyPrefs.getShippingLng() ?? '';
+    textController = TextEditingController(text: yemenyPrefs.getShippingCoordinatesAddress());
 
     super.onInit();
   }
@@ -88,6 +98,15 @@ class ShippingDetailsController extends GetxController {
       Get.snackbar('Error', 'Please select location', backgroundColor: Colors.red, colorText: Colors.white);
       return;
     }
+    YemenyPrefs yemenyPrefs = YemenyPrefs();
+    yemenyPrefs.setShippingName(name.value);
+    yemenyPrefs.setShippingEmail(email.value);
+    yemenyPrefs.setShippingPhone(phone.value);
+    yemenyPrefs.setShippingAddress(detailedAddress.value);
+    yemenyPrefs.setShippingLat(latitude.value.toString());
+    yemenyPrefs.setShippingLng(longitude.value.toString());
+    yemenyPrefs.setShippingCoordinatesAddress(textController.text);
+
     Get.toNamed(Routes.CART, arguments: meals, parameters: {
       'name': name.value,
       'email': email.value,
