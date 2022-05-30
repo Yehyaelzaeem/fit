@@ -73,16 +73,16 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               )),
                           SizedBox(height: 12),
                           body([
-                            Expanded(flex: 2, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 1, child: kTextbody("", color: kColorPrimary)),
+                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
                           ], color: Color(0xFFE5E5E5)),
                           ...controller.proteinSelected.map((e) {
                             return body([
                               Expanded(
-                                flex: 3,
+                                flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
@@ -133,7 +133,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 ),
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
                                     if (controller.protein.where((element) => element.id == e.id).isEmpty) return;
@@ -184,10 +184,10 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   ),
                                 ),
                               ),
-                              Expanded(flex: 2, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 2, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
                               Expanded(
-                                  flex: 1,
+                                  flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
                                       controller.proteinSelected.remove(e);
@@ -224,16 +224,16 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               )),
                           SizedBox(height: 12),
                           body([
-                            Expanded(flex: 2, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 1, child: kTextbody("", color: kColorPrimary)),
+                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
                           ], color: Color(0xFFE5E5E5)),
                           ...controller.carbSelected.map((e) {
                             return body([
                               Expanded(
-                                flex: 2,
+                                flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
@@ -284,7 +284,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 ),
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
@@ -335,10 +335,10 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   ),
                                 ),
                               ),
-                              Expanded(flex: 2, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 2, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
                               Expanded(
-                                  flex: 1,
+                                  flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
                                       controller.carbSelected.remove(e);
@@ -375,16 +375,16 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               )),
                           SizedBox(height: 12),
                           body([
-                            Expanded(flex: 2, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 1, child: kTextbody("", color: kColorPrimary)),
+                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
                           ], color: Color(0xFFE5E5E5)),
                           ...controller.fatSelected.map((e) {
                             return body([
                               Expanded(
-                                flex: 2,
+                                flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
                                     Get.dialog(Dialog(
@@ -435,7 +435,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 ),
                               ),
                               Expanded(
-                                flex: 2,
+                                flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
@@ -486,10 +486,10 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   ),
                                 ),
                               ),
-                              Expanded(flex: 2, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 2, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
                               Expanded(
-                                  flex: 1,
+                                  flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
                                       controller.fatSelected.remove(e);
@@ -603,7 +603,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
       ),
       child: Row(
         children: [
-          Expanded(child: kTextbody('$title', size: 12, maxLines: 1)),
+          Expanded(child: Container(height: 18, child: FittedBox(child: kTextbody('$title', size: 10, maxLines: 1)))),
           if (showDropDownArrow)
             Icon(
               Icons.keyboard_arrow_down,
