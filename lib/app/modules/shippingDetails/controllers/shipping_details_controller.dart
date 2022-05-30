@@ -35,23 +35,15 @@ class ShippingDetailsController extends GetxController {
 
   @override
   void onInit() async {
+    name.value = Get.parameters['name'] ?? '';
+    email.value = Get.parameters['email'] ?? '';
+    phone.value = Get.parameters['phone'] ?? '';
+    detailedAddress.value = Get.parameters['detailedAddress'] ?? '';
+    latitude.value = Get.parameters['latitude'] ?? '';
+    longitude.value = Get.parameters['longitude'] ?? '';
+    String address = Get.parameters['address'] ?? '';
+    textController = TextEditingController(text: address);
     meals = Get.arguments;
-
-    if (kDebugMode) {
-      detailedAddress.value = 'address';
-      name.value = 'name';
-      email.value = 'email@email.com';
-      phone.value = 'phome';
-    }
-
-    YemenyPrefs yemenyPrefs = YemenyPrefs();
-    name.value = yemenyPrefs.getShippingName() ?? '';
-    email.value = yemenyPrefs.getShippingEmail() ?? '';
-    phone.value = yemenyPrefs.getShippingPhone() ?? '';
-    detailedAddress.value = yemenyPrefs.getShippingAddress() ?? '';
-    latitude.value = yemenyPrefs.getShippingLat() ?? '';
-    longitude.value = yemenyPrefs.getShippingLng() ?? '';
-    textController = TextEditingController(text: yemenyPrefs.getShippingCoordinatesAddress());
 
     super.onInit();
   }

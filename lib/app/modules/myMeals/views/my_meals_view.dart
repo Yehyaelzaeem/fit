@@ -1,3 +1,4 @@
+import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/modules/myMeals/controllers/my_meals_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -72,7 +73,18 @@ class MyMealsView extends GetView<MyMealsController> {
                               );
                               return;
                             }
-                            Get.toNamed(Routes.SHIPPING_DETAILS, arguments: meals);
+
+                            YemenyPrefs yemenyPrefs = YemenyPrefs();
+
+                            Get.toNamed(Routes.SHIPPING_DETAILS, arguments: meals, parameters: {
+                              "name": yemenyPrefs.getShippingName() ?? '',
+                              "email": yemenyPrefs.getShippingEmail() ?? '',
+                              "phone": yemenyPrefs.getShippingPhone() ?? '',
+                              "detailedAddress": yemenyPrefs.getShippingAddress() ?? '',
+                              "latitude": yemenyPrefs.getShippingLat() ?? '',
+                              "longitude": yemenyPrefs.getShippingLng() ?? '',
+                              "address": yemenyPrefs.getShippingCoordinatesAddress() ?? '',
+                            });
                           },
                         ),
                       ),
@@ -116,7 +128,7 @@ class MyMealsView extends GetView<MyMealsController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 44,
+              height: 60,
             ),
           ),
           Positioned(
@@ -128,11 +140,10 @@ class MyMealsView extends GetView<MyMealsController> {
                 Get.back();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  size: 26,
+                  size: 30,
                   color: Colors.black87,
                 ),
               ),

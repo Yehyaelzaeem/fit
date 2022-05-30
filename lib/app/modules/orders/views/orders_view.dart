@@ -1,6 +1,7 @@
 import 'package:app/app/models/my_orders_response.dart';
 import 'package:app/app/modules/orders/controllers/orders_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/helper/methods.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
@@ -30,7 +31,7 @@ class OrdersView extends GetView<OrdersController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 44,
+              height: 60,
             ),
           ),
           Positioned(
@@ -42,11 +43,10 @@ class OrdersView extends GetView<OrdersController> {
                 Get.back();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  size: 26,
+                  size: 30,
                   color: Colors.black87,
                 ),
               ),
@@ -143,25 +143,6 @@ class OrdersView extends GetView<OrdersController> {
               }),
               //* Subhect
               SizedBox(height: Get.width / 14),
-              Container(
-                width: double.infinity,
-                child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
-              ),
-              SizedBox(height: 6),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
-                child: EditText(
-                  value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
-                  hintColor: Color(0xff8D8D8D),
-                  enable: false,
-                  background: Color(0xffF1F1F1),
-                  updateFunc: (value) {},
-                  noBorder: true,
-                  radius: 4,
-                  lines: 3,
-                ),
-              ),
-              SizedBox(height: Get.width / 14),
             ])),
       ),
     );
@@ -191,7 +172,7 @@ class OrdersView extends GetView<OrdersController> {
               Column(
                 children: [
                   kTextbody("${e.price} L.E", color: kColorPrimary, bold: true),
-                  kTextbody("${controller.getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
+                  kTextbody("${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
                 ],
               )
             ],
@@ -213,7 +194,7 @@ class OrdersView extends GetView<OrdersController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 12),
-                              kTextbody("Delivery method : ${e.deliveryMethod}", color: Colors.black, bold: true, align: TextAlign.start),
+                              kTextbody("Delivery method : ${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true, align: TextAlign.start),
                               kTextbody(e.userInfo == null ? '' : "${e.userInfo!.address}", color: Colors.black, bold: true),
                               SizedBox(height: 12),
                             ],
@@ -245,6 +226,25 @@ class OrdersView extends GetView<OrdersController> {
                                 trailing: kTextbody("${element.price} L.E", color: Colors.black, bold: true),
                               );
                             }).toList(),
+                            Container(
+                              width: double.infinity,
+                              child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+                            ),
+                            SizedBox(height: 6),
+                            Container(
+                              margin: EdgeInsets.symmetric(horizontal: 12),
+                              child: EditText(
+                                value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
+                                hintColor: Color(0xff8D8D8D),
+                                enable: false,
+                                background: Color(0xffF1F1F1),
+                                updateFunc: (value) {},
+                                noBorder: true,
+                                radius: 4,
+                                lines: 3,
+                              ),
+                            ),
+                            SizedBox(height: 12),
                           ],
                         ),
                       ),

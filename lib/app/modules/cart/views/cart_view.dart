@@ -62,7 +62,67 @@ class CartView extends GetView<CartController> {
                     children: [
                       Expanded(
                           child: kButtonDefault("Delivery", func: () {
-                        controller.createOrder("delivery");
+                        Get.dialog(Dialog(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    color: Color(0xFF414042),
+                                    child: Center(
+                                      child: kTextHeader("Delivery", color: Colors.white, size: 30),
+                                    ),
+                                  ),
+                                  SizedBox(height: 12),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      initialValue: '',
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(4),
+                                            borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                          ),
+                                          disabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(4),
+                                            borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(4),
+                                            borderSide: BorderSide(color: kColorPrimary, width: 2),
+                                          ),
+                                          errorStyle: TextStyle(fontSize: 10),
+                                          labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
+                                          hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
+                                          hintText: '',
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
+                                      keyboardType: TextInputType.text,
+                                      validator: (text) {},
+                                      maxLines: 4,
+                                      onChanged: (newValue) {},
+                                      onFieldSubmitted: (newValue) {},
+                                      onSaved: (newValue) {},
+                                    ),
+                                  ),
+                                  SizedBox(height: 12),
+                                  kButtonDefault("Submit",
+                                      color: kColorPrimary,
+                                      textColor: Colors.white,
+                                      border: Border.all(
+                                        color: Color(0xffF1F1F1),
+                                        width: 1,
+                                      ), func: () {
+                                    Get.back();
+                                    controller.createOrder("delivery");
+                                  }),
+                                  SizedBox(height: 12),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ));
                       })),
                       Expanded(
                           child: kButtonDefault("Pick up ", func: () {
@@ -218,7 +278,7 @@ class CartView extends GetView<CartController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 44,
+              height: 60,
             ),
           ),
           Positioned(
@@ -230,11 +290,10 @@ class CartView extends GetView<CartController> {
                 Get.back();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  size: 26,
+                  size: 30,
                   color: Colors.black87,
                 ),
               ),

@@ -68,6 +68,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   child: Icon(
                                     Icons.add_box,
                                     color: kColorPrimary,
+                                    size: 30,
                                   ),
                                 ),
                               )),
@@ -96,7 +97,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quality",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.protein.length > 0) SizedBox(height: 12),
                                               ...controller.protein.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -150,7 +151,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quantity",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.protein.length < 1) SizedBox(height: 12),
                                               ...controller.protein.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -219,6 +220,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   child: Icon(
                                     Icons.add_box,
                                     color: kColorPrimary,
+                                    size: 30,
                                   ),
                                 ),
                               )),
@@ -247,7 +249,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quality",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.carb.length > 0) SizedBox(height: 12),
                                               ...controller.carb.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -301,7 +303,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quantity",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.carb.length < 1) SizedBox(height: 12),
                                               ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -370,6 +372,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   child: Icon(
                                     Icons.add_box,
                                     color: kColorPrimary,
+                                    size: 30,
                                   ),
                                 ),
                               )),
@@ -398,7 +401,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quality",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.fat.length > 0) SizedBox(height: 12),
                                               ...controller.fat.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -452,7 +455,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 "Select Quantity",
                                                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                               ),
-                                              SizedBox(height: 12),
+                                              if (controller.carb.length < 1) SizedBox(height: 12),
                                               ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
@@ -603,7 +606,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
       ),
       child: Row(
         children: [
-          Expanded(child: Container(height: 18, child: FittedBox(child: kTextbody('$title', size: 10, maxLines: 1)))),
+          Expanded(child: Container(child: kTextbody('$title', size: 12, maxLines: 3))),
           if (showDropDownArrow)
             Icon(
               Icons.keyboard_arrow_down,
@@ -633,7 +636,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 44,
+              height: 60,
             ),
           ),
           Positioned(
@@ -645,11 +648,10 @@ class MakeMealsView extends GetView<MakeMealsController> {
                 Get.back();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 12),
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 child: Icon(
                   Icons.arrow_back_ios,
-                  size: 26,
+                  size: 30,
                   color: Colors.black87,
                 ),
               ),

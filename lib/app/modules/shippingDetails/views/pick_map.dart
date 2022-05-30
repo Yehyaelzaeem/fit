@@ -95,7 +95,7 @@ class PickMap extends GetView<ShippingDetailsController> {
             child: SizedBox(
               child: TextButton(
                 child: Text(
-                  "Pick Locations",
+                  "Choose Location",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
