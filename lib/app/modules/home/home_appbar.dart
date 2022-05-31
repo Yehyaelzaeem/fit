@@ -96,7 +96,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
             ),
             Image.asset(
               kLogoRow,
-              height: 60,
+              height: 44,
             ),
             Row(
               children: [
