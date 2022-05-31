@@ -636,7 +636,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 60,
+              height: 44,
             ),
           ),
           Positioned(

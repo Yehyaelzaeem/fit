@@ -31,7 +31,7 @@ class OrdersView extends GetView<OrdersController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 60,
+              height: 44,
             ),
           ),
           Positioned(

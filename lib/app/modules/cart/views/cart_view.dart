@@ -278,7 +278,7 @@ class CartView extends GetView<CartController> {
           Center(
             child: Image.asset(
               kLogoChellFullRow,
-              height: 60,
+              height: 44,
             ),
           ),
           Positioned(
