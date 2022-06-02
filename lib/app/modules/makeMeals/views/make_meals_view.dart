@@ -606,7 +606,14 @@ class MakeMealsView extends GetView<MakeMealsController> {
       ),
       child: Row(
         children: [
-          Expanded(child: Container(child: kTextbody('$title', size: 12, maxLines: 3))),
+          Expanded(
+              child: Container(
+                  child: kTextbody(
+            '$title',
+            size: 12,
+            maxLines: 5,
+            paddingH: 1,
+          ))),
           if (showDropDownArrow)
             Icon(
               Icons.keyboard_arrow_down,

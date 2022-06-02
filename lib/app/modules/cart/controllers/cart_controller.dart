@@ -1,7 +1,9 @@
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/translations/strings.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
@@ -78,6 +80,24 @@ class CartController extends GetxController {
       Get.back();
       Get.back();
       Get.back();
+
+      Get.dialog(
+        Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(height: 12),
+                kTextbody("Thank you for ordering from Cheer-Full Have a cheerful day", color: Colors.black, bold: true, align: TextAlign.center),
+                SizedBox(height: 12),
+              ],
+            ),
+          ),
+        ),
+      );
     } catch (e) {
       Get.snackbar(Strings().notification, '$e');
     }

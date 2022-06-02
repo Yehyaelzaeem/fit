@@ -79,7 +79,8 @@ class CartView extends GetView<CartController> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
-                                      initialValue: '',
+                                      initialValue: 'you will get your order within two days',
+                                      enabled: false,
                                       decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(4),

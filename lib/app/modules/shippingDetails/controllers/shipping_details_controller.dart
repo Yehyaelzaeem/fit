@@ -39,10 +39,10 @@ class ShippingDetailsController extends GetxController {
     email.value = Get.parameters['email'] ?? '';
     phone.value = Get.parameters['phone'] ?? '';
     detailedAddress.value = Get.parameters['detailedAddress'] ?? '';
-    latitude.value = Get.parameters['latitude'] ?? '';
-    longitude.value = Get.parameters['longitude'] ?? '';
-    String address = Get.parameters['address'] ?? '';
-    textController = TextEditingController(text: address);
+    // latitude.value = Get.parameters['latitude'] ?? '';
+    // longitude.value = Get.parameters['longitude'] ?? '';
+    // String address = Get.parameters['address'] ?? '';
+    // textController = TextEditingController(text: address);
     meals = Get.arguments;
 
     super.onInit();
