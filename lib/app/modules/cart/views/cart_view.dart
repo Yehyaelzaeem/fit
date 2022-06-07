@@ -2,7 +2,6 @@ import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
-import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
@@ -38,24 +37,25 @@ class CartView extends GetView<CartController> {
                   header2("Total Price", Container(margin: EdgeInsets.symmetric(horizontal: 12), child: kTextbody("${controller.totalAmount()} L.E", color: Colors.white))),
 
                   SizedBox(height: 12),
-                  Container(
-                    width: double.infinity,
-                    child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
-                  ),
-                  SizedBox(height: 6),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    child: EditText(
-                      value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
-                      hintColor: Color(0xff8D8D8D),
-                      enable: false,
-                      background: Color(0xffF1F1F1),
-                      updateFunc: (value) {},
-                      noBorder: true,
-                      radius: 4,
-                      lines: 3,
-                    ),
-                  ),
+                  // Container(
+                  //   width: double.infinity,
+                  //   child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+                  // ),
+                  // SizedBox(height: 6),
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(horizontal: 12),
+                  //   child: EditText(
+                  //     value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
+                  //     hintColor: Color(0xff8D8D8D),
+                  //     enable: false,
+                  //     background: Color(0xffF1F1F1),
+                  //     updateFunc: (value) {},
+                  //     noBorder: true,
+                  //     radius: 4,
+                  //     lines: 3,
+                  //   ),
+                  // ),
+
                   SizedBox(height: 8),
 
                   Row(
@@ -75,39 +75,79 @@ class CartView extends GetView<CartController> {
                                       child: kTextHeader("Delivery", color: Colors.white, size: 30),
                                     ),
                                   ),
+                                  // SizedBox(height: 12),
+
                                   SizedBox(height: 12),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      initialValue: 'you will get your order within two days',
-                                      enabled: false,
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(4),
-                                            borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                  Container(
+                                    alignment: Alignment(0.0, 0.12),
+                                    width: double.infinity,
+                                    margin: EdgeInsets.symmetric(horizontal: 12),
+                                    height: 120.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(9.0),
+                                      color: const Color(0xFFF1F1F1),
+                                    ),
+                                    child: SizedBox(
+                                      width: Get.width / 1.3,
+                                      height: 120.0,
+                                      child: Column(
+                                        children: <Widget>[
+                                          Spacer(),
+                                          Align(
+                                            alignment: Alignment(-0.09, 0.0),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                                              child: Text(
+                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!,
+                                                style: GoogleFonts.cairo(
+                                                  fontSize: 13.0,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w600,
+                                                  height: 1.38,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                          disabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(4),
-                                            borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(4),
-                                            borderSide: BorderSide(color: kColorPrimary, width: 2),
-                                          ),
-                                          errorStyle: TextStyle(fontSize: 10),
-                                          labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
-                                          hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
-                                          hintText: '',
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-                                      keyboardType: TextInputType.text,
-                                      validator: (text) {},
-                                      maxLines: 4,
-                                      onChanged: (newValue) {},
-                                      onFieldSubmitted: (newValue) {},
-                                      onSaved: (newValue) {},
+                                          Spacer(),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                   SizedBox(height: 12),
+
+                                  // Padding(
+                                  //   padding: const EdgeInsets.all(8.0),
+                                  //   child: TextFormField(
+                                  //     initialValue: '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!}',
+                                  //     enabled: false,
+                                  //     decoration: InputDecoration(
+                                  //         border: OutlineInputBorder(
+                                  //           borderRadius: BorderRadius.circular(4),
+                                  //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                  //         ),
+                                  //         disabledBorder: OutlineInputBorder(
+                                  //           borderRadius: BorderRadius.circular(4),
+                                  //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                  //         ),
+                                  //         focusedBorder: OutlineInputBorder(
+                                  //           borderRadius: BorderRadius.circular(4),
+                                  //           borderSide: BorderSide(color: kColorPrimary, width: 2),
+                                  //         ),
+                                  //         errorStyle: TextStyle(fontSize: 10),
+                                  //         labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
+                                  //         hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
+                                  //         hintText: '',
+                                  //         contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
+                                  //     keyboardType: TextInputType.text,
+                                  //     validator: (text) {},
+                                  //     maxLines: 4,
+                                  //     onChanged: (newValue) {},
+                                  //     onFieldSubmitted: (newValue) {},
+                                  //     onSaved: (newValue) {},
+                                  //   ),
+                                  // ),
+                                  // SizedBox(height: 12),
+
                                   kButtonDefault("Submit",
                                       color: kColorPrimary,
                                       textColor: Colors.white,
@@ -151,7 +191,7 @@ class CartView extends GetView<CartController> {
                                       color: const Color(0xFFF1F1F1),
                                     ),
                                     child: SizedBox(
-                                      width: 307.0,
+                                      width: Get.width / 1.3,
                                       height: 155.0,
                                       child: Column(
                                         children: <Widget>[
