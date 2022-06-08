@@ -55,7 +55,7 @@ class Info {
   factory Info.fromJson(Map<String, dynamic> json) => Info(
         about: json["about"] == null ? null : json["about"],
         location: json["location"] == null ? null : json["location"],
-        deliveryInstructions: json["deliveryInstructions"] == null ? 'Delivery instructions' : json["deliveryInstructions"],
+        deliveryInstructions: json["delivery_instructions"] == null ? 'Delivery instructions' : json["delivery_instructions"],
         pickupInstructions: json["pickup_instructions"] == null ? 'Pickup instructions' : json["pickup_instructions"],
       );
 }
