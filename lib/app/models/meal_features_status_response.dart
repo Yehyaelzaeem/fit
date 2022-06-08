@@ -43,20 +43,21 @@ class Info {
   Info({
     this.about,
     this.location,
+    this.deliveryInstructions,
+    this.pickupInstructions,
   });
 
   final String? about;
   final String? location;
+  final String? deliveryInstructions;
+  final String? pickupInstructions;
 
   factory Info.fromJson(Map<String, dynamic> json) => Info(
         about: json["about"] == null ? null : json["about"],
         location: json["location"] == null ? null : json["location"],
+        deliveryInstructions: json["deliveryInstructions"] == null ? 'Delivery instructions' : json["deliveryInstructions"],
+        pickupInstructions: json["pickup_instructions"] == null ? 'Pickup instructions' : json["pickup_instructions"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "about": about == null ? null : about,
-        "location": location == null ? null : location,
-      };
 }
 
 class Slider {

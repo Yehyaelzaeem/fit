@@ -98,7 +98,7 @@ class CartView extends GetView<CartController> {
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 12),
                                               child: Text(
-                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!,
+                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
                                                 style: GoogleFonts.cairo(
                                                   fontSize: 13.0,
                                                   color: Colors.black,
@@ -201,7 +201,7 @@ class CartView extends GetView<CartController> {
                                             child: Padding(
                                               padding: const EdgeInsets.symmetric(horizontal: 12),
                                               child: Text(
-                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!,
+                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions!,
                                                 style: GoogleFonts.cairo(
                                                   fontSize: 13.0,
                                                   color: Colors.black,

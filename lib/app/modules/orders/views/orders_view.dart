@@ -234,7 +234,7 @@ class OrdersView extends GetView<OrdersController> {
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 12),
                               child: EditText(
-                                value: "Lorem ipsum dolor sit amet, consectetur  elit, sed do eiusmod tempor incididunt ut labore adipiscing",
+                                value: getInsturctions(e.deliveryMethod),
                                 hintColor: Color(0xff8D8D8D),
                                 enable: false,
                                 background: Color(0xffF1F1F1),
@@ -265,5 +265,17 @@ class OrdersView extends GetView<OrdersController> {
         ],
       ),
     );
+  }
+
+  String getInsturctions(String deliveryMethod) {
+    String instructions = "";
+    if (controller.globalController.mealFeatureHomeResponse.value.data == null) return "";
+    if (controller.globalController.mealFeatureHomeResponse.value.data!.info == null) return "";
+    if (deliveryMethod == 'Delivery' || deliveryMethod == 'delivery') {
+      instructions = "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions}";
+    } else {
+      instructions = "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions}";
+    }
+    return instructions;
   }
 }
