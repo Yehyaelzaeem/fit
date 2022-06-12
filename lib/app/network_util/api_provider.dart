@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
+import 'package:app/app/models/cheer_full_response.dart';
 import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/models/faq_response.dart';
@@ -252,16 +253,7 @@ class ApiProvider {
     String? password_confirmation,
     String? gender,
   }) async {
-    FormData body = FormData.fromMap({
-      "image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'),
-      "name": name,
-      "gender": gender,
-      "email": email,
-      "phone": phone,
-      "date_of_birth": date,
-      "password": password,
-      "password_confirmation": password_confirmation
-    });
+    FormData body = FormData.fromMap({"image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'), "name": name, "gender": gender, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
     Response response = await _utils.post("update_profile", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -280,20 +272,8 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendOrintaionData(
-      {String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
-    FormData body = FormData.fromMap({
-      "first_name": first_name,
-      "middle_name": middle_name,
-      "last_name": last_name,
-      "mobile": mobile,
-      "age": age,
-      "target": target,
-      "country": country,
-      "hear_from": hear_from,
-      "package": package,
-      "whatsapp": whats
-    });
+  Future<GeneralResponse> sendOrintaionData({String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
+    FormData body = FormData.fromMap({"first_name": first_name, "middle_name": middle_name, "last_name": last_name, "mobile": mobile, "age": age, "target": target, "country": country, "hear_from": hear_from, "package": package, "whatsapp": whats});
     Response response = await _utils.post(
       "orientation_registeration/$id",
       body: body,
@@ -360,6 +340,15 @@ class ApiProvider {
       return MealFeatureHomeResponse.fromJson(response.data);
     } else {
       return MealFeatureHomeResponse.fromJson(response.data);
+    }
+  }
+
+  Future<bool> getCheerFullStatus() async {
+    Response response = await _utils.post("meals_features_status");
+    if (response.statusCode == 200) {
+      return CheerFullResponse.fromJson(response.data).data!.isActive!;
+    } else {
+      return CheerFullResponse.fromJson(response.data).data!.isActive!;
     }
   }
 

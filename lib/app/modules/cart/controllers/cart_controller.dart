@@ -91,7 +91,7 @@ class CartController extends GetxController {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(height: 12),
-                kTextbody("Thank you for ordering from Cheer-Full Have a cheerful day", color: Colors.black, bold: true, align: TextAlign.center),
+                kTextbody("Thank you for ordering from Cheer-Full \n \n 😍 Have a cheerful day 😍", color: Colors.black, bold: true, align: TextAlign.center),
                 SizedBox(height: 12),
               ],
             ),

@@ -34,7 +34,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                           Row(
                             children: [
                               Icon(Icons.person, color: kColorPrimary),
-                              kTextbody('Full name', size: 18, bold: true),
+                              kTextbody('Full Name', size: 18, bold: true),
                             ],
                           ),
                           Container(
@@ -179,7 +179,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                 Row(
                                   children: [
                                     Icon(Icons.location_city, color: kColorPrimary),
-                                    kTextbody('Detailed Address', size: 18, bold: true),
+                                    kTextbody('Detailed delivery address', size: 18, bold: true),
                                   ],
                                 ),
                                 Container(
@@ -229,7 +229,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                 Row(
                                   children: [
                                     Icon(Icons.gps_fixed, color: kColorPrimary),
-                                    kTextbody('Location', size: 18, bold: true),
+                                    kTextbody('Current location', size: 18, bold: true),
                                   ],
                                 ),
                                 GestureDetector(

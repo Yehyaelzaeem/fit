@@ -170,9 +170,14 @@ class OrdersView extends GetView<OrdersController> {
                 ),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   kTextbody("${e.price} L.E", color: kColorPrimary, bold: true),
                   kTextbody("${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
+                  kTextbody(
+                    "${e.date}",
+                    color: Colors.black,
+                  ),
                 ],
               )
             ],

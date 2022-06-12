@@ -14,6 +14,7 @@ class HomeController extends GetxController {
   final homeResponse = HomePageResponse().obs;
   final userData = UserResponse().obs;
   late bool login = false;
+  bool cheerFullStatus = false;
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
@@ -43,8 +44,7 @@ class HomeController extends GetxController {
     super.onInit();
 
     homeResponse.value.data!.slider!.forEach((v) {
-      slider.add(v.image ??
-          "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
+      slider.add(v.image ?? "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
     });
     print(slider);
     homeResponse.value.data!.services!.forEach((v) {

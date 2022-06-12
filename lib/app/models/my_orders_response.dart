@@ -48,6 +48,7 @@ class Completed {
     required this.userInfo,
     required this.note,
     required this.meals,
+    required this.date,
   });
 
   int id;
@@ -56,11 +57,13 @@ class Completed {
   String deliveryMethod;
   UserInfo? userInfo;
   String note;
+  String date;
   List<Meal> meals;
 
   factory Completed.fromJson(Map<String, dynamic> json) => Completed(
         id: json["id"] == null ? null : json["id"],
         price: json["price"] == null ? null : json["price"],
+        date: json["date"] == null ? null : json["date"],
         status: json["status"] == null ? null : json["status"],
         deliveryMethod: json["delivery_method"] == null ? null : json["delivery_method"],
         userInfo: json["user_info"] == null ? null : UserInfo.fromJson(json["user_info"]),

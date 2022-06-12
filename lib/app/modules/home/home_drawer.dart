@@ -1,6 +1,8 @@
+import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -158,12 +160,19 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
             //CHEER_FULL
-            singleDrawerItem(
-                title: "Cheer-Full",
-                image: 'assets/img/ic_meals.png',
-                action: () {
-                  Get.toNamed(Routes.CHEER_FULL);
-                }),
+            FutureBuilder<bool>(
+              future: getCheerFullStatus(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) if (snapshot.data!)
+                  return singleDrawerItem(
+                      title: "Cheer-Full",
+                      image: 'assets/img/ic_meals.png',
+                      action: () {
+                        Get.toNamed(Routes.CHEER_FULL);
+                      });
+                return Container();
+              },
+            ),
             //Orders
             // singleDrawerItem(
             //     title: "My Orders",
@@ -266,5 +275,17 @@ class HomeDrawer extends GetView<HomeController> {
         ],
       ),
     );
+  }
+
+  Future<bool> getCheerFullStatus() async {
+    try {
+      if (controller.cheerFullStatus) return true;
+      bool status = await ApiProvider().getCheerFullStatus();
+      controller.cheerFullStatus = status;
+      return status;
+    } catch (e) {
+      Echo('error response $e');
+    }
+    return true;
   }
 }
