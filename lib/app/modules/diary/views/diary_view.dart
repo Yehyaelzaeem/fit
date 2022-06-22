@@ -5,6 +5,7 @@ import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -12,9 +13,11 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../pdf_viewr.dart';
 import '../../main_un_auth.dart';
 
@@ -29,6 +32,7 @@ class _DiaryViewState extends State<DiaryView> {
   GlobalKey<FormState> key = GlobalKey();
   bool isLoading = true;
 
+  String? lastSelectedDate;
   late String date;
 
   late String WorkOutData;
@@ -46,6 +50,7 @@ class _DiaryViewState extends State<DiaryView> {
   String? apiDate;
 
   void getDiaryData(String _date) async {
+    lastSelectedDate = _date;
     setState(() {
       isLoading = true;
     });
@@ -65,15 +70,9 @@ class _DiaryViewState extends State<DiaryView> {
             ShowLoader = false;
             length = response.data!.water! + 3;
             workOut = response.data!.workouts![0].id;
-            workDesc = response.data!.dayWorkouts == null
-                ? " "
-                : response.data!.dayWorkouts!.workoutDesc!;
-            controller.text = response.data!.dayWorkouts == null
-                ? " "
-                : response.data!.dayWorkouts!.workoutDesc!;
-            WorkOutData = response.data!.dayWorkouts == null
-                ? " "
-                : response.data!.dayWorkouts!.workoutType!;
+            workDesc = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
+            controller.text = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
+            WorkOutData = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutType!;
             list.clear();
           });
 
@@ -99,27 +98,24 @@ class _DiaryViewState extends State<DiaryView> {
             if (i <= response.data!.water!) {
               setState(() {
                 list.add(
-                  SingleImageItem(
-                      id: i,
-                      imagePath: 'assets/img/im_holder1.png',
-                      selected: true),
+                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: true),
                 );
               });
             } else {
               setState(() {
                 list.add(
-                  SingleImageItem(
-                      id: i,
-                      imagePath: 'assets/img/im_holder1.png',
-                      selected: false),
+                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: false),
                 );
               });
             }
           }
-          print(
-              "Percentage ${response.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.data!.proteins!.caloriesTotal!.taken} / ${response.data!.proteins!.caloriesTotal!.imposed}");
+          print("Percentage ${response.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.data!.proteins!.caloriesTotal!.taken} / ${response.data!.proteins!.caloriesTotal!.imposed}");
         } else {
-          getDiaryData(DateTime.now().toString().substring(0, 10));
+          if (lastSelectedDate != null && lastSelectedDate!.isNotEmpty) {
+            getDiaryData(lastSelectedDate!);
+          } else {
+            getDiaryData(DateTime.now().toString().substring(0, 10));
+          }
           setState(() {
             response = value;
             isLoading = false;
@@ -133,9 +129,7 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
   void deleteItem(int id, String _date) async {
-    await ApiProvider()
-        .deleteCalorie("delete_calories_details", id)
-        .then((value) {
+    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
       if (value.success == true) {
         setState(() {
           isLoading = false;
@@ -152,14 +146,10 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
   void updateWaterData(String water) async {
-    print("Water ==== > $water / $length");
-    print("Water ==== > ${list.length}");
     setState(() {
       ShowLoader = true;
     });
-    await ApiProvider()
-        .updateDiaryData(water: water, date: apiDate!)
-        .then((value) {
+    await ApiProvider().updateDiaryData(water: water, date: apiDate!).then((value) {
       if (value.success == true) {
         setState(() {
           ShowLoader = false;
@@ -178,10 +168,7 @@ class _DiaryViewState extends State<DiaryView> {
       ShowLoader = true;
     });
 
-    await ApiProvider()
-        .updateDiaryData(
-            workOut: workOut, workout_desc: workDesc, date: apiDate!)
-        .then((value) {
+    await ApiProvider().updateDiaryData(workOut: workOut, workout_desc: workDesc, date: apiDate!).then((value) {
       if (value.success == true) {
         setState(() {
           ShowLoader = false;
@@ -246,8 +233,7 @@ class _DiaryViewState extends State<DiaryView> {
                                 color: const Color(0xFF414042),
                               ),
                               child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 4),
+                                padding: const EdgeInsets.symmetric(vertical: 4),
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -275,10 +261,8 @@ class _DiaryViewState extends State<DiaryView> {
                               child: Container(
                                 width: 80,
                                 height: 40,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 0),
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 18, vertical: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 0),
+                                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
                                 // height: double.infinity,
                                 decoration: BoxDecoration(
                                   // color: Colors.grey[200],
@@ -297,14 +281,11 @@ class _DiaryViewState extends State<DiaryView> {
                             ? CircularLoadingWidget()
                             : isLoading == false && noSessions == true
                                 ? Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 200),
+                                    padding: EdgeInsets.symmetric(vertical: 200),
                                     child: Center(
                                       child: Text(
                                         "Book Your Next Session",
-                                        style: TextStyle(
-                                            fontStyle: FontStyle.italic,
-                                            fontSize: 17),
+                                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 17),
                                       ),
                                     ),
                                   )
@@ -315,124 +296,28 @@ class _DiaryViewState extends State<DiaryView> {
                                       ),
                                       isToday == true
                                           ? Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 InkWell(
                                                   onTap: () {
-                                                    print(response
-                                                        .data!.days![1].date!);
-                                                    getDiaryData(response
-                                                        .data!.days![1].date!);
+                                                    print(response.data!.days![1].date!);
+                                                    getDiaryData(response.data!.days![1].date!);
                                                   },
-                                                  child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              4,
-                                                      height: 50,
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          color: kColorPrimary,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                      child: Center(
-                                                          child: kTextHeader(
-                                                              'Yesterday',
-                                                              color:
-                                                                  Colors.white,
-                                                              bold: true,
-                                                              size: 14))),
+                                                  child: Container(width: MediaQuery.of(context).size.width / 4, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('Yesterday', color: Colors.white, bold: true, size: 14))),
                                                 ),
-                                                Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            1.5,
-                                                    height: 50,
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8,
-                                                            vertical: 0),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.grey[200],
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: Center(
-                                                        child: kTextHeader(
-                                                            '${date}',
-                                                            color:
-                                                                Colors.black87,
-                                                            bold: true,
-                                                            size: 14))),
+                                                Container(width: MediaQuery.of(context).size.width / 1.5, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('${date}', color: Colors.black87, bold: true, size: 14))),
                                               ],
                                             )
                                           : Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width /
-                                                            1.5,
-                                                    height: 50,
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 8,
-                                                            vertical: 0),
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.grey[200],
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(5)),
-                                                    child: Center(
-                                                        child: kTextHeader(
-                                                            '${date}',
-                                                            color:
-                                                                Colors.black87,
-                                                            bold: true,
-                                                            size: 14))),
+                                                Container(width: MediaQuery.of(context).size.width / 1.5, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('${date}', color: Colors.black87, bold: true, size: 14))),
                                                 InkWell(
                                                   onTap: () {
-                                                    print(response
-                                                        .data!.days![0].date!);
-                                                    getDiaryData(response
-                                                        .data!.days![0].date!);
+                                                    lastSelectedDate = response.data!.days![0].date!;
+                                                    getDiaryData(response.data!.days![0].date!);
                                                   },
-                                                  child: Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              4,
-                                                      height: 50,
-                                                      margin:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 0),
-                                                      decoration: BoxDecoration(
-                                                          color: kColorPrimary,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5)),
-                                                      child: Center(
-                                                          child: kTextHeader(
-                                                              'Today',
-                                                              color:
-                                                                  Colors.white,
-                                                              bold: true,
-                                                              size: 14))),
+                                                  child: Container(width: MediaQuery.of(context).size.width / 4, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('Today', color: Colors.white, bold: true, size: 14))),
                                                 ),
                                               ],
                                             ),
@@ -440,17 +325,13 @@ class _DiaryViewState extends State<DiaryView> {
                                         height: 16,
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               "Water : ${response.data!.water ?? "0"}",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                             ),
                                             // SizedBox(),
                                             Icon(
@@ -463,61 +344,34 @@ class _DiaryViewState extends State<DiaryView> {
                                       ),
                                       Container(
                                           width: double.infinity,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              3,
                                           child: GridView.builder(
                                             itemCount: length,
-                                            gridDelegate:
-                                                SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 3,
-                                                    crossAxisSpacing: 4.0,
-                                                    mainAxisSpacing: 4.0),
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+                                            itemBuilder: (BuildContext context, int index) {
                                               return InkWell(
                                                   onTap: () {
-                                                    updateWaterData(
-                                                        "${index + 1}");
+                                                    updateWaterData("${index + 1}");
                                                   },
                                                   child: Stack(
                                                     children: [
                                                       Container(
-                                                        decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                                image: AssetImage(
-                                                                    list[index]
-                                                                        .imagePath),
-                                                                fit: BoxFit
-                                                                    .cover)),
+                                                        decoration: BoxDecoration(image: DecorationImage(image: AssetImage(list[index].imagePath), fit: BoxFit.cover)),
                                                       ),
-                                                      list[index].selected ==
-                                                              false
+                                                      list[index].selected == false
                                                           ? SizedBox()
                                                           : Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      right: 0,
-                                                                      left: 0,
-                                                                      bottom: 0,
-                                                                      top: 0),
+                                                              padding: const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 0),
                                                               child: Container(
                                                                 child: Center(
                                                                   child: Icon(
-                                                                    Icons
-                                                                        .check_circle,
+                                                                    Icons.check_circle,
                                                                     size: 50,
-                                                                    color:
-                                                                        kColorPrimary,
+                                                                    color: kColorPrimary,
                                                                   ),
                                                                 ),
-                                                                decoration: BoxDecoration(
-                                                                    color: Colors
-                                                                        .black
-                                                                        .withOpacity(
-                                                                            0.5)),
+                                                                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
                                                               ),
                                                             ),
                                                     ],
@@ -527,103 +381,79 @@ class _DiaryViewState extends State<DiaryView> {
                                       Divider(
                                         thickness: 2,
                                       ),
-                                      rowWithProgressBar(
-                                          "Proteins", response.data!.proteins),
+                                      rowWithProgressBar("Proteins", response.data!.proteins),
                                       staticBar(1),
                                       ListView.builder(
                                           shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: response.data!.proteins!
-                                              .caloriesDetails!.length,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: response.data!.proteins!.caloriesDetails!.length,
                                           itemBuilder: (context, indedx) {
-                                            return rowItem(
-                                                response.data!.proteins!
-                                                    .caloriesDetails![indedx],
-                                                1);
+                                            return rowItem(response.data!.proteins!.caloriesDetails![indedx], 1);
                                           }),
                                       Divider(thickness: 2),
-                                      rowWithProgressBar("Carbs & Fats",
-                                          response.data!.carbsFats),
+                                      rowWithProgressBar("Carbs & Fats", response.data!.carbsFats),
                                       staticBar(2),
                                       ListView.builder(
                                           shrinkWrap: true,
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          itemCount: response.data!.carbsFats!
-                                              .caloriesDetails!.length,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemCount: response.data!.carbsFats!.caloriesDetails!.length,
                                           itemBuilder: (context, indedx) {
-                                            return rowItem(
-                                                response.data!.carbsFats!
-                                                    .caloriesDetails![indedx],
-                                                2);
+                                            return rowItem(response.data!.carbsFats!.caloriesDetails![indedx], 2);
                                           }),
                                       SizedBox(height: 12),
                                       Divider(),
                                       InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      MyOtherCalories()));
+                                        onTap: () async {
+                                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => MyOtherCalories()));
+
+                                          if (result == null) {
+                                            Echo('onback result == null');
+                                            ;
+                                            setState(() {});
+                                            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+                                          }
                                         },
                                         child: Container(
                                           width: double.infinity,
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 16),
+                                          padding: EdgeInsets.symmetric(vertical: 16),
                                           decoration: BoxDecoration(
                                             color: Color(0xffF1F9E3),
                                           ),
                                           child: kButtonDefault(
-                                              'My other calories',
-                                              marginH: MediaQuery.of(context)
-                                                      .size
-                                                      .width /
-                                                  6,
-                                              paddingV: 0,
-                                              shadow: true,
-                                              paddingH: 12),
+                                            'My other calories',
+                                            marginH: MediaQuery.of(context).size.width / 6,
+                                            paddingV: 0,
+                                            shadow: true,
+                                            paddingH: 12,
+                                          ),
                                         ),
                                       ),
                                       Divider(),
                                       SizedBox(height: 12),
                                       InkWell(
                                         onTap: () {
-                                          if (response
-                                                  .data!.workoutDetailsType ==
-                                              "") {
-                                            Fluttertoast.showToast(
-                                                msg: "Nothing To Show ");
-                                          } else if (response
-                                                  .data!.workoutDetailsType ==
-                                              "link") {
-                                            _launchURL(
-                                                response.data!.workoutDetails);
+                                          if (response.data!.workoutDetailsType == "") {
+                                            Fluttertoast.showToast(msg: "Nothing To Show ");
+                                          } else if (response.data!.workoutDetailsType == "link") {
+                                            _launchURL(response.data!.workoutDetails);
                                           } else {
-                                            showPobUp(
-                                                response.data!.workoutDetails!);
+                                            showPobUp(response.data!.workoutDetails!);
                                           }
                                         },
                                         child: Container(
                                           width: double.infinity,
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
                                               SizedBox(
                                                 width: 16,
                                               ),
                                               Text(
                                                 "Workout Details",
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15),
+                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                                               ),
                                               Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 8),
+                                                padding: EdgeInsets.symmetric(horizontal: 8),
                                                 child: Icon(
                                                   Icons.upload_sharp,
                                                   color: Colors.white,
@@ -635,27 +465,17 @@ class _DiaryViewState extends State<DiaryView> {
                                           margin: EdgeInsets.symmetric(
                                             horizontal: 72,
                                           ),
-                                          decoration: BoxDecoration(
-                                              color: kColorPrimary,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
+                                          decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
                                         ),
                                       ),
-                                      SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              14),
+                                      SizedBox(height: MediaQuery.of(context).size.width / 14),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 16),
+                                        padding: const EdgeInsets.symmetric(horizontal: 16),
                                         child: Row(
                                           children: [
                                             Text(
                                               "Workout",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 20),
+                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                                               textAlign: TextAlign.start,
                                             ),
                                           ],
@@ -666,48 +486,25 @@ class _DiaryViewState extends State<DiaryView> {
                                           CustomSheet(
                                               context: context,
                                               widget: Padding(
-                                                padding:
-                                                    EdgeInsets.only(top: 16),
+                                                padding: EdgeInsets.only(top: 16),
                                                 child: ListView.builder(
-                                                    itemCount: response
-                                                        .data!.workouts!.length,
-                                                    itemBuilder:
-                                                        (context, index) {
+                                                    itemCount: response.data!.workouts!.length,
+                                                    itemBuilder: (context, index) {
                                                       return InkWell(
                                                         onTap: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                           setState(() {
-                                                            WorkOutData =
-                                                                response
-                                                                    .data!
-                                                                    .workouts![
-                                                                        index]
-                                                                    .title!;
-                                                            workOut = response
-                                                                .data!
-                                                                .workouts![
-                                                                    index]
-                                                                .id!;
+                                                            WorkOutData = response.data!.workouts![index].title!;
+                                                            workOut = response.data!.workouts![index].id!;
                                                           });
                                                         },
                                                         child: Column(
                                                           children: [
                                                             Padding(
-                                                              padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                  horizontal: 8,
-                                                                  vertical: 16),
+                                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                                                               child: Text(
                                                                 "${response.data!.workouts![index].title}",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black,
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
+                                                                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
                                                               ),
                                                             ),
                                                             Divider()
@@ -718,66 +515,49 @@ class _DiaryViewState extends State<DiaryView> {
                                               ));
                                         },
                                         child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 12, vertical: 5),
+                                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                                           child: Container(
                                             width: double.infinity,
                                             child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 16),
+                                              padding: const EdgeInsets.symmetric(horizontal: 16),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
                                                     "${WorkOutData}",
-                                                    style:
-                                                        TextStyle(fontSize: 20),
+                                                    style: TextStyle(fontSize: 20),
                                                   ),
                                                   Icon(Icons.arrow_drop_down)
                                                 ],
                                               ),
                                             ),
                                             height: 40,
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                border: Border.all(
-                                                    color: Colors.black)),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.black)),
                                           ),
                                         ),
                                       ),
                                       Container(
                                         color: Colors.white,
-                                        width:
-                                            MediaQuery.of(context).size.width,
+                                        width: MediaQuery.of(context).size.width,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
                                             SizedBox(
                                               height: 20,
                                             ),
                                             Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8),
+                                              padding: EdgeInsets.symmetric(horizontal: 8),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
-                                                  kTextbody(
-                                                      'Workout Description',
-                                                      size: 20,
-                                                      bold: true),
+                                                  kTextbody('Workout Description', size: 20, bold: true),
                                                   EditText(
                                                     // controller: controller,
                                                     radius: 12,
                                                     lines: 5,
+                                                    type: TextInputType.multiline,
                                                     value: '${workDesc}',
                                                     // hint: '${workDesc}',
                                                     updateFunc: (text) {
@@ -790,25 +570,13 @@ class _DiaryViewState extends State<DiaryView> {
                                                   ),
                                                   SizedBox(height: 8),
                                                   Center(
-                                                    child: kButtonDefault(
-                                                        'Save',
-                                                        marginH: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width /
-                                                            5,
-                                                        paddingV: 0, func: () {
-                                                      if (workDesc == "" ||
-                                                          workOut == null) {
-                                                        Fluttertoast.showToast(
-                                                            msg:
-                                                                "Please Complete Data");
+                                                    child: kButtonDefault('Save', marginH: MediaQuery.of(context).size.width / 5, paddingV: 0, func: () {
+                                                      if (workDesc.trim() == "" || workOut == null) {
+                                                        Fluttertoast.showToast(msg: "Enter Workout Description");
                                                       } else {
                                                         updateWork();
                                                       }
-                                                    },
-                                                        shadow: true,
-                                                        paddingH: 50),
+                                                    }, shadow: true, paddingH: 50),
                                                   ),
                                                 ],
                                               ),
@@ -837,25 +605,66 @@ class _DiaryViewState extends State<DiaryView> {
 
   Widget rowItem(CaloriesDetails item, int type) {
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (type == 1) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddNewFood(
-                      date: apiDate!,
-                      list: response.data!.proteins!.food,
-                      edit: true,
-                      id: item.id)));
+          //show screen dialog
+          dynamic result = await showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: AddNewFood(
+                    date: apiDate!,
+                    list: response.data!.proteins!.food,
+                    edit: true,
+                    id: item.id,
+                    showAsDialog: true,
+                  ),
+                );
+              });
+          if (result == null) {
+            setState(() {});
+            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          }
+          // dynamic result = await Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => AddNewFood(date: apiDate!, list: response.data!.proteins!.food, edit: true, id: item.id),
+          //   ),
+          // );
+          // if (result == null) {
+          //   setState(() {});
+          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          // }
         } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddNewFood(
-                      date: apiDate!,
-                      list: response.data!.carbsFats!.food,
-                      edit: true,
-                      id: item.id)));
+          dynamic result = await showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: AddNewFood(
+                    date: apiDate!,
+                    list: response.data!.carbsFats!.food,
+                    edit: true,
+                    id: item.id,
+                    showAsDialog: true,
+                  ),
+                );
+              });
+          if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+          // dynamic result = await Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => AddNewFood(
+          //               date: apiDate!,
+          //               list: response.data!.carbsFats!.food,
+          //               edit: true,
+          //               id: item.id,
+          //             )));
+
+          // if (result == null) {
+          //   setState(() {});
+          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          // }
         }
       },
       child: Column(
@@ -876,45 +685,28 @@ class _DiaryViewState extends State<DiaryView> {
                     children: [
                       Container(
                         padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(color: Colors.black87)),
-                        child: kTextbody('${item.qty}',
-                            color: Colors.black, bold: false, size: 12),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black87)),
+                        child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 12),
                       ),
-                      kTextbody('x',
-                          color: Colors.black, bold: false, size: 10),
+                      kTextbody('x', color: Colors.black, bold: false, size: 10),
                       Flexible(
                         fit: FlexFit.tight,
                         child: Container(
                           padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.black87)),
-                          child: kTextbody('${item.unit}',
-                              color: Colors.black, bold: false, size: 12),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black87)),
+                          child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
                         ),
                       )
                     ],
                   ),
                 ),
-                Container(
-                    width: MediaQuery.of(context).size.width / 3,
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(color: Colors.grey[500]!)),
-                    child: kTextbody('${item.quality}',
-                        color: Color(int.parse("0xFF${item.color}")),
-                        bold: false,
-                        size: 12)),
+                Container(width: MediaQuery.of(context).size.width / 3, padding: EdgeInsets.all(2), decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.grey[500]!)), child: kTextbody('${item.quality}', color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
                 Container(
                   width: MediaQuery.of(context).size.width / 3,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      kTextbody('${item.calories}',
-                          color: Colors.black, bold: false, size: 16),
+                      kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
                       InkWell(
                         onTap: () {
                           deleteItem(item.id!, date);
@@ -961,11 +753,7 @@ class _DiaryViewState extends State<DiaryView> {
     //   await dio.download(url, filePath, onReceiveProgress: (received, total) {
     //     String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
     //     print('Progress: $progress');
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                PDFPreview(res: "$url", name: "Calories Calculator")));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
     // });
     // } catch (e) {
     //   print(e);
@@ -1012,11 +800,7 @@ class _DiaryViewState extends State<DiaryView> {
                   // ),
                 ],
               ),
-              kTextHeader(
-                  '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
-                  bold: false,
-                  size: 20,
-                  color: Colors.black),
+              kTextHeader('${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}', bold: false, size: 20, color: Colors.black),
             ],
           ),
         ),
@@ -1034,12 +818,9 @@ class _DiaryViewState extends State<DiaryView> {
               ),
               Container(
                 height: 20,
-                width: MediaQuery.of(context).size.width *
-                    (item.caloriesTotal!.progress!.percentage!.toDouble() /
-                        100),
+                width: MediaQuery.of(context).size.width * (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                 decoration: BoxDecoration(
-                  color: Color(
-                      int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
+                  color: Color(int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -1062,15 +843,9 @@ class _DiaryViewState extends State<DiaryView> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width / 3,
-            child: Center(
-                child: kTextbody('Quantity',
-                    color: Colors.white, bold: true, size: 16)),
+            child: Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
           ),
-          Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: Center(
-                  child: kTextbody('Quality',
-                      color: Colors.white, bold: true, size: 16))),
+          Container(width: MediaQuery.of(context).size.width / 3, child: Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
           Container(
             width: MediaQuery.of(context).size.width / 3,
             child: Row(
@@ -1079,25 +854,55 @@ class _DiaryViewState extends State<DiaryView> {
                 // SizedBox(width: ,),
                 kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     if (type == 1) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewFood(
-                                    date: apiDate!,
-                                    list: response.data!.proteins!.food,
-                                    edit: false,
-                                  )));
+                      dynamic result = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: AddNewFood(
+                                date: apiDate!,
+                                list: response.data!.proteins!.food,
+                                edit: false,
+                                showAsDialog: true,
+                              ),
+                            );
+                          });
+                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      // dynamic result = await Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => AddNewFood(
+                      //               date: apiDate!,
+                      //               list: response.data!.proteins!.food,
+                      //               edit: false,
+                      //             )));
+                      // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
                     } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewFood(
-                                    date: apiDate!,
-                                    list: response.data!.carbsFats!.food,
-                                    edit: false,
-                                  )));
+                      dynamic result = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: AddNewFood(
+                                date: apiDate!,
+                                list: response.data!.carbsFats!.food,
+                                edit: false,
+                                showAsDialog: true,
+                              ),
+                            );
+                          });
+                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      // dynamic result = await Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => AddNewFood(
+                      //               date: apiDate!,
+                      //               list: response.data!.carbsFats!.food,
+                      //               edit: false,
+                      //             )));
+                      // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
                     }
                   },
                   child: Container(
@@ -1123,16 +928,13 @@ class _DiaryViewState extends State<DiaryView> {
         builder: (BuildContext context) {
           return Dialog(
             child: Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 1.7,
                 padding: EdgeInsets.all(16),
                 child: SingleChildScrollView(
-                  child: Text(
+                  child: SelectableText(
                     "${text}",
                     // textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontStyle: FontStyle.italic),
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
                   ),
                 )),
           );

@@ -80,7 +80,7 @@ class _NotificationsViewState extends State<NotificationsView> {
             SizedBox(height: 10),
             Row(
               children: [
-                PageLable(name: "Messages"),
+                PageLable(name: "Messagses"),
               ],
             ),
             isLoading == true
@@ -134,10 +134,8 @@ class _NotificationsViewState extends State<NotificationsView> {
                     child: Row(
                       children: [
                         SizedBox(width: 6),
-                        kTextHeader('Subject:',
-                            paddingV: 12, color: kColorPrimary, align: TextAlign.start),
-                        kTextHeader('${element.subject}',
-                            paddingV: 12, color: Colors.black, align: TextAlign.start),
+                        kTextHeader('Subject:', paddingV: 12, color: kColorPrimary, align: TextAlign.start),
+                        kTextHeader('${element.subject}', paddingV: 12, color: Colors.black, align: TextAlign.start),
                       ],
                     ),
                   ),
@@ -164,11 +162,7 @@ class _NotificationsViewState extends State<NotificationsView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  kTextbody(element.viewStatus == false ? "Click To See Info" : "Seen",
-                      paddingH: 12,
-                      paddingV: 12,
-                      align: TextAlign.start,
-                      color: element.viewStatus == true ? Colors.black : Colors.white),
+                  kTextbody(element.viewStatus == false ? "Click To See Info" : "Seen", paddingH: 12, paddingV: 12, align: TextAlign.start, color: element.viewStatus == true ? Colors.black : Colors.white),
                   element.viewStatus == false
                       ? Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -190,8 +184,7 @@ class _NotificationsViewState extends State<NotificationsView> {
             Container(
               width: double.infinity,
               decoration: BoxDecoration(),
-              child: kTextfooter(element.date ?? "",
-                  paddingH: 0, paddingV: 0, align: TextAlign.end, color: kColorPrimary),
+              child: kTextfooter(element.date ?? "", paddingH: 0, paddingV: 0, align: TextAlign.end, color: kColorPrimary),
             ),
             SizedBox(height: 16),
           ],

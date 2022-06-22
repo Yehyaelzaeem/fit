@@ -23,10 +23,14 @@ import 'package:app/app/models/session_response.dart';
 import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
+import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:app/app/utils/helper/echo.dart';
-import 'package:dio/dio.dart';
 // import 'package:dio/dio.dart';
+import 'package:device_info/device_info.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:yaml/yaml.dart';
 
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
@@ -142,6 +146,19 @@ class ApiProvider {
       return GeneralResponse.fromJson(response.data);
     } else {
       return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<UserResponse> changePassword({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    FormData body = FormData.fromMap({'password': password, 'password_confirmation': confirmPassword});
+    Response response = await _utils.post("change_password", body: body);
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data);
     }
   }
 
@@ -335,7 +352,10 @@ class ApiProvider {
   }
 
   Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
-    Response response = await _utils.post("meals_features_home");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("meals_features_home", body: body);
     if (response.statusCode == 200) {
       return MealFeatureHomeResponse.fromJson(response.data);
     } else {
@@ -343,17 +363,23 @@ class ApiProvider {
     }
   }
 
-  Future<bool> getCheerFullStatus() async {
-    Response response = await _utils.post("meals_features_status");
+  Future<CheerFullResponse> getCheerFullStatus() async {
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("meals_features_status", body: body);
     if (response.statusCode == 200) {
-      return CheerFullResponse.fromJson(response.data).data!.isActive!;
+      return CheerFullResponse.fromJson(response.data);
     } else {
-      return CheerFullResponse.fromJson(response.data).data!.isActive!;
+      return CheerFullResponse.fromJson(response.data);
     }
   }
 
   Future<MealFeatureStatusResponse> getMealFeaturesStatus() async {
-    Response response = await _utils.post("meals_features_status");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("meals_features_status", body: body);
     if (response.statusCode == 200) {
       return MealFeatureStatusResponse.fromJson(response.data);
     } else {
@@ -362,7 +388,10 @@ class ApiProvider {
   }
 
   Future<MealFoodListResponse> getMealFoodList() async {
-    Response response = await _utils.post("meals_food_list");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("meals_food_list", body: body);
     if (response.statusCode == 200) {
       return MealFoodListResponse.fromJson(response.data);
     } else {
@@ -381,7 +410,9 @@ class ApiProvider {
       "food": foodIds,
       "amount": amountsId,
       "note": note,
+      'device_id': kDeviceInfo(),
     });
+
     Response response = await _utils.post("new_meal", body: body);
     if (response.statusCode == 200) {
       return true;
@@ -402,7 +433,9 @@ class ApiProvider {
       "food": foodIds,
       "amount": amountsId,
       "note": note,
+      'device_id': kDeviceInfo(),
     });
+
     Response response = await _utils.post("update_meal/$id", body: body);
     if (response.statusCode == 200) {
       return true;
@@ -414,7 +447,10 @@ class ApiProvider {
   Future<BasicResponse> deleteMeal({
     required String id,
   }) async {
-    Response response = await _utils.post("delete_meal/$id");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("delete_meal/$id", body: body);
     if (response.statusCode == 200) {
       return BasicResponse.fromJson(response.data);
     } else {
@@ -423,7 +459,12 @@ class ApiProvider {
   }
 
   Future<MyMealResponse> getMyMeals() async {
-    Response response = await _utils.post("my_meals");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    print('-------> my_meals');
+    Response response = await _utils.post("my_meals", body: body);
+    print('-------> ${response.data}');
     if (response.statusCode == 200 && response.data['success'] == true) {
       return MyMealResponse.fromJson(response.data);
     } else {
@@ -434,7 +475,10 @@ class ApiProvider {
   Future<MealDetailsResponse> getMealDetails({
     required String id,
   }) async {
-    Response response = await _utils.post("meal_details/$id");
+    FormData body = FormData.fromMap({
+      'device_id': kDeviceInfo(),
+    });
+    Response response = await _utils.post("meal_details/$id", body: body);
     if (response.statusCode == 200) {
       return MealDetailsResponse.fromJson(response.data);
     } else {
@@ -462,12 +506,14 @@ class ApiProvider {
         'latitude': latitude,
         'longitude': longitude,
         'meals': meals,
+        'device_id': kDeviceInfo(),
       });
       Response response = await _utils.post("create_shopping_cart", body: body);
       if (response.statusCode == 200) {
         String id = '${response.data['data']['cart']['id']}';
         FormData body2 = FormData.fromMap({
           'delivery_method': deliveryMethod,
+          'device_id': kDeviceInfo(),
         });
         await _utils.post("checkout/$id", body: body2);
         return true;
@@ -481,7 +527,10 @@ class ApiProvider {
 
   Future<MyOrdersResponse> myOrders() async {
     try {
-      Response response = await _utils.post("my_orders");
+      FormData body = FormData.fromMap({
+        'device_id': kDeviceInfo(),
+      });
+      Response response = await _utils.post("my_orders", body: body);
       if (response.statusCode == 200) {
         MyOrdersResponse myOrdersResponse = MyOrdersResponse.fromJson(response.data);
         return myOrdersResponse;
@@ -490,6 +539,44 @@ class ApiProvider {
     } catch (e) {
       Echo('error $e');
       return Future.error(e);
+    }
+  }
+
+  Future<String> kDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String deviceId = "";
+    if (kDebugMode) return 'testDeviceId';
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      deviceId = '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}';
+    } else {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      deviceId = '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
+    }
+    return deviceId.replaceAll(' ', '');
+  }
+
+  Future<VersionResponse> kAppVersion() async {
+    String pubVersion = "";
+    try {
+      File f = new File("../pubspec.yaml");
+      f.readAsString().then((String text) {
+        Map yaml = loadYaml(text);
+        pubVersion = yaml['version'];
+      });
+    } catch (e) {}
+
+    FormData body = FormData.fromMap({
+      'type': 'production',
+      'platform': Platform.isAndroid ? 'android' : 'ios',
+      'version': '1.0.0',
+      'pubVersion': pubVersion,
+    });
+    Response response = await _utils.post("api_version", body: body);
+    if (response.data["success"] == true) {
+      return VersionResponse.fromJson(response.data);
+    } else {
+      return VersionResponse.fromJson(response.data);
     }
   }
 }

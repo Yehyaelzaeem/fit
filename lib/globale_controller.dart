@@ -5,4 +5,6 @@ import 'package:get/get.dart';
 class GlobalController extends GetxController {
   final response = MealFoodListResponse().obs;
   final mealFeatureHomeResponse = MealFeatureHomeResponse().obs;
+  final delivery_option = false.obs;
+  final pickup_option = false.obs;
 }

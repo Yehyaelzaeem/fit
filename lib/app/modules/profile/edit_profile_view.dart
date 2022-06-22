@@ -28,15 +28,17 @@ class EditProfileView extends StatefulWidget {
 }
 
 class _EditProfileViewState extends State<EditProfileView> {
-  String? password;
+  String password = '';
   String? name;
   String? email;
   String? date;
   String? phone;
-  String? password_confirmation;
+  String password_confirmation = '';
   String gender = "Male";
   GlobalKey<FormState> key = GlobalKey();
+  GlobalKey<FormState> key2 = GlobalKey();
   bool showLoader = false;
+  bool passwordSaveLoading = false;
   UserResponse loginResponse = UserResponse();
   UserResponse ress = UserResponse();
   DateTime selectedDate = DateTime.now();
@@ -45,11 +47,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   XFile? _imageFile;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(1950, 8),
-        lastDate: DateTime.now());
+    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1950, 8), lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
@@ -102,19 +100,33 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
   }
 
+  void savePassword() async {
+    if (passwordSaveLoading) return;
+    passwordSaveLoading = true;
+    setState(() {});
+    await ApiProvider().changePassword(password: password, confirmPassword: password_confirmation).then((value) async {
+      if (value.success == true) {
+        setState(() {
+          loginResponse = value;
+          passwordSaveLoading = false;
+        });
+        Fluttertoast.showToast(msg: "${value.message}");
+      } else {
+        setState(() {
+          loginResponse = value;
+          passwordSaveLoading = false;
+        });
+        Fluttertoast.showToast(msg: "${value.message}");
+        print("error");
+      }
+    });
+  }
+
   void updatePhoto() async {
     setState(() {
       showLoader = true;
     });
-    await ApiProvider()
-        .editProfileApi(
-            image: File(_imageFile!.path),
-            name: name ?? ress.data!.name,
-            email: email ?? ress.data!.email,
-            date: date ?? ress.data!.dateOfBirth,
-            phone: phone ?? ress.data!.phone,
-            gender: gender)
-        .then((value) async {
+    await ApiProvider().editProfileApi(image: File(_imageFile!.path), name: name ?? ress.data!.name, email: email ?? ress.data!.email, date: date ?? ress.data!.dateOfBirth, phone: phone ?? ress.data!.phone, gender: gender).then((value) async {
       if (value.success == true) {
         setState(() {
           loginResponse = value;
@@ -171,8 +183,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         updatePhoto();
       }
     } catch (e) {
-      setState(() {
-      });
+      setState(() {});
     }
   }
 
@@ -197,232 +208,307 @@ class _EditProfileViewState extends State<EditProfileView> {
           ),
           isLoading == true
               ? CircularLoadingWidget()
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Form(
-                    key: key,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 18,
-                        ),
-                        InkWell(
-                          onTap: getImage,
-                          child: Center(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(250),
-                                child: _imageFile == null
-                                    ? CachedNetworkImage(
-                                        imageUrl: "${ress.data!.image}",
-                                        fit: BoxFit.cover,
-                                        height: 100,
-                                        width: 100,
-                                        placeholder: (ctx, url) {
-                                          return profileImageHolder();
-                                        },
-                                        errorWidget: (context, url, error) {
-                                          return profileImageHolder();
-                                        },
-                                      )
-                                    : Container(
-                                        width: 100,
-                                        height: 100,
-                                        decoration: BoxDecoration(shape: BoxShape.circle),
-                                        child: Image.file(
-                                          File(_imageFile!.path),
-                                          fit: BoxFit.cover,
-                                        ))),
-                          ),
-                        ),
-                        //id
-                        kTextbody('ID', size: 18),
-                        EditText(
-                          value: '${ress.data!.patientId!.toUpperCase()}',
-                          updateFunc: (text) {},
-                          validateFunc: (text) {},
-                          enable: false,
-                          type: TextInputType.name,
-                        ),
-                        SizedBox(height: 12),
-                        //User name
-                        kTextbody('User name', size: 18),
-                        EditText(
-                          value: '${ress.data!.name!}',
-                          updateFunc: (text) {
-                            setState(() {
-                              name = text;
-                            });
-                            print(text);
-                          },
-                          validateFunc: (text) {
-                            if (text != null && text.toString().length < 3) {
-                              return "Enter Valid Name";
-                            }
-                          },
-                          type: TextInputType.text,
-                        ),
-                        SizedBox(height: 12),
-
-                        //User name
-                        kTextbody('Email', size: 18),
-                        EditText(
-                          value: '${ress.data!.email}',
-                          updateFunc: (text) {
-                            setState(() {
-                              email = text;
-                            });
-                            print(text);
-                          },
-                          validateFunc: (text) {
-                            if (text != null && !text.toString().contains("@")) {
-                              return "Enter Valid Email";
-                            }
-                          },
-                          type: TextInputType.emailAddress,
-                        ),
-                        SizedBox(height: 12),
-                        //Mobile Number
-                        kTextbody('Mobile Number', size: 18),
-                        EditText(
-                          value: '${ress.data!.phone!.toUpperCase()}',
-                          updateFunc: (text) {
-                            setState(() {
-                              phone = text;
-                            });
-                            print(text);
-                          },
-                          validateFunc: (text) {
-                            if (text != null && text.toString().length < 10) {
-                              return "Enter Valid Mobile Number";
-                            }
-                          },
-                          type: TextInputType.phone,
-                        ),
-                        SizedBox(height: 12),
-                        //Birth date
-                        kTextbody('Birth date', size: 18),
-                        InkWell(
-                          onTap: () {
-                            _selectDate(context);
-                          },
-                          child: EditText(
-                            value: "",
-                            suffixIconData: Icons.date_range,
-                            hint: '${date}',
-                            type: TextInputType.text,
-                            enable: false,
-                          ),
-                        ),
-                        SizedBox(height: 12),
-                        //Gender
-                        kTextbody('Gender', size: 18),
-                        Row(
+              : Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Form(
+                        key: key,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(width: 4),
+                            SizedBox(
+                              height: 18,
+                            ),
+                            InkWell(
+                              onTap: getImage,
+                              child: Center(
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(250),
+                                    child: _imageFile == null
+                                        ? CachedNetworkImage(
+                                            imageUrl: "${ress.data!.image}",
+                                            fit: BoxFit.cover,
+                                            height: 100,
+                                            width: 100,
+                                            placeholder: (ctx, url) {
+                                              return profileImageHolder();
+                                            },
+                                            errorWidget: (context, url, error) {
+                                              return profileImageHolder();
+                                            },
+                                          )
+                                        : Container(
+                                            width: 100,
+                                            height: 100,
+                                            decoration: BoxDecoration(shape: BoxShape.circle),
+                                            child: Image.file(
+                                              File(_imageFile!.path),
+                                              fit: BoxFit.cover,
+                                            ))),
+                              ),
+                            ),
+                            //id
+                            kTextbody('ID', size: 18),
+                            EditText(
+                              value: '${ress.data!.patientId!.toUpperCase()}',
+                              updateFunc: (text) {},
+                              validateFunc: (text) {},
+                              enable: false,
+                              type: TextInputType.name,
+                            ),
+                            SizedBox(height: 12),
+                            //User name
+                            kTextbody('User name', size: 18),
+                            EditText(
+                              value: '${ress.data!.name!}',
+                              updateFunc: (text) {
+                                setState(() {
+                                  name = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text != null && text.toString().length < 3) {
+                                  return "Enter Valid Name";
+                                }
+                              },
+                              type: TextInputType.text,
+                            ),
+                            SizedBox(height: 12),
+
+                            //User name
+                            kTextbody('Email', size: 18),
+                            EditText(
+                              value: '${ress.data!.email}',
+                              updateFunc: (text) {
+                                setState(() {
+                                  email = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text != null && !text.toString().contains("@")) {
+                                  return "Enter Valid Email";
+                                }
+                              },
+                              type: TextInputType.emailAddress,
+                            ),
+                            SizedBox(height: 12),
+                            //Mobile Number
+                            kTextbody('Mobile Number', size: 18),
+                            EditText(
+                              value: '${ress.data!.phone!.toUpperCase()}',
+                              updateFunc: (text) {
+                                setState(() {
+                                  phone = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text != null && text.toString().length < 10) {
+                                  return "Enter Valid Mobile Number";
+                                }
+                              },
+                              type: TextInputType.phone,
+                            ),
+                            SizedBox(height: 12),
+                            //Birth date
+                            kTextbody('Birth date', size: 18),
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  gender = "Female";
-                                });
+                                _selectDate(context);
                               },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(64),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      gender == "Female"
-                                          ? Icon(
-                                              Icons.radio_button_checked,
-                                              color: kColorPrimary,
-                                            )
-                                          : Icon(
-                                              Icons.radio_button_off,
-                                              color: kColorPrimary,
-                                            ),
-                                      kTextbody('Female', size: 16),
-                                      SizedBox(
-                                        width: 16,
-                                        height: 50,
+                              child: EditText(
+                                value: "",
+                                suffixIconData: Icons.date_range,
+                                hint: '${date}',
+                                type: TextInputType.text,
+                                enable: false,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            //Gender
+                            kTextbody('Gender', size: 18),
+                            Row(
+                              children: [
+                                SizedBox(width: 4),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      gender = "Female";
+                                    });
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width / 3,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(64),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          gender == "Female"
+                                              ? Icon(
+                                                  Icons.radio_button_checked,
+                                                  color: kColorPrimary,
+                                                )
+                                              : Icon(
+                                                  Icons.radio_button_off,
+                                                  color: kColorPrimary,
+                                                ),
+                                          kTextbody('Female', size: 16),
+                                          SizedBox(
+                                            width: 16,
+                                            height: 50,
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
                                 ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 8,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      gender = "Male";
+                                    });
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width / 3,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey, width: 1),
+                                      borderRadius: BorderRadius.circular(64),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          gender == "Male"
+                                              ? Icon(
+                                                  Icons.radio_button_checked,
+                                                  color: kColorPrimary,
+                                                )
+                                              : Icon(
+                                                  Icons.radio_button_off,
+                                                  color: kColorPrimary,
+                                                ),
+                                          kTextbody('Male', size: 16),
+                                          SizedBox(
+                                            width: 16,
+                                            height: 50,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 12),
+                            SizedBox(height: 12),
+                            Container(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  kButtonDefault(
+                                    'Save',
+                                    marginH: MediaQuery.of(context).size.width / 4,
+                                    paddingV: 0,
+                                    func: () {
+                                      SendData();
+                                    },
+                                    shadow: true,
+                                    paddingH: 16,
+                                  ),
+                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
+                                ],
                               ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Form(
+                        key: key2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 18),
+                            kTextbody('Password', size: 18),
+                            EditTextPassword(
+                              value: '',
+                              hint: '',
+                              updateFunc: (text) {
+                                setState(() {
+                                  password = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text.toString().isEmpty || text.toString().length < 6) {
+                                  return "Enter Valid Password";
+                                }
+                              },
+                            ),
+                            SizedBox(height: 12),
+                            kTextbody('Confirm password', size: 18),
+                            EditTextPassword(
+                              value: '',
+                              hint: '',
+                              updateFunc: (text) {
+                                setState(() {
+                                  password_confirmation = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text.toString().isEmpty || text.toString().length < 6) {
+                                  return "Enter Valid Password";
+                                }
+                              },
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 8,
                             ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  gender = "Male";
-                                });
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey, width: 1),
-                                  borderRadius: BorderRadius.circular(64),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      gender == "Male"
-                                          ? Icon(
-                                              Icons.radio_button_checked,
-                                              color: kColorPrimary,
-                                            )
-                                          : Icon(
-                                              Icons.radio_button_off,
-                                              color: kColorPrimary,
-                                            ),
-                                      kTextbody('Male', size: 16),
-                                      SizedBox(
-                                        width: 16,
-                                        height: 50,
-                                      ),
-                                    ],
+
+                            SizedBox(height: 12),
+                            //Password
+                            SizedBox(height: 12),
+                            Container(
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  kButtonDefault(
+                                    'change password',
+                                    marginH: MediaQuery.of(context).size.width / 4,
+                                    paddingV: 0,
+                                    func: () {
+                                      savePassword();
+                                    },
+                                    shadow: true,
+                                    paddingH: 16,
+                                    loading: passwordSaveLoading,
                                   ),
-                                ),
+                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
+                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
+                                ],
                               ),
-                            ),
+                            )
                           ],
                         ),
-                        SizedBox(height: 12),
-                        //Password
-                        SizedBox(height: 12),
-                        Container(
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              kButtonDefault(
-                                'Save',
-                                marginH: MediaQuery.of(context).size.width / 4,
-                                paddingV: 0,
-                                func: () {
-                                  SendData();
-                                },
-                                shadow: true,
-                                paddingH: 16,
-                              ),
-                              SizedBox(height: MediaQuery.of(context).size.width / 14),
-                              SizedBox(height: MediaQuery.of(context).size.width / 14),
-                            ],
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 )
         ],
       ),

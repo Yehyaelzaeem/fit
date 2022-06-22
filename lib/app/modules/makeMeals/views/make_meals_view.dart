@@ -53,6 +53,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               'Protein',
                               GestureDetector(
                                 onTap: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
                                   controller.proteinSelected.add(Food(
                                       amounts: [],
                                       selectedAmount: Amount(
@@ -86,6 +87,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -101,6 +103,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.protein.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.id = item.id;
                                                     e.title = item.title;
                                                     e.selectedAmount = Amount(
@@ -137,6 +140,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     if (controller.protein.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.protein.firstWhere((element) => element.id == e.id).amounts == null) return;
                                     if (controller.protein.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
@@ -155,6 +159,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.protein.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.selectedAmount = Amount(
                                                       id: item.id,
                                                       name: item.name,
@@ -191,6 +196,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
                                       controller.proteinSelected.remove(e);
                                     },
                                     child: Padding(
@@ -205,6 +211,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               "Carb",
                               GestureDetector(
                                 onTap: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
                                   controller.carbSelected.add(Food(
                                       amounts: [],
                                       selectedAmount: Amount(
@@ -238,6 +245,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -253,6 +261,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.carb.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.id = item.id;
                                                     e.title = item.title;
                                                     e.selectedAmount = Amount(
@@ -289,6 +298,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
@@ -307,6 +317,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.selectedAmount = Amount(
                                                       id: item.id,
                                                       name: item.name,
@@ -343,6 +354,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
                                       controller.carbSelected.remove(e);
                                     },
                                     child: Padding(
@@ -357,6 +369,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                               "Fat",
                               GestureDetector(
                                 onTap: () {
+                                  FocusScope.of(context).requestFocus(FocusNode());
                                   controller.fatSelected.add(Food(
                                       amounts: [],
                                       selectedAmount: Amount(
@@ -390,6 +403,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 5,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     Get.dialog(Dialog(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
@@ -405,6 +419,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.fat.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.id = item.id;
                                                     e.title = item.title;
                                                     e.selectedAmount = Amount(
@@ -441,6 +456,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 flex: 4,
                                 child: GestureDetector(
                                   onTap: () {
+                                    FocusScope.of(context).requestFocus(FocusNode());
                                     if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
                                     if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
@@ -459,6 +475,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                               ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
                                                 return GestureDetector(
                                                   onTap: () {
+                                                    FocusScope.of(context).requestFocus(FocusNode());
                                                     e.selectedAmount = Amount(
                                                       id: item.id,
                                                       name: item.name,
@@ -495,6 +512,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   flex: 2,
                                   child: GestureDetector(
                                     onTap: () {
+                                      FocusScope.of(context).requestFocus(FocusNode());
                                       controller.fatSelected.remove(e);
                                     },
                                     child: Padding(

@@ -1,3 +1,4 @@
+import 'package:app/app/models/cheer_full_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -6,6 +7,7 @@ import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:app/globale_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,7 @@ import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
   final controller = Get.put(HomeController());
+  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class HomeDrawer extends GetView<HomeController> {
         child: Column(
           children: <Widget>[
             // if (prefs.getUserId() != null)
-            controller.isLogggd == false
+            controller.isLogggd.value == false
                 ? Column(
                     children: [
                       Padding(
@@ -280,9 +283,11 @@ class HomeDrawer extends GetView<HomeController> {
   Future<bool> getCheerFullStatus() async {
     try {
       if (controller.cheerFullStatus) return true;
-      bool status = await ApiProvider().getCheerFullStatus();
-      controller.cheerFullStatus = status;
-      return status;
+      CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
+      controller.cheerFullStatus = cheerFullResponse.data!.isActive!;
+      globalController.delivery_option.value = cheerFullResponse.data!.delivery_option!;
+      globalController.pickup_option.value = cheerFullResponse.data!.pickup_option!;
+      return controller.cheerFullStatus;
     } catch (e) {
       Echo('error response $e');
     }

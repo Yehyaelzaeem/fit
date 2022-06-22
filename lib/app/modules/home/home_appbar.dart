@@ -73,10 +73,14 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         controller.currentIndex.value = 0;
                       }
                     },
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      size: 30,
-                      color: Colors.black87,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 6),
+                      padding: EdgeInsets.all(4),
+                      child: Icon(
+                        Icons.arrow_back_ios,
+                        size: 30,
+                        color: Colors.black87,
+                      ),
                     ),
                   )
                 : GestureDetector(
@@ -139,10 +143,17 @@ class _HomeAppbarState extends State<HomeAppbar> {
                     ? SizedBox(
                         width: 40,
                       )
-                    : Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, image: DecorationImage(image: NetworkImage("${ress.data!.image}"), fit: BoxFit.cover)),
+                    : GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(FocusNode());
+
+                          if (controller.isLogggd.value) Get.toNamed(Routes.PROFILE);
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, image: DecorationImage(image: NetworkImage("${ress.data!.image}"), fit: BoxFit.cover)),
+                        ),
                       ),
               ],
             )

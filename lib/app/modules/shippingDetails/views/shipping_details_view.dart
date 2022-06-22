@@ -247,8 +247,19 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                     height: 50,
                                     child: Row(
                                       children: [
-                                        if (controller.textController.text.isEmpty && controller.latitude.value.isNotEmpty) kTextbody("${controller.latitude.value}, ${controller.longitude.value}"),
-                                        if (controller.textController.text.isNotEmpty) kTextbody("${controller.textController.text}"),
+                                        if (controller.textController.text.isEmpty && controller.latitude.value.isNotEmpty)
+                                          Expanded(
+                                            child: kTextbody(
+                                              "${controller.latitude.value}, ${controller.longitude.value}",
+                                            ),
+                                          ),
+                                        if (controller.textController.text.isNotEmpty)
+                                          Expanded(
+                                            child: kTextbody(
+                                              "${controller.textController.text}",
+                                            ),
+                                          ),
+                                        if (controller.textController.text.isEmpty && controller.latitude.value.isEmpty) kTextbody("Choose location", paddingH: 12, color: Colors.grey),
                                       ],
                                     ),
                                   ),

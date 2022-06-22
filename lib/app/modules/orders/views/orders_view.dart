@@ -7,7 +7,6 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
-import 'package:app/un_coplete_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -71,7 +70,7 @@ class OrdersView extends GetView<OrdersController> {
               SizedBox(height: 12),
               Obx(() {
                 if (controller.loading.value) return Center(child: CircularLoadingWidget());
-                if (controller.requiredAuth.value) return IncompleteData();
+                // if (controller.requiredAuth.value) return IncompleteData();
                 return Column(
                   children: [
                     Container(
@@ -92,24 +91,6 @@ class OrdersView extends GetView<OrdersController> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                controller.selectedTap.value = 1;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
-                                  borderRadius: BorderRadius.circular(200),
-                                ),
-                                child: kTextbody(
-                                  "Completed",
-                                  paddingV: 8,
-                                  color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
                                 controller.selectedTap.value = 2;
                               },
                               child: Container(
@@ -125,17 +106,35 @@ class OrdersView extends GetView<OrdersController> {
                               ),
                             ),
                           ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.selectedTap.value = 1;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
+                                  borderRadius: BorderRadius.circular(200),
+                                ),
+                                child: kTextbody(
+                                  "Accepted",
+                                  paddingV: 8,
+                                  color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     if (controller.response.value.data != null)
-                      if (controller.selectedTap.value == 1)
-                        ...controller.response.value.data!.completed.map((e) {
+                      if (controller.selectedTap.value == 2)
+                        ...controller.response.value.data!.pending.map((e) {
                           return singleOrderCard(e);
                         }).toList(),
                     if (controller.response.value.data != null)
-                      if (controller.selectedTap.value == 2)
-                        ...controller.response.value.data!.pending.map((e) {
+                      if (controller.selectedTap.value == 1)
+                        ...controller.response.value.data!.completed.map((e) {
                           return singleOrderCard(e);
                         }).toList(),
                   ],
@@ -174,10 +173,8 @@ class OrdersView extends GetView<OrdersController> {
                 children: [
                   kTextbody("${e.price} L.E", color: kColorPrimary, bold: true),
                   kTextbody("${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
-                  kTextbody(
-                    "${e.date}",
-                    color: Colors.black,
-                  ),
+                  kTextbody("${e.date}", color: Colors.black),
+                  kTextbody("${e.status}", color: Colors.grey),
                 ],
               )
             ],
@@ -199,8 +196,19 @@ class OrdersView extends GetView<OrdersController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 12),
-                              kTextbody("Delivery method : ${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true, align: TextAlign.start),
-                              kTextbody(e.userInfo == null ? '' : "${e.userInfo!.address}", color: Colors.black, bold: true),
+                              Row(
+                                children: [
+                                  kTextbody("Delivery method :", color: kColorPrimary, bold: true, align: TextAlign.start),
+                                  Expanded(child: kTextbody("${getDelivertMethod(e.deliveryMethod.trim())}", color: Colors.black, align: TextAlign.start)),
+                                ],
+                              ),
+                              if (e.userInfo != null && e.userInfo!.address.isNotEmpty)
+                                Row(
+                                  children: [
+                                    kTextbody("Address :", color: kColorPrimary, bold: true, align: TextAlign.start),
+                                    Expanded(child: kTextbody(e.userInfo!.address, color: Colors.black, align: TextAlign.start)),
+                                  ],
+                                ),
                               SizedBox(height: 12),
                             ],
                           ),
@@ -227,7 +235,7 @@ class OrdersView extends GetView<OrdersController> {
                           children: [
                             ...e.meals.map((element) {
                               return ListTile(
-                                title: kTextbody(element.name, color: Colors.black, bold: true, align: TextAlign.start),
+                                title: kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
                                 trailing: kTextbody("${element.price} L.E", color: Colors.black, bold: true),
                               );
                             }).toList(),

@@ -53,25 +53,29 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
           HomeAppbar(
             type: null,
           ),
-          Row(children: [
-            PageLable(name: "Messages"),
-
-          ],),
+          Row(
+            children: [
+              PageLable(name: "Messages"),
+            ],
+          ),
           isLoading == true
               ? CircularLoadingWidget()
               : Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24),
-              child: Text("${ressponse.data!.subject}" , style: TextStyle(color: kColorPrimary , fontSize: 20),),
-            ),
-          ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: Text(
+                      "${ressponse.data!.subject}",
+                      style: TextStyle(color: kColorPrimary, fontSize: 20),
+                    ),
+                  ),
+                ),
           isLoading == true
               ? SizedBox()
               : Center(
-            child: Html(
-              data: """${ressponse.data!.message}""",
-            ),
-          ),
+                  child: Html(
+                    data: """${ressponse.data!.message}""",
+                  ),
+                ),
         ],
       ),
     );

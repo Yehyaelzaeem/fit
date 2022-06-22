@@ -60,209 +60,211 @@ class CartView extends GetView<CartController> {
 
                   Row(
                     children: [
-                      Expanded(
-                          child: kButtonDefault("Delivery", func: () {
-                        Get.dialog(Dialog(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    color: Color(0xFF414042),
-                                    child: Center(
-                                      child: kTextHeader("Delivery", color: Colors.white, size: 30),
+                      if (controller.globalController.delivery_option.value)
+                        Expanded(
+                            child: kButtonDefault("Delivery", func: () {
+                          Get.dialog(Dialog(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      color: Color(0xFF414042),
+                                      child: Center(
+                                        child: kTextHeader("Delivery", color: Colors.white, size: 30),
+                                      ),
                                     ),
-                                  ),
-                                  // SizedBox(height: 12),
+                                    // SizedBox(height: 12),
 
-                                  SizedBox(height: 12),
-                                  Container(
-                                    alignment: Alignment(0.0, 0.12),
-                                    width: double.infinity,
-                                    margin: EdgeInsets.symmetric(horizontal: 12),
-                                    height: 120.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(9.0),
-                                      color: const Color(0xFFF1F1F1),
-                                    ),
-                                    child: SizedBox(
-                                      width: Get.width / 1.3,
+                                    SizedBox(height: 12),
+                                    Container(
+                                      alignment: Alignment(0.0, 0.12),
+                                      width: double.infinity,
+                                      margin: EdgeInsets.symmetric(horizontal: 12),
                                       height: 120.0,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Spacer(),
-                                          Align(
-                                            alignment: Alignment(-0.09, 0.0),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                                              child: Text(
-                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
-                                                style: GoogleFonts.cairo(
-                                                  fontSize: 13.0,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                  height: 1.38,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(9.0),
+                                        color: const Color(0xFFF1F1F1),
+                                      ),
+                                      child: SizedBox(
+                                        width: Get.width / 1.3,
+                                        height: 120.0,
+                                        child: Column(
+                                          children: <Widget>[
+                                            Spacer(),
+                                            Align(
+                                              alignment: Alignment(-0.09, 0.0),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                child: Text(
+                                                  controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
+                                                  style: GoogleFonts.cairo(
+                                                    fontSize: 13.0,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w600,
+                                                    height: 1.38,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          Spacer(),
-                                        ],
+                                            Spacer(),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 12),
+                                    SizedBox(height: 12),
 
-                                  // Padding(
-                                  //   padding: const EdgeInsets.all(8.0),
-                                  //   child: TextFormField(
-                                  //     initialValue: '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!}',
-                                  //     enabled: false,
-                                  //     decoration: InputDecoration(
-                                  //         border: OutlineInputBorder(
-                                  //           borderRadius: BorderRadius.circular(4),
-                                  //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                  //         ),
-                                  //         disabledBorder: OutlineInputBorder(
-                                  //           borderRadius: BorderRadius.circular(4),
-                                  //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                  //         ),
-                                  //         focusedBorder: OutlineInputBorder(
-                                  //           borderRadius: BorderRadius.circular(4),
-                                  //           borderSide: BorderSide(color: kColorPrimary, width: 2),
-                                  //         ),
-                                  //         errorStyle: TextStyle(fontSize: 10),
-                                  //         labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
-                                  //         hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
-                                  //         hintText: '',
-                                  //         contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-                                  //     keyboardType: TextInputType.text,
-                                  //     validator: (text) {},
-                                  //     maxLines: 4,
-                                  //     onChanged: (newValue) {},
-                                  //     onFieldSubmitted: (newValue) {},
-                                  //     onSaved: (newValue) {},
-                                  //   ),
-                                  // ),
-                                  // SizedBox(height: 12),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.all(8.0),
+                                    //   child: TextFormField(
+                                    //     initialValue: '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!}',
+                                    //     enabled: false,
+                                    //     decoration: InputDecoration(
+                                    //         border: OutlineInputBorder(
+                                    //           borderRadius: BorderRadius.circular(4),
+                                    //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                    //         ),
+                                    //         disabledBorder: OutlineInputBorder(
+                                    //           borderRadius: BorderRadius.circular(4),
+                                    //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                    //         ),
+                                    //         focusedBorder: OutlineInputBorder(
+                                    //           borderRadius: BorderRadius.circular(4),
+                                    //           borderSide: BorderSide(color: kColorPrimary, width: 2),
+                                    //         ),
+                                    //         errorStyle: TextStyle(fontSize: 10),
+                                    //         labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
+                                    //         hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
+                                    //         hintText: '',
+                                    //         contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
+                                    //     keyboardType: TextInputType.text,
+                                    //     validator: (text) {},
+                                    //     maxLines: 4,
+                                    //     onChanged: (newValue) {},
+                                    //     onFieldSubmitted: (newValue) {},
+                                    //     onSaved: (newValue) {},
+                                    //   ),
+                                    // ),
+                                    // SizedBox(height: 12),
 
-                                  kButtonDefault("Submit",
-                                      color: kColorPrimary,
-                                      textColor: Colors.white,
-                                      border: Border.all(
-                                        color: Color(0xffF1F1F1),
-                                        width: 1,
-                                      ), func: () {
-                                    Get.back();
-                                    controller.createOrder("delivery");
-                                  }),
-                                  SizedBox(height: 12),
-                                ],
+                                    kButtonDefault("Submit",
+                                        color: kColorPrimary,
+                                        textColor: Colors.white,
+                                        border: Border.all(
+                                          color: Color(0xffF1F1F1),
+                                          width: 1,
+                                        ), func: () {
+                                      Get.back();
+                                      controller.createOrder("delivery");
+                                    }),
+                                    SizedBox(height: 12),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ));
-                      })),
-                      Expanded(
-                          child: kButtonDefault("Pick up ", func: () {
-                        Get.dialog(Dialog(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 16),
-                            child: SingleChildScrollView(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    color: Color(0xFF414042),
-                                    child: Center(
-                                      child: kTextHeader("Pick up", color: Colors.white, size: 30),
+                          ));
+                        })),
+                      if (controller.globalController.pickup_option.value)
+                        Expanded(
+                            child: kButtonDefault("Pick up ", func: () {
+                          Get.dialog(Dialog(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      color: Color(0xFF414042),
+                                      child: Center(
+                                        child: kTextHeader("Pick up", color: Colors.white, size: 30),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 12),
-                                  Container(
-                                    alignment: Alignment(0.0, 0.12),
-                                    width: double.infinity,
-                                    margin: EdgeInsets.symmetric(horizontal: 12),
-                                    height: 155.0,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(9.0),
-                                      color: const Color(0xFFF1F1F1),
-                                    ),
-                                    child: SizedBox(
-                                      width: Get.width / 1.3,
+                                    SizedBox(height: 12),
+                                    Container(
+                                      alignment: Alignment(0.0, 0.12),
+                                      width: double.infinity,
+                                      margin: EdgeInsets.symmetric(horizontal: 12),
                                       height: 155.0,
-                                      child: Column(
-                                        children: <Widget>[
-                                          Spacer(flex: 23),
-                                          Align(
-                                            alignment: Alignment(-0.09, 0.0),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                                              child: Text(
-                                                controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions!,
-                                                style: GoogleFonts.cairo(
-                                                  fontSize: 13.0,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w600,
-                                                  height: 1.38,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(9.0),
+                                        color: const Color(0xFFF1F1F1),
+                                      ),
+                                      child: SizedBox(
+                                        width: Get.width / 1.3,
+                                        height: 155.0,
+                                        child: Column(
+                                          children: <Widget>[
+                                            Spacer(flex: 23),
+                                            Align(
+                                              alignment: Alignment(-0.09, 0.0),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                child: Text(
+                                                  controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions!,
+                                                  style: GoogleFonts.cairo(
+                                                    fontSize: 13.0,
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w600,
+                                                    height: 1.38,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                          SizedBox(height: 20),
-                                          GestureDetector(
-                                            onTap: () {
-                                              launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);
-                                            },
-                                            child: Container(
-                                              alignment: Alignment(-0.04, -0.33),
-                                              width: double.infinity,
-                                              margin: EdgeInsets.symmetric(horizontal: 12),
-                                              height: 39.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(9.0),
-                                                color: const Color(0xFFF1F1F1),
-                                                border: Border.all(
-                                                  width: 1.0,
-                                                  color: const Color(0xFF7FC902),
+                                            SizedBox(height: 20),
+                                            GestureDetector(
+                                              onTap: () {
+                                                launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);
+                                              },
+                                              child: Container(
+                                                alignment: Alignment(-0.04, -0.33),
+                                                width: double.infinity,
+                                                margin: EdgeInsets.symmetric(horizontal: 12),
+                                                height: 39.0,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(9.0),
+                                                  color: const Color(0xFFF1F1F1),
+                                                  border: Border.all(
+                                                    width: 1.0,
+                                                    color: const Color(0xFF7FC902),
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.location_on, color: kColorPrimary),
+                                                    SizedBox(width: 4),
+                                                    kTextbody('Location', size: 18, color: kColorPrimary),
+                                                  ],
                                                 ),
                                               ),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Icon(Icons.location_on, color: kColorPrimary),
-                                                  SizedBox(width: 4),
-                                                  kTextbody('Location', size: 18, color: kColorPrimary),
-                                                ],
-                                              ),
                                             ),
-                                          ),
-                                          Spacer(flex: 18),
-                                        ],
+                                            Spacer(flex: 18),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 12),
-                                  kButtonDefault("Submit",
-                                      color: kColorPrimary,
-                                      textColor: Colors.white,
-                                      border: Border.all(
-                                        color: Color(0xffF1F1F1),
-                                        width: 1,
-                                      ), func: () {
-                                    Get.back();
-                                    controller.createOrder("pick_up");
-                                  }),
-                                  SizedBox(height: 12),
-                                ],
+                                    SizedBox(height: 12),
+                                    kButtonDefault("Submit",
+                                        color: kColorPrimary,
+                                        textColor: Colors.white,
+                                        border: Border.all(
+                                          color: Color(0xffF1F1F1),
+                                          width: 1,
+                                        ), func: () {
+                                      Get.back();
+                                      controller.createOrder("pick_up");
+                                    }),
+                                    SizedBox(height: 12),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ));
-                      })),
+                          ));
+                        })),
                     ],
                   )
                 ],

@@ -1,5 +1,6 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/models/user_response.dart';
+import 'package:app/app/models/version_response.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -23,7 +24,8 @@ class HomeController extends GetxController {
   var avatar = "".obs;
   var isLogggd = false.obs;
   var id = "".obs;
-
+  final response = VersionResponse(success: false, code: 0, message: "", forceUpdate: false).obs;
+  final loading = true.obs;
   @override
   void onInit() async {
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
@@ -54,6 +56,7 @@ class HomeController extends GetxController {
 
   @override
   void onReady() {
+    getNetworkData();
     super.onReady();
   }
 
@@ -62,5 +65,15 @@ class HomeController extends GetxController {
 
   void updateCurrentIndex(int value) {
     currentIndex.value = value;
+  }
+
+  void getNetworkData() async {
+    loading.value = true;
+    try {
+      response.value = await ApiProvider().kAppVersion();
+    } catch (e) {
+      loading.value = false;
+    }
+    loading.value = false;
   }
 }

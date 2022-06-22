@@ -1,6 +1,5 @@
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/app/network_util/shared_helper.dart';
 import 'package:get/get.dart';
 
 class MyMealsController extends GetxController {
@@ -17,8 +16,8 @@ class MyMealsController extends GetxController {
   }
 
   getNetworkData() async {
-    requiredAuth.value = !await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    if (requiredAuth.value) return;
+    // requiredAuth.value = !await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    // if (requiredAuth.value) return;
     error.value = '';
     getMyMealsLoading.value = true;
     try {

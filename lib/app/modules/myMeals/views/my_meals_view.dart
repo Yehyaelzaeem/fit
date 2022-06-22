@@ -9,7 +9,6 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:app/app/widgets/page_lable.dart';
-import 'package:app/un_coplete_session.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,7 +23,7 @@ class MyMealsView extends GetView<MyMealsController> {
           backgroundColor: Colors.white,
           body: Obx(() {
             if (controller.loading.value) return Center(child: CircularLoadingWidget());
-            if (controller.requiredAuth.value) return IncompleteData();
+            // if (controller.requiredAuth.value) return IncompleteData();
             if (controller.error.value.isNotEmpty)
               return Container(
                   margin: EdgeInsets.only(top: Get.height / 3),
