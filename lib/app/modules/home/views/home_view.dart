@@ -32,7 +32,7 @@ class HomeView extends GetView<HomeController> {
             children: [
               SizedBox(height: 26),
               kTextHeader('Update required', size: 24),
-              kTextHeader('${controller.response.value.message}'),
+              kTextHeader('${controller.response.value.message}', paddingH: 20),
               SizedBox(height: 26),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 100),
