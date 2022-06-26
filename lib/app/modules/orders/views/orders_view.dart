@@ -8,7 +8,10 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrdersView extends GetView<OrdersController> {
   Widget appBar() {
@@ -196,19 +199,95 @@ class OrdersView extends GetView<OrdersController> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  kTextbody("Delivery method :", color: kColorPrimary, bold: true, align: TextAlign.start),
-                                  Expanded(child: kTextbody("${getDelivertMethod(e.deliveryMethod.trim())}", color: Colors.black, align: TextAlign.start)),
-                                ],
-                              ),
-                              if (e.userInfo != null && e.userInfo!.address.isNotEmpty)
-                                Row(
-                                  children: [
-                                    kTextbody("Address :", color: kColorPrimary, bold: true, align: TextAlign.start),
-                                    Expanded(child: kTextbody(e.userInfo!.address, color: Colors.black, align: TextAlign.start)),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                margin: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(200),
+                                  color: Color(0xffF6F6F6),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[300]!,
+                                      blurRadius: 3,
+                                      spreadRadius: 1,
+                                      offset: Offset(3, 3),
+                                    ),
                                   ],
                                 ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    kTextbody("Delivery method :", color: kColorPrimary, bold: true, align: TextAlign.start),
+                                    Expanded(child: kTextbody("${getDelivertMethod(e.deliveryMethod.trim())}", color: Colors.black, align: TextAlign.start)),
+                                  ],
+                                ),
+                              ),
+                              if (e.userInfo != null && e.userInfo!.address.isNotEmpty)
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  margin: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(200),
+                                    color: Color(0xffF6F6F6),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey[300]!,
+                                        blurRadius: 3,
+                                        spreadRadius: 1,
+                                        offset: Offset(3, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      kTextbody("Address :", color: kColorPrimary, bold: true, align: TextAlign.start),
+                                      Expanded(child: kTextbody('${e.userInfo!.address}', color: Colors.black, align: TextAlign.start)),
+                                    ],
+                                  ),
+                                ),
+                              SizedBox(height: 12),
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (e.userInfo != null && e.userInfo!.latitude != null) {
+                                      String lat = e.userInfo!.latitude.toString();
+                                      String lng = e.userInfo!.longitude.toString();
+                                      launch('http://www.google.com/maps/place/$lat,$lng');
+                                    }
+                                  },
+                                  child: Container(
+                                    width: Get.width / 1.6,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(color: kColorPrimary),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Align(
+                                          alignment: Alignment(0.0, 0.1),
+                                          child: SvgPicture.string(
+                                            // Icon material-location-on
+                                            '<svg viewBox="130.4 401.0 11.2 16.0" ><path transform="translate(122.9, 398.0)" d="M 13.10000038146973 3 C 10.00399971008301 3 7.5 5.504000186920166 7.5 8.600000381469727 C 7.5 12.80000019073486 13.10000038146973 19 13.10000038146973 19 C 13.10000038146973 19 18.70000076293945 12.80000019073486 18.70000076293945 8.600000381469727 C 18.70000076293945 5.504000186920166 16.19600105285645 3 13.10000038146973 3 Z M 13.10000038146973 10.60000038146973 C 11.99600028991699 10.60000038146973 11.10000038146973 9.703999519348145 11.10000038146973 8.600000381469727 C 11.10000038146973 7.49600076675415 11.99600028991699 6.600000381469727 13.10000038146973 6.600000381469727 C 14.20400047302246 6.600000381469727 15.10000038146973 7.49600076675415 15.10000038146973 8.600000381469727 C 15.10000038146973 9.703999519348145 14.20400047302246 10.60000038146973 13.10000038146973 10.60000038146973 Z" fill="#7fc902" stroke="none" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
+                                            width: 11.2,
+                                            height: 16.0,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'Location',
+                                          style: GoogleFonts.cairo(
+                                            fontSize: 19.0,
+                                            color: const Color(0xFF7FC902),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                               SizedBox(height: 12),
                             ],
                           ),
@@ -233,10 +312,30 @@ class OrdersView extends GetView<OrdersController> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            SizedBox(height: 8),
                             ...e.meals.map((element) {
-                              return ListTile(
-                                title: kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
-                                trailing: kTextbody("${element.price} L.E", color: Colors.black, bold: true),
+                              return Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                margin: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(200),
+                                  color: Color(0xffF6F6F6),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey[300]!,
+                                      blurRadius: 3,
+                                      spreadRadius: 1,
+                                      offset: Offset(3, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
+                                    kTextbody("${element.price} L.E", color: Colors.black, bold: true),
+                                  ],
+                                ),
                               );
                             }).toList(),
                             Container(
@@ -246,11 +345,21 @@ class OrdersView extends GetView<OrdersController> {
                             SizedBox(height: 6),
                             Container(
                               margin: EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 3,
+                                    spreadRadius: 1,
+                                    offset: Offset(3, 3),
+                                  ),
+                                ],
+                              ),
                               child: EditText(
                                 value: getInsturctions(e.deliveryMethod),
                                 hintColor: Color(0xff8D8D8D),
                                 enable: false,
-                                background: Color(0xffF1F1F1),
+                                background: Color(0xffF6F6F6),
                                 updateFunc: (value) {},
                                 noBorder: true,
                                 radius: 4,

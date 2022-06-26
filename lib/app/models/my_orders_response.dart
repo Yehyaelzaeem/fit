@@ -110,24 +110,15 @@ class UserInfo {
   String email;
   String phone;
   String address;
-  String latitude;
-  String longitude;
+  String? latitude;
+  String? longitude;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
-        name: json["name"] == null ? null : json["name"],
-        email: json["email"] == null ? null : json["email"],
-        phone: json["phone"] == null ? null : json["phone"],
-        address: json["address"] == null ? null : json["address"],
+        name: json["name"] == null ? '' : json["name"],
+        email: json["email"] == null ? '' : json["email"],
+        phone: json["phone"] == null ? '' : json["phone"],
+        address: json["address"] == null ? '' : json["address"],
         latitude: json["latitude"] == null ? null : json["latitude"],
         longitude: json["longitude"] == null ? null : json["longitude"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "name": name == null ? null : name,
-        "email": email == null ? null : email,
-        "phone": phone == null ? null : phone,
-        "address": address == null ? null : address,
-        "latitude": latitude == null ? null : latitude,
-        "longitude": longitude == null ? null : longitude,
-      };
 }

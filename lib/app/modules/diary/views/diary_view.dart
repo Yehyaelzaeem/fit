@@ -608,63 +608,70 @@ class _DiaryViewState extends State<DiaryView> {
       onTap: () async {
         if (type == 1) {
           //show screen dialog
-          dynamic result = await showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  child: AddNewFood(
-                    date: apiDate!,
-                    list: response.data!.proteins!.food,
-                    edit: true,
-                    id: item.id,
-                    showAsDialog: true,
-                  ),
-                );
-              });
+          // dynamic result = await showDialog(
+          //     context: context,
+          //     builder: (context) {
+          //       return Dialog(
+          //         child: AddNewFood(
+          //           date: apiDate!,
+          //           list: response.data!.proteins!.food,
+          //           edit: true,
+          //           id: item.id,
+          //           showAsDialog: true,
+          //         ),
+          //       );
+          //     });
+          // if (result == null) {
+          //   setState(() {});
+          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          // }
+          dynamic result = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddNewFood(
+                date: apiDate!,
+                list: response.data!.proteins!.food,
+                edit: true,
+                id: item.id,
+                showAsDialog: false,
+              ),
+            ),
+          );
           if (result == null) {
             setState(() {});
             if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
           }
-          // dynamic result = await Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => AddNewFood(date: apiDate!, list: response.data!.proteins!.food, edit: true, id: item.id),
-          //   ),
-          // );
-          // if (result == null) {
-          //   setState(() {});
-          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-          // }
         } else {
-          dynamic result = await showDialog(
-              context: context,
-              builder: (context) {
-                return Dialog(
-                  child: AddNewFood(
-                    date: apiDate!,
-                    list: response.data!.carbsFats!.food,
-                    edit: true,
-                    id: item.id,
-                    showAsDialog: true,
-                  ),
-                );
-              });
-          if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          // dynamic result = await showDialog(
+          //     context: context,
+          //     builder: (context) {
+          //       return Dialog(
+          //         child: AddNewFood(
+          //           date: apiDate!,
+          //           list: response.data!.carbsFats!.food,
+          //           edit: true,
+          //           id: item.id,
+          //           showAsDialog: true,
+          //         ),
+          //       );
+          //     });
+          // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
 
-          // dynamic result = await Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //         builder: (context) => AddNewFood(
-          //               date: apiDate!,
-          //               list: response.data!.carbsFats!.food,
-          //               edit: true,
-          //               id: item.id,
-          //             )));
+          dynamic result = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => AddNewFood(
+                        date: apiDate!,
+                        list: response.data!.carbsFats!.food,
+                        edit: true,
+                        id: item.id,
+                        showAsDialog: false,
+                      )));
 
-          // if (result == null) {
-          //   setState(() {});
-          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-          // }
+          if (result == null) {
+            setState(() {});
+            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          }
         }
       },
       child: Column(
@@ -856,53 +863,55 @@ class _DiaryViewState extends State<DiaryView> {
                 InkWell(
                   onTap: () async {
                     if (type == 1) {
-                      dynamic result = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: AddNewFood(
-                                date: apiDate!,
-                                list: response.data!.proteins!.food,
-                                edit: false,
-                                showAsDialog: true,
-                              ),
-                            );
-                          });
-                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-
-                      // dynamic result = await Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => AddNewFood(
-                      //               date: apiDate!,
-                      //               list: response.data!.proteins!.food,
-                      //               edit: false,
-                      //             )));
+                      // dynamic result = await showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return Dialog(
+                      //         child: AddNewFood(
+                      //           date: apiDate!,
+                      //           list: response.data!.proteins!.food,
+                      //           edit: false,
+                      //           showAsDialog: true,
+                      //         ),
+                      //       );
+                      //     });
                       // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      dynamic result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewFood(
+                                    date: apiDate!,
+                                    list: response.data!.proteins!.food,
+                                    edit: false,
+                                    showAsDialog: false,
+                                  )));
+                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
                     } else {
-                      dynamic result = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: AddNewFood(
-                                date: apiDate!,
-                                list: response.data!.carbsFats!.food,
-                                edit: false,
-                                showAsDialog: true,
-                              ),
-                            );
-                          });
-                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-
-                      // dynamic result = await Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => AddNewFood(
-                      //               date: apiDate!,
-                      //               list: response.data!.carbsFats!.food,
-                      //               edit: false,
-                      //             )));
+                      // dynamic result = await showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return Dialog(
+                      //         child: AddNewFood(
+                      //           date: apiDate!,
+                      //           list: response.data!.carbsFats!.food,
+                      //           edit: false,
+                      //           showAsDialog: true,
+                      //         ),
+                      //       );
+                      //     });
                       // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      dynamic result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => AddNewFood(
+                                    date: apiDate!,
+                                    list: response.data!.carbsFats!.food,
+                                    edit: false,
+                                    showAsDialog: false,
+                                  )));
+                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
                     }
                   },
                   child: Container(

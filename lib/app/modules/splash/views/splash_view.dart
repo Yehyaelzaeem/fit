@@ -56,13 +56,11 @@ class SplashView extends GetView<SplashController> {
                         width: Get.width,
                         child: Center(
                           child: DefaultTextStyle(
-                            style: const TextStyle(
-                                fontSize: 18.0, fontFamily: 'appFont', color: Colors.white),
+                            style: const TextStyle(fontSize: 18.0, fontFamily: 'appFont', color: Colors.white),
                             child: AnimatedTextKit(
                               totalRepeatCount: 1,
                               animatedTexts: [
-                                TyperAnimatedText('                     ',
-                                    speed: Duration(milliseconds: 45)),
+                                TyperAnimatedText('                     ', speed: Duration(milliseconds: 45)),
                               ],
                               onFinished: () {
                                 controller.navigateNextPage();
