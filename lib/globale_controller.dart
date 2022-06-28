@@ -7,4 +7,5 @@ class GlobalController extends GetxController {
   final mealFeatureHomeResponse = MealFeatureHomeResponse().obs;
   final delivery_option = false.obs;
   final pickup_option = false.obs;
+  final shoNewMessage = true.obs;
 }

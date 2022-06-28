@@ -36,12 +36,13 @@ class HomeView extends GetView<HomeController> {
               SizedBox(height: 26),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 100),
-                height: Get.height / 5,
+                height: Get.height / 4,
                 child: Image.asset(
                   kLogoColumn,
                   width: double.infinity,
                 ),
               ),
+              SizedBox(height: 20),
               kButtonDefault(
                 "Update",
                 func: () async {

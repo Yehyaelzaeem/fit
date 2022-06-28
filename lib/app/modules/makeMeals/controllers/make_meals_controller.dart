@@ -1,6 +1,7 @@
 import 'package:app/app/models/meal_food_list_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/globale_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -36,17 +37,17 @@ class MakeMealsController extends GetxController {
     try {
       if (globalController.response.value.data == null) globalController.response.value = await ApiProvider().getMealFoodList();
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Protien").isNotEmpty)
-        protein.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Protien").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Protien").isNotEmpty) protein.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Protien").food;
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Carb").isNotEmpty)
-        carb.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Carb").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Carb").isNotEmpty) carb.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Carb").food;
 
-      if (globalController.response.value.data!.where((element) => element.title! == "Fats").isNotEmpty)
-        fat.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Fats").food;
+      if (globalController.response.value.data!.where((element) => element.title! == "Fats").isNotEmpty) fat.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Fats").food;
 
       if (Get.arguments != null) meal = Get.arguments;
       if (meal != null) {
+        meal!.items.forEach((element) {
+          Echo('title ${element.title} length ${element.items.length}');
+        });
         mealName.value = meal!.name;
         note.value = meal!.note ?? '';
         mealNameController.text = meal!.name;
@@ -73,10 +74,54 @@ class MakeMealsController extends GetxController {
               if (food != null) proteinSelected.add(food!);
             });
           }
+
+          if (element.title == "Carb" || element.title == "carb") {
+            element.items.forEach((element) {
+              Food? food;
+              Amount? amount;
+              carb.forEach((item) {
+                if (item.id == element.id) {
+                  item.amounts.forEach((amountItem) {
+                    if (element.amount == amountItem.name) amount = amountItem;
+                  });
+                  if (amount != null)
+                    food = Food(
+                      id: item.id,
+                      title: item.title,
+                      selectedAmount: amount!,
+                      amounts: item.amounts,
+                    );
+                }
+              });
+              if (food != null) carbSelected.add(food!);
+            });
+          }
+          if (element.title == "Fat" || element.title == "fat") {
+            element.items.forEach((element) {
+              Food? food;
+              Amount? amount;
+              fat.forEach((item) {
+                if (item.id == element.id) {
+                  item.amounts.forEach((amountItem) {
+                    if (element.amount == amountItem.name) amount = amountItem;
+                  });
+                  if (amount != null)
+                    food = Food(
+                      id: item.id,
+                      title: item.title,
+                      selectedAmount: amount!,
+                      amounts: item.amounts,
+                    );
+                }
+              });
+              if (food != null) fatSelected.add(food!);
+            });
+          }
         });
       }
     } catch (e) {
       error.value = '$e';
+      loading.value = false;
     }
     loading.value = false;
   }
@@ -104,16 +149,16 @@ class MakeMealsController extends GetxController {
       foodIds += element.id.toString() + ",";
       amountIds += element.selectedAmount.id.toString() + ",";
     });
-    carb.forEach((element) {
+    carbSelected.forEach((element) {
       foodIds += element.id.toString() + ",";
       amountIds += element.selectedAmount.id.toString() + ",";
     });
-    fat.forEach((element) {
+    fatSelected.forEach((element) {
       foodIds += element.id.toString() + ",";
       amountIds += element.selectedAmount.id.toString() + ",";
     });
     foodIds.substring(0, foodIds.length - 1);
-    amountIds.substring(0, foodIds.length - 1);
+    amountIds.substring(0, amountIds.length - 1);
 
     try {
       if (meal != null) {
@@ -135,6 +180,7 @@ class MakeMealsController extends GetxController {
       Get.back(result: true);
     } catch (e) {
       Get.snackbar("Error", "$e");
+      saveLoading.value = false;
     }
     saveLoading.value = false;
   }

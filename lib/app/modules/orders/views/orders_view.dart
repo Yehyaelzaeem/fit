@@ -250,10 +250,27 @@ class OrdersView extends GetView<OrdersController> {
                               Center(
                                 child: GestureDetector(
                                   onTap: () {
-                                    if (e.userInfo != null && e.userInfo!.latitude != null) {
+                                    if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery') {
+                                      if (e.userInfo != null && e.userInfo!.latitude != null) {
+                                        String lat = e.userInfo!.latitude.toString();
+                                        String lng = e.userInfo!.longitude.toString();
+                                        launch('http://www.google.com/maps/place/$lat,$lng');
+                                      }
+                                    } else {
                                       String lat = e.userInfo!.latitude.toString();
                                       String lng = e.userInfo!.longitude.toString();
                                       launch('http://www.google.com/maps/place/$lat,$lng');
+
+                                      String location = "";
+
+                                      if (controller.globalController.mealFeatureHomeResponse.value.data != null) {
+                                        if (controller.globalController.mealFeatureHomeResponse.value.data!.info != null) {
+                                          if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null) {
+                                            location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!;
+                                          }
+                                        }
+                                      }
+                                      launch(location);
                                     }
                                   },
                                   child: Container(
@@ -309,65 +326,67 @@ class OrdersView extends GetView<OrdersController> {
                   onTap: () {
                     Get.dialog(
                       Dialog(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(height: 8),
-                            ...e.meals.map((element) {
-                              return Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                margin: EdgeInsets.all(8),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(height: 8),
+                              ...e.meals.map((element) {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  margin: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(200),
+                                    color: Color(0xffF6F6F6),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey[300]!,
+                                        blurRadius: 3,
+                                        spreadRadius: 1,
+                                        offset: Offset(3, 3),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
+                                      kTextbody("${element.price} L.E", color: Colors.black, bold: true),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                              Container(
+                                width: double.infinity,
+                                child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+                              ),
+                              SizedBox(height: 6),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 12),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(200),
-                                  color: Color(0xffF6F6F6),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.grey[300]!,
+                                      color: Colors.grey,
                                       blurRadius: 3,
                                       spreadRadius: 1,
                                       offset: Offset(3, 3),
                                     ),
                                   ],
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
-                                    kTextbody("${element.price} L.E", color: Colors.black, bold: true),
-                                  ],
+                                child: EditText(
+                                  value: getInsturctions(e.deliveryMethod),
+                                  hintColor: Color(0xff8D8D8D),
+                                  enable: false,
+                                  background: Color(0xffF6F6F6),
+                                  updateFunc: (value) {},
+                                  noBorder: true,
+                                  radius: 4,
+                                  lines: 3,
                                 ),
-                              );
-                            }).toList(),
-                            Container(
-                              width: double.infinity,
-                              child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
-                            ),
-                            SizedBox(height: 6),
-                            Container(
-                              margin: EdgeInsets.symmetric(horizontal: 12),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 3,
-                                    spreadRadius: 1,
-                                    offset: Offset(3, 3),
-                                  ),
-                                ],
                               ),
-                              child: EditText(
-                                value: getInsturctions(e.deliveryMethod),
-                                hintColor: Color(0xff8D8D8D),
-                                enable: false,
-                                background: Color(0xffF6F6F6),
-                                updateFunc: (value) {},
-                                noBorder: true,
-                                radius: 4,
-                                lines: 3,
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                          ],
+                              SizedBox(height: 12),
+                            ],
+                          ),
                         ),
                       ),
                     );

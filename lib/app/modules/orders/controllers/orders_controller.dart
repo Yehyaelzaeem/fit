@@ -8,7 +8,7 @@ class OrdersController extends GetxController {
 
   final response = MyOrdersResponse(code: 200, success: false, data: null).obs;
   final error = ''.obs;
-  final selectedTap = 1.obs;
+  final selectedTap = 2.obs;
 
   final loading = false.obs;
   final requiredAuth = false.obs;

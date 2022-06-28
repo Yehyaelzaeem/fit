@@ -59,7 +59,7 @@ class _SessionsViewState extends State<SessionsView> {
   bool getLog = true;
   void getFromCash() async {
     IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-     setState(() {
+    setState(() {
       getLog = false;
     });
     if (IsLogggd != true) {
@@ -89,6 +89,7 @@ class _SessionsViewState extends State<SessionsView> {
                 ? MainUnAuth()
                 : ListView(
                     children: [
+                      SizedBox(height: 6),
                       Row(
                         children: [
                           PageLable(name: "My Sessions"),
@@ -101,37 +102,27 @@ class _SessionsViewState extends State<SessionsView> {
                               children: [
                                 ress.data!.nextSession == null
                                     ? Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 18),
-                                        child: Center(
-                                            child: Text(
-                                                " You Have No Sessions, Book Your Next Session")),
+                                        padding: const EdgeInsets.symmetric(vertical: 18),
+                                        child: Center(child: Text(" You Have No Sessions, Book Your Next Session")),
                                       )
                                     : Container(
                                         width: double.infinity,
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 12),
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8),
+                                        margin: EdgeInsets.symmetric(vertical: 12),
+                                        padding: EdgeInsets.symmetric(vertical: 8),
                                         color: Color(0xffF1F1F1),
                                         child: Stack(
                                           children: [
                                             Container(
                                                 width: double.infinity,
                                                 child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
                                                   children: [
                                                     kTextbody(
                                                       'Next Session',
                                                       color: Colors.black,
                                                       size: 16,
                                                     ),
-                                                    kTextbody(
-                                                        '${ress.data!.nextSession!.day}',
-                                                        color: kColorPrimary,
-                                                        size: 16,
-                                                        bold: true),
+                                                    kTextbody('${ress.data!.nextSession!.day}', color: kColorPrimary, size: 16, bold: true),
                                                     kTextbody(
                                                       '${ress.data!.nextSession!.sessionDate}',
                                                       color: Colors.black,
@@ -156,8 +147,7 @@ class _SessionsViewState extends State<SessionsView> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
                                             child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 18),
+                                          padding: const EdgeInsets.symmetric(vertical: 18),
                                           child: Text("No Sessions Yet"),
                                         )),
                                       )
@@ -168,85 +158,44 @@ class _SessionsViewState extends State<SessionsView> {
                                         itemBuilder: (context, i) {
                                           return Container(
                                             width: double.infinity,
-                                            margin: EdgeInsets.symmetric(
-                                                vertical: 12),
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8),
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2),
-                                                    blurRadius: 3,
-                                                    offset: Offset(0, 1),
-                                                    spreadRadius: 3,
-                                                  )
-                                                ]),
+                                            margin: EdgeInsets.symmetric(vertical: 12),
+                                            padding: EdgeInsets.symmetric(vertical: 8),
+                                            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(0.2),
+                                                blurRadius: 3,
+                                                offset: Offset(0, 1),
+                                                spreadRadius: 3,
+                                              )
+                                            ]),
                                             child: Stack(
                                               children: [
                                                 Container(
                                                     width: double.infinity,
                                                     child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
+                                                      crossAxisAlignment: CrossAxisAlignment.center,
                                                       children: [
                                                         Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .end,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.end,
                                                           children: [
-                                                            Expanded(
-                                                                child: SizedBox(
-                                                                    width: 1)),
+                                                            Expanded(child: SizedBox(width: 1)),
                                                             Column(
                                                               children: [
-                                                                kTextbody(
-                                                                    '${sessionResponse.data![i].day ?? "Monday"}',
-                                                                    color:
-                                                                        kColorPrimary,
-                                                                    size: 16,
-                                                                    bold: true),
+                                                                kTextbody('${sessionResponse.data![i].day ?? "Monday"}', color: kColorPrimary, size: 16, bold: true),
                                                                 kTextbody(
                                                                   '${sessionResponse.data![i].date}',
-                                                                  color: Colors
-                                                                      .black,
+                                                                  color: Colors.black,
                                                                   size: 16,
                                                                 ),
                                                               ],
                                                             ),
-                                                            Expanded(
-                                                                child: SizedBox(
-                                                                    width: 1)),
-                                                            kButton(
-                                                                '${sessionResponse.data![i].status == "Pending" ? "Pending" : "Details"}',
-                                                                hight: 35,
-                                                                color: sessionResponse
-                                                                            .data![
-                                                                                i]
-                                                                            .status ==
-                                                                        "Pending"
-                                                                    ? Colors
-                                                                        .grey
-                                                                    : kColorPrimary,
-                                                                func: () {
-                                                              if (sessionResponse
-                                                                      .data![i]
-                                                                      .status ==
-                                                                  "Pending") {
-                                                                print(
-                                                                    "Pending Item");
+                                                            Expanded(child: SizedBox(width: 1)),
+                                                            kButton('${sessionResponse.data![i].status == "Pending" ? "Pending" : "Details"}', hight: 35, color: sessionResponse.data![i].status == "Pending" ? Colors.grey : kColorPrimary, func: () {
+                                                              if (sessionResponse.data![i].status == "Pending") {
+                                                                print("Pending Item");
                                                               } else {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                SessionDetails(id: sessionResponse.data![i].id)));
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => SessionDetails(id: sessionResponse.data![i].id)));
                                                               }
                                                             }),
                                                             SizedBox(width: 12),

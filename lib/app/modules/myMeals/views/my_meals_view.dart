@@ -51,7 +51,7 @@ class MyMealsView extends GetView<MyMealsController> {
                       ),
                     ),
                   if (!controller.getMyMealsLoading.value && controller.response.value.data != null)
-                    ...controller.response.value.data!.map((e) {
+                    ...controller.response.value.data!.reversed.map((e) {
                       return singleItem(meal: e);
                     }).toList(),
                   SizedBox(height: 12),

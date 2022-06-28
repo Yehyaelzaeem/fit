@@ -92,6 +92,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                       child: Icon(
                         Icons.menu,
                         color: Colors.black87,
+                        size: 30,
                       ),
                     ),
                   ),

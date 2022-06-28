@@ -201,6 +201,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           HomeAppbar(
             type: null,
           ),
+          SizedBox(height: 8),
           Row(
             children: [
               PageLable(name: "Edit Profile"),
@@ -443,7 +444,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 18),
-                            kTextbody('Password', size: 18),
+                            kTextbody('Change password', size: 18),
                             EditTextPassword(
                               value: '',
                               hint: '',
@@ -489,7 +490,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   kButtonDefault(
-                                    'change password',
+                                    'Change password',
                                     marginH: MediaQuery.of(context).size.width / 4,
                                     paddingV: 0,
                                     func: () {

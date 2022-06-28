@@ -236,9 +236,7 @@ class _DiaryViewState extends State<DiaryView> {
                                 padding: const EdgeInsets.symmetric(vertical: 4),
                                 child: Column(
                                   children: [
-                                    SizedBox(
-                                      height: 2,
-                                    ),
+                                    SizedBox(height: 2),
                                     Text(
                                       '         Calories Calculator       ',
                                       style: TextStyle(
@@ -937,7 +935,7 @@ class _DiaryViewState extends State<DiaryView> {
         builder: (BuildContext context) {
           return Dialog(
             child: Container(
-                height: MediaQuery.of(context).size.height / 1.7,
+                height: MediaQuery.of(context).size.height / 1.5,
                 padding: EdgeInsets.all(16),
                 child: SingleChildScrollView(
                   child: SelectableText(

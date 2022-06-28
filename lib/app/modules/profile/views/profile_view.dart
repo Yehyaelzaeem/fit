@@ -48,7 +48,7 @@ class _ProfileViewState extends State<ProfileView> {
       body: ListView(
         children: [
           HomeAppbar(type: null),
-          SizedBox(height: 12),
+          SizedBox(height: 8),
           // profile title
           Row(
             children: [
@@ -101,8 +101,7 @@ class _ProfileViewState extends State<ProfileView> {
                                 },
                               )),
                           kTextHeader('${ress.data!.name!}'),
-                          kTextfooter('ID : ${ress.data!.patientId!}',
-                              size: 14, color: Colors.black87, paddingV: 0),
+                          kTextfooter('ID : ${ress.data!.patientId!}', size: 14, color: Colors.black87, paddingV: 0),
                           SizedBox(height: 14),
                         ],
                       ),
@@ -111,8 +110,7 @@ class _ProfileViewState extends State<ProfileView> {
                     // edit your profile
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                            context, MaterialPageRoute(builder: (context) => EditProfileView()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileView()));
                       },
                       child: Container(
                         width: double.infinity,
@@ -211,8 +209,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Total Weight:', bold: true),
-                                kTextbody(' ${ress.data!.target!.totalWeight}',
-                                    color: kColorPrimary),
+                                kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -265,7 +262,7 @@ class _ProfileViewState extends State<ProfileView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PageLable(name: "Last Body Composition"),
-                              ress.data!.lastBodyComposition == null ?   kTextbody(' Unknown', paddingH: 36):   kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
+                              ress.data!.lastBodyComposition == null ? kTextbody(' Unknown', paddingH: 36) : kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
                             ],
                           ),
                     SizedBox(height: 12),
@@ -278,8 +275,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Total Weight:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.totalWeight}',
-                                    color: kColorPrimary),
+                                kTextbody('${ress.data!.lastBodyComposition!.totalWeight}', color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -292,8 +288,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Fats Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.fats}',
-                                    color: kColorPrimary),
+                                kTextbody('${ress.data!.lastBodyComposition!.fats}', color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -306,8 +301,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Muscles Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.muscles}',
-                                    color: kColorPrimary),
+                                kTextbody('${ress.data!.lastBodyComposition!.muscles}', color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -320,8 +314,7 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Water Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.water}',
-                                    color: kColorPrimary),
+                                kTextbody('${ress.data!.lastBodyComposition!.water}', color: kColorPrimary),
                               ],
                             ),
                           )

@@ -11,7 +11,7 @@ class PageLable extends StatelessWidget {
       children: [
         Container(
           alignment: Alignment(0.01, -1.0),
-          padding: EdgeInsets.symmetric(horizontal:24),
+          padding: EdgeInsets.symmetric(horizontal: 24),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.horizontal(
               right: Radius.circular(15.0),
@@ -19,7 +19,7 @@ class PageLable extends StatelessWidget {
             color: const Color(0xFF414042),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4),
+            padding: const EdgeInsets.symmetric(vertical: 6),
             child: Column(
               children: [
                 Text(

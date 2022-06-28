@@ -80,7 +80,7 @@ class _NotificationsViewState extends State<NotificationsView> {
             SizedBox(height: 10),
             Row(
               children: [
-                PageLable(name: "Messagses"),
+                PageLable(name: "Messages"),
               ],
             ),
             isLoading == true

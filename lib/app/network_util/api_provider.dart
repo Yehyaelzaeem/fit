@@ -25,11 +25,14 @@ import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
+import 'package:app/globale_controller.dart';
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' as getx;
 import 'package:yaml/yaml.dart';
 
 class ApiProvider {
@@ -163,11 +166,41 @@ class ApiProvider {
   }
 
   Future<UserResponse> getProfile() async {
+    final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
+    Echo('getProfile getProfile');
     Response response = await _utils.get("profile");
     if (response.data["success"] == true) {
-      return UserResponse.fromJson(response.data);
+      UserResponse ur = UserResponse.fromJson(response.data);
+      if (globalController.shoNewMessage.value) {
+        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+          globalController.shoNewMessage.value = false;
+          getx.Get.defaultDialog(
+            title: 'Notification',
+            content: Text('You have a new message?'),
+            confirm: TextButton(
+                onPressed: () {
+                  getx.Get.back();
+                  getx.Get.toNamed(Routes.NOTIFICATIONS);
+                },
+                child: Text('Check it')),
+            cancel: TextButton(
+                onPressed: () => getx.Get.back(),
+                child: Text(
+                  'Dismiss',
+                  style: TextStyle(color: Colors.grey),
+                )),
+          );
+        }
+      }
+      return ur;
     } else {
-      return UserResponse.fromJson(response.data);
+      UserResponse ur = UserResponse.fromJson(response.data);
+      if (globalController.shoNewMessage.value) {
+        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+          globalController.shoNewMessage.value = false;
+        }
+      }
+      return ur;
     }
   }
 
@@ -352,8 +385,9 @@ class ApiProvider {
   }
 
   Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("meals_features_home", body: body);
     if (response.statusCode == 200) {
@@ -364,8 +398,9 @@ class ApiProvider {
   }
 
   Future<CheerFullResponse> getCheerFullStatus() async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("meals_features_status", body: body);
     if (response.statusCode == 200) {
@@ -376,8 +411,9 @@ class ApiProvider {
   }
 
   Future<MealFeatureStatusResponse> getMealFeaturesStatus() async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("meals_features_status", body: body);
     if (response.statusCode == 200) {
@@ -388,8 +424,9 @@ class ApiProvider {
   }
 
   Future<MealFoodListResponse> getMealFoodList() async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("meals_food_list", body: body);
     if (response.statusCode == 200) {
@@ -405,13 +442,20 @@ class ApiProvider {
     required String amountsId,
     required String note,
   }) async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
       "name": name,
       "food": foodIds,
       "amount": amountsId,
       "note": note,
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
+
+    Echo("createNewMeal name $name");
+    Echo("createNewMeal food $foodIds");
+    Echo("createNewMeal amount $amountsId");
+    Echo("createNewMeal note $note");
+    Echo("createNewMeal device_id $deviceId");
 
     Response response = await _utils.post("new_meal", body: body);
     if (response.statusCode == 200) {
@@ -428,12 +472,13 @@ class ApiProvider {
     required String amountsId,
     required String note,
   }) async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
       "name": name,
       "food": foodIds,
       "amount": amountsId,
       "note": note,
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
 
     Response response = await _utils.post("update_meal/$id", body: body);
@@ -447,8 +492,9 @@ class ApiProvider {
   Future<BasicResponse> deleteMeal({
     required String id,
   }) async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("delete_meal/$id", body: body);
     if (response.statusCode == 200) {
@@ -459,8 +505,9 @@ class ApiProvider {
   }
 
   Future<MyMealResponse> getMyMeals() async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     print('-------> my_meals');
     Response response = await _utils.post("my_meals", body: body);
@@ -475,8 +522,9 @@ class ApiProvider {
   Future<MealDetailsResponse> getMealDetails({
     required String id,
   }) async {
+    String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
-      'device_id': kDeviceInfo(),
+      'device_id': deviceId,
     });
     Response response = await _utils.post("meal_details/$id", body: body);
     if (response.statusCode == 200) {
@@ -498,6 +546,7 @@ class ApiProvider {
   }) async {
     Echo("meals $meals");
     try {
+      String deviceId = await kDeviceInfo();
       FormData body = FormData.fromMap({
         'name': name,
         'phone': phone,
@@ -506,14 +555,14 @@ class ApiProvider {
         'latitude': latitude,
         'longitude': longitude,
         'meals': meals,
-        'device_id': kDeviceInfo(),
+        'device_id': deviceId,
       });
       Response response = await _utils.post("create_shopping_cart", body: body);
       if (response.statusCode == 200) {
         String id = '${response.data['data']['cart']['id']}';
         FormData body2 = FormData.fromMap({
           'delivery_method': deliveryMethod,
-          'device_id': kDeviceInfo(),
+          'device_id': deviceId,
         });
         await _utils.post("checkout/$id", body: body2);
         return true;
@@ -526,9 +575,10 @@ class ApiProvider {
   }
 
   Future<MyOrdersResponse> myOrders() async {
+    String deviceId = await kDeviceInfo();
     try {
       FormData body = FormData.fromMap({
-        'device_id': kDeviceInfo(),
+        'device_id': deviceId,
       });
       Response response = await _utils.post("my_orders", body: body);
       if (response.statusCode == 200) {
@@ -545,7 +595,7 @@ class ApiProvider {
   Future<String> kDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     String deviceId = "";
-    if (kDebugMode) return 'testDeviceId';
+    // if (kDebugMode) return 'testDeviceId';
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       deviceId = '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}';
@@ -553,6 +603,7 @@ class ApiProvider {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       deviceId = '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
     }
+    Echo('deviceId = ${deviceId.replaceAll(' ', '')}');
     return deviceId.replaceAll(' ', '');
   }
 
