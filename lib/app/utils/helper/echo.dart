@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -5,7 +7,7 @@ import 'package:get/get.dart';
 
 class Echo {
   Echo(String text) {
-    print('------> $text');
+    log('------> $text');
   }
 }
 

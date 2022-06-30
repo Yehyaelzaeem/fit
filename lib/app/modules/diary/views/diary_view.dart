@@ -936,12 +936,18 @@ class _DiaryViewState extends State<DiaryView> {
           return Dialog(
             child: Container(
                 height: MediaQuery.of(context).size.height / 1.5,
-                padding: EdgeInsets.all(16),
-                child: SingleChildScrollView(
-                  child: SelectableText(
-                    "${text}",
-                    // textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+                padding: EdgeInsets.only(top: 8, left: 4, right: 4),
+                child: Scrollbar(
+                  isAlwaysShown: true,
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: SingleChildScrollView(
+                      child: SelectableText(
+                        "${text}",
+                        // textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   ),
                 )),
           );

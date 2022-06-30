@@ -30,7 +30,7 @@ class CartView extends GetView<CartController> {
                   SizedBox(height: 20),
                   header(),
                   SizedBox(height: 4),
-                  ...controller.meals.map((e) {
+                  ...controller.meals.reversed.map((e) {
                     return singleItem(id: e.id!, title: "${e.name}", price: "${e.price} L.E");
                   }).toList(),
                   SizedBox(height: 12),

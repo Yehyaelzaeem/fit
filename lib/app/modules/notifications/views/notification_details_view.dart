@@ -53,6 +53,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
           HomeAppbar(
             type: null,
           ),
+          SizedBox(height: 10),
           Row(
             children: [
               PageLable(name: "Messages"),

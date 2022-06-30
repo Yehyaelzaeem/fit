@@ -25,7 +25,7 @@ class HomeController extends GetxController {
   var isLogggd = false.obs;
   var id = "".obs;
   final response = VersionResponse(success: false, code: 0, message: "", forceUpdate: false).obs;
-  final loading = true.obs;
+  final loading = false.obs;
   @override
   void onInit() async {
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
@@ -68,12 +68,8 @@ class HomeController extends GetxController {
   }
 
   void getNetworkData() async {
-    loading.value = true;
     try {
       response.value = await ApiProvider().kAppVersion();
-    } catch (e) {
-      loading.value = false;
-    }
-    loading.value = false;
+    } catch (e) {}
   }
 }

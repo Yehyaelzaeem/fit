@@ -49,479 +49,646 @@ class MakeMealsView extends GetView<MakeMealsController> {
                             ),
                           ),
                           SizedBox(height: 12),
-                          header(
-                              'Protein',
-                              GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  controller.proteinSelected.add(Food(
-                                      amounts: [],
-                                      selectedAmount: Amount(
-                                        id: 0,
-                                        calories: "",
-                                        name: "",
-                                        price: "",
-                                      )));
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(6),
-                                  margin: EdgeInsets.symmetric(horizontal: 12),
-                                  child: Icon(
-                                    Icons.add_box,
-                                    color: kColorPrimary,
-                                    size: 30,
-                                  ),
-                                ),
-                              )),
+
                           SizedBox(height: 12),
-                          body([
-                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
-                          ], color: Color(0xFFE5E5E5)),
-                          ...controller.proteinSelected.map((e) {
-                            return body([
-                              Expanded(
-                                flex: 5,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    Get.dialog(Dialog(
+                          ...controller.meals.map((meal) {
+                            return Column(
+                              children: [
+                                header(
+                                    '${meal.title}',
+                                    GestureDetector(
+                                      onTap: () {
+                                        FocusScope.of(context).requestFocus(FocusNode());
+                                        controller.selectedFood.add(Food(
+                                            amounts: [],
+                                            mealTitle: meal.title ?? "",
+                                            title: '',
+                                            selectedAmount: Amount(
+                                              id: 0,
+                                              calories: "",
+                                              name: "",
+                                              price: "",
+                                            )));
+                                      },
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quality",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.protein.length > 0) SizedBox(height: 12),
-                                              ...controller.protein.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.id = item.id;
-                                                    e.title = item.title;
-                                                    e.selectedAmount = Amount(
-                                                      id: 0,
-                                                      name: "select...",
-                                                      calories: "",
-                                                      price: "",
-                                                    );
-                                                    controller.proteinSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.title!,
-                                                      style: TextStyle(fontSize: 16),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
-                                          ),
+                                        padding: EdgeInsets.all(6),
+                                        margin: EdgeInsets.symmetric(horizontal: 12),
+                                        child: Icon(
+                                          Icons.add_box,
+                                          color: kColorPrimary,
+                                          size: 30,
                                         ),
                                       ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: e.title == null ? "Select..." : "${e.title}",
-                                    showDropDownArrow: true,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    if (controller.protein.where((element) => element.id == e.id).isEmpty) return;
-                                    if (controller.protein.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.protein.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
-                                    Get.dialog(Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quantity",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.protein.length < 1) SizedBox(height: 12),
-                                              ...controller.protein.firstWhere((element) => element.id == e.id).amounts.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.selectedAmount = Amount(
-                                                      id: item.id,
-                                                      name: item.name,
-                                                      calories: item.calories,
-                                                      price: item.price,
-                                                    );
-                                                    controller.proteinSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.name,
-                                                      style: TextStyle(fontSize: 16),
+                                    )),
+                                SizedBox(height: 12),
+                                body([
+                                  Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                                  Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                                  Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                                  Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                                  Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
+                                ], color: Color(0xFFE5E5E5)),
+                                ...controller.selectedFood.where((selectedFood) => selectedFood.mealTitle == meal.title).map((e) {
+                                  return body([
+                                    Expanded(
+                                      flex: 5,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          Get.dialog(Dialog(
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Select Quality",
+                                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                                     ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
-                                          ),
+                                                    if (meal.food.length > 0) SizedBox(height: 12),
+                                                    ...meal.food.map((item) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context).requestFocus(FocusNode());
+                                                          e.id = item.id;
+                                                          e.title = item.title;
+                                                          e.selectedAmount = Amount(
+                                                            id: 0,
+                                                            name: "select...",
+                                                            calories: "",
+                                                            price: "",
+                                                          );
+                                                          controller.selectedFood.refresh();
+                                                          Get.back();
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets.symmetric(vertical: 8),
+                                                          child: Text(
+                                                            item.title,
+                                                            style: TextStyle(fontSize: 16),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ));
+                                        },
+                                        child: item(
+                                          title: e.title == null ? "Select..." : "${e.title}",
+                                          showDropDownArrow: true,
                                         ),
                                       ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: "${e.selectedAmount.name}",
-                                    showDropDownArrow: e.selectedAmount.name.isNotEmpty,
-                                  ),
-                                ),
-                              ),
-                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
-                              Expanded(
-                                  flex: 2,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).requestFocus(FocusNode());
-                                      controller.proteinSelected.remove(e);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(Icons.delete, color: Colors.red),
                                     ),
-                                  )),
-                            ]);
-                          }).toList(),
-                          SizedBox(height: 12),
-                          header(
-                              "Carb",
-                              GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  controller.carbSelected.add(Food(
-                                      amounts: [],
-                                      selectedAmount: Amount(
-                                        id: 0,
-                                        calories: "",
-                                        name: "",
-                                        price: "",
-                                      )));
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(6),
-                                  margin: EdgeInsets.symmetric(horizontal: 12),
-                                  child: Icon(
-                                    Icons.add_box,
-                                    color: kColorPrimary,
-                                    size: 30,
-                                  ),
-                                ),
-                              )),
-                          SizedBox(height: 12),
-                          body([
-                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
-                          ], color: Color(0xFFE5E5E5)),
-                          ...controller.carbSelected.map((e) {
-                            return body([
-                              Expanded(
-                                flex: 5,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    Get.dialog(Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quality",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.carb.length > 0) SizedBox(height: 12),
-                                              ...controller.carb.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.id = item.id;
-                                                    e.title = item.title;
-                                                    e.selectedAmount = Amount(
-                                                      id: 0,
-                                                      name: "select...",
-                                                      calories: "",
-                                                      price: "",
-                                                    );
-                                                    controller.carbSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.title!,
-                                                      style: TextStyle(fontSize: 16),
+                                    Expanded(
+                                      flex: 4,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          if (meal.food.where((element) => element.id == e.id).isEmpty) return;
+                                          if (meal.food.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
+                                          Get.dialog(Dialog(
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    Text(
+                                                      "Select Quantity",
+                                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                                     ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
-                                          ),
+                                                    if (meal.food.length < 1) SizedBox(height: 12),
+                                                    ...meal.food.firstWhere((element) => element.id == e.id).amounts.map((item) {
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          FocusScope.of(context).requestFocus(FocusNode());
+                                                          e.selectedAmount = Amount(
+                                                            id: item.id,
+                                                            name: item.name,
+                                                            calories: item.calories,
+                                                            price: item.price,
+                                                          );
+                                                          controller.selectedFood.refresh();
+                                                          Get.back();
+                                                        },
+                                                        child: Container(
+                                                          padding: EdgeInsets.symmetric(vertical: 8),
+                                                          child: Text(
+                                                            item.name,
+                                                            style: TextStyle(fontSize: 16),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ));
+                                        },
+                                        child: item(
+                                          title: "${e.selectedAmount.name}",
+                                          showDropDownArrow: e.selectedAmount.name.isNotEmpty,
                                         ),
                                       ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: e.title == null ? "Select..." : "${e.title}",
-                                    showDropDownArrow: true,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
-                                    Get.dialog(Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quantity",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.carb.length < 1) SizedBox(height: 12),
-                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.selectedAmount = Amount(
-                                                      id: item.id,
-                                                      name: item.name,
-                                                      calories: item.calories,
-                                                      price: item.price,
-                                                    );
-                                                    controller.carbSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.name,
-                                                      style: TextStyle(fontSize: 16),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: "${e.selectedAmount.name}",
-                                    showDropDownArrow: e.selectedAmount.name.isNotEmpty,
-                                  ),
-                                ),
-                              ),
-                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
-                              Expanded(
-                                  flex: 2,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).requestFocus(FocusNode());
-                                      controller.carbSelected.remove(e);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(Icons.delete, color: Colors.red),
                                     ),
-                                  )),
-                            ]);
-                          }).toList(),
-                          SizedBox(height: 12),
-                          header(
-                              "Fat",
-                              GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(context).requestFocus(FocusNode());
-                                  controller.fatSelected.add(Food(
-                                      amounts: [],
-                                      selectedAmount: Amount(
-                                        id: 0,
-                                        calories: "",
-                                        name: "",
-                                        price: "",
-                                      )));
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(6),
-                                  margin: EdgeInsets.symmetric(horizontal: 12),
-                                  child: Icon(
-                                    Icons.add_box,
-                                    color: kColorPrimary,
-                                    size: 30,
-                                  ),
-                                ),
-                              )),
-                          SizedBox(height: 12),
-                          body([
-                            Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
-                            Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
-                            Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
-                          ], color: Color(0xFFE5E5E5)),
-                          ...controller.fatSelected.map((e) {
-                            return body([
-                              Expanded(
-                                flex: 5,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    Get.dialog(Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quality",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.fat.length > 0) SizedBox(height: 12),
-                                              ...controller.fat.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.id = item.id;
-                                                    e.title = item.title;
-                                                    e.selectedAmount = Amount(
-                                                      id: 0,
-                                                      name: "select...",
-                                                      calories: "",
-                                                      price: "",
-                                                    );
-                                                    controller.fatSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.title!,
-                                                      style: TextStyle(fontSize: 16),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
+                                    Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                                    Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                                    Expanded(
+                                        flex: 2,
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            FocusScope.of(context).requestFocus(FocusNode());
+                                            controller.selectedFood.remove(e);
+                                          },
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(6.0),
+                                            child: Icon(Icons.delete, color: Colors.red),
                                           ),
-                                        ),
-                                      ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: e.title == null ? "Select..." : "${e.title}",
-                                    showDropDownArrow: true,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).requestFocus(FocusNode());
-                                    if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
-                                    if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
-                                    Get.dialog(Dialog(
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text(
-                                                "Select Quantity",
-                                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                              ),
-                                              if (controller.carb.length < 1) SizedBox(height: 12),
-                                              ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
-                                                return GestureDetector(
-                                                  onTap: () {
-                                                    FocusScope.of(context).requestFocus(FocusNode());
-                                                    e.selectedAmount = Amount(
-                                                      id: item.id,
-                                                      name: item.name,
-                                                      calories: item.calories,
-                                                      price: item.price,
-                                                    );
-                                                    controller.fatSelected.refresh();
-                                                    Get.back();
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                                    child: Text(
-                                                      item.name,
-                                                      style: TextStyle(fontSize: 16),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ));
-                                  },
-                                  child: item(
-                                    title: "${e.selectedAmount.name}",
-                                    showDropDownArrow: e.selectedAmount.name.isNotEmpty,
-                                  ),
-                                ),
-                              ),
-                              Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                              Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
-                              Expanded(
-                                  flex: 2,
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      FocusScope.of(context).requestFocus(FocusNode());
-                                      controller.fatSelected.remove(e);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(6.0),
-                                      child: Icon(Icons.delete, color: Colors.red),
-                                    ),
-                                  )),
-                            ]);
-                          }).toList(),
+                                        )),
+                                  ]);
+                                }).toList(),
+                              ],
+                            );
+                          }),
+
+                          // header(
+                          //     'Protein',
+                          //     GestureDetector(
+                          //       onTap: () {
+                          //         FocusScope.of(context).requestFocus(FocusNode());
+                          //         controller.proteinSelected.add(Food(
+                          //             amounts: [],
+                          //             selectedAmount: Amount(
+                          //               id: 0,
+                          //               calories: "",
+                          //               name: "",
+                          //               price: "",
+                          //             )));
+                          //       },
+                          //       child: Container(
+                          //         padding: EdgeInsets.all(6),
+                          //         margin: EdgeInsets.symmetric(horizontal: 12),
+                          //         child: Icon(
+                          //           Icons.add_box,
+                          //           color: kColorPrimary,
+                          //           size: 30,
+                          //         ),
+                          //       ),
+                          //     )),
+                          // SizedBox(height: 12),
+                          // body([
+                          //   Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                          //   Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
+                          // ], color: Color(0xFFE5E5E5)),
+                          // ...controller.proteinSelected.map((e) {
+                          //   return body([
+                          //     Expanded(
+                          //       flex: 5,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quality",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.protein.length > 0) SizedBox(height: 12),
+                          //                     ...controller.protein.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.id = item.id;
+                          //                           e.title = item.title;
+                          //                           e.selectedAmount = Amount(
+                          //                             id: 0,
+                          //                             name: "select...",
+                          //                             calories: "",
+                          //                             price: "",
+                          //                           );
+                          //                           controller.proteinSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.title!,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: e.title == null ? "Select..." : "${e.title}",
+                          //           showDropDownArrow: true,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(
+                          //       flex: 4,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           if (controller.protein.where((element) => element.id == e.id).isEmpty) return;
+                          //           if (controller.protein.firstWhere((element) => element.id == e.id).amounts == null) return;
+                          //           if (controller.protein.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quantity",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.protein.length < 1) SizedBox(height: 12),
+                          //                     ...controller.protein.firstWhere((element) => element.id == e.id).amounts.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.selectedAmount = Amount(
+                          //                             id: item.id,
+                          //                             name: item.name,
+                          //                             calories: item.calories,
+                          //                             price: item.price,
+                          //                           );
+                          //                           controller.proteinSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.name,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: "${e.selectedAmount.name}",
+                          //           showDropDownArrow: e.selectedAmount.name.isNotEmpty,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                          //     Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                          //     Expanded(
+                          //         flex: 2,
+                          //         child: GestureDetector(
+                          //           onTap: () {
+                          //             FocusScope.of(context).requestFocus(FocusNode());
+                          //             controller.proteinSelected.remove(e);
+                          //           },
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.all(6.0),
+                          //             child: Icon(Icons.delete, color: Colors.red),
+                          //           ),
+                          //         )),
+                          //   ]);
+                          // }).toList(),
+                          // SizedBox(height: 12),
+                          // header(
+                          //     "Carb",
+                          //     GestureDetector(
+                          //       onTap: () {
+                          //         FocusScope.of(context).requestFocus(FocusNode());
+                          //         controller.carbSelected.add(Food(
+                          //             amounts: [],
+                          //             selectedAmount: Amount(
+                          //               id: 0,
+                          //               calories: "",
+                          //               name: "",
+                          //               price: "",
+                          //             )));
+                          //       },
+                          //       child: Container(
+                          //         padding: EdgeInsets.all(6),
+                          //         margin: EdgeInsets.symmetric(horizontal: 12),
+                          //         child: Icon(
+                          //           Icons.add_box,
+                          //           color: kColorPrimary,
+                          //           size: 30,
+                          //         ),
+                          //       ),
+                          //     )),
+                          // SizedBox(height: 12),
+                          // body([
+                          //   Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                          //   Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
+                          // ], color: Color(0xFFE5E5E5)),
+                          // ...controller.carbSelected.map((e) {
+                          //   return body([
+                          //     Expanded(
+                          //       flex: 5,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quality",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.carb.length > 0) SizedBox(height: 12),
+                          //                     ...controller.carb.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.id = item.id;
+                          //                           e.title = item.title;
+                          //                           e.selectedAmount = Amount(
+                          //                             id: 0,
+                          //                             name: "select...",
+                          //                             calories: "",
+                          //                             price: "",
+                          //                           );
+                          //                           controller.carbSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.title!,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: e.title == null ? "Select..." : "${e.title}",
+                          //           showDropDownArrow: true,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(
+                          //       flex: 4,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
+                          //           if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
+                          //           if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quantity",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.carb.length < 1) SizedBox(height: 12),
+                          //                     ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.selectedAmount = Amount(
+                          //                             id: item.id,
+                          //                             name: item.name,
+                          //                             calories: item.calories,
+                          //                             price: item.price,
+                          //                           );
+                          //                           controller.carbSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.name,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: "${e.selectedAmount.name}",
+                          //           showDropDownArrow: e.selectedAmount.name.isNotEmpty,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                          //     Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                          //     Expanded(
+                          //         flex: 2,
+                          //         child: GestureDetector(
+                          //           onTap: () {
+                          //             FocusScope.of(context).requestFocus(FocusNode());
+                          //             controller.carbSelected.remove(e);
+                          //           },
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.all(6.0),
+                          //             child: Icon(Icons.delete, color: Colors.red),
+                          //           ),
+                          //         )),
+                          //   ]);
+                          // }).toList(),
+                          // SizedBox(height: 12),
+                          // header(
+                          //     "Fat",
+                          //     GestureDetector(
+                          //       onTap: () {
+                          //         FocusScope.of(context).requestFocus(FocusNode());
+                          //         controller.fatSelected.add(Food(
+                          //             amounts: [],
+                          //             selectedAmount: Amount(
+                          //               id: 0,
+                          //               calories: "",
+                          //               name: "",
+                          //               price: "",
+                          //             )));
+                          //       },
+                          //       child: Container(
+                          //         padding: EdgeInsets.all(6),
+                          //         margin: EdgeInsets.symmetric(horizontal: 12),
+                          //         child: Icon(
+                          //           Icons.add_box,
+                          //           color: kColorPrimary,
+                          //           size: 30,
+                          //         ),
+                          //       ),
+                          //     )),
+                          // SizedBox(height: 12),
+                          // body([
+                          //   Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
+                          //   Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
+                          //   Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
+                          // ], color: Color(0xFFE5E5E5)),
+                          // ...controller.fatSelected.map((e) {
+                          //   return body([
+                          //     Expanded(
+                          //       flex: 5,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quality",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.fat.length > 0) SizedBox(height: 12),
+                          //                     ...controller.fat.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.id = item.id;
+                          //                           e.title = item.title;
+                          //                           e.selectedAmount = Amount(
+                          //                             id: 0,
+                          //                             name: "select...",
+                          //                             calories: "",
+                          //                             price: "",
+                          //                           );
+                          //                           controller.fatSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.title!,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: e.title == null ? "Select..." : "${e.title}",
+                          //           showDropDownArrow: true,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(
+                          //       flex: 4,
+                          //       child: GestureDetector(
+                          //         onTap: () {
+                          //           FocusScope.of(context).requestFocus(FocusNode());
+                          //           if (controller.carb.where((element) => element.id == e.id).isEmpty) return;
+                          //           if (controller.carb.firstWhere((element) => element.id == e.id).amounts == null) return;
+                          //           if (controller.carb.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
+                          //           Get.dialog(Dialog(
+                          //             child: Container(
+                          //               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                          //               child: SingleChildScrollView(
+                          //                 child: Column(
+                          //                   mainAxisSize: MainAxisSize.min,
+                          //                   children: [
+                          //                     Text(
+                          //                       "Select Quantity",
+                          //                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          //                     ),
+                          //                     if (controller.carb.length < 1) SizedBox(height: 12),
+                          //                     ...controller.carb.firstWhere((element) => element.id == e.id).amounts.map((item) {
+                          //                       return GestureDetector(
+                          //                         onTap: () {
+                          //                           FocusScope.of(context).requestFocus(FocusNode());
+                          //                           e.selectedAmount = Amount(
+                          //                             id: item.id,
+                          //                             name: item.name,
+                          //                             calories: item.calories,
+                          //                             price: item.price,
+                          //                           );
+                          //                           controller.fatSelected.refresh();
+                          //                           Get.back();
+                          //                         },
+                          //                         child: Container(
+                          //                           padding: EdgeInsets.symmetric(vertical: 8),
+                          //                           child: Text(
+                          //                             item.name,
+                          //                             style: TextStyle(fontSize: 16),
+                          //                           ),
+                          //                         ),
+                          //                       );
+                          //                     }),
+                          //                   ],
+                          //                 ),
+                          //               ),
+                          //             ),
+                          //           ));
+                          //         },
+                          //         child: item(
+                          //           title: "${e.selectedAmount.name}",
+                          //           showDropDownArrow: e.selectedAmount.name.isNotEmpty,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
+                          //     Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                          //     Expanded(
+                          //         flex: 2,
+                          //         child: GestureDetector(
+                          //           onTap: () {
+                          //             FocusScope.of(context).requestFocus(FocusNode());
+                          //             controller.fatSelected.remove(e);
+                          //           },
+                          //           child: Padding(
+                          //             padding: const EdgeInsets.all(6.0),
+                          //             child: Icon(Icons.delete, color: Colors.red),
+                          //           ),
+                          //         )),
+                          //   ]);
+                          // }).toList(),
                           SizedBox(height: 12),
                           header(
                               "Total Price",
@@ -565,34 +732,45 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                     Get.snackbar("Error", "Please enter meal name");
                                     return;
                                   }
-                                  if (controller.fatSelected.isEmpty && controller.carbSelected.isEmpty && controller.proteinSelected.isEmpty) {
+                                  if (controller.selectedFood.isEmpty) {
                                     Get.snackbar("Error", "No food selected!");
                                     return;
                                   }
+                                  if (controller.selectedFood.isNotEmpty) {
+                                    controller.selectedFood.forEach((element) {
+                                      if (element.selectedAmount.calories.isEmpty) {
+                                        Get.snackbar("Error", "Please select amount for ${element.title}");
+                                        return;
+                                      }
+                                    });
+                                    // if (controller.fatSelected.isEmpty && controller.carbSelected.isEmpty && controller.proteinSelected.isEmpty) {
+                                    //   Get.snackbar("Error", "No food selected!");
+                                    //   return;
+                                    // }
 
-                                  if (controller.proteinSelected.isNotEmpty) {
-                                    controller.proteinSelected.forEach((element) {
-                                      if (element.selectedAmount.calories.isEmpty) {
-                                        Get.snackbar("Error", "Please select amount for ${element.title}");
-                                        return;
-                                      }
-                                    });
-                                  }
-                                  if (controller.carbSelected.isNotEmpty) {
-                                    controller.carbSelected.forEach((element) {
-                                      if (element.selectedAmount.calories.isEmpty) {
-                                        Get.snackbar("Error", "Please select amount for ${element.title}");
-                                        return;
-                                      }
-                                    });
-                                  }
-                                  if (controller.fatSelected.isNotEmpty) {
-                                    controller.fatSelected.forEach((element) {
-                                      if (element.selectedAmount.calories.isEmpty) {
-                                        Get.snackbar("Error", "Please select amount for ${element.title}");
-                                        return;
-                                      }
-                                    });
+                                    // if (controller.proteinSelected.isNotEmpty) {
+                                    //   controller.proteinSelected.forEach((element) {
+                                    //     if (element.selectedAmount.calories.isEmpty) {
+                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
+                                    //       return;
+                                    //     }
+                                    //   });
+                                    // }
+                                    // if (controller.carbSelected.isNotEmpty) {
+                                    //   controller.carbSelected.forEach((element) {
+                                    //     if (element.selectedAmount.calories.isEmpty) {
+                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
+                                    //       return;
+                                    //     }
+                                    //   });
+                                    // }
+                                    // if (controller.fatSelected.isNotEmpty) {
+                                    //   controller.fatSelected.forEach((element) {
+                                    //     if (element.selectedAmount.calories.isEmpty) {
+                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
+                                    //       return;
+                                    //     }
+                                    //   });
                                   }
 
                                   controller.saveMeal();

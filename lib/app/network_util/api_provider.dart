@@ -27,12 +27,15 @@ import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
+import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:yaml/yaml.dart';
 
 class ApiProvider {
@@ -167,41 +170,156 @@ class ApiProvider {
 
   Future<UserResponse> getProfile() async {
     final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
-    Echo('getProfile getProfile');
-    Response response = await _utils.get("profile");
-    if (response.data["success"] == true) {
-      UserResponse ur = UserResponse.fromJson(response.data);
-      if (globalController.shoNewMessage.value) {
-        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
-          globalController.shoNewMessage.value = false;
-          getx.Get.defaultDialog(
-            title: 'Notification',
-            content: Text('You have a new message?'),
-            confirm: TextButton(
-                onPressed: () {
-                  getx.Get.back();
-                  getx.Get.toNamed(Routes.NOTIFICATIONS);
-                },
-                child: Text('Check it')),
-            cancel: TextButton(
-                onPressed: () => getx.Get.back(),
-                child: Text(
-                  'Dismiss',
-                  style: TextStyle(color: Colors.grey),
-                )),
-          );
-        }
-      }
-      return ur;
-    } else {
-      UserResponse ur = UserResponse.fromJson(response.data);
-      if (globalController.shoNewMessage.value) {
-        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
-          globalController.shoNewMessage.value = false;
-        }
-      }
-      return ur;
-    }
+    await Future.delayed(Duration(seconds: 3));
+    getx.Get.dialog(WillPopScope(
+      onWillPop: () async {
+        return globalController.canDismissNewMessageDialog.value;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Container(
+            margin: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10,
+                  spreadRadius: 10,
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 16),
+                kTextHeader("Notification"),
+                SizedBox(height: 6),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(200),
+                    color: Color(0xffF6F6F6),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[300]!,
+                        blurRadius: 3,
+                        spreadRadius: 1,
+                        offset: Offset(3, 3),
+                      ),
+                    ],
+                  ),
+                  child: Text('You have a new message from Dr/ Ramy Mansour'),
+                ),
+                SizedBox(height: 14),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      globalController.canDismissNewMessageDialog.value = true;
+                      getx.Get.back();
+                      getx.Get.toNamed(Routes.NOTIFICATIONS);
+                    },
+                    child: Container(
+                      width: getx.Get.width / 1.6,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: kColorPrimary),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Check it',
+                            style: GoogleFonts.cairo(
+                              fontSize: 14.0,
+                              color: const Color(0xFF7FC902),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 12),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ));
+    return Future.error('');
+    // final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
+    // Echo('getProfile getProfile');
+    // Response response = await _utils.get("profile");
+    // if (response.data["success"] == true) {
+    //   UserResponse ur = UserResponse.fromJson(response.data);
+    //   if (globalController.shoNewMessage.value) {
+    //     if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+    //       globalController.shoNewMessage.value = false;
+    //       getx.Get.dialog(WillPopScope(
+    //         onWillPop: () async {
+    //           return globalController.canDismissNewMessageDialog.value;
+    //         },
+    //         child: Scaffold(
+    //           backgroundColor: Colors.transparent,
+    //           body: Center(
+    //             child: Container(
+    //               margin: EdgeInsets.all(20),
+    //               decoration: BoxDecoration(
+    //                 color: Colors.white,
+    //                 borderRadius: BorderRadius.circular(20),
+    //                 boxShadow: [
+    //                   BoxShadow(
+    //                     color: Colors.black.withOpacity(0.1),
+    //                     blurRadius: 10,
+    //                     spreadRadius: 10,
+    //                   ),
+    //                 ],
+    //               ),
+    //               child: Column(
+    //                 mainAxisSize: MainAxisSize.min,
+    //                 children: [
+    //                   SizedBox(height: 16),
+    //                   kTextHeader("Notification"),
+    //                   Text('You have a new message from Dr/ Ramy Mansour'),
+    //                   Row(
+    //                     children: [
+    //                       Expanded(child: Container()),
+    //                       TextButton(
+    //                           onPressed: () {
+    //                             globalController.canDismissNewMessageDialog.value = true;
+    //                             getx.Get.back();
+    //                             getx.Get.toNamed(Routes.NOTIFICATIONS);
+    //                           },
+    //                           child: Text('Check it')),
+    //                       SizedBox(
+    //                         width: 16,
+    //                       ),
+    //                     ],
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //       ));
+    //     }
+    //   }
+
+    //   return ur;
+    // } else {
+    //   UserResponse ur = UserResponse.fromJson(response.data);
+    //   if (globalController.shoNewMessage.value) {
+    //     if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+    //       globalController.shoNewMessage.value = false;
+    //     }
+    //   }
+
+    //   return ur;
+    // }
   }
 
   Future<SessionResponse> getSessions() async {
@@ -429,6 +547,7 @@ class ApiProvider {
       'device_id': deviceId,
     });
     Response response = await _utils.post("meals_food_list", body: body);
+    Echo(response.data.toString());
     if (response.statusCode == 200) {
       return MealFoodListResponse.fromJson(response.data);
     } else {

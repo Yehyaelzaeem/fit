@@ -10,17 +10,17 @@ class MealFoodListResponse {
   MealFoodListResponse({
     this.code,
     this.success,
-    this.data,
+    required this.data,
   });
 
   final int? code;
   final bool? success;
-  final List<SingleMeal>? data;
+  final List<SingleMeal> data;
 
   factory MealFoodListResponse.fromJson(Map<String, dynamic> json) => MealFoodListResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : List<SingleMeal>.from(json["data"].map((x) => SingleMeal.fromJson(x))),
+        data: json["data"] == null ? [] : List<SingleMeal>.from(json["data"].map((x) => SingleMeal.fromJson(x))),
       );
 }
 
@@ -45,19 +45,22 @@ class SingleMeal {
 class Food {
   Food({
     this.id,
-    this.title,
+    required this.title,
+    required this.mealTitle,
     required this.amounts,
     required this.selectedAmount,
   });
 
   int? id;
-  String? title;
+  String title;
+  String mealTitle;
   List<Amount> amounts;
   Amount selectedAmount;
 
   factory Food.fromJson(Map<String, dynamic> json) => Food(
+        mealTitle: "",
         id: json["id"] == null ? null : json["id"],
-        title: json["title"] == null ? null : json["title"],
+        title: json["title"] == null ? '' : json["title"],
         amounts: json["amounts"] == null ? [] : List<Amount>.from(json["amounts"].map((x) => Amount.fromJson(x))),
         selectedAmount: Amount(
           id: 0,

@@ -164,7 +164,7 @@ class OrdersView extends GetView<OrdersController> {
             children: [
               Expanded(
                 child: kTextHeader(
-                  controller.getMealsName(e.meals),
+                  controller.getMealsName(e.meals.reversed.toList()),
                   align: TextAlign.start,
                   paddingH: 12,
                   color: Colors.black,
@@ -217,8 +217,18 @@ class OrdersView extends GetView<OrdersController> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    kTextbody("Delivery method :", color: kColorPrimary, bold: true, align: TextAlign.start),
-                                    Expanded(child: kTextbody("${getDelivertMethod(e.deliveryMethod.trim())}", color: Colors.black, align: TextAlign.start)),
+                                    kTextbody(
+                                      "Delivery method :",
+                                      color: kColorPrimary,
+                                      bold: true,
+                                      align: TextAlign.start,
+                                    ),
+                                    Expanded(
+                                        child: kTextbody(
+                                      "${getDelivertMethod(e.deliveryMethod.trim())}",
+                                      color: Colors.black,
+                                      align: TextAlign.start,
+                                    )),
                                   ],
                                 ),
                               ),
@@ -227,7 +237,7 @@ class OrdersView extends GetView<OrdersController> {
                                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                   margin: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(200),
+                                    borderRadius: BorderRadius.circular(16),
                                     color: Color(0xffF6F6F6),
                                     boxShadow: [
                                       BoxShadow(
@@ -241,12 +251,31 @@ class OrdersView extends GetView<OrdersController> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      kTextbody("Address :", color: kColorPrimary, bold: true, align: TextAlign.start),
-                                      Expanded(child: kTextbody('${e.userInfo!.address}', color: Colors.black, align: TextAlign.start)),
+                                      kTextbody(
+                                        "Address :",
+                                        color: kColorPrimary,
+                                        bold: true,
+                                        align: TextAlign.start,
+                                      ),
+                                      if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery')
+                                        Expanded(
+                                            child: kTextbody(
+                                          '${e.userInfo!.address}',
+                                          color: Colors.black,
+                                          align: TextAlign.start,
+                                        )),
+                                      if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery')
+                                        Expanded(
+                                            child: kTextbody(
+                                          '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!}',
+                                          color: Colors.black,
+                                          align: TextAlign.start,
+                                        )),
                                     ],
                                   ),
                                 ),
                               SizedBox(height: 12),
+                              // if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery') kTextbody(controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!),
                               Center(
                                 child: GestureDetector(
                                   onTap: () {
@@ -331,7 +360,7 @@ class OrdersView extends GetView<OrdersController> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 8),
-                              ...e.meals.map((element) {
+                              ...e.meals.reversed.map((element) {
                                 return Container(
                                   padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                   margin: EdgeInsets.all(8),
