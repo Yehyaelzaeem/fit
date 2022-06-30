@@ -276,64 +276,66 @@ class OrdersView extends GetView<OrdersController> {
                                 ),
                               SizedBox(height: 12),
                               // if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery') kTextbody(controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery') {
-                                      if (e.userInfo != null && e.userInfo!.latitude != null) {
+
+                              if ((e.deliveryMethod != 'Delivery' || e.deliveryMethod != 'delivery') && controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                                Center(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery') {
+                                        if (e.userInfo != null && e.userInfo!.latitude != null) {
+                                          String lat = e.userInfo!.latitude.toString();
+                                          String lng = e.userInfo!.longitude.toString();
+                                          launch('http://www.google.com/maps/place/$lat,$lng');
+                                        }
+                                      } else {
                                         String lat = e.userInfo!.latitude.toString();
                                         String lng = e.userInfo!.longitude.toString();
                                         launch('http://www.google.com/maps/place/$lat,$lng');
-                                      }
-                                    } else {
-                                      String lat = e.userInfo!.latitude.toString();
-                                      String lng = e.userInfo!.longitude.toString();
-                                      launch('http://www.google.com/maps/place/$lat,$lng');
 
-                                      String location = "";
+                                        String location = "";
 
-                                      if (controller.globalController.mealFeatureHomeResponse.value.data != null) {
-                                        if (controller.globalController.mealFeatureHomeResponse.value.data!.info != null) {
-                                          if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null) {
-                                            location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!;
+                                        if (controller.globalController.mealFeatureHomeResponse.value.data != null) {
+                                          if (controller.globalController.mealFeatureHomeResponse.value.data!.info != null) {
+                                            if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null) {
+                                              location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!;
+                                            }
                                           }
                                         }
+                                        launch(location);
                                       }
-                                      launch(location);
-                                    }
-                                  },
-                                  child: Container(
-                                    width: Get.width / 1.6,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border.all(color: kColorPrimary),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Align(
-                                          alignment: Alignment(0.0, 0.1),
-                                          child: SvgPicture.string(
-                                            // Icon material-location-on
-                                            '<svg viewBox="130.4 401.0 11.2 16.0" ><path transform="translate(122.9, 398.0)" d="M 13.10000038146973 3 C 10.00399971008301 3 7.5 5.504000186920166 7.5 8.600000381469727 C 7.5 12.80000019073486 13.10000038146973 19 13.10000038146973 19 C 13.10000038146973 19 18.70000076293945 12.80000019073486 18.70000076293945 8.600000381469727 C 18.70000076293945 5.504000186920166 16.19600105285645 3 13.10000038146973 3 Z M 13.10000038146973 10.60000038146973 C 11.99600028991699 10.60000038146973 11.10000038146973 9.703999519348145 11.10000038146973 8.600000381469727 C 11.10000038146973 7.49600076675415 11.99600028991699 6.600000381469727 13.10000038146973 6.600000381469727 C 14.20400047302246 6.600000381469727 15.10000038146973 7.49600076675415 15.10000038146973 8.600000381469727 C 15.10000038146973 9.703999519348145 14.20400047302246 10.60000038146973 13.10000038146973 10.60000038146973 Z" fill="#7fc902" stroke="none" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
-                                            width: 11.2,
-                                            height: 16.0,
+                                    },
+                                    child: Container(
+                                      width: Get.width / 1.6,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(color: kColorPrimary),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment(0.0, 0.1),
+                                            child: SvgPicture.string(
+                                              // Icon material-location-on
+                                              '<svg viewBox="130.4 401.0 11.2 16.0" ><path transform="translate(122.9, 398.0)" d="M 13.10000038146973 3 C 10.00399971008301 3 7.5 5.504000186920166 7.5 8.600000381469727 C 7.5 12.80000019073486 13.10000038146973 19 13.10000038146973 19 C 13.10000038146973 19 18.70000076293945 12.80000019073486 18.70000076293945 8.600000381469727 C 18.70000076293945 5.504000186920166 16.19600105285645 3 13.10000038146973 3 Z M 13.10000038146973 10.60000038146973 C 11.99600028991699 10.60000038146973 11.10000038146973 9.703999519348145 11.10000038146973 8.600000381469727 C 11.10000038146973 7.49600076675415 11.99600028991699 6.600000381469727 13.10000038146973 6.600000381469727 C 14.20400047302246 6.600000381469727 15.10000038146973 7.49600076675415 15.10000038146973 8.600000381469727 C 15.10000038146973 9.703999519348145 14.20400047302246 10.60000038146973 13.10000038146973 10.60000038146973 Z" fill="#7fc902" stroke="none" stroke-width="1" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
+                                              width: 11.2,
+                                              height: 16.0,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          'Location',
-                                          style: GoogleFonts.cairo(
-                                            fontSize: 19.0,
-                                            color: const Color(0xFF7FC902),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            'Location',
+                                            style: GoogleFonts.cairo(
+                                              fontSize: 19.0,
+                                              color: const Color(0xFF7FC902),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
                               SizedBox(height: 12),
                             ],
                           ),

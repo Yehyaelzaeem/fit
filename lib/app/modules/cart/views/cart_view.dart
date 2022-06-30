@@ -214,34 +214,35 @@ class CartView extends GetView<CartController> {
                                               ),
                                             ),
                                             SizedBox(height: 20),
-                                            GestureDetector(
-                                              onTap: () {
-                                                launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);
-                                              },
-                                              child: Container(
-                                                alignment: Alignment(-0.04, -0.33),
-                                                width: double.infinity,
-                                                margin: EdgeInsets.symmetric(horizontal: 12),
-                                                height: 39.0,
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(9.0),
-                                                  color: const Color(0xFFF1F1F1),
-                                                  border: Border.all(
-                                                    width: 1.0,
-                                                    color: const Color(0xFF7FC902),
+                                            if (controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                                              GestureDetector(
+                                                onTap: () {
+                                                  launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);
+                                                },
+                                                child: Container(
+                                                  alignment: Alignment(-0.04, -0.33),
+                                                  width: double.infinity,
+                                                  margin: EdgeInsets.symmetric(horizontal: 12),
+                                                  height: 39.0,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(9.0),
+                                                    color: const Color(0xFFF1F1F1),
+                                                    border: Border.all(
+                                                      width: 1.0,
+                                                      color: const Color(0xFF7FC902),
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    children: [
+                                                      Icon(Icons.location_on, color: kColorPrimary),
+                                                      SizedBox(width: 4),
+                                                      kTextbody('Location', size: 18, color: kColorPrimary),
+                                                    ],
                                                   ),
                                                 ),
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Icon(Icons.location_on, color: kColorPrimary),
-                                                    SizedBox(width: 4),
-                                                    kTextbody('Location', size: 18, color: kColorPrimary),
-                                                  ],
-                                                ),
                                               ),
-                                            ),
                                             Spacer(flex: 18),
                                           ],
                                         ),

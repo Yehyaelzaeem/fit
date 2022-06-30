@@ -170,156 +170,107 @@ class ApiProvider {
 
   Future<UserResponse> getProfile() async {
     final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
-    await Future.delayed(Duration(seconds: 3));
-    getx.Get.dialog(WillPopScope(
-      onWillPop: () async {
-        return globalController.canDismissNewMessageDialog.value;
-      },
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Center(
-          child: Container(
-            margin: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  spreadRadius: 10,
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 16),
-                kTextHeader("Notification"),
-                SizedBox(height: 6),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    Echo('getProfile getProfile');
+    Response response = await _utils.get("profile");
+    if (response.data["success"] == true) {
+      UserResponse ur = UserResponse.fromJson(response.data);
+      if (globalController.shoNewMessage.value) {
+        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+          globalController.shoNewMessage.value = false;
+
+          getx.Get.dialog(WillPopScope(
+            onWillPop: () async {
+              return globalController.canDismissNewMessageDialog.value;
+            },
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Center(
+                child: Container(
+                  margin: EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(200),
-                    color: Color(0xffF6F6F6),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey[300]!,
-                        blurRadius: 3,
-                        spreadRadius: 1,
-                        offset: Offset(3, 3),
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 10,
                       ),
                     ],
                   ),
-                  child: Text('You have a new message from Dr/ Ramy Mansour'),
-                ),
-                SizedBox(height: 14),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      globalController.canDismissNewMessageDialog.value = true;
-                      getx.Get.back();
-                      getx.Get.toNamed(Routes.NOTIFICATIONS);
-                    },
-                    child: Container(
-                      width: getx.Get.width / 1.6,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: kColorPrimary),
-                        borderRadius: BorderRadius.circular(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 16),
+                      kTextHeader("Notification"),
+                      SizedBox(height: 6),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(200),
+                          color: Color(0xffF6F6F6),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[300]!,
+                              blurRadius: 3,
+                              spreadRadius: 1,
+                              offset: Offset(3, 3),
+                            ),
+                          ],
+                        ),
+                        child: Text('You have a new message from Dr/ Ramy Mansour'),
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Check it',
-                            style: GoogleFonts.cairo(
-                              fontSize: 14.0,
-                              color: const Color(0xFF7FC902),
+                      SizedBox(height: 14),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            globalController.canDismissNewMessageDialog.value = true;
+                            getx.Get.back();
+                            getx.Get.toNamed(Routes.NOTIFICATIONS);
+                          },
+                          child: Container(
+                            width: getx.Get.width / 1.6,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: kColorPrimary),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Check it',
+                                  style: GoogleFonts.cairo(
+                                    fontSize: 14.0,
+                                    color: const Color(0xFF7FC902),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(height: 12),
+                    ],
                   ),
                 ),
-                SizedBox(height: 12),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    ));
-    return Future.error('');
-    // final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
-    // Echo('getProfile getProfile');
-    // Response response = await _utils.get("profile");
-    // if (response.data["success"] == true) {
-    //   UserResponse ur = UserResponse.fromJson(response.data);
-    //   if (globalController.shoNewMessage.value) {
-    //     if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
-    //       globalController.shoNewMessage.value = false;
-    //       getx.Get.dialog(WillPopScope(
-    //         onWillPop: () async {
-    //           return globalController.canDismissNewMessageDialog.value;
-    //         },
-    //         child: Scaffold(
-    //           backgroundColor: Colors.transparent,
-    //           body: Center(
-    //             child: Container(
-    //               margin: EdgeInsets.all(20),
-    //               decoration: BoxDecoration(
-    //                 color: Colors.white,
-    //                 borderRadius: BorderRadius.circular(20),
-    //                 boxShadow: [
-    //                   BoxShadow(
-    //                     color: Colors.black.withOpacity(0.1),
-    //                     blurRadius: 10,
-    //                     spreadRadius: 10,
-    //                   ),
-    //                 ],
-    //               ),
-    //               child: Column(
-    //                 mainAxisSize: MainAxisSize.min,
-    //                 children: [
-    //                   SizedBox(height: 16),
-    //                   kTextHeader("Notification"),
-    //                   Text('You have a new message from Dr/ Ramy Mansour'),
-    //                   Row(
-    //                     children: [
-    //                       Expanded(child: Container()),
-    //                       TextButton(
-    //                           onPressed: () {
-    //                             globalController.canDismissNewMessageDialog.value = true;
-    //                             getx.Get.back();
-    //                             getx.Get.toNamed(Routes.NOTIFICATIONS);
-    //                           },
-    //                           child: Text('Check it')),
-    //                       SizedBox(
-    //                         width: 16,
-    //                       ),
-    //                     ],
-    //                   )
-    //                 ],
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //       ));
-    //     }
-    //   }
+          ));
+        }
+      }
 
-    //   return ur;
-    // } else {
-    //   UserResponse ur = UserResponse.fromJson(response.data);
-    //   if (globalController.shoNewMessage.value) {
-    //     if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
-    //       globalController.shoNewMessage.value = false;
-    //     }
-    //   }
+      return ur;
+    } else {
+      UserResponse ur = UserResponse.fromJson(response.data);
+      if (globalController.shoNewMessage.value) {
+        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+          globalController.shoNewMessage.value = false;
+        }
+      }
 
-    //   return ur;
-    // }
+      return ur;
+    }
   }
 
   Future<SessionResponse> getSessions() async {
