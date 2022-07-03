@@ -22,8 +22,6 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   @override
-  final controller = Get.find<HomeController>();
-  @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.loading.value) return Scaffold(body: CircularLoadingWidget());

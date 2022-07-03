@@ -2,12 +2,14 @@ import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import 'add_new_other_calories.dart';
 import 'edit_other_calory.dart';
@@ -86,7 +88,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                   HomeAppbar(
                     type: null,
                     onBack: () {
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (c) => HomeView()), (route) => false);
+                      Get.offAndToNamed(Routes.HOME);
                     },
                   ),
                   Row(

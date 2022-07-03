@@ -1,6 +1,5 @@
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/forget_password/views/forget_password_view.dart';
-import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -49,12 +48,7 @@ class _LoginViewState extends State<LoginView> {
         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         await _shared.writeData(CachingKey.IS_LOGGED, true);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HomeView(),
-            ),
-            (Route<dynamic> route) => false);
+        Get.offAndToNamed(Routes.HOME);
       } else {
         setState(() {
           loginResponse = value;
@@ -153,8 +147,7 @@ class _LoginViewState extends State<LoginView> {
                             SizedBox(height: 4),
                             InkWell(
                               onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => ForgetPassword()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword()));
                               },
                               child: Text(
                                 "Forgot Password?",
@@ -210,15 +203,11 @@ class _LoginViewState extends State<LoginView> {
                                     children: [
                                       Text(
                                         "Don't Have Account ? ",
-                                        style: TextStyle(
-                                            decoration: TextDecoration.underline, fontSize: 17),
+                                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 17),
                                       ),
                                       Text(
                                         'Sign Up',
-                                        style: TextStyle(
-                                            decoration: TextDecoration.underline,
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 17, fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),
