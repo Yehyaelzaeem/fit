@@ -277,7 +277,7 @@ class OrdersView extends GetView<OrdersController> {
                               SizedBox(height: 12),
                               // if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery') kTextbody(controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!),
 
-                              if ((e.deliveryMethod != 'Delivery' || e.deliveryMethod != 'delivery') && controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                              if ((e.deliveryMethod != 'Delivery' || e.deliveryMethod != 'delivery') && controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation!.isNotEmpty)
                                 Center(
                                   child: GestureDetector(
                                     onTap: () {
@@ -296,8 +296,8 @@ class OrdersView extends GetView<OrdersController> {
 
                                         if (controller.globalController.mealFeatureHomeResponse.value.data != null) {
                                           if (controller.globalController.mealFeatureHomeResponse.value.data!.info != null) {
-                                            if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null) {
-                                              location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!;
+                                            if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation != null) {
+                                              location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation!;
                                             }
                                           }
                                         }

@@ -9,6 +9,7 @@ import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -284,7 +285,7 @@ class HomeDrawer extends GetView<HomeController> {
     try {
       if (controller.cheerFullStatus) return true;
       CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
-      controller.cheerFullStatus = cheerFullResponse.data!.isActive!;
+      controller.cheerFullStatus = kDebugMode ? true : cheerFullResponse.data!.isActive!;
       globalController.delivery_option.value = cheerFullResponse.data!.delivery_option!;
       globalController.pickup_option.value = cheerFullResponse.data!.pickup_option!;
       return controller.cheerFullStatus;

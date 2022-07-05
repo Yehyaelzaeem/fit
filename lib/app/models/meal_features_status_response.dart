@@ -44,12 +44,14 @@ class Info {
     this.about,
     this.location,
     this.address,
+    this.pickupLocation,
     this.deliveryInstructions,
     this.pickupInstructions,
   });
 
   final String? about;
   final String? location;
+  final String? pickupLocation;
   final String? address;
   final String? deliveryInstructions;
   final String? pickupInstructions;
@@ -58,6 +60,7 @@ class Info {
         about: json["about"] == null ? null : json["about"],
         location: json["location"] == null ? null : json["location"],
         address: json["address"] == null ? '' : json["address"],
+        pickupLocation: json["pickup_location"] == null ? '' : json["pickup_location"],
         deliveryInstructions: json["delivery_instructions"] == null ? 'Delivery instructions' : json["delivery_instructions"],
         pickupInstructions: json["pickup_instructions"] == null ? 'Pickup instructions' : json["pickup_instructions"],
       );
