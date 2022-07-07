@@ -75,7 +75,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           loginResponse = value;
           showLoader = false;
         });
-        final controller = Get.put(HomeController());
+        final controller = Get.find<HomeController>(tag: 'home');
         controller.avatar.value = loginResponse.data!.image!;
         controller.name.value = loginResponse.data!.name!;
         controller.id.value = loginResponse.data!.patientId!;
@@ -132,7 +132,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           loginResponse = value;
           showLoader = false;
         });
-        final controller = Get.put(HomeController());
+        final controller = Get.find<HomeController>(tag: 'home');
         controller.avatar.value = loginResponse.data!.image!;
         controller.name.value = loginResponse.data!.name!;
         controller.id.value = loginResponse.data!.patientId!;

@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:app/app/models/about_response.dart';
@@ -36,7 +37,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:yaml/yaml.dart';
 
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
@@ -284,6 +284,8 @@ class ApiProvider {
 
   Future<DayDetailsResponse> getDiaryView(String? date) async {
     Response response = await _utils.get("calories_day_details?date=$date");
+    log('api->calories_day_details?date=$date');
+    log('response ${response.data}');
     if (response.data["success"] == true) {
       return DayDetailsResponse.fromJson(response.data);
     } else {
@@ -678,20 +680,11 @@ class ApiProvider {
   }
 
   Future<VersionResponse> kAppVersion() async {
-    String pubVersion = "";
-    try {
-      File f = new File("../pubspec.yaml");
-      f.readAsString().then((String text) {
-        Map yaml = loadYaml(text);
-        pubVersion = yaml['version'];
-      });
-    } catch (e) {}
-
+    //TODO make sure to change version
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': '2.0.0',
-      'pubVersion': pubVersion,
+      'version': '3.0.0',
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {

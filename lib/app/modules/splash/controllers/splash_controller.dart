@@ -49,7 +49,7 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   }
 
   navigateNextPage() async {
-    final controller = Get.put(HomeController());
+    final controller = Get.find<HomeController>(tag: 'home');
     print("Controller Data ===> Logged : ${controller.isLogggd.value} ,  Name : ${controller.name.value},  Id : ${controller.id.value},  Image : ${controller.avatar.value}");
     controller.isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     controller.name.value = await SharedHelper().readString(CachingKey.USER_NAME);

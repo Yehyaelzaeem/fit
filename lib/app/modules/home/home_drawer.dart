@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
-  final controller = Get.put(HomeController());
+  final controller = Get.find<HomeController>(tag: 'home');
   final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
 
   @override
@@ -54,23 +54,22 @@ class HomeDrawer extends GetView<HomeController> {
                     child: Column(
                       children: [
                         Obx(() {
+                          Echo('drawer itemBuilder ${controller.avatar.value}');
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                               // ignore: unnecessary_null_comparison
-                              child: prefs.readString(CachingKey.AVATAR) != null
-                                  ? CachedNetworkImage(
-                                      imageUrl: controller.avatar.value,
-                                      fit: BoxFit.cover,
-                                      height: 80,
-                                      width: 80,
-                                      placeholder: (ctx, url) {
-                                        return profileImageHolder();
-                                      },
-                                      errorWidget: (context, url, error) {
-                                        return profileImageHolder();
-                                      },
-                                    )
-                                  : profileImageHolder());
+                              child: CachedNetworkImage(
+                                imageUrl: '${controller.avatar.value}',
+                                fit: BoxFit.cover,
+                                height: 80,
+                                width: 80,
+                                placeholder: (ctx, url) {
+                                  return profileImageHolder();
+                                },
+                                errorWidget: (context, url, error) {
+                                  return profileImageHolder();
+                                },
+                              ));
                         })
                         // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
                         // Text(prefs.getName()!)

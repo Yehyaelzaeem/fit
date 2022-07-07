@@ -9,4 +9,6 @@ class GlobalController extends GetxController {
   final pickup_option = false.obs;
   final shoNewMessage = true.obs;
   final canDismissNewMessageDialog = false.obs;
+  final avatar = ''.obs;
+  String? lastSelectedDate;
 }

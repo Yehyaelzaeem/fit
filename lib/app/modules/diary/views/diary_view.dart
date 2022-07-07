@@ -312,7 +312,6 @@ class _DiaryViewState extends State<DiaryView> {
                                                 Container(width: MediaQuery.of(context).size.width / 1.5, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('${date}', color: Colors.black87, bold: true, size: 14))),
                                                 InkWell(
                                                   onTap: () {
-                                                    lastSelectedDate = response.data!.days![0].date!;
                                                     getDiaryData(response.data!.days![0].date!);
                                                   },
                                                   child: Container(width: MediaQuery.of(context).size.width / 4, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('Today', color: Colors.white, bold: true, size: 14))),
@@ -402,13 +401,19 @@ class _DiaryViewState extends State<DiaryView> {
                                       Divider(),
                                       InkWell(
                                         onTap: () async {
-                                          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => MyOtherCalories()));
+                                          dynamic result = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => MyOtherCalories(
+                                                        canGoBack: true,
+                                                      )));
 
                                           if (result == null) {
-                                            Echo('onback result == null');
-                                            ;
+                                            Echo('lastSelectedDate ${lastSelectedDate}');
                                             setState(() {});
                                             if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+                                          } else {
+                                            Echo('result != null 3');
                                           }
                                         },
                                         child: Container(
@@ -623,6 +628,7 @@ class _DiaryViewState extends State<DiaryView> {
           //   setState(() {});
           //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
           // }
+          Echo('result init lastSelectedDate ${lastSelectedDate!} navigate to AddNewFood ');
           dynamic result = await Navigator.push(
             context,
             MaterialPageRoute(
@@ -635,9 +641,14 @@ class _DiaryViewState extends State<DiaryView> {
               ),
             ),
           );
+          Echo('asdasd');
+          Echo('result ${result}');
           if (result == null) {
-            setState(() {});
+            Echo('lastSelectedDate ${lastSelectedDate}');
             if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+            setState(() {});
+          } else {
+            Echo('result != null 1');
           }
         } else {
           // dynamic result = await showDialog(
@@ -667,8 +678,11 @@ class _DiaryViewState extends State<DiaryView> {
                       )));
 
           if (result == null) {
+            Echo('lastSelectedDate ${lastSelectedDate}');
             setState(() {});
             if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+          } else {
+            Echo('result != null 2');
           }
         }
       },
@@ -875,6 +889,7 @@ class _DiaryViewState extends State<DiaryView> {
                       //     });
                       // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
 
+                      Echo('result init lastSelectedDate ${lastSelectedDate!} navigate to AddNewFood ');
                       dynamic result = await Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -884,7 +899,16 @@ class _DiaryViewState extends State<DiaryView> {
                                     edit: false,
                                     showAsDialog: false,
                                   )));
-                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      Echo('asdasd');
+                      Echo('result ${result}');
+                      if (result == null) {
+                        Echo('lastSelectedDate ${lastSelectedDate}');
+                        setState(() {});
+                        if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+                      } else {
+                        Echo('result != null 2');
+                      }
                     } else {
                       // dynamic result = await showDialog(
                       //     context: context,
@@ -909,7 +933,15 @@ class _DiaryViewState extends State<DiaryView> {
                                     edit: false,
                                     showAsDialog: false,
                                   )));
-                      if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+
+                      Echo('result ${result}');
+                      if (result == null) {
+                        Echo('lastSelectedDate ${lastSelectedDate}');
+                        setState(() {});
+                        if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+                      } else {
+                        Echo('result != null 2');
+                      }
                     }
                   },
                   child: Container(

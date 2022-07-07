@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/modules/home/home_slider.dart';
-
 // import 'app/modules/orientation_register/views/orientation_register_view.dart';
 import 'app/network_util/api_provider.dart';
 import 'app/utils/theme/app_colors.dart';
@@ -31,13 +30,12 @@ class _HomePageViewState extends State<HomePageView> {
   void getHomeData() async {
     await ApiProvider().getHomeData().then((value) {
       if (value.success == true) {
-        setState(() {
-          ress = value;
-          isLoading = false;
-          ress.data!.slider!.forEach((element) {
-            homeSliderList.add(element.image!);
-          });
+        ress = value;
+        isLoading = false;
+        ress.data!.slider!.forEach((element) {
+          homeSliderList.add(element.image!);
         });
+        setState(() {});
         print(homeSliderList);
       } else {
         Fluttertoast.showToast(msg: "$value");
@@ -63,8 +61,7 @@ class _HomePageViewState extends State<HomePageView> {
                 height: 16,
               ),
               Container(
-                decoration:
-                    BoxDecoration(color: ACCENT_COLOR, borderRadius: BorderRadius.circular(50)),
+                decoration: BoxDecoration(color: ACCENT_COLOR, borderRadius: BorderRadius.circular(50)),
                 height: 45,
                 child: ListView.builder(
                     itemCount: ress.data!.services!.length,
@@ -130,8 +127,7 @@ class _HomePageViewState extends State<HomePageView> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
-                                    color:
-                                        serviceIndex == index ? kColorPrimary : Colors.transparent,
+                                    color: serviceIndex == index ? kColorPrimary : Colors.transparent,
                                     width: serviceIndex == index ? 1 : 1,
                                   ),
                                   boxShadow: [
@@ -210,14 +206,12 @@ class _HomePageViewState extends State<HomePageView> {
                     padding: EdgeInsets.all(8),
                     // color: Colors.grey[300],
                     width: double.infinity,
-                    child: kTextbody('${ress.data!.services![pageIndex].items![serviceIndex].text}',
-                        align: TextAlign.start, size: 15),
+                    child: kTextbody('${ress.data!.services![pageIndex].items![serviceIndex].text}', align: TextAlign.start, size: 15),
                   ),
                   ress.data!.services![pageIndex].items![serviceIndex].cover!.type == "image"
                       ? CachedNetworkImage(
                           width: double.infinity,
-                          imageUrl:
-                              '${ress.data!.services![pageIndex].items![serviceIndex].cover!.content}',
+                          imageUrl: '${ress.data!.services![pageIndex].items![serviceIndex].cover!.content}',
                           fadeInDuration: Duration(seconds: 2),
                           // errorWidget: (vtx, url, obj) {
                           //   return Image.network(
@@ -236,8 +230,7 @@ class _HomePageViewState extends State<HomePageView> {
                           ? Container(
                               child: Html(
                               shrinkWrap: true,
-                              data:
-                                  """${ress.data!.services![pageIndex].items![serviceIndex].cover!.content} """,
+                              data: """${ress.data!.services![pageIndex].items![serviceIndex].cover!.content} """,
                             ))
                           : Center(
                               child: SizedBox(),
@@ -248,21 +241,34 @@ class _HomePageViewState extends State<HomePageView> {
                   ress.data!.services![pageIndex].items![serviceIndex].hasOrientation == true
                       ? GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OrientationRegisterView(
-                                        id: ress
-                                            .data!.services![pageIndex].items![serviceIndex].id!)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrientationRegisterView(id: ress.data!.services![pageIndex].items![serviceIndex].id!)));
                           },
                           child: Center(
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               margin: EdgeInsets.symmetric(vertical: 16),
-                              decoration: BoxDecoration(
-                                  color: kColorPrimary,
-                                  borderRadius: BorderRadius.circular(64),
-                                  boxShadow: [
+                              decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
+                                ),
+                              ]),
+                              child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
+                            ),
+                          ),
+                        )
+                      : ress.data!.services![pageIndex].items![serviceIndex].hasOrientation == false && ress.data!.services![pageIndex].items![serviceIndex].link != null
+                          ? GestureDetector(
+                              onTap: () {
+                                _launchURL(ress.data!.services![pageIndex].items![serviceIndex].link);
+                              },
+                              child: Center(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  margin: EdgeInsets.symmetric(vertical: 16),
+                                  decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.4),
                                       blurRadius: 1,
@@ -270,44 +276,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       offset: Offset(0, 1),
                                     ),
                                   ]),
-                              child: kTextHeader('Orientation Registration',
-                                  size: 16,
-                                  color: Colors.white,
-                                  bold: true,
-                                  paddingH: 16,
-                                  paddingV: 4),
-                            ),
-                          ),
-                        )
-                      : ress.data!.services![pageIndex].items![serviceIndex].hasOrientation ==
-                                  false &&
-                              ress.data!.services![pageIndex].items![serviceIndex].link != null
-                          ? GestureDetector(
-                              onTap: () {
-                                _launchURL(
-                                    ress.data!.services![pageIndex].items![serviceIndex].link);
-                              },
-                              child: Center(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                  margin: EdgeInsets.symmetric(vertical: 16),
-                                  decoration: BoxDecoration(
-                                      color: kColorPrimary,
-                                      borderRadius: BorderRadius.circular(64),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.4),
-                                          blurRadius: 1,
-                                          spreadRadius: 1,
-                                          offset: Offset(0, 1),
-                                        ),
-                                      ]),
-                                  child: kTextHeader('  Registration  ',
-                                      size: 16,
-                                      color: Colors.white,
-                                      bold: true,
-                                      paddingH: 16,
-                                      paddingV: 4),
+                                  child: kTextHeader('  Registration  ', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                                 ),
                               ),
                             )
@@ -321,6 +290,6 @@ class _HomePageViewState extends State<HomePageView> {
           );
   }
 
-  void _launchURL(_url) async =>await launch(_url);
-      // await canLaunch(_url) == false ?  : throw 'Could not launch $_url';
+  void _launchURL(_url) async => await launch(_url);
+  // await canLaunch(_url) == false ?  : throw 'Could not launch $_url';
 }

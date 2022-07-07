@@ -2,6 +2,8 @@ import 'package:app/app/models/user_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/helper/echo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,14 +25,22 @@ class _HomeAppbarState extends State<HomeAppbar> {
   late int newMessage = 0;
 
   void getUserData() async {
+    Echo('getUserData');
     await ApiProvider().getProfile().then((value) {
       if (value.success == true) {
         setState(() {
           ress = value;
           newMessage = ress.data!.newMessages!;
         });
+        if (ress.data != null && ress.data!.image != null) {
+          final controller = Get.find<HomeController>(tag: 'home');
+          controller.avatar.value = ress.data!.image!;
+          Echo(' getUserData avatart  ${controller.avatar.value}');
+        } else {
+          Echo(' getUserData avatart nulls');
+        }
       } else {
-        print("error");
+        Echo(' getUserData error ');
       }
     });
   }
@@ -43,7 +53,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(HomeController());
+    final controller = Get.find<HomeController>(tag: 'home');
 
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -153,7 +163,19 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         child: Container(
                           width: 40,
                           height: 40,
-                          decoration: BoxDecoration(color: Colors.white, shape: BoxShape.circle, image: DecorationImage(image: NetworkImage("${ress.data!.image}"), fit: BoxFit.cover)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(200),
+                            child: CachedNetworkImage(
+                              imageUrl: "${ress.data!.image}",
+                              fit: BoxFit.cover,
+                              placeholder: (ctx, url) {
+                                return profileImageHolder();
+                              },
+                              errorWidget: (context, url, error) {
+                                return profileImageHolder();
+                              },
+                            ),
+                          ),
                         ),
                       ),
               ],

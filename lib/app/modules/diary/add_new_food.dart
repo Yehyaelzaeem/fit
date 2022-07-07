@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app/app/models/day_details_reposne.dart';
-import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -28,8 +27,6 @@ class AddNewFood extends StatefulWidget {
 }
 
 class _AddNewFoodState extends State<AddNewFood> {
-  final controller = Get.put(HomeController());
-
   String food = "Choose Food";
   bool ShowLoader = false;
   int? foodId;
@@ -76,11 +73,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                   children: [
                     if (!widget.showAsDialog)
                       HomeAppbar(
-                        onBack: () {
-                          // Get.offAllNamed(Routes.HOME);
-                          // controller.currentIndex.value = 0;
-                          Navigator.pop(context);
-                        },
+                        onBack: null,
                       ),
                     EditText(
                       controller: _controller,
@@ -262,10 +255,10 @@ class _AddNewFoodState extends State<AddNewFood> {
   }
 
   Future<bool> _willPopCallback() async {
-    // Get.back();
+    Get.back();
     // Get.offAllNamed(Routes.HOME);
     // controller.currentIndex.value = 0;
-    return Future.value(true);
+    return Future.value(false);
   }
 
   void updateProtineData(int? food, double _quantity, {int? index}) async {

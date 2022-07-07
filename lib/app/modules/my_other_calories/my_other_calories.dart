@@ -87,9 +87,11 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 children: [
                   HomeAppbar(
                     type: null,
-                    onBack: () {
-                      Get.offAndToNamed(Routes.HOME);
-                    },
+                    onBack: widget.canGoBack
+                        ? null
+                        : () {
+                            Get.offAndToNamed(Routes.HOME);
+                          },
                   ),
                   Row(
                     children: [

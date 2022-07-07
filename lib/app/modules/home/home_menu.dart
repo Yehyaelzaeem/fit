@@ -2,7 +2,6 @@ import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
@@ -14,8 +13,7 @@ class HomeMenu extends GetView<HomeController> {
       () => Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(color: kColorAccent, borderRadius:
-         BorderRadius.circular(64), boxShadow: [
+        decoration: BoxDecoration(color: kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.4),
             blurRadius: 2,

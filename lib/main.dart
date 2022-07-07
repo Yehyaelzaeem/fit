@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
@@ -28,7 +29,10 @@ Future<void> main() async {
 
   final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
   if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings, onSelectNotification: selectNotification);
+
   Get.put(GlobalController(), tag: "global");
+  Get.put(HomeController(), tag: "home");
+
   runApp(
     GetMaterialApp(
       title: "FIT over FAT",

@@ -1,5 +1,6 @@
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class YemenyPrefs {
   final box = GetStorage();
@@ -230,7 +231,7 @@ class YemenyPrefs {
     return box.read('AlreadySendPhoneData') == null ? false : box.read('AlreadySendPhoneData');
   }
 
-  void logout() {
+  void logout() async {
 //    MainProviderModel mainProviderModel = Provider.of<MainProviderModel>(context, listen: false);
 //    mainProviderModel = null;
     setSkipAuth(false);
@@ -240,6 +241,8 @@ class YemenyPrefs {
     setToken('');
     setEmail('');
     setImage('');
+    SharedPreferences _shared = await SharedPreferences.getInstance();
+    _shared.clear();
 //    Navigator.of(context).pushNamedAndRemoveUntil(SplashController.id, (Route<dynamic> route) => false);
   }
 }

@@ -135,7 +135,7 @@ class HomeView extends GetView<HomeController> {
   }
 
   Widget currentPage() {
-    final controller = Get.put(HomeController());
+    final controller = Get.find<HomeController>(tag: 'home');
     if (controller.currentIndex == 2) {
       return SessionsView();
     }
