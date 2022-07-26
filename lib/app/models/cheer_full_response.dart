@@ -27,15 +27,18 @@ class CheerFullResponse {
 class Data {
   Data({
     this.isActive,
+    this.isFaqActive,
     this.delivery_option,
     this.pickup_option,
   });
 
   bool? isActive;
+  bool? isFaqActive;
   bool? delivery_option;
   bool? pickup_option;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
+        isFaqActive: json["isFaqActive"] == null ? true : json["isFaqActive"],
         isActive: json["is_active"] == null ? null : json["is_active"],
         delivery_option: json["delivery_option"] == null ? null : json["delivery_option"],
         pickup_option: json["pickup_option"] == null ? null : json["pickup_option"],

@@ -11,10 +11,16 @@ import 'package:get/get.dart';
 import 'controllers/home_controller.dart';
 
 class HomeAppbar extends StatefulWidget {
+  final bool removeNotificaitonCount;
   final String? type;
   final Function? onBack;
 
-  const HomeAppbar({Key? key, this.type, this.onBack}) : super(key: key);
+  const HomeAppbar({
+    Key? key,
+    this.type,
+    this.removeNotificaitonCount = false,
+    this.onBack,
+  }) : super(key: key);
 
   @override
   _HomeAppbarState createState() => _HomeAppbarState();
@@ -123,6 +129,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         width: 50,
                         child: GestureDetector(
                           onTap: () {
+                            newMessage = 0;
+                            setState(() {});
                             Get.toNamed(Routes.NOTIFICATIONS);
                           },
                           child: Stack(
@@ -139,7 +147,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: Text(
-                                      "$newMessage",
+                                      widget.removeNotificaitonCount ? "0" : "$newMessage",
                                       style: TextStyle(color: Colors.white, fontSize: 16),
                                     ),
                                   ),

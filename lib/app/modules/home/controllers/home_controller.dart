@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   final userData = UserResponse().obs;
   late bool login = false;
   bool cheerFullStatus = false;
+  bool faqStatus = false;
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();

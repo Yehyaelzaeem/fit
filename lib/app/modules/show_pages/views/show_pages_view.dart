@@ -1,7 +1,6 @@
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/show_pages_controller.dart';

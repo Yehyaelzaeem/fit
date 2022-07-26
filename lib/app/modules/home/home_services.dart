@@ -44,9 +44,7 @@ class HomeServices extends GetView<HomeController> {
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(25),
                                 border: Border.all(
-                                  color: controller.selectedService.value == i
-                                      ? kColorPrimary
-                                      : Colors.black87,
+                                  color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
                                   width: controller.selectedService.value == i ? 1 : 0.02,
                                 ),
                                 boxShadow: [
@@ -74,9 +72,7 @@ class HomeServices extends GetView<HomeController> {
                             Expanded(
                               child: kTextbody(
                                 controller.servicesList[i].title ?? "",
-                                color: controller.selectedService.value == i
-                                    ? kColorPrimary
-                                    : Colors.black87,
+                                color: controller.selectedService.value == i ? kColorPrimary : Colors.black87,
                                 bold: controller.selectedService.value == i,
                                 maxLines: 2,
                               ),
@@ -127,14 +123,12 @@ class HomeServices extends GetView<HomeController> {
                   padding: EdgeInsets.all(8),
                   color: Colors.grey[300],
                   width: double.infinity,
-                  child: kTextbody('${controller.servicesList[sellectedIndex.value].title}',
-                      align: TextAlign.start),
+                  child: kTextbody('${controller.servicesList[sellectedIndex.value].title}', align: TextAlign.start),
                 ),
                 Container(
                   width: double.infinity,
                   child: CachedNetworkImage(
-                    imageUrl:
-                        "${controller.servicesList[sellectedIndex.value].items![0].cover!.content}",
+                    imageUrl: "${controller.servicesList[sellectedIndex.value].items![0].cover!.content}",
                     fadeInDuration: Duration(seconds: 2),
                     // errorWidget: (vtx, url, obj) {
                     //   return Image.network(
@@ -157,19 +151,15 @@ class HomeServices extends GetView<HomeController> {
                   child: Center(
                     child: Container(
                       margin: EdgeInsets.symmetric(vertical: 24),
-                      decoration: BoxDecoration(
-                          color: kColorPrimary,
-                          borderRadius: BorderRadius.circular(64),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              blurRadius: 1,
-                              spreadRadius: 1,
-                              offset: Offset(0, 1),
-                            ),
-                          ]),
-                      child: kTextHeader('Orientation Registration',
-                          size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
+                      decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.4),
+                          blurRadius: 1,
+                          spreadRadius: 1,
+                          offset: Offset(0, 1),
+                        ),
+                      ]),
+                      child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                     ),
                   ),
                 ),

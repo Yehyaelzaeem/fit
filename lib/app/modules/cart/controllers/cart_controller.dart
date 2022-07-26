@@ -66,7 +66,7 @@ class CartController extends GetxController {
         // });
       });
       meals = meals.replaceRange(meals.length - 1, meals.length, '');
-      bool status = await ApiProvider().createShoppingCart(
+      await ApiProvider().createShoppingCart(
         name: name,
         phone: phone,
         email: email,

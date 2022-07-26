@@ -2,7 +2,6 @@ import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -42,7 +41,7 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
           width: double.infinity,
           padding: const EdgeInsets.only(top: 16),
           child: IntroductionScreen(
-            rtl: controller.lang.value.contains('عربي') ?  true: false,
+            rtl: controller.lang.value.contains('عربي') ? true : false,
             pages: [
               ...controller.walkThroughList.map((singleItem) {
                 return PageViewModel(

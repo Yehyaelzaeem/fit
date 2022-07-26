@@ -25,16 +25,7 @@ class Data {
   String? workoutDetails;
   String? workoutDetailsType;
 
-  Data(
-      {this.proteins,
-      this.carbsFats,
-      this.water,
-      this.workouts,
-      this.dayWorkouts,
-      this.pdf,
-      this.workoutDetails,
-      this.days,
-      this.workoutDetailsType});
+  Data({this.proteins, this.carbsFats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType});
 
   Data.fromJson(Map<String, dynamic> json) {
     proteins = json['proteins'] != null ? new Proteins.fromJson(json['proteins']) : null;
@@ -52,8 +43,7 @@ class Data {
         days!.add(new Days.fromJson(v));
       });
     }
-    dayWorkouts =
-        json['day_workouts'] != null ? new DayWorkouts.fromJson(json['day_workouts']) : null;
+    dayWorkouts = json['day_workouts'] != null ? new DayWorkouts.fromJson(json['day_workouts']) : null;
     pdf = json['pdf'];
     workoutDetails = json['workout_details'] ?? "";
     workoutDetailsType = json['workout_details_type'] ?? "";
@@ -90,8 +80,7 @@ class Proteins {
   Proteins({this.caloriesTotal, this.caloriesDetails, this.food});
 
   Proteins.fromJson(Map<String, dynamic> json) {
-    caloriesTotal =
-        json['calories_total'] != null ? new CaloriesTotal.fromJson(json['calories_total']) : null;
+    caloriesTotal = json['calories_total'] != null ? new CaloriesTotal.fromJson(json['calories_total']) : null;
     if (json['calories_details'] != null) {
       caloriesDetails = <CaloriesDetails>[];
       json['calories_details'].forEach((v) {
@@ -159,8 +148,7 @@ class CaloriesDetails {
   String? unit;
   String? color;
 
-  CaloriesDetails(
-      {this.id, this.qty, this.quality, this.calories, this.createdAt, this.unit, this.color});
+  CaloriesDetails({this.id, this.qty, this.quality, this.calories, this.createdAt, this.unit, this.color});
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -190,8 +178,9 @@ class Food {
   var caloriePerUnit;
   String? color;
   bool? isSellected;
+  double? qty;
 
-  Food({this.id, this.title, this.unit, this.caloriePerUnit, this.color, this.isSellected});
+  Food({this.id, this.title, this.qty, this.unit, this.caloriePerUnit, this.color, this.isSellected});
 
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];

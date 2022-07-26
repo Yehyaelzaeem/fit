@@ -40,21 +40,13 @@ class AboutView extends GetView<AboutController> {
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Text(
                               "${response.data![index].title}",
-                              style: TextStyle(
-                                  color: kColorPrimary,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 18),
+                              style: TextStyle(color: kColorPrimary, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic, fontSize: 18),
                             ),
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                width: Get.width,
-                                child: Html(data: """${response.data![index].text}""")
-                              ),
+                              Container(padding: EdgeInsets.symmetric(horizontal: 8), width: Get.width, child: Html(data: """${response.data![index].text}""")),
                               Container(
                                 width: Get.width,
                                 child: CachedNetworkImage(

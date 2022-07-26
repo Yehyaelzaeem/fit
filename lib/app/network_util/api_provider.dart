@@ -177,7 +177,6 @@ class ApiProvider {
       if (globalController.shoNewMessage.value) {
         if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
           globalController.shoNewMessage.value = false;
-
           getx.Get.dialog(WillPopScope(
             onWillPop: () async {
               return globalController.canDismissNewMessageDialog.value;
@@ -225,6 +224,7 @@ class ApiProvider {
                         child: GestureDetector(
                           onTap: () {
                             globalController.canDismissNewMessageDialog.value = true;
+                            globalController.removeNotificaitonCount.value = true;
                             getx.Get.back();
                             getx.Get.toNamed(Routes.NOTIFICATIONS);
                           },
@@ -407,7 +407,14 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> updateDiaryData({required String date, String? water, int? foodProtine, double? qtyProtiene, int? workOut, String? workout_desc}) async {
+  Future<GeneralResponse> createDiaryData({
+    required String date,
+    String? water,
+    int? foodProtine,
+    double? qtyProtiene,
+    int? workOut,
+    String? workout_desc,
+  }) async {
     print(date);
     FormData body = FormData.fromMap({
       "water": water,
@@ -417,7 +424,8 @@ class ApiProvider {
       "workout": workOut,
       "workout_desc": workout_desc,
     });
-    print("${body}");
+    Echo("${body}");
+    Echo("api--> save_calories_details");
 
     Response response = await _utils.post(
       "save_calories_details",
@@ -431,7 +439,15 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> editDiaryData({required String date, String? water, int? foodProtine, double? qtyProtiene, int? workOut, String? workout_desc, int? id}) async {
+  Future<GeneralResponse> editDiaryData({
+    required String date,
+    String? water,
+    int? foodProtine,
+    double? qtyProtiene,
+    int? workOut,
+    String? workout_desc,
+    int? id,
+  }) async {
     print(date);
     FormData body = FormData.fromMap({
       "water": water,
@@ -441,7 +457,8 @@ class ApiProvider {
       "workout": workOut,
       "workout_desc": workout_desc,
     });
-    print("${body}");
+    Echo("${body}");
+    Echo("api--> update_calories_details/$id");
 
     Response response = await _utils.post(
       "update_calories_details/$id",
@@ -680,7 +697,6 @@ class ApiProvider {
   }
 
   Future<VersionResponse> kAppVersion() async {
-    //TODO make sure to change version
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',

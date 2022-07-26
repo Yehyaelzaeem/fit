@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
-  final controller = Get.find<HomeController>(tag: 'home');
+  final textEditController = Get.find<HomeController>(tag: 'home');
   final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
 
   @override
@@ -35,7 +35,7 @@ class HomeDrawer extends GetView<HomeController> {
         child: Column(
           children: <Widget>[
             // if (prefs.getUserId() != null)
-            controller.isLogggd.value == false
+            textEditController.isLogggd.value == false
                 ? Column(
                     children: [
                       Padding(
@@ -54,12 +54,12 @@ class HomeDrawer extends GetView<HomeController> {
                     child: Column(
                       children: [
                         Obx(() {
-                          Echo('drawer itemBuilder ${controller.avatar.value}');
+                          Echo('drawer itemBuilder ${textEditController.avatar.value}');
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                               // ignore: unnecessary_null_comparison
                               child: CachedNetworkImage(
-                                imageUrl: '${controller.avatar.value}',
+                                imageUrl: '${textEditController.avatar.value}',
                                 fit: BoxFit.cover,
                                 height: 80,
                                 width: 80,
@@ -75,9 +75,9 @@ class HomeDrawer extends GetView<HomeController> {
                         // Text(prefs.getName()!)
                         ,
                         Obx(() {
-                          return kTextHeader('${controller.name.value}', size: 18);
+                          return kTextHeader('${textEditController.name.value}', size: 18);
                         }),
-                        kTextfooter('ID :  ${controller.id.value}', size: 14, color: Colors.black87, paddingV: 0),
+                        kTextfooter('ID :  ${textEditController.id.value}', size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
@@ -128,7 +128,7 @@ class HomeDrawer extends GetView<HomeController> {
             //     }),
             //
             // //Profile
-            controller.isLogggd == false
+            textEditController.isLogggd == false
                 ? SizedBox()
                 : singleDrawerItem(
                     title: Strings().profile,
@@ -138,7 +138,7 @@ class HomeDrawer extends GetView<HomeController> {
                     }),
 
             //Messages
-            controller.isLogggd == false
+            textEditController.isLogggd == false
                 ? SizedBox()
                 : singleDrawerItem(
                     title: 'Messages', //todo transulate
@@ -147,12 +147,21 @@ class HomeDrawer extends GetView<HomeController> {
                       Get.toNamed(Routes.NOTIFICATIONS);
                     }),
             //Messages
-            singleDrawerItem(
-                title: 'FAQ', //todo transulate
-                image: 'assets/img/ic_menu_faq.png',
-                action: () {
-                  Get.toNamed(Routes.FAQ);
-                }),
+
+            //CHEER_FULL
+            FutureBuilder<bool>(
+              future: getFaqStatus(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) if (snapshot.data!)
+                  return singleDrawerItem(
+                      title: 'FAQ', //todo transulate
+                      image: 'assets/img/ic_menu_faq.png',
+                      action: () {
+                        Get.toNamed(Routes.FAQ);
+                      });
+                return Container();
+              },
+            ),
 
             //Transformation
             singleDrawerItem(
@@ -197,7 +206,7 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.ABOUT);
                 }),
-            controller.isLogggd == false
+            textEditController.isLogggd == false
                 ? singleDrawerItem(
                     title: "Login",
                     image: "assets/img/ic_menu_logout.png",
@@ -282,12 +291,25 @@ class HomeDrawer extends GetView<HomeController> {
 
   Future<bool> getCheerFullStatus() async {
     try {
-      if (controller.cheerFullStatus) return true;
+      if (textEditController.cheerFullStatus) return true;
       CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
-      controller.cheerFullStatus = kDebugMode ? true : cheerFullResponse.data!.isActive!;
+      textEditController.cheerFullStatus = kDebugMode ? true : cheerFullResponse.data!.isActive!;
       globalController.delivery_option.value = cheerFullResponse.data!.delivery_option!;
       globalController.pickup_option.value = cheerFullResponse.data!.pickup_option!;
-      return controller.cheerFullStatus;
+      return textEditController.cheerFullStatus;
+    } catch (e) {
+      Echo('error response $e');
+    }
+    return true;
+  }
+
+  Future<bool> getFaqStatus() async {
+    try {
+      if (textEditController.faqStatus) return true;
+      CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
+      if (cheerFullResponse.data == null) return true;
+      textEditController.faqStatus = kDebugMode ? true : cheerFullResponse.data!.isFaqActive!;
+      return textEditController.faqStatus;
     } catch (e) {
       Echo('error response $e');
     }

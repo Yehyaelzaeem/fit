@@ -88,12 +88,6 @@ class Meal {
         name: json["name"] == null ? null : json["name"],
         price: json["price"] == null ? null : json["price"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": name == null ? null : name,
-        "price": price == null ? null : price,
-      };
 }
 
 class UserInfo {

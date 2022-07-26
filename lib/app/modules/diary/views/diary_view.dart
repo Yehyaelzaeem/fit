@@ -3,8 +3,6 @@ import 'package:app/app/modules/diary/add_new_food.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
-import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
@@ -16,767 +14,228 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 
-import '../../../pdf_viewr.dart';
 import '../../main_un_auth.dart';
 
-class DiaryView extends StatefulWidget {
-  const DiaryView({Key? key}) : super(key: key);
-
+class DiaryView extends GetView<DiaryController> {
   @override
-  _DiaryViewState createState() => _DiaryViewState();
-}
-
-class _DiaryViewState extends State<DiaryView> {
-  GlobalKey<FormState> key = GlobalKey();
-  bool isLoading = true;
-
-  String? lastSelectedDate;
-  late String date;
-
-  late String WorkOutData;
-  DayDetailsResponse response = DayDetailsResponse();
-  late String qtyProtine, foodProtine;
-  late int length;
-  bool ShowLoader = false;
-  int? workOut;
-  late String workDesc;
-  late bool isToday;
-  bool noSessions = false;
-  TextEditingController controller = TextEditingController();
-  List<SingleImageItem> list = [];
-
-  String? apiDate;
-
-  void getDiaryData(String _date) async {
-    lastSelectedDate = _date;
-    setState(() {
-      isLoading = true;
-    });
-    print("====> Gittng Day $_date Info ");
-
-    await ApiProvider().getDiaryView(_date).then((value) {
-      if (value.success == false && value.data == null) {
-        setState(() {
-          isLoading = false;
-          noSessions = true;
-        });
-      } else {
-        if (value.data != null) {
-          setState(() {
-            response = value;
-            isLoading = false;
-            ShowLoader = false;
-            length = response.data!.water! + 3;
-            workOut = response.data!.workouts![0].id;
-            workDesc = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
-            controller.text = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutDesc!;
-            WorkOutData = response.data!.dayWorkouts == null ? " " : response.data!.dayWorkouts!.workoutType!;
-            list.clear();
-          });
-
-          if (response.data!.days![0].active == true) {
-            setState(() {
-              isToday = true;
-            });
-          } else {
-            setState(() {
-              isToday = false;
-            });
-          }
-          for (int i = 0; i < response.data!.days!.length; i++) {
-            if (response.data!.days![i].active == true) {
-              setState(() {
-                date = response.data!.days![i].dateFormat!;
-                apiDate = response.data!.days![i].date;
-              });
-            } else {}
-          }
-
-          for (int i = 1; i <= length; i++) {
-            if (i <= response.data!.water!) {
-              setState(() {
-                list.add(
-                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: true),
-                );
-              });
-            } else {
-              setState(() {
-                list.add(
-                  SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: false),
-                );
-              });
-            }
-          }
-          print("Percentage ${response.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.data!.proteins!.caloriesTotal!.taken} / ${response.data!.proteins!.caloriesTotal!.imposed}");
-        } else {
-          if (lastSelectedDate != null && lastSelectedDate!.isNotEmpty) {
-            getDiaryData(lastSelectedDate!);
-          } else {
-            getDiaryData(DateTime.now().toString().substring(0, 10));
-          }
-          setState(() {
-            response = value;
-            isLoading = false;
-            ShowLoader = false;
-            date = _date;
-          });
-          print("error");
-        }
-      }
-    });
-  }
-
-  void deleteItem(int id, String _date) async {
-    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
-      if (value.success == true) {
-        setState(() {
-          isLoading = false;
-        });
-        getDiaryData(apiDate!);
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        print("error");
-      }
-    });
-  }
-
-  void updateWaterData(String water) async {
-    setState(() {
-      ShowLoader = true;
-    });
-    await ApiProvider().updateDiaryData(water: water, date: apiDate!).then((value) {
-      if (value.success == true) {
-        setState(() {
-          ShowLoader = false;
-        });
-        getDiaryData(apiDate!);
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        // Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
-      }
-    });
-  }
-
-  void updateWork() async {
-    setState(() {
-      ShowLoader = true;
-    });
-
-    await ApiProvider().updateDiaryData(workOut: workOut, workout_desc: workDesc, date: apiDate!).then((value) {
-      if (value.success == true) {
-        setState(() {
-          ShowLoader = false;
-        });
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        setState(() {
-          ShowLoader = false;
-        });
-        Fluttertoast.showToast(msg: "Server Error");
-        print("error");
-      }
-    });
-  }
-
-  bool IsLogggd = false;
-  bool getLog = true;
-  void getFromCash() async {
-    IsLogggd = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    setState(() {
-      getLog = false;
-    });
-    if (IsLogggd != true) {
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => UnAuthView(),
-      //     ),
-      //     (Route<dynamic> route) => false);
-    } else {
-      getDiaryData(DateTime.now().toString().substring(0, 10));
-    }
-  }
-
-  @override
-  void initState() {
-    getFromCash();
-    super.initState();
-  }
+  final controller = Get.find(tag: 'diary');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HomeDrawer(),
-      body: getLog
-          ? Center()
-          : !IsLogggd
-              ? MainUnAuth()
-              : Stack(
-                  children: [
-                    ListView(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              // padding: EdgeInsets.symmetric(horizontal:16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.horizontal(
-                                  right: Radius.circular(15.0),
-                                ),
-                                color: const Color(0xFF414042),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 4),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 2),
-                                    Text(
-                                      '         Calories Calculator       ',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                downloadFile(response.data!.pdf!);
-                              },
-                              child: Container(
-                                width: 80,
-                                height: 40,
-                                padding: const EdgeInsets.symmetric(horizontal: 0),
-                                margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                                // height: double.infinity,
-                                decoration: BoxDecoration(
-                                  // color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(64),
-                                ),
-                                child: Image.asset(
-                                  "assets/img/view.png",
-                                  color: kColorPrimary,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                        isLoading == true
-                            ? CircularLoadingWidget()
-                            : isLoading == false && noSessions == true
-                                ? Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 200),
-                                    child: Center(
-                                      child: Text(
-                                        "Book Your Next Session",
-                                        style: TextStyle(fontStyle: FontStyle.italic, fontSize: 17),
-                                      ),
-                                    ),
-                                  )
-                                : Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                      isToday == true
-                                          ? Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                InkWell(
-                                                  onTap: () {
-                                                    print(response.data!.days![1].date!);
-                                                    getDiaryData(response.data!.days![1].date!);
-                                                  },
-                                                  child: Container(width: MediaQuery.of(context).size.width / 4, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('Yesterday', color: Colors.white, bold: true, size: 14))),
-                                                ),
-                                                Container(width: MediaQuery.of(context).size.width / 1.5, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('${date}', color: Colors.black87, bold: true, size: 14))),
-                                              ],
-                                            )
-                                          : Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Container(width: MediaQuery.of(context).size.width / 1.5, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('${date}', color: Colors.black87, bold: true, size: 14))),
-                                                InkWell(
-                                                  onTap: () {
-                                                    getDiaryData(response.data!.days![0].date!);
-                                                  },
-                                                  child: Container(width: MediaQuery.of(context).size.width / 4, height: 50, margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0), decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(5)), child: Center(child: kTextHeader('Today', color: Colors.white, bold: true, size: 14))),
-                                                ),
-                                              ],
-                                            ),
-                                      SizedBox(
-                                        height: 16,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Water : ${response.data!.water ?? "0"}",
-                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                            ),
-                                            // SizedBox(),
-                                            Icon(
-                                              Icons.swap_vert,
-                                              size: 25,
-                                              color: kColorPrimary,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Container(
-                                          width: double.infinity,
-                                          child: GridView.builder(
-                                            itemCount: length,
-                                            shrinkWrap: true,
-                                            physics: NeverScrollableScrollPhysics(),
-                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
-                                            itemBuilder: (BuildContext context, int index) {
-                                              return InkWell(
-                                                  onTap: () {
-                                                    updateWaterData("${index + 1}");
-                                                  },
-                                                  child: Stack(
-                                                    children: [
-                                                      Container(
-                                                        decoration: BoxDecoration(image: DecorationImage(image: AssetImage(list[index].imagePath), fit: BoxFit.cover)),
-                                                      ),
-                                                      list[index].selected == false
-                                                          ? SizedBox()
-                                                          : Padding(
-                                                              padding: const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 0),
-                                                              child: Container(
-                                                                child: Center(
-                                                                  child: Icon(
-                                                                    Icons.check_circle,
-                                                                    size: 50,
-                                                                    color: kColorPrimary,
-                                                                  ),
-                                                                ),
-                                                                decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
-                                                              ),
-                                                            ),
-                                                    ],
-                                                  ));
-                                            },
-                                          )),
-                                      Divider(
-                                        thickness: 2,
-                                      ),
-                                      rowWithProgressBar("Proteins", response.data!.proteins),
-                                      staticBar(1),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          itemCount: response.data!.proteins!.caloriesDetails!.length,
-                                          itemBuilder: (context, indedx) {
-                                            return rowItem(response.data!.proteins!.caloriesDetails![indedx], 1);
-                                          }),
-                                      Divider(thickness: 2),
-                                      rowWithProgressBar("Carbs & Fats", response.data!.carbsFats),
-                                      staticBar(2),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          physics: NeverScrollableScrollPhysics(),
-                                          itemCount: response.data!.carbsFats!.caloriesDetails!.length,
-                                          itemBuilder: (context, indedx) {
-                                            return rowItem(response.data!.carbsFats!.caloriesDetails![indedx], 2);
-                                          }),
-                                      SizedBox(height: 12),
-                                      Divider(),
-                                      InkWell(
-                                        onTap: () async {
-                                          dynamic result = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => MyOtherCalories(
-                                                        canGoBack: true,
-                                                      )));
+        drawer: HomeDrawer(),
+        body: Obx(() {
+          if (!controller.isLogggd.value) return MainUnAuth();
+          if (controller.showLoader.value || controller.isLoading.value)
+            return Container(
+                child: Center(
+                  child: CircularLoadingWidget(),
+                ),
+                color: Colors.white);
 
-                                          if (result == null) {
-                                            Echo('lastSelectedDate ${lastSelectedDate}');
-                                            setState(() {});
-                                            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-                                          } else {
-                                            Echo('result != null 3');
-                                          }
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          padding: EdgeInsets.symmetric(vertical: 16),
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffF1F9E3),
-                                          ),
-                                          child: kButtonDefault(
-                                            'My other calories',
-                                            marginH: MediaQuery.of(context).size.width / 6,
-                                            paddingV: 0,
-                                            shadow: true,
-                                            paddingH: 12,
-                                          ),
-                                        ),
-                                      ),
-                                      Divider(),
-                                      SizedBox(height: 12),
-                                      InkWell(
-                                        onTap: () {
-                                          if (response.data!.workoutDetailsType == "") {
-                                            Fluttertoast.showToast(msg: "Nothing To Show ");
-                                          } else if (response.data!.workoutDetailsType == "link") {
-                                            _launchURL(response.data!.workoutDetails);
-                                          } else {
-                                            showPobUp(response.data!.workoutDetails!);
-                                          }
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                width: 16,
-                                              ),
-                                              Text(
-                                                "Workout Details",
-                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(horizontal: 8),
-                                                child: Icon(
-                                                  Icons.upload_sharp,
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          height: 45,
-                                          margin: EdgeInsets.symmetric(
-                                            horizontal: 72,
-                                          ),
-                                          decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
-                                        ),
-                                      ),
-                                      SizedBox(height: MediaQuery.of(context).size.width / 14),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              "Workout",
-                                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                                              textAlign: TextAlign.start,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          CustomSheet(
-                                              context: context,
-                                              widget: Padding(
-                                                padding: EdgeInsets.only(top: 16),
-                                                child: ListView.builder(
-                                                    itemCount: response.data!.workouts!.length,
-                                                    itemBuilder: (context, index) {
-                                                      return InkWell(
-                                                        onTap: () {
-                                                          Navigator.pop(context);
-                                                          setState(() {
-                                                            WorkOutData = response.data!.workouts![index].title!;
-                                                            workOut = response.data!.workouts![index].id!;
-                                                          });
-                                                        },
-                                                        child: Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                                                              child: Text(
-                                                                "${response.data!.workouts![index].title}",
-                                                                style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
-                                                              ),
-                                                            ),
-                                                            Divider()
-                                                          ],
-                                                        ),
-                                                      );
-                                                    }),
-                                              ));
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                                          child: Container(
-                                            width: double.infinity,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    "${WorkOutData}",
-                                                    style: TextStyle(fontSize: 20),
-                                                  ),
-                                                  Icon(Icons.arrow_drop_down)
-                                                ],
-                                              ),
-                                            ),
-                                            height: 40,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.black)),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        color: Colors.white,
-                                        width: MediaQuery.of(context).size.width,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
-                                            SizedBox(
-                                              height: 20,
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 8),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  kTextbody('Workout Description', size: 20, bold: true),
-                                                  EditText(
-                                                    // controller: controller,
-                                                    radius: 12,
-                                                    lines: 5,
-                                                    type: TextInputType.multiline,
-                                                    value: '${workDesc}',
-                                                    // hint: '${workDesc}',
-                                                    updateFunc: (text) {
-                                                      setState(() {
-                                                        workDesc = text;
-                                                      });
-                                                      print("$workDesc");
-                                                    },
-                                                    validateFunc: (text) {},
-                                                  ),
-                                                  SizedBox(height: 8),
-                                                  Center(
-                                                    child: kButtonDefault('Save', marginH: MediaQuery.of(context).size.width / 5, paddingV: 0, func: () {
-                                                      if (workDesc.trim() == "" || workOut == null) {
-                                                        Fluttertoast.showToast(msg: "Enter Workout Description");
-                                                      } else {
-                                                        updateWork();
-                                                      }
-                                                    }, shadow: true, paddingH: 50),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
+          if (!controller.isLoading.value && controller.noSessions.value == true)
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 200),
+              child: Center(
+                child: Text(
+                  "Book Your Next Session",
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 17),
+                ),
+              ),
+            );
+          return ListView(
+            children: [
+              //* Header + eye Icon
+              header(),
+
+              Column(
+                children: [
+                  SizedBox(height: 16),
+                  //* Diary Dates
+                  diaryDatesOptions(),
+                  SizedBox(height: 16),
+                  //*Water Header
+                  waterHeader(),
+                  //*Water Bottles
+                  waterBottles(),
+                  Divider(thickness: 2),
+                  rowWithProgressBar("Proteins", controller.response.value.data!.proteins),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        if (controller.refreshLoadingProtine.value)
+                          Container(
+                            child: LinearProgressIndicator(),
+                            color: kColorPrimary,
+                          ),
+                        staticBar(1),
+                        if (controller.caloriesDetails.isEmpty) SizedBox(height: 20),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.caloriesDetails.length,
+                            itemBuilder: (context, indedx) {
+                              return rowItem(controller.caloriesDetails[indedx], 1);
+                            }),
                       ],
                     ),
-                    ShowLoader == false
-                        ? SizedBox()
-                        : Container(
-                            child: Center(
-                              child: CircularLoadingWidget(),
-                            ),
-                            width: double.infinity,
-                            height: double.infinity,
-                            color: Colors.black.withOpacity(.9),
-                          )
-                  ],
-                ),
-    );
+                  ),
+                  Divider(thickness: 2),
+                  rowWithProgressBar("Carbs & Fats", controller.response.value.data!.carbsFats),
+                  if (controller.refreshLoadingCarbs.value)
+                    Container(
+                      child: LinearProgressIndicator(),
+                      color: kColorPrimary,
+                    ),
+                  staticBar(2),
+                  if (controller.carbsAndFats.isEmpty) SizedBox(height: 20),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.carbsAndFats.length,
+                      itemBuilder: (context, indedx) {
+                        return rowItem(controller.carbsAndFats[indedx], 2);
+                      }),
+                  SizedBox(height: 12),
+                  Divider(),
+                  diaryFooter(),
+                ],
+              )
+            ],
+          );
+        }));
   }
 
   Widget rowItem(CaloriesDetails item, int type) {
-    return GestureDetector(
-      onTap: () async {
-        if (type == 1) {
-          //show screen dialog
-          // dynamic result = await showDialog(
-          //     context: context,
-          //     builder: (context) {
-          //       return Dialog(
-          //         child: AddNewFood(
-          //           date: apiDate!,
-          //           list: response.data!.proteins!.food,
-          //           edit: true,
-          //           id: item.id,
-          //           showAsDialog: true,
-          //         ),
-          //       );
-          //     });
-          // if (result == null) {
-          //   setState(() {});
-          //   if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
+    return Container(
+      height: 52,
+      child: GestureDetector(
+        onTap: () async {
+          // if (type == 1) {
+          //   dynamic result = await Navigator.push(
+          //     Get.context!,
+          //     MaterialPageRoute(
+          //       builder: (context) => AddNewFood(
+          //         date: controller.apiDate.value,
+          //         list: controller.response.value.data!.proteins!.food,
+          //         edit: true,
+          //         id: item.id,
+          //         showAsDialog: false,
+          //       ),
+          //     ),
+          //   );
+          //   if (result == null) {
+          //     if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+          //   }
+          // } else {
+          //   dynamic result = await Navigator.push(
+          //       Get.context!,
+          //       MaterialPageRoute(
+          //           builder: (context) => AddNewFood(
+          //                 date: controller.apiDate.value,
+          //                 list: controller.response.value.data!.carbsFats!.food,
+          //                 edit: true,
+          //                 id: item.id,
+          //                 showAsDialog: false,
+          //               )));
+
+          //   if (result == null) {
+          //     Echo('controller.lastSelectedDate.value ${controller.lastSelectedDate.value}');
+
+          //     if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+          //   }
           // }
-          Echo('result init lastSelectedDate ${lastSelectedDate!} navigate to AddNewFood ');
-          dynamic result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddNewFood(
-                date: apiDate!,
-                list: response.data!.proteins!.food,
-                edit: true,
-                id: item.id,
-                showAsDialog: false,
-              ),
-            ),
-          );
-          Echo('asdasd');
-          Echo('result ${result}');
-          if (result == null) {
-            Echo('lastSelectedDate ${lastSelectedDate}');
-            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-            setState(() {});
-          } else {
-            Echo('result != null 1');
-          }
-        } else {
-          // dynamic result = await showDialog(
-          //     context: context,
-          //     builder: (context) {
-          //       return Dialog(
-          //         child: AddNewFood(
-          //           date: apiDate!,
-          //           list: response.data!.carbsFats!.food,
-          //           edit: true,
-          //           id: item.id,
-          //           showAsDialog: true,
-          //         ),
-          //       );
-          //     });
-          // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-
-          dynamic result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AddNewFood(
-                        date: apiDate!,
-                        list: response.data!.carbsFats!.food,
-                        edit: true,
-                        id: item.id,
-                        showAsDialog: false,
-                      )));
-
-          if (result == null) {
-            Echo('lastSelectedDate ${lastSelectedDate}');
-            setState(() {});
-            if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-          } else {
-            Echo('result != null 2');
-          }
-        }
-      },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            child: Row(
+        },
+        child: Column(
+          children: [
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black87)),
-                        child: kTextbody('${item.qty}', color: Colors.black, bold: false, size: 12),
-                      ),
-                      kTextbody('x', color: Colors.black, bold: false, size: 10),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Container(
-                          padding: EdgeInsets.all(4),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.black87)),
-                          child: kTextbody('${item.unit}', color: Colors.black, bold: false, size: 12),
+                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Expanded(
+                  flex: 3,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: GestureDetector(
+                            onTap: () {
+                              showQualityDialog(controller.response.value.data!.proteins!.food!, item, type == 1);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(4),
+                              margin: EdgeInsets.symmetric(horizontal: 2),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(
+                                  color: Colors.grey[500]!,
+                                ),
+                              ),
+                              child: Center(child: kTextbody(item.qty == null ? '' : '${item.qty}', color: Colors.black, bold: false, size: 12)),
+                            ),
+                          ),
                         ),
-                      )
-                    ],
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 1),
+                            child: kTextbody(item.unit == null ? '' : '${item.unit}', color: Colors.black, bold: false, size: 12),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Container(width: MediaQuery.of(context).size.width / 3, padding: EdgeInsets.all(2), decoration: BoxDecoration(borderRadius: BorderRadius.circular(5), border: Border.all(color: Colors.grey[500]!)), child: kTextbody('${item.quality}', color: Color(int.parse("0xFF${item.color}")), bold: false, size: 12)),
-                Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      kTextbody('${item.calories}', color: Colors.black, bold: false, size: 16),
-                      InkWell(
-                        onTap: () {
-                          deleteItem(item.id!, date);
-                        },
-                        child: Icon(
-                          Icons.delete,
-                          color: Colors.redAccent,
-                          size: 30,
-                        ),
+                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Expanded(
+                  flex: 4,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    width: double.infinity,
+                    child: GestureDetector(
+                      onTap: () {
+                        showQualityDialog(controller.response.value.data!.carbsFats!.food!, item, type == 1);
+                      },
+                      child: itemWidget(
+                        title: item.quality == null ? '' : '${item.quality}',
+                        showDropDownArrow: item.quality == null || '${item.quality}'.isEmpty,
                       ),
-                    ],
+                    ),
                   ),
                 ),
+                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Expanded(flex: 2, child: kTextbody(item.calories == null ? '' : '${item.calories}', color: Colors.black, bold: false, size: 16)),
+                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Expanded(
+                  flex: 1,
+                  child: DeleteItemWidget(
+                    controller: controller,
+                    item: item,
+                    typeIsCalories: type == 1,
+                  ),
+                ),
+                Container(width: 1, height: 50, color: Colors.grey[700]),
               ],
             ),
-          ),
-        ],
+            Divider(
+              height: 1,
+              color: Colors.black,
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  // void onClick() async {
-  //   Permission permission = Permission.storage;
-  //   bool status = await permission.status.isGranted;
-  //   if (status) {
-  //     downloadFile('${response.data!.pdf}');
-  //     // _showProgressNotification();
-  //   } else {
-  //     print('Permission is granted: $status');
-  //     final requestStatus = permission.request();
-  //     print('Request Status: ${await requestStatus.isGranted}');
-  //   }
-  // }
-
-  void downloadFile(String url) async {
-    // try {
-    //   Dio dio = Dio();
-    //   List<Directory>? directories = await getExternalStorageDirectories();
-    //   directories!.forEach((element) {
-    //     print(element.path);
-    //   });
-    //   // print(directory!.path);
-    //   String filePath = '/sdcard/download/${url.split("/").last}.pdf';
-    //   await dio.download(url, filePath, onReceiveProgress: (received, total) {
-    //     String progress = ((received / total) * 100).toStringAsFixed(0) + "%";
-    //     print('Progress: $progress');
-    Navigator.push(context, MaterialPageRoute(builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
-    // });
-    // } catch (e) {
-    //   print(e);
-    // }
   }
 
   Widget rowWithProgressBar(String Title, Proteins? item) {
@@ -801,22 +260,6 @@ class _DiaryViewState extends State<DiaryView> {
                   SizedBox(
                     width: 10,
                   ),
-                  // InkWell(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //         context,
-                  //         MaterialPageRoute(
-                  //             builder: (context) => AddNewFood(
-                  //                   list: response.data!.proteins!.food,
-                  //                 )));
-                  //   },
-                  //   child: Container(
-                  //       decoration: BoxDecoration(color: kColorPrimary),
-                  //       child: Icon(
-                  //         Icons.add,
-                  //         color: Color(0xFF414042),
-                  //       )),
-                  // ),
                 ],
               ),
               kTextHeader('${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}', bold: false, size: 20, color: Colors.black),
@@ -832,15 +275,15 @@ class _DiaryViewState extends State<DiaryView> {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
               Container(
                 height: 20,
-                width: MediaQuery.of(context).size.width * (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                width: MediaQuery.of(Get.context!).size.width * (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                 decoration: BoxDecoration(
                   color: Color(int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(4),
                 ),
               ),
             ],
@@ -855,136 +298,554 @@ class _DiaryViewState extends State<DiaryView> {
 
   Widget staticBar(int type) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      height: 50,
       color: Color(0xFF414042),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Center(child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16)),
-          ),
-          Container(width: MediaQuery.of(context).size.width / 3, child: Center(child: kTextbody('Quality', color: Colors.white, bold: true, size: 16))),
-          Container(
-            width: MediaQuery.of(context).size.width / 3,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // SizedBox(width: ,),
-                kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
-                InkWell(
-                  onTap: () async {
-                    if (type == 1) {
-                      // dynamic result = await showDialog(
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return Dialog(
-                      //         child: AddNewFood(
-                      //           date: apiDate!,
-                      //           list: response.data!.proteins!.food,
-                      //           edit: false,
-                      //           showAsDialog: true,
-                      //         ),
-                      //       );
-                      //     });
-                      // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-
-                      Echo('result init lastSelectedDate ${lastSelectedDate!} navigate to AddNewFood ');
-                      dynamic result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewFood(
-                                    date: apiDate!,
-                                    list: response.data!.proteins!.food,
-                                    edit: false,
-                                    showAsDialog: false,
-                                  )));
-
-                      Echo('asdasd');
-                      Echo('result ${result}');
-                      if (result == null) {
-                        Echo('lastSelectedDate ${lastSelectedDate}');
-                        setState(() {});
-                        if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-                      } else {
-                        Echo('result != null 2');
-                      }
-                    } else {
-                      // dynamic result = await showDialog(
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return Dialog(
-                      //         child: AddNewFood(
-                      //           date: apiDate!,
-                      //           list: response.data!.carbsFats!.food,
-                      //           edit: false,
-                      //           showAsDialog: true,
-                      //         ),
-                      //       );
-                      //     });
-                      // if (result == null) if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-
-                      dynamic result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddNewFood(
-                                    date: apiDate!,
-                                    list: response.data!.carbsFats!.food,
-                                    edit: false,
-                                    showAsDialog: false,
-                                  )));
-
-                      Echo('result ${result}');
-                      if (result == null) {
-                        Echo('lastSelectedDate ${lastSelectedDate}');
-                        setState(() {});
-                        if (lastSelectedDate != null) getDiaryData(lastSelectedDate!);
-                      } else {
-                        Echo('result != null 2');
-                      }
-                    }
-                  },
-                  child: Container(
-                      margin: EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(color: kColorPrimary),
-                      child: Icon(
-                        Icons.add,
-                        size: 30,
-                        color: Colors.black87,
-                      )),
-                ),
-              ],
+          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Expanded(
+            flex: 3,
+            child: Container(
+              width: double.infinity,
+              child: Center(
+                child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16),
+              ),
             ),
           ),
+          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Expanded(
+            flex: 4,
+            child: Container(
+              width: double.infinity,
+              child: Center(
+                child: kTextbody('Quality', color: Colors.white, bold: true, size: 16),
+              ),
+            ),
+          ),
+          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Expanded(
+            flex: 2,
+            child: kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
+          ),
+          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: () async {
+                if (type == 1) {
+                  controller.caloriesDetails.add(CaloriesDetails());
+                  // dynamic result = await Navigator.push(
+                  //     Get.context!,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => AddNewFood(
+                  //               date: controller.apiDate.value,
+                  //               list: controller.response.value.data!.proteins!.food,
+                  //               edit: false,
+                  //               showAsDialog: false,
+                  //             )));
+
+                  // if (result == null) {
+                  //   if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+                  // } else {}
+                } else {
+                  controller.carbsAndFats.add(CaloriesDetails());
+                  // dynamic result = await Navigator.push(
+                  //     Get.context!,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => AddNewFood(
+                  //               date: controller.apiDate.value,
+                  //               list: controller.response.value.data!.carbsFats!.food,
+                  //               edit: false,
+                  //               showAsDialog: false,
+                  //             )));
+
+                  // if (result == null) {
+                  //   if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+                  // } else {}
+                }
+              },
+              child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(color: kColorPrimary),
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.black87,
+                    size: 24,
+                  )),
+            ),
+          ),
+          Container(width: 1, height: 50, color: Colors.grey[700]),
         ],
       ),
     );
   }
 
-  void showPobUp(String text) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Dialog(
-            child: Container(
-                height: MediaQuery.of(context).size.height / 1.5,
-                padding: EdgeInsets.only(top: 8, left: 4, right: 4),
-                child: Scrollbar(
-                  isAlwaysShown: true,
-                  child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: SingleChildScrollView(
-                      child: SelectableText(
-                        "${text}",
-                        // textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
-                      ),
-                    ),
+  Widget header() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          // padding: EdgeInsets.symmetric(horizontal:16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.horizontal(
+              right: Radius.circular(15.0),
+            ),
+            color: const Color(0xFF414042),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Column(
+              children: [
+                SizedBox(height: 2),
+                Text(
+                  '         Calories Calculator       ',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
                   ),
-                )),
-          );
-        });
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+              ],
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            controller.downloadFile(controller.response.value.data!.pdf!);
+          },
+          child: Container(
+            width: 80,
+            height: 40,
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+            // height: double.infinity,
+            decoration: BoxDecoration(
+              // color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(64),
+            ),
+            child: Image.asset(
+              "assets/img/view.png",
+              color: kColorPrimary,
+              fit: BoxFit.contain,
+            ),
+          ),
+        )
+      ],
+    );
   }
 
-  void _launchURL(_url) async => await launch(_url);
+  Widget diaryDatesOptions() {
+    Widget dayButton = InkWell(
+      onTap: () {
+        if (!controller.isToday.value) {
+          controller.getDiaryData(controller.response.value.data!.days![0].date!);
+        } else {
+          controller.getDiaryData(controller.response.value.data!.days![1].date!);
+        }
+      },
+      child: Container(
+        width: MediaQuery.of(Get.context!).size.width / 4,
+        height: 50,
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(4)),
+        child: Center(
+          child: kTextHeader(controller.isToday.value ? 'Yesterday' : 'Today', color: Colors.white, bold: true, size: 14),
+        ),
+      ),
+    );
+    Widget dateDisplay = Container(
+      width: MediaQuery.of(Get.context!).size.width / 1.5,
+      height: 50,
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
+      child: Center(
+        child: kTextHeader('${controller.date.value}', color: Colors.black87, bold: true, size: 14),
+      ),
+    );
+    return controller.isToday.value == true
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              dayButton,
+              dateDisplay,
+            ],
+          )
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              dateDisplay,
+              dayButton,
+            ],
+          );
+  }
+
+  Widget waterHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Water : ${controller.response.value.data!.water ?? "0"}",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          // SizedBox(),
+          Icon(Icons.swap_vert, size: 25, color: kColorPrimary)
+        ],
+      ),
+    );
+  }
+
+  Widget waterBottles() {
+    return Container(
+        width: double.infinity,
+        child: GridView.builder(
+          itemCount: controller.length.value,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+                onTap: () {
+                  controller.updateWaterData("${index + 1}");
+                },
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(controller.waterBottlesList[index].imagePath), fit: BoxFit.cover)),
+                    ),
+                    controller.waterBottlesList[index].selected == false
+                        ? SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 0),
+                            child: Container(
+                              child: Center(
+                                child: Icon(
+                                  Icons.check_circle,
+                                  size: 50,
+                                  color: kColorPrimary,
+                                ),
+                              ),
+                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                            ),
+                          ),
+                  ],
+                ));
+          },
+        ));
+  }
+
+  Widget diaryFooter() {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () async {
+            dynamic result = await Navigator.push(
+                Get.context!,
+                MaterialPageRoute(
+                    builder: (context) => MyOtherCalories(
+                          canGoBack: true,
+                        )));
+
+            if (result == null) {
+              if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: Color(0xffF1F9E3),
+            ),
+            child: kButtonDefault(
+              'My other calories',
+              marginH: MediaQuery.of(Get.context!).size.width / 6,
+              paddingV: 0,
+              shadow: true,
+              paddingH: 12,
+            ),
+          ),
+        ),
+        Divider(),
+        SizedBox(height: 12),
+        InkWell(
+          onTap: () {
+            if (controller.response.value.data!.workoutDetailsType == "") {
+              Fluttertoast.showToast(msg: "Nothing To Show ");
+            } else if (controller.response.value.data!.workoutDetailsType == "link") {
+              controller.launchURL(controller.response.value.data!.workoutDetails);
+            } else {
+              controller.showPobUp(controller.response.value.data!.workoutDetails!);
+            }
+          },
+          child: Container(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 16,
+                ),
+                Text(
+                  "Workout Details",
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Icon(
+                    Icons.upload_sharp,
+                    color: Colors.white,
+                  ),
+                )
+              ],
+            ),
+            height: 45,
+            margin: EdgeInsets.symmetric(
+              horizontal: 72,
+            ),
+            decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
+          ),
+        ),
+        SizedBox(height: MediaQuery.of(Get.context!).size.width / 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Text(
+                "Workout",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                textAlign: TextAlign.start,
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            CustomSheet(
+                context: Get.context!,
+                widget: Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: ListView.builder(
+                      itemCount: controller.response.value.data!.workouts!.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pop(Get.context!);
+                            controller.workOutData.value = controller.response.value.data!.workouts![index].title!;
+                            controller.workOut.value = controller.response.value.data!.workouts![index].id!;
+                          },
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                                child: Text(
+                                  "${controller.response.value.data!.workouts![index].title}",
+                                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Divider()
+                            ],
+                          ),
+                        );
+                      }),
+                ));
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            child: Container(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "${controller.workOutData.value}",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Icon(Icons.arrow_drop_down)
+                  ],
+                ),
+              ),
+              height: 40,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          width: MediaQuery.of(Get.context!).size.width,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Container(width: double.infinity, child: kTextHeader(Strings().login, size: 24, align: TextAlign.start)),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    kTextbody('Workout Description', size: 20, bold: true),
+                    EditText(
+                      // controller: controller,
+                      radius: 12,
+                      lines: 5,
+                      type: TextInputType.multiline,
+                      value: '${controller.workDesc.value}',
+                      // hint: '${controller.workDesc.value}',
+                      updateFunc: (text) {
+                        controller.workDesc.value = text;
+                        Echo("$controller.workDesc.value");
+                      },
+                      validateFunc: (text) {},
+                    ),
+                    SizedBox(height: 8),
+                    Center(
+                      child: kButtonDefault('Save', marginH: MediaQuery.of(Get.context!).size.width / 5, paddingV: 0, func: () {
+                        if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
+                          Fluttertoast.showToast(msg: "Enter Workout Description");
+                        } else {
+                          controller.updateWork();
+                        }
+                      }, shadow: true, paddingH: 50),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget itemWidget({required String title, bool showDropDownArrow = false}) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: Colors.grey, width: 1),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Expanded(
+              child: Container(
+                  child: kTextbody(
+            '$title',
+            size: 12,
+            maxLines: 5,
+            paddingH: 1,
+          ))),
+          if (showDropDownArrow)
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: 18,
+            ),
+        ],
+      ),
+    );
+  }
+
+  void showQualityDialog(List<Food> food, CaloriesDetails item, bool typeIsProtine) async {
+    // show screen dialog
+    dynamic result = await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return Dialog(
+            child: AddNewFood(
+              date: controller.apiDate.value,
+              list: food,
+            ),
+          );
+        });
+    if (result != null) {
+      Food food = result as Food;
+      item.quality = food.title;
+      item.qty = food.qty;
+
+      controller.caloriesDetails.refresh();
+      if (item.id == null) {
+        controller.createProtineData(food.id, food.qty!, typeIsProtine: typeIsProtine);
+      } else {
+        controller.updateProtineData(item.id, food.id, food.qty!, typeIsProtine: typeIsProtine);
+      }
+    }
+  }
+}
+
+class DeleteItemWidget extends StatefulWidget {
+  final CaloriesDetails item;
+  final DiaryController controller;
+  final bool typeIsCalories;
+  DeleteItemWidget({
+    Key? key,
+    required this.item,
+    required this.controller,
+    required this.typeIsCalories,
+  }) : super(key: key);
+// صالح السباك
+  @override
+  State<DeleteItemWidget> createState() => _DeleteItemWidgetState();
+}
+
+class _DeleteItemWidgetState extends State<DeleteItemWidget> {
+  bool deleteItem = false;
+  @override
+  Widget build(BuildContext context) {
+    if (deleteItem)
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(
+              strokeWidth: 1.4,
+            ),
+          ),
+        ],
+      );
+    return InkWell(
+      onTap: () async {
+        deleteItem = true;
+        setState(() {});
+        if (widget.item.id == null) {
+          if (widget.typeIsCalories)
+            await widget.controller.caloriesDetails.remove(widget.item);
+          else
+            await widget.controller.carbsAndFats.remove(widget.item);
+        } else {
+          if (widget.typeIsCalories)
+            await widget.controller.deleteItemCalories(widget.item.id!, widget.controller.lastSelectedDate.value, widget.typeIsCalories);
+          else
+            await widget.controller.deleteItemCarbs(widget.item.id!, widget.controller.lastSelectedDate.value, widget.typeIsCalories);
+
+          await widget.controller.carbsAndFats.remove(widget.item);
+        }
+
+        deleteItem = false;
+        setState(() {});
+      },
+      child: Icon(
+        Icons.delete,
+        color: Colors.redAccent,
+        size: 30,
+      ),
+    );
+  }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeBottomNavigationBar extends GetView<HomeController> {
-  final controller = Get.find<HomeController>(tag: 'home');
+  final textEditController = Get.find<HomeController>(tag: 'home');
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -42,7 +42,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
         children: [
           InkWell(
             onTap: () {
-              controller.currentIndex.value = 0;
+              textEditController.currentIndex.value = 0;
             },
             child: Container(
               height: 60,
@@ -50,7 +50,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
               child: Center(
                 child: Column(
                   children: [
-                    controller.currentIndex.value == 0
+                    textEditController.currentIndex.value == 0
                         ? Image.asset(
                             "assets/img/notebook.png",
                             width: 30,
@@ -61,7 +61,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                             width: 30,
                             height: 30,
                           ),
-                    kTextbody('Diary', color: controller.currentIndex.value == 0 ? kColorPrimary : Colors.black87),
+                    kTextbody('Diary', color: textEditController.currentIndex.value == 0 ? kColorPrimary : Colors.black87),
                   ],
                 ),
               ),
@@ -69,7 +69,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
           ),
           InkWell(
             onTap: () {
-              controller.currentIndex.value = 1;
+              textEditController.currentIndex.value = 1;
             },
             child: Container(
               height: 60,
@@ -77,7 +77,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
               child: Center(
                 child: Column(
                   children: [
-                    controller.currentIndex.value == 1
+                    textEditController.currentIndex.value == 1
                         ? Image.asset(
                             "assets/img/home0.png",
                             width: 30,
@@ -90,7 +90,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                           ),
                     kTextbody(
                       'Home',
-                      color: controller.currentIndex.value == 1 ? kColorPrimary : Colors.black87,
+                      color: textEditController.currentIndex.value == 1 ? kColorPrimary : Colors.black87,
                     ),
                   ],
                 ),
@@ -99,7 +99,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
           ),
           InkWell(
             onTap: () {
-              controller.currentIndex.value = 2;
+              textEditController.currentIndex.value = 2;
             },
             child: Container(
               height: 60,
@@ -107,7 +107,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
               child: Center(
                 child: Column(
                   children: [
-                    controller.currentIndex.value == 2
+                    textEditController.currentIndex.value == 2
                         ? Image.asset(
                             "assets/img/doctor0.png",
                             width: 30,
@@ -118,7 +118,7 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                             width: 30,
                             height: 30,
                           ),
-                    kTextbody('Sessions', color: controller.currentIndex.value == 2 ? kColorPrimary : Colors.black87),
+                    kTextbody('Sessions', color: textEditController.currentIndex.value == 2 ? kColorPrimary : Colors.black87),
                   ],
                 ),
               ),
