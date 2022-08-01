@@ -1,5 +1,7 @@
 import 'package:app/app/models/user_response.dart';
+import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/forget_password/views/forget_password_view.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -11,6 +13,7 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/password_edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -48,6 +51,24 @@ class _LoginViewState extends State<LoginView> {
         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         await _shared.writeData(CachingKey.IS_LOGGED, true);
+
+        bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
+        if (isReggisterd) {
+          DiaryController controller = Get.find<DiaryController>(tag: 'diary');
+          controller.onInit();
+        }
+        bool isReggisterd2 = Get.isRegistered<HomeController>(tag: 'diary');
+        if (isReggisterd2) {
+          HomeController textEditController = Get.find<HomeController>(tag: 'home');
+          textEditController.refreshController(true);
+          textEditController.isLogggd.value = true;
+        }
+
+        // bool isReggisterd = Get.isRegistered<HomeC>(tag: 'diary');
+        // if (isReggisterd) {
+        //   DiaryController controller = Get.find<DiaryController>(tag: 'diary');
+        //   controller.onInit();
+        // }
         Get.offAndToNamed(Routes.HOME);
       } else {
         setState(() {
@@ -103,7 +124,7 @@ class _LoginViewState extends State<LoginView> {
                           child: kTextbody('ID', size: 18),
                         ),
                         EditText(
-                          value: '',
+                          value: kDebugMode ? 'Egan123' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {
@@ -125,7 +146,7 @@ class _LoginViewState extends State<LoginView> {
                           child: kTextbody('Password', size: 18),
                         ),
                         EditTextPassword(
-                          value: '',
+                          value: kDebugMode ? '123123' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {

@@ -124,19 +124,21 @@ class DiaryController extends GetxController {
     if (!typeIsProtine) refreshLoadingCarbs.value = true;
     lastSelectedDate.value = _date;
     response.value = await ApiProvider().getDiaryView(_date);
-    if (response.value.data!.proteins!.caloriesDetails!.isEmpty) {
+    if (response.value.data!.proteins!.caloriesDetails!.isEmpty && response.value.data!.carbsFats!.caloriesDetails!.isEmpty) {
       if (typeIsProtine) refreshLoadingProtine.value = false;
       if (!typeIsProtine) refreshLoadingCarbs.value = false;
-
-      getDiaryData(_date);
       return;
     } else {
       caloriesDetails.removeWhere((element) => element.id == null);
       carbsAndFats.removeWhere((element) => element.id == null);
       response.value.data!.proteins!.caloriesDetails!.forEach((element) {
         if (caloriesDetails.where((element2) => element.id == element2.id).toList().length > 0) {
-          caloriesDetails.where((element2) => element.id == element2.id).forEach((element3) {
-            element3 = element;
+          caloriesDetails.forEach((item) {
+            if (item.id == element.id) {
+              item.quality = element.quality;
+              item.qty = element.qty;
+              item.calories = element.calories;
+            }
           });
         } else {
           caloriesDetails.add(element);
@@ -144,15 +146,23 @@ class DiaryController extends GetxController {
       });
       response.value.data!.carbsFats!.caloriesDetails!.forEach((element) {
         if (carbsAndFats.where((element2) => element.id == element2.id).toList().length > 0) {
-          carbsAndFats.where((element2) => element.id == element2.id).forEach((element3) {
-            element3 = element;
+          carbsAndFats.forEach((item) {
+            if (item.id == element.id) {
+              item.quality = element.quality;
+              item.qty = element.qty;
+              item.calories = element.calories;
+            }
           });
         } else {
           carbsAndFats.add(element);
         }
       });
     }
+    caloriesDetails.refresh();
+    carbsAndFats.refresh();
 
+    caloriesDetails.forEach((element) {});
+    carbsAndFats.forEach((element) {});
     if (typeIsProtine) refreshLoadingProtine.value = false;
     if (!typeIsProtine) refreshLoadingCarbs.value = false;
   }
@@ -162,8 +172,11 @@ class DiaryController extends GetxController {
       if (value.success == true) {
         caloriesDetails.removeWhere((element) => element.id == id);
         refreshDiaryData(apiDate.value, typeIsProtine);
-      } else
+      } else {
+        caloriesDetails.removeWhere((element) => element.id == id);
+        refreshDiaryData(apiDate.value, typeIsProtine);
         Fluttertoast.showToast(msg: "${value.message}");
+      }
     });
   }
 
@@ -172,8 +185,11 @@ class DiaryController extends GetxController {
       if (value.success == true) {
         carbsAndFats.removeWhere((element) => element.id == id);
         refreshDiaryData(apiDate.value, typeIsProtine);
-      } else
+      } else {
+        carbsAndFats.removeWhere((element) => element.id == id);
+        refreshDiaryData(apiDate.value, typeIsProtine);
         Fluttertoast.showToast(msg: "${value.message}");
+      }
     });
   }
 
@@ -191,8 +207,9 @@ class DiaryController extends GetxController {
     });
   }
 
+  final workoutLoading = false.obs;
   void updateWork() async {
-    showLoader.value = true;
+    workoutLoading.value = true;
 
     await ApiProvider()
         .createDiaryData(
@@ -202,10 +219,10 @@ class DiaryController extends GetxController {
     )
         .then((value) {
       if (value.success == true) {
-        showLoader.value = false;
+        workoutLoading.value = false;
         Fluttertoast.showToast(msg: "${value.message}");
       } else {
-        showLoader.value = false;
+        workoutLoading.value = false;
         Fluttertoast.showToast(msg: "Server Error");
         Echo("error");
       }
@@ -244,13 +261,24 @@ class DiaryController extends GetxController {
   void launchURL(_url) async => await launch(_url);
 
   void createProtineData(int? food, double _quantity, {int? index, required bool typeIsProtine}) async {
+    if (typeIsProtine) refreshLoadingProtine.value = true;
+    if (!typeIsProtine) refreshLoadingCarbs.value = true;
     await ApiProvider().createDiaryData(foodProtine: food, qtyProtiene: _quantity, date: apiDate.value);
     refreshDiaryData(apiDate.value, typeIsProtine);
   }
 
   void updateProtineData(int? index, int? food, double _quantity, {required bool typeIsProtine}) async {
+    if (typeIsProtine) refreshLoadingProtine.value = true;
+    if (!typeIsProtine) refreshLoadingCarbs.value = true;
     await ApiProvider().editDiaryData(foodProtine: food, qtyProtiene: _quantity, date: apiDate.value, id: index);
     refreshDiaryData(apiDate.value, typeIsProtine);
+  }
+
+  Color getColor(String title) {
+    if (title == 'أنتويرب') return Colors.red;
+    if (title == 'خقخل') return Colors.red;
+
+    return Colors.black87;
   }
 }
 

@@ -6,6 +6,7 @@ import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
+import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -21,10 +22,18 @@ class HomeDrawer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return itemBuilder();
+    return FutureBuilder<bool>(
+      future: checkIfUserIsLogged(),
+      builder: (context, snapshot) {
+        if (snapshot.data == null) {
+          return Container();
+        }
+        return itemBuilder(snapshot.data);
+      },
+    );
   }
 
-  Widget itemBuilder() {
+  Widget itemBuilder(bool? data) {
     SharedHelper prefs = SharedHelper();
 
     return Container(
@@ -206,7 +215,7 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.ABOUT);
                 }),
-            textEditController.isLogggd == false
+            textEditController.isLogggd.value == false
                 ? singleDrawerItem(
                     title: "Login",
                     image: "assets/img/ic_menu_logout.png",
@@ -217,34 +226,44 @@ class HomeDrawer extends GetView<HomeController> {
                     title: Strings().logout,
                     image: 'assets/img/ic_menu_logout.png',
                     action: () {
-                      Get.defaultDialog(
+                      appDialog(
                         title: "Logout",
-                        middleText: Strings().logoutMessageConfirm,
-                        confirm: GestureDetector(
-                          onTap: () {
-                            prefs.logout();
-                            Get.offAllNamed(Routes.SPLASH);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            margin: EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              "Yes",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          ),
-                        ),
-                        cancel: GestureDetector(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            margin: EdgeInsets.symmetric(horizontal: 12),
-                            child: Text("No"),
-                          ),
-                        ),
+                        image: Icon(Icons.exit_to_app, size: 50, color: Colors.red),
+                        cancelAction: () {
+                          Get.back();
+                        },
+                        cancelText: "No",
+                        confirmAction: () {
+                          prefs.logout();
+                          Get.offAllNamed(Routes.SPLASH);
+                        },
+                        confirmText: "Yes",
                       );
+                      // Get.defaultDialog(
+                      //   title: "Logout",
+                      //   middleText: Strings().logoutMessageConfirm,
+                      //   confirm: GestureDetector(
+                      //     onTap: () {},
+                      //     child: Container(
+                      //       padding: EdgeInsets.all(4),
+                      //       margin: EdgeInsets.symmetric(horizontal: 12),
+                      //       child: Text(
+                      //         "Yes",
+                      //         style: TextStyle(color: Colors.red),
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   cancel: GestureDetector(
+                      //     onTap: () {
+                      //       Get.back();
+                      //     },
+                      //     child: Container(
+                      //       padding: EdgeInsets.all(4),
+                      //       margin: EdgeInsets.symmetric(horizontal: 12),
+                      //       child: Text("No"),
+                      //     ),
+                      //   ),
+                      // );
                     }),
           ],
         ),
@@ -314,5 +333,11 @@ class HomeDrawer extends GetView<HomeController> {
       Echo('error response $e');
     }
     return true;
+  }
+
+  Future<bool> checkIfUserIsLogged() async {
+    bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    textEditController.refreshController(false);
+    return isLogged;
   }
 }

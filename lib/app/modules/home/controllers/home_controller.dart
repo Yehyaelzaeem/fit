@@ -1,7 +1,6 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
-import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
@@ -42,7 +41,6 @@ class HomeController extends GetxController {
       Get.offAllNamed(Routes.SPLASH);
     }
     Get.put(SessionsController(), tag: 'SessionsController');
-    Get.put(DiaryController(), tag: 'DiaryController');
 
     super.onInit();
 
@@ -53,6 +51,16 @@ class HomeController extends GetxController {
     homeResponse.value.data!.services!.forEach((v) {
       servicesList.add(Services(id: v.id, title: v.title, items: v.items));
     });
+  }
+
+  void refreshController(bool getNeworkData) async {
+    isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    name.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
+    id.value = await SharedHelper().readString(CachingKey.USER_ID);
+    login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+
+    homeResponse.value = await ApiProvider().getHomeData();
   }
 
   @override

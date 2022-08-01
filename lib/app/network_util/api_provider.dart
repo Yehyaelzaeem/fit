@@ -28,15 +28,13 @@ import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/widgets/default/text.dart';
+import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
-import 'package:google_fonts/google_fonts.dart';
 
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
@@ -177,86 +175,20 @@ class ApiProvider {
       if (globalController.shoNewMessage.value) {
         if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
           globalController.shoNewMessage.value = false;
-          getx.Get.dialog(WillPopScope(
-            onWillPop: () async {
-              return globalController.canDismissNewMessageDialog.value;
+
+          appDialog(
+            title: 'You have a new message from Dr/ Ramy Mansour',
+            image: Icon(Icons.chat, size: 50, color: Colors.grey),
+            cancelAction: null,
+            confirmAction: () {
+              globalController.canDismissNewMessageDialog.value = true;
+              globalController.removeNotificaitonCount.value = true;
+              getx.Get.back();
+              getx.Get.toNamed(Routes.NOTIFICATIONS);
             },
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Center(
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        spreadRadius: 10,
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(height: 16),
-                      kTextHeader("Notification"),
-                      SizedBox(height: 6),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(200),
-                          color: Color(0xffF6F6F6),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[300]!,
-                              blurRadius: 3,
-                              spreadRadius: 1,
-                              offset: Offset(3, 3),
-                            ),
-                          ],
-                        ),
-                        child: Text('You have a new message from Dr/ Ramy Mansour'),
-                      ),
-                      SizedBox(height: 14),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            globalController.canDismissNewMessageDialog.value = true;
-                            globalController.removeNotificaitonCount.value = true;
-                            getx.Get.back();
-                            getx.Get.toNamed(Routes.NOTIFICATIONS);
-                          },
-                          child: Container(
-                            width: getx.Get.width / 1.6,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(color: kColorPrimary),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  'Check it',
-                                  style: GoogleFonts.cairo(
-                                    fontSize: 14.0,
-                                    color: const Color(0xFF7FC902),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 12),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ));
+            cancelText: '',
+            confirmText: 'Check it',
+          );
         }
       }
 

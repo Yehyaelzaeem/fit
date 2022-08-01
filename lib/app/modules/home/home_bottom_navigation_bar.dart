@@ -1,3 +1,4 @@
+import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -43,6 +44,8 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
           InkWell(
             onTap: () {
               textEditController.currentIndex.value = 0;
+              final controllerDiary = Get.find<DiaryController>(tag: 'diary');
+              controllerDiary.onInit();
             },
             child: Container(
               height: 60,

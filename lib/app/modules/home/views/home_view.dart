@@ -24,7 +24,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.loading.value) return Scaffold(body: CircularLoadingWidget());
+      if (controller.loading.value) return Scaffold(body: Container(child: CircularLoadingWidget()));
       if (controller.response.value.forceUpdate)
         return Scaffold(
           body: Column(
@@ -80,7 +80,7 @@ class HomeView extends GetView<HomeController> {
   Future<bool> _willPopCallback() async {
     appDialog(
       title: 'Are you sure you want to exit?',
-      iconData: Icons.warning_amber_rounded,
+      image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
       cancelAction: () {
         Get.back();
       },
@@ -104,6 +104,7 @@ class HomeView extends GetView<HomeController> {
     }
     bool isReg = Get.isRegistered(tag: 'diary');
     if (!isReg) Get.put(DiaryController(), tag: 'diary');
+
     return DiaryView();
   }
 }

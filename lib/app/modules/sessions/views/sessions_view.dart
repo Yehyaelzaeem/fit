@@ -96,14 +96,17 @@ class _SessionsViewState extends State<SessionsView> {
                         ],
                       ),
                       isLoading == true
-                          ? CircularLoadingWidget()
+                          ? Container(child: CircularLoadingWidget())
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 ress.data!.nextSession == null
                                     ? Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 18),
-                                        child: Center(child: Text(" You Have No Sessions, Book Your Next Session")),
+                                        child: Center(
+                                            child: Text(
+                                          " You Have No Sessions, Book Your Next Session",
+                                        )),
                                       )
                                     : Container(
                                         width: double.infinity,

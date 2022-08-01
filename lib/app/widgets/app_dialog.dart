@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 appDialog({
   required String title,
-  required IconData iconData,
+  required Widget? image,
+  String? body,
   Function? confirmAction,
   Function? cancelAction,
   String confirmText = '',
@@ -13,35 +14,44 @@ appDialog({
 }) {
   return Get.dialog(
     Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
-            SizedBox(height: 8),
+            if (image != null) image,
+            SizedBox(height: 4),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(200),
-                // color: Color(0xffF6F6F6),
-                // boxShadow: [
-                //   BoxShadow(
-                //     color: Colors.grey[300]!,
-                //     blurRadius: 3,
-                //     spreadRadius: 1,
-                //     offset: Offset(3, 3),
-                //   ),
-                // ],
               ),
               child: Text(
                 title,
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(height: 12),
+            if (body != null)
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(200),
+                ),
+                child: Text(
+                  body,
+                  style: TextStyle(color: Colors.black, fontSize: 14),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            SizedBox(height: 8),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 if (cancelAction != null)
                   GestureDetector(
@@ -66,9 +76,9 @@ appDialog({
                       ),
                     ),
                   ),
-                if (cancelAction != null)
+                if (confirmAction != null)
                   GestureDetector(
-                    onTap: () => confirmAction!(),
+                    onTap: () => confirmAction(),
                     child: Container(
                       width: Get.width / 5,
                       margin: EdgeInsets.symmetric(horizontal: 12),

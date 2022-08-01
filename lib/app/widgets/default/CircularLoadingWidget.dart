@@ -10,8 +10,9 @@ class CircularLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
+        padding: EdgeInsets.only(bottom: 40),
+        margin: EdgeInsets.only(bottom: 40),
         child: Lottie.asset('assets/loader.json'),
-
       ),
     );
   }

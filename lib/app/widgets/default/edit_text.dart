@@ -26,11 +26,13 @@ class EditText extends StatelessWidget {
   final List<TextInputFormatter>? formatter;
   final Color? background;
   final Color hintColor;
+  final bool autofocus;
   final TextEditingController? controller;
 
   EditText({
     this.hintColor = Colors.black,
     this.background,
+    this.autofocus = false,
     this.iconData,
     this.value,
     this.hint,
@@ -62,6 +64,7 @@ class EditText extends StatelessWidget {
       padding: EdgeInsets.all(padding),
       child: TextFormField(
         initialValue: value,
+        autofocus: autofocus,
         controller: controller,
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         decoration: InputDecoration(
@@ -117,7 +120,7 @@ class EditText extends StatelessWidget {
           return null;
         },
         enabled: enable,
-        maxLines: lines,
+        maxLines: lines == 0 ? null : lines,
         inputFormatters: formatter,
         onChanged: (newValue) {
           if (updateFunc != null) return updateFunc!(newValue);

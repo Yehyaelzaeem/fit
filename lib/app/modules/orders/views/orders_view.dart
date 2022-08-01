@@ -412,7 +412,7 @@ class OrdersView extends GetView<OrdersController> {
                                   updateFunc: (value) {},
                                   noBorder: true,
                                   radius: 4,
-                                  lines: 3,
+                                  lines: 0,
                                 ),
                               ),
                               SizedBox(height: 12),

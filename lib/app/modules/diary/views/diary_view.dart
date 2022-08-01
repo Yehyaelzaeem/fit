@@ -26,15 +26,10 @@ class DiaryView extends GetView<DiaryController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: HomeDrawer(),
+        drawer: Obx(() => Container(key: Key('drawer_${controller.isLogggd.value}'), child: HomeDrawer())),
         body: Obx(() {
           if (!controller.isLogggd.value) return MainUnAuth();
-          if (controller.showLoader.value || controller.isLoading.value)
-            return Container(
-                child: Center(
-                  child: CircularLoadingWidget(),
-                ),
-                color: Colors.white);
+          if (controller.showLoader.value || controller.isLoading.value) return Container(child: CircularLoadingWidget(), color: Colors.white);
 
           if (!controller.isLoading.value && controller.noSessions.value == true)
             Padding(
@@ -46,6 +41,7 @@ class DiaryView extends GetView<DiaryController> {
                 ),
               ),
             );
+
           return ListView(
             children: [
               //* Header + eye Icon
@@ -69,8 +65,9 @@ class DiaryView extends GetView<DiaryController> {
                       children: [
                         if (controller.refreshLoadingProtine.value)
                           Container(
-                            child: LinearProgressIndicator(),
-                            color: kColorPrimary,
+                            child: LinearProgressIndicator(
+                              color: kColorPrimary,
+                            ),
                           ),
                         staticBar(1),
                         if (controller.caloriesDetails.isEmpty) SizedBox(height: 20),
@@ -88,8 +85,7 @@ class DiaryView extends GetView<DiaryController> {
                   rowWithProgressBar("Carbs & Fats", controller.response.value.data!.carbsFats),
                   if (controller.refreshLoadingCarbs.value)
                     Container(
-                      child: LinearProgressIndicator(),
-                      color: kColorPrimary,
+                      child: LinearProgressIndicator(color: kColorPrimary),
                     ),
                   staticBar(2),
                   if (controller.carbsAndFats.isEmpty) SizedBox(height: 20),
@@ -167,30 +163,87 @@ class DiaryView extends GetView<DiaryController> {
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          flex: 4,
+                          flex: 8,
                           child: GestureDetector(
                             onTap: () {
-                              showQualityDialog(controller.response.value.data!.proteins!.food!, item, type == 1);
+                              showQualityDialog(
+                                type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                                item,
+                                type == 1,
+                              );
                             },
                             child: Container(
-                              padding: EdgeInsets.all(4),
-                              margin: EdgeInsets.symmetric(horizontal: 2),
-                              height: 40,
+                              margin: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+                              height: 42,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4),
-                                border: Border.all(
-                                  color: Colors.grey[500]!,
-                                ),
+                                border: Border.all(color: Colors.grey, width: 1),
                               ),
-                              child: Center(child: kTextbody(item.qty == null ? '' : '${item.qty}', color: Colors.black, bold: false, size: 12)),
+                              child: TextFormField(
+                                textAlign: TextAlign.center,
+                                key: Key('foodName_${item.id}_${item.qty}'),
+                                decoration: InputDecoration(
+                                  hintText: '',
+                                  hintStyle: TextStyle(fontSize: 12),
+                                  labelStyle: TextStyle(fontSize: 12),
+                                  border: InputBorder.none,
+                                ),
+                                cursorHeight: 0,
+                                showCursor: false,
+                                style: TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
+                                initialValue: item.qty == null ? '' : item.qty.toString(),
+                                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                textInputAction: TextInputAction.done,
+                                onFieldSubmitted: (text) {
+                                  if (text.isEmpty) return;
+                                  try {
+                                    double qty = double.parse(text);
+                                    int foodId = 0;
+                                    if (type == 1) {
+                                      foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                    } else {
+                                      foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                    }
+                                    controller.updateProtineData(
+                                      item.id,
+                                      foodId,
+                                      qty,
+                                      typeIsProtine: type == 1,
+                                    );
+                                  } catch (e) {}
+                                },
+                              ),
                             ),
                           ),
+
+                          //   Container(
+                          //     padding: EdgeInsets.all(4),
+                          //     margin: EdgeInsets.symmetric(horizontal: 2),
+                          //     height: 40,
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(4),
+                          //       border: Border.all(
+                          //         color: Colors.grey[500]!,
+                          //       ),
+                          //     ),
+                          //     child: Center(child: kTextbody(item.qty == null ? '' : '${item.qty}', color: Colors.black, bold: false, size: 12)),
+                          //   ),
+                          // ),
                         ),
                         Expanded(
-                          flex: 2,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 1),
-                            child: kTextbody(item.unit == null ? '' : '${item.unit}', color: Colors.black, bold: false, size: 12),
+                          flex: 5,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 1),
+                              child: kTextbody(
+                                item.unit == null ? '' : '${item.unit}',
+                                color: Colors.black,
+                                bold: false,
+                                size: 12,
+                                maxLines: 2,
+                              ),
+                            ),
                           ),
                         )
                       ],
@@ -203,13 +256,19 @@ class DiaryView extends GetView<DiaryController> {
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 4),
                     width: double.infinity,
+                    height: 42,
                     child: GestureDetector(
                       onTap: () {
-                        showQualityDialog(controller.response.value.data!.carbsFats!.food!, item, type == 1);
+                        showQualityDialog(
+                          type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                          item,
+                          type == 1,
+                        );
                       },
                       child: itemWidget(
                         title: item.quality == null ? '' : '${item.quality}',
                         showDropDownArrow: item.quality == null || '${item.quality}'.isEmpty,
+                        color: item.color,
                       ),
                     ),
                   ),
@@ -298,7 +357,7 @@ class DiaryView extends GetView<DiaryController> {
 
   Widget staticBar(int type) {
     return Container(
-      height: 50,
+      height: 40,
       color: Color(0xFF414042),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -335,34 +394,8 @@ class DiaryView extends GetView<DiaryController> {
               onTap: () async {
                 if (type == 1) {
                   controller.caloriesDetails.add(CaloriesDetails());
-                  // dynamic result = await Navigator.push(
-                  //     Get.context!,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => AddNewFood(
-                  //               date: controller.apiDate.value,
-                  //               list: controller.response.value.data!.proteins!.food,
-                  //               edit: false,
-                  //               showAsDialog: false,
-                  //             )));
-
-                  // if (result == null) {
-                  //   if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
-                  // } else {}
                 } else {
                   controller.carbsAndFats.add(CaloriesDetails());
-                  // dynamic result = await Navigator.push(
-                  //     Get.context!,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => AddNewFood(
-                  //               date: controller.apiDate.value,
-                  //               list: controller.response.value.data!.carbsFats!.food,
-                  //               edit: false,
-                  //               showAsDialog: false,
-                  //             )));
-
-                  // if (result == null) {
-                  //   if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
-                  // } else {}
                 }
               },
               child: Container(
@@ -714,13 +747,21 @@ class DiaryView extends GetView<DiaryController> {
                     ),
                     SizedBox(height: 8),
                     Center(
-                      child: kButtonDefault('Save', marginH: MediaQuery.of(Get.context!).size.width / 5, paddingV: 0, func: () {
-                        if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
-                          Fluttertoast.showToast(msg: "Enter Workout Description");
-                        } else {
-                          controller.updateWork();
-                        }
-                      }, shadow: true, paddingH: 50),
+                      child: kButtonDefault(
+                        'Save',
+                        marginH: MediaQuery.of(Get.context!).size.width / 5,
+                        paddingV: 0,
+                        func: () {
+                          if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
+                            Fluttertoast.showToast(msg: "Enter Workout Description");
+                          } else {
+                            controller.updateWork();
+                          }
+                        },
+                        shadow: true,
+                        paddingH: 50,
+                        loading: controller.workoutLoading.value,
+                      ),
                     ),
                   ],
                 ),
@@ -732,7 +773,7 @@ class DiaryView extends GetView<DiaryController> {
     );
   }
 
-  Widget itemWidget({required String title, bool showDropDownArrow = false}) {
+  Widget itemWidget({required String title, bool showDropDownArrow = false, String? color}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2),
       padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
@@ -745,12 +786,14 @@ class DiaryView extends GetView<DiaryController> {
         children: [
           Expanded(
               child: Container(
+                  key: Key('title$title'),
                   child: kTextbody(
-            '$title',
-            size: 12,
-            maxLines: 5,
-            paddingH: 1,
-          ))),
+                    '$title',
+                    size: 12,
+                    color: color != null ? Color(int.parse("0xFF$color")) : Colors.black87,
+                    maxLines: 5,
+                    paddingH: 1,
+                  ))),
           if (showDropDownArrow)
             Icon(
               Icons.keyboard_arrow_down,
@@ -779,6 +822,7 @@ class DiaryView extends GetView<DiaryController> {
       item.qty = food.qty;
 
       controller.caloriesDetails.refresh();
+      controller.carbsAndFats.refresh();
       if (item.id == null) {
         controller.createProtineData(food.id, food.qty!, typeIsProtine: typeIsProtine);
       } else {

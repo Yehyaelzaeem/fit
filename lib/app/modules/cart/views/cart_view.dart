@@ -156,17 +156,13 @@ class CartView extends GetView<CartController> {
                                       alignment: Alignment(0.0, 0.12),
                                       width: double.infinity,
                                       margin: EdgeInsets.symmetric(horizontal: 12),
-                                      height: 155.0,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(9.0),
                                         color: const Color(0xFFF1F1F1),
                                       ),
                                       child: SizedBox(
-                                        width: Get.width / 1.3,
-                                        height: 155.0,
                                         child: Column(
                                           children: <Widget>[
-                                            Spacer(flex: 23),
                                             Align(
                                               alignment: Alignment(-0.09, 0.0),
                                               child: Padding(
@@ -212,7 +208,6 @@ class CartView extends GetView<CartController> {
                                                   ),
                                                 ),
                                               ),
-                                            Spacer(flex: 18),
                                           ],
                                         ),
                                       ),
