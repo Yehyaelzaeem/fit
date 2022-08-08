@@ -772,6 +772,7 @@ class DiaryView extends GetView<DiaryController> {
                         marginH: MediaQuery.of(Get.context!).size.width / 5,
                         paddingV: 0,
                         func: () {
+                          FocusScope.of(Get.context!).requestFocus(FocusNode());
                           if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
                             Fluttertoast.showToast(msg: "Enter Workout Description");
                           } else {
