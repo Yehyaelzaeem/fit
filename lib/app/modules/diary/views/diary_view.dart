@@ -10,6 +10,7 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -151,7 +152,7 @@ class DiaryView extends GetView<DiaryController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
                 Expanded(
                   flex: 3,
                   child: Container(
@@ -175,43 +176,53 @@ class DiaryView extends GetView<DiaryController> {
                             child: Container(
                               margin: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                               height: 42,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: Colors.grey, width: 1),
-                              ),
-                              child: TextFormField(
-                                textAlign: TextAlign.center,
-                                key: Key('foodName_${item.id}_${item.qty}'),
-                                decoration: InputDecoration(
-                                  hintText: '',
-                                  hintStyle: TextStyle(fontSize: 12),
-                                  labelStyle: TextStyle(fontSize: 12),
-                                  border: InputBorder.none,
-                                ),
-                                cursorHeight: 0,
-                                showCursor: false,
-                                style: TextStyle(fontSize: 12.0, height: 2.0, color: Colors.black),
-                                initialValue: item.qty == null ? '' : item.qty.toString(),
-                                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (text) {
-                                  if (text.isEmpty) return;
-                                  try {
-                                    double qty = double.parse(text);
-                                    int foodId = 0;
-                                    if (type == 1) {
-                                      foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
-                                    } else {
-                                      foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
-                                    }
-                                    controller.updateProtineData(
-                                      item.id,
-                                      foodId,
-                                      qty,
-                                      typeIsProtine: type == 1,
-                                    );
-                                  } catch (e) {}
-                                },
+                              child: Stack(
+                                children: [
+                                  TextFormField(
+                                    textAlign: TextAlign.center,
+                                    key: Key('foodName_${item.id}_${item.qty}'),
+                                    decoration: InputDecoration(
+                                      hintText: '',
+                                      hintStyle: TextStyle(fontSize: 12),
+                                      labelStyle: TextStyle(fontSize: 12),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                        borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                        borderSide: BorderSide(color: kColorPrimary, width: 1),
+                                      ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                        borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                      ),
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                    ),
+                                    style: TextStyle(fontSize: 12.0, height: 2, color: Colors.black),
+                                    initialValue: item.qty == null ? '' : item.qty.toString(),
+                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                    textInputAction: TextInputAction.done,
+                                    onFieldSubmitted: (text) {
+                                      if (text.isEmpty) return;
+                                      try {
+                                        double qty = double.parse(text);
+                                        int foodId = 0;
+                                        if (type == 1) {
+                                          foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                        } else {
+                                          foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                        }
+                                        controller.updateProtineData(
+                                          item.id,
+                                          foodId,
+                                          qty,
+                                          typeIsProtine: type == 1,
+                                        );
+                                      } catch (e) {}
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -250,7 +261,7 @@ class DiaryView extends GetView<DiaryController> {
                     ),
                   ),
                 ),
-                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
                 Expanded(
                   flex: 4,
                   child: Container(
@@ -273,9 +284,9 @@ class DiaryView extends GetView<DiaryController> {
                     ),
                   ),
                 ),
-                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
                 Expanded(flex: 2, child: kTextbody(item.calories == null ? '' : '${item.calories}', color: Colors.black, bold: false, size: 16)),
-                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
                 Expanded(
                   flex: 1,
                   child: DeleteItemWidget(
@@ -284,7 +295,7 @@ class DiaryView extends GetView<DiaryController> {
                     typeIsCalories: type == 1,
                   ),
                 ),
-                Container(width: 1, height: 50, color: Colors.grey[700]),
+                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
               ],
             ),
             Divider(
@@ -362,7 +373,7 @@ class DiaryView extends GetView<DiaryController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
             flex: 3,
             child: Container(
@@ -372,7 +383,7 @@ class DiaryView extends GetView<DiaryController> {
               ),
             ),
           ),
-          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
             flex: 4,
             child: Container(
@@ -382,34 +393,38 @@ class DiaryView extends GetView<DiaryController> {
               ),
             ),
           ),
-          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
             flex: 2,
             child: kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
           ),
-          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
             flex: 1,
             child: InkWell(
               onTap: () async {
+                FocusScope.of(Get.context!).requestFocus(FocusNode());
                 if (type == 1) {
                   controller.caloriesDetails.add(CaloriesDetails());
                 } else {
                   controller.carbsAndFats.add(CaloriesDetails());
                 }
               },
-              child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  padding: EdgeInsets.all(4),
-                  decoration: BoxDecoration(color: kColorPrimary),
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.black87,
-                    size: 24,
-                  )),
+              child: Center(
+                child: Container(
+                    width: 26,
+                    height: 26,
+                    padding: EdgeInsets.all(2),
+                    decoration: BoxDecoration(color: kColorPrimary),
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.black87,
+                      size: 18,
+                    )),
+              ),
             ),
           ),
-          Container(width: 1, height: 50, color: Colors.grey[700]),
+          Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
         ],
       ),
     );
@@ -449,6 +464,7 @@ class DiaryView extends GetView<DiaryController> {
         ),
         InkWell(
           onTap: () {
+            FocusScope.of(Get.context!).requestFocus(FocusNode());
             controller.downloadFile(controller.response.value.data!.pdf!);
           },
           child: Container(
@@ -475,6 +491,7 @@ class DiaryView extends GetView<DiaryController> {
   Widget diaryDatesOptions() {
     Widget dayButton = InkWell(
       onTap: () {
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
         if (!controller.isToday.value) {
           controller.getDiaryData(controller.response.value.data!.days![0].date!);
         } else {
@@ -545,6 +562,7 @@ class DiaryView extends GetView<DiaryController> {
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
                 onTap: () {
+                  FocusScope.of(Get.context!).requestFocus(FocusNode());
                   controller.updateWaterData("${index + 1}");
                 },
                 child: Stack(
@@ -588,6 +606,7 @@ class DiaryView extends GetView<DiaryController> {
             if (result == null) {
               if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
             }
+            FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
           child: Container(
             width: double.infinity,
@@ -608,6 +627,7 @@ class DiaryView extends GetView<DiaryController> {
         SizedBox(height: 12),
         InkWell(
           onTap: () {
+            FocusScope.of(Get.context!).requestFocus(FocusNode());
             if (controller.response.value.data!.workoutDetailsType == "") {
               Fluttertoast.showToast(msg: "Nothing To Show ");
             } else if (controller.response.value.data!.workoutDetailsType == "link") {
@@ -658,7 +678,7 @@ class DiaryView extends GetView<DiaryController> {
           ),
         ),
         InkWell(
-          onTap: () {
+          onTap: () async {
             CustomSheet(
                 context: Get.context!,
                 widget: Padding(
@@ -786,14 +806,15 @@ class DiaryView extends GetView<DiaryController> {
         children: [
           Expanded(
               child: Container(
-                  key: Key('title$title'),
-                  child: kTextbody(
-                    '$title',
-                    size: 12,
-                    color: color != null ? Color(int.parse("0xFF$color")) : Colors.black87,
-                    maxLines: 5,
-                    paddingH: 1,
-                  ))),
+            key: Key('title$title'),
+            padding: EdgeInsets.symmetric(horizontal: 1),
+            child: AutoSizeText(
+              '$title',
+              style: TextStyle(fontSize: 12, color: color != null ? Color(int.parse("0xFF$color")) : Colors.black87, height: 1.2),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+            ),
+          )),
           if (showDropDownArrow)
             Icon(
               Icons.keyboard_arrow_down,
@@ -820,6 +841,7 @@ class DiaryView extends GetView<DiaryController> {
       Food food = result as Food;
       item.quality = food.title;
       item.qty = food.qty;
+      item.color = food.color;
 
       controller.caloriesDetails.refresh();
       controller.carbsAndFats.refresh();
@@ -829,6 +851,7 @@ class DiaryView extends GetView<DiaryController> {
         controller.updateProtineData(item.id, food.id, food.qty!, typeIsProtine: typeIsProtine);
       }
     }
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
   }
 }
 
@@ -884,6 +907,7 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
 
         deleteItem = false;
         setState(() {});
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
       },
       child: Icon(
         Icons.delete,

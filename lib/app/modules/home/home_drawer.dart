@@ -325,7 +325,7 @@ class HomeDrawer extends GetView<HomeController> {
   Future<bool> getFaqStatus() async {
     try {
       if (textEditController.faqStatus) return true;
-      CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
+      CheerFullResponse cheerFullResponse = await ApiProvider().getFaqStatus();
       if (cheerFullResponse.data == null) return true;
       textEditController.faqStatus = kDebugMode ? true : cheerFullResponse.data!.isFaqActive!;
       return textEditController.faqStatus;

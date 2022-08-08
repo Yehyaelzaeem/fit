@@ -38,7 +38,7 @@ class Data {
   bool? pickup_option;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        isFaqActive: json["isFaqActive"] == null ? true : json["isFaqActive"],
+        isFaqActive: json["show_faq_page"] == null ? true : json["show_faq_page"],
         isActive: json["is_active"] == null ? null : json["is_active"],
         delivery_option: json["delivery_option"] == null ? null : json["delivery_option"],
         pickup_option: json["pickup_option"] == null ? null : json["pickup_option"],

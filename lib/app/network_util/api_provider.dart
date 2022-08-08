@@ -177,8 +177,9 @@ class ApiProvider {
           globalController.shoNewMessage.value = false;
 
           appDialog(
-            title: 'You have a new message from Dr/ Ramy Mansour',
+            title: 'You have a new message from \n Dr/ Ramy Mansour',
             image: Icon(Icons.chat, size: 50, color: Colors.grey),
+            barrierDismissible: false,
             cancelAction: null,
             confirmAction: () {
               globalController.canDismissNewMessageDialog.value = true;
@@ -423,6 +424,19 @@ class ApiProvider {
       'device_id': deviceId,
     });
     Response response = await _utils.post("meals_features_status", body: body);
+    if (response.statusCode == 200) {
+      return CheerFullResponse.fromJson(response.data);
+    } else {
+      return CheerFullResponse.fromJson(response.data);
+    }
+  }
+
+  Future<CheerFullResponse> getFaqStatus() async {
+    String deviceId = await kDeviceInfo();
+    FormData body = FormData.fromMap({
+      'device_id': deviceId,
+    });
+    Response response = await _utils.post("faq_status", body: body);
     if (response.statusCode == 200) {
       return CheerFullResponse.fromJson(response.data);
     } else {

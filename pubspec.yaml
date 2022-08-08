@@ -39,6 +39,7 @@ dependencies:
   geolocator: ^7.0.0
   geocoding: ^2.0.0
   platform_device_id: ^1.0.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

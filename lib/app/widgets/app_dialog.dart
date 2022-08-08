@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 appDialog({
   required String title,
   required Widget? image,
+  bool barrierDismissible = false,
   String? body,
   Function? confirmAction,
   Function? cancelAction,
@@ -16,7 +17,7 @@ appDialog({
     Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: EdgeInsets.only(top: image != null ? 6 : 10, bottom: 12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -104,5 +105,6 @@ appDialog({
         ),
       ),
     ),
+    barrierDismissible: barrierDismissible,
   );
 }
