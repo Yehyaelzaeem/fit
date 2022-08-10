@@ -109,201 +109,156 @@ class DiaryView extends GetView<DiaryController> {
 
   Widget rowItem(CaloriesDetails item, int type) {
     return Container(
-      height: 52,
-      child: GestureDetector(
-        onTap: () async {
-          // if (type == 1) {
-          //   dynamic result = await Navigator.push(
-          //     Get.context!,
-          //     MaterialPageRoute(
-          //       builder: (context) => AddNewFood(
-          //         date: controller.apiDate.value,
-          //         list: controller.response.value.data!.proteins!.food,
-          //         edit: true,
-          //         id: item.id,
-          //         showAsDialog: false,
-          //       ),
-          //     ),
-          //   );
-          //   if (result == null) {
-          //     if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
-          //   }
-          // } else {
-          //   dynamic result = await Navigator.push(
-          //       Get.context!,
-          //       MaterialPageRoute(
-          //           builder: (context) => AddNewFood(
-          //                 date: controller.apiDate.value,
-          //                 list: controller.response.value.data!.carbsFats!.food,
-          //                 edit: true,
-          //                 id: item.id,
-          //                 showAsDialog: false,
-          //               )));
-
-          //   if (result == null) {
-          //     Echo('controller.lastSelectedDate.value ${controller.lastSelectedDate.value}');
-
-          //     if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
-          //   }
-          // }
-        },
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
-                Expanded(
-                  flex: 3,
-                  child: Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 8,
-                          child: GestureDetector(
-                            onTap: () {
-                              showQualityDialog(
-                                type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
-                                item,
-                                type == 1,
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-                              height: 42,
-                              child: Stack(
-                                children: [
-                                  TextFormField(
-                                    textAlign: TextAlign.center,
-                                    key: Key('foodName_${item.id}_${item.qty}'),
-                                    decoration: InputDecoration(
-                                      hintText: '',
-                                      hintStyle: TextStyle(fontSize: 12),
-                                      labelStyle: TextStyle(fontSize: 12),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(color: kColorPrimary, width: 1),
-                                      ),
-                                      disabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                                    ),
-                                    style: TextStyle(fontSize: 12.0, height: 2, color: Colors.black),
-                                    initialValue: item.qty == null ? '' : item.qty.toString(),
-                                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                                    textInputAction: TextInputAction.done,
-                                    onFieldSubmitted: (text) {
-                                      if (text.isEmpty) return;
-                                      try {
-                                        double qty = double.parse(text);
-                                        int foodId = 0;
-                                        if (type == 1) {
-                                          foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
-                                        } else {
-                                          foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
-                                        }
-                                        controller.updateProtineData(
-                                          item.id,
-                                          foodId,
-                                          qty,
-                                          typeIsProtine: type == 1,
-                                        );
-                                      } catch (e) {}
-                                    },
-                                  ),
-                                ],
+      height: 40,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 8,
+                        child: GestureDetector(
+                          onTap: () {
+                            showQualityDialog(
+                              type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                              item,
+                              type == 1,
+                            );
+                          },
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                            height: 34,
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              key: Key('foodName_${item.id}_${item.qty}'),
+                              decoration: InputDecoration(
+                                hintText: '',
+                                hintStyle: TextStyle(fontSize: 12),
+                                labelStyle: TextStyle(fontSize: 12),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                  borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                  borderSide: BorderSide(color: kColorPrimary, width: 1),
+                                ),
+                                disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                  borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                ),
+                                contentPadding: EdgeInsets.only(top: 10, bottom: 10, left: 2),
                               ),
+                              style: TextStyle(fontSize: 12.0, height: 1, color: Colors.black),
+                              initialValue: item.qty == null ? '' : item.qty.toString(),
+                              keyboardType: TextInputType.numberWithOptions(decimal: true),
+                              textInputAction: TextInputAction.done,
+                              onFieldSubmitted: (text) {
+                                if (text.isEmpty) return;
+                                try {
+                                  double qty = double.parse(text);
+                                  int foodId = 0;
+                                  if (type == 1) {
+                                    foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                  } else {
+                                    foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                  }
+                                  controller.updateProtineData(
+                                    item.id,
+                                    foodId,
+                                    qty,
+                                    typeIsProtine: type == 1,
+                                  );
+                                } catch (e) {}
+                              },
                             ),
                           ),
-
-                          //   Container(
-                          //     padding: EdgeInsets.all(4),
-                          //     margin: EdgeInsets.symmetric(horizontal: 2),
-                          //     height: 40,
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(4),
-                          //       border: Border.all(
-                          //         color: Colors.grey[500]!,
-                          //       ),
-                          //     ),
-                          //     child: Center(child: kTextbody(item.qty == null ? '' : '${item.qty}', color: Colors.black, bold: false, size: 12)),
-                          //   ),
-                          // ),
                         ),
-                        Expanded(
-                          flex: 5,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: 1),
-                              child: kTextbody(
-                                item.unit == null ? '' : '${item.unit}',
-                                color: Colors.black,
-                                bold: false,
-                                size: 12,
-                                maxLines: 2,
-                              ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 1),
+                            child: kTextbody(
+                              item.unit == null ? '' : '${item.unit}',
+                              color: Colors.black,
+                              bold: false,
+                              size: 12,
+                              maxLines: 2,
                             ),
                           ),
-                        )
-                      ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+              Expanded(
+                flex: 4,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 4),
+                  width: double.infinity,
+                  height: 34,
+                  child: GestureDetector(
+                    onTap: () {
+                      showQualityDialog(
+                        type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                        item,
+                        type == 1,
+                      );
+                    },
+                    child: itemWidget(
+                      title: item.quality == null ? '' : '${item.quality}',
+                      showDropDownArrow: item.quality == null || '${item.quality}'.isEmpty,
+                      color: item.color,
                     ),
                   ),
                 ),
-                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
-                Expanded(
-                  flex: 4,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 4),
-                    width: double.infinity,
-                    height: 42,
-                    child: GestureDetector(
-                      onTap: () {
-                        showQualityDialog(
-                          type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
-                          item,
-                          type == 1,
-                        );
-                      },
-                      child: itemWidget(
-                        title: item.quality == null ? '' : '${item.quality}',
-                        showDropDownArrow: item.quality == null || '${item.quality}'.isEmpty,
-                        color: item.color,
-                      ),
-                    ),
+              ),
+              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+              Expanded(
+                flex: 2,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: kTextbody(
+                    item.calories == null ? '' : '${item.calories}',
+                    color: Colors.black,
+                    bold: false,
+                    size: 16,
                   ),
                 ),
-                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
-                Expanded(flex: 2, child: kTextbody(item.calories == null ? '' : '${item.calories}', color: Colors.black, bold: false, size: 16)),
-                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
-                Expanded(
-                  flex: 1,
-                  child: DeleteItemWidget(
-                    controller: controller,
-                    item: item,
-                    typeIsCalories: type == 1,
-                  ),
+              ),
+              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+              Expanded(
+                flex: 1,
+                child: DeleteItemWidget(
+                  controller: controller,
+                  item: item,
+                  typeIsCalories: type == 1,
                 ),
-                Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
-              ],
-            ),
-            Divider(
-              height: 1,
-              color: Colors.black,
-            ),
-          ],
-        ),
+              ),
+              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+            ],
+          ),
+          Divider(
+            height: 1,
+            color: Colors.black,
+          ),
+        ],
       ),
     );
   }
@@ -813,6 +768,7 @@ class DiaryView extends GetView<DiaryController> {
               '$title',
               style: TextStyle(fontSize: 12, color: color != null ? Color(int.parse("0xFF$color")) : Colors.black87, height: 1.2),
               textAlign: TextAlign.center,
+              minFontSize: 8,
               maxLines: 2,
             ),
           )),
@@ -866,7 +822,6 @@ class DeleteItemWidget extends StatefulWidget {
     required this.controller,
     required this.typeIsCalories,
   }) : super(key: key);
-// صالح السباك
   @override
   State<DeleteItemWidget> createState() => _DeleteItemWidgetState();
 }
@@ -913,7 +868,7 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
       child: Icon(
         Icons.delete,
         color: Colors.redAccent,
-        size: 30,
+        size: 26,
       ),
     );
   }
