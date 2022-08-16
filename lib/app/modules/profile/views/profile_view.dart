@@ -1,14 +1,18 @@
+import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -317,7 +321,47 @@ class _ProfileViewState extends State<ProfileView> {
                                 kTextbody('${ress.data!.lastBodyComposition!.water}', color: kColorPrimary),
                               ],
                             ),
-                          )
+                          ),
+
+                    if (ress.data!.showDeleteAccount!) SizedBox(height: 24),
+                    if (ress.data!.showDeleteAccount!)
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            appDialog(
+                              title: 'Delete Account',
+                              body: 'Are you sure you want to delete your account?',
+                              confirmAction: () {
+                                ApiProvider().deleteAccount();
+                                YemenyPrefs prefs = YemenyPrefs();
+                                prefs.logout();
+                                Get.offAllNamed(Routes.AUTH);
+                              },
+                              confirmText: 'Delete',
+                              cancelText: 'Cancel',
+                              cancelAction: () {
+                                Get.back();
+                              },
+                              image: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.warning,
+                                  color: Colors.orange,
+                                  size: 34,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Delete account',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (ress.data!.showDeleteAccount!) SizedBox(height: 40),
                   ],
                 ),
         ],

@@ -215,6 +215,10 @@ class ApiProvider {
     }
   }
 
+  Future<void> deleteAccount() async {
+    await _utils.post("delete_account");
+  }
+
   Future<DayDetailsResponse> getDiaryView(String? date) async {
     Response response = await _utils.get("calories_day_details?date=$date");
     log('api->calories_day_details?date=$date');
