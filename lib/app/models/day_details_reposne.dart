@@ -141,7 +141,7 @@ class Progress {
 
 class CaloriesDetails {
   int? id;
-  var qty;
+  double? qty;
   String? quality;
   var calories;
   String? createdAt;
@@ -152,7 +152,7 @@ class CaloriesDetails {
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    qty = json['qty'];
+    qty = json['qty'].toDouble();
     quality = json['quality'];
     calories = json['calories'];
     createdAt = json['created_at'];

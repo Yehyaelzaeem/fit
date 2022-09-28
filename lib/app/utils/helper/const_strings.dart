@@ -9,7 +9,7 @@ const siteUrl = '';
 const apikey = '';
 
 class StringConst {
-  static const String APP_NAME = "المحاكي";
+  static const String APP_NAME = "FitoverfaT";
   static const String DEVELOPER = "Mohamed Hurab";
   static const String DEV_EMAIL = "md.hurab@gmail.com";
   static const String PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.fofclinic';

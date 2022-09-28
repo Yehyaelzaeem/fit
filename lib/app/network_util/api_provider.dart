@@ -33,6 +33,7 @@ import 'package:app/globale_controller.dart';
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 
@@ -650,7 +651,7 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': '3.0.0',
+      'version': kDebugMode || true ? '4.0.0 ' : '5.0.0', //Updated 21/09/2022
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {

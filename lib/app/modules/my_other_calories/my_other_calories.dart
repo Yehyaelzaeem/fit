@@ -196,8 +196,10 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child: InkWell(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewCalorie(type: type)));
+        onTap: () async {
+          dynamic result = await Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewCalorie(type: type)));
+          if (result == null) getDiaryData();
+          setState(() {});
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

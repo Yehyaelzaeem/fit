@@ -162,7 +162,8 @@ class DiaryView extends GetView<DiaryController> {
                                 ),
                                 contentPadding: EdgeInsets.only(top: 10, bottom: 10, left: 2),
                               ),
-                              style: TextStyle(fontSize: 12.0, height: 1, color: Colors.black),
+                              style: TextStyle(fontSize: 12.0, height: 1.4, color: Colors.black),
+                              enableInteractiveSelection: false,
                               initialValue: item.qty == null ? '' : item.qty.toString(),
                               keyboardType: Platform.isIOS ? TextInputType.numberWithOptions(signed: true, decimal: true) : TextInputType.numberWithOptions(decimal: true),
                               textInputAction: TextInputAction.done,
@@ -561,7 +562,7 @@ class DiaryView extends GetView<DiaryController> {
                         )));
 
             if (result == null) {
-              if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryData(controller.lastSelectedDate.value);
+              if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryDataRefreshResponse(controller.lastSelectedDate.value);
             }
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
@@ -710,6 +711,7 @@ class DiaryView extends GetView<DiaryController> {
                   children: [
                     kTextbody('Workout Description', size: 20, bold: true),
                     EditText(
+                      focusNode: controller.workoutTitleDescFocus,
                       // controller: controller,
                       radius: 12,
                       lines: 5,
@@ -729,7 +731,7 @@ class DiaryView extends GetView<DiaryController> {
                         marginH: MediaQuery.of(Get.context!).size.width / 5,
                         paddingV: 0,
                         func: () {
-                          FocusScope.of(Get.context!).requestFocus(FocusNode());
+                          controller.workoutTitleDescFocus.unfocus();
                           if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
                             Fluttertoast.showToast(msg: "Enter Workout Description");
                           } else {

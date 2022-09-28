@@ -15,7 +15,7 @@ class DiaryController extends GetxController {
   RxList<CaloriesDetails> caloriesDetails = RxList();
   RxList<CaloriesDetails> carbsAndFats = RxList();
   final response = DayDetailsResponse().obs;
-//
+  FocusNode workoutTitleDescFocus = FocusNode();
   final isLoading = false.obs;
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
@@ -54,9 +54,26 @@ class DiaryController extends GetxController {
     }
   }
 
+  void getDiaryDataRefreshResponse(String _date) async {
+    isLoading.value = true;
+    try {
+      await ApiProvider().getDiaryView(_date).then((value) {
+        if (value.success == false && value.data == null) {
+          noSessions.value = true;
+        } else {
+          response.value = value;
+        }
+      });
+    } catch (e) {}
+    isLoading.value = false;
+  }
+
   void getDiaryData(String _date) async {
+    Echo('getDiaryData');
     lastSelectedDate.value = _date;
     isLoading.value = true;
+    caloriesDetails.clear();
+    carbsAndFats.clear();
     Echo("====> Gittng Day $_date Info ");
 
     await ApiProvider().getDiaryView(_date).then((value) {
@@ -111,15 +128,19 @@ class DiaryController extends GetxController {
           date.value = _date;
           Echo("error");
         }
-        caloriesDetails.clear();
-        carbsAndFats.clear();
-        caloriesDetails.addAll(response.value.data!.proteins!.caloriesDetails!);
-        carbsAndFats.addAll(response.value.data!.carbsFats!.caloriesDetails!);
+        // caloriesDetails.clear();
+        // carbsAndFats.clear();
+        refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
+        refreshCarbsAndFatsList(response.value.data!.carbsFats!.caloriesDetails ?? []);
+
+        // caloriesDetails.addAll(response.value.data!.proteins!.caloriesDetails!);
+        // carbsAndFats.addAll(response.value.data!.carbsFats!.caloriesDetails!);
       }
     });
   }
 
   void refreshDiaryData(String _date, bool typeIsProtine) async {
+    Echo('refreshDiaryData');
     if (typeIsProtine) refreshLoadingProtine.value = true;
     if (!typeIsProtine) refreshLoadingCarbs.value = true;
     lastSelectedDate.value = _date;
@@ -129,8 +150,8 @@ class DiaryController extends GetxController {
       if (!typeIsProtine) refreshLoadingCarbs.value = false;
       return;
     } else {
-      caloriesDetails.removeWhere((element) => element.id == null);
-      carbsAndFats.removeWhere((element) => element.id == null);
+      // caloriesDetails.removeWhere((element) => element.id == null);
+      // carbsAndFats.removeWhere((element) => element.id == null);
       response.value.data!.proteins!.caloriesDetails!.forEach((element) {
         if (caloriesDetails.where((element2) => element.id == element2.id).toList().length > 0) {
           caloriesDetails.forEach((item) {
@@ -141,7 +162,7 @@ class DiaryController extends GetxController {
             }
           });
         } else {
-          caloriesDetails.add(element);
+          refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
         }
       });
       response.value.data!.carbsFats!.caloriesDetails!.forEach((element) {
@@ -154,7 +175,7 @@ class DiaryController extends GetxController {
             }
           });
         } else {
-          carbsAndFats.add(element);
+          refreshCarbsAndFatsList(response.value.data!.carbsFats!.caloriesDetails ?? []);
         }
       });
     }
@@ -279,6 +300,49 @@ class DiaryController extends GetxController {
     if (title == 'خقخل') return Colors.red;
 
     return Colors.black87;
+  }
+
+  void refreshCaloriesList(List<CaloriesDetails> list) {
+    list.forEach((resItem) {
+      if (caloriesDetails.where((item) {
+            Echo('item ${item.quality} resItem${resItem.quality}');
+            Echo('item ${item.qty} resItem${resItem.qty}');
+            return item.quality == resItem.quality && item.qty == resItem.qty;
+          }).length >
+          0) {
+        caloriesDetails.forEach((item) {
+          if (item.quality == resItem.quality && item.qty == resItem.qty) {
+            item.id = resItem.id;
+            item.calories = resItem.calories;
+            item.unit = resItem.unit;
+          }
+        });
+      } else {
+        caloriesDetails.add(resItem);
+      }
+    });
+  }
+
+  void refreshCarbsAndFatsList(List<CaloriesDetails> list) {
+    list.forEach((resItem) {
+      if (carbsAndFats.where((item) {
+            Echo('item ${item.quality} resItem${resItem.quality}');
+            Echo('item ${item.qty} resItem${resItem.qty}');
+            return item.quality == resItem.quality && item.qty == resItem.qty;
+          }).length >
+          0) {
+        carbsAndFats
+          ..forEach((item) {
+            if (item.quality == resItem.quality && item.qty == resItem.qty) {
+              item.id = resItem.id;
+              item.calories = resItem.calories;
+              item.unit = resItem.unit;
+            }
+          });
+      } else {
+        carbsAndFats..add(resItem);
+      }
+    });
   }
 }
 

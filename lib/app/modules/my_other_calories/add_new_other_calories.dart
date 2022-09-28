@@ -1,6 +1,5 @@
 import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
@@ -20,8 +19,7 @@ class AddNewCalorie extends StatefulWidget {
 class _AddNewCalorieState extends State<AddNewCalorie> {
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
-  MyOtherCaloriesUnitsResponse otherCaloriesResponse =
-      MyOtherCaloriesUnitsResponse();
+  MyOtherCaloriesUnitsResponse otherCaloriesResponse = MyOtherCaloriesUnitsResponse();
   String? title;
   String? calorie_per_unit;
   String unitName = "Choose Unit";
@@ -53,25 +51,18 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
       showLoader = true;
     });
 
-    await ApiProvider()
-        .addOtherCalories(
-            title: title,
-            calPerUnti: calorie_per_unit,
-            unit: unitID,
-            unitQuantity: unit_qty,
-            unitName: unit_name,
-            type: widget.type)
-        .then((value) {
+    await ApiProvider().addOtherCalories(title: title, calPerUnti: calorie_per_unit, unit: unitID, unitQuantity: unit_qty, unitName: unit_name, type: widget.type).then((value) {
       if (value.success == true) {
         setState(() {
           showLoader = false;
         });
         Fluttertoast.showToast(msg: "${value.message}");
         // Navigator.push(context, MaterialPageRoute(builder: (context) => MyOtherCalories()));
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MyOtherCalories()),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => MyOtherCalories()),
+        // );
+        Navigator.of(context).pop();
         print("OK");
       } else {
         setState(() {
@@ -153,26 +144,19 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  unitName =
-                                      otherCaloriesResponse.data![index].title!;
-                                  unit_name =
-                                      otherCaloriesResponse.data![index].title!;
-                                  unitID =
-                                      otherCaloriesResponse.data![index].id!;
+                                  unitName = otherCaloriesResponse.data![index].title!;
+                                  unit_name = otherCaloriesResponse.data![index].title!;
+                                  unitID = otherCaloriesResponse.data![index].id!;
                                 });
                                 Navigator.pop(context);
                               },
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 4),
+                                    padding: const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(

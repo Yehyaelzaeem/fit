@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 class Echo {
   Echo(String text) {
     log('------> $text');
+    print('------> $text');
   }
 }
 

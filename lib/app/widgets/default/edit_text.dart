@@ -27,11 +27,13 @@ class EditText extends StatelessWidget {
   final Color? background;
   final Color hintColor;
   final bool autofocus;
+  final FocusNode? focusNode;
   final TextEditingController? controller;
 
   EditText({
     this.hintColor = Colors.black,
     this.background,
+    this.focusNode,
     this.autofocus = false,
     this.iconData,
     this.value,
@@ -64,6 +66,7 @@ class EditText extends StatelessWidget {
       padding: EdgeInsets.all(padding),
       child: TextFormField(
         initialValue: value,
+        focusNode: focusNode,
         autofocus: autofocus,
         controller: controller,
         autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,

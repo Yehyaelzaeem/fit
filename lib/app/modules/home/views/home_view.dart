@@ -73,16 +73,20 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
           ),
-          onWillPop: _willPopCallback);
+          onWillPop: () async {
+            return _willPopCallback(context);
+          });
     });
   }
 
-  Future<bool> _willPopCallback() async {
+  Future<bool> _willPopCallback(BuildContext context) async {
+    FocusScope.of(Get.context!).requestFocus(FocusNode());
     appDialog(
       title: 'Are you sure you want to exit?',
       image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
       cancelAction: () {
         Get.back();
+        FocusScope.of(Get.context!).requestFocus(FocusNode());
       },
       confirmAction: () {
         SystemNavigator.pop();
