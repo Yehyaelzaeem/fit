@@ -69,6 +69,9 @@ class DiaryController extends GetxController {
   }
 
   void getDiaryData(String _date) async {
+    if (isLoading.value) return;
+    if (refreshLoadingProtine.value) return;
+    if (refreshLoadingCarbs.value) return;
     Echo('getDiaryData');
     lastSelectedDate.value = _date;
     isLoading.value = true;
@@ -115,7 +118,8 @@ class DiaryController extends GetxController {
               );
             }
           }
-          Echo("Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
+          Echo(
+              "Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
         } else {
           if (lastSelectedDate.value.isNotEmpty) {
             getDiaryData(lastSelectedDate.value);

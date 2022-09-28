@@ -143,7 +143,8 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   ),
                                                 ),
                                                 radius: 12,
-                                                type: TextInputType.numberWithOptions(decimal: true),
+                                                // type: TextInputType.numberWithOptions(decimal: true),
+                                                type: TextInputType.number,
                                                 updateFunc: (String text) {
                                                   setState(() {
                                                     quantity = double.tryParse(text);
