@@ -162,7 +162,7 @@ class DiaryView extends GetView<DiaryController> {
                               ),
                               style: TextStyle(fontSize: 12.0, height: 1.4, color: Colors.black),
                               enableInteractiveSelection: false,
-                              initialValue: item.qty == null ? '' : item.qty.toString().replaceAll(RegExp(r'.0'), ''),
+                              initialValue: item.qty == null ? '' : item.qty.toString().replaceAll('.0', ''),
                               // keyboardType: Platform.isIOS ? TextInputType.numberWithOptions(signed: true, decimal: true) : TextInputType.numberWithOptions(decimal: true),
                               keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.done,
