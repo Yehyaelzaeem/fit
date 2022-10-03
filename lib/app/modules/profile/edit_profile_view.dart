@@ -32,6 +32,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   String? name;
   String? email;
   String? date;
+  String? formattedDate;
   String? phone;
   String password_confirmation = '';
   String gender = "Male";
@@ -52,6 +53,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       setState(() {
         selectedDate = picked;
         date = picked.toString().substring(0, 10);
+        formattedDate = '${picked.day}-${picked.month}-${picked.year}';
       });
   }
 
@@ -65,7 +67,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             password: password,
             name: name ?? ress.data!.name,
             email: email ?? ress.data!.email,
-            date: date ?? ress.data!.dateOfBirth,
+            date: formattedDate ?? ress.data!.dateOfBirth,
             phone: phone ?? ress.data!.phone,
             password_confirmation: password_confirmation,
             gender: gender)
@@ -126,7 +128,16 @@ class _EditProfileViewState extends State<EditProfileView> {
     setState(() {
       showLoader = true;
     });
-    await ApiProvider().editProfileApi(image: File(_imageFile!.path), name: name ?? ress.data!.name, email: email ?? ress.data!.email, date: date ?? ress.data!.dateOfBirth, phone: phone ?? ress.data!.phone, gender: gender).then((value) async {
+    await ApiProvider()
+        .editProfileApi(
+      image: File(_imageFile!.path),
+      name: name ?? ress.data!.name,
+      email: email ?? ress.data!.email,
+      date: formattedDate ?? ress.data!.dateOfBirth,
+      phone: phone ?? ress.data!.phone,
+      gender: gender,
+    )
+        .then((value) async {
       if (value.success == true) {
         setState(() {
           loginResponse = value;
@@ -156,6 +167,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         setState(() {
           ress = value;
           date = ress.data!.dateOfBirth!.toUpperCase();
+          formattedDate = date;
           isLoading = false;
           gender = ress.data!.gender!;
         });
@@ -323,7 +335,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                               child: EditText(
                                 value: "",
                                 suffixIconData: Icons.date_range,
-                                hint: '${date}',
+                                hint: '${formattedDate}',
                                 type: TextInputType.text,
                                 enable: false,
                               ),

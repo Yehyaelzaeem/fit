@@ -36,11 +36,13 @@ dependencies:
   flutter_math_fork: ^0.4.2
   google_maps_flutter: ^2.0.0
   map_picker: ^0.0.3
-  geolocator: ^7.0.0
-  geocoding: ^2.0.0
+  geocoding: 2.0.0
   platform_device_id: ^1.0.1
   auto_size_text: ^3.0.0
 
+dependency_overrides:
+  geolocator: ^7.7.1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
