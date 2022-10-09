@@ -118,8 +118,7 @@ class DiaryController extends GetxController {
               );
             }
           }
-          Echo(
-              "Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
+          Echo("Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
         } else {
           if (lastSelectedDate.value.isNotEmpty) {
             getDiaryData(lastSelectedDate.value);
@@ -307,6 +306,12 @@ class DiaryController extends GetxController {
   }
 
   void refreshCaloriesList(List<CaloriesDetails> list) {
+    List<CaloriesDetails> emptyList = [];
+    emptyList.addAll(caloriesDetails.where((element) => element.qty == null).toList());
+    caloriesDetails.clear();
+    caloriesDetails.addAll(list);
+    caloriesDetails.addAll(emptyList);
+    return;
     list.forEach((resItem) {
       if (caloriesDetails.where((item) {
             Echo('item ${item.quality} resItem${resItem.quality}');
@@ -328,6 +333,12 @@ class DiaryController extends GetxController {
   }
 
   void refreshCarbsAndFatsList(List<CaloriesDetails> list) {
+    List<CaloriesDetails> emptyList = [];
+    emptyList.addAll(carbsAndFats.where((element) => element.qty == null).toList());
+    carbsAndFats.clear();
+    carbsAndFats.addAll(list);
+    carbsAndFats.addAll(emptyList);
+    return;
     list.forEach((resItem) {
       if (carbsAndFats.where((item) {
             Echo('item ${item.quality} resItem${resItem.quality}');
