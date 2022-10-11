@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -143,8 +144,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   ),
                                                 ),
                                                 radius: 12,
-                                                // type: TextInputType.numberWithOptions(decimal: true),
-                                                type: TextInputType.number,
+                                                type: Platform.isIOS ? TextInputType.numberWithOptions(signed: true, decimal: true) : TextInputType.numberWithOptions(decimal: true),
                                                 updateFunc: (String text) {
                                                   setState(() {
                                                     quantity = double.tryParse(text);

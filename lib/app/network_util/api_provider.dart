@@ -650,7 +650,7 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': '5.0.0', //Updated 09/10/2022
+      'version': Platform.isAndroid ? '5.0.0' : '6.0.0', //Updated 09/10/2022
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {
