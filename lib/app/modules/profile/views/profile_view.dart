@@ -57,6 +57,33 @@ class _ProfileViewState extends State<ProfileView> {
           Row(
             children: [
               PageLable(name: "Profile"),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(Routes.MY_PACKAGES);
+                },
+                child: Center(
+                  child: Container(
+                    width: Get.width / 2.0,
+                    padding:  EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Color(0xffFFB62B),
+                      borderRadius: BorderRadius.circular(64),
+                    ),
+                    child: Row(
+                      children: [
+                         Image.asset(
+                    'assets/img/premium.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                        kTextHeader(' My Packages ', size: 16, color: Colors.white, bold: true, paddingH: 16),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 26),
             ],
           ),
           SizedBox(height: 12),

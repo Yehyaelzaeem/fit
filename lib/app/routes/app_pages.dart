@@ -28,6 +28,8 @@ import '../modules/myMeals/bindings/my_meals_binding.dart';
 import '../modules/myMeals/views/my_meals_view.dart';
 import '../modules/myOrders/bindings/my_orders_binding.dart';
 import '../modules/myOrders/views/my_orders_view.dart';
+import '../modules/myPackages/bindings/my_packages_binding.dart';
+import '../modules/myPackages/views/my_packages_view.dart';
 import '../modules/my_other_calories/my_other_calories.dart';
 import '../modules/notifications/bindings/notifications_binding.dart';
 import '../modules/notifications/views/notifications_view.dart';
@@ -35,6 +37,8 @@ import '../modules/orders/bindings/orders_binding.dart';
 import '../modules/orders/views/orders_view.dart';
 import '../modules/otp/bindings/otp_binding.dart';
 import '../modules/otp/views/otp_view.dart';
+import '../modules/payment/bindings/payment_binding.dart';
+import '../modules/payment/views/payment_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -47,6 +51,10 @@ import '../modules/show_pages/bindings/show_pages_binding.dart';
 import '../modules/show_pages/views/show_pages_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
+import '../modules/subscribe/bindings/subscribe_binding.dart';
+import '../modules/subscribe/views/subscribe_view.dart';
+import '../modules/timeSleep/bindings/time_sleep_binding.dart';
+import '../modules/timeSleep/views/time_sleep_view.dart';
 import '../modules/transform/bindings/transform_binding.dart';
 import '../modules/transform/views/transform_view.dart';
 
@@ -194,6 +202,26 @@ class AppPages {
       name: _Paths.MY_ORDERS,
       page: () => MyOrdersView(),
       binding: MyOrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.TIME_SLEEP,
+      page: () => TimeSleepView(),
+      binding: TimeSleepBinding(),
+    ),
+    GetPage(
+      name: _Paths.SUBSCRIBE,
+      page: () => SubscribeView(),
+      binding: SubscribeBinding(),
+    ),
+    GetPage(
+      name: _Paths.MY_PACKAGES,
+      page: () => MyPackagesView(),
+      binding: MyPackagesBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => PaymentView(),
+      binding: PaymentBinding(),
     ),
   ];
 }

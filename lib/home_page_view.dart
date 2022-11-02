@@ -1,10 +1,12 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/modules/orientation_register/views/orientation_register_view.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/modules/home/home_slider.dart';
@@ -281,6 +283,41 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             )
                           : SizedBox(),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(Routes.SUBSCRIBE, arguments: ress.data!.services![pageIndex].items!);
+                    },
+                    child: Center(
+                      child: Container(
+                        width: Get.width / 2,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(color: Color(0xffFFB62B), borderRadius: BorderRadius.circular(64), boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            offset: Offset(0, 1),
+                          ),
+                        ]),
+                        child: Stack(
+                          children: [
+                            Center(child: kTextHeader('  Subscribe  ', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4)),
+                            Positioned(
+                              left: 12,
+                              top: 0,
+                              bottom: 0,
+                              child: Image.asset(
+                                'assets/img/premium.png',
+                                width: 30,
+                                height: 30,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 50,
                   ),

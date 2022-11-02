@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
 import '../../main_un_auth.dart';
+import 'sleep_time_status.dart';
 
 class DiaryView extends GetView<DiaryController> {
   @override
@@ -52,6 +53,7 @@ class DiaryView extends GetView<DiaryController> {
 
               Column(
                 children: [
+                  SleepTimeStatus(),
                   SizedBox(height: 16),
                   //* Diary Dates
                   diaryDatesOptions(),

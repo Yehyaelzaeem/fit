@@ -32,6 +32,10 @@ abstract class Routes {
   static const SHIPPING_DETAILS = _Paths.SHIPPING_DETAILS;
   static const CHEER_FULL = _Paths.CHEER_FULL;
   static const MY_ORDERS = _Paths.MY_ORDERS;
+  static const TIME_SLEEP = _Paths.TIME_SLEEP;
+  static const SUBSCRIBE = _Paths.SUBSCRIBE;
+  static const MY_PACKAGES = _Paths.MY_PACKAGES;
+  static const PAYMENT = _Paths.PAYMENT;
 }
 
 abstract class _Paths {
@@ -63,4 +67,8 @@ abstract class _Paths {
   static const SHIPPING_DETAILS = '/shipping-details';
   static const CHEER_FULL = '/cheer-full';
   static const MY_ORDERS = '/my-orders';
+  static const TIME_SLEEP = '/time-sleep';
+  static const SUBSCRIBE = '/subscribe';
+  static const MY_PACKAGES = '/my-packages';
+  static const PAYMENT = '/payment';
 }

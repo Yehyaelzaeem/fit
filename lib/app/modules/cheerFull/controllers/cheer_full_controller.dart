@@ -37,4 +37,5 @@ class CheerFullController extends GetxController {
     }
     loading.value = false;
   }
+
 }
