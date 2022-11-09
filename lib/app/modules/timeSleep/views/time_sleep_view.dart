@@ -14,7 +14,6 @@ import '../controllers/time_sleep_controller.dart';
 
 class TimeSleepView extends GetView<TimeSleepController> {
   DateTime dateTime = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,7 +28,8 @@ class TimeSleepView extends GetView<TimeSleepController> {
                 if (controller.error.value.isNotEmpty)
                   return errorHandler(controller.error.value, controller);
                 return SingleChildScrollView(
-                  child: Column(
+                  child:GetBuilder<TimeSleepController>(
+                    builder: (_) => Column(
                     children: [
                       //App bar
                       HomeAppbar(),
@@ -45,36 +45,34 @@ class TimeSleepView extends GetView<TimeSleepController> {
                       Row(
                         children: [
                           SizedBox(width: 16),
-                          myRadioButton(0, "From"),
+                          myRadioButton(0, "From", context,),
                           SizedBox(width: 28),
-                          Container(
-                            decoration:
-                                BoxDecoration(color: Colors.white, boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 1,
-                                spreadRadius: 1,
-                                offset: Offset(0, 1),
-                              ),
-                            ]),
-                            child: Row(
-                              children: [
-                                SizedBox(width: 20),
-                                kTextHeader("12:00", size: 26, bold: true),
-                                SizedBox(width: 20),
-                                Column(
-                                  children: [
-                                    Container(
-                                        color: kColorPrimary.withOpacity(0.5),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 2),
-                                        margin: EdgeInsets.all(2),
-                                        child: kTextHeader("AM", size: 24)),
-                                    kTextHeader("PM", size: 24),
-                                  ],
+                          InkWell(
+                            onTap: ()=>controller.selectTimeFrom(
+                              context,
+                            ),
+                            child: Container(
+                              decoration:
+                                  BoxDecoration(color: Colors.white, boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
                                 ),
-                                SizedBox(width: 20),
-                              ],
+                              ]),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  kTextHeader(
+                                      controller.selectedTimeFrom.format(context).split(" ").first,
+                                      size: 24,
+                                      bold: true),
+                                  SizedBox(width: 20),
+                                  buildTimeFromAMorPM(context),
+                                  SizedBox(width: 20),
+                                ],
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -84,36 +82,35 @@ class TimeSleepView extends GetView<TimeSleepController> {
                       Row(
                         children: [
                           SizedBox(width: 16),
-                          myRadioButton(1, "To     "),
+                          myRadioButton(1, "To     ", context,),
                           SizedBox(width: 28),
-                          Container(
-                            decoration:
-                                BoxDecoration(color: Colors.white, boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 1,
-                                spreadRadius: 1,
-                                offset: Offset(0, 1),
-                              ),
-                            ]),
-                            child: Row(
-                              children: [
-                                SizedBox(width: 20),
-                                kTextHeader("12:00", size: 26, bold: true),
-                                SizedBox(width: 20),
-                                Column(
-                                  children: [
-                                    Container(
-                                        color: kColorPrimary.withOpacity(0.5),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 2),
-                                        margin: EdgeInsets.all(2),
-                                        child: kTextHeader("AM", size: 24)),
-                                    kTextHeader("PM", size: 24),
-                                  ],
+                          InkWell(
+                            onTap: ()=>controller.selectTimeTo(
+                              context,
+                            ),
+                            child:Container(
+                              decoration:
+                                  BoxDecoration(color: Colors.white, boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
                                 ),
-                                SizedBox(width: 20),
-                              ],
+                              ]),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 20),
+                                  kTextHeader(
+                                    controller.selectedTimeTo.format(context).split(" ").first,
+                                    size: 24,
+                                    bold: true,
+                                  ),
+                                  SizedBox(width: 20),
+                                  buildTimeToAMorPM(context),
+                                  SizedBox(width: 20),
+                                ],
+                              ),
                             ),
                           ),
                           Spacer(),
@@ -127,11 +124,11 @@ class TimeSleepView extends GetView<TimeSleepController> {
                           border: Border.all(
                             color: Color(0xffF1F1F1),
                             width: 1,
-                          ), func: () {
-                          }),
+                          ),
+                          func: () {}),
                       SizedBox(height: 20),
                     ],
-                  ),
+                  )),
                 );
               },
             )),
@@ -139,6 +136,22 @@ class TimeSleepView extends GetView<TimeSleepController> {
     );
   }
 
+  Widget buildTimeFromAMorPM(context) {
+    return Container(
+        color: kColorPrimary.withOpacity(0.5),
+        padding: EdgeInsets.symmetric(
+            horizontal: 6, vertical: 2),
+        margin: EdgeInsets.all(2),
+        child: kTextHeader(controller.selectedTimeFrom.format(context).split(" ").last, size: 24));
+  }
+  Widget buildTimeToAMorPM(context) {
+    return Container(
+        color: kColorPrimary.withOpacity(0.5),
+        padding: EdgeInsets.symmetric(
+            horizontal: 6, vertical: 2),
+        margin: EdgeInsets.all(2),
+        child: kTextHeader(controller.selectedTimeTo.format(context).split(" ").last, size: 24));
+  }
 
   Widget get simpleClock => AnalogClock(
         decoration: BoxDecoration(
@@ -158,7 +171,12 @@ class TimeSleepView extends GetView<TimeSleepController> {
         datetime: dateTime,
         key: const GlobalObjectKey(1),
       );
-  Widget myRadioButton(int btnIndex, String title) {
+
+  Widget myRadioButton(
+    int btnIndex,
+    String title,
+    BuildContext context,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -167,11 +185,18 @@ class TimeSleepView extends GetView<TimeSleepController> {
               activeColor: kColorPrimary,
               value: controller.dayTime[btnIndex],
               groupValue: controller.select,
-              onChanged: (value) =>
-                  controller.onClickRadioButton(value)),
+              onChanged: (value) {
+                controller.onClickRadioButton(value);
+                value == "From"
+                    ? controller.selectTimeFrom(
+                        context,
+                      )
+                    : controller.selectTimeTo(
+                        context,
+                      );
+              }),
         ),
-        kTextHeader(title,
-            align: TextAlign.start, paddingH: 0, size: 22),
+        kTextHeader(title, align: TextAlign.start, paddingH: 0, size: 22),
       ],
     );
   }
