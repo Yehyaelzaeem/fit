@@ -29,20 +29,26 @@ class SessionResponse {
 
 class Data {
   int? id;
-
   String? day;
-
   String? date;
   String? status;
+  bool? onPeriod;
   bool? detailsStatus;
 
-  Data({this.id, this.date, this.day, this.status, this.detailsStatus});
+  Data(
+      {this.id,
+      this.date,
+      this.day,
+      this.status,
+      this.onPeriod,
+      this.detailsStatus});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    day = json['day']??" ";
+    day = json['day'] ?? " ";
     date = json['date'];
     status = json['status'];
+    onPeriod = json['on_period'];
     detailsStatus = json['details_status'];
   }
 

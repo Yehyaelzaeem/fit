@@ -77,7 +77,7 @@ class PaymentView extends GetView<PaymentController> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 18),
+                          /*     SizedBox(height: 18),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.symmetric(horizontal: BorderSide(color: Colors.grey[200]!, width: 1)),
@@ -95,7 +95,7 @@ class PaymentView extends GetView<PaymentController> {
                                 ],
                               ),
                             ),
-                          ),
+                          ),*/
                           SizedBox(height: 20),
                         ],
                       ),

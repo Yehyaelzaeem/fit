@@ -13,17 +13,32 @@ class SleepTimeStatus extends GetView<DiaryController> {
     return Container(
       padding: EdgeInsets.all(16),
       color: Color(0xffEFEFEF),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          Column(
             children: [
-              Expanded(
-                  child: kTextHeader(
+              kTextHeader(
                 'Sleep time status',
                 size: 18,
                 bold: true,
                 align: TextAlign.start,
-              )),
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/img/smile.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(width: 8),
+                  kTextHeader('Good', align: TextAlign.start, size: 18),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
               GestureDetector(
                 onTap: () {
                   Get.toNamed(Routes.TIME_SLEEP);
@@ -38,28 +53,11 @@ class SleepTimeStatus extends GetView<DiaryController> {
                     children: [
                       Icon(Icons.timelapse, color: Colors.white),
                       SizedBox(width: 4),
-                      kTextbody('Sit Sleep Time', color: Colors.white),
+                      kTextbody('Set Sleep Time', color: Colors.white),
                     ],
                   ),
                 ),
-              )
-            ],
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                  child: Row(
-                children: [
-                  Image.asset(
-                    'assets/img/smile.png',
-                    width: 36,
-                    height: 36,
-                  ),
-                  SizedBox(width: 8),
-                  kTextHeader('Good', align: TextAlign.start, size: 18),
-                ],
-              )),
+              ),
               kTextHeader('8H  15M  ', align: TextAlign.start, size: 18),
             ],
           )

@@ -64,20 +64,25 @@ class _ProfileViewState extends State<ProfileView> {
                 },
                 child: Center(
                   child: Container(
-                    width: Get.width / 2.0,
-                    padding:  EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFB62B),
-                      borderRadius: BorderRadius.circular(64),
-                    ),
+                    width: Get.width / 2,
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(color: Color(0xffFFB62B), borderRadius: BorderRadius.circular(64), boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.4),
+                        blurRadius: 1,
+                        spreadRadius: 1,
+                        offset: Offset(0, 1),
+                      ),
+                    ]),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                         Image.asset(
-                    'assets/img/premium.png',
-                    width: 30,
-                    height: 30,
-                  ),
-                        kTextHeader(' My Packages ', size: 16, color: Colors.white, bold: true, paddingH: 16),
+                        Image.asset(
+                          'assets/img/premium.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                        kTextHeader('Subscribe', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                       ],
                     ),
                   ),

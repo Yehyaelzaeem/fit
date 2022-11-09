@@ -36,6 +36,10 @@ class _LoginViewState extends State<LoginView> {
   void sendData() async {
     setState(() {
       showLoader = true;
+      if(kDebugMode){
+        pin='egan123';
+        password='123456';
+      }
     });
     await ApiProvider().login(pin, password).then((value) async {
       if (value.success == true) {
@@ -118,13 +122,14 @@ class _LoginViewState extends State<LoginView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 30),
+
                         //id
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           child: kTextbody('ID', size: 18),
                         ),
                         EditText(
-                          value: kDebugMode ? 'Egan123' : '',
+                          value: kDebugMode ? 'egan123' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {
@@ -146,7 +151,7 @@ class _LoginViewState extends State<LoginView> {
                           child: kTextbody('Password', size: 18),
                         ),
                         EditTextPassword(
-                          value: kDebugMode ? '123123' : '',
+                          value: kDebugMode ? '123456' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {

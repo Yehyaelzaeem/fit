@@ -20,6 +20,7 @@ import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/models/orintation_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
+import 'package:app/app/models/services_response.dart';
 import 'package:app/app/models/session_response.dart';
 import 'package:app/app/models/sessions_details_response.dart';
 import 'package:app/app/models/transformation_response.dart';
@@ -212,6 +213,16 @@ class ApiProvider {
       return SessionResponse.fromJson(response.data);
     } else {
       return SessionResponse.fromJson(response.data);
+    }
+  }
+
+
+  Future<ServicesResponse> getServices() async {
+    Response response = await _utils.get("services");
+    if (response.data["success"] == true) {
+      return ServicesResponse.fromJson(response.data);
+    } else {
+      return ServicesResponse.fromJson(response.data);
     }
   }
 

@@ -1,7 +1,7 @@
 storePassword=fitoverfat
 keyPassword=fitoverfat
 keyAlias=key
-storeFile=../key.jks
+storeFile=../app/key.jks
 
 
 keyPassword : FitOverFatMc

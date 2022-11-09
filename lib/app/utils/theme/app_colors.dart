@@ -13,3 +13,5 @@ final Color SCREEN_BACKGOUND_COLOR = Color(0xfafafafa);
 final Color PRIMART_COLOR_DARK = Color(0xff8ACF02);
 final Color ACCENT_COLOR_DARK = Color(0xff3F3D56);
 final Color SCREEN_BACKGOUND_COLOR_DARK = Color(0xff3FA093);
+final Color clockColor = Color(0xffDFEDC9);
+final Color redOpacityColor = Color(0xffFFD5D5);
