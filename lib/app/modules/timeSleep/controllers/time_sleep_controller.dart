@@ -9,10 +9,11 @@ class TimeSleepController extends GetxController {
   TimeOfDay selectedTimeTo  = TimeOfDay.now();
   String? select;
 
-  void onClickRadioButton(value) {
+   onClickRadioButton(value) {
     print(value);
     select = value;
     update();
+    return value;
   }
 
   Future<void> selectTimeFrom(
@@ -38,7 +39,7 @@ class TimeSleepController extends GetxController {
     if (picked_s != null) {
       selectedTimeTo = picked_s;
       selectedTimeTo.format(context);
-    }
+     }
     update();
   }
 

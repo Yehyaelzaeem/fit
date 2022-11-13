@@ -316,9 +316,6 @@ class _HomePageViewState extends State<HomePageView> {
                               },
                               child: Center(
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  margin: EdgeInsets.symmetric(vertical: 16),
                                   decoration: BoxDecoration(
                                       color: kColorPrimary,
                                       borderRadius: BorderRadius.circular(64),
@@ -330,12 +327,16 @@ class _HomePageViewState extends State<HomePageView> {
                                           offset: Offset(0, 1),
                                         ),
                                       ]),
-                                  child: kTextHeader('  Registration  ',
-                                      size: 16,
-                                      color: Colors.white,
-                                      bold: true,
-                                      paddingH: 16,
-                                      paddingV: 4),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    child: kTextHeader("Details ",
+                                        size: 16,
+                                        color: Colors.white,
+                                        bold: true,
+                                      paddingH: 12,
+                                      paddingV: 4,
+                                       ),
+                                  ),
                                 ),
                               ),
                             )

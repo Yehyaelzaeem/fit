@@ -24,6 +24,7 @@ class SleepTimeStatus extends GetView<DiaryController> {
                 bold: true,
                 align: TextAlign.start,
               ),
+              SizedBox(height: 8,),
               Row(
                 children: [
                   Image.asset(
@@ -58,7 +59,9 @@ class SleepTimeStatus extends GetView<DiaryController> {
                   ),
                 ),
               ),
-              kTextHeader('8H  15M  ', align: TextAlign.start, size: 18),
+              SizedBox(height: 8,),
+
+              kTextHeader('08H  15M  ', align: TextAlign.start, size: 18),
             ],
           )
         ],
