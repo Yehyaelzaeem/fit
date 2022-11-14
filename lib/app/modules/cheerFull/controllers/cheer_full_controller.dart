@@ -1,7 +1,9 @@
+import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/meal_features_status_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/globale_controller.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class CheerFullController extends GetxController {
@@ -10,10 +12,25 @@ class CheerFullController extends GetxController {
   final response = MealFeatureHomeResponse().obs;
   final error = ''.obs;
   final loading = false.obs;
+  final isLoading = true.obs;
 
+  ContactResponse contactResponse  = ContactResponse();
+
+  void getData() async {
+    await ApiProvider().getContactData().then((value) {
+      if (value.success == true) {
+          contactResponse = value;
+          isLoading.value = false;
+      } else {
+        Fluttertoast.showToast(msg: "$value");
+        print("error");
+      }
+    });
+  }
   @override
   void onInit() async {
     getNetworkData();
+    getData();
     super.onInit();
   }
 

@@ -144,7 +144,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   ),
                                                 ),
                                                 radius: 12,
-                                                type: Platform.isIOS ? TextInputType.numberWithOptions(signed: true, decimal: true) : TextInputType.numberWithOptions(decimal: true),
+                                                type: TextInputType.number,
                                                 updateFunc: (String text) {
                                                   setState(() {
                                                     quantity = double.tryParse(text);

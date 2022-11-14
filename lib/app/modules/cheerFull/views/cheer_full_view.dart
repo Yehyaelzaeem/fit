@@ -1,3 +1,4 @@
+import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/modules/cheerFull/views/cheer_full_slider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
@@ -9,6 +10,7 @@ import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:app/app/widgets/text_inside_rec.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/cheer_full_controller.dart';
 
@@ -23,6 +25,7 @@ class CheerFullView extends GetView<CheerFullController> {
             body: Obx(
               () {
                 if (controller.loading.value) return Center(child: CircularLoadingWidget());
+                if (controller.isLoading.value) return Center(child: CircularLoadingWidget());
 
                 if (controller.error.value.isNotEmpty) return errorHandler(controller.error.value, controller);
 
@@ -65,6 +68,17 @@ class CheerFullView extends GetView<CheerFullController> {
                         ),
                       ),
                       SizedBox(height: 20),
+                      Container(
+                        height: 100,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: controller.contactResponse.data!.socialMedia!.length,
+                            itemBuilder: (context, index) {
+                              return socialMediaItem(controller.contactResponse.data!.socialMedia![index]);
+                            }),
+                      ),
+                      SizedBox(height: 20),
+
                     ],
                   ),
                 );
@@ -112,6 +126,32 @@ class CheerFullView extends GetView<CheerFullController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+  Widget socialMediaItem(SocialMedia data) {
+    return InkWell(
+      onTap: () async {
+        String fallbackUrl = '${data.link}';
+        try {
+          bool launched = await launch(fallbackUrl, forceSafariVC: false);
+          if (!launched) {
+            await launch(fallbackUrl, forceSafariVC: false);
+          }
+        } catch (e) {
+          await launch(fallbackUrl, forceSafariVC: false);
+        }
+      },
+      child: buildImage("${data.image}"),
+    );
+  }
+  Widget buildImage(String path) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Image.network(
+        "$path",
+        width: 50,
+        height: 50,
       ),
     );
   }
