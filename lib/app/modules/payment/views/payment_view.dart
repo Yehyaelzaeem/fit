@@ -1,5 +1,6 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/payment/controllers/payment_controller.dart';
+import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
@@ -20,9 +21,11 @@ class PaymentView extends GetView<PaymentController> {
             backgroundColor: Colors.white,
             body: Obx(
               () {
-                if (controller.loading.value) return Center(child: CircularLoadingWidget());
+                if (controller.loading.value)
+                  return Center(child: CircularLoadingWidget());
 
-                if (controller.error.value.isNotEmpty) return errorHandler(controller.error.value, controller);
+                if (controller.error.value.isNotEmpty)
+                  return errorHandler(controller.error.value, controller);
 
                 return Column(
                   children: [
@@ -41,9 +44,17 @@ class PaymentView extends GetView<PaymentController> {
                                 SizedBox(height: 18),
                                 Row(
                                   children: [
-                                    kTextHeader('Physiotherapy', color: kColorPrimary, bold: true, paddingH: 12, size: 20),
+                                    kTextHeader('Physiotherapy',
+                                        color: kColorPrimary,
+                                        bold: true,
+                                        paddingH: 12,
+                                        size: 20),
                                     Spacer(),
-                                    kTextHeader('150 L.E', color: Colors.black, bold: true, paddingH: 12, size: 20),
+                                    kTextHeader('150 L.E',
+                                        color: Colors.black,
+                                        bold: true,
+                                        paddingH: 12,
+                                        size: 20),
                                   ],
                                 ),
                                 SizedBox(height: 12),
@@ -51,7 +62,8 @@ class PaymentView extends GetView<PaymentController> {
                                   children: [
                                     kTextHeader('03/06/2022', paddingH: 12),
                                     Spacer(),
-                                    kTextHeader('1 Month', color: Colors.black, paddingH: 12),
+                                    kTextHeader('1 Month',
+                                        color: Colors.black, paddingH: 12),
                                   ],
                                 ),
                                 SizedBox(height: 18),
@@ -61,7 +73,9 @@ class PaymentView extends GetView<PaymentController> {
                           SizedBox(height: 18),
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.symmetric(horizontal: BorderSide(color: kColorPrimary, width: 1)),
+                              border: Border.symmetric(
+                                  horizontal: BorderSide(
+                                      color: kColorPrimary, width: 1)),
                             ),
                             child: RadioListTile(
                               value: 'visa',
@@ -70,9 +84,11 @@ class PaymentView extends GetView<PaymentController> {
                               onChanged: (value) {},
                               title: Row(
                                 children: [
-                                  Image.asset('assets/img/visa.png', width: 40, height: 40),
+                                  Image.asset('assets/img/visa.png',
+                                      width: 40, height: 40),
                                   SizedBox(width: 12),
-                                  kTextHeader('Online Payment', align: TextAlign.start, paddingH: 0),
+                                  kTextHeader('Online Payment',
+                                      align: TextAlign.start, paddingH: 0),
                                 ],
                               ),
                             ),
@@ -101,7 +117,7 @@ class PaymentView extends GetView<PaymentController> {
                       ),
                     ),
                     kButton("Confirm"),
-                    SizedBox(height: Get.height/10),
+                    SizedBox(height: Get.height / 10),
                   ],
                 );
               },

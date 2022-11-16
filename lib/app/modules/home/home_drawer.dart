@@ -12,13 +12,15 @@ import 'package:app/globale_controller.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
   final textEditController = Get.find<HomeController>(tag: 'home');
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +60,14 @@ class HomeDrawer extends GetView<HomeController> {
                   )
                 : Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     color: Colors.white,
                     child: Column(
                       children: [
                         Obx(() {
-                          Echo('drawer itemBuilder ${textEditController.avatar.value}');
+                          Echo(
+                              'drawer itemBuilder ${textEditController.avatar.value}');
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                               // ignore: unnecessary_null_comparison
@@ -84,9 +88,11 @@ class HomeDrawer extends GetView<HomeController> {
                         // Text(prefs.getName()!)
                         ,
                         Obx(() {
-                          return kTextHeader('${textEditController.name.value}', size: 18);
+                          return kTextHeader('${textEditController.name.value}',
+                              size: 18);
                         }),
-                        kTextfooter('ID :  ${textEditController.id.value}', size: 14, color: Colors.black87, paddingV: 0),
+                        kTextfooter('ID :  ${textEditController.id.value}',
+                            size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
@@ -141,7 +147,7 @@ class HomeDrawer extends GetView<HomeController> {
                 ? SizedBox()
                 : singleDrawerItem(
                     title: Strings().profile,
-                    image: 'assets/img/ic_menu_person.png',
+                    image: 'assets/icons/user.svg',
                     action: () {
                       Get.toNamed(Routes.PROFILE);
                     }),
@@ -151,7 +157,7 @@ class HomeDrawer extends GetView<HomeController> {
                 ? SizedBox()
                 : singleDrawerItem(
                     title: 'Messages', //todo transulate
-                    image: 'assets/img/ic_menu_messages.png',
+                    image: 'assets/icons/messages.svg',
                     action: () {
                       Get.toNamed(Routes.NOTIFICATIONS);
                     }),
@@ -164,7 +170,7 @@ class HomeDrawer extends GetView<HomeController> {
                 if (snapshot.hasData) if (snapshot.data!)
                   return singleDrawerItem(
                       title: 'FAQ', //todo transulate
-                      image: 'assets/img/ic_menu_faq.png',
+                      image: 'assets/icons/faq.svg',
                       action: () {
                         Get.toNamed(Routes.FAQ);
                       });
@@ -175,7 +181,7 @@ class HomeDrawer extends GetView<HomeController> {
             //Transformation
             singleDrawerItem(
                 title: 'Transformations', //todo transulate
-                image: 'assets/img/ic_menu_images.png',
+                image: 'assets/icons/transformation.svg',
                 action: () {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
@@ -187,7 +193,7 @@ class HomeDrawer extends GetView<HomeController> {
                 if (snapshot.hasData) if (snapshot.data!)
                   return singleDrawerItem(
                       title: "Cheer-Full",
-                      image: 'assets/img/ic_meals.png',
+                      image: 'assets/icons/cheer.svg',
                       action: () {
                         Get.toNamed(Routes.CHEER_FULL);
                       });
@@ -204,31 +210,32 @@ class HomeDrawer extends GetView<HomeController> {
             //Contact
             singleDrawerItem(
                 title: Strings().contactUs,
-                image: 'assets/img/ic_menu_contact.png',
+                image: 'assets/icons/contact.svg',
                 action: () {
                   Get.toNamed(Routes.CONTACT_US);
                 }),
             //About
             singleDrawerItem(
                 title: "About us",
-                image: 'assets/img/ic_menu_information.png',
+                image: 'assets/icons/about_us.svg',
                 action: () {
                   Get.toNamed(Routes.ABOUT);
                 }),
             textEditController.isLogggd.value == false
                 ? singleDrawerItem(
                     title: "Login",
-                    image: "assets/img/ic_menu_logout.png",
+                    image: "assets/icons/logout.svg",
                     action: () {
                       Get.offAllNamed(Routes.AUTH);
                     })
                 : singleDrawerItem(
                     title: Strings().logout,
-                    image: 'assets/img/ic_menu_logout.png',
+                    image: 'assets/icons/logout.svg',
                     action: () {
                       appDialog(
                         title: "Logout",
-                        image: Icon(Icons.exit_to_app, size: 50, color: Colors.red),
+                        image: Icon(Icons.exit_to_app,
+                            size: 50, color: Colors.red),
                         cancelAction: () {
                           Get.back();
                         },
@@ -281,7 +288,8 @@ class HomeDrawer extends GetView<HomeController> {
     );
   }
 
-  Widget singleDrawerItem({required String title, required String image, var action}) {
+  Widget singleDrawerItem(
+      {required String title, required String image, var action}) {
     return InkWell(
       onTap: action,
       child: Column(
@@ -290,10 +298,10 @@ class HomeDrawer extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox(width: 40),
-              Image.asset(
+              SvgPicture.asset(
                 image,
-                width: 24,
-                color: title == "Login" ? kColorPrimary : null,
+                width: 25,
+                color: title =="Logout"? null:kColorPrimary ,
               ),
               SizedBox(width: 16),
               Text(
@@ -311,10 +319,14 @@ class HomeDrawer extends GetView<HomeController> {
   Future<bool> getCheerFullStatus() async {
     try {
       if (textEditController.cheerFullStatus) return true;
-      CheerFullResponse cheerFullResponse = await ApiProvider().getCheerFullStatus();
-      textEditController.cheerFullStatus = kDebugMode ? true : cheerFullResponse.data!.isActive!;
-      globalController.delivery_option.value = cheerFullResponse.data!.delivery_option!;
-      globalController.pickup_option.value = cheerFullResponse.data!.pickup_option!;
+      CheerFullResponse cheerFullResponse =
+          await ApiProvider().getCheerFullStatus();
+      textEditController.cheerFullStatus =
+          kDebugMode ? true : cheerFullResponse.data!.isActive!;
+      globalController.delivery_option.value =
+          cheerFullResponse.data!.delivery_option!;
+      globalController.pickup_option.value =
+          cheerFullResponse.data!.pickup_option!;
       return textEditController.cheerFullStatus;
     } catch (e) {
       Echo('error response $e');
@@ -327,7 +339,8 @@ class HomeDrawer extends GetView<HomeController> {
       if (textEditController.faqStatus) return true;
       CheerFullResponse cheerFullResponse = await ApiProvider().getFaqStatus();
       if (cheerFullResponse.data == null) return true;
-      textEditController.faqStatus = kDebugMode ? true : cheerFullResponse.data!.isFaqActive!;
+      textEditController.faqStatus =
+          kDebugMode ? true : cheerFullResponse.data!.isFaqActive!;
       return textEditController.faqStatus;
     } catch (e) {
       Echo('error response $e');
