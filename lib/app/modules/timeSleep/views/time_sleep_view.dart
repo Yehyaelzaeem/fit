@@ -118,8 +118,14 @@ class TimeSleepView extends GetView<TimeSleepController> {
                                   border: Border.all(
                                     color: Color(0xffF1F1F1),
                                     width: 1,
-                                  ),
-                                  func: () {}),
+                                  ), func: () {
+                                controller.addSleepTime(
+                                  sleepTimeFrom:
+                                      controller.selectedTimeFrom.toString(),
+                                  sleepTimeTo:
+                                      controller.selectedTimeTo.toString(),
+                                );
+                              }),
                               SizedBox(height: 20),
                             ],
                           )),

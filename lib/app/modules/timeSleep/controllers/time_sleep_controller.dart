@@ -1,15 +1,31 @@
+import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class TimeSleepController extends GetxController {
   String? selectedGender;
   final List<String> dayTime = ["From", "To"];
   TimeOfDay selectedTimeFrom = TimeOfDay.now();
-  TimeOfDay selectedTimeTo  = TimeOfDay.now();
+  TimeOfDay selectedTimeTo = TimeOfDay.now();
   String? select;
 
-   onClickRadioButton(value) {
+  addSleepTime({
+    required String sleepTimeFrom,
+    required String sleepTimeTo,
+  }) async {
+    await ApiProvider()
+        .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo)
+        .then((value) {
+      Fluttertoast.showToast(msg: value.message.toString());
+      Get.toNamed(Routes.HOME);
+    });
+  }
+
+  onClickRadioButton(value) {
     print(value);
     select = value;
     update();
@@ -17,7 +33,7 @@ class TimeSleepController extends GetxController {
   }
 
   Future<void> selectTimeFrom(
-     BuildContext context,
+    BuildContext context,
   ) async {
     final TimeOfDay? picked_s = await showTimePicker(
       context: context,
@@ -29,8 +45,9 @@ class TimeSleepController extends GetxController {
     }
     update();
   }
+
   Future<void> selectTimeTo(
-     BuildContext context,
+    BuildContext context,
   ) async {
     final TimeOfDay? picked_s = await showTimePicker(
       context: context,
@@ -39,10 +56,9 @@ class TimeSleepController extends GetxController {
     if (picked_s != null) {
       selectedTimeTo = picked_s;
       selectedTimeTo.format(context);
-     }
+    }
     update();
   }
-
 
   final error = ''.obs;
   final loading = false.obs;

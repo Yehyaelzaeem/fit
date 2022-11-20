@@ -23,6 +23,7 @@ import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/models/services_response.dart';
 import 'package:app/app/models/session_response.dart';
 import 'package:app/app/models/sessions_details_response.dart';
+import 'package:app/app/models/sleep_time_response.dart';
 import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
@@ -31,10 +32,12 @@ import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
+
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as getx;
 
 class ApiProvider {
@@ -124,8 +127,15 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendContactData(String name, String email, String phone, String subject, String message) async {
-    FormData body = FormData.fromMap({'name': name, 'email': email, 'phone': phone, 'subject': subject, 'message': message});
+  Future<GeneralResponse> sendContactData(String name, String email,
+      String phone, String subject, String message) async {
+    FormData body = FormData.fromMap({
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'subject': subject,
+      'message': message
+    });
     Response response = await _utils.post("contact_form", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
@@ -158,7 +168,8 @@ class ApiProvider {
     required String password,
     required String confirmPassword,
   }) async {
-    FormData body = FormData.fromMap({'password': password, 'password_confirmation': confirmPassword});
+    FormData body = FormData.fromMap(
+        {'password': password, 'password_confirmation': confirmPassword});
     Response response = await _utils.post("change_password", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -168,13 +179,16 @@ class ApiProvider {
   }
 
   Future<UserResponse> getProfile() async {
-    final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
+    final GlobalController globalController =
+        getx.Get.find<GlobalController>(tag: 'global');
     Echo('getProfile getProfile');
     Response response = await _utils.get("profile");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
-        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+        if (ur.data != null &&
+            ur.data!.newMessages != null &&
+            ur.data!.newMessages! > 0) {
           globalController.shoNewMessage.value = false;
 
           appDialog(
@@ -198,7 +212,9 @@ class ApiProvider {
     } else {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
-        if (ur.data != null && ur.data!.newMessages != null && ur.data!.newMessages! > 0) {
+        if (ur.data != null &&
+            ur.data!.newMessages != null &&
+            ur.data!.newMessages! > 0) {
           globalController.shoNewMessage.value = false;
         }
       }
@@ -216,7 +232,6 @@ class ApiProvider {
     }
   }
 
-
   Future<ServicesResponse> getServices() async {
     Response response = await _utils.get("services");
     if (response.data["success"] == true) {
@@ -228,6 +243,23 @@ class ApiProvider {
 
   Future<void> deleteAccount() async {
     await _utils.post("delete_account");
+  }
+
+  Future<SleepTimeResponse> addSleepTime({
+    String? sleepTimeFrom,
+    String? sleepTimeTo,
+  }) async {
+    FormData body = FormData.fromMap({
+      'sleeping_from': sleepTimeFrom,
+      'sleeping_to': sleepTimeTo,
+    });
+    Response response = await _utils.post("set_sleeping_time", body: body);
+    print('-------> sleep time ${response.data}');
+    if (response.data["success"] == true) {
+      return SleepTimeResponse.fromJson(response.data);
+    } else {
+      return SleepTimeResponse.fromJson(response.data);
+    }
   }
 
   Future<DayDetailsResponse> getDiaryView(String? date) async {
@@ -269,7 +301,13 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> addOtherCalories({required String? title, required String? calPerUnti, required int? unit, String? unitQuantity, String? unitName, int? type}) async {
+  Future<GeneralResponse> addOtherCalories(
+      {required String? title,
+      required String? calPerUnti,
+      required int? unit,
+      String? unitQuantity,
+      String? unitName,
+      int? type}) async {
     FormData body = FormData.fromMap({
       "title": title,
       "calorie_per_unit": calPerUnti,
@@ -286,7 +324,14 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> updateOtherCalories({required String? title, required String? calPerUnti, required int? unit, String? unitQuantity, String? unitName, int? type, int? id}) async {
+  Future<GeneralResponse> updateOtherCalories(
+      {required String? title,
+      required String? calPerUnti,
+      required int? unit,
+      String? unitQuantity,
+      String? unitName,
+      int? type,
+      int? id}) async {
     FormData body = FormData.fromMap({
       "title": title,
       "calorie_per_unit": calPerUnti,
@@ -295,7 +340,8 @@ class ApiProvider {
       "unit_name": unitName,
       "type": type,
     });
-    Response response = await _utils.post("update_other_calories/$id", body: body);
+    Response response =
+        await _utils.post("update_other_calories/$id", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
     } else {
@@ -322,7 +368,19 @@ class ApiProvider {
     String? password_confirmation,
     String? gender,
   }) async {
-    FormData body = FormData.fromMap({"image": image == null ? null : await MultipartFile.fromFile('${image.path}', filename: '${image.path}.png'), "name": name, "gender": gender, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
+    FormData body = FormData.fromMap({
+      "image": image == null
+          ? null
+          : await MultipartFile.fromFile('${image.path}',
+              filename: '${image.path}.png'),
+      "name": name,
+      "gender": gender,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": password_confirmation
+    });
     Response response = await _utils.post("update_profile", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -331,8 +389,23 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> signUpApi(String id, String password, String name, String email, String date, String phone, String password_confirmation) async {
-    FormData body = FormData.fromMap({"patient_id": id, "name": name, "email": email, "phone": phone, "date_of_birth": date, "password": password, "password_confirmation": password_confirmation});
+  Future<GeneralResponse> signUpApi(
+      String id,
+      String password,
+      String name,
+      String email,
+      String date,
+      String phone,
+      String password_confirmation) async {
+    FormData body = FormData.fromMap({
+      "patient_id": id,
+      "name": name,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": password_confirmation
+    });
     Response response = await _utils.post("register", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
@@ -341,8 +414,30 @@ class ApiProvider {
     }
   }
 
-  Future<GeneralResponse> sendOrintaionData({String? first_name, String? middle_name, String? last_name, String? mobile, String? age, String? country, String? whats, int? hear_from, int? target, int? package, int? id}) async {
-    FormData body = FormData.fromMap({"first_name": first_name, "middle_name": middle_name, "last_name": last_name, "mobile": mobile, "age": age, "target": target, "country": country, "hear_from": hear_from, "package": package, "whatsapp": whats});
+  Future<GeneralResponse> sendOrintaionData(
+      {String? first_name,
+      String? middle_name,
+      String? last_name,
+      String? mobile,
+      String? age,
+      String? country,
+      String? whats,
+      int? hear_from,
+      int? target,
+      int? package,
+      int? id}) async {
+    FormData body = FormData.fromMap({
+      "first_name": first_name,
+      "middle_name": middle_name,
+      "last_name": last_name,
+      "mobile": mobile,
+      "age": age,
+      "target": target,
+      "country": country,
+      "hear_from": hear_from,
+      "package": package,
+      "whatsapp": whats
+    });
     Response response = await _utils.post(
       "orientation_registeration/$id",
       body: body,
@@ -632,7 +727,8 @@ class ApiProvider {
       });
       Response response = await _utils.post("my_orders", body: body);
       if (response.statusCode == 200) {
-        MyOrdersResponse myOrdersResponse = MyOrdersResponse.fromJson(response.data);
+        MyOrdersResponse myOrdersResponse =
+            MyOrdersResponse.fromJson(response.data);
         return myOrdersResponse;
       } else
         return Future.error("server");
@@ -648,10 +744,12 @@ class ApiProvider {
     // if (kDebugMode) return 'testDeviceId';
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId = '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}';
+      deviceId =
+          '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}';
     } else {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceId = '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
+      deviceId =
+          '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
     }
     Echo('deviceId = ${deviceId.replaceAll(' ', '')}');
     return deviceId.replaceAll(' ', '');
