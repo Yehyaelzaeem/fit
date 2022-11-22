@@ -1,3 +1,4 @@
+import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
@@ -7,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class TimeSleepController extends GetxController {
+  final controllerDiary = Get.find<DiaryController>(tag: 'diary');
+
   String? selectedGender;
   final List<String> dayTime = ["From", "To"];
   TimeOfDay selectedTimeFrom = TimeOfDay.now();
@@ -21,6 +24,7 @@ class TimeSleepController extends GetxController {
         .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo)
         .then((value) {
       Fluttertoast.showToast(msg: value.message.toString());
+      controllerDiary.onInit();
       Get.toNamed(Routes.HOME);
     });
   }

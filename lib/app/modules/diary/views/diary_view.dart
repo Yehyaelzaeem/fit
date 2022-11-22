@@ -34,7 +34,6 @@ class DiaryView extends GetView<DiaryController> {
         body: Obx(() {
           if (!controller.isLogggd.value) return MainUnAuth();
           if (controller.showLoader.value || controller.isLoading.value) return Container(child: CircularLoadingWidget(), color: Colors.white);
-
           if (!controller.isLoading.value && controller.noSessions.value == true)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 200),

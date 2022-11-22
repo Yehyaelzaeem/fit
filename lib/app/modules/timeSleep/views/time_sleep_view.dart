@@ -1,4 +1,5 @@
 import 'package:analog_clock/analog_clock.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 import '../controllers/time_sleep_controller.dart';
 
 class TimeSleepView extends GetView<TimeSleepController> {
+
   DateTime dateTime = DateTime.now();
 
   @override
@@ -119,11 +121,11 @@ class TimeSleepView extends GetView<TimeSleepController> {
                                     color: Color(0xffF1F1F1),
                                     width: 1,
                                   ), func: () {
-                                controller.addSleepTime(
+                                     controller.addSleepTime(
                                   sleepTimeFrom:
-                                      controller.selectedTimeFrom.toString(),
+                                  controller.selectedTimeFrom.format(context),
                                   sleepTimeTo:
-                                      controller.selectedTimeTo.toString(),
+                                  controller.selectedTimeTo.format(context),
                                 );
                               }),
                               SizedBox(height: 20),

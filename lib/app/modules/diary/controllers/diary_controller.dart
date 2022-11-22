@@ -31,7 +31,6 @@ class DiaryController extends GetxController {
   final workDesc = ''.obs;
   final length = 0.obs;
   final workOut = 0.obs;
-
   @override
   void onInit() {
     super.onInit();

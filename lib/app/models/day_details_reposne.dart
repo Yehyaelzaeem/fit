@@ -24,8 +24,9 @@ class Data {
   String? pdf;
   String? workoutDetails;
   String? workoutDetailsType;
+  SleepingTime ? sleepingTime;
 
-  Data({this.proteins, this.carbsFats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType});
+  Data({this.proteins, this.carbsFats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType, this.sleepingTime});
 
   Data.fromJson(Map<String, dynamic> json) {
     proteins = json['proteins'] != null ? new Proteins.fromJson(json['proteins']) : null;
@@ -47,6 +48,7 @@ class Data {
     pdf = json['pdf'];
     workoutDetails = json['workout_details'] ?? "";
     workoutDetailsType = json['workout_details_type'] ?? "";
+    sleepingTime = json['sleeping_time'] != null ? new SleepingTime.fromJson(json['sleeping_time']) : null;
   }
 }
 
@@ -279,4 +281,37 @@ class DayWorkouts {
     data['workout_desc'] = this.workoutDesc;
     return data;
   }
+}
+
+class SleepingTime {
+  String? sleepingFrom;
+  String? sleepingTo;
+  String? sleepingDuration;
+  SleepingStatus? sleepingStatus;
+
+  SleepingTime({this.sleepingFrom, this.sleepingTo, this.sleepingDuration, this.sleepingStatus});
+
+  SleepingTime.fromJson(Map<String, dynamic> json) {
+    sleepingFrom = json['sleeping_from'];
+    sleepingTo = json['sleeping_to'];
+    sleepingDuration = json['sleeping_duration'];
+    sleepingStatus = json['sleeping_status'] != null ? new SleepingStatus.fromJson(json['sleeping_status']) : null;
+
+  }
+
+}
+
+class SleepingStatus {
+  int? id;
+  String? name;
+  String? image;
+
+  SleepingStatus({this.id, this.name, this.image,});
+
+  SleepingStatus.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    image = json['image'];
+  }
+
 }

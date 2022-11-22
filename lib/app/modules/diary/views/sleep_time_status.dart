@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 class SleepTimeStatus extends GetView<DiaryController> {
   @override
   final controller = Get.find(tag: 'diary');
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,16 +26,29 @@ class SleepTimeStatus extends GetView<DiaryController> {
                 bold: true,
                 align: TextAlign.start,
               ),
-              SizedBox(height: 8,),
-              Row(
+              SizedBox(
+                height: 8,
+              ),
+  Column(
                 children: [
-                  Image.asset(
-                    'assets/img/smile.png',
+                  Image.network(
+                    controller.response.value.data?.sleepingTime?.sleepingStatus
+                            ?.image ??
+                        "",
                     width: 30,
                     height: 30,
                   ),
                   SizedBox(width: 8),
-                  kTextHeader('Good', align: TextAlign.start, size: 18),
+                  Container(
+                    width: Get.width/2,
+                    child: kTextHeader(
+                        controller.response.value.data?.sleepingTime
+                                ?.sleepingStatus?.name ??"",
+                        align: TextAlign.start,
+                        color: kColorPrimary,
+                        bold: true,
+                        size: 14),
+                  ),
                 ],
               ),
             ],
@@ -59,9 +74,11 @@ class SleepTimeStatus extends GetView<DiaryController> {
                   ),
                 ),
               ),
-              SizedBox(height: 8,),
-
-              kTextHeader('08H  15M  ', align: TextAlign.start, size: 18),
+              SizedBox(
+                height: 8,
+              ),
+              kTextHeader( controller.response.value.data?.sleepingTime
+                  ?.sleepingDuration??"", align: TextAlign.start, size: 18),
             ],
           )
         ],
