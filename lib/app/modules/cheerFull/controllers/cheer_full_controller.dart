@@ -1,3 +1,4 @@
+import 'package:app/app/models/cheerful_response.dart';
 import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/meal_features_status_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -14,12 +15,12 @@ class CheerFullController extends GetxController {
   final loading = false.obs;
   final isLoading = true.obs;
 
-  ContactResponse contactResponse  = ContactResponse();
+  CheerfulSocialsResponse cheerfulSocialsResponse  = CheerfulSocialsResponse();
 
   void getData() async {
-    await ApiProvider().getContactData().then((value) {
+    await ApiProvider().getCheerfulSocialsResponse().then((value) {
       if (value.success == true) {
-          contactResponse = value;
+        cheerfulSocialsResponse = value;
           isLoading.value = false;
       } else {
         Fluttertoast.showToast(msg: "$value");

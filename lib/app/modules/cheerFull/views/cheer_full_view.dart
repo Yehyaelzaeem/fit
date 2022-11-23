@@ -1,3 +1,4 @@
+import 'package:app/app/models/cheerful_response.dart';
 import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/modules/cheerFull/views/cheer_full_slider.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -24,10 +25,13 @@ class CheerFullView extends GetView<CheerFullController> {
             backgroundColor: Colors.white,
             body: Obx(
               () {
-                if (controller.loading.value) return Center(child: CircularLoadingWidget());
-                if (controller.isLoading.value) return Center(child: CircularLoadingWidget());
+                if (controller.loading.value)
+                  return Center(child: CircularLoadingWidget());
+                if (controller.isLoading.value)
+                  return Center(child: CircularLoadingWidget());
 
-                if (controller.error.value.isNotEmpty) return errorHandler(controller.error.value, controller);
+                if (controller.error.value.isNotEmpty)
+                  return errorHandler(controller.error.value, controller);
 
                 return SingleChildScrollView(
                   child: Column(
@@ -36,14 +40,17 @@ class CheerFullView extends GetView<CheerFullController> {
                       appBar(),
                       //Slider
                       CheerFullSlider(sliders: [
-                        ...controller.response.value.data!.sliders!.map((e) => e.image!).toList(),
+                        ...controller.response.value.data!.sliders!
+                            .map((e) => e.image!)
+                            .toList(),
                       ]),
 
                       TextInsideRec(
                         text: controller.response.value.data!.info!.about!,
                       ),
                       SizedBox(height: 20),
-                      kButtonWithIcon('Make My Meals', marginH: Get.width / 6, func: () {
+                      kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
+                          func: () {
                         Get.toNamed(Routes.MY_MEALS);
                       }),
                       SizedBox(height: 20),
@@ -54,7 +61,8 @@ class CheerFullView extends GetView<CheerFullController> {
                         },
                         child: Container(
                           width: double.infinity,
-                          margin: EdgeInsets.symmetric(horizontal: Get.width / 6),
+                          margin:
+                              EdgeInsets.symmetric(horizontal: Get.width / 6),
                           padding: EdgeInsets.symmetric(vertical: 6),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(200.0),
@@ -68,17 +76,20 @@ class CheerFullView extends GetView<CheerFullController> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      Container(
-                        height: 100,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: controller.contactResponse.data!.socialMedia!.length,
-                            itemBuilder: (context, index) {
-                              return socialMediaItem(controller.contactResponse.data!.socialMedia![index]);
-                            }),
-                      ),
+                      controller.cheerfulSocialsResponse.data!.isEmpty
+                          ? Container()
+                          : Container(
+                              height: 100,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: controller
+                                      .cheerfulSocialsResponse.data!.length,
+                                  itemBuilder: (context, index) {
+                                    return socialMediaItem(controller
+                                        .cheerfulSocialsResponse.data![index]);
+                                  }),
+                            ),
                       SizedBox(height: 20),
-
                     ],
                   ),
                 );
@@ -94,14 +105,17 @@ class CheerFullView extends GetView<CheerFullController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(
@@ -129,7 +143,8 @@ class CheerFullView extends GetView<CheerFullController> {
       ),
     );
   }
-  Widget socialMediaItem(SocialMedia data) {
+
+  Widget socialMediaItem(CheerfulData data) {
     return InkWell(
       onTap: () async {
         String fallbackUrl = '${data.link}';
@@ -145,6 +160,7 @@ class CheerFullView extends GetView<CheerFullController> {
       child: buildImage("${data.image}"),
     );
   }
+
   Widget buildImage(String path) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),

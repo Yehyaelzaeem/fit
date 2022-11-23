@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
 import 'package:app/app/models/cheer_full_response.dart';
+import 'package:app/app/models/cheerful_response.dart';
 import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/models/faq_response.dart';
@@ -766,6 +767,15 @@ class ApiProvider {
       return VersionResponse.fromJson(response.data);
     } else {
       return VersionResponse.fromJson(response.data);
+    }
+  }
+
+  Future<CheerfulSocialsResponse> getCheerfulSocialsResponse() async {
+    Response response = await _utils.get("cheerful_social");
+    if (response.statusCode == 200) {
+      return CheerfulSocialsResponse.fromJson(response.data);
+    } else {
+      return CheerfulSocialsResponse.fromJson(response.data);
     }
   }
 }

@@ -27,14 +27,20 @@ class DiaryView extends GetView<DiaryController> {
   @override
   final controller = Get.find(tag: 'diary');
 
+//controller.response.value.data?
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: Obx(() => Container(key: Key('drawer_${controller.isLogggd.value}'), child: HomeDrawer())),
+        drawer: Obx(() => Container(
+            key: Key('drawer_${controller.isLogggd.value}'),
+            child: HomeDrawer())),
         body: Obx(() {
           if (!controller.isLogggd.value) return MainUnAuth();
-          if (controller.showLoader.value || controller.isLoading.value) return Container(child: CircularLoadingWidget(), color: Colors.white);
-          if (!controller.isLoading.value && controller.noSessions.value == true)
+          if (controller.showLoader.value || controller.isLoading.value)
+            return Container(
+                child: CircularLoadingWidget(), color: Colors.white);
+          if (!controller.isLoading.value &&
+              controller.noSessions.value == true)
             Padding(
               padding: EdgeInsets.symmetric(vertical: 200),
               child: Center(
@@ -62,7 +68,8 @@ class DiaryView extends GetView<DiaryController> {
                   //*Water Bottles
                   waterBottles(),
                   Divider(thickness: 2),
-                  rowWithProgressBar("Proteins", controller.response.value.data!.proteins),
+                  rowWithProgressBar(
+                      "Proteins", controller.response.value.data!.proteins),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 4),
                     child: Column(
@@ -74,19 +81,22 @@ class DiaryView extends GetView<DiaryController> {
                             ),
                           ),
                         staticBar(1),
-                        if (controller.caloriesDetails.isEmpty) SizedBox(height: 20),
+                        if (controller.caloriesDetails.isEmpty)
+                          SizedBox(height: 20),
                         ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemCount: controller.caloriesDetails.length,
                             itemBuilder: (context, indedx) {
-                              return rowItem(controller.caloriesDetails[indedx], 1);
+                              return rowItem(
+                                  controller.caloriesDetails[indedx], 1);
                             }),
                       ],
                     ),
                   ),
                   Divider(thickness: 2),
-                  rowWithProgressBar("Carbs & Fats", controller.response.value.data!.carbsFats),
+                  rowWithProgressBar("Carbs & Fats",
+                      controller.response.value.data!.carbsFats),
                   if (controller.refreshLoadingCarbs.value)
                     Container(
                       child: LinearProgressIndicator(color: kColorPrimary),
@@ -134,13 +144,18 @@ class DiaryView extends GetView<DiaryController> {
                         child: GestureDetector(
                           onTap: () {
                             showQualityDialog(
-                              type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                              type == 1
+                                  ? controller
+                                      .response.value.data!.proteins!.food!
+                                  : controller
+                                      .response.value.data!.carbsFats!.food!,
                               item,
                               type == 1,
                             );
                           },
                           child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 2, vertical: 2),
                             height: 34,
                             child: TextFormField(
                               textAlign: TextAlign.center,
@@ -151,22 +166,35 @@ class DiaryView extends GetView<DiaryController> {
                                 labelStyle: TextStyle(fontSize: 12),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.5),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(color: kColorPrimary, width: 1),
+                                  borderSide: BorderSide(
+                                      color: kColorPrimary, width: 1),
                                 ),
                                 disabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(color: Colors.grey, width: 1.5),
+                                  borderSide: BorderSide(
+                                      color: Colors.grey, width: 1.5),
                                 ),
-                                contentPadding: EdgeInsets.only(top: 10, bottom: 10, left: 2),
+                                contentPadding: EdgeInsets.only(
+                                    top: 10, bottom: 10, left: 2),
                               ),
-                              style: TextStyle(fontSize: 12.0, height: 1.4, color: Colors.black),
+                              style: TextStyle(
+                                  fontSize: 12.0,
+                                  height: 1.4,
+                                  color: Colors.black),
                               enableInteractiveSelection: false,
-                              initialValue: item.qty == null ? '' : item.qty.toString().replaceAll('.0', ''),
-                              keyboardType: Platform.isIOS ? TextInputType.numberWithOptions(signed: true, decimal: true) : TextInputType.numberWithOptions(decimal: true, signed: false),
+                              initialValue: item.qty == null
+                                  ? ''
+                                  : item.qty.toString().replaceAll('.0', ''),
+                              keyboardType: Platform.isIOS
+                                  ? TextInputType.numberWithOptions(
+                                      signed: true, decimal: true)
+                                  : TextInputType.numberWithOptions(
+                                      decimal: true, signed: false),
                               // keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (text) {
@@ -175,9 +203,17 @@ class DiaryView extends GetView<DiaryController> {
                                   double qty = double.parse(text);
                                   int foodId = 0;
                                   if (type == 1) {
-                                    foodId = controller.response.value.data!.proteins!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                    foodId = controller
+                                        .response.value.data!.proteins!.food!
+                                        .firstWhere((element) =>
+                                            element.title == item.quality)
+                                        .id!;
                                   } else {
-                                    foodId = controller.response.value.data!.carbsFats!.food!.firstWhere((element) => element.title == item.quality).id!;
+                                    foodId = controller
+                                        .response.value.data!.carbsFats!.food!
+                                        .firstWhere((element) =>
+                                            element.title == item.quality)
+                                        .id!;
                                   }
                                   controller.updateProtineData(
                                     item.id,
@@ -221,14 +257,17 @@ class DiaryView extends GetView<DiaryController> {
                   child: GestureDetector(
                     onTap: () {
                       showQualityDialog(
-                        type == 1 ? controller.response.value.data!.proteins!.food! : controller.response.value.data!.carbsFats!.food!,
+                        type == 1
+                            ? controller.response.value.data!.proteins!.food!
+                            : controller.response.value.data!.carbsFats!.food!,
                         item,
                         type == 1,
                       );
                     },
                     child: itemWidget(
                       title: item.quality == null ? '' : '${item.quality}',
-                      showDropDownArrow: item.quality == null || '${item.quality}'.isEmpty,
+                      showDropDownArrow:
+                          item.quality == null || '${item.quality}'.isEmpty,
                       color: item.color,
                     ),
                   ),
@@ -292,7 +331,11 @@ class DiaryView extends GetView<DiaryController> {
                   ),
                 ],
               ),
-              kTextHeader('${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}', bold: false, size: 20, color: Colors.black),
+              kTextHeader(
+                  '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
+                  bold: false,
+                  size: 20,
+                  color: Colors.black),
             ],
           ),
         ),
@@ -310,9 +353,12 @@ class DiaryView extends GetView<DiaryController> {
               ),
               Container(
                 height: 20,
-                width: MediaQuery.of(Get.context!).size.width * (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                width: MediaQuery.of(Get.context!).size.width *
+                    (item.caloriesTotal!.progress!.percentage!.toDouble() /
+                        100),
                 decoration: BoxDecoration(
-                  color: Color(int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
+                  color: Color(
+                      int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -339,7 +385,8 @@ class DiaryView extends GetView<DiaryController> {
             child: Container(
               width: double.infinity,
               child: Center(
-                child: kTextbody('Quantity', color: Colors.white, bold: true, size: 16),
+                child: kTextbody('Quantity',
+                    color: Colors.white, bold: true, size: 16),
               ),
             ),
           ),
@@ -349,7 +396,8 @@ class DiaryView extends GetView<DiaryController> {
             child: Container(
               width: double.infinity,
               child: Center(
-                child: kTextbody('Quality', color: Colors.white, bold: true, size: 16),
+                child: kTextbody('Quality',
+                    color: Colors.white, bold: true, size: 16),
               ),
             ),
           ),
@@ -453,18 +501,22 @@ class DiaryView extends GetView<DiaryController> {
       onTap: () {
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         if (!controller.isToday.value) {
-          controller.getDiaryData(controller.response.value.data!.days![0].date!);
+          controller
+              .getDiaryData(controller.response.value.data!.days![0].date!);
         } else {
-          controller.getDiaryData(controller.response.value.data!.days![1].date!);
+          controller
+              .getDiaryData(controller.response.value.data!.days![1].date!);
         }
       },
       child: Container(
         width: MediaQuery.of(Get.context!).size.width / 4,
         height: 50,
         margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-        decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(4)),
+        decoration: BoxDecoration(
+            color: kColorPrimary, borderRadius: BorderRadius.circular(4)),
         child: Center(
-          child: kTextHeader(controller.isToday.value ? 'Yesterday' : 'Today', color: Colors.white, bold: true, size: 14),
+          child: kTextHeader(controller.isToday.value ? 'Yesterday' : 'Today',
+              color: Colors.white, bold: true, size: 14),
         ),
       ),
     );
@@ -472,9 +524,11 @@ class DiaryView extends GetView<DiaryController> {
       width: MediaQuery.of(Get.context!).size.width / 1.5,
       height: 50,
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
+      decoration: BoxDecoration(
+          color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
       child: Center(
-        child: kTextHeader('${controller.date.value}', color: Colors.black87, bold: true, size: 14),
+        child: kTextHeader('${controller.date.value}',
+            color: Colors.black87, bold: true, size: 14),
       ),
     );
     return controller.isToday.value == true
@@ -518,7 +572,8 @@ class DiaryView extends GetView<DiaryController> {
           itemCount: controller.length.value,
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
                 onTap: () {
@@ -528,12 +583,17 @@ class DiaryView extends GetView<DiaryController> {
                 child: Stack(
                   children: [
                     Container(
-                      decoration: BoxDecoration(image: DecorationImage(image: AssetImage(controller.waterBottlesList[index].imagePath), fit: BoxFit.cover)),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  controller.waterBottlesList[index].imagePath),
+                              fit: BoxFit.cover)),
                     ),
                     controller.waterBottlesList[index].selected == false
                         ? SizedBox()
                         : Padding(
-                            padding: const EdgeInsets.only(right: 0, left: 0, bottom: 0, top: 0),
+                            padding: const EdgeInsets.only(
+                                right: 0, left: 0, bottom: 0, top: 0),
                             child: Container(
                               child: Center(
                                 child: Icon(
@@ -542,7 +602,8 @@ class DiaryView extends GetView<DiaryController> {
                                   color: kColorPrimary,
                                 ),
                               ),
-                              decoration: BoxDecoration(color: Colors.black.withOpacity(0.5)),
+                              decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.5)),
                             ),
                           ),
                   ],
@@ -564,7 +625,9 @@ class DiaryView extends GetView<DiaryController> {
                         )));
 
             if (result == null) {
-              if (controller.lastSelectedDate.value.isNotEmpty) controller.getDiaryDataRefreshResponse(controller.lastSelectedDate.value);
+              if (controller.lastSelectedDate.value.isNotEmpty)
+                controller.getDiaryDataRefreshResponse(
+                    controller.lastSelectedDate.value);
             }
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
@@ -590,10 +653,13 @@ class DiaryView extends GetView<DiaryController> {
             FocusScope.of(Get.context!).requestFocus(FocusNode());
             if (controller.response.value.data!.workoutDetailsType == "") {
               Fluttertoast.showToast(msg: "Nothing To Show ");
-            } else if (controller.response.value.data!.workoutDetailsType == "link") {
-              controller.launchURL(controller.response.value.data!.workoutDetails);
+            } else if (controller.response.value.data!.workoutDetailsType ==
+                "link") {
+              controller
+                  .launchURL(controller.response.value.data!.workoutDetails);
             } else {
-              controller.showPobUp(controller.response.value.data!.workoutDetails!);
+              controller
+                  .showPobUp(controller.response.value.data!.workoutDetails!);
             }
           },
           child: Container(
@@ -606,7 +672,10 @@ class DiaryView extends GetView<DiaryController> {
                 ),
                 Text(
                   "Workout Details",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
@@ -621,7 +690,8 @@ class DiaryView extends GetView<DiaryController> {
             margin: EdgeInsets.symmetric(
               horizontal: 72,
             ),
-            decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
+            decoration: BoxDecoration(
+                color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
           ),
         ),
         SizedBox(height: MediaQuery.of(Get.context!).size.width / 14),
@@ -644,21 +714,28 @@ class DiaryView extends GetView<DiaryController> {
                 widget: Padding(
                   padding: EdgeInsets.only(top: 16),
                   child: ListView.builder(
-                      itemCount: controller.response.value.data!.workouts!.length,
+                      itemCount:
+                          controller.response.value.data!.workouts!.length,
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
                             Navigator.pop(Get.context!);
-                            controller.workOutData.value = controller.response.value.data!.workouts![index].title!;
-                            controller.workOut.value = controller.response.value.data!.workouts![index].id!;
+                            controller.workOutData.value = controller
+                                .response.value.data!.workouts![index].title!;
+                            controller.workOut.value = controller
+                                .response.value.data!.workouts![index].id!;
                           },
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 16),
                                 child: Text(
                                   "${controller.response.value.data!.workouts![index].title}",
-                                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Divider()
@@ -734,8 +811,10 @@ class DiaryView extends GetView<DiaryController> {
                         paddingV: 0,
                         func: () {
                           controller.workoutTitleDescFocus.unfocus();
-                          if (controller.workDesc.value.trim() == "" || controller.workOut.value == null) {
-                            Fluttertoast.showToast(msg: "Enter Workout Description");
+                          if (controller.workDesc.value.trim() == "" ||
+                              controller.workOut.value == null) {
+                            Fluttertoast.showToast(
+                                msg: "Enter Workout Description");
                           } else {
                             controller.updateWork();
                           }
@@ -755,7 +834,8 @@ class DiaryView extends GetView<DiaryController> {
     );
   }
 
-  Widget itemWidget({required String title, bool showDropDownArrow = false, String? color}) {
+  Widget itemWidget(
+      {required String title, bool showDropDownArrow = false, String? color}) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2),
       padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
@@ -772,7 +852,12 @@ class DiaryView extends GetView<DiaryController> {
             padding: EdgeInsets.symmetric(horizontal: 1),
             child: AutoSizeText(
               '$title',
-              style: TextStyle(fontSize: 12, color: color != null ? Color(int.parse("0xFF$color")) : Colors.black87, height: 1.2),
+              style: TextStyle(
+                  fontSize: 12,
+                  color: color != null
+                      ? Color(int.parse("0xFF$color"))
+                      : Colors.black87,
+                  height: 1.2),
               textAlign: TextAlign.center,
               minFontSize: 8,
               maxLines: 2,
@@ -788,7 +873,8 @@ class DiaryView extends GetView<DiaryController> {
     );
   }
 
-  void showQualityDialog(List<Food> food, CaloriesDetails item, bool typeIsProtine) async {
+  void showQualityDialog(
+      List<Food> food, CaloriesDetails item, bool typeIsProtine) async {
     // show screen dialog
     dynamic result = await showDialog(
         context: Get.context!,
@@ -809,9 +895,11 @@ class DiaryView extends GetView<DiaryController> {
       controller.caloriesDetails.refresh();
       controller.carbsAndFats.refresh();
       if (item.id == null) {
-        controller.createProtineData(food.id, food.qty!, typeIsProtine: typeIsProtine);
+        controller.createProtineData(food.id, food.qty!,
+            typeIsProtine: typeIsProtine);
       } else {
-        controller.updateProtineData(item.id, food.id, food.qty!, typeIsProtine: typeIsProtine);
+        controller.updateProtineData(item.id, food.id, food.qty!,
+            typeIsProtine: typeIsProtine);
       }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -822,18 +910,21 @@ class DeleteItemWidget extends StatefulWidget {
   final CaloriesDetails item;
   final DiaryController controller;
   final bool typeIsCalories;
+
   DeleteItemWidget({
     Key? key,
     required this.item,
     required this.controller,
     required this.typeIsCalories,
   }) : super(key: key);
+
   @override
   State<DeleteItemWidget> createState() => _DeleteItemWidgetState();
 }
 
 class _DeleteItemWidgetState extends State<DeleteItemWidget> {
   bool deleteItem = false;
+
   @override
   Widget build(BuildContext context) {
     if (deleteItem)
@@ -860,9 +951,15 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
             await widget.controller.carbsAndFats.remove(widget.item);
         } else {
           if (widget.typeIsCalories)
-            await widget.controller.deleteItemCalories(widget.item.id!, widget.controller.lastSelectedDate.value, widget.typeIsCalories);
+            await widget.controller.deleteItemCalories(
+                widget.item.id!,
+                widget.controller.lastSelectedDate.value,
+                widget.typeIsCalories);
           else
-            await widget.controller.deleteItemCarbs(widget.item.id!, widget.controller.lastSelectedDate.value, widget.typeIsCalories);
+            await widget.controller.deleteItemCarbs(
+                widget.item.id!,
+                widget.controller.lastSelectedDate.value,
+                widget.typeIsCalories);
 
           await widget.controller.carbsAndFats.remove(widget.item);
         }

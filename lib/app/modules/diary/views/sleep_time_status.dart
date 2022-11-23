@@ -1,14 +1,15 @@
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SleepTimeStatus extends GetView<DiaryController> {
   @override
   final controller = Get.find(tag: 'diary');
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +30,30 @@ class SleepTimeStatus extends GetView<DiaryController> {
               SizedBox(
                 height: 8,
               ),
-  Column(
+              controller.response.value.data?.sleepingTime==null?Container(child: kTextbody("Please, Insert your sleeping time",maxLines: 2)):       Column(
                 children: [
-                  Image.network(
-                    controller.response.value.data?.sleepingTime?.sleepingStatus
-                            ?.image ??
+                  CachedNetworkImage(
+                    width: 24,
+                    height:24,
+                    imageUrl: controller.response.value.data?.sleepingTime
+                            ?.sleepingStatus?.image ??
                         "",
-                    width: 30,
-                    height: 30,
+                    fadeInDuration: Duration(seconds: 2),
+                    errorWidget: (vtx, url, obj) {
+                      return Container();
+                    },
+                    placeholder: (ctx, url) {
+                      return CircularLoadingWidget();
+                    },
+                    // fit: BoxFit.c,
                   ),
                   SizedBox(width: 8),
                   Container(
-                    width: Get.width/2,
+                    width: Get.width / 2,
                     child: kTextHeader(
                         controller.response.value.data?.sleepingTime
-                                ?.sleepingStatus?.name ??"",
+                                ?.sleepingStatus?.name ??
+                            "",
                         align: TextAlign.start,
                         color: kColorPrimary,
                         bold: true,
@@ -77,8 +87,12 @@ class SleepTimeStatus extends GetView<DiaryController> {
               SizedBox(
                 height: 8,
               ),
-              kTextHeader( controller.response.value.data?.sleepingTime
-                  ?.sleepingDuration??"", align: TextAlign.start, size: 18),
+              controller.response.value.data?.sleepingTime==null?kTextbody("No time selected"):      kTextHeader(
+                  controller.response.value.data?.sleepingTime
+                          ?.sleepingDuration ??
+                      "",
+                  align: TextAlign.start,
+                  size: 18),
             ],
           )
         ],
