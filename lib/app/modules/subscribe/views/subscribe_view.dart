@@ -200,13 +200,15 @@ class SubscribeView extends GetView<SubscribeController> {
                                               ],
                                             ),
                                           ),
-                                          Html(
-                                            data: controller
-                                                .servicesResponse
-                                                .data?[controller
-                                                    .serviceIndex.value]
-                                                .packages?[i]
-                                                .description,
+                                          Expanded(
+                                            child: Html(
+                                              data: controller
+                                                  .servicesResponse
+                                                  .data?[controller
+                                                      .serviceIndex.value]
+                                                  .packages?[i]
+                                                  .description,
+                                            ),
                                           ),
                                           kButton("Payment", func: () {
                                             Get.toNamed(

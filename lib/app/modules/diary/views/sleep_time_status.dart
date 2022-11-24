@@ -27,40 +27,41 @@ class SleepTimeStatus extends GetView<DiaryController> {
                 bold: true,
                 align: TextAlign.start,
               ),
-              SizedBox(
-                height: 8,
-              ),
-              controller.response.value.data?.sleepingTime==null?Container(child: kTextbody("Please, Insert your sleeping time",maxLines: 2)):       Column(
-                children: [
-                  CachedNetworkImage(
-                    width: 24,
-                    height:24,
-                    imageUrl: controller.response.value.data?.sleepingTime
-                            ?.sleepingStatus?.image ??
-                        "",
-                    fadeInDuration: Duration(seconds: 2),
-                    errorWidget: (vtx, url, obj) {
-                      return Container();
-                    },
-                    placeholder: (ctx, url) {
-                      return CircularLoadingWidget();
-                    },
-                    // fit: BoxFit.c,
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: Get.width / 2,
-                    child: kTextHeader(
-                        controller.response.value.data?.sleepingTime
-                                ?.sleepingStatus?.name ??
-                            "",
-                        align: TextAlign.start,
-                        color: kColorPrimary,
-                        bold: true,
-                        size: 14),
-                  ),
-                ],
-              ),
+              controller.response.value.data?.sleepingTime == null
+                  ? Container(
+                      child: kTextbody("Please, Insert your sleeping time",
+                          maxLines: 2))
+                  : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CachedNetworkImage(
+                          width: 24,
+                          height: 24,
+                          imageUrl: controller.response.value.data?.sleepingTime
+                                  ?.sleepingStatus?.image ??
+                              "",
+                          fadeInDuration: Duration(seconds: 2),
+                          errorWidget: (vtx, url, obj) {
+                            return Container();
+                          },
+                          placeholder: (ctx, url) {
+                            return CircularLoadingWidget();
+                          },
+                          // fit: BoxFit.c,
+                        ),
+                        Container(
+                          width: Get.width / 2,
+                          child: kTextHeader(
+                              controller.response.value.data?.sleepingTime
+                                      ?.sleepingStatus?.name ??
+                                  "",
+                              align: TextAlign.center,
+                              color: kColorPrimary,
+                              bold: true,
+                              size: 14),
+                        ),
+                      ],
+                    ),
             ],
           ),
           Column(
@@ -87,12 +88,14 @@ class SleepTimeStatus extends GetView<DiaryController> {
               SizedBox(
                 height: 8,
               ),
-              controller.response.value.data?.sleepingTime==null?kTextbody("No time selected"):      kTextHeader(
-                  controller.response.value.data?.sleepingTime
-                          ?.sleepingDuration ??
-                      "",
-                  align: TextAlign.start,
-                  size: 18),
+              controller.response.value.data?.sleepingTime == null
+                  ? kTextbody("No time selected")
+                  : kTextHeader(
+                      controller.response.value.data?.sleepingTime
+                              ?.sleepingDuration ??
+                          "",
+                      align: TextAlign.start,
+                      size: 18),
             ],
           )
         ],
