@@ -9,6 +9,7 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -36,7 +37,7 @@ class _SessionDetailsState extends State<SessionDetails> {
           isLoading = false;
         });
       } else {
-        // Fluttertoast.showToast(msg: "${sessionResponse}");
+         Fluttertoast.showToast(msg: "Server Error");
         print("error");
       }
     });

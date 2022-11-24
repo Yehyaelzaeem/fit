@@ -33,64 +33,66 @@ class CheerFullView extends GetView<CheerFullController> {
                 if (controller.error.value.isNotEmpty)
                   return errorHandler(controller.error.value, controller);
 
-                return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      //App bar
-                      appBar(),
-                      //Slider
-                      CheerFullSlider(sliders: [
-                        ...controller.response.value.data!.sliders!
-                            .map((e) => e.image!)
-                            .toList(),
-                      ]),
-
-                      TextInsideRec(
-                        text: controller.response.value.data!.info!.about!,
-                      ),
-                      SizedBox(height: 20),
-                      kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
-                          func: () {
-                        Get.toNamed(Routes.MY_MEALS);
-                      }),
-                      SizedBox(height: 20),
-
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.ORDERS);
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          margin:
-                              EdgeInsets.symmetric(horizontal: Get.width / 6),
-                          padding: EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(200.0),
-                            color: const Color(0xFFF1F1F1),
-                            border: Border.all(
-                              width: 1.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                          child: kTextHeader('My Orders'),
+                return SizedBox(
+                  height: Get.height,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        //App bar
+                        appBar(),
+                        //Slider
+                        CheerFullSlider(sliders: [
+                          ...controller.response.value.data!.sliders!
+                              .map((e) => e.image!)
+                              .toList(),
+                        ]),
+                        TextInsideRec(
+                          text: controller.response.value.data!.info!.about!,
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      controller.cheerfulSocialsResponse.data!.isEmpty
-                          ? Container()
-                          : Container(
-                              height: 100,
-                              child: ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: controller
-                                      .cheerfulSocialsResponse.data!.length,
-                                  itemBuilder: (context, index) {
-                                    return socialMediaItem(controller
-                                        .cheerfulSocialsResponse.data![index]);
-                                  }),
+                        SizedBox(height: 20),
+                        kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
+                            func: () {
+                          Get.toNamed(Routes.MY_MEALS);
+                        }),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.ORDERS);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            margin:
+                                EdgeInsets.symmetric(horizontal: Get.width / 6),
+                            padding: EdgeInsets.symmetric(vertical: 6),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(200.0),
+                              color: const Color(0xFFF1F1F1),
+                              border: Border.all(
+                                width: 1.0,
+                                color: Colors.black,
+                              ),
                             ),
-                      SizedBox(height: 20),
-                    ],
+                            child: kTextHeader('My Orders'),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        controller.cheerfulSocialsResponse.data!.isEmpty
+                            ? Container()
+                            : Container(
+                          height: Get.height*0.12,
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: controller
+                                        .cheerfulSocialsResponse.data!.length,
+                                    itemBuilder: (context, index) {
+                                      return socialMediaItem(controller
+                                          .cheerfulSocialsResponse.data![index]);
+                                    }),
+                              ),
+                      ],
+                    ),
                   ),
                 );
               },

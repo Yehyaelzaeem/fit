@@ -81,8 +81,12 @@ class _ContactUsViewState extends State<ContactUsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  kTextHeader('Phone', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
-                  kTextbody('${ress.data!.contactInfo!.phone}', align: TextAlign.start, color: Colors.black, bold: true),
+                  kTextHeader('Phone',
+                      align: TextAlign.start,
+                      color: Color(0xff7FC902),
+                      bold: true),
+                  kTextbody('${ress.data!.contactInfo!.phone}',
+                      align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
             ),
@@ -95,8 +99,12 @@ class _ContactUsViewState extends State<ContactUsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  kTextHeader('Email Address', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
-                  kTextbody("${ress.data!.contactInfo!.email}", align: TextAlign.start, color: Colors.black, bold: true),
+                  kTextHeader('Email Address',
+                      align: TextAlign.start,
+                      color: Color(0xff7FC902),
+                      bold: true),
+                  kTextbody("${ress.data!.contactInfo!.email}",
+                      align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
             ),
@@ -109,8 +117,12 @@ class _ContactUsViewState extends State<ContactUsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  kTextHeader('Our Location', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
-                  kTextbody("${ress.data!.contactInfo!.address}", align: TextAlign.start, color: Colors.black, bold: true),
+                  kTextHeader('Our Location',
+                      align: TextAlign.start,
+                      color: Color(0xff7FC902),
+                      bold: true),
+                  kTextbody("${ress.data!.contactInfo!.address}",
+                      align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
             ),
@@ -123,8 +135,12 @@ class _ContactUsViewState extends State<ContactUsView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  kTextHeader('Working Hours', align: TextAlign.start, color: Color(0xff7FC902), bold: true),
-                  kTextbody("${ress.data!.contactInfo!.workingHours}", align: TextAlign.start, color: Colors.black, bold: true),
+                  kTextHeader('Working Hours',
+                      align: TextAlign.start,
+                      color: Color(0xff7FC902),
+                      bold: true),
+                  kTextbody("${ress.data!.contactInfo!.workingHours}",
+                      align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
             ),
@@ -349,7 +365,10 @@ class _ContactUsViewState extends State<ContactUsView> {
               print(contactPhone);
               print(subject);
               print(contactPhone);
-              await ApiProvider().sendContactData(contactFirstName, contactEmail, contactPhone, subject, contactMessage).then((value) {
+              await ApiProvider()
+                  .sendContactData(contactFirstName, contactEmail, contactPhone,
+                      subject, contactMessage)
+                  .then((value) {
                 if (value.success == true) {
                   Get.offAllNamed(Routes.HOME);
                   Fluttertoast.showToast(msg: "${value.message}");
@@ -362,13 +381,16 @@ class _ContactUsViewState extends State<ContactUsView> {
             Center(child: kTextbody('Our Social media links', size: 14)),
 
             Container(
-              height: 100,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: ress.data!.socialMedia!.length,
-                  itemBuilder: (contaxt, index) {
-                    return socoialItem(ress.data!.socialMedia![index]);
-                  }),
+              height: Get.height * 0.12,
+              child: Center(
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: ress.data!.socialMedia!.length,
+                    itemBuilder: (contaxt, index) {
+                      return socoialItem(ress.data!.socialMedia![index]);
+                    }),
+              ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height / 14),
           ]);
