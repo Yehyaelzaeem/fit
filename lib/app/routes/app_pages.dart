@@ -1,3 +1,5 @@
+import 'package:app/app/modules/invoice/bindings/invoice_binding.dart';
+import 'package:app/app/modules/invoice/views/invoice_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
@@ -222,6 +224,11 @@ class AppPages {
       name: _Paths.PAYMENT,
       page: () => PaymentView(),
       binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVOICE,
+      page: () => InvoiceView(),
+      binding: InvoiceBinding(),
     ),
   ];
 }

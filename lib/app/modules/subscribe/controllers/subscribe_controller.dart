@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 class SubscribeController extends GetxController with SingleGetTickerProviderMixin {
   final error = ''.obs;
   final loading = false.obs;
+  final isLE = false.obs;
   final serviceIndex = 0.obs;
   final currentPageIndex = 0.obs;
 
@@ -34,6 +35,10 @@ class SubscribeController extends GetxController with SingleGetTickerProviderMix
     return serviceIndex.value;
   }
 
+  exchangePrice(){
+    isLE.value=!isLE.value;
+    update();
+  }
 
   @override
   void onInit() {

@@ -36,6 +36,7 @@ abstract class Routes {
   static const SUBSCRIBE = _Paths.SUBSCRIBE;
   static const MY_PACKAGES = _Paths.MY_PACKAGES;
   static const PAYMENT = _Paths.PAYMENT;
+  static const INVOICE = _Paths.INVOICE;
 }
 
 abstract class _Paths {
@@ -71,4 +72,5 @@ abstract class _Paths {
   static const SUBSCRIBE = '/subscribe';
   static const MY_PACKAGES = '/my-packages';
   static const PAYMENT = '/payment';
+  static const INVOICE = '/invoice';
 }

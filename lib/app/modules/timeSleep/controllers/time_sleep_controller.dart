@@ -2,6 +2,7 @@ import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
+import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,6 +21,9 @@ class TimeSleepController extends GetxController {
     required String sleepTimeFrom,
     required String sleepTimeTo,
   }) async {
+    if(selectedTimeFrom==selectedTimeTo){
+      Fluttertoast.showToast(msg: "Please, Select time first");
+    }else
     await ApiProvider()
         .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo)
         .then((value) {

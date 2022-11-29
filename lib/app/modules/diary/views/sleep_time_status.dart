@@ -25,14 +25,17 @@ class SleepTimeStatus extends GetView<DiaryController> {
                 'Sleep time status',
                 size: 18,
                 bold: true,
-                align: TextAlign.start,
+                align: TextAlign.center,
+              ),
+              SizedBox(
+                height: 8,
               ),
               controller.response.value.data?.sleepingTime == null
                   ? Container(
-                      child: kTextbody("Please, Insert your sleeping time",
+                      child: kTextbody("Please, Insert your sleep time",
                           maxLines: 2))
                   : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CachedNetworkImage(
                           width: 24,
@@ -49,6 +52,7 @@ class SleepTimeStatus extends GetView<DiaryController> {
                           },
                           // fit: BoxFit.c,
                         ),
+                        SizedBox(width: 8),
                         Container(
                           width: Get.width / 2,
                           child: kTextHeader(
@@ -89,12 +93,12 @@ class SleepTimeStatus extends GetView<DiaryController> {
                 height: 8,
               ),
               controller.response.value.data?.sleepingTime == null
-                  ? kTextbody("No time selected")
+                  ? SizedBox()
                   : kTextHeader(
                       controller.response.value.data?.sleepingTime
                               ?.sleepingDuration ??
                           "",
-                      align: TextAlign.start,
+                      align: TextAlign.center,
                       size: 18),
             ],
           )
