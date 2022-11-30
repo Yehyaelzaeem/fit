@@ -24,12 +24,16 @@ class HomeController extends GetxController {
   var avatar = "".obs;
   var isLogggd = false.obs;
   var id = "".obs;
-  final response = VersionResponse(success: false, code: 0, message: "", forceUpdate: false).obs;
+  final response =
+      VersionResponse(success: false, code: 0, message: "", forceUpdate: false)
+          .obs;
   final loading = false.obs;
+
   @override
   void onInit() async {
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     name.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    phone.value = await SharedHelper().readString(CachingKey.PHONE);
     avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
@@ -40,12 +44,17 @@ class HomeController extends GetxController {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
     }
+    if (phone.value.isEmpty) {
+      SharedHelper().logout();
+      Get.offAllNamed(Routes.SPLASH);
+    }
     Get.put(SessionsController(), tag: 'SessionsController');
 
     super.onInit();
 
     homeResponse.value.data!.slider!.forEach((v) {
-      slider.add(v.image ?? "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
+      slider.add(v.image ??
+          "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
     });
     print(slider);
     homeResponse.value.data!.services!.forEach((v) {

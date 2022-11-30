@@ -21,6 +21,7 @@ import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/models/orintation_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
+import 'package:app/app/models/payment_package_response.dart';
 import 'package:app/app/models/services_response.dart';
 import 'package:app/app/models/session_response.dart';
 import 'package:app/app/models/sessions_details_response.dart';
@@ -776,6 +777,26 @@ class ApiProvider {
       return CheerfulSocialsResponse.fromJson(response.data);
     } else {
       return CheerfulSocialsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<PackagePaymentResponse> packagePayment({
+    required String name,
+    required String phone,
+    required String email,
+    required int packageId,
+  }) async {
+    FormData body = FormData.fromMap({
+      "name": name,
+      "phone": phone,
+      "email": email,
+    });
+    Response response =
+        await _utils.post("book-service-package/$packageId", body: body);
+    if (response.data["success"] == true) {
+      return PackagePaymentResponse.fromJson(response.data);
+    } else {
+      return PackagePaymentResponse.fromJson(response.data);
     }
   }
 }

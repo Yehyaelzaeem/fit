@@ -51,6 +51,7 @@ class _LoginViewState extends State<LoginView> {
         await _shared.writeData(CachingKey.TOKEN, loginResponse.data!.accessToken);
         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
+        await _shared.writeData(CachingKey.PHONE,loginResponse.data!.phone);
         await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.patientId);
         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
