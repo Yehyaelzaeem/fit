@@ -1,6 +1,7 @@
 import 'package:app/app/models/payment_package_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,9 +18,10 @@ class PaymentController extends GetxController {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    print("UserPhone ==> ${userPhone}");
-    print("UserEmail ==> ${userEmail}");
-    print("UserName ==> ${userName}");
+    if (userPhone.value.isEmpty) {
+      SharedHelper().logout();
+      Get.offAllNamed(Routes.LOGIN);
+    }
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();

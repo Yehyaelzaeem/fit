@@ -44,10 +44,6 @@ class HomeController extends GetxController {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
     }
-    if (phone.value.isEmpty) {
-      SharedHelper().logout();
-      Get.offAllNamed(Routes.SPLASH);
-    }
     Get.put(SessionsController(), tag: 'SessionsController');
 
     super.onInit();
