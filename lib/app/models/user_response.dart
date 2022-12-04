@@ -68,7 +68,7 @@ class Data {
     phone = json['phone'] ?? " Enter your Phone";
     dateOfBirth = json['date_of_birth'] ?? " Enter your Date Of Birth";
     gender = json['gender'] ?? " Select Gender";
-    packageRenewalDate = json['package_renewal_date'] ?? " ";
+    packageRenewalDate = json['package_renewal_date'] ?? "";
     nextSession = json['next_session'] != null ? new NextSession.fromJson(json['next_session']) : null;
     target = json['target'] != null ? new Target.fromJson(json['target']) : null;
     lastBodyComposition = json['last_body_composition'] != null ? new LastBodyComposition.fromJson(json['last_body_composition']) : null;

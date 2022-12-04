@@ -41,6 +41,8 @@ dependencies:
   auto_size_text: ^3.0.0
   analog_clock: ^0.1.1
   dotted_decoration: ^2.0.0
+  timeago: ^3.3.0
+
 
   # analog_clock_picker: ^0.0.1
 

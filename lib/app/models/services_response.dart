@@ -63,14 +63,16 @@ class Packages {
   int? id;
   int? price;
   String? duration;
+  int? usdPrice;
   String? description;
 
-  Packages({this.id, this.price, this.duration, this.description});
+  Packages({this.id, this.price, this.duration,this.usdPrice, this.description});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     price = json['price'];
     duration = json['duration'];
+    usdPrice = json['usd_price'];
     description = json['description'];
   }
 

@@ -1,12 +1,11 @@
-import 'package:get/get.dart' as invoice_binding;
+import 'package:app/app/modules/invoice/controllers/invoice_controller.dart';
+import 'package:get/get.dart';
 
-import '../controllers/invoice_controller.dart';
-
-class InvoiceBinding extends invoice_binding.Bindings {
+class InvoiceBinding extends Bindings {
   @override
   void dependencies() {
-    invoice_binding.Get.lazyPut<InvoiceController>(
-      () => InvoiceController(),
+    Get.lazyPut<InvoiceController>(
+          () => InvoiceController(),
     );
   }
 }

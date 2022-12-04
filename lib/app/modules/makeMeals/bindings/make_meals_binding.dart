@@ -1,6 +1,6 @@
+import 'package:app/app/modules/makeMeals/controllers/make_meals_controller.dart';
 import 'package:get/get.dart';
 
-import '../controllers/make_meals_controller.dart';
 
 class MakeMealsBinding extends Bindings {
   @override

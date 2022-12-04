@@ -1,4 +1,5 @@
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/invoice/views/invoice_view.dart';
 import 'package:app/app/modules/myPackages/controllers/my_packages_controller.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -19,13 +20,11 @@ class MyPackagesView extends GetView<MyPackagesController> {
         child: Scaffold(
             backgroundColor: Colors.white,
             body: Obx(
-                  () {
+              () {
                 if (controller.loading.value)
                   return Center(child: CircularLoadingWidget());
-
                 if (controller.error.value.isNotEmpty)
                   return errorHandler(controller.error.value, controller);
-
                 return Column(
                   children: [
                     //App bar
@@ -36,83 +35,175 @@ class MyPackagesView extends GetView<MyPackagesController> {
                     Expanded(
                       child: SizedBox(
                         height: Get.height,
-                        child: ListView.separated(itemBuilder: (context,index)=> Column(
-                          children: [
-                            Container(
-                              color: Color(0xffF1F1F1),
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 18),
-                                  Row(
-                                    children: [
-                                      kTextHeader('Physiotherapy',
-                                          color: kColorPrimary,
-                                          bold: true,
-                                          paddingH: 12,
-                                          size: 20),
-                                      Spacer(),
-                                      kTextHeader('150 L.E',
-                                          color: Colors.black,
-                                          bold: true,
-                                          paddingH: 12,
-                                          size: 20),
-                                    ],
-                                  ),
-                                  SizedBox(height: 12),
-                                  Row(
-                                    children: [
-                                      kTextHeader('03/06/2022', paddingH: 12),
-                                      Spacer(),
-                                      kTextHeader('1 Month',
-                                          color: Colors.black, paddingH: 12),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.check_circle, color: kColorPrimary),
-                                      kTextHeader("Completed payment",
-                                          color: kColorPrimary),
-                                    ],
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      Get.toNamed(Routes.INVOICE);
-                                    },
-                                    child: Center(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: kColorPrimary,
-                                            borderRadius: BorderRadius.circular(64),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey.withOpacity(0.4),
-                                                blurRadius: 1,
-                                                spreadRadius: 1,
-                                                offset: Offset(0, 1),
+                        child: ListView.separated(
+                            itemBuilder: (context, index) => Column(
+                                  children: [
+                                    Container(
+                                      color: Color(0xffF1F1F1),
+                                      child: Column(
+                                        children: [
+                                          SizedBox(height: 18),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: kTextHeader(
+                                                    controller
+                                                            .myPackagesResponse
+                                                            .data?[index]
+                                                            .name ??
+                                                        "",
+                                                    color: kColorPrimary,
+                                                    align: TextAlign.start,
+                                                    maxLines: 2,
+                                                    bold: true,
+                                                    paddingH: 12,
+                                                    size: 20),
                                               ),
-                                            ]),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                          child: kTextHeader("Details ",
-                                            size: 16,
-                                            color: Colors.white,
-                                            bold: true,
-                                            paddingH: 12,
-                                            paddingV: 4,
+                                              kTextHeader(
+                                                  "${controller.myPackagesResponse.data?[index].price.toString() ?? ""} LE",
+                                                  color: Colors.black,
+                                                  align: TextAlign.end,
+                                                  bold: true,
+                                                  paddingH: 12,
+                                                  size: 20),
+                                            ],
                                           ),
-                                        ),
+                                          SizedBox(height: 12),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: kTextHeader(
+                                                    controller
+                                                            .myPackagesResponse
+                                                            .data?[index]
+                                                            .date ??
+                                                        "",
+                                                    align: TextAlign.start,
+                                                    paddingH: 12),
+                                              ),
+                                              Spacer(),
+                                              kTextHeader(
+                                                  controller
+                                                          .myPackagesResponse
+                                                          .data?[index]
+                                                          .package ??
+                                                      "",
+                                                  align: TextAlign.end,
+                                                  color: Colors.black,
+                                                  paddingH: 12),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child: Center(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      controller
+                                                              .myPackagesResponse
+                                                              .data![index]
+                                                              .paymentStatus!
+                                                              .contains('confirmed')
+                                                          ? Icon(Icons.check_circle,
+                                                              size: 16,
+                                                              color: kColorPrimary)
+                                                          : Icon(Icons.error,
+                                                              size: 16,
+                                                              color: kRedColor),
+                                                      kTextHeader(
+                                                          controller
+                                                                  .myPackagesResponse
+                                                                  .data?[index]
+                                                                  .paymentStatus ??
+                                                              "",
+                                                          bold: true,
+                                                          paddingH: 8,
+                                                          color: controller
+                                                                  .myPackagesResponse
+                                                                  .data![index]
+                                                                  .paymentStatus!
+                                                                  .contains(
+                                                                      'confirmed')
+                                                              ? kColorPrimary
+                                                              : kRedColor),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+
+                                              Expanded(
+                                                child: Center(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      /*Get.toNamed(Routes.INVOICE);*/
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (_) =>
+                                                                  InvoiceView(
+                                                                    packageId: controller
+                                                                        .myPackagesResponse
+                                                                        .data?[
+                                                                            index]
+                                                                        .id,
+                                                                  )));
+                                                    },
+                                                    child: Center(
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                            color: kColorPrimary,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(64),
+                                                            boxShadow: [
+                                                              BoxShadow(
+                                                                color: Colors.grey
+                                                                    .withOpacity(
+                                                                        0.4),
+                                                                blurRadius: 1,
+                                                                spreadRadius: 1,
+                                                                offset:
+                                                                    Offset(0, 1),
+                                                              ),
+                                                            ]),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets
+                                                                  .symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 4),
+                                                          child: kTextHeader(
+                                                            "Details ",
+                                                            size: 16,
+                                                            color: Colors.white,
+                                                            bold: true,
+                                                            paddingH: 12,
+                                                            paddingV: 4,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 8,
+                                          )
+                                        ],
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                            separatorBuilder: (context,index)=> SizedBox(height: 12),
-                            itemCount: 2),
+                                  ],
+                                ),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 12),
+                            itemCount:
+                                controller.myPackagesResponse.data!.length),
                       ),
                     ),
                     GestureDetector(
@@ -156,7 +247,6 @@ class MyPackagesView extends GetView<MyPackagesController> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
                   ],
                 );
               },

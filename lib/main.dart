@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/routes/app_pages.dart';
 
 Future selectNotification(payload) async {
@@ -32,6 +33,7 @@ Future<void> main() async {
 
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");
+  Get.put(InvoiceController());
 
   runApp(
     GetMaterialApp(

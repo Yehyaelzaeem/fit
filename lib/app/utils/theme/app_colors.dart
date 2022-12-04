@@ -9,6 +9,7 @@ final Color PRIMART_COLOR = Color(0xff7FC902);
 final Color ACCENT_COLOR = Color(0xff414042);
 final Color SCREEN_BACKGOUND_COLOR = Color(0xfafafafa);
 final Color kGreyContainerBackground = Color(0xffF1F1F1);
+final Color kRedColor = Colors.red;
 
 
 final Color PRIMART_COLOR_DARK = Color(0xff8ACF02);

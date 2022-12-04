@@ -118,16 +118,36 @@ class CartView extends GetView<CartController> {
                                     // ),
                                     // SizedBox(height: 12),
 
-                                    kButtonDefault("Submit",
-                                        color: kColorPrimary,
-                                        textColor: Colors.white,
-                                        border: Border.all(
-                                          color: Color(0xffF1F1F1),
-                                          width: 1,
-                                        ), func: () {
-                                      Get.back();
-                                      controller.createOrder("delivery");
-                                    }),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: kButtonDefault("Cash",
+                                              color: kColorPrimary,
+                                              textColor: Colors.white,
+                                              border: Border.all(
+                                                color: Color(0xffF1F1F1),
+                                                width: 1,
+                                              ), func: () {
+                                            Get.back();
+                                            controller.createOrder(payMethod: 'cash', shippingMethod: 'delivery', context: context);
+                                          }),
+                                        ),
+                                        Expanded(
+                                          child: kButtonDefault("Visa",
+                                              color: kColorPrimary,
+                                              textColor: Colors.white,
+                                              border: Border.all(
+                                                color: Color(0xffF1F1F1),
+                                                width: 1,
+                                              ), func: () {
+                                                Get.back();
+                                                controller.createOrder(payMethod: 'visa', shippingMethod: 'delivery', context: context);
+                                              }),
+                                        ),
+                                      ],
+                                    ),
+
+                                   
                                     SizedBox(height: 12),
                                   ],
                                 ),
@@ -221,7 +241,7 @@ class CartView extends GetView<CartController> {
                                           width: 1,
                                         ), func: () {
                                       Get.back();
-                                      controller.createOrder("pick_up");
+                                      controller.createOrder(shippingMethod: "pick_up", payMethod: "cash", context: context);
                                     }),
                                     SizedBox(height: 12),
                                   ],

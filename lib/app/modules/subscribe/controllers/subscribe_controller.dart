@@ -11,10 +11,10 @@ class SubscribeController extends GetxController
     with SingleGetTickerProviderMixin {
   final error = ''.obs;
   final loading = false.obs;
-  final isLE = false.obs;
+  final isLE = true.obs;
+  final isPaymentClicked = false.obs;
   final serviceIndex = 0.obs;
   final currentPageIndex = 0.obs;
-
 
   PageController pc = new PageController(viewportFraction: 0.75);
   bool smaller = false;
@@ -27,25 +27,30 @@ class SubscribeController extends GetxController
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-   if(userPhone.value.isEmpty){
-
-   }
+    if (userPhone.value.isEmpty) {}
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();
+
   Future packagePayment({
     required int packageId,
   }) async {
+    paymentClicked();
+    print(isPaymentClicked.value);
     await getFromCash();
-    await ApiProvider().packagePayment(
+    await ApiProvider()
+        .packagePayment(
       email: userEmail.value,
-      name:userName.value,
-      packageId:packageId,
-      phone:userPhone.value,
-    ).then((value) {
+      name: userName.value,
+      packageId: packageId,
+      phone: userPhone.value,
+    )
+        .then((value) {
       if (value.success == true) {
         packagePaymentResponse = value;
         loading.value = false;
+        paymentClicked();
+        print(isPaymentClicked.value);
         update();
       } else {
         Fluttertoast.showToast(msg: "Server Error");
@@ -54,6 +59,7 @@ class SubscribeController extends GetxController
   }
 
   ServicesResponse servicesResponse = ServicesResponse();
+
   void getAllServicesData() async {
     await ApiProvider().getServices().then((value) {
       if (value.success == true) {
@@ -77,10 +83,14 @@ class SubscribeController extends GetxController
     update();
   }
 
+  paymentClicked() {
+    isPaymentClicked.value = !isPaymentClicked.value;
+    update();
+  }
+
   @override
   void onInit() {
-    if (Get.arguments != null)
-      servicesResponse = Get.arguments;
+    if (Get.arguments != null) servicesResponse = Get.arguments;
     getAllServicesData();
     getFromCash();
     super.onInit();
@@ -92,8 +102,7 @@ class SubscribeController extends GetxController
   }
 
   @override
-  void onClose() {
-  }
+  void onClose() {}
 
   getNetworkData() async {
     error.value = '';

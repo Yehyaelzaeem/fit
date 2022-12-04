@@ -147,154 +147,127 @@ class SubscribeView extends GetView<SubscribeController> {
                                       .packages
                                       ?.length,
                                   itemBuilder: (ctx, i) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(32),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.grey[200]!,
-                                              offset: Offset(3, 3),
-                                              spreadRadius: 6,
-                                              blurRadius: 6,
-                                            )
-                                          ]),
-                                      margin: EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: Get.height / 14),
-                                      width: double.infinity,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(32),
-                                                  topRight: Radius.circular(32),
-                                                ),
-                                                color: Colors.grey[900]),
-                                            child:    GetBuilder<SubscribeController>(
-                                              builder: (_) =>  Row(
-                                                children: [
-                                                  Spacer(),
-                                                  Expanded(
-                                                    child: Column(
-                                                      children: [
-                                                        SizedBox(height: 8),
-                                                        kTextHeader(
-                                                            "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price??""} ${
-                                                                controller.isLE ==
-                                                                    true
-                                                                    ? "USD"
-                                                                    : "LE"
-                                                            }"
-                                                                ,
-                                                            size: 22,
-                                                            bold: true,
-                                                            white: true),
-                                                        kTextHeader(
-                                                            controller
-                                                                    .servicesResponse
-                                                                    .data?[controller
-                                                                        .serviceIndex
-                                                                        .value]
-                                                                    .packages?[i]
-                                                                    .duration ??
-                                                                "",
-                                                            white: true,
-                                                            paddingV: 12)
-                                                      ],
-                                                    ),
+                                    return  GetBuilder<SubscribeController>(
+                                        builder: (_) => Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(32),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey[200]!,
+                                                offset: Offset(3, 3),
+                                                spreadRadius: 6,
+                                                blurRadius: 6,
+                                              )
+                                            ]),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: Get.height / 14),
+                                        width: double.infinity,
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(32),
+                                                    topRight: Radius.circular(32),
                                                   ),
-                                              Expanded(
-                                                            child:
-                                                                GestureDetector(
-                                                              onTap: () => controller
-                                                                  .exchangePrice(),
-                                                              child: Column(
-                                                                children: [
-                                                                  kTextHeader(
-                                                                      controller.isLE ==
-                                                                              false
-                                                                          ? "USD"
-                                                                          : "LE",
-                                                                      color:
-                                                                          kColorPrimary,
-                                                                      bold: true),
-                                                                  SvgPicture.asset(
-                                                                      'assets/icons/exchange.svg'),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                ],
+                                                  color: Colors.grey[900]),
+                                              child:
+                                                  Row(
+                                                  children: [
+                                                    Spacer(),
+                                                    Expanded(
+                                                      child: Column(
+                                                        children: [
+                                                          SizedBox(height: 8),
+                                                          kTextHeader(
+                                                              controller.isLE.value ==
+                                                                      true
+                                                                  ? "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price??""} LE"
+                                                                  : "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].usdPrice??""} USD",
+                                                              size: 22,
+                                                              bold: true,
+                                                              white: true),
+                                                          kTextHeader(
+                                                              controller
+                                                                      .servicesResponse
+                                                                      .data?[controller
+                                                                          .serviceIndex
+                                                                          .value]
+                                                                      .packages?[
+                                                                          i]
+                                                                      .duration ??
+                                                                  "",
+                                                              white: true,
+                                                              paddingV: 12)
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      child: GestureDetector(
+                                                        onTap: () => controller
+                                                            .exchangePrice(),
+                                                        child: Column(
+                                                          children: [
+                                                            kTextHeader(
+                                                                controller.isLE.value ==
+                                                                        true
+                                                                    ? "USD"
+                                                                    : "LE",
+                                                                color:
+                                                                    kColorPrimary,
+                                                                bold: true),
+                                                            SvgPicture.asset(
+                                                                'assets/icons/exchange.svg'),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                            ),
+                                            Expanded(
+                                              child: Html(
+                                                data: controller
+                                                    .servicesResponse
+                                                    .data?[controller
+                                                        .serviceIndex.value]
+                                                    .packages?[i]
+                                                    .description,
                                               ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: Html(
-                                              data: controller
-                                                  .servicesResponse
-                                                  .data?[controller
-                                                      .serviceIndex.value]
-                                                  .packages?[i]
-                                                  .description,
-                                            ),
-                                          ),
-                                          kButton("Payment", func: () {
-                                            Fluttertoast.showToast(msg: "Loading ..");
-                                            controller
-                                                .packagePayment(
-                                                    packageId: controller
-                                                        .servicesResponse
-                                                        .data![controller
-                                                            .serviceIndex.value]
-                                                        .packages![i]
-                                                        .id!)
-                                                .then((value) {
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .message!);
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .success!
-                                                  .toString());
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .data!
-                                                  .paymentUrl!);
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .data!
-                                                  .price!);
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .data!
-                                                  .date!);
-                                              log(controller
-                                                  .packagePaymentResponse
-                                                  .data!
-                                                  .name!);
-                                                      Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) =>
-                                                      WebViewScreen(
-                                                        url: controller
-                                                            .packagePaymentResponse
-                                                            .data!
-                                                            .paymentUrl!,
-                                                      ),
-                                                ),
-                                              );
-                                            });
-                                            /*  Get.toNamed(
-                                        Routes.PAYMENT,
-                                      );*/
-                                          }),
-                                          SizedBox(height: 18),
-                                        ],
+                                        controller.isPaymentClicked.value==false?    kButton("Payment", func: () {
+                                              controller
+                                                  .packagePayment(
+                                                      packageId: controller
+                                                          .servicesResponse
+                                                          .data![controller
+                                                              .serviceIndex.value]
+                                                          .packages![i]
+                                                          .id!)
+                                                  .then((value) {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) => WebViewScreen(
+                                                      url: controller
+                                                          .packagePaymentResponse
+                                                          .data!
+                                                          .paymentUrl!,
+                                                      packageId:controller
+                                                          .packagePaymentResponse
+                                                          .data!.id!,
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                            }):Expanded(child: CircularLoadingWidget()),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
+import 'package:app/app/models/cart_order_response.dart';
 import 'package:app/app/models/cheer_full_response.dart';
 import 'package:app/app/models/cheerful_response.dart';
 import 'package:app/app/models/contact_response.dart';
@@ -18,9 +19,11 @@ import 'package:app/app/models/message_details_response.dart';
 import 'package:app/app/models/messages_response.dart';
 import 'package:app/app/models/my_orders_response.dart';
 import 'package:app/app/models/my_other_calories_response.dart';
+import 'package:app/app/models/my_packages_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/models/orintation_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
+import 'package:app/app/models/package_details_response.dart';
 import 'package:app/app/models/payment_package_response.dart';
 import 'package:app/app/models/services_response.dart';
 import 'package:app/app/models/session_response.dart';
@@ -681,7 +684,7 @@ class ApiProvider {
     }
   }
 
-  Future<bool> createShoppingCart({
+  Future<String> createShoppingCart({
     required String name,
     required String phone,
     required String email,
@@ -690,6 +693,7 @@ class ApiProvider {
     required String longitude,
     required String meals,
     required String deliveryMethod,
+    required String payMethod,
   }) async {
     Echo("meals $meals");
     try {
@@ -710,11 +714,20 @@ class ApiProvider {
         FormData body2 = FormData.fromMap({
           'delivery_method': deliveryMethod,
           'device_id': deviceId,
+          'pay_method': payMethod,
         });
-        await _utils.post("checkout/$id", body: body2);
-        return true;
+        Response checkOutResponse =
+            await _utils.post("checkout/$id", body: body2);
+        if (checkOutResponse.statusCode == 200) {
+          return payMethod == "visa"
+              ? checkOutResponse.data['payment_url']
+              : "";
+        } else {
+          return "";
+        }
+        ;
       } else
-        return false;
+        return response.data;
     } catch (e) {
       Echo('error $e');
       return Future.error(e);
@@ -797,6 +810,36 @@ class ApiProvider {
       return PackagePaymentResponse.fromJson(response.data);
     } else {
       return PackagePaymentResponse.fromJson(response.data);
+    }
+  }
+
+  Future<PackageDetailsResponse> paymentPackageDetails({
+    required int packageId,
+  }) async {
+    Response response = await _utils.get(
+      "service-package-order/$packageId",
+    );
+    if (response.data["success"] == true) {
+      return PackageDetailsResponse.fromJson(response.data);
+    } else {
+      return PackageDetailsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<MyPackagesResponse> myPackagesResponse() async {
+    try {
+      Response response = await _utils.get(
+        "service-package-orders",
+      );
+      if (response.statusCode == 200) {
+        MyPackagesResponse myPackagesResponse =
+            MyPackagesResponse.fromJson(response.data);
+        return myPackagesResponse;
+      } else
+        return Future.error("server");
+    } catch (e) {
+      Echo('error $e');
+      return Future.error(e);
     }
   }
 }

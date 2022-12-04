@@ -1,4 +1,6 @@
+import 'package:app/app/models/cart_order_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
+import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -7,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
   RxList<SingleMyMeal> meals = RxList<SingleMyMeal>();
   final loading = false.obs;
   late String name;
@@ -16,6 +19,7 @@ class CartController extends GetxController {
   late String address;
   late String latitude;
   late String longitude;
+
   @override
   void onInit() {
     meals.value = Get.arguments;
@@ -52,7 +56,11 @@ class CartController extends GetxController {
       meals.refresh();
   }
 
-  void createOrder(String shippingMethod) async {
+  void createOrder({
+    required String shippingMethod,
+    required BuildContext context,
+    required String payMethod,
+  }) async {
     loading.value = true;
     try {
       String meals = '';
@@ -66,7 +74,7 @@ class CartController extends GetxController {
         // });
       });
       meals = meals.replaceRange(meals.length - 1, meals.length, '');
-      await ApiProvider().createShoppingCart(
+      String paymentUrl = await ApiProvider().createShoppingCart(
         name: name,
         phone: phone,
         email: email,
@@ -75,29 +83,45 @@ class CartController extends GetxController {
         longitude: longitude,
         meals: meals,
         deliveryMethod: shippingMethod,
+        payMethod: payMethod,
       );
-      Get.back();
-      Get.back();
-      Get.back();
-      Get.back();
-
-      Get.dialog(
-        Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: 12),
-                kTextbody("Thank you for ordering from Cheer-Full \n \n 😍 Have a cheerful day 😍", color: Colors.black, bold: true, align: TextAlign.center),
-                SizedBox(height: 12),
-              ],
+      if (payMethod.contains('cash')) {
+        Get.back();
+        Get.back();
+        Get.back();
+        Get.back();
+        Get.dialog(
+          Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 12),
+                  kTextbody(
+                      "Thank you for ordering from Cheer-Full \n \n 😍 Have a cheerful day 😍",
+                      color: Colors.black,
+                      bold: true,
+                      align: TextAlign.center),
+                  SizedBox(height: 12),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      } else {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) => WebViewScreen(
+                      url: paymentUrl,
+                      fromCheerfull: "From Cheerful Order",
+                    )));
+
+        print("URL ==========>${paymentUrl}");
+      }
     } catch (e) {
       Get.snackbar(Strings().notification, '$e');
     }
