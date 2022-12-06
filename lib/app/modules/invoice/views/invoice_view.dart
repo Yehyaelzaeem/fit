@@ -70,9 +70,13 @@ class InvoiceView extends GetView<InvoiceController> {
                                                     .toString() ??
                                                 ""),
                                         invoiceData(
-                                            'Service  Name',
+                                            'Service Name',
                                             controller.packageDetailsResponse
-                                                .data!.name!),
+                                                .data?.name ??""),
+                                        invoiceData(
+                                            'Duration',
+                                            controller.packageDetailsResponse
+                                                .data?.package ??""),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -88,7 +92,7 @@ class InvoiceView extends GetView<InvoiceController> {
                                                 color: kGreyContainerBackground,
                                               ),
                                               child: kTextHeader(
-                                                  'Service Details',
+                                                  'Details',
                                                   align: TextAlign.center,
                                                   color: Color(0xff7FC902),
                                                   bold: true),

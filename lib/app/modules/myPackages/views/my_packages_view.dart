@@ -102,25 +102,41 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                 child: Center(
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     children: [
                                                       controller
                                                               .myPackagesResponse
                                                               .data![index]
                                                               .paymentStatus!
-                                                              .contains('confirmed')
-                                                          ? Icon(Icons.check_circle,
+                                                              .contains(
+                                                                  'confirmed')
+                                                          ? Icon(
+                                                              Icons
+                                                                  .check_circle,
                                                               size: 16,
-                                                              color: kColorPrimary)
+                                                              color:
+                                                                  kColorPrimary)
                                                           : Icon(Icons.error,
                                                               size: 16,
                                                               color: kRedColor),
                                                       kTextHeader(
                                                           controller
-                                                                  .myPackagesResponse
-                                                                  .data?[index]
-                                                                  .paymentStatus ??
-                                                              "",
+                                                                      .myPackagesResponse
+                                                                      .data?[
+                                                                          index]
+                                                                      .paymentStatus ==
+                                                                  ""
+                                                              ? ""
+                                                              : controller
+                                                                      .myPackagesResponse
+                                                                      .data![
+                                                                          index]
+                                                                      .paymentStatus!
+                                                                      .contains(
+                                                                          "confirmed")
+                                                                  ? "Successful"
+                                                                  : "Pending",
                                                           bold: true,
                                                           paddingH: 8,
                                                           color: controller
@@ -135,7 +151,6 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                   ),
                                                 ),
                                               ),
-
                                               Expanded(
                                                 child: Center(
                                                   child: GestureDetector(
@@ -156,26 +171,30 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                     child: Center(
                                                       child: Container(
                                                         decoration: BoxDecoration(
-                                                            color: kColorPrimary,
+                                                            color:
+                                                                kColorPrimary,
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(64),
+                                                                    .circular(
+                                                                        64),
                                                             boxShadow: [
                                                               BoxShadow(
-                                                                color: Colors.grey
+                                                                color: Colors
+                                                                    .grey
                                                                     .withOpacity(
                                                                         0.4),
                                                                 blurRadius: 1,
                                                                 spreadRadius: 1,
-                                                                offset:
-                                                                    Offset(0, 1),
+                                                                offset: Offset(
+                                                                    0, 1),
                                                               ),
                                                             ]),
                                                         child: Padding(
-                                                          padding: const EdgeInsets
-                                                                  .symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 4),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  horizontal: 8,
+                                                                  vertical: 4),
                                                           child: kTextHeader(
                                                             "Details ",
                                                             size: 16,

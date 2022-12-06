@@ -14,13 +14,17 @@ class WebViewScreen extends GetView<CartController> {
   final String url;
   final int? packageId;
   final String? fromCheerfull;
-
-  const WebViewScreen(
+  FocusNode inputNode = FocusNode();
+  void openKeyboard(context){
+    FocusScope.of(context).requestFocus(inputNode);
+  }
+   WebViewScreen(
       {Key? key, required this.url, this.packageId, this.fromCheerfull})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    openKeyboard(context);
     print("WEB URL =========== > $url");
     return SafeArea(
       child: Scaffold(
@@ -37,7 +41,7 @@ class WebViewScreen extends GetView<CartController> {
                   onPageStarted: (String link) {
                     print("WEB link =========== > $link");
                     if (link.contains("Success")) {
-                      Fluttertoast.showToast(msg: link.split("/").last);
+                      Fluttertoast.showToast(msg: "Payment Successful");
                       if (fromCheerfull != "From Cheerful Order") {
                         Navigator.pushReplacement(
                             context,
@@ -73,7 +77,7 @@ class WebViewScreen extends GetView<CartController> {
                   onPageFinished: (String link) {
                     print("WEB link =========== > $link");
                     if (link.contains("Failed")) {
-                      Fluttertoast.showToast(msg: link.split("/").last);
+                      Fluttertoast.showToast(msg: "Payment Failed");
                       Navigator.pop(context);
                     }
                   },
