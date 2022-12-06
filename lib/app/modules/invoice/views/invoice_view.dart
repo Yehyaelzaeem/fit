@@ -66,7 +66,7 @@ class InvoiceView extends GetView<InvoiceController> {
                                         invoiceData(
                                             'Order No',
                                             controller.packageDetailsResponse
-                                                    .data?.id
+                                                    .data?.orderId
                                                     .toString() ??
                                                 ""),
                                         invoiceData(

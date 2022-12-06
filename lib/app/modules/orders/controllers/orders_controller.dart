@@ -17,7 +17,6 @@ class OrdersController extends GetxController {
   @override
   void onInit() async {
     getNetworkData();
-
     super.onInit();
   }
 
@@ -27,6 +26,7 @@ class OrdersController extends GetxController {
     getMyMealsLoading.value = true;
     try {
       response.value = await ApiProvider().myOrders();
+      update();
     } catch (e) {
       error.value = '$e';
     }

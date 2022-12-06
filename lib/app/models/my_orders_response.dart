@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final myOrdersResponse = myOrdersResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 MyOrdersResponse myOrdersResponseFromJson(String str) => MyOrdersResponse.fromJson(json.decode(str));
@@ -52,7 +48,7 @@ class Completed {
   });
 
   int id;
-  int price;
+  double price;
   String status;
   String deliveryMethod;
   UserInfo? userInfo;
@@ -62,7 +58,7 @@ class Completed {
 
   factory Completed.fromJson(Map<String, dynamic> json) => Completed(
         id: json["id"] == null ? null : json["id"],
-        price: json["price"] == null ? null : json["price"],
+        price: json["price"] == null ? null : json["price"].toDouble(),
         date: json["date"] == null ? null : json["date"],
         status: json["status"] == null ? null : json["status"],
         deliveryMethod: json["delivery_method"] == null ? null : json["delivery_method"],
@@ -81,12 +77,12 @@ class Meal {
 
   int id;
   String name;
-  int price;
+  double price;
 
   factory Meal.fromJson(Map<String, dynamic> json) => Meal(
         id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? null : json["name"],
-        price: json["price"] == null ? null : json["price"],
+        price: json["price"] == null ? null : json["price"].toDouble(),
       );
 }
 

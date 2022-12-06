@@ -74,7 +74,7 @@ class WebViewScreen extends GetView<CartController> {
                     print("WEB link =========== > $link");
                     if (link.contains("Failed")) {
                       Fluttertoast.showToast(msg: "Payment Failed");
-                      Navigator.pop(context);
+                     // Navigator.pop(context);
                     }
                   },
                 ),

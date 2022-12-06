@@ -737,14 +737,9 @@ class ApiProvider {
   Future<MyOrdersResponse> myOrders() async {
     String deviceId = await kDeviceInfo();
     try {
-      FormData body = FormData.fromMap({
-        'device_id': deviceId,
-      });
-      Response response = await _utils.post("my_orders", body: body);
+      Response response = await _utils.post("my_orders?device_id=$deviceId",);
       if (response.statusCode == 200) {
-        MyOrdersResponse myOrdersResponse =
-            MyOrdersResponse.fromJson(response.data);
-        return myOrdersResponse;
+        return MyOrdersResponse.fromJson(response.data);
       } else
         return Future.error("server");
     } catch (e) {
@@ -799,10 +794,13 @@ class ApiProvider {
     required String email,
     required int packageId,
   }) async {
+    String deviceId = await kDeviceInfo();
+
     FormData body = FormData.fromMap({
       "name": name,
       "phone": phone,
       "email": email,
+      "device_id": deviceId,
     });
     Response response =
         await _utils.post("book-service-package/$packageId", body: body);
@@ -816,8 +814,9 @@ class ApiProvider {
   Future<PackageDetailsResponse> paymentPackageDetails({
     required int packageId,
   }) async {
+    String deviceId = await kDeviceInfo();
     Response response = await _utils.get(
-      "service-package-order/$packageId",
+      "service-package-order/$packageId?device_id=$deviceId",
     );
     if (response.data["success"] == true) {
       return PackageDetailsResponse.fromJson(response.data);
@@ -827,9 +826,10 @@ class ApiProvider {
   }
 
   Future<MyPackagesResponse> myPackagesResponse() async {
+    String deviceId = await kDeviceInfo();
     try {
       Response response = await _utils.get(
-        "service-package-orders",
+        "service-package-orders?device_id=$deviceId",
       );
       if (response.statusCode == 200) {
         MyPackagesResponse myPackagesResponse =

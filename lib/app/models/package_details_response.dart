@@ -17,6 +17,7 @@ class PackageDetailsResponse {
 class Data {
   int? id;
   String? name;
+  String? orderId;
   String? package;
   String? description;
   int? price;
@@ -28,6 +29,7 @@ class Data {
   Data({
     this.id,
     this.name,
+    this.orderId,
     this.package,
     this.description,
     this.price,
@@ -40,6 +42,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    orderId = json['order_id'];
     package = json['package'];
     description = json['description'];
     price = json['price'];
