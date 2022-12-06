@@ -14,17 +14,13 @@ class WebViewScreen extends GetView<CartController> {
   final String url;
   final int? packageId;
   final String? fromCheerfull;
-  FocusNode inputNode = FocusNode();
-  void openKeyboard(context){
-    FocusScope.of(context).requestFocus(inputNode);
-  }
+
    WebViewScreen(
       {Key? key, required this.url, this.packageId, this.fromCheerfull})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    openKeyboard(context);
     print("WEB URL =========== > $url");
     return SafeArea(
       child: Scaffold(

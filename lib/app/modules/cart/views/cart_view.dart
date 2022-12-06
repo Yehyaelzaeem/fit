@@ -118,7 +118,20 @@ class CartView extends GetView<CartController> {
                                     // ),
                                     // SizedBox(height: 12),
 
-                                    Row(
+                                    Container(
+                                      width: double.infinity,
+                                      child: kButtonDefault("Visa",
+                                          color: kColorPrimary,
+                                          textColor: Colors.white,
+                                          border: Border.all(
+                                            color: Color(0xffF1F1F1),
+                                            width: 1,
+                                          ), func: () {
+                                            Get.back();
+                                            controller.createOrder(payMethod: 'visa', shippingMethod: 'delivery', context: context);
+                                          }),
+                                    ),
+                                  /*  Row(
                                       children: [
                                         Expanded(
                                           child: kButtonDefault("Cash",
@@ -146,7 +159,7 @@ class CartView extends GetView<CartController> {
                                         ),
                                       ],
                                     ),
-
+*/
                                    
                                     SizedBox(height: 12),
                                   ],
