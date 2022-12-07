@@ -142,6 +142,16 @@ class HomeDrawer extends GetView<HomeController> {
             //       controller.currentIndex.value = 2;
             //     }),
             //
+            // packages
+
+            singleDrawerItem(
+              action: () {
+                Get.toNamed(Routes.MY_PACKAGES);
+              },
+              title: "My Packages",
+                image:"assets/icons/crown.svg"
+            ),
+
             // //Profile
             textEditController.isLogggd == false
                 ? SizedBox()
@@ -301,7 +311,7 @@ class HomeDrawer extends GetView<HomeController> {
               SvgPicture.asset(
                 image,
                 width: 25,
-                color: title =="Logout"? null:kColorPrimary ,
+                color: title =="Logout"? null:title =="My Packages"?null:kColorPrimary ,
               ),
               SizedBox(width: 16),
               Text(

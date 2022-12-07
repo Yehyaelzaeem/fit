@@ -1,3 +1,4 @@
+import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
 import 'package:app/app/modules/myPackages/controllers/my_packages_controller.dart';
@@ -136,9 +137,10 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                       .contains(
                                                                           "confirmed")
                                                                   ? "Successful"
-                                                                  : "Pending",
+                                                                  : "Failed",
                                                           bold: true,
                                                           paddingH: 8,
+                                                          align: TextAlign.start,
                                                           color: controller
                                                                   .myPackagesResponse
                                                                   .data![index]
@@ -154,20 +156,39 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                               Expanded(
                                                 child: Center(
                                                   child: GestureDetector(
-                                                    onTap: () {
-                                                      /*Get.toNamed(Routes.INVOICE);*/
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (_) =>
-                                                                  InvoiceView(
-                                                                    packageId: controller
-                                                                        .myPackagesResponse
-                                                                        .data?[
-                                                                            index]
-                                                                        .id,
-                                                                  )));
-                                                    },
+                                                    onTap: controller
+                                                                .myPackagesResponse
+                                                                .data?[index]
+                                                                .paymentUrl !=
+                                                            null
+                                                        ? () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (_) =>
+                                                                        WebViewScreen(
+                                                                          url: controller
+                                                                              .myPackagesResponse
+                                                                              .data![index]
+                                                                              .paymentUrl!,
+                                                                          packageId: controller
+                                                                              .myPackagesResponse
+                                                                              .data![index]
+                                                                              .id!,
+                                                                        )));
+                                                          }
+                                                        : () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (_) =>
+                                                                        InvoiceView(
+                                                                          packageId: controller
+                                                                              .myPackagesResponse
+                                                                              .data?[index]
+                                                                              .id,
+                                                                        )));
+                                                          },
                                                     child: Center(
                                                       child: Container(
                                                         decoration: BoxDecoration(
@@ -196,7 +217,14 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                   horizontal: 8,
                                                                   vertical: 4),
                                                           child: kTextHeader(
-                                                            "Details ",
+                                                            controller
+                                                                        .myPackagesResponse
+                                                                        .data?[
+                                                                            index]
+                                                                        .paymentUrl ==
+                                                                    null
+                                                                ? "Details "
+                                                                : "Pay ",
                                                             size: 16,
                                                             color: Colors.white,
                                                             bold: true,

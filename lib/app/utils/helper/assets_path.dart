@@ -38,3 +38,5 @@ const String kLogoAppbar = 'assets/img/ic_logo_appbar.png';
 const String kTestSlider = 'assets/img/img_test_slider.jpe';
 const String kLogoColumn = 'assets/img/ic_logo_column.png';
 const String kEmptyPackage = 'assets/img/empty.png';
+const String kSuccessful = 'assets/img/successful.png';
+const String kFailed = 'assets/img/failed.png';

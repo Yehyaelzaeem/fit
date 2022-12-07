@@ -11,7 +11,6 @@ class SubscribeController extends GetxController
     with SingleGetTickerProviderMixin {
   final error = ''.obs;
   final loading = false.obs;
-  final isLE = true.obs;
   final isPaymentClicked = false.obs;
   final serviceIndex = 0.obs;
   final currentPageIndex = 0.obs;
@@ -23,27 +22,37 @@ class SubscribeController extends GetxController
   final userEmail = ''.obs;
   final userName = ''.obs;
 
-  getFromCash() async {
+ Future<bool> getFromCash() async {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    if (userPhone.value.isEmpty) {}
+    if (userPhone.value.isEmpty &&
+        userName.value.isEmpty &&
+        userEmail.value.isEmpty) {
+      print("Shared = false");
+      return false;
+    }else {
+      print("Shared = true");
+      return true;
+    };
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();
 
   Future packagePayment({
     required int packageId,
+    String? email,
+    String? name,
+    String? phone,
   }) async {
     paymentClicked();
-    print(isPaymentClicked.value);
     await getFromCash();
     await ApiProvider()
         .packagePayment(
-      email: userEmail.value,
-      name: userName.value,
+      email: email ?? userEmail.value,
+      name: name ?? userName.value,
       packageId: packageId,
-      phone: userPhone.value,
+      phone: phone ?? userPhone.value,
     )
         .then((value) {
       if (value.success == true) {
@@ -78,10 +87,6 @@ class SubscribeController extends GetxController
     return serviceIndex.value;
   }
 
-  exchangePrice() {
-    isLE.value = !isLE.value;
-    update();
-  }
 
   paymentClicked() {
     isPaymentClicked.value = !isPaymentClicked.value;

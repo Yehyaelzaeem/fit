@@ -1,4 +1,5 @@
 import 'package:app/app/models/day_details_reposne.dart';
+import 'package:app/app/models/sleep_time_response.dart';
 
 class SessionDetailsResponse {
   int? code;
@@ -106,6 +107,7 @@ class FollowUpTable {
   bool? isSellected;
   DayWorkouts? workout;
   CaloriesTable? caloriesTable;
+  SleepingTime? sleepingTime;
 
   FollowUpTable(
       {this.id,
@@ -115,7 +117,8 @@ class FollowUpTable {
       this.water,
       this.isSellected,
       this.workout,
-      this.caloriesTable});
+      this.caloriesTable,
+      this.sleepingTime});
 
   FollowUpTable.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -135,6 +138,8 @@ class FollowUpTable {
 
     caloriesTable =
         json['calories_table'] != null ? new CaloriesTable.fromJson(json['calories_table']) : null;
+    sleepingTime =
+        json['sleeping_time'] != null ? new SleepingTime.fromJson(json['sleeping_time']) : null;
   }
 
   Map<String, dynamic> toJson() {

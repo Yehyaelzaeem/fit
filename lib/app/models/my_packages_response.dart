@@ -28,6 +28,7 @@ class Data {
   String? time;
   String? date;
   String? paymentStatus;
+  String? paymentUrl;
 
   Data(
       {this.id,
@@ -38,6 +39,7 @@ class Data {
         this.usdPrice,
         this.time,
         this.date,
+        this.paymentUrl,
         this.paymentStatus});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -46,10 +48,10 @@ class Data {
     package = json['package'];
     description = json['description'];
     price = json['price'];
-    usdPrice = json['usd_price'];
     time = json['time'];
     date = json['date'];
     paymentStatus = json['payment_status'];
+    paymentUrl = json['payment_url'];
   }
 
 }

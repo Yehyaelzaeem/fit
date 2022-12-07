@@ -355,6 +355,21 @@ class _SessionDetailsState extends State<SessionDetails> {
                 ),
                 Divider(),
                 Text(
+                  "Sleep time : ${table.sleepingTime != null ? table.sleepingTime?.sleepingDuration : "Not Yet"}",
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: kColorPrimary),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  "${table.sleepingTime != null ? table.sleepingTime?.sleepingStatus?.name : "   "}",
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                ),
+                Divider(),
+                Text(
                   "Proteins",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),

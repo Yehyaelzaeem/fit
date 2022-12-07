@@ -1,9 +1,11 @@
 import 'package:app/app/models/my_orders_response.dart';
+import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/orders/controllers/orders_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/methods.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
+import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
@@ -133,12 +135,12 @@ class OrdersView extends GetView<OrdersController> {
                     if (controller.response.value.data != null)
                       if (controller.selectedTap.value == 2)
                         ...controller.response.value.data!.pending.map((e) {
-                          return singleOrderCard(e);
+                          return singleOrderCard(e,context);
                         }).toList(),
                     if (controller.response.value.data != null)
                       if (controller.selectedTap.value == 1)
                         ...controller.response.value.data!.completed.map((e) {
-                          return singleOrderCard(e);
+                          return singleOrderCard(e,context);
                         }).toList(),
                   ],
                 );
@@ -150,7 +152,7 @@ class OrdersView extends GetView<OrdersController> {
     );
   }
 
-  Widget singleOrderCard(Completed e) {
+  Widget singleOrderCard(Completed e,BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       margin: EdgeInsets.symmetric(vertical: 8),
@@ -178,6 +180,28 @@ class OrdersView extends GetView<OrdersController> {
                   kTextbody("${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
                   kTextbody("${e.date}", color: Colors.black),
                   kTextbody("${e.status}", color: Colors.grey),
+                  e.visaPaymentStatus==true ? kTextbody("Payment Successful", color: Colors.grey):
+
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => WebViewScreen(
+                                url: e.paymentUrl,
+                                fromCheerfull: "From Cheerful Order",
+                              )));
+                    },
+                    child:Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.black, width: 1.6),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: kTextbody('Payment Failed', color: kRedColor, paddingV: 2)),
+                  ),
+
+
                 ],
               )
             ],
@@ -355,7 +379,7 @@ class OrdersView extends GetView<OrdersController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    Get.dialog(
+                  Get.dialog(
                       Dialog(
                         child: SingleChildScrollView(
                           child: Column(
@@ -420,7 +444,7 @@ class OrdersView extends GetView<OrdersController> {
                           ),
                         ),
                       ),
-                    );
+                    ) ;
                   },
                   child: Container(
                       decoration: BoxDecoration(

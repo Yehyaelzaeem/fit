@@ -41,19 +41,23 @@ class Completed {
     required this.price,
     required this.status,
     required this.deliveryMethod,
+    required this.visaPaymentStatus,
     required this.userInfo,
     required this.note,
     required this.meals,
     required this.date,
+    required this.paymentUrl,
   });
 
   int id;
   double price;
   String status;
   String deliveryMethod;
+  bool visaPaymentStatus;
   UserInfo? userInfo;
   String note;
   String date;
+  String paymentUrl;
   List<Meal> meals;
 
   factory Completed.fromJson(Map<String, dynamic> json) => Completed(
@@ -62,8 +66,10 @@ class Completed {
         date: json["date"] == null ? null : json["date"],
         status: json["status"] == null ? null : json["status"],
         deliveryMethod: json["delivery_method"] == null ? null : json["delivery_method"],
+    visaPaymentStatus: json["visa_payment_status"] == null ? null : json["visa_payment_status"],
         userInfo: json["user_info"] == null ? null : UserInfo.fromJson(json["user_info"]),
         note: json["note"] == null ? '' : json["note"],
+    paymentUrl: json["payment_url"] == null ? '' : json["payment_url"],
         meals: json["meals"] == null ? [] : List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x))),
       );
 }
