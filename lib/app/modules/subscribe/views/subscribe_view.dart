@@ -181,43 +181,49 @@ class SubscribeView extends GetView<SubscribeController> {
                                               child: Row(
                                                 children: [
                                                   Spacer(),
-                                                  Expanded(
-                                                    child: Column(
-                                                      children: [
-                                                        SizedBox(height: 8),
-                                                        kTextHeader(
-                                                            "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price ?? ""}",
-                                                            size: 22,
-                                                            bold: true,
-                                                            white: true),
-                                                        kTextHeader(
-                                                            controller
-                                                                    .servicesResponse
-                                                                    .data?[controller
-                                                                        .serviceIndex
-                                                                        .value]
-                                                                    .packages?[
-                                                                        i]
-                                                                    .duration ??
-                                                                "",
-                                                            white: true,
-                                                            paddingV: 12)
-                                                      ],
-                                                    ),
+
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(height: 8),
+                                                      Row(
+                                                        children: [
+                                                          kTextHeader(
+                                                              "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price ?? ""}",
+                                                              size: 22,
+                                                              bold: true,
+                                                              white: true),
+                                                          kTextHeader(
+                                                              controller
+                                                                  .servicesResponse
+                                                                  .data?[controller
+                                                                  .serviceIndex
+                                                                  .value]
+                                                                  .packages?[i]
+                                                                  .currency ??
+                                                                  "",
+                                                              color: kColorPrimary,
+                                                              bold: true,
+                                                            paddingV: 0,
+                                                            paddingH: 0
+
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      kTextHeader(
+                                                          controller
+                                                                  .servicesResponse
+                                                                  .data?[controller
+                                                                      .serviceIndex
+                                                                      .value]
+                                                                  .packages?[
+                                                                      i]
+                                                                  .duration ??
+                                                              "",
+                                                          white: true,
+                                                          paddingV: 12)
+                                                    ],
                                                   ),
-                                                  Expanded(
-                                                    child: kTextHeader(
-                                                        controller
-                                                                .servicesResponse
-                                                                .data?[controller
-                                                                    .serviceIndex
-                                                                    .value]
-                                                                .packages?[i]
-                                                                .currency ??
-                                                            "",
-                                                        color: kColorPrimary,
-                                                        bold: true),
-                                                  ),
+                                                  Spacer(),
                                                 ],
                                               ),
                                             ),

@@ -60,7 +60,6 @@ class OrdersView extends GetView<OrdersController> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -183,7 +182,7 @@ class OrdersView extends GetView<OrdersController> {
                   e.visaPaymentStatus==true ? kTextbody("Payment Successful", color: Colors.grey):
 
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -191,6 +190,7 @@ class OrdersView extends GetView<OrdersController> {
                                 url: e.paymentUrl,
                                 fromCheerfull: "From Cheerful Order",
                               )));
+                 //   print("result =>>>>>>>> $result");
                     },
                     child:Container(
                         decoration: BoxDecoration(

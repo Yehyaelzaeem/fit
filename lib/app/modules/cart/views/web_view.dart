@@ -54,7 +54,7 @@ class WebViewScreen extends GetView<CartController> {
                                   Image.asset(kSuccessful,scale: 10,),
                                   SizedBox(height: 12),
                                   kTextbody(
-                                      "Payment Successful  😍 😍",
+                                      "  Payment Successful  ",
                                       color: Colors.black,
                                       bold: true,
                                       align: TextAlign.center),
@@ -65,7 +65,7 @@ class WebViewScreen extends GetView<CartController> {
                           ),
                         );
                       } else {
-                        Get.toNamed(Routes.ORDERS);
+                        Get.offNamed(Routes.ORDERS);
                         Get.dialog(
                           Dialog(
                             child: Padding(
