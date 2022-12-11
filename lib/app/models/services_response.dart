@@ -45,8 +45,9 @@ class Packages {
   String? duration;
   String? currency;
   String? description;
+  bool? paymentStatus;
 
-  Packages({this.id, this.price, this.duration,this.currency, this.description});
+  Packages({this.id, this.price, this.duration,this.currency, this.description, this.paymentStatus});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -54,6 +55,7 @@ class Packages {
     duration = json['duration'];
     currency = json['currency'];
     description = json['description'];
+    paymentStatus = json['payment_status'];
   }
 
 }

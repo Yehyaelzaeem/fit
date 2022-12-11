@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'non_user_subscribe_view.dart';
@@ -239,7 +240,18 @@ class SubscribeView extends GetView<SubscribeController> {
                                             ),
                                             controller.isPaymentClicked.value ==
                                                     false
-                                                ? kButton("Payment", func: () async {
+                                                ? kButton("Payment",
+
+                                                color: controller
+                                                    .servicesResponse
+                                                    .data?[controller
+                                                    .serviceIndex.value]
+                                                    .packages?[i].paymentStatus==true? kColorPrimary:kColorAccent,
+                                                func:  controller
+                                                .servicesResponse
+                                                .data?[controller
+                                                .serviceIndex.value]
+                                                .packages?[i].paymentStatus==true?() async {
                                                     if(await controller.getFromCash() ==
                                                         true){controller
                                                         .packagePayment(
@@ -273,7 +285,10 @@ class SubscribeView extends GetView<SubscribeController> {
                                                         context: context,
                                                         i: i);}
 
-                                                  })
+                                                  }:(){
+
+                                                  Fluttertoast.showToast(msg: "  Payment is deactivated  ");
+                                                })
                                                 : Expanded(
                                                     child:
                                                         CircularLoadingWidget()),

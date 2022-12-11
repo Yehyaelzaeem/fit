@@ -1,14 +1,17 @@
+import 'dart:collection';
+import 'dart:io';
+
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import '../controllers/cart_controller.dart';
 
-class WebViewScreen extends GetView<CartController> {
+class WebViewScreen extends StatefulWidget {
   final String url;
   final int? packageId;
   final String? fromCheerfull;
@@ -18,8 +21,47 @@ class WebViewScreen extends GetView<CartController> {
       : super(key: key);
 
   @override
+  _WebViewScreenState createState() => _WebViewScreenState();
+}
+
+class _WebViewScreenState extends State<WebViewScreen> {
+
+
+
+
+  late PullToRefreshController pullToRefreshController;
+
+  InAppWebViewController? webViewController;
+  InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
+      crossPlatform: InAppWebViewOptions(
+        useShouldOverrideUrlLoading: true,
+        mediaPlaybackRequiresUserGesture: false,
+      ),
+      android: AndroidInAppWebViewOptions(
+        useHybridComposition: true,
+      ),
+      ios: IOSInAppWebViewOptions(
+        allowsInlineMediaPlayback: true,
+      ));
+
+
+  @override
+  void initState() {
+    pullToRefreshController = PullToRefreshController(
+      options: PullToRefreshOptions(
+        color: kColorPrimary,
+      ),
+      onRefresh: () async {
+        if (Platform.isAndroid) {
+          webViewController?.reload();
+        } else if (Platform.isIOS) {
+          webViewController?.loadUrl(urlRequest: URLRequest(url: await webViewController?.getUrl()));
+        }
+      },
+    );    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
-    print("WEB URL =========== > $url");
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -29,18 +71,33 @@ class WebViewScreen extends GetView<CartController> {
             ),
             Expanded(
               child: Center(
-                child: WebView(
-                  javascriptMode: JavascriptMode.unrestricted,
-                  initialUrl: url,
-                  onPageStarted: (String link) {
-                    print("WEB link =========== > $link");
-                    if (link.contains("Success")) {
-                      if (fromCheerfull != "From Cheerful Order") {
+                child: InAppWebView(
+                  initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+                    initialUserScripts: UnmodifiableListView<UserScript>([]),
+                    onWebViewCreated: (myController) async {
+                    webViewController = myController;
+                    print(await myController.getUrl());
+                  },
+                    initialOptions: options,
+                    pullToRefreshController: pullToRefreshController,
+                    onLoadError: (ctrl, url, code, message) {
+                      pullToRefreshController.endRefreshing();
+                    },
+                  shouldOverrideUrlLoading: (controller, navigationAction) async {
+                    final uri = navigationAction.request.url!;
+                    print("uri = " + uri.toString());
+                    return NavigationActionPolicy.ALLOW;
+                  },
+                    onLoadStart: (webViewController, uri) {
+                    print("WEB URI link =========== > ${Uri.parse(uri.toString())}");
+                    print("on load onLoadStart ===>${uri!.path}");
+                    if (uri.path.contains("Success")) {
+                      if (widget.fromCheerfull != "From Cheerful Order") {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (_) =>
-                                    InvoiceView(packageId: packageId!)));
+                                    InvoiceView(packageId: widget.packageId!)));
                         Get.dialog(
                           Dialog(
                             child: Padding(
@@ -88,11 +145,8 @@ class WebViewScreen extends GetView<CartController> {
                           ),
                         );
                       }
-                    }
-                  },
-                  onPageFinished: (String link) {
-                    print("WEB link =========== > $link");
-                    if (link.contains("Failed")) {
+                    }else if (uri.path.contains("Failed")) {
+                      print("Failed ${uri.path}");
                       Get.dialog(
                         Dialog(
                           child: Padding(
@@ -118,6 +172,17 @@ class WebViewScreen extends GetView<CartController> {
                       );                     // Navigator.pop(context);
                     }
                   },
+                    onLoadStop: (ctrl, url) async {
+                    print("on load stop ===>$url");
+                    pullToRefreshController.endRefreshing();
+                    },
+               /*   onPageFinished: (String link) {
+                    print("WEB link =========== > $link");
+
+                  },*/
+                  /*  shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) async {
+                      return ShouldOverrideUrlLoadingAction.ALLOW;
+                    }*/
                 ),
               ),
             ),

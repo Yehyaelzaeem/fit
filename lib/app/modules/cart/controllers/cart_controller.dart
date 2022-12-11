@@ -119,7 +119,6 @@ class CartController extends GetxController {
                       url: paymentUrl,
                       fromCheerfull: "From Cheerful Order",
                     )));
-
         print("URL ==========>${paymentUrl}");
       }
     } catch (e) {

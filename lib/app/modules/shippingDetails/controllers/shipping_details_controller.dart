@@ -99,7 +99,7 @@ class ShippingDetailsController extends GetxController {
     yemenyPrefs.setShippingLng(longitude.value.toString());
     yemenyPrefs.setShippingCoordinatesAddress(textController.text);
 
-    Get.toNamed(Routes.CART, arguments: meals, parameters: {
+    Get.offNamed(Routes.CART, arguments: meals, parameters: {
       'name': name.value,
       'email': email.value,
       'phone': phone.value,

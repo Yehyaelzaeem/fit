@@ -84,7 +84,6 @@ class CartView extends GetView<CartController> {
                                       text: controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
                                     ),
                                     SizedBox(height: 12),
-
                                     // Padding(
                                     //   padding: const EdgeInsets.all(8.0),
                                     //   child: TextFormField(
@@ -117,7 +116,6 @@ class CartView extends GetView<CartController> {
                                     //   ),
                                     // ),
                                     // SizedBox(height: 12),
-
                                     Container(
                                       width: double.infinity,
                                       child: kButtonDefault("Visa",
