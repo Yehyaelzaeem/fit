@@ -13,6 +13,14 @@ class YemenyPrefs {
   String? getShippingName() {
     return box.read('ShippingName');
   }
+  /// **********    ShippingName     ****************/
+  setShippingLastName(String? val) {
+    box.write('ShippingLastName', val);
+  }
+
+  String? getShippingLastName() {
+    return box.read('ShippingLastName');
+  }
 
   /// **********    ShippingEmail     ****************/
   setShippingEmail(String? val) {

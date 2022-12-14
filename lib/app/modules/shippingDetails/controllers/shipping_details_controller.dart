@@ -94,7 +94,7 @@ class ShippingDetailsController extends GetxController {
     }
     YemenyPrefs yemenyPrefs = YemenyPrefs();
     yemenyPrefs.setShippingName(name.value);
-    yemenyPrefs.setShippingName(lastName.value);
+    yemenyPrefs.setShippingLastName(lastName.value);
     yemenyPrefs.setShippingEmail(email.value);
     yemenyPrefs.setShippingPhone(phone.value);
     yemenyPrefs.setShippingAddress(detailedAddress.value);

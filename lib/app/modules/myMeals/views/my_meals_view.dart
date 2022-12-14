@@ -77,6 +77,7 @@ class MyMealsView extends GetView<MyMealsController> {
 
                             Get.offNamed(Routes.SHIPPING_DETAILS, arguments: meals, parameters: {
                               "name": yemenyPrefs.getShippingName() ?? '',
+                              "last_name": yemenyPrefs.getShippingLastName() ?? '',
                               "email": yemenyPrefs.getShippingEmail() ?? '',
                               "phone": yemenyPrefs.getShippingPhone() ?? '',
                               "detailedAddress": yemenyPrefs.getShippingAddress() ?? '',
