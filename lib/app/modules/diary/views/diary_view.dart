@@ -69,7 +69,7 @@ class DiaryView extends GetView<DiaryController> {
                   waterBottles(),
                   Divider(thickness: 2),
                   rowWithProgressBar(
-                      "Proteins", controller.response.value.data!.proteins),
+                      "Proteins", controller.response.value.data?.proteins),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 4),
                     child: Column(
@@ -96,7 +96,7 @@ class DiaryView extends GetView<DiaryController> {
                   ),
                   Divider(thickness: 2),
                   rowWithProgressBar("Carbs & Fats",
-                      controller.response.value.data!.carbsFats),
+                      controller.response.value.data?.carbsFats),
                   if (controller.refreshLoadingCarbs.value)
                     Container(
                       child: LinearProgressIndicator(color: kColorPrimary),
@@ -332,7 +332,7 @@ class DiaryView extends GetView<DiaryController> {
                 ],
               ),
               kTextHeader(
-                  '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
+                item==null?"":  '${item.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
                   bold: false,
                   size: 20,
                   color: Colors.black),
@@ -351,17 +351,16 @@ class DiaryView extends GetView<DiaryController> {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-              Container(
+       /*       Container(
                 height: 20,
                 width: MediaQuery.of(Get.context!).size.width *
-                    (item.caloriesTotal!.progress!.percentage!.toDouble() /
-                        100),
+                    (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                 decoration: BoxDecoration(
                   color: Color(
                       int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(4),
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
@@ -555,7 +554,7 @@ class DiaryView extends GetView<DiaryController> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            "Water : ${controller.response.value.data!.water ?? "0"}",
+            "Water : ${controller.response.value.data?.water ?? ""}",
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           // SizedBox(),

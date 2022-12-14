@@ -14,6 +14,7 @@ class CachingKey extends Enum<String> {
   static const CachingKey CART_NUM = const CachingKey('CART_NUM');
   static const CachingKey IS_LOGGED = const CachingKey('IS_LOGGED');
   static const CachingKey USER_NAME = const CachingKey('USER_NAME');
+  static const CachingKey USER_LAST_NAME = const CachingKey('USER_LAST_NAME');
   static const CachingKey USER = const CachingKey('USER');
   static const CachingKey USER_ID = const CachingKey('USER_ID');
   static const CachingKey TOKEN = const CachingKey('TOKEN');

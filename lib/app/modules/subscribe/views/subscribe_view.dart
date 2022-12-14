@@ -1,5 +1,6 @@
 import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/modules/subscribe/controllers/subscribe_controller.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -10,7 +11,6 @@ import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -34,290 +34,294 @@ class SubscribeView extends GetView<SubscribeController> {
                   return Center(child: CircularLoadingWidget());
                 if (controller.error.value.isNotEmpty)
                   return errorHandler(controller.error.value, controller);
-                return Column(
-                  children: [
-                    //App bar
-                    HomeAppbar(),
-                    SizedBox(height: 12),
-                    Container(
-                      height: 120,
-                      child: ListView.builder(
-                          itemCount: controller.servicesResponse.data!.length,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return Obx(
-                              () => InkWell(
-                                onTap: () {
-                                  controller.selectedIndex(index);
-                                },
-                                child: Container(
-                                  height: 150,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 28, vertical: 12),
-                                        margin: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          border: Border.all(
-                                            color:
-                                                controller.serviceIndex.value ==
-                                                        index
-                                                    ? kColorPrimary
-                                                    : Colors.transparent,
-                                            width:
-                                                controller.serviceIndex.value ==
-                                                        index
-                                                    ? 1
-                                                    : 1,
-                                          ),
-                                          boxShadow: [
-                                            if (controller.serviceIndex.value ==
-                                                index)
-                                              BoxShadow(
-                                                color: kColorPrimary,
-                                                blurRadius: 1,
-                                                spreadRadius: 1,
-                                                offset: Offset(0, 0),
-                                              ),
-                                            if (controller.serviceIndex.value !=
-                                                index)
-                                              BoxShadow(
-                                                color: const Color(0xFF414042)
-                                                    .withOpacity(0.35),
-                                                offset: Offset(1, 1.0),
-                                                blurRadius: 3.0,
-                                              ),
-                                          ],
-                                        ),
-                                        child: Image.network(
-                                          "${controller.servicesResponse.data![index].image}",
-                                          width: 50,
-                                          height: 40,
-                                        ),
-                                      ),
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                3.2,
-                                        child: Text(
-                                          controller.servicesResponse
-                                              .data![index].name!,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color:
-                                                controller.serviceIndex.value ==
-                                                        index
-                                                    ? kColorPrimary
-                                                    : Colors.black87,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                    controller
-                                .servicesResponse
-                                .data?[controller.serviceIndex.value]
-                                .packages
-                                ?.length !=
-                            0
-                        ? Expanded(
-                            child: AnimatedBuilder(
-                              animation: controller.pc,
-                              builder: (context, child) {
-                                return PageView.builder(
-                                  controller: controller.pc,
-                                  onPageChanged: (value) {
-                                    controller.currentPageIndex.value =
-                                        controller.pc.page!.round();
+                return SizedBox(
+                  height: Get.height,
+                  child: Column(
+                    children: [
+                      //App bar
+                      HomeAppbar(),
+                      SizedBox(height: 12),
+                      Container(
+                        height: Get.height*0.2,
+                        child: ListView.builder(
+                            itemCount: controller.servicesResponse.data!.length,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              return Obx(
+                                () => InkWell(
+                                  onTap: () {
+                                    controller.selectedIndex(index);
                                   },
-                                  itemCount: controller
-                                      .servicesResponse
-                                      .data?[controller.serviceIndex.value]
-                                      .packages
-                                      ?.length,
-                                  itemBuilder: (ctx, i) {
-                                    return GetBuilder<SubscribeController>(
-                                      builder: (_) => Container(
-                                        decoration: BoxDecoration(
+                                  child: Container(
+                                    height: Get.height*0.12,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 28, vertical: 12),
+                                          margin: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius:
-                                                BorderRadius.circular(32),
+                                                BorderRadius.circular(25),
+                                            border: Border.all(
+                                              color:
+                                                  controller.serviceIndex.value ==
+                                                          index
+                                                      ? kColorPrimary
+                                                      : Colors.transparent,
+                                              width:
+                                                  controller.serviceIndex.value ==
+                                                          index
+                                                      ? 1
+                                                      : 1,
+                                            ),
                                             boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey[200]!,
-                                                offset: Offset(3, 3),
-                                                spreadRadius: 6,
-                                                blurRadius: 6,
-                                              )
-                                            ]),
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                            vertical: Get.height / 14),
-                                        width: double.infinity,
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(32),
-                                                    topRight:
-                                                        Radius.circular(32),
-                                                  ),
-                                                  color: Colors.grey[900]),
-                                              child: Row(
-                                                children: [
-                                                  Spacer(),
-
-                                                  Column(
-                                                    children: [
-                                                      SizedBox(height: 8),
-                                                      Row(
-                                                        children: [
-                                                          kTextHeader(
-                                                              "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price ?? ""}",
-                                                              size: 22,
-                                                              bold: true,
-                                                              white: true),
-                                                          kTextHeader(
-                                                              controller
-                                                                  .servicesResponse
-                                                                  .data?[controller
-                                                                  .serviceIndex
-                                                                  .value]
-                                                                  .packages?[i]
-                                                                  .currency ??
-                                                                  "",
-                                                              color: kColorPrimary,
-                                                              bold: true,
-                                                            paddingV: 0,
-                                                            paddingH: 0
-
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      kTextHeader(
-                                                          controller
-                                                                  .servicesResponse
-                                                                  .data?[controller
-                                                                      .serviceIndex
-                                                                      .value]
-                                                                  .packages?[
-                                                                      i]
-                                                                  .duration ??
-                                                              "",
-                                                          white: true,
-                                                          paddingV: 12)
-                                                    ],
-                                                  ),
-                                                  Spacer(),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Html(
-                                                data: controller
-                                                    .servicesResponse
-                                                    .data?[controller
-                                                        .serviceIndex.value]
-                                                    .packages?[i]
-                                                    .description,
-                                              ),
-                                            ),
-                                            controller.isPaymentClicked.value ==
-                                                    false
-                                                ? kButton("Payment",
-
-                                                color: controller
-                                                    .servicesResponse
-                                                    .data?[controller
-                                                    .serviceIndex.value]
-                                                    .packages?[i].paymentStatus==true? kColorPrimary:kColorAccent,
-                                                func:  controller
-                                                .servicesResponse
-                                                .data?[controller
-                                                .serviceIndex.value]
-                                                .packages?[i].paymentStatus==true?() async {
-                                                    if(await controller.getFromCash() ==
-                                                        true){controller
-                                                        .packagePayment(
-                                                        packageId: controller
-                                                            .servicesResponse
-                                                            .data![controller
-                                                            .serviceIndex
-                                                            .value]
-                                                            .packages![
-                                                        i]
-                                                            .id!)
-                                                        .then((value) {
-                                                      Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                          builder: (_) =>
-                                                              WebViewScreen(
-                                                                url: controller
-                                                                    .packagePaymentResponse
-                                                                    .data!
-                                                                    .paymentUrl!,
-                                                                packageId:
-                                                                controller
-                                                                    .packagePaymentResponse
-                                                                    .data!
-                                                                    .id!,
-                                                              ),
-                                                        ),
-                                                      );
-                                                    });} else{_navigateAndDisplaySelection(
-                                                        context: context,
-                                                        i: i);}
-
-                                                  }:(){
-
-                                                  Fluttertoast.showToast(msg: "  Payment is deactivated  ");
-                                                })
-                                                : Expanded(
-                                                    child:
-                                                        CircularLoadingWidget()),
-                                          ],
+                                              if (controller.serviceIndex.value ==
+                                                  index)
+                                                BoxShadow(
+                                                  color: kColorPrimary,
+                                                  blurRadius: 1,
+                                                  spreadRadius: 1,
+                                                  offset: Offset(0, 0),
+                                                ),
+                                              if (controller.serviceIndex.value !=
+                                                  index)
+                                                BoxShadow(
+                                                  color: const Color(0xFF414042)
+                                                      .withOpacity(0.35),
+                                                  offset: Offset(1, 1.0),
+                                                  blurRadius: 3.0,
+                                                ),
+                                            ],
+                                          ),
+                                          child: Image.network(
+                                            "${controller.servicesResponse.data![index].image}",
+                                            width: 50,
+                                            height: 40,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            ),
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(top: Get.height * 0.2),
-                            child: Column(
-                              children: [
-                                Image.asset(
-                                  kEmptyPackage,
-                                  scale: 5,
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width /
+                                                  3.2,
+                                          child: kTextHeader(
+                                            controller.servicesResponse
+                                                .data![index].name!,
+                                            bold: true,
+                                             size: 12,
+                                             color: controller.serviceIndex.value ==
+                                                  index
+                                                  ? kColorPrimary
+                                                  : Colors.black87
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 14,
-                                ),
-                                kTextbody("Packages are empty!", size: 16),
-                              ],
+                              );
+                            }),
+                      ),
+                      controller
+                                  .servicesResponse
+                                  .data?[controller.serviceIndex.value]
+                                  .packages
+                                  ?.length !=
+                              0
+                          ? Expanded(
+                              child: AnimatedBuilder(
+                                animation: controller.pc,
+                                builder: (context, child) {
+                                  return PageView.builder(
+                                    controller: controller.pc,
+                                    onPageChanged: (value) {
+                                      controller.currentPageIndex.value =
+                                          controller.pc.page!.round();
+                                    },
+                                    itemCount: controller
+                                        .servicesResponse
+                                        .data?[controller.serviceIndex.value]
+                                        .packages
+                                        ?.length,
+                                    itemBuilder: (ctx, i) {
+                                      return GetBuilder<SubscribeController>(
+                                        builder: (_) => Container(
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(32),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey[200]!,
+                                                  offset: Offset(3, 3),
+                                                  spreadRadius: 6,
+                                                  blurRadius: 6,
+                                                )
+                                              ]),
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 8,
+                                              vertical: Get.height / 14),
+                                          width: double.infinity,
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(32),
+                                                      topRight:
+                                                          Radius.circular(32),
+                                                    ),
+                                                    color: Colors.grey[900]),
+                                                child: Row(
+                                                  children: [
+                                                    Spacer(),
+
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(height: 8),
+                                                        Row(
+                                                          children: [
+                                                            kTextHeader(
+                                                                "${controller.servicesResponse.data?[controller.serviceIndex.value].packages?[i].price ?? ""}",
+                                                                size: 22,
+                                                                bold: true,
+                                                                white: true),
+                                                            kTextHeader(
+                                                                controller
+                                                                    .servicesResponse
+                                                                    .data?[controller
+                                                                    .serviceIndex
+                                                                    .value]
+                                                                    .packages?[i]
+                                                                    .currency ??
+                                                                    "",
+                                                                color: kColorPrimary,
+                                                                bold: true,
+                                                              paddingV: 0,
+                                                              paddingH: 0
+
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        kTextHeader(
+                                                            controller
+                                                                    .servicesResponse
+                                                                    .data?[controller
+                                                                        .serviceIndex
+                                                                        .value]
+                                                                    .packages?[
+                                                                        i]
+                                                                    .duration ??
+                                                                "",
+                                                            white: true,
+                                                            paddingV: 12)
+                                                      ],
+                                                    ),
+                                                    Spacer(),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Html(
+                                                  data: controller
+                                                      .servicesResponse
+                                                      .data?[controller
+                                                          .serviceIndex.value]
+                                                      .packages?[i]
+                                                      .description??"",
+                                                ),
+                                              ),
+                                              controller.isPaymentClicked.value ==
+                                                      false
+                                                  ? kButton("Payment",
+                                                  color: controller
+                                                      .servicesResponse
+                                                      .data?[controller
+                                                      .serviceIndex.value]
+                                                      .packages?[i].paymentStatus==true? kColorPrimary:kColorAccent,
+                                                  func:  controller
+                                                  .servicesResponse
+                                                  .data?[controller
+                                                  .serviceIndex.value]
+                                                  .packages?[i].paymentStatus==true?() async {
+                                                      if(await controller.getFromCash() ==
+                                                          "haveAllData"){controller
+                                                          .packagePayment(context: context,
+                                                          packageId: controller
+                                                              .servicesResponse
+                                                              .data![controller
+                                                              .serviceIndex
+                                                              .value]
+                                                              .packages![
+                                                          i]
+                                                              .id!)
+                                                          .then((value) {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (_) =>
+                                                                WebViewScreen(
+                                                                  url: controller
+                                                                      .packagePaymentResponse
+                                                                      .data!
+                                                                      .paymentUrl!,
+                                                                  packageId:
+                                                                  controller
+                                                                      .packagePaymentResponse
+                                                                      .data!
+                                                                      .id!,
+                                                                ),
+                                                          ),
+                                                        );
+                                                      });}  else if (await controller.getFromCash() ==
+                                                          "noLastName") {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (_) => EditProfileView()));
+                                                      } else{_navigateAndDisplaySelection(
+                                                          context: context,
+                                                          i: i);}
+
+                                                    }:(){
+                                                    Fluttertoast.showToast(msg: "  Payment is deactivated  ");
+                                                  })
+                                                  : Expanded(
+                                                      child:
+                                                          CircularLoadingWidget()),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(top: Get.height * 0.2),
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    kEmptyPackage,
+                                    scale: 5,
+                                  ),
+                                  SizedBox(
+                                    height: 14,
+                                  ),
+                                  kTextbody("Packages are empty!", size: 16),
+                                ],
+                              ),
                             ),
-                          ),
-                    SizedBox(height: 20),
-                  ],
+                      SizedBox(height: 20),
+                    ],
+                  ),
                 );
               },
             )),
@@ -340,9 +344,11 @@ class SubscribeView extends GetView<SubscribeController> {
 
     controller
         .packagePayment(
+            context: context,
             name: result[0],
-            email: result[1],
-            phone: result[2],
+            lastName: result[1],
+            email: result[2],
+            phone: result[3],
             packageId: controller.servicesResponse
                 .data![controller.serviceIndex.value].packages![i].id!)
         .then((value) {

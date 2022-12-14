@@ -34,7 +34,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                           Row(
                             children: [
                               Icon(Icons.person, color: kColorPrimary),
-                              kTextbody('Full Name', size: 18, bold: true),
+                              kTextbody('First Name', size: 18, bold: true),
                             ],
                           ),
                           Container(
@@ -52,6 +52,45 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                               validateFunc: (text) {
                                 if (text.isEmpty) {
                                   return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                              type: TextInputType.name,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      width: Get.width,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          //First name
+                          Row(
+                            children: [
+                              Icon(Icons.person, color: kColorPrimary),
+                              kTextbody('Last Name', size: 18, bold: true),
+                            ],
+                          ),
+                          Container(
+                            color: Color(0xffeeeeee),
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: EditText(
+                              value: controller.lastName.value,
+                              hint: '',
+                              radius: 4,
+                              noBorder: true,
+                              background: Color(0xffeeeeee),
+                              updateFunc: (String text) {
+                                controller.name.value = text;
+                              },
+                              validateFunc: (text) {
+                                if (text.isEmpty) {
+                                  return 'Please enter your last name';
                                 }
                                 return null;
                               },

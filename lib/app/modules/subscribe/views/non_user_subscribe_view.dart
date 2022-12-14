@@ -1,6 +1,4 @@
-import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
@@ -21,6 +19,7 @@ class NonUserSubscribeView extends StatefulWidget {
 class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
   late String email;
   late String name;
+  late String lastName;
   late String phone;
   GlobalKey<FormState> key = GlobalKey();
 
@@ -29,6 +28,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
   if (kDebugMode) {
     email = 'HossamNonUser@gmail.com';
     name = 'Hossam Non User';
+    lastName = 'Hossam Non User';
     phone = '01113040518';
   }    super.initState();
   }
@@ -40,13 +40,13 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
       child: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                //App bar
-                HomeAppbar(),
-                SingleChildScrollView(
-                  child: Form(
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  //App bar
+                  HomeAppbar(),
+                  Form(
                     key: key,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: 30),
-                              kTextHeader('Enter your info first',
+                              kTextHeader('Kindly enter your info first',
                                   color: kColorPrimary,
                                   bold: true,
                                   paddingH: 12,
@@ -71,7 +71,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
-                                child: kTextbody('Name', size: 18),
+                                child: kTextbody('First Name', size: 18),
                               ),
                               EditText(
                                 value: kDebugMode ? 'Hossam Non User' : '',
@@ -79,6 +79,30 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                 updateFunc: (text) {
                                   setState(() {
                                     name = text;
+                                  });
+                                  print(text);
+                                },
+                                validateFunc: (text) {
+                                  if (text.toString().isEmpty) {
+                                    return "Enter Valid Name";
+                                  }
+                                },
+                                type: TextInputType.emailAddress,
+                              ),
+                              SizedBox(height: 12),
+
+                              //last
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child: kTextbody('Last Name', size: 18),
+                              ),
+                              EditText(
+                                value: kDebugMode ? 'Last Hossam Non User' : '',
+                                hint: '',
+                                updateFunc: (text) {
+                                  setState(() {
+                                    lastName = text;
                                   });
                                   print(text);
                                 },
@@ -107,7 +131,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                   print(text);
                                 },
                                 validateFunc: (text) {
-                                  if (text.toString().isEmpty) {
+                                  if (text.toString().isEmpty || !text.toString().contains("@")) {
                                     return "Enter Valid Email";
                                   }
                                 },
@@ -153,10 +177,9 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                       paddingV: 0,
                                       func: () {
                                         if (!key.currentState!.validate()) {
-                                          print("Error");
                                           return;
                                         } else {
-                                          Navigator.pop(context,[name,email,phone]);
+                                          Navigator.pop(context,[name,lastName,email,phone]);
                                           print("Done");
                                         }
                                       },
@@ -172,9 +195,9 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                       ],
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-              ],
+                  SizedBox(height: 20),
+                ],
+              ),
             )),
       ),
     );

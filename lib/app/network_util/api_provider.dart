@@ -367,6 +367,7 @@ class ApiProvider {
     File? image,
     String? password,
     String? name,
+    String? lastName,
     String? email,
     String? date,
     String? phone,
@@ -379,6 +380,7 @@ class ApiProvider {
           : await MultipartFile.fromFile('${image.path}',
               filename: '${image.path}.png'),
       "name": name,
+      "last_name": lastName,
       "gender": gender,
       "email": email,
       "phone": phone,
@@ -398,6 +400,7 @@ class ApiProvider {
       String id,
       String password,
       String name,
+      String lastName,
       String email,
       String date,
       String phone,
@@ -405,6 +408,7 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       "patient_id": id,
       "name": name,
+      "last_name": lastName,
       "email": email,
       "phone": phone,
       "date_of_birth": date,
@@ -686,6 +690,7 @@ class ApiProvider {
 
   Future<String> createShoppingCart({
     required String name,
+    required String lastName,
     required String phone,
     required String email,
     required String address,
@@ -700,6 +705,7 @@ class ApiProvider {
       String deviceId = await kDeviceInfo();
       FormData body = FormData.fromMap({
         'name': name,
+        'last_name': lastName,
         'phone': phone,
         'email': email,
         'address': address,
@@ -723,6 +729,7 @@ class ApiProvider {
               ? checkOutResponse.data['payment_url']
               : "";
         } else {
+          print("Error Checkout!!");
           return "";
         }
         ;
@@ -790,6 +797,7 @@ class ApiProvider {
 
   Future<PackagePaymentResponse> packagePayment({
     required String name,
+    required String lastName,
     required String phone,
     required String email,
     required int packageId,
@@ -798,6 +806,7 @@ class ApiProvider {
 
     FormData body = FormData.fromMap({
       "name": name,
+      "last_name": lastName,
       "phone": phone,
       "email": email,
       "device_id": deviceId,
@@ -818,6 +827,9 @@ class ApiProvider {
     Response response = await _utils.get(
       "service-package-order/$packageId?device_id=$deviceId",
     );
+    print("Device id =>>$packageId");
+    print("Device id =>>$deviceId");
+
     if (response.data["success"] == true) {
       return PackageDetailsResponse.fromJson(response.data);
     } else {

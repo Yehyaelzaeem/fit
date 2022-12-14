@@ -6,6 +6,7 @@ import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
@@ -14,6 +15,7 @@ class CartController extends GetxController {
   RxList<SingleMyMeal> meals = RxList<SingleMyMeal>();
   final loading = false.obs;
   late String name;
+  late String lastName;
   late String phone;
   late String email;
   late String address;
@@ -24,6 +26,7 @@ class CartController extends GetxController {
   void onInit() {
     meals.value = Get.arguments;
     name = Get.parameters['name'] ?? '';
+    lastName = Get.parameters['last_name'] ?? '';
     phone = Get.parameters['phone'] ?? '';
     email = Get.parameters['email'] ?? '';
     address = Get.parameters['address'] ?? '';
@@ -76,6 +79,7 @@ class CartController extends GetxController {
       meals = meals.replaceRange(meals.length - 1, meals.length, '');
       String paymentUrl = await ApiProvider().createShoppingCart(
         name: name,
+        lastName: lastName,
         phone: phone,
         email: email,
         address: address,
@@ -112,7 +116,8 @@ class CartController extends GetxController {
           ),
         );
       } else {
-        Navigator.pushReplacement(
+        paymentUrl==""?  Fluttertoast.showToast(msg: "  Payment is deactivated  ")
+        :    Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (_) => WebViewScreen(

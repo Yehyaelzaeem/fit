@@ -29,6 +29,7 @@ class Data {
   int? id;
   String? patientId;
   String? name;
+  String? lastName;
   String? email;
   String? phone;
   String? dateOfBirth;
@@ -46,6 +47,7 @@ class Data {
     this.id,
     this.patientId,
     this.name,
+    this.lastName,
     this.email,
     this.phone,
     this.dateOfBirth,
@@ -63,15 +65,21 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     patientId = json['patient_id'];
-    name = json['name'] ?? "Enter your Name ";
-    email = json['email'] ?? "Enter your Email ";
-    phone = json['phone'] ?? " Enter your Phone";
-    dateOfBirth = json['date_of_birth'] ?? " Enter your Date Of Birth";
-    gender = json['gender'] ?? " Select Gender";
+    name = json['name'] ?? "";
+    lastName = json['last_name'] ==null ? "" : json['last_name'] ?? "";
+    email = json['email'] ?? "";
+    phone = json['phone'] ?? "";
+    dateOfBirth = json['date_of_birth'] ?? "";
+    gender = json['gender'] ?? "";
     packageRenewalDate = json['package_renewal_date'] ?? "";
-    nextSession = json['next_session'] != null ? new NextSession.fromJson(json['next_session']) : null;
-    target = json['target'] != null ? new Target.fromJson(json['target']) : null;
-    lastBodyComposition = json['last_body_composition'] != null ? new LastBodyComposition.fromJson(json['last_body_composition']) : null;
+    nextSession = json['next_session'] != null
+        ? new NextSession.fromJson(json['next_session'])
+        : null;
+    target =
+        json['target'] != null ? new Target.fromJson(json['target']) : null;
+    lastBodyComposition = json['last_body_composition'] != null
+        ? new LastBodyComposition.fromJson(json['last_body_composition'])
+        : null;
     image = json['image'];
     newMessages = json['new_messages'];
     accessToken = json['access_token'];
@@ -158,7 +166,8 @@ class LastBodyComposition {
   String? muscles;
   String? water;
 
-  LastBodyComposition({this.date, this.totalWeight, this.fats, this.muscles, this.water});
+  LastBodyComposition(
+      {this.date, this.totalWeight, this.fats, this.muscles, this.water});
 
   LastBodyComposition.fromJson(Map<String, dynamic> json) {
     date = json['date'] ?? "unknown";

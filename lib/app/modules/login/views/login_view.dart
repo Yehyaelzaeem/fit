@@ -37,8 +37,8 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       showLoader = true;
       if(kDebugMode){
-        pin='egan123';
-        password='123456';
+        pin='p30000';
+        password='123123';
       }
     });
     await ApiProvider().login(pin, password).then((value) async {
@@ -50,12 +50,14 @@ class _LoginViewState extends State<LoginView> {
         SharedHelper _shared = SharedHelper();
         await _shared.writeData(CachingKey.TOKEN, loginResponse.data!.accessToken);
         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
+        await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.patientId);
         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
         await _shared.writeData(CachingKey.PHONE,loginResponse.data!.phone);
-        await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.patientId);
         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         await _shared.writeData(CachingKey.IS_LOGGED, true);
+        await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
+
 
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
@@ -130,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
                           child: kTextbody('ID', size: 18),
                         ),
                         EditText(
-                          value: kDebugMode ? 'egan123' : '',
+                          value: kDebugMode ? 'Egan123' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {

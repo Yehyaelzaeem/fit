@@ -17,6 +17,7 @@ class ShippingDetailsController extends GetxController {
   List<SingleMyMeal> meals = [];
   final detailedAddress = ''.obs;
   final name = ''.obs;
+  final lastName = ''.obs;
   final email = ''.obs;
   final phone = ''.obs;
 
@@ -36,6 +37,7 @@ class ShippingDetailsController extends GetxController {
   @override
   void onInit() async {
     name.value = Get.parameters['name'] ?? '';
+    lastName.value = Get.parameters['name'] ?? '';
     email.value = Get.parameters['email'] ?? '';
     phone.value = Get.parameters['phone'] ?? '';
     detailedAddress.value = Get.parameters['detailedAddress'] ?? '';
@@ -92,6 +94,7 @@ class ShippingDetailsController extends GetxController {
     }
     YemenyPrefs yemenyPrefs = YemenyPrefs();
     yemenyPrefs.setShippingName(name.value);
+    yemenyPrefs.setShippingName(lastName.value);
     yemenyPrefs.setShippingEmail(email.value);
     yemenyPrefs.setShippingPhone(phone.value);
     yemenyPrefs.setShippingAddress(detailedAddress.value);
@@ -101,6 +104,7 @@ class ShippingDetailsController extends GetxController {
 
     Get.offNamed(Routes.CART, arguments: meals, parameters: {
       'name': name.value,
+      'last_name': lastName.value,
       'email': email.value,
       'phone': phone.value,
       'address': detailedAddress.value,

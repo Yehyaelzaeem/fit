@@ -1,5 +1,6 @@
 import 'package:app/app/models/payment_package_response.dart';
 import 'package:app/app/models/services_response.dart';
+import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/helper/echo.dart';
@@ -21,28 +22,35 @@ class SubscribeController extends GetxController
   final userPhone = ''.obs;
   final userEmail = ''.obs;
   final userName = ''.obs;
+  final userLastName = ''.obs;
 
- Future<bool> getFromCash() async {
+  Future<String> getFromCash() async {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    if (userPhone.value.isEmpty &&
-        userName.value.isEmpty &&
-        userEmail.value.isEmpty) {
-      print("Shared = false");
-      return false;
+    userLastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    if (userPhone.value.isEmpty&&
+        userEmail.value.isEmpty&&
+        userName.value.isEmpty ) {
+      Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      return await "noPhone";
+    } else if (userLastName.value.isEmpty) {
+      Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      return await "noLastName";
     }else {
       print("Shared = true");
-      return true;
+      return await "haveAllData";
     };
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();
 
   Future packagePayment({
+    required BuildContext context,
     required int packageId,
     String? email,
     String? name,
+    String? lastName,
     String? phone,
   }) async {
     paymentClicked();
@@ -51,11 +59,13 @@ class SubscribeController extends GetxController
         .packagePayment(
       email: email ?? userEmail.value,
       name: name ?? userName.value,
+      lastName: lastName ?? userLastName.value,
       packageId: packageId,
       phone: phone ?? userPhone.value,
     )
         .then((value) {
       if (value.success == true) {
+        print("value data =>${value.data}");
         packagePaymentResponse = value;
         loading.value = false;
         paymentClicked();
@@ -92,7 +102,7 @@ class SubscribeController extends GetxController
     isPaymentClicked.value = !isPaymentClicked.value;
     update();
   }
-
+BuildContext? context;
   @override
   void onInit() {
     if (Get.arguments != null) servicesResponse = Get.arguments;

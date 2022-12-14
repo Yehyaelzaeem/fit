@@ -341,7 +341,7 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             )
                           : SizedBox(),
-                  GestureDetector(
+                  ress.data!.subscriptionStatus==true?    GestureDetector(
                     onTap: () {
                       Get.toNamed(
                         Routes.SUBSCRIBE,
@@ -382,7 +382,7 @@ class _HomePageViewState extends State<HomePageView> {
                         ),
                       ),
                     ),
-                  ),
+                  ):SizedBox(),
                   SizedBox(
                     height: 50,
                   ),

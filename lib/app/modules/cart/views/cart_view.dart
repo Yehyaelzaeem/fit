@@ -77,8 +77,6 @@ class CartView extends GetView<CartController> {
                                         child: kTextHeader("Delivery", color: Colors.white, size: 30),
                                       ),
                                     ),
-                                    // SizedBox(height: 12),
-
                                     SizedBox(height: 12),
                                     TextInsideRec(
                                       text: controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
@@ -158,7 +156,6 @@ class CartView extends GetView<CartController> {
                                       ],
                                     ),
 */
-                                   
                                     SizedBox(height: 12),
                                   ],
                                 ),

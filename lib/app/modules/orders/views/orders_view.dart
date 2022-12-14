@@ -11,6 +11,7 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -181,8 +182,10 @@ class OrdersView extends GetView<OrdersController> {
                   kTextbody("${e.status}", color: Colors.grey),
                   e.visaPaymentStatus==true ? kTextbody("Payment Successful", color: Colors.grey):
 
-                  GestureDetector(
-                    onTap: () {
+                    GestureDetector(
+                    onTap:e.paymentUrl==''?(){
+                      Fluttertoast.showToast(msg: "  Payment is deactivated  ");
+                    }: () {
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

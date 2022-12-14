@@ -5,6 +5,7 @@ import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -30,6 +31,7 @@ class EditProfileView extends StatefulWidget {
 class _EditProfileViewState extends State<EditProfileView> {
   String password = '';
   String? name;
+  String? lastName;
   String? email;
   String? date;
   String? formattedDate;
@@ -66,6 +68,7 @@ class _EditProfileViewState extends State<EditProfileView> {
             // image: File(_imageFile!.path),
             password: password,
             name: name ?? ress.data!.name,
+            lastName: lastName ?? ress.data!.lastName,
             email: email ?? ress.data!.email,
             date: formattedDate ?? ress.data!.dateOfBirth,
             phone: phone ?? ress.data!.phone,
@@ -80,11 +83,13 @@ class _EditProfileViewState extends State<EditProfileView> {
         final controller = Get.find<HomeController>(tag: 'home');
         controller.avatar.value = loginResponse.data!.image!;
         controller.name.value = loginResponse.data!.name!;
+        controller.lastName.value = loginResponse.data!.lastName!;
         controller.id.value = loginResponse.data!.patientId!;
 
         Fluttertoast.showToast(msg: "${value.message}");
         // SharedHelper _shared = SharedHelper();
         // await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
+        // await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
         // await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
         // await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
         // await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
@@ -132,6 +137,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         .editProfileApi(
       image: File(_imageFile!.path),
       name: name ?? ress.data!.name,
+      lastName: lastName ?? ress.data!.lastName,
       email: email ?? ress.data!.email,
       date: formattedDate ?? ress.data!.dateOfBirth,
       phone: phone ?? ress.data!.phone,
@@ -272,12 +278,31 @@ class _EditProfileViewState extends State<EditProfileView> {
                             ),
                             SizedBox(height: 12),
                             //User name
-                            kTextbody('User name', size: 18),
+                            kTextbody('First name', size: 18),
                             EditText(
                               value: '${ress.data!.name!}',
                               updateFunc: (text) {
                                 setState(() {
                                   name = text;
+                                });
+                                print(text);
+                              },
+                              validateFunc: (text) {
+                                if (text != null && text.toString().length < 3) {
+                                  return "Enter Valid Name";
+                                }
+                              },
+                              type: TextInputType.text,
+                            ),
+                            SizedBox(height: 12),
+
+                            //User last name
+                            kTextbody('Last name', size: 18),
+                            EditText(
+                              value: '${ress.data?.lastName??""}',
+                              updateFunc: (text) {
+                                setState(() {
+                                  lastName = text;
                                 });
                                 print(text);
                               },

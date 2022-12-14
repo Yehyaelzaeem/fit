@@ -20,6 +20,7 @@ class HomeController extends GetxController {
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
   var name = "".obs;
+  var lastName = "".obs;
   var phone = "".obs;
   var avatar = "".obs;
   var isLogggd = false.obs;
@@ -37,6 +38,7 @@ class HomeController extends GetxController {
     avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
 
     homeResponse.value = await ApiProvider().getHomeData();
 
@@ -61,10 +63,10 @@ class HomeController extends GetxController {
   void refreshController(bool getNeworkData) async {
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     name.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
+    lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-
     homeResponse.value = await ApiProvider().getHomeData();
   }
 

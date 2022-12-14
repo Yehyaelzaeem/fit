@@ -25,8 +25,9 @@ class HomePageResponse {
 class HomeData {
   List<Slider>? slider;
   List<Services>? services;
+  bool? subscriptionStatus;
 
-  HomeData({this.slider, this.services});
+  HomeData({this.slider, this.services, this.subscriptionStatus});
 
   HomeData.fromJson(Map<String, dynamic> json) {
     if (json['slider'] != null) {
@@ -41,6 +42,7 @@ class HomeData {
         services!.add(new Services.fromJson(v));
       });
     }
+    subscriptionStatus = json['subscribtion_status'];
   }
 
   Map<String, dynamic> toJson() {

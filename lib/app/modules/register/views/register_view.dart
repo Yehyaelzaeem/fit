@@ -24,6 +24,7 @@ class _RegisterViewState extends State<RegisterView> {
   late String id;
   late String password;
   late String name;
+  late String lastName;
   late String email;
   String date = " Sellect Date";
   late String phone;
@@ -52,7 +53,7 @@ class _RegisterViewState extends State<RegisterView> {
       showLoader = true;
     });
     await ApiProvider()
-        .signUpApi(id, password, name, email, date, phone, password_confirmation)
+        .signUpApi(id, password, name,lastName, email, date, phone, password_confirmation)
         .then((value) async {
       if (value.success == true) {
         setState(() {
@@ -143,13 +144,32 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                       SizedBox(height: 12),
                       //User name
-                      kTextbody('User name', size: 18),
+                      kTextbody('First name', size: 18),
                       EditText(
                         value: '',
                         hint: '',
                         updateFunc: (text) {
                           setState(() {
                             name = text;
+                          });
+                          print(text);
+                        },
+                        validateFunc: (text) {
+                          if (text.toString().isEmpty || text.toString().length < 3) {
+                            return "Enter Valid Name";
+                          }
+                        },
+                        type: TextInputType.text,
+                      ),
+                      SizedBox(height: 12),
+                //last name
+                      kTextbody('Last name', size: 18),
+                      EditText(
+                        value: '',
+                        hint: '',
+                        updateFunc: (text) {
+                          setState(() {
+                            lastName = text;
                           });
                           print(text);
                         },

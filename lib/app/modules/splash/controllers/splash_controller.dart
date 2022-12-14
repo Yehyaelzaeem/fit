@@ -50,11 +50,13 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
 
   navigateNextPage() async {
     final controller = Get.find<HomeController>(tag: 'home');
-    print("Controller Data ===> Logged : ${controller.isLogggd.value} ,  Name : ${controller.name.value},  Id : ${controller.id.value},  Image : ${controller.avatar.value}");
+    //print("Controller Data ===> Logged : ${controller.isLogggd.value} ,  Name : ${controller.name.value},  Last Name : ${controller.lastName.value},Id : ${controller.id.value},  Image : ${controller.avatar.value}");
+    print("Controller Data ===> Logged :   Id : ${controller.id.value}, ");
     controller.isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     controller.name.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    controller.avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     controller.id.value = await SharedHelper().readString(CachingKey.USER_ID);
+    controller.lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    controller.avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     if (controller.isLogggd.value == true) {
       Get.offAllNamed(Routes.HOME);
     } else {

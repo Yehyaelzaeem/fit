@@ -1,24 +1,35 @@
 class MyPackagesResponse {
   int? code;
   bool? success;
-  List<Data>? data;
+  Data? data;
 
   MyPackagesResponse({this.code, this.success, this.data});
 
   MyPackagesResponse.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     success = json['success'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
-
 }
 
 class Data {
+  List<Orders>? orders;
+  bool? subscriptionStatus;
+
+  Data({this.orders, this.subscriptionStatus});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['orders'] != null) {
+      orders = <Orders>[];
+      json['orders'].forEach((v) {
+        orders!.add(Orders.fromJson(v));
+      });
+    }
+    subscriptionStatus = json['subscribtion_status'];
+  }
+}
+
+class Orders {
   int? id;
   String? name;
   String? package;
@@ -29,20 +40,23 @@ class Data {
   String? date;
   String? paymentStatus;
   String? paymentUrl;
+  bool? paymentUrlStatus;
 
-  Data(
-      {this.id,
-        this.name,
-        this.package,
-        this.description,
-        this.price,
-        this.usdPrice,
-        this.time,
-        this.date,
-        this.paymentUrl,
-        this.paymentStatus});
+  Orders({
+    this.id,
+    this.name,
+    this.package,
+    this.description,
+    this.price,
+    this.usdPrice,
+    this.time,
+    this.date,
+    this.paymentUrl,
+    this.paymentStatus,
+    this.paymentUrlStatus,
+  });
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     package = json['package'];
@@ -52,6 +66,6 @@ class Data {
     date = json['date'];
     paymentStatus = json['payment_status'];
     paymentUrl = json['payment_url'];
+    paymentUrlStatus = json['payment_link_status'];
   }
-
 }
