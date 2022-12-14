@@ -32,10 +32,10 @@ class SubscribeController extends GetxController
     if (userPhone.value.isEmpty&&
         userEmail.value.isEmpty&&
         userName.value.isEmpty ) {
-      Fluttertoast.showToast(msg: "Kindly enter your all data!");
+     // Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noPhone";
     } else if (userLastName.value.isEmpty) {
-      Fluttertoast.showToast(msg: "Kindly enter your all data!");
+    //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noLastName";
     }else {
       print("Shared = true");

@@ -142,7 +142,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8),
-                                child: kTextbody('Phone', size: 18),
+                                child: kTextbody('Phone Number', size: 18),
                               ),
                               EditText(
                                 value: kDebugMode ? '01113040518' : '',
@@ -155,7 +155,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                 },
                                 validateFunc: (text) {
                                   if (text.toString().length < 11) {
-                                    return "Enter Valid Phone";
+                                    return "Enter Valid Phone Number";
                                   }
                                 },
                               ),

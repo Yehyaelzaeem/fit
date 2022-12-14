@@ -37,7 +37,7 @@ class ShippingDetailsController extends GetxController {
   @override
   void onInit() async {
     name.value = Get.parameters['name'] ?? '';
-    lastName.value = Get.parameters['name'] ?? '';
+    lastName.value = Get.parameters['last_name'] ?? '';
     email.value = Get.parameters['email'] ?? '';
     phone.value = Get.parameters['phone'] ?? '';
     detailedAddress.value = Get.parameters['detailedAddress'] ?? '';

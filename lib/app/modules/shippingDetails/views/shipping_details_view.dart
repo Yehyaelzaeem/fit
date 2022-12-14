@@ -86,7 +86,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                               noBorder: true,
                               background: Color(0xffeeeeee),
                               updateFunc: (String text) {
-                                controller.name.value = text;
+                                controller.lastName.value = text;
                               },
                               validateFunc: (text) {
                                 if (text.isEmpty) {
@@ -135,7 +135,7 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                       controller.email.value = text;
                                     },
                                     validateFunc: (text) {
-                                      if (!GetUtils.isEmail(text)) {
+                                      if (text != null && !text.toString().contains("@")) {
                                         return 'Please enter your email';
                                       }
                                       return null;

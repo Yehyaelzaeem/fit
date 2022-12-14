@@ -37,8 +37,8 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       showLoader = true;
       if(kDebugMode){
-        pin='p30000';
-        password='123123';
+        pin='Egan123';
+        password='123456';
       }
     });
     await ApiProvider().login(pin, password).then((value) async {
