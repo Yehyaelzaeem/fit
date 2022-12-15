@@ -331,11 +331,7 @@ class DiaryView extends GetView<DiaryController> {
                   ),
                 ],
               ),
-              kTextHeader(
-                item==null?"":  '${item.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
-                  bold: false,
-                  size: 20,
-                  color: Colors.black),
+              kTextHeader('${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}', bold: false, size: 20, color: Colors.black),
             ],
           ),
         ),
@@ -353,11 +349,9 @@ class DiaryView extends GetView<DiaryController> {
               ),
               Container(
                 height: 20,
-                width: MediaQuery.of(Get.context!).size.width *
-                    (item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                width: MediaQuery.of(Get.context!).size.width * (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                 decoration: BoxDecoration(
-                  color: Color(
-                      int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
+                  color: Color(int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
