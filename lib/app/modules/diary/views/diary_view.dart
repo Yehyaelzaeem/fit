@@ -351,16 +351,16 @@ class DiaryView extends GetView<DiaryController> {
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
-       /*       Container(
+              Container(
                 height: 20,
                 width: MediaQuery.of(Get.context!).size.width *
-                    (item.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                    (item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                 decoration: BoxDecoration(
                   color: Color(
                       int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
                   borderRadius: BorderRadius.circular(4),
                 ),
-              ),*/
+              ),
             ],
           ),
         ),
