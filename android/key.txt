@@ -1,9 +1,0 @@
-storePassword=fitoverfat
-keyPassword=fitoverfat
-keyAlias=key
-storeFile=../app/key.jks
-
-
-keyPassword : FitOverFatMc
-keyAlias : matrix
-Matrix Clouds

@@ -87,12 +87,12 @@ class _EditProfileViewState extends State<EditProfileView> {
         controller.id.value = loginResponse.data!.patientId!;
 
         Fluttertoast.showToast(msg: "${value.message}");
-        // SharedHelper _shared = SharedHelper();
-        // await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
-        // await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
-        // await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
+         SharedHelper _shared = SharedHelper();
+         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
+         await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
+         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
         // await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
-        // await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
+         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         // await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         // await _shared.writeData(CachingKey.IS_LOGGED, true);
         Get.offAllNamed(Routes.HOME);

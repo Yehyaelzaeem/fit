@@ -36,6 +36,11 @@ if (keystorePropertiesFile.exists()) {
 android {
     compileSdkVersion 31
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
@@ -60,9 +65,10 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
-            minifyEnabled true // Add these lines
-            shrinkResources true // Add these lines
+            signingConfig signingConfigs.release
+            useProguard true
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
