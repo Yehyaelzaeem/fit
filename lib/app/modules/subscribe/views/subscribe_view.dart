@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'non_user_subscribe_view.dart';
 
@@ -292,9 +293,10 @@ class SubscribeView extends GetView<SubscribeController> {
                                                     }:(){
                                                     Fluttertoast.showToast(msg: "  Payment is deactivated  ");
                                                   })
-                                                  : Expanded(
-                                                      child:
-                                                          CircularLoadingWidget()),
+                                                  : Container(
+                                                height: 40,
+                                                child: Lottie.asset('assets/loader.json'),
+                                              ),
                                             ],
                                           ),
                                         ),

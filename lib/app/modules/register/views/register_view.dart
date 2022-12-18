@@ -26,7 +26,7 @@ class _RegisterViewState extends State<RegisterView> {
   late String name;
   late String lastName;
   late String email;
-  String date = " Sellect Date";
+  String date = " Select Date";
   late String phone;
   late String password_confirmation;
   String gender = "male";
@@ -45,6 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
       setState(() {
         selectedDate = picked;
         date = picked.toString().substring(0, 10);
+        date = '${picked.day}-${picked.month}-${picked.year}';
       });
   }
 

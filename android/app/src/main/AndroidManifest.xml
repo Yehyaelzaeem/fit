@@ -9,12 +9,6 @@
     <application
         android:label="FitoverfaT"
         android:icon="@mipmap/ic_launcher">
-        <receiver android:name="com.razorpay.RzpTokenReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="rzp.device_token.share" />
-            </intent-filter>
-        </receiver>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

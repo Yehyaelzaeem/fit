@@ -181,9 +181,8 @@ class MakeMealsController extends GetxController {
 
   double totalPrice() {
     double total = 0;
-
     selectedFood.forEach((element) {
-      if (element.selectedAmount.price.isNotEmpty) total += double.parse(element.selectedAmount.price);
+      if (element.selectedAmount.price.isNotEmpty) total += double.parse(element.selectedAmount.price).round();
     });
 
     // proteinSelected.forEach((element) {

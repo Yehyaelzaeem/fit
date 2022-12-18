@@ -196,8 +196,8 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                         ),
                                       ),
                                     ),
-                                    Expanded(flex: 4, child: item(title: "${e.selectedAmount.calories}", showDropDownArrow: false)),
-                                    Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${e.selectedAmount.price} L.E", showDropDownArrow: false)),
+                                    Expanded(flex: 4, child: item(title: "${double.tryParse(e.selectedAmount.calories)?.round()??""}", showDropDownArrow: false)),
+                                    Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${double.tryParse(e.selectedAmount.price)?.round()??""} L.E", showDropDownArrow: false)),
                                     Expanded(
                                         flex: 2,
                                         child: GestureDetector(
