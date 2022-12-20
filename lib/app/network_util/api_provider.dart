@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
-import 'package:app/app/models/cart_order_response.dart';
 import 'package:app/app/models/cheer_full_response.dart';
 import 'package:app/app/models/cheerful_response.dart';
 import 'package:app/app/models/contact_response.dart';
@@ -34,15 +33,14 @@ import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
-
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' as getx;
 
 class ApiProvider {
@@ -776,7 +774,7 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': Platform.isAndroid ? '5.0.0' : '6.0.0', //Updated 09/10/2022
+      'version': Platform.isAndroid ? StringConst.APP_Android_VERSION : StringConst.APP_IOS_VERSION, //Updated 09/10/2022
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {
