@@ -15,5 +15,5 @@ class StringConst {
   static const String PLAY_STORE = 'https://play.google.com/store/apps/details?id=com.fofclinic';
   static const String APP_STORE = 'https://apps.apple.com/eg/app/fitoverfat/id1590233628';
   static const String APP_Android_VERSION = '7.0.0'; //Updated 20/12/2022
-  static const String APP_IOS_VERSION = '7.0.0'; //Updated 20/12/2022
+  static const String APP_IOS_VERSION = '7.0.1'; //Updated 20/12/2022
 }
