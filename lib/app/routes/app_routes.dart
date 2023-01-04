@@ -37,6 +37,7 @@ abstract class Routes {
   static const MY_PACKAGES = _Paths.MY_PACKAGES;
   static const PAYMENT = _Paths.PAYMENT;
   static const INVOICE = _Paths.INVOICE;
+  static const Orientation = _Paths.Orientation;
 }
 
 abstract class _Paths {
@@ -73,4 +74,5 @@ abstract class _Paths {
   static const MY_PACKAGES = '/my-packages';
   static const PAYMENT = '/payment';
   static const INVOICE = '/invoice';
+  static const Orientation = '/orientation';
 }

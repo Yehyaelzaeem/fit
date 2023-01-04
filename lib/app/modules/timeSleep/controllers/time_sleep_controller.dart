@@ -16,6 +16,7 @@ class TimeSleepController extends GetxController {
   TimeOfDay selectedTimeFrom = TimeOfDay.now();
   TimeOfDay selectedTimeTo = TimeOfDay.now();
   String? select;
+  RxBool ? isToday;
 
   addSleepTime({
     required String sleepTimeFrom,
@@ -25,7 +26,7 @@ class TimeSleepController extends GetxController {
       Fluttertoast.showToast(msg: "Please, Select time first");
     }else
     await ApiProvider()
-        .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo)
+        .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo,date: isToday==true?DateTime.now().toString().substring(0, 10):DateTime.now().subtract(Duration(days:1)).toString().substring(0, 10))
         .then((value) {
       Fluttertoast.showToast(msg: value.message.toString());
       controllerDiary.onInit();
@@ -73,6 +74,8 @@ class TimeSleepController extends GetxController {
 
   @override
   void onInit() {
+    if (Get.arguments != null)
+      isToday = Get.arguments[0]['isToday'];
     super.onInit();
   }
 

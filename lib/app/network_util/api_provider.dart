@@ -251,10 +251,12 @@ class ApiProvider {
   Future<SleepTimeResponse> addSleepTime({
     String? sleepTimeFrom,
     String? sleepTimeTo,
+    String? date,
   }) async {
     FormData body = FormData.fromMap({
       'sleeping_from': sleepTimeFrom,
       'sleeping_to': sleepTimeTo,
+      'date': date,
     });
     Response response = await _utils.post("set_sleeping_time", body: body);
     print('-------> sleep time ${response.data}');

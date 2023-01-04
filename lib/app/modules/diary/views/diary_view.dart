@@ -58,7 +58,7 @@ class DiaryView extends GetView<DiaryController> {
 
               Column(
                 children: [
-                  SleepTimeStatus(),
+                  SleepTimeStatus(isToday:controller.isToday),
                   SizedBox(height: 16),
                   //* Diary Dates
                   diaryDatesOptions(),

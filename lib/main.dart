@@ -4,6 +4,7 @@ import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
+import 'package:appspector/appspector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -23,18 +24,31 @@ Future selectNotification(payload) async {
   // );
 }
 
+void runAppSpector() {
+  final config = Config()
+    ..iosApiKey = "ios_M2VlOWRhMmEtOWEyYS00YTkzLThjZDctNzhhMDNlMGQ1MDZh"
+    ..androidApiKey =
+        "android_MDE5MjNjODktNWY1NS00M2Y2LTgyYzUtYmM4NDE4MjRmMDM5";
+  config.monitors = Monitors.all();
+  AppSpectorPlugin.run(config);
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (Platform.isAndroid) runAppSpector();
   await GetStorage().initStorage;
-  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
 
-  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-  if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings, onSelectNotification: selectNotification);
+  final InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+  if (Platform.isAndroid)
+    await FlutterLocalNotificationsPlugin().initialize(initializationSettings,
+        onSelectNotification: selectNotification);
 
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");
   Get.put(InvoiceController());
-
   runApp(
     GetMaterialApp(
       title: "FIT over FAT",

@@ -8,8 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SleepTimeStatus extends GetView<DiaryController> {
+  final isToday;
+
   @override
   final controller = Get.find(tag: 'diary');
+
+  SleepTimeStatus({required this.isToday});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +39,7 @@ class SleepTimeStatus extends GetView<DiaryController> {
                       child: kTextbody("Please, Insert your sleep time",
                           maxLines: 2))
                   : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CachedNetworkImage(
                           width: 24,
@@ -72,7 +76,9 @@ class SleepTimeStatus extends GetView<DiaryController> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.TIME_SLEEP);
+                  Get.toNamed(Routes.TIME_SLEEP,arguments: [
+                    {"isToday": isToday},
+                  ]);
                 },
                 child: Container(
                   decoration: BoxDecoration(

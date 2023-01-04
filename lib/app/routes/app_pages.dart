@@ -1,5 +1,7 @@
 import 'package:app/app/modules/invoice/bindings/invoice_binding.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
+import 'package:app/app/modules/orientation/bindings/orientation_binding.dart';
+import 'package:app/app/modules/orientation/views/orientation_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/about/bindings/about_binding.dart';
@@ -229,6 +231,11 @@ class AppPages {
       name: _Paths.INVOICE,
       page: () => InvoiceView(),
       binding: InvoiceBinding(),
+    ),
+    GetPage(
+      name: _Paths.Orientation,
+      page: () => OrientationView(),
+      binding: OrientationBinding(),
     ),
   ];
 }

@@ -19,6 +19,7 @@ class TimeSleepView extends GetView<TimeSleepController> {
 
   @override
   Widget build(BuildContext context) {
+    print(controller.isToday);
     return Container(
       color: kColorPrimary,
       child: SafeArea(

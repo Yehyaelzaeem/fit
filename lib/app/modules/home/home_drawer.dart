@@ -196,6 +196,13 @@ class HomeDrawer extends GetView<HomeController> {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
 
+          singleDrawerItem(
+                title: 'Orientations', //todo transulate
+                image: 'assets/icons/orientation.svg',
+                action: () {
+                  Get.toNamed(Routes.Orientation);
+                }),
+
             //CHEER_FULL
             FutureBuilder<bool>(
               future: getCheerFullStatus(),
