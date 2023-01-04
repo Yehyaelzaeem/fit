@@ -35,7 +35,7 @@ void runAppSpector() {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid) runAppSpector();
+  runAppSpector();
   await GetStorage().initStorage;
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
