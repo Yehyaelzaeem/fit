@@ -1,17 +1,14 @@
 import 'dart:collection';
-import 'dart:io';
-
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
-class WebViewScreen extends StatefulWidget {
+class WebViewScreen extends StatelessWidget {
   final String url;
   final int? packageId;
   final String? fromCheerfull;
@@ -20,11 +17,6 @@ class WebViewScreen extends StatefulWidget {
       {Key? key, required this.url, this.packageId, this.fromCheerfull})
       : super(key: key);
 
-  @override
-  _WebViewScreenState createState() => _WebViewScreenState();
-}
-
-class _WebViewScreenState extends State<WebViewScreen> {
 
 
 
@@ -45,7 +37,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       ));
 
 
-  @override
+/*  @override
   void initState() {
     pullToRefreshController = PullToRefreshController(
       options: PullToRefreshOptions(
@@ -59,7 +51,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
         }
       },
     );    super.initState();
-  }
+  }*/
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,7 +64,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             Expanded(
               child: Center(
                 child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: Uri.parse(widget.url)),
+                  initialUrlRequest: URLRequest(url: Uri.parse(url)),
                     initialUserScripts: UnmodifiableListView<UserScript>([]),
                     onWebViewCreated: (myController) async {
                     webViewController = myController;
@@ -92,12 +84,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
                     print("WEB URI link =========== > ${Uri.parse(uri.toString())}");
                     print("on load onLoadStart ===>${uri!.path}");
                     if (uri.path.contains("Success")) {
-                      if (widget.fromCheerfull != "From Cheerful Order") {
+                      if (fromCheerfull != "From Cheerful Order") {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (_) =>
-                                    InvoiceView(packageId: widget.packageId!)));
+                                    InvoiceView(packageId:packageId!)));
                         Get.dialog(
                           Dialog(
                             child: Padding(
