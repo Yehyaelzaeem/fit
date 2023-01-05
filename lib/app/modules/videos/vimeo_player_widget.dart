@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 
 class VimeoPlayerWidget extends StatelessWidget {
-  const VimeoPlayerWidget({Key? key}) : super(key: key);
-
+  const VimeoPlayerWidget({Key? key,required this.link}) : super(key: key);
+final String link;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -14,15 +14,11 @@ class VimeoPlayerWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             HomeAppbar(type: null),
-            Center(
-              child: Container(
-                height: Get.height*0.5,
-                child: VimeoPlayer(
-                  videoId: '786197180',
-                ),
+            Expanded(
+              child: VimeoPlayer(
+                videoId: link,
               ),
             ),
-            SizedBox(),
           ],
         ),
       ),

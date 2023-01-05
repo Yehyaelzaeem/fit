@@ -197,7 +197,7 @@ class HomeDrawer extends GetView<HomeController> {
                 }),
 
           singleDrawerItem(
-                title: 'Orientations', //todo transulate
+                title: 'Orientation', //todo transulate
                 image: 'assets/icons/orientation.svg',
                 action: () {
                   Get.toNamed(Routes.Orientation);

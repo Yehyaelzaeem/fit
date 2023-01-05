@@ -21,7 +21,7 @@ class WebViewScreen extends StatelessWidget {
 
 
 
-  late PullToRefreshController pullToRefreshController;
+ // late PullToRefreshController pullToRefreshController;
 
   InAppWebViewController? webViewController;
   InAppWebViewGroupOptions options = InAppWebViewGroupOptions(
@@ -71,9 +71,9 @@ class WebViewScreen extends StatelessWidget {
                     print(await myController.getUrl());
                   },
                     initialOptions: options,
-                    pullToRefreshController: pullToRefreshController,
+                 //   pullToRefreshController: pullToRefreshController,
                     onLoadError: (ctrl, url, code, message) {
-                      pullToRefreshController.endRefreshing();
+                 //     pullToRefreshController.endRefreshing();
                     },
                   shouldOverrideUrlLoading: (controller, navigationAction) async {
                     final uri = navigationAction.request.url!;
@@ -166,7 +166,7 @@ class WebViewScreen extends StatelessWidget {
                   },
                     onLoadStop: (ctrl, url) async {
                     print("on load stop ===>$url");
-                    pullToRefreshController.endRefreshing();
+               //     pullToRefreshController.endRefreshing();
                     },
                /*   onPageFinished: (String link) {
                     print("WEB link =========== > $link");

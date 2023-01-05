@@ -268,6 +268,7 @@ class ApiProvider {
   }
 
   Future<DayDetailsResponse> getDiaryView(String? date) async {
+    print('date ====>$date');
     Response response = await _utils.get("calories_day_details?date=$date");
     log('api->calories_day_details?date=$date');
     log('response ${response.data}');
