@@ -1,10 +1,7 @@
 import 'package:app/app/models/my_packages_response.dart';
-import 'package:app/app/modules/invoice/controllers/invoice_controller.dart';
-import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/helper/echo.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -45,7 +42,7 @@ class MyPackagesController extends GetxController
     }else {
       print("Shared = true");
       return await "haveAllData";
-    };
+    }
   }
   @override
   void onInit() {

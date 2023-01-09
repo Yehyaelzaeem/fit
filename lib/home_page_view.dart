@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'app/modules/home/home_slider.dart';
-
 // import 'app/modules/orientation_register/views/orientation_register_view.dart';
 import 'app/network_util/api_provider.dart';
 import 'app/utils/theme/app_colors.dart';

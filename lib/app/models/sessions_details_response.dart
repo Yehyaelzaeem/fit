@@ -1,5 +1,4 @@
 import 'package:app/app/models/day_details_reposne.dart';
-import 'package:app/app/models/sleep_time_response.dart';
 
 class SessionDetailsResponse {
   int? code;

@@ -1,5 +1,4 @@
 import 'package:app/app/models/cheerful_response.dart';
-import 'package:app/app/models/contact_response.dart';
 import 'package:app/app/models/meal_features_status_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/utils/helper/echo.dart';

@@ -733,7 +733,6 @@ class ApiProvider {
           print("Error Checkout!!");
           return "";
         }
-        ;
       } else
         return response.data;
     } catch (e) {

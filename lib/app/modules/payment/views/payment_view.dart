@@ -1,6 +1,5 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/payment/controllers/payment_controller.dart';
-import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';

@@ -1,6 +1,5 @@
 import 'package:app/app/models/payment_package_response.dart';
 import 'package:app/app/models/services_response.dart';
-import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/helper/echo.dart';

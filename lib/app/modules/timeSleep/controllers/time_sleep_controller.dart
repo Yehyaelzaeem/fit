@@ -2,8 +2,6 @@ import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -16,22 +14,33 @@ class TimeSleepController extends GetxController {
   TimeOfDay selectedTimeFrom = TimeOfDay.now();
   TimeOfDay selectedTimeTo = TimeOfDay.now();
   String? select;
-  RxBool ? isToday;
+  RxBool? isToday;
 
   addSleepTime({
     required String sleepTimeFrom,
     required String sleepTimeTo,
   }) async {
-    if(selectedTimeFrom==selectedTimeTo){
+    if (selectedTimeFrom == selectedTimeTo) {
       Fluttertoast.showToast(msg: "Please, Select time first");
-    }else
-    await ApiProvider()
-        .addSleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo,date: isToday==true?DateTime.now().toString().substring(0, 10):DateTime.now().subtract(Duration(days:1)).toString().substring(0, 10))
-        .then((value) {
-      Fluttertoast.showToast(msg: value.message.toString());
-      controllerDiary.onInit();
-      Get.toNamed(Routes.HOME);
-    });
+    } else
+      await ApiProvider()
+          .addSleepTime(
+              sleepTimeFrom: sleepTimeFrom,
+              sleepTimeTo: sleepTimeTo,
+              date: isToday == true
+                  ? DateTime.now().toString().substring(0, 10)
+                  : DateTime.now()
+                      .subtract(Duration(days: 1))
+                      .toString()
+                      .substring(0, 10))
+          .then((value) {
+        Fluttertoast.showToast(msg: value.message.toString());
+        controllerDiary.onInit();
+        Get.toNamed(Routes.HOME);
+      isToday==false?  controllerDiary
+            .getDiaryData(controllerDiary.response.value.data!.days![1].date!)  :controllerDiary
+            .getDiaryData(controllerDiary.response.value.data!.days![0].date!);
+      });
   }
 
   onClickRadioButton(value) {
@@ -74,8 +83,7 @@ class TimeSleepController extends GetxController {
 
   @override
   void onInit() {
-    if (Get.arguments != null)
-      isToday = Get.arguments[0]['isToday'];
+    if (Get.arguments != null) isToday = Get.arguments[0]['isToday'];
     super.onInit();
   }
 

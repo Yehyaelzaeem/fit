@@ -1,5 +1,4 @@
 import 'package:analog_clock/analog_clock.dart';
-import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -41,8 +40,8 @@ class TimeSleepView extends GetView<TimeSleepController> {
                               PageLable(name: "Sleep Time"),
                               SizedBox(height: Get.height * 0.02),
                               Container(
-                                height: Get.height / 3,
-                                width: Get.width,
+                                height: MediaQuery.of(context).size.height *0.33,
+                                width: MediaQuery.of(context).size.width,
                                 child: simpleClock,
                               ),
                               SizedBox(height: Get.height * 0.1),
@@ -175,7 +174,7 @@ class TimeSleepView extends GetView<TimeSleepController> {
         showTicks: true,
         showDigitalClock: false,
         datetime: dateTime,
-        key: const GlobalObjectKey(1),
+      //  key: const GlobalObjectKey(1),
       );
 
   Widget myTileRadioButton(

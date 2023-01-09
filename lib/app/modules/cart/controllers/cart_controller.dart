@@ -1,4 +1,3 @@
-import 'package:app/app/models/cart_order_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
