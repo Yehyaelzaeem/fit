@@ -37,9 +37,11 @@ class TimeSleepController extends GetxController {
         Fluttertoast.showToast(msg: value.message.toString());
         controllerDiary.onInit();
         Get.toNamed(Routes.HOME);
-      isToday==false?  controllerDiary
-            .getDiaryData(controllerDiary.response.value.data!.days![1].date!)  :controllerDiary
-            .getDiaryData(controllerDiary.response.value.data!.days![0].date!);
+        isToday == false
+            ? controllerDiary.getDiaryData(
+                controllerDiary.response.value.data!.days![1].date!)
+            : controllerDiary.getDiaryData(
+                controllerDiary.response.value.data!.days![0].date!);
       });
   }
 

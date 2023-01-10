@@ -15,8 +15,11 @@ class VimeoPlayerWidget extends StatelessWidget {
           children: [
             HomeAppbar(type: null),
             Expanded(
-              child: VimeoPlayer(
-                videoId: link,
+              child: AspectRatio(
+                aspectRatio: 16/9,
+                child: VimeoPlayer(
+                  videoId: link,
+                ),
               ),
             ),
           ],
