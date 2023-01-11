@@ -22,6 +22,7 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
     animation = new CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn);
   }
 
+
   @override
   void onReady() {
     super.onReady();
