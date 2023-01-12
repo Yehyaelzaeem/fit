@@ -11,27 +11,27 @@ import 'package:get/get.dart';
 class MainUnAuth extends StatelessWidget {
   const MainUnAuth({Key? key}) : super(key: key);
 
-  /*void listenNotifications() =>
-      NotificationApi.onNotifications.stream.listen(onClickedNotification);
+ // void listenNotifications() =>
+ //     NotificationApi.onNotifications.stream.listen(onClickedNotification);
+//
+ // void onClickedNotification(String? payLoad) => print(
+ //     "NotificationApi Function TODO Navigate to another screen and take payload to display");
 
-  void onClickedNotification(String? payLoad) => print(
-      "NotificationApi Function TODO Navigate to another screen and take payload to display");
-
-  @override
-  void initState() {
-    super.initState();
-    NotificationApi.init(isScheduled: true);
-    listenNotifications();
-    print("Before el notifications");
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(
-      scheduleDate: DateTime.now(),
-      title: "Water",
-      body: "Do not forget to drink water 💧",
-      payLoad: "Hussam.abs",
-      ///<< to be displayed in new page
-    ));
-    print("After el notifications");
-  }*/
+ // @override
+ // void initState() {
+ //   super.initState();
+ //   NotificationApi.init(isScheduled: true);
+ //   listenNotifications();
+ //   print("Before el notifications");
+ //   Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(
+ //     scheduleDate: DateTime.now(),
+ //     title: "Water",
+ //     body: "Do not forget to drink water 💧",
+ //     payLoad: "Hussam.abs",
+ //     ///<< to be displayed in new page
+ //   ));
+ //   print("After el notifications");
+ // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +65,12 @@ class MainUnAuth extends StatelessWidget {
             paddingH: 0,
             textSize: 20,
             func: () {
-        /*      NotificationApi.showNotification(
-                  title: "Test Notification",
-                  body: "Hey Im Notification",
-                  payLoad: "Hussam.abs"
-                  ///<< to be displayed in new page
-                  );*/
+           //  NotificationApi.showNotification(
+           //      title: "Test Notification",
+           //      body: "Hey Im Notification",
+           //      payLoad: "Hussam.abs"
+           //      ///<< to be displayed in new page
+           //      );
                        Get.toNamed(Routes.LOGIN);
             },
           ),
@@ -83,20 +83,20 @@ class MainUnAuth extends StatelessWidget {
               textSize: 20,
               bold: true,
               func: () {
-     /*           NotificationApi.showScheduledNotification(
-                  scheduleDate: DateTime.now(),
-                  title: "Water",
-                  body: "Do not forget to drink water 💧",
-                  payLoad: "Hussam.abs",
+            //    NotificationApi.showScheduledNotification(
+            //      scheduleDate: DateTime.now(),
+            //      title: "Water",
+            //      body: "Do not forget to drink water 💧",
+            //      payLoad: "Hussam.abs",
                   ///<< to be displayed in new page
-                );
-                final snackBar = SnackBar(
-                  content: kTextHeader("showScheduledNotification 10 seconds"),
-                  backgroundColor: Colors.green,
-                );
-                ScaffoldMessenger.of(context)
-                  ..removeCurrentSnackBar()
-                  ..showSnackBar(snackBar);*/
+           //     );
+           //     final snackBar = SnackBar(
+           //       content: kTextHeader("showScheduledNotification 10 seconds"),
+           //       backgroundColor: Colors.green,
+           //     );
+           //     ScaffoldMessenger.of(context)
+           //       ..removeCurrentSnackBar()
+           //       ..showSnackBar(snackBar);
                   Get.toNamed(Routes.REGISTER);
               },
             ),
