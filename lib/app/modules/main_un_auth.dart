@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -6,28 +8,31 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MainUnAuth extends StatefulWidget {
+class MainUnAuth extends StatelessWidget {
   const MainUnAuth({Key? key}) : super(key: key);
 
-  @override
-  _MainUnAuthState createState() => _MainUnAuthState();
-}
+  /*void listenNotifications() =>
+      NotificationApi.onNotifications.stream.listen(onClickedNotification);
 
-class _MainUnAuthState extends State<MainUnAuth> {
-  void listenNotifications()=>NotificationApi.onNotifications.stream.listen(onClickedNotification);
-  void onClickedNotification(String? payLoad)=>print("NotificationApi Function TODO Navigate to another screen and take payload to display");
+  void onClickedNotification(String? payLoad) => print(
+      "NotificationApi Function TODO Navigate to another screen and take payload to display");
+
   @override
   void initState() {
     super.initState();
-    NotificationApi.init(isScheduled:true);
+    NotificationApi.init(isScheduled: true);
     listenNotifications();
-/*    NotificationApi.showScheduledNotification(
-      scheduleDate: DateTime.now().add(Duration(seconds: 10)),
-      title: "Dinner",
-      body: "Do not forget Dinner",
-      payLoad: "Hussam.abs", ///<< to be displayed in new page
-    );*/
-  }
+    print("Before el notifications");
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(
+      scheduleDate: DateTime.now(),
+      title: "Water",
+      body: "Do not forget to drink water 💧",
+      payLoad: "Hussam.abs",
+      ///<< to be displayed in new page
+    ));
+    print("After el notifications");
+  }*/
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +43,7 @@ class _MainUnAuthState extends State<MainUnAuth> {
           Center(
             child: Image.asset(
               "assets/img/block-user.png",
-              width:150,
+              width: 150,
               height: 150,
               color: kColorPrimary,
             ),
@@ -60,12 +65,13 @@ class _MainUnAuthState extends State<MainUnAuth> {
             paddingH: 0,
             textSize: 20,
             func: () {
-                NotificationApi.showNotification(
+        /*      NotificationApi.showNotification(
                   title: "Test Notification",
                   body: "Hey Im Notification",
-                  payLoad: "Hussam.abs" ///<< to be displayed in new page
-                );
-            //  Get.toNamed(Routes.LOGIN);
+                  payLoad: "Hussam.abs"
+                  ///<< to be displayed in new page
+                  );*/
+                       Get.toNamed(Routes.LOGIN);
             },
           ),
           Padding(
@@ -77,15 +83,21 @@ class _MainUnAuthState extends State<MainUnAuth> {
               textSize: 20,
               bold: true,
               func: () {
-                NotificationApi.showScheduledNotification(
-                  scheduleDate: DateTime.now().add(Duration(seconds: 10)),
-                  title: "Dinner",
-                    body: "Do not forget Dinner",
-                    payLoad: "Hussam.abs", ///<< to be displayed in new page
+     /*           NotificationApi.showScheduledNotification(
+                  scheduleDate: DateTime.now(),
+                  title: "Water",
+                  body: "Do not forget to drink water 💧",
+                  payLoad: "Hussam.abs",
+                  ///<< to be displayed in new page
                 );
-                final snackBar = SnackBar(content: kTextHeader("showScheduledNotification 10 seconds"),backgroundColor: Colors.red,);
-                ScaffoldMessenger.of(context)..removeCurrentSnackBar()..showSnackBar(snackBar);
-                //Get.toNamed(Routes.REGISTER);
+                final snackBar = SnackBar(
+                  content: kTextHeader("showScheduledNotification 10 seconds"),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(snackBar);*/
+                  Get.toNamed(Routes.REGISTER);
               },
             ),
           ),

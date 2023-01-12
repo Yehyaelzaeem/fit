@@ -4,7 +4,6 @@ import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/pdf_viewr.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,23 +39,6 @@ class DiaryController extends GetxController {
   }
   String _timezone = 'Unknown';
   List<String> _availableTimezones = <String>[];
-
-  Future<void> _initData() async {
-    try {
-      _timezone = await FlutterNativeTimezone.getLocalTimezone();
-      print("timezone => ${_timezone}");
-    } catch (e) {
-      print('Could not get the local timezone');
-    }
-    try {
-      _availableTimezones = await FlutterNativeTimezone.getAvailableTimezones();
-      _availableTimezones.sort();
-      print("Sorted timezones length => ${_availableTimezones.length}");
-      print("Sorted timezones => ${_availableTimezones}");
-    } catch (e) {
-      print('Could not get available timezones');
-    }
-  }
 
   final isLogggd = false.obs;
 

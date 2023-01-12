@@ -1,4 +1,7 @@
+import 'package:app/app/modules/utils.dart';
+import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -8,10 +11,20 @@ class NotificationApi {
   static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
+    final largeIconPath = await Utils.downloadFile('https://fofclinic.com/images/logo/favicons/android-icon-192x192.png', 'largeIcon');
+    final bigPicturePath = await  Utils.downloadFile('https://fofclinic.com/images/logo/logo.png', 'bigPicture');
+    final styleInformation = BigPictureStyleInformation(
+      FilePathAndroidBitmap(bigPicturePath),
+      largeIcon: FilePathAndroidBitmap(largeIconPath)
+    );
     return NotificationDetails(
       android: AndroidNotificationDetails(
-          'channel id', 'channel name', 'channel description',
-          importance: Importance.max),
+        'channel id',
+        'channel name',
+        'channel description',
+        importance: Importance.max,
+        styleInformation: styleInformation,
+      ),
       iOS: IOSNotificationDetails(),
     );
   }
@@ -25,8 +38,10 @@ class NotificationApi {
       onNotifications.add(payLoad);
     });
 
-    if(isScheduled){
-   //   tz.initializeTimeZonse();
+    if (isScheduled) {
+      tz.initializeTimeZones();
+      final locationName = await FlutterNativeTimezone.getLocalTimezone();
+      tz.setLocalLocation(tz.getLocation(locationName));
     }
   }
 
@@ -55,11 +70,16 @@ class NotificationApi {
         id,
         title,
         body,
-        _scheduleWeekly(Time(8), days: [
+        _scheduleWeekly(Time(12, 21), days: [
+          DateTime.saturday,
+          DateTime.sunday,
           DateTime.monday,
+          DateTime.tuesday,
+          DateTime.wednesday,
           DateTime.thursday,
+          DateTime.friday,
         ]),
-        //scheduled to 8 am morning
+        //scheduled to 11 am morning
         await _notificationDetails(),
         payload: payLoad,
         androidAllowWhileIdle: true,

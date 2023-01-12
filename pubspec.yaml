@@ -1,5 +1,5 @@
 name: app
-version: 2.2.0+19
+version: 2.2.1+20
 publish_to: none
 description: A new project create by md.hurab@gmail.com .
 environment:
@@ -33,7 +33,6 @@ dependencies:
   path_provider: ^2.0.4
   permission_handler: ^8.1.6
   flutter_local_notifications: ^8.2.0
-  workmanager: ^0.4.0
   flutter_math_fork: ^0.4.2
   google_maps_flutter: ^2.0.0
   map_picker: ^0.0.3
@@ -48,7 +47,6 @@ dependencies:
   flutter_native_timezone: any
   rxdart: any
   timezone: any
-  appspector: ^0.7.0
 
 
   # analog_clock_picker: ^0.0.1

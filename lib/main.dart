@@ -1,16 +1,13 @@
 import 'dart:io';
-
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
-import 'package:appspector/appspector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:workmanager/workmanager.dart';
 
 import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/routes/app_pages.dart';
@@ -25,18 +22,8 @@ Future selectNotification(payload) async {
   // );
 }
 
-void runAppSpector() {
-  final config = Config()
-    ..iosApiKey = "ios_M2VlOWRhMmEtOWEyYS00YTkzLThjZDctNzhhMDNlMGQ1MDZh"
-    ..androidApiKey =
-        "android_MDE5MjNjODktNWY1NS00M2Y2LTgyYzUtYmM4NDE4MjRmMDM5";
-  config.monitors = Monitors.all();
-  AppSpectorPlugin.run(config);
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//    runAppSpector();
   await GetStorage().initStorage;
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
