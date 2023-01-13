@@ -11,18 +11,20 @@ class NotificationApi {
   static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
-    final largeIconPath = await Utils.downloadFile('https://fofclinic.com/images/logo/favicons/android-icon-192x192.png', 'largeIcon');
-    final bigPicturePath = await  Utils.downloadFile('https://fofclinic.com/images/logo/logo.png', 'bigPicture');
+    final largeIconPath = await Utils.downloadFile(
+        'https://fofclinic.com/images/logo/favicons/android-icon-192x192.png',
+        'largeIcon');
+    final bigPicturePath = await Utils.downloadFile(
+        'https://fofclinic.com/images/logo/logo.png', 'bigPicture');
     final styleInformation = BigPictureStyleInformation(
-      FilePathAndroidBitmap(bigPicturePath),
-      largeIcon: FilePathAndroidBitmap(largeIconPath)
-    );
+        FilePathAndroidBitmap(bigPicturePath),
+        largeIcon: FilePathAndroidBitmap(largeIconPath));
     return NotificationDetails(
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
         'channel description',
-        importance: Importance.max,
+        importance: Importance.max, ///<< to show in center of screen
         styleInformation: styleInformation,
       ),
       iOS: IOSNotificationDetails(),
@@ -33,6 +35,14 @@ class NotificationApi {
     final android = AndroidInitializationSettings('@mipmap/ic_launcher');
     final iOS = IOSInitializationSettings();
     final settings = InitializationSettings(android: android, iOS: iOS);
+
+    ///to open specific page
+    final notificationDetails = await _notifications.getNotificationAppLaunchDetails();
+    if(notificationDetails!=null && notificationDetails.didNotificationLaunchApp){
+      onNotifications.add(notificationDetails.payload);
+    }
+
+
     await _notifications.initialize(settings,
         onSelectNotification: (payLoad) async {
       onNotifications.add(payLoad);
@@ -59,8 +69,37 @@ class NotificationApi {
         payload: payLoad,
       );
 
+
   static Future showScheduledNotification({
-    int id = 0,
+    String? payLoad, //<< navigate content screen
+    required DateTime scheduleDate,
+    required int hour,
+  }) async =>
+      _notifications.zonedSchedule(
+        0,
+        'water 💧',
+        "Do not forget to drink water 💧",
+        _scheduleWeekly(Time(hour), days: [
+          DateTime.saturday,
+          DateTime.sunday,
+          DateTime.monday,
+          DateTime.tuesday,
+          DateTime.wednesday,
+          DateTime.thursday,
+          DateTime.friday,
+        ]),
+        await _notificationDetails(),
+        payload: payLoad,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+
+
+/*
+  static Future showSecondScheduledNotification({
+    int id = 1,
     String? title,
     String? body,
     String? payLoad,
@@ -70,7 +109,7 @@ class NotificationApi {
         id,
         title,
         body,
-        _scheduleWeekly(Time(12, 21), days: [
+        _scheduleWeekly(Time(16,34), days: [
           DateTime.saturday,
           DateTime.sunday,
           DateTime.monday,
@@ -86,7 +125,7 @@ class NotificationApi {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-      );
+      );*/
 
   static tz.TZDateTime _scheduleDaily(Time time) {
     final now = tz.TZDateTime.now(tz.local);

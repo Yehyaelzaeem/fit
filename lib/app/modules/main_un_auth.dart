@@ -9,30 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainUnAuth extends StatelessWidget {
-  const MainUnAuth({Key? key}) : super(key: key);
+/*  const MainUnAuth({Key? key}) : super(key: key);
 
- // void listenNotifications() =>
- //     NotificationApi.onNotifications.stream.listen(onClickedNotification);
-//
- // void onClickedNotification(String? payLoad) => print(
- //     "NotificationApi Function TODO Navigate to another screen and take payload to display");
+  @override
+  _MainUnAuthState createState() => _MainUnAuthState();
+}
 
- // @override
- // void initState() {
- //   super.initState();
- //   NotificationApi.init(isScheduled: true);
- //   listenNotifications();
- //   print("Before el notifications");
- //   Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(
- //     scheduleDate: DateTime.now(),
- //     title: "Water",
- //     body: "Do not forget to drink water 💧",
- //     payLoad: "Hussam.abs",
- //     ///<< to be displayed in new page
- //   ));
- //   print("After el notifications");
- // }
+class _MainUnAuthState extends State<MainUnAuth> {
+  void listenNotifications() =>
+      NotificationApi.onNotifications.stream.listen(onClickedNotification);
 
+  void onClickedNotification(String? payLoad) => print(
+      "NotificationApi Function TODO Navigate to another screen and take payload to display");
+
+  @override
+  void initState() {
+    super.initState();
+    NotificationApi.init(isScheduled: true);
+    listenNotifications();
+    print("Before el notifications");
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17, scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
+    print("After el notifications");
+  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,22 +57,22 @@ class MainUnAuth extends StatelessWidget {
               style: TextStyle(color: kColorPrimary, fontSize: 22),
             )),
           ),
-          kButton(
-            'Sign in',
-            hight: 55,
-            marginH: 20,
-            color: kColorAccent,
-            bold: true,
-            paddingH: 0,
-            textSize: 20,
-            func: () {
-           //  NotificationApi.showNotification(
-           //      title: "Test Notification",
-           //      body: "Hey Im Notification",
-           //      payLoad: "Hussam.abs"
-           //      ///<< to be displayed in new page
-           //      );
-                       Get.toNamed(Routes.LOGIN);
+      kButton(
+        'Sign in',
+        hight: 55,
+        marginH: 20,
+        color: kColorAccent,
+        bold: true,
+        paddingH: 0,
+        textSize: 20,
+        func: () {
+      ///     NotificationApi.showNotification(
+      ///         title: "Test Notification",
+      ///         body: "Hey Im Notification",
+      ///         payLoad: "Hussam.abs"
+      ///         ///<< to be displayed in new page
+      ///         );
+              Get.toNamed(Routes.LOGIN);
             },
           ),
           Padding(
@@ -83,20 +84,20 @@ class MainUnAuth extends StatelessWidget {
               textSize: 20,
               bold: true,
               func: () {
-            //    NotificationApi.showScheduledNotification(
-            //      scheduleDate: DateTime.now(),
-            //      title: "Water",
-            //      body: "Do not forget to drink water 💧",
-            //      payLoad: "Hussam.abs",
+      /*          NotificationApi.showScheduledNotification(
+                  scheduleDate: DateTime.now(),
+                  title: "Water",
+                  body: "Do not forget to drink water 💧",
+                  payLoad: "Hussam.abs",
                   ///<< to be displayed in new page
-           //     );
-           //     final snackBar = SnackBar(
-           //       content: kTextHeader("showScheduledNotification 10 seconds"),
-           //       backgroundColor: Colors.green,
-           //     );
-           //     ScaffoldMessenger.of(context)
-           //       ..removeCurrentSnackBar()
-           //       ..showSnackBar(snackBar);
+                );
+                final snackBar = SnackBar(
+                  content: kTextHeader("showScheduledNotification 10 seconds"),
+                  backgroundColor: Colors.green,
+                );
+                ScaffoldMessenger.of(context)
+                  ..removeCurrentSnackBar()
+                  ..showSnackBar(snackBar);*/
                   Get.toNamed(Routes.REGISTER);
               },
             ),
