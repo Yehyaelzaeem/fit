@@ -5,6 +5,8 @@ import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../notification_api.dart';
+
 class SplashController extends GetxController with SingleGetTickerProviderMixin {
   final error = ''.obs;
 
@@ -14,10 +16,26 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   AnimationController? animationController;
   Animation<double>? animation;
   var animationValue = (0.0).obs;
+  void listenNotifications() => NotificationApi.onNotifications.stream.listen(onClickedNotification);
+  void onClickedNotification(String? payLoad) => print(
+      "NotificationApi Function TODO Navigate to another screen and take payload to display");
+
+  initLocalNotification(){
+ //   print("initLocalNotification");
+    NotificationApi.init(isScheduled: true);
+   // listenNotifications();
+   // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showCustomScheduledNotification(scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
+
+  }
 
   @override
   void onInit() {
     super.onInit();
+    initLocalNotification();
     animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
     animation = new CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn);
   }

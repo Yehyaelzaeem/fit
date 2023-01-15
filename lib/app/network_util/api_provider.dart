@@ -20,6 +20,7 @@ import 'package:app/app/models/my_orders_response.dart';
 import 'package:app/app/models/my_other_calories_response.dart';
 import 'package:app/app/models/my_packages_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
+import 'package:app/app/models/orientation_videos_response.dart';
 import 'package:app/app/models/orintation_response.dart';
 import 'package:app/app/models/other_calories_units_repose.dart';
 import 'package:app/app/models/package_details_response.dart';
@@ -852,6 +853,15 @@ class ApiProvider {
     } catch (e) {
       Echo('error $e');
       return Future.error(e);
+    }
+  }
+
+  Future<OrientationVideosResponse> getOrientationVideos() async {
+    Response response = await _utils.get("orientation_videos");
+    if (response.statusCode == 200) {
+      return OrientationVideosResponse.fromJson(response.data);
+    } else {
+      return OrientationVideosResponse.fromJson(response.data);
     }
   }
 }

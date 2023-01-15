@@ -11,21 +11,21 @@ class NotificationApi {
   static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
-    final largeIconPath = await Utils.downloadFile(
+/*    final largeIconPath = await Utils.downloadFile(
         'https://fofclinic.com/images/logo/favicons/android-icon-192x192.png',
         'largeIcon');
     final bigPicturePath = await Utils.downloadFile(
         'https://fofclinic.com/images/logo/logo.png', 'bigPicture');
     final styleInformation = BigPictureStyleInformation(
         FilePathAndroidBitmap(bigPicturePath),
-        largeIcon: FilePathAndroidBitmap(largeIconPath));
+        largeIcon: FilePathAndroidBitmap(largeIconPath));*/
     return NotificationDetails(
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
         'channel description',
-        importance: Importance.max, ///<< to show in center of screen
-        styleInformation: styleInformation,
+        importance: Importance.max,///<< to show in center of screen
+      //  styleInformation: styleInformation,
       ),
       iOS: IOSNotificationDetails(),
     );
@@ -37,11 +37,12 @@ class NotificationApi {
     final settings = InitializationSettings(android: android, iOS: iOS);
 
     ///to open specific page
-    final notificationDetails = await _notifications.getNotificationAppLaunchDetails();
-    if(notificationDetails!=null && notificationDetails.didNotificationLaunchApp){
+    final notificationDetails =
+        await _notifications.getNotificationAppLaunchDetails();
+    if (notificationDetails != null &&
+        notificationDetails.didNotificationLaunchApp) {
       onNotifications.add(notificationDetails.payload);
     }
-
 
     await _notifications.initialize(settings,
         onSelectNotification: (payLoad) async {
@@ -70,16 +71,50 @@ class NotificationApi {
       );
 
 
-  static Future showScheduledNotification({
-    String? payLoad, //<< navigate content screen
+  static Future showCustomScheduledNotification({
+    int id = 0,
+    String? title,
+    String? body,
+    String? payLoad,
     required DateTime scheduleDate,
-    required int hour,
   }) async =>
       _notifications.zonedSchedule(
         0,
         'water 💧',
         "Do not forget to drink water 💧",
-        _scheduleWeekly(Time(hour), days: [
+        _scheduleWeekly(Time(12,36), days: [
+          DateTime.saturday,
+          DateTime.sunday,
+          DateTime.monday,
+          DateTime.tuesday,
+          DateTime.wednesday,
+          DateTime.thursday,
+          DateTime.friday,
+        ]),
+        //scheduled to 11 am morning
+        await _notificationDetails(),
+        payload: payLoad,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+
+
+
+
+
+  static Future showScheduledNotification({
+    String? payLoad, //<< navigate content screen
+    required int id,
+    required DateTime scheduleDate,
+    required int hour,
+  }) async =>
+      _notifications.zonedSchedule(
+        id,
+        ' 💧 Water 💧 ',
+        "Do not forget to drink water",
+        _scheduleWeekly(Time(hour,), days: [
           DateTime.saturday,
           DateTime.sunday,
           DateTime.monday,
@@ -95,37 +130,6 @@ class NotificationApi {
             UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
-
-
-/*
-  static Future showSecondScheduledNotification({
-    int id = 1,
-    String? title,
-    String? body,
-    String? payLoad,
-    required DateTime scheduleDate,
-  }) async =>
-      _notifications.zonedSchedule(
-        id,
-        title,
-        body,
-        _scheduleWeekly(Time(16,34), days: [
-          DateTime.saturday,
-          DateTime.sunday,
-          DateTime.monday,
-          DateTime.tuesday,
-          DateTime.wednesday,
-          DateTime.thursday,
-          DateTime.friday,
-        ]),
-        //scheduled to 11 am morning
-        await _notificationDetails(),
-        payload: payLoad,
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
-      );*/
 
   static tz.TZDateTime _scheduleDaily(Time time) {
     final now = tz.TZDateTime.now(tz.local);
