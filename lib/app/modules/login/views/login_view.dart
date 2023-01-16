@@ -37,7 +37,7 @@ class _LoginViewState extends State<LoginView> {
     setState(() {
       showLoader = true;
       if(kDebugMode){
-        pin='12230';
+        pin='p30000';
         password='123123';
       }
     });
@@ -132,7 +132,7 @@ class _LoginViewState extends State<LoginView> {
                           child: kTextbody('ID', size: 18),
                         ),
                         EditText(
-                          value: kDebugMode ? '12230' : '',
+                          value: kDebugMode ? 'p30000' : '',
                           hint: '',
                           updateFunc: (text) {
                             setState(() {

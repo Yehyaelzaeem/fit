@@ -1,4 +1,5 @@
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
+import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -76,7 +77,12 @@ class SleepTimeStatus extends GetView<DiaryController> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.TIME_SLEEP,arguments: [
+                  //   NotificationApi.showNotification(
+                  //     id:   0,
+                  //     title:    'Water 💧',
+                  //     body:     "Do not forget to drink water 💧",
+                  //   );
+                  Get.toNamed(Routes.TIME_SLEEP, arguments: [
                     {"isToday": isToday},
                   ]);
                 },

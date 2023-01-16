@@ -1,5 +1,7 @@
 import 'package:app/app/modules/utils.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/theme/app_colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:rxdart/rxdart.dart';
@@ -11,13 +13,13 @@ class NotificationApi {
   static final onNotifications = BehaviorSubject<String?>();
 
   static Future _notificationDetails() async {
-/*    final largeIconPath = await Utils.downloadFile(
+    final largeIconPath = await Utils.downloadFile(
         'https://fofclinic.com/images/logo/favicons/android-icon-192x192.png',
         'largeIcon');
-    final bigPicturePath = await Utils.downloadFile(
+   /* final bigPicturePath = await Utils.downloadFile(
         'https://fofclinic.com/images/logo/logo.png', 'bigPicture');
     final styleInformation = BigPictureStyleInformation(
-        FilePathAndroidBitmap(bigPicturePath),
+        FilePathAndroidBitmap('bigPicturePath'),
         largeIcon: FilePathAndroidBitmap(largeIconPath));*/
     return NotificationDetails(
       android: AndroidNotificationDetails(
@@ -25,9 +27,11 @@ class NotificationApi {
         'channel name',
         'channel description',
         importance: Importance.max,///<< to show in center of screen
-      //  styleInformation: styleInformation,
+        largeIcon: FilePathAndroidBitmap(largeIconPath),
+        color: kColorPrimary,
+        //  styleInformation: styleInformation,
       ),
-      iOS: IOSNotificationDetails(),
+        iOS: IOSNotificationDetails(),
     );
   }
 

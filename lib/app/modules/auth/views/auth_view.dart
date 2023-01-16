@@ -1,3 +1,4 @@
+import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -54,7 +55,8 @@ class AuthView extends GetView<AuthController> {
           ),
           GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.HOME);
+          //      Get.toNamed(Routes.HOME);
+                NotificationApi.showNotification(title: "Notification Title",body: "Notification Body");
               },
               child: kTextHeader('Skip', color: kColorPrimary, size: 20))
         ],

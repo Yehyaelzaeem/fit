@@ -13,12 +13,12 @@ class VimeoPlayerWidget extends StatelessWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            HomeAppbar(type: null),
+            HomeAppbar(),
             Expanded(
               child: AspectRatio(
                 aspectRatio: 16/9,
                 child: VimeoPlayer(
-                  videoId: link,
+                  videoId: link.split('/').last,
                 ),
               ),
             ),
