@@ -28,7 +28,7 @@ class NotificationApi {
         'channel description',
         importance: Importance.max,///<< to show in center of screen
         largeIcon: FilePathAndroidBitmap(largeIconPath),
-        color: kColorPrimary,
+        color: Color(0xff7fc902),
         //  styleInformation: styleInformation,
       ),
         iOS: IOSNotificationDetails(),

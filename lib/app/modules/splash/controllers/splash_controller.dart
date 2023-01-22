@@ -16,20 +16,12 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   AnimationController? animationController;
   Animation<double>? animation;
   var animationValue = (0.0).obs;
-  void listenNotifications() => NotificationApi.onNotifications.stream.listen(onClickedNotification);
-  void onClickedNotification(String? payLoad) => print(
-      "NotificationApi Function TODO Navigate to another screen and take payload to display");
-
   initLocalNotification(){
- //   print("initLocalNotification");
     NotificationApi.init(isScheduled: true);
-   // listenNotifications();
-   // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showCustomScheduledNotification(scheduleDate: DateTime.now().add(Duration(seconds: 2)),));
     Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
     Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
     Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
     Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
-
   }
 
   @override
