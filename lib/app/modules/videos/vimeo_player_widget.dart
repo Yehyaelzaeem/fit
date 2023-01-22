@@ -17,13 +17,17 @@ class VimeoPlayerWidget extends StatelessWidget {
           children: [
             HomeAppbar(),
             Expanded(
-              child:link.contains('vimeo')? AspectRatio(
-                aspectRatio: 16/9,
+              child: link.contains('vimeo') ? AspectRatio(
+                aspectRatio: 16 / 9,
                 child: VimeoPlayer(
-                  videoId: link.split('/').last,
+                  videoId: link
+                      .split('/')
+                      .last,
                 ),
-              ):Center(
-                child: kTextHeader('No Vimeo Video Attached',color: kColorPrimary,bold: true),
+              ) : Center(
+                child: kTextHeader(
+                    'No Vimeo Video Attached', color: kColorPrimary,
+                    bold: true),
               ),
             ),
           ],

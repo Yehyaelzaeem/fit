@@ -36,6 +36,7 @@ class OrientationView extends GetView<OrientationController> {
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 20,
+                    childAspectRatio: 0.92,
                     mainAxisSpacing: 20,
                   ),
                   itemCount: controller.orientationVideosResponse.data?.length,
@@ -70,8 +71,8 @@ class OrientationView extends GetView<OrientationController> {
                               ),
                             ),
                           ),
-                          Center(child: FittedBox(
-                            child: kTextbody(controller.orientationVideosResponse.data?[index].name??""),)),
+                          Center(child: kTextbody(controller.orientationVideosResponse.data?[index].name??"",size: 12)),
+
                         ],
                       ),
                     );
