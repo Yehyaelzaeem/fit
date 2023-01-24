@@ -17,7 +17,8 @@ class DayDetailsResponse {
 class Data {
   List<Days>? days;
   Proteins? proteins;
-  Proteins? carbsFats;
+  Proteins? carbs;
+  Proteins? fats;
   int? water;
   List<Workouts>? workouts;
   DayWorkouts? dayWorkouts;
@@ -26,11 +27,12 @@ class Data {
   String? workoutDetailsType;
   SleepingTime ? sleepingTime;
 
-  Data({this.proteins, this.carbsFats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType, this.sleepingTime});
+  Data({this.proteins, this.carbs,this.fats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType, this.sleepingTime});
 
   Data.fromJson(Map<String, dynamic> json) {
     proteins = json['proteins'] != null ? new Proteins.fromJson(json['proteins']) : null;
-    carbsFats = json['carbs_fats'] != null ? new Proteins.fromJson(json['carbs_fats']) : null;
+    carbs = json['carbs_fats'] != null ? new Proteins.fromJson(json['carbs_fats']) : null;
+    fats = json['fats'] != null ? new Proteins.fromJson(json['fats']) : null;
     water = json['water'];
     if (json['workouts'] != null) {
       workouts = <Workouts>[];

@@ -38,6 +38,7 @@ import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
+
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
@@ -149,7 +150,13 @@ class ApiProvider {
   }
 
   Future<UserResponse> login(String id, String password) async {
-    FormData body = FormData.fromMap({'patient_id': id, 'password': password});
+    String deviceId = await kDeviceInfo();
+    FormData body = FormData.fromMap({
+      'patient_id': id,
+      'password': password,
+      'device_id': deviceId,
+    });
+
     Response response = await _utils.post("login", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -183,10 +190,11 @@ class ApiProvider {
   }
 
   Future<UserResponse> getProfile() async {
+    String deviceId = await kDeviceInfo();
     final GlobalController globalController =
         getx.Get.find<GlobalController>(tag: 'global');
     Echo('getProfile getProfile');
-    Response response = await _utils.get("profile");
+    Response response = await _utils.get("profile?device_id==$deviceId");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
@@ -745,7 +753,9 @@ class ApiProvider {
   Future<MyOrdersResponse> myOrders() async {
     String deviceId = await kDeviceInfo();
     try {
-      Response response = await _utils.post("my_orders?device_id=$deviceId",);
+      Response response = await _utils.post(
+        "my_orders?device_id=$deviceId",
+      );
       if (response.statusCode == 200) {
         return MyOrdersResponse.fromJson(response.data);
       } else
@@ -777,7 +787,9 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'type': 'production',
       'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': Platform.isAndroid ? StringConst.APP_Android_VERSION : StringConst.APP_IOS_VERSION, //Updated 09/10/2022
+      'version': Platform.isAndroid
+          ? StringConst.APP_Android_VERSION
+          : StringConst.APP_IOS_VERSION, //Updated 09/10/2022
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {

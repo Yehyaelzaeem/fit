@@ -124,16 +124,16 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                           }),
                   SizedBox(height: 20),
 
-                  rowWithProgressBar("Carbs & Fats", 2), //*
+                  rowWithProgressBar("Carbs", 2),
                   staticBar(),
-                  otherCaloriesResponse.data!.carbsFats!.isEmpty
+                  otherCaloriesResponse.data!.carbs!.isEmpty
                       ? Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: Column(
                               children: [
                                 SizedBox(height: 24),
-                                Text("No Carbs Fats Added Yet"),
+                                Text("No Carbs Added Yet"),
                               ],
                             ),
                           ),
@@ -141,10 +141,34 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: otherCaloriesResponse.data!.carbsFats!.length,
-                          itemBuilder: (context, indedx) {
-                            return rowItem(otherCaloriesResponse.data!.carbsFats![indedx], 2);
-                          })
+                          itemCount: otherCaloriesResponse.data!.carbs!.length,
+                          itemBuilder: (context, i) {
+                            return rowItem(otherCaloriesResponse.data!.carbs![i], 2);
+                          }),
+
+                  SizedBox(height: 20),
+
+                  rowWithProgressBar("Fats", 2),
+                  staticBar(),
+                  otherCaloriesResponse.data!.fats!.isEmpty
+                      ? Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Column(
+                              children: [
+                                SizedBox(height: 24),
+                                Text("No Fats Added Yet"),
+                              ],
+                            ),
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: otherCaloriesResponse.data!.fats!.length,
+                          itemBuilder: (context, j) {
+                            return rowItem(otherCaloriesResponse.data!.fats![j], 3);
+                          }),
                 ],
               ),
       ),

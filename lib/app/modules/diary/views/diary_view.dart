@@ -80,7 +80,7 @@ class DiaryView extends GetView<DiaryController> {
                               color: kColorPrimary,
                             ),
                           ),
-                        staticBar(1),
+                        staticBar('proteins'),
                         if (controller.caloriesDetails.isEmpty)
                           SizedBox(height: 20),
                         ListView.builder(
@@ -89,27 +89,54 @@ class DiaryView extends GetView<DiaryController> {
                             itemCount: controller.caloriesDetails.length,
                             itemBuilder: (context, indedx) {
                               return rowItem(
-                                  controller.caloriesDetails[indedx], 1);
+                                  controller.caloriesDetails[indedx], 'proteins');
                             }),
                       ],
                     ),
                   ),
                   Divider(thickness: 2),
-                  rowWithProgressBar("Carbs & Fats",
-                      controller.response.value.data?.carbsFats),
+                  rowWithProgressBar("Carbs",
+                      controller.response.value.data?.carbs),
                   if (controller.refreshLoadingCarbs.value)
                     Container(
                       child: LinearProgressIndicator(color: kColorPrimary),
                     ),
-                  staticBar(2),
-                  if (controller.carbsAndFats.isEmpty) SizedBox(height: 20),
+                  staticBar('carbs'),
+                  if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
                   ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.carbsAndFats.length,
+                      itemCount: controller.carbsDetails.length,
                       itemBuilder: (context, indedx) {
-                        return rowItem(controller.carbsAndFats[indedx], 2);
+                        return rowItem(controller.carbsDetails[indedx], 'carbs');
                       }),
+                  Divider(thickness: 2),
+                  rowWithProgressBar(
+                      "Fats", controller.response.value.data?.fats),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        if (controller.refreshLoadingFats.value)
+                          Container(
+                            child: LinearProgressIndicator(
+                              color: kColorPrimary,
+                            ),
+                          ),
+                        staticBar('fats'),
+                        if (controller.fatsDetails.isEmpty)
+                          SizedBox(height: 20),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.fatsDetails.length,
+                            itemBuilder: (context, indedx) {
+                              return rowItem(
+                                  controller.fatsDetails[indedx], 'fats');
+                            }),
+                      ],
+                    ),
+                  ),
                   SizedBox(height: 12),
                   Divider(),
                   diaryFooter(),
@@ -120,7 +147,7 @@ class DiaryView extends GetView<DiaryController> {
         }));
   }
 
-  Widget rowItem(CaloriesDetails item, int type) {
+  Widget rowItem(CaloriesDetails item, String type) {
     return Container(
       height: 40,
       child: Column(
@@ -144,13 +171,16 @@ class DiaryView extends GetView<DiaryController> {
                         child: GestureDetector(
                           onTap: () {
                             showQualityDialog(
-                              type == 1
+                              type == 'proteins'
                                   ? controller
-                                      .response.value.data!.proteins!.food!
+                                      .response.value.data!.proteins!.food!  :
+                              type == 'carbs'
+                                  ? controller
+                                      .response.value.data!.carbs!.food!
                                   : controller
-                                      .response.value.data!.carbsFats!.food!,
+                                      .response.value.data!.fats!.food!,
                               item,
-                              type == 1,
+                              type == 'proteins'?   'proteins': type == 'carbs'?'carbs':'fats',
                             );
                           },
                           child: Container(
@@ -202,15 +232,21 @@ class DiaryView extends GetView<DiaryController> {
                                 try {
                                   double qty = double.parse(text);
                                   int foodId = 0;
-                                  if (type == 1) {
+                                  if (type=='proteins') {
                                     foodId = controller
                                         .response.value.data!.proteins!.food!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
                                         .id!;
-                                  } else {
+                                  } else if(type=='carbs'){
                                     foodId = controller
-                                        .response.value.data!.carbsFats!.food!
+                                        .response.value.data!.carbs!.food!
+                                        .firstWhere((element) =>
+                                            element.title == item.quality)
+                                        .id!;
+                                  }else {
+                                    foodId = controller
+                                        .response.value.data!.fats!.food!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
                                         .id!;
@@ -219,7 +255,7 @@ class DiaryView extends GetView<DiaryController> {
                                     item.id,
                                     foodId,
                                     qty,
-                                    typeIsProtine: type == 1,
+                                    type: 'proteins',
                                   );
                                 } catch (e) {}
                               },
@@ -257,11 +293,12 @@ class DiaryView extends GetView<DiaryController> {
                   child: GestureDetector(
                     onTap: () {
                       showQualityDialog(
-                        type == 1
-                            ? controller.response.value.data!.proteins!.food!
-                            : controller.response.value.data!.carbsFats!.food!,
+                        type=='proteins'
+                            ? controller.response.value.data!.proteins!.food! : type=='carbs'
+                            ? controller.response.value.data!.carbs!.food!
+                            : controller.response.value.data!.fats!.food!,
                         item,
-                        type == 1,
+                        type == 'proteins'?   'proteins': type == 'carbs'?'carbs':'fats',
                       );
                     },
                     child: itemWidget(
@@ -292,7 +329,7 @@ class DiaryView extends GetView<DiaryController> {
                 child: DeleteItemWidget(
                   controller: controller,
                   item: item,
-                  typeIsCalories: type == 1,
+                  type:                              type == 'proteins'?   'proteins': type == 'carbs'?'carbs':'fats',
                 ),
               ),
               Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
@@ -365,7 +402,7 @@ class DiaryView extends GetView<DiaryController> {
     );
   }
 
-  Widget staticBar(int type) {
+  Widget staticBar(String type) {
     return Container(
       height: 40,
       color: Color(0xFF414042),
@@ -405,10 +442,12 @@ class DiaryView extends GetView<DiaryController> {
             child: InkWell(
               onTap: () async {
                 FocusScope.of(Get.context!).requestFocus(FocusNode());
-                if (type == 1) {
+                if (type=='proteins') {
                   controller.caloriesDetails.add(CaloriesDetails());
-                } else {
-                  controller.carbsAndFats.add(CaloriesDetails());
+                } else if(type=='carbs')   {
+                  controller.carbsDetails.add(CaloriesDetails());
+                }else {
+                  controller.fatsDetails.add(CaloriesDetails());
                 }
               },
               child: Center(
@@ -867,7 +906,7 @@ class DiaryView extends GetView<DiaryController> {
   }
 
   void showQualityDialog(
-      List<Food> food, CaloriesDetails item, bool typeIsProtine) async {
+      List<Food> food, CaloriesDetails item, String type) async {
     // show screen dialog
     dynamic result = await showDialog(
         context: Get.context!,
@@ -886,13 +925,14 @@ class DiaryView extends GetView<DiaryController> {
       item.color = food.color;
 
       controller.caloriesDetails.refresh();
-      controller.carbsAndFats.refresh();
+      controller.carbsDetails.refresh();
+      controller.fatsDetails.refresh();
       if (item.id == null) {
         controller.createProtineData(food.id, food.qty!,
-            typeIsProtine: typeIsProtine);
+            type: type);
       } else {
         controller.updateProtineData(item.id, food.id, food.qty!,
-            typeIsProtine: typeIsProtine);
+            type: type);
       }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -902,13 +942,13 @@ class DiaryView extends GetView<DiaryController> {
 class DeleteItemWidget extends StatefulWidget {
   final CaloriesDetails item;
   final DiaryController controller;
-  final bool typeIsCalories;
+  final String type;
 
   DeleteItemWidget({
     Key? key,
     required this.item,
     required this.controller,
-    required this.typeIsCalories,
+    required this.type,
   }) : super(key: key);
 
   @override
@@ -938,23 +978,31 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
         deleteItem = true;
         setState(() {});
         if (widget.item.id == null) {
-          if (widget.typeIsCalories)
+          if (widget.type=='Proteins')
             await widget.controller.caloriesDetails.remove(widget.item);
+          else if(widget.type=='carbs')
+            await widget.controller.carbsDetails.remove(widget.item);
           else
-            await widget.controller.carbsAndFats.remove(widget.item);
+            await widget.controller.fatsDetails.remove(widget.item);
         } else {
-          if (widget.typeIsCalories)
+          if (widget.type=='proteins')
             await widget.controller.deleteItemCalories(
                 widget.item.id!,
                 widget.controller.lastSelectedDate.value,
-                widget.typeIsCalories);
+                widget.type);
+          else if(widget.type=='carbs')
+            await widget.controller.deleteItemCarbs(
+                widget.item.id!,
+                widget.controller.lastSelectedDate.value,
+                widget.type);
           else
             await widget.controller.deleteItemCarbs(
                 widget.item.id!,
                 widget.controller.lastSelectedDate.value,
-                widget.typeIsCalories);
+                widget.type);
 
-          await widget.controller.carbsAndFats.remove(widget.item);
+          await widget.controller.carbsDetails.remove(widget.item);
+          await widget.controller.fatsDetails.remove(widget.item);
         }
 
         deleteItem = false;

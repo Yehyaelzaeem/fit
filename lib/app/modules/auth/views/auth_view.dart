@@ -55,8 +55,7 @@ class AuthView extends GetView<AuthController> {
           ),
           GestureDetector(
               onTap: () {
-          //      Get.toNamed(Routes.HOME);
-                NotificationApi.showNotification(title: "Notification Title",body: "Notification Body");
+                     Get.toNamed(Routes.HOME);
               },
               child: kTextHeader('Skip', color: kColorPrimary, size: 20))
         ],

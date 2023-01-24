@@ -77,11 +77,6 @@ class SleepTimeStatus extends GetView<DiaryController> {
             children: [
               GestureDetector(
                 onTap: () {
-                  //   NotificationApi.showNotification(
-                  //     id:   0,
-                  //     title:    'Water 💧',
-                  //     body:     "Do not forget to drink water 💧",
-                  //   );
                   Get.toNamed(Routes.TIME_SLEEP, arguments: [
                     {"isToday": isToday},
                   ]);

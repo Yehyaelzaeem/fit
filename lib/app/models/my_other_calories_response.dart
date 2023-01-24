@@ -24,9 +24,10 @@ class MyOtherCaloriesResponse {
 
 class Data {
   List<Proteins>? proteins;
-  List<Proteins>? carbsFats;
+  List<Proteins>? carbs;
+  List<Proteins>? fats;
 
-  Data({this.proteins, this.carbsFats});
+  Data({this.proteins, this.carbs,this.fats});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['proteins'] != null) {
@@ -36,9 +37,14 @@ class Data {
       });
     }
     if (json['carbs_fats'] != null) {
-      carbsFats = <Proteins>[];
+      carbs = <Proteins>[];
       json['carbs_fats'].forEach((v) {
-        carbsFats!.add(new Proteins.fromJson(v));
+        carbs!.add(new Proteins.fromJson(v));
+      });
+    }   if (json['carbs_fats'] != null) {
+      fats = <Proteins>[];
+      json['carbs_fats'].forEach((v) {
+        fats!.add(new Proteins.fromJson(v));
       });
     }
   }
@@ -48,8 +54,11 @@ class Data {
     if (this.proteins != null) {
       data['proteins'] = this.proteins!.map((v) => v.toJson()).toList();
     }
-    if (this.carbsFats != null) {
-      data['carbs_fats'] = this.carbsFats!.map((v) => v.toJson()).toList();
+    if (this.carbs != null) {
+      data['carbs_fats'] = this.carbs!.map((v) => v.toJson()).toList();
+    }
+    if (this.fats != null) {
+      data['carbs_fats'] = this.fats!.map((v) => v.toJson()).toList();
     }
     return data;
   }
