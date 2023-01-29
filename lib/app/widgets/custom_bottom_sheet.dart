@@ -7,7 +7,7 @@ void CustomSheet({required BuildContext context, required Widget widget, double?
         return Container(
           color: Color(0xFF737373),
           child: Container(
-            height: hight ?? MediaQuery.of(context).size.height / 2,
+            height: hight ?? MediaQuery.of(context).size.height *0.7,
             decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.only(

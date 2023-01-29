@@ -1225,13 +1225,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  vimeo_player_flutter:
-    dependency: "direct main"
-    description:
-      name: vimeo_player_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.3+1"
   wakelock:
     dependency: transitive
     description:
@@ -1282,7 +1275,7 @@ packages:
     source: hosted
     version: "2.1.0"
   webview_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter
       url: "https://pub.dartlang.org"

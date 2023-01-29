@@ -26,8 +26,6 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   bool isLoading = true;
 
   MyOtherCaloriesResponse otherCaloriesResponse = MyOtherCaloriesResponse();
-  late String qtyProtine, foodProtine;
-
   void getDiaryData() async {
     await ApiProvider().getOtherCaloreis().then((value) {
       if (value.success == true) {
@@ -148,7 +146,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
 
                   SizedBox(height: 20),
 
-                  rowWithProgressBar("Fats", 2),
+                  rowWithProgressBar("Fats", 3),
                   staticBar(),
                   otherCaloriesResponse.data!.fats!.isEmpty
                       ? Center(

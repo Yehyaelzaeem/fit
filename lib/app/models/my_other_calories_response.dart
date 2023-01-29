@@ -41,9 +41,9 @@ class Data {
       json['carbs_fats'].forEach((v) {
         carbs!.add(new Proteins.fromJson(v));
       });
-    }   if (json['carbs_fats'] != null) {
+    }   if (json['fats'] != null) {
       fats = <Proteins>[];
-      json['carbs_fats'].forEach((v) {
+      json['fats'].forEach((v) {
         fats!.add(new Proteins.fromJson(v));
       });
     }
@@ -58,7 +58,7 @@ class Data {
       data['carbs_fats'] = this.carbs!.map((v) => v.toJson()).toList();
     }
     if (this.fats != null) {
-      data['carbs_fats'] = this.fats!.map((v) => v.toJson()).toList();
+      data['fats'] = this.fats!.map((v) => v.toJson()).toList();
     }
     return data;
   }

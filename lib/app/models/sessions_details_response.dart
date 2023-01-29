@@ -36,6 +36,7 @@ class Data {
   String? bodyComposition;
   int? proteinsCalories;
   int? carbsFatsCalories;
+  int? fatsCalories;
   String? followUp;
   List<FollowUpTable>? followUpTable;
 
@@ -50,6 +51,7 @@ class Data {
       this.water,
       this.bodyComposition,
       this.proteinsCalories,
+      this.fatsCalories,
       this.carbsFatsCalories,
       this.followUp,
       this.followUpTable});
@@ -66,6 +68,7 @@ class Data {
     bodyComposition = json['body_composition'];
     proteinsCalories = json['proteins_calories'];
     carbsFatsCalories = json['carbs_fats_calories'];
+    carbsFatsCalories = json['fats_calories'];
     followUp = json['follow_up'];
     if (json['follow_up_table'] != null) {
       followUpTable = <FollowUpTable>[];
@@ -90,7 +93,8 @@ class Data {
     data['carbs_fats_calories'] = this.carbsFatsCalories;
     data['follow_up'] = this.followUp;
     if (this.followUpTable != null) {
-      data['follow_up_table'] = this.followUpTable!.map((v) => v.toJson()).toList();
+      data['follow_up_table'] =
+          this.followUpTable!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -100,6 +104,7 @@ class FollowUpTable {
   int? id;
   ProteinsCalories? proteinsCalories;
   ProteinsCalories? carbsFatsCalories;
+  ProteinsCalories? fatsCalories;
   ProteinsCalories? total;
   String? date;
   int? water;
@@ -112,6 +117,7 @@ class FollowUpTable {
       {this.id,
       this.proteinsCalories,
       this.carbsFatsCalories,
+      this.fatsCalories,
       this.date,
       this.water,
       this.isSellected,
@@ -128,17 +134,24 @@ class FollowUpTable {
     carbsFatsCalories = json['carbs_fats_calories'] != null
         ? new ProteinsCalories.fromJson(json['carbs_fats_calories'])
         : null;
-   total = json['total_calories'] != null
+    fatsCalories = json['fats_calories'] != null
+        ? new ProteinsCalories.fromJson(json['fats_calories'])
+        : null;
+    total = json['total_calories'] != null
         ? new ProteinsCalories.fromJson(json['total_calories'])
         : null;
     date = json['date'];
     water = json['water'];
-    workout = json['workout'] != null ? new DayWorkouts.fromJson(json['workout']) : null;
+    workout = json['workout'] != null
+        ? new DayWorkouts.fromJson(json['workout'])
+        : null;
 
-    caloriesTable =
-        json['calories_table'] != null ? new CaloriesTable.fromJson(json['calories_table']) : null;
-    sleepingTime =
-        json['sleeping_time'] != null ? new SleepingTime.fromJson(json['sleeping_time']) : null;
+    caloriesTable = json['calories_table'] != null
+        ? new CaloriesTable.fromJson(json['calories_table'])
+        : null;
+    sleepingTime = json['sleeping_time'] != null
+        ? new SleepingTime.fromJson(json['sleeping_time'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -182,8 +195,10 @@ class ProteinsCalories {
 class CaloriesTable {
   List<CarbsFatsTable>? proteinsCaloriesTable;
   List<CarbsFatsTable>? carbsFatsTable;
+  List<CarbsFatsTable>? fatsTable;
 
-  CaloriesTable({this.proteinsCaloriesTable, this.carbsFatsTable});
+  CaloriesTable(
+      {this.proteinsCaloriesTable, this.carbsFatsTable, this.fatsTable});
 
   CaloriesTable.fromJson(Map<String, dynamic> json) {
     if (json['proteins_calories_table'] != null) {
@@ -198,15 +213,27 @@ class CaloriesTable {
         carbsFatsTable!.add(new CarbsFatsTable.fromJson(v));
       });
     }
+    if (json['fats_table'] != null) {
+      fatsTable = <CarbsFatsTable>[];
+      json['fats_table'].forEach((v) {
+        fatsTable!.add(new CarbsFatsTable.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.proteinsCaloriesTable != null) {
-      data['proteins_calories_table'] = this.proteinsCaloriesTable!.map((v) => v.toJson()).toList();
+      data['proteins_calories_table'] =
+          this.proteinsCaloriesTable!.map((v) => v.toJson()).toList();
     }
     if (this.carbsFatsTable != null) {
-      data['carbs_fats_table'] = this.carbsFatsTable!.map((v) => v.toJson()).toList();
+      data['carbs_fats_table'] =
+          this.carbsFatsTable!.map((v) => v.toJson()).toList();
+    }
+    if (this.fatsTable != null) {
+      data['fats_table'] =
+          this.fatsTable!.map((v) => v.toJson()).toList();
     }
     return data;
   }

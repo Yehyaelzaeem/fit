@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MainUnAuth extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +41,7 @@ class MainUnAuth extends StatelessWidget {
             paddingH: 0,
             textSize: 20,
             func: () {
-            Get.toNamed(Routes.LOGIN);
+              Get.toNamed(Routes.LOGIN);
             },
           ),
           Padding(
@@ -54,7 +53,12 @@ class MainUnAuth extends StatelessWidget {
               textSize: 20,
               bold: true,
               func: () {
-                  Get.toNamed(Routes.REGISTER);
+                //   Get.toNamed(Routes.REGISTER);
+                NotificationApi.showNotification(
+                  id: 0,
+                  title: ' 💧 Water 💧 ',
+                  body: "Do not forget to drink water",
+                );
               },
             ),
           ),

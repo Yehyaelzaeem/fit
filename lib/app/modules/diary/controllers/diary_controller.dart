@@ -208,7 +208,6 @@ class DiaryController extends GetxController {
     caloriesDetails.refresh();
     carbsDetails.refresh();
     fatsDetails.refresh();
-
     caloriesDetails.forEach((element) {});
     carbsDetails.forEach((element) {});
     carbsDetails.forEach((element) {});

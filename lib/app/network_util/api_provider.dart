@@ -365,6 +365,7 @@ class ApiProvider {
   }
 
   Future<SessionDetailsResponse> getSessionDetails(int? id) async {
+    print("session/$id");
     Response response = await _utils.get("session/$id");
     if (response.data["success"] == true) {
       return SessionDetailsResponse.fromJson(response.data);
