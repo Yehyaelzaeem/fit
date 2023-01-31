@@ -7,13 +7,15 @@ class OrientationController extends GetxController {
   final loading = true.obs;
   final response = OrientationVideosResponse().obs;
   final error = ''.obs;
-  OrientationVideosResponse orientationVideosResponse = OrientationVideosResponse();
+  OrientationVideosResponse orientationVideosResponse =
+      OrientationVideosResponse();
 
   @override
   void onInit() {
     getData();
     super.onInit();
   }
+
   void getData() async {
     await ApiProvider().getOrientationVideos().then((value) {
       if (value.success == true) {
@@ -25,6 +27,7 @@ class OrientationController extends GetxController {
       }
     });
   }
+
   getNetworkData() async {
     error.value = '';
     loading.value = true;

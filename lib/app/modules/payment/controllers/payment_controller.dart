@@ -14,38 +14,43 @@ class PaymentController extends GetxController {
   final userName = ''.obs;
   final userLastName = ''.obs;
 
-   getFromCash() async {
+  getFromCash() async {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    userLastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    if (userPhone.value.isEmpty&&userLastName.value.isEmpty) {
+    userLastName.value =
+        await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    if (userPhone.value.isEmpty && userLastName.value.isEmpty) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.LOGIN);
     }
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();
+
   void packagePayment({
     required int packageId,
   }) async {
     await getFromCash();
-    await ApiProvider().packagePayment(
+    await ApiProvider()
+        .packagePayment(
       email: userEmail.value,
-      name:userName.value,
-      lastName:userLastName.value,
-      packageId:packageId,
-      phone:userPhone.value,
-    ).then((value) {
+      name: userName.value,
+      lastName: userLastName.value,
+      packageId: packageId,
+      phone: userPhone.value,
+    )
+        .then((value) {
       if (value.success == true) {
         packagePaymentResponse = value;
         loading.value = false;
         update();
       } else {
-       Fluttertoast.showToast(msg: "Server Error");
+        Fluttertoast.showToast(msg: "Server Error");
       }
     });
   }
+
   @override
   void onInit() {
     getFromCash();
@@ -59,7 +64,8 @@ class PaymentController extends GetxController {
 
   @override
   void onClose() {}
- getNetworkData() async {
+
+  getNetworkData() async {
     error.value = '';
     loading.value = true;
     try {} catch (e) {
@@ -67,4 +73,5 @@ class PaymentController extends GetxController {
       error.value = '$e';
     }
     loading.value = false;
-  }}
+  }
+}

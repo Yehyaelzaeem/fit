@@ -38,10 +38,11 @@ import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
-
 // import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 
@@ -151,12 +152,14 @@ class ApiProvider {
 
   Future<UserResponse> login(String id, String password) async {
     String deviceId = await kDeviceInfo();
+    String deviceToken = await kDeviceToken();
+    print("FCM Token  =$deviceToken");
     FormData body = FormData.fromMap({
       'patient_id': id,
       'password': password,
       'device_id': deviceId,
+      'fcm_token': deviceToken,
     });
-
     Response response = await _utils.post("login", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -191,10 +194,13 @@ class ApiProvider {
 
   Future<UserResponse> getProfile() async {
     String deviceId = await kDeviceInfo();
+    String deviceToken = await kDeviceToken();
+    print("FCM Token  =$deviceToken");
     final GlobalController globalController =
         getx.Get.find<GlobalController>(tag: 'global');
     Echo('getProfile getProfile');
-    Response response = await _utils.get("profile?device_id==$deviceId");
+    Response response =
+        await _utils.get("profile?device_id==$deviceId&fcm_token=$deviceToken");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
@@ -770,7 +776,6 @@ class ApiProvider {
   Future<String> kDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     String deviceId = "";
-    // if (kDebugMode) return 'testDeviceId';
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       deviceId =
@@ -782,6 +787,12 @@ class ApiProvider {
     }
     Echo('deviceId = ${deviceId.replaceAll(' ', '')}');
     return deviceId.replaceAll(' ', '');
+  }
+
+  Future<String> kDeviceToken() async {
+    String? token;
+    token = await FirebaseMessaging.instance.getToken();
+    return token??"";
   }
 
   Future<VersionResponse> kAppVersion() async {

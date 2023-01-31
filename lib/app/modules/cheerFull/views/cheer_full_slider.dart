@@ -74,7 +74,16 @@ class _CheerFullSliderState extends State<CheerFullSlider> {
             children: <Widget>[
               ...widget.sliders.map((singleString) {
                 var index = widget.sliders.indexOf(singleString);
-                return Container(width: 8.0, height: 8.0, margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0), decoration: BoxDecoration(shape: BoxShape.circle, color: _currentPage == index ? kColorPrimary : Colors.grey));
+                return Container(
+                    width: 8.0,
+                    height: 8.0,
+                    margin:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: _currentPage == index
+                            ? kColorPrimary
+                            : Colors.grey));
               }),
             ],
           ),

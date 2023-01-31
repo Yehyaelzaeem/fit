@@ -29,7 +29,6 @@ class AuthErrorWidget extends StatelessWidget {
           kButtonDefault(Strings().login, func: () {
             Get.toNamed(Routes.LOGIN);
           }),
-         
         ],
       ),
     );

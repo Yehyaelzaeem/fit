@@ -10,7 +10,6 @@ class ContactResponse {
     success = json['success'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
-
 }
 
 class Data {
@@ -24,13 +23,12 @@ class Data {
         ? new ContactInfo.fromJson(json['contact_info'])
         : null;
     if (json['social_media'] != null) {
-      socialMedia =  <SocialMedia>[];
+      socialMedia = <SocialMedia>[];
       json['social_media'].forEach((v) {
         socialMedia!.add(new SocialMedia.fromJson(v));
       });
     }
   }
-
 }
 
 class ContactInfo {

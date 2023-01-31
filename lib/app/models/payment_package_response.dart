@@ -25,12 +25,12 @@ class Data {
 
   Data(
       {this.id,
-        this.name,
-        this.description,
-        this.price,
-        this.time,
-        this.date,
-        this.paymentUrl});
+      this.name,
+      this.description,
+      this.price,
+      this.time,
+      this.date,
+      this.paymentUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -41,5 +41,4 @@ class Data {
     date = json['date'];
     paymentUrl = json['payment_url'];
   }
-
 }

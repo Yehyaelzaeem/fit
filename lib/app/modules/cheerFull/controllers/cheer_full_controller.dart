@@ -7,26 +7,28 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class CheerFullController extends GetxController {
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
 
   final response = MealFeatureHomeResponse().obs;
   final error = ''.obs;
   final loading = false.obs;
   final isLoading = true.obs;
 
-  CheerfulSocialsResponse cheerfulSocialsResponse  = CheerfulSocialsResponse();
+  CheerfulSocialsResponse cheerfulSocialsResponse = CheerfulSocialsResponse();
 
   void getData() async {
     await ApiProvider().getCheerfulSocialsResponse().then((value) {
       if (value.success == true) {
         cheerfulSocialsResponse = value;
-          isLoading.value = false;
+        isLoading.value = false;
       } else {
         Fluttertoast.showToast(msg: "$value");
         print("error");
       }
     });
   }
+
   @override
   void onInit() async {
     getNetworkData();
@@ -54,5 +56,4 @@ class CheerFullController extends GetxController {
     }
     loading.value = false;
   }
-
 }

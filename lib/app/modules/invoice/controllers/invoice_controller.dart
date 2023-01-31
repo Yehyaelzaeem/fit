@@ -7,10 +7,13 @@ class InvoiceController extends GetxController {
   final loading = true.obs;
 
   PackageDetailsResponse packageDetailsResponse = PackageDetailsResponse();
+
   Future getPackageDetails({
-required int packageId,
-}) async {
-    await ApiProvider().paymentPackageDetails(packageId: packageId).then((value) {
+    required int packageId,
+  }) async {
+    await ApiProvider()
+        .paymentPackageDetails(packageId: packageId)
+        .then((value) {
       if (value.success == true) {
         packageDetailsResponse = value;
         loading.value = false;
@@ -23,8 +26,7 @@ required int packageId,
 
   @override
   void onInit() {
-    if (Get.arguments != null)
-      packageDetailsResponse = Get.arguments;
+    if (Get.arguments != null) packageDetailsResponse = Get.arguments;
     super.onInit();
   }
 

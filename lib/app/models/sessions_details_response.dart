@@ -232,8 +232,7 @@ class CaloriesTable {
           this.carbsFatsTable!.map((v) => v.toJson()).toList();
     }
     if (this.fatsTable != null) {
-      data['fats_table'] =
-          this.fatsTable!.map((v) => v.toJson()).toList();
+      data['fats_table'] = this.fatsTable!.map((v) => v.toJson()).toList();
     }
     return data;
   }

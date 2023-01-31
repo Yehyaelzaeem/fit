@@ -8,7 +8,7 @@ class FaqController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    faqResponse.value=await ApiProvider().getFaqtData();
+    faqResponse.value = await ApiProvider().getFaqtData();
     super.onInit();
   }
 

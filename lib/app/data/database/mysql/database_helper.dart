@@ -62,7 +62,6 @@
 //           ''');
 //   }
 
-
 //   Future<int> insert(Map<String, dynamic> row) async {
 //     Echo('insert');
 //     row.forEach((key, value) {
@@ -103,8 +102,6 @@
 //     Database db = await instance.database;
 //     return await db.delete(table, where: '$columnProductId = ?', whereArgs: [id]);
 //   }
-
-
 
 //   Future<int> delete(int id) async {
 //     Database db = await instance.database;

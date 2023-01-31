@@ -79,7 +79,7 @@ class CheerFullView extends GetView<CheerFullController> {
                         controller.cheerfulSocialsResponse.data!.isEmpty
                             ? Container()
                             : Container(
-                          height: Get.height*0.12,
+                                height: Get.height * 0.12,
                                 child: ListView.builder(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
@@ -87,7 +87,8 @@ class CheerFullView extends GetView<CheerFullController> {
                                         .cheerfulSocialsResponse.data!.length,
                                     itemBuilder: (context, index) {
                                       return socialMediaItem(controller
-                                          .cheerfulSocialsResponse.data![index]);
+                                          .cheerfulSocialsResponse
+                                          .data![index]);
                                     }),
                               ),
                       ],

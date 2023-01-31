@@ -18,7 +18,7 @@ class EmptyErrorWidget extends StatelessWidget {
           SizedBox(height: 8),
           Image.asset(
             'assets/img/ic_empty.png',
-            width: MediaQuery.of(context).size.width/1.4,
+            width: MediaQuery.of(context).size.width / 1.4,
           ),
           SizedBox(height: 20),
           kTextHeader(Strings().emptyMessage),

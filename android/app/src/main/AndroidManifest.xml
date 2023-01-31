@@ -31,6 +31,10 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            <intent-filter>
+                <action android:name="FLUUTER_NOTIFICATION_CLICK"/>
+                <action android:name="android.intent.action.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
             android:exported="true">

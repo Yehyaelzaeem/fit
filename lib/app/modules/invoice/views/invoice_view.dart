@@ -18,7 +18,7 @@ class InvoiceView extends GetView<InvoiceController> {
 
   @override
   Widget build(BuildContext context) {
-     controller.getPackageDetails(packageId: packageId!);
+    controller.getPackageDetails(packageId: packageId!);
     return Scaffold(
         body: packageId == null
             ? Center(child: kTextHeader("Error loading order details"))
@@ -70,11 +70,13 @@ class InvoiceView extends GetView<InvoiceController> {
                                         invoiceData(
                                             'Service Name',
                                             controller.packageDetailsResponse
-                                                .data?.name ??""),
+                                                    .data?.name ??
+                                                ""),
                                         invoiceData(
                                             'Duration',
                                             controller.packageDetailsResponse
-                                                .data?.package ??""),
+                                                    .data?.package ??
+                                                ""),
                                         Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -89,8 +91,7 @@ class InvoiceView extends GetView<InvoiceController> {
                                                     BorderRadius.circular(16),
                                                 color: kGreyContainerBackground,
                                               ),
-                                              child: kTextHeader(
-                                                  'Details',
+                                              child: kTextHeader('Details',
                                                   align: TextAlign.center,
                                                   color: Color(0xff7FC902),
                                                   bold: true),
@@ -116,18 +117,8 @@ class InvoiceView extends GetView<InvoiceController> {
                                             ),
                                           ],
                                         ),
-                                        invoiceData(
-                                            'Price',
-                                                "${controller.packageDetailsResponse
-                                                    .data?.price
-                                                    .toString() ??
-                                                    controller
-                                                        .packageDetailsResponse
-                                                        .data
-                                                        ?.usdPrice
-                                                        .toString() ??""} ${controller.packageDetailsResponse
-                                                    .data?.price
-                                                    .toString()!=null? "LE":"\$"}"),
+                                        invoiceData('Price',
+                                            "${controller.packageDetailsResponse.data?.price.toString() ?? controller.packageDetailsResponse.data?.usdPrice.toString() ?? ""} ${controller.packageDetailsResponse.data?.price.toString() != null ? "LE" : "\$"}"),
                                         invoiceData(
                                           'Time',
                                           controller.packageDetailsResponse.data

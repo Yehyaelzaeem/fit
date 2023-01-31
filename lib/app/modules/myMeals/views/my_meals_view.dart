@@ -22,7 +22,8 @@ class MyMealsView extends GetView<MyMealsController> {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Obx(() {
-            if (controller.loading.value) return Center(child: CircularLoadingWidget());
+            if (controller.loading.value)
+              return Center(child: CircularLoadingWidget());
             // if (controller.requiredAuth.value) return IncompleteData();
             if (controller.error.value.isNotEmpty)
               return Container(
@@ -40,8 +41,11 @@ class MyMealsView extends GetView<MyMealsController> {
                   SizedBox(height: 20),
                   header(),
                   SizedBox(height: 4),
-                  if (controller.getMyMealsLoading.value) Container(height: 100, child: CircularLoadingWidget()),
-                  if (!controller.getMyMealsLoading.value && controller.response.value.data != null && controller.response.value.data!.isEmpty)
+                  if (controller.getMyMealsLoading.value)
+                    Container(height: 100, child: CircularLoadingWidget()),
+                  if (!controller.getMyMealsLoading.value &&
+                      controller.response.value.data != null &&
+                      controller.response.value.data!.isEmpty)
                     Text(
                       'No meals added',
                       style: GoogleFonts.cairo(
@@ -50,7 +54,8 @@ class MyMealsView extends GetView<MyMealsController> {
                         color: Colors.black,
                       ),
                     ),
-                  if (!controller.getMyMealsLoading.value && controller.response.value.data != null)
+                  if (!controller.getMyMealsLoading.value &&
+                      controller.response.value.data != null)
                     ...controller.response.value.data!.reversed.map((e) {
                       return singleItem(meal: e);
                     }).toList(),
@@ -60,9 +65,17 @@ class MyMealsView extends GetView<MyMealsController> {
                       Expanded(
                         child: kButtonDefault(
                           "Order Now",
-                          color: controller.response.value.data != null && controller.response.value.data!.isEmpty ? Colors.grey : kColorPrimary,
+                          color: controller.response.value.data != null &&
+                                  controller.response.value.data!.isEmpty
+                              ? Colors.grey
+                              : kColorPrimary,
                           func: () {
-                            List<SingleMyMeal> meals = controller.response.value.data == null ? [] : controller.response.value.data!.where((element) => element.selected).toList();
+                            List<SingleMyMeal> meals =
+                                controller.response.value.data == null
+                                    ? []
+                                    : controller.response.value.data!
+                                        .where((element) => element.selected)
+                                        .toList();
                             if (meals.isEmpty) {
                               Get.snackbar(
                                 'Error',
@@ -75,16 +88,24 @@ class MyMealsView extends GetView<MyMealsController> {
 
                             YemenyPrefs yemenyPrefs = YemenyPrefs();
 
-                            Get.offNamed(Routes.SHIPPING_DETAILS, arguments: meals, parameters: {
-                              "name": yemenyPrefs.getShippingName() ?? '',
-                              "last_name": yemenyPrefs.getShippingLastName() ?? '',
-                              "email": yemenyPrefs.getShippingEmail() ?? '',
-                              "phone": yemenyPrefs.getShippingPhone() ?? '',
-                              "detailedAddress": yemenyPrefs.getShippingAddress() ?? '',
-                              "latitude": yemenyPrefs.getShippingLat() ?? '',
-                              "longitude": yemenyPrefs.getShippingLng() ?? '',
-                              "address": yemenyPrefs.getShippingCoordinatesAddress() ?? '',
-                            });
+                            Get.offNamed(Routes.SHIPPING_DETAILS,
+                                arguments: meals,
+                                parameters: {
+                                  "name": yemenyPrefs.getShippingName() ?? '',
+                                  "last_name":
+                                      yemenyPrefs.getShippingLastName() ?? '',
+                                  "email": yemenyPrefs.getShippingEmail() ?? '',
+                                  "phone": yemenyPrefs.getShippingPhone() ?? '',
+                                  "detailedAddress":
+                                      yemenyPrefs.getShippingAddress() ?? '',
+                                  "latitude":
+                                      yemenyPrefs.getShippingLat() ?? '',
+                                  "longitude":
+                                      yemenyPrefs.getShippingLng() ?? '',
+                                  "address": yemenyPrefs
+                                          .getShippingCoordinatesAddress() ??
+                                      '',
+                                });
                           },
                         ),
                       ),
@@ -94,7 +115,9 @@ class MyMealsView extends GetView<MyMealsController> {
                         color: Color(0xffF1F1F1),
                         textColor: Colors.red,
                         func: () {
-                          if (controller.response.value.data != null && controller.response.value.data!.isNotEmpty) controller.deleteMeals();
+                          if (controller.response.value.data != null &&
+                              controller.response.value.data!.isNotEmpty)
+                            controller.deleteMeals();
                         },
                         border: Border.all(color: Colors.red, width: 1),
                       )),
@@ -115,14 +138,17 @@ class MyMealsView extends GetView<MyMealsController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(
@@ -208,39 +234,113 @@ class MyMealsView extends GetView<MyMealsController> {
         color: Color(0xffF1F1F1),
       ),
       margin: EdgeInsets.symmetric(vertical: 4),
-      child: Row(
+      child: Column(
         children: [
-          Checkbox(
-              value: meal.selected,
-              onChanged: (sts) {
-                controller.response.update((val) {
-                  val!.data!.forEach((e) {
-                    if (e.id == meal.id) e.selected = sts!;
-                  });
-                });
-              }),
-          SizedBox(width: 8),
-          Expanded(child: kTextbody("${meal.name}", color: kColorPrimary, align: TextAlign.start, bold: true)),
-          kTextbody("${meal.price} L.E", color: Colors.black),
-          SizedBox(width: 12),
-          GestureDetector(
-            onTap: () async {
-              dynamic val = await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
-              if (val != null) controller.getNetworkData();
-            },
-            child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                child: Icon(
-                  Icons.edit,
-                  size: 18,
-                )),
+          Row(
+            children: [
+              Checkbox(
+                  value: meal.selected,
+                  onChanged: (sts) {
+                    controller.response.update((val) {
+                      val!.data!.forEach((e) {
+                        if (e.id == meal.id) e.selected = sts!;
+                      });
+                    });
+                    controller.changeValue(meal.selected);
+                  }),
+              SizedBox(width: 8),
+              Expanded(
+                  child: kTextbody("${meal.name}",
+                      color: kColorPrimary,
+                      align: TextAlign.start,
+                      bold: true)),
+              kTextbody("${meal.price} L.E", color: Colors.black),
+              SizedBox(width: 12),
+              GestureDetector(
+                onTap: () async {
+                  dynamic val =
+                      await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
+                  if (val != null) controller.getNetworkData();
+                },
+                child: Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.black, width: 1),
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                    child: Icon(
+                      Icons.edit,
+                      size: 18,
+                    )),
+              ),
+              SizedBox(width: 8),
+            ],
           ),
-          SizedBox(width: 8),
+          meal.selected == true
+              ? Container(
+                width: 120,
+                height: 46,
+                decoration: BoxDecoration(
+                  color:Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(
+                      12),
+                ),
+                /**************************** number & add & minus *****************************/
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    /**************************** minus *****************************/
+                    GestureDetector(
+                      onTap: () {
+                  //      cubit.minus();
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                          BorderRadius.circular(
+                             12),
+                        ),
+                        child: Icon(
+                          Icons.remove,
+                        ),
+                      ),
+                    ),
+                    /**************************** number *****************************/
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 2.0),
+                      child: kTextHeader(
+                        "1"
+                      ),
+                    ),
+                    /**************************** add *****************************/
+                    GestureDetector(
+                      onTap: () {
+                   //     cubit.add();
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius:
+                          BorderRadius.circular(
+                             12),
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          //  color: ColorsManager.blackColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+              : SizedBox()
         ],
       ),
     );

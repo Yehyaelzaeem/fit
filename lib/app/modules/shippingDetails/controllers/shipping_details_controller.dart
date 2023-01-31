@@ -12,7 +12,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:map_picker/map_picker.dart';
 
 class ShippingDetailsController extends GetxController {
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
   GlobalKey<FormState> key = GlobalKey();
   List<SingleMyMeal> meals = [];
   final detailedAddress = ''.obs;
@@ -89,7 +90,8 @@ class ShippingDetailsController extends GetxController {
       longitude.value = '0';
     }
     if (latitude.value.toString().isEmpty) {
-      Get.snackbar('Error', 'Please select location', backgroundColor: Colors.red, colorText: Colors.white);
+      Get.snackbar('Error', 'Please select location',
+          backgroundColor: Colors.red, colorText: Colors.white);
       return;
     }
     YemenyPrefs yemenyPrefs = YemenyPrefs();

@@ -14,7 +14,7 @@ class EditNewCalorie extends StatefulWidget {
   final Proteins proteins;
 
   const EditNewCalorie({Key? key, required this.type, required this.proteins})
-   : super(key: key);
+      : super(key: key);
 
   @override
   _EditNewCalorieState createState() => _EditNewCalorieState();
@@ -24,7 +24,7 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
   MyOtherCaloriesUnitsResponse otherCaloriesResponse =
-   MyOtherCaloriesUnitsResponse();
+      MyOtherCaloriesUnitsResponse();
   String? title;
   String? calorie_per_unit;
   String unitName = "Choose Unit";
@@ -60,19 +60,19 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
 
     await ApiProvider()
         .updateOtherCalories(
-          title: title,
-                 calPerUnti: calorie_per_unit,
-          unit: unitID,
-           unitQuantity: unit_qty,
+            title: title,
+            calPerUnti: calorie_per_unit,
+            unit: unitID,
+            unitQuantity: unit_qty,
             unitName: unit_name,
-             type: widget.type,
-              id: widget.proteins.id)
+            type: widget.type,
+            id: widget.proteins.id)
         .then((value) {
       if (value.success == true) {
         setState(() => showLoader = false);
         Fluttertoast.showToast(msg: "${value.message}");
         Navigator.pushReplacement(context,
-         MaterialPageRoute(builder: (context) => MyOtherCalories()));
+            MaterialPageRoute(builder: (context) => MyOtherCalories()));
         print("OK");
       } else {
         setState(() => showLoader = false);
@@ -150,12 +150,12 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  unitName = 
-                                  otherCaloriesResponse.data![index].title!;
+                                  unitName =
+                                      otherCaloriesResponse.data![index].title!;
                                   unit_name =
-                                   otherCaloriesResponse.data![index].title!;
+                                      otherCaloriesResponse.data![index].title!;
                                   unitID =
-                                   otherCaloriesResponse.data![index].id!;
+                                      otherCaloriesResponse.data![index].id!;
                                 });
                                 Navigator.pop(context);
                               },
@@ -163,13 +163,13 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
                                 children: [
                                   Padding(
                                     padding:
-                                     const EdgeInsets.symmetric(vertical: 4),
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
                                       style: TextStyle(
-                                        color: Colors.black,
-                                       fontSize: 18, 
-                                      fontWeight: FontWeight.bold),
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(

@@ -68,6 +68,7 @@ class AppPages {
   AppPages._();
 
   static const INITIAL = Routes.AUTH;
+
   // static const INITIAL = Routes.SHOW_PAGES;
 
   static final routes = [

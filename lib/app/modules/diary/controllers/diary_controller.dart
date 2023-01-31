@@ -33,12 +33,14 @@ class DiaryController extends GetxController {
   final workDesc = ''.obs;
   final length = 0.obs;
   final workOut = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
     getFromCash();
- //   _initData();
+    //   _initData();
   }
+
   String _timezone = 'Unknown';
   List<String> _availableTimezones = <String>[];
 
@@ -96,9 +98,15 @@ class DiaryController extends GetxController {
           showLoader.value = false;
           length.value = response.value.data!.water! + 3;
           workOut.value = response.value.data!.workouts![0].id!;
-          workDesc.value = response.value.data!.dayWorkouts == null ? " " : response.value.data!.dayWorkouts!.workoutDesc!;
-          textEditController.text = response.value.data!.dayWorkouts == null ? " " : response.value.data!.dayWorkouts!.workoutDesc!;
-          workOutData.value = response.value.data!.dayWorkouts == null ? " " : response.value.data!.dayWorkouts!.workoutType!;
+          workDesc.value = response.value.data!.dayWorkouts == null
+              ? " "
+              : response.value.data!.dayWorkouts!.workoutDesc!;
+          textEditController.text = response.value.data!.dayWorkouts == null
+              ? " "
+              : response.value.data!.dayWorkouts!.workoutDesc!;
+          workOutData.value = response.value.data!.dayWorkouts == null
+              ? " "
+              : response.value.data!.dayWorkouts!.workoutType!;
           waterBottlesList.clear();
 
           if (response.value.data!.days![0].active == true) {
@@ -116,15 +124,22 @@ class DiaryController extends GetxController {
           for (int i = 1; i <= length.value; i++) {
             if (i <= response.value.data!.water!) {
               waterBottlesList.add(
-                SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: true),
+                SingleImageItem(
+                    id: i,
+                    imagePath: 'assets/img/im_holder1.png',
+                    selected: true),
               );
             } else {
               waterBottlesList.add(
-                SingleImageItem(id: i, imagePath: 'assets/img/im_holder1.png', selected: false),
+                SingleImageItem(
+                    id: i,
+                    imagePath: 'assets/img/im_holder1.png',
+                    selected: false),
               );
             }
           }
-          Echo("Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
+          Echo(
+              "Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
         } else {
           if (lastSelectedDate.value.isNotEmpty) {
             getDiaryData(lastSelectedDate.value);
@@ -139,7 +154,8 @@ class DiaryController extends GetxController {
         }
         // caloriesDetails.clear();
         // carbsAndFats.clear();
-        refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
+        refreshCaloriesList(
+            response.value.data!.proteins!.caloriesDetails ?? []);
         refreshCarbsList(response.value.data!.carbs!.caloriesDetails ?? []);
         refreshFatsList(response.value.data!.fats!.caloriesDetails ?? []);
 
@@ -151,21 +167,27 @@ class DiaryController extends GetxController {
 
   void refreshDiaryData(String _date, String type) async {
     Echo('refreshDiaryData');
-     if(type=='proteins')refreshLoadingProtine.value = true;
-     if(type=='carbs')    refreshLoadingCarbs.value = true;
-     if(type=='fats')     refreshLoadingFats.value = true;
+    if (type == 'proteins') refreshLoadingProtine.value = true;
+    if (type == 'carbs') refreshLoadingCarbs.value = true;
+    if (type == 'fats') refreshLoadingFats.value = true;
     lastSelectedDate.value = _date;
     response.value = await ApiProvider().getDiaryView(_date);
-    if (response.value.data!.proteins!.caloriesDetails!.isEmpty && response.value.data!.carbs!.caloriesDetails!.isEmpty&& response.value.data!.fats!.caloriesDetails!.isEmpty) {
-      if(type=='proteins')refreshLoadingProtine.value = false;
-      if(type=='carbs')    refreshLoadingCarbs.value = false;
-      if(type=='fats')     refreshLoadingFats.value = false;
+    if (response.value.data!.proteins!.caloriesDetails!.isEmpty &&
+        response.value.data!.carbs!.caloriesDetails!.isEmpty &&
+        response.value.data!.fats!.caloriesDetails!.isEmpty) {
+      if (type == 'proteins') refreshLoadingProtine.value = false;
+      if (type == 'carbs') refreshLoadingCarbs.value = false;
+      if (type == 'fats') refreshLoadingFats.value = false;
       return;
     } else {
       // caloriesDetails.removeWhere((element) => element.id == null);
       // carbsAndFats.removeWhere((element) => element.id == null);
       response.value.data!.proteins!.caloriesDetails!.forEach((element) {
-        if (caloriesDetails.where((element2) => element.id == element2.id).toList().length > 0) {
+        if (caloriesDetails
+                .where((element2) => element.id == element2.id)
+                .toList()
+                .length >
+            0) {
           caloriesDetails.forEach((item) {
             if (item.id == element.id) {
               item.quality = element.quality;
@@ -174,11 +196,16 @@ class DiaryController extends GetxController {
             }
           });
         } else {
-          refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
+          refreshCaloriesList(
+              response.value.data!.proteins!.caloriesDetails ?? []);
         }
       });
       response.value.data!.carbs!.caloriesDetails!.forEach((element) {
-        if (carbsDetails.where((element2) => element.id == element2.id).toList().length > 0) {
+        if (carbsDetails
+                .where((element2) => element.id == element2.id)
+                .toList()
+                .length >
+            0) {
           carbsDetails.forEach((item) {
             if (item.id == element.id) {
               item.quality = element.quality;
@@ -192,7 +219,11 @@ class DiaryController extends GetxController {
       });
 
       response.value.data!.fats!.caloriesDetails!.forEach((element) {
-        if (fatsDetails.where((element2) => element.id == element2.id).toList().length > 0) {
+        if (fatsDetails
+                .where((element2) => element.id == element2.id)
+                .toList()
+                .length >
+            0) {
           fatsDetails.forEach((item) {
             if (item.id == element.id) {
               item.quality = element.quality;
@@ -212,13 +243,15 @@ class DiaryController extends GetxController {
     carbsDetails.forEach((element) {});
     carbsDetails.forEach((element) {});
     fatsDetails.forEach((element) {});
-   if(type=='proteins')refreshLoadingProtine.value = false;
-   if(type=='carbs')    refreshLoadingCarbs.value = false;
-   if(type=='fats')    refreshLoadingFats.value = false;
+    if (type == 'proteins') refreshLoadingProtine.value = false;
+    if (type == 'carbs') refreshLoadingCarbs.value = false;
+    if (type == 'fats') refreshLoadingFats.value = false;
   }
 
   Future<void> deleteItemCalories(int id, String _date, String type) async {
-    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
+    await ApiProvider()
+        .deleteCalorie("delete_calories_details", id)
+        .then((value) {
       if (value.success == true) {
         caloriesDetails.removeWhere((element) => element.id == id);
         refreshDiaryData(apiDate.value, type);
@@ -231,7 +264,9 @@ class DiaryController extends GetxController {
   }
 
   Future<void> deleteItemCarbs(int id, String _date, String type) async {
-    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
+    await ApiProvider()
+        .deleteCalorie("delete_calories_details", id)
+        .then((value) {
       if (value.success == true) {
         carbsDetails.removeWhere((element) => element.id == id);
         refreshDiaryData(apiDate.value, type);
@@ -244,7 +279,9 @@ class DiaryController extends GetxController {
   }
 
   Future<void> deleteItemFats(int id, String _date, String type) async {
-    await ApiProvider().deleteCalorie("delete_calories_details", id).then((value) {
+    await ApiProvider()
+        .deleteCalorie("delete_calories_details", id)
+        .then((value) {
       if (value.success == true) {
         fatsDetails.removeWhere((element) => element.id == id);
         refreshDiaryData(apiDate.value, type);
@@ -258,7 +295,9 @@ class DiaryController extends GetxController {
 
   void updateWaterData(String water) async {
     showLoader.value = true;
-    await ApiProvider().createDiaryData(water: water, date: apiDate.value).then((value) {
+    await ApiProvider()
+        .createDiaryData(water: water, date: apiDate.value)
+        .then((value) {
       if (value.success == true) {
         showLoader.value = false;
         getDiaryData(apiDate.value);
@@ -271,6 +310,7 @@ class DiaryController extends GetxController {
   }
 
   final workoutLoading = false.obs;
+
   void updateWork() async {
     workoutLoading.value = true;
 
@@ -293,7 +333,11 @@ class DiaryController extends GetxController {
   }
 
   void downloadFile(String url) async {
-    Navigator.push(Get.context!, MaterialPageRoute(builder: (context) => PDFPreview(res: "$url", name: "Calories Calculator")));
+    Navigator.push(
+        Get.context!,
+        MaterialPageRoute(
+            builder: (context) =>
+                PDFPreview(res: "$url", name: "Calories Calculator")));
   }
 
   void showPobUp(String text) {
@@ -312,7 +356,8 @@ class DiaryController extends GetxController {
                       child: SelectableText(
                         "${text}",
                         // textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -323,19 +368,26 @@ class DiaryController extends GetxController {
 
   void launchURL(_url) async => await launch(_url);
 
-  void createProtineData(int? food, double _quantity, {int? index, required String type}) async {
-    if (type=='proteins') refreshLoadingProtine.value = true;
-    if (type=='carbs')     refreshLoadingCarbs.value = true;
-    if (type=='fats')     refreshLoadingFats.value = true;
-    await ApiProvider().createDiaryData(foodProtine: food, qtyProtiene: _quantity, date: apiDate.value);
+  void createProtineData(int? food, double _quantity,
+      {int? index, required String type}) async {
+    if (type == 'proteins') refreshLoadingProtine.value = true;
+    if (type == 'carbs') refreshLoadingCarbs.value = true;
+    if (type == 'fats') refreshLoadingFats.value = true;
+    await ApiProvider().createDiaryData(
+        foodProtine: food, qtyProtiene: _quantity, date: apiDate.value);
     refreshDiaryData(apiDate.value, type);
   }
 
-  void updateProtineData(int? index, int? food, double _quantity, {required String type}) async {
-     if (type=='proteins')refreshLoadingProtine.value = true;
-     if (type=='carbs')    refreshLoadingCarbs.value = true;
-     if (type=='fats')     refreshLoadingFats.value = true;
-    await ApiProvider().editDiaryData(foodProtine: food, qtyProtiene: _quantity, date: apiDate.value, id: index);
+  void updateProtineData(int? index, int? food, double _quantity,
+      {required String type}) async {
+    if (type == 'proteins') refreshLoadingProtine.value = true;
+    if (type == 'carbs') refreshLoadingCarbs.value = true;
+    if (type == 'fats') refreshLoadingFats.value = true;
+    await ApiProvider().editDiaryData(
+        foodProtine: food,
+        qtyProtiene: _quantity,
+        date: apiDate.value,
+        id: index);
     refreshDiaryData(apiDate.value, type);
   }
 
@@ -348,7 +400,8 @@ class DiaryController extends GetxController {
 
   void refreshCaloriesList(List<CaloriesDetails> list) {
     List<CaloriesDetails> emptyList = [];
-    emptyList.addAll(caloriesDetails.where((element) => element.qty == null).toList());
+    emptyList.addAll(
+        caloriesDetails.where((element) => element.qty == null).toList());
     caloriesDetails.clear();
     caloriesDetails.addAll(list);
     caloriesDetails.addAll(emptyList);
@@ -375,7 +428,8 @@ class DiaryController extends GetxController {
 
   void refreshCarbsList(List<CaloriesDetails> list) {
     List<CaloriesDetails> emptyList = [];
-    emptyList.addAll(carbsDetails.where((element) => element.qty == null).toList());
+    emptyList
+        .addAll(carbsDetails.where((element) => element.qty == null).toList());
     carbsDetails.clear();
     carbsDetails.addAll(list);
     carbsDetails.addAll(emptyList);
@@ -400,9 +454,11 @@ class DiaryController extends GetxController {
       }
     });
   }
+
   void refreshFatsList(List<CaloriesDetails> list) {
     List<CaloriesDetails> emptyList = [];
-    emptyList.addAll(fatsDetails.where((element) => element.qty == null).toList());
+    emptyList
+        .addAll(fatsDetails.where((element) => element.qty == null).toList());
     fatsDetails.clear();
     fatsDetails.addAll(list);
     fatsDetails.addAll(emptyList);
@@ -434,5 +490,6 @@ class SingleImageItem {
   String imagePath;
   bool selected;
 
-  SingleImageItem({required this.id, required this.imagePath, required this.selected});
+  SingleImageItem(
+      {required this.id, required this.imagePath, required this.selected});
 }

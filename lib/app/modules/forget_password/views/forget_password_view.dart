@@ -119,10 +119,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height: MediaQuery.of(context).size.width / 14),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.width / 14),
                               kButtonDefault(
                                 '  SEND  ',
-                                marginH: MediaQuery.of(context).size.width / 4.5,
+                                marginH:
+                                    MediaQuery.of(context).size.width / 4.5,
                                 paddingV: 0,
                                 func: () {
                                   if (!key.currentState!.validate()) {

@@ -25,13 +25,28 @@ class Data {
   String? pdf;
   String? workoutDetails;
   String? workoutDetailsType;
-  SleepingTime ? sleepingTime;
+  SleepingTime? sleepingTime;
 
-  Data({this.proteins, this.carbs,this.fats, this.water, this.workouts, this.dayWorkouts, this.pdf, this.workoutDetails, this.days, this.workoutDetailsType, this.sleepingTime});
+  Data(
+      {this.proteins,
+      this.carbs,
+      this.fats,
+      this.water,
+      this.workouts,
+      this.dayWorkouts,
+      this.pdf,
+      this.workoutDetails,
+      this.days,
+      this.workoutDetailsType,
+      this.sleepingTime});
 
   Data.fromJson(Map<String, dynamic> json) {
-    proteins = json['proteins'] != null ? new Proteins.fromJson(json['proteins']) : null;
-    carbs = json['carbs_fats'] != null ? new Proteins.fromJson(json['carbs_fats']) : null;
+    proteins = json['proteins'] != null
+        ? new Proteins.fromJson(json['proteins'])
+        : null;
+    carbs = json['carbs_fats'] != null
+        ? new Proteins.fromJson(json['carbs_fats'])
+        : null;
     fats = json['fats'] != null ? new Proteins.fromJson(json['fats']) : null;
     water = json['water'];
     if (json['workouts'] != null) {
@@ -46,11 +61,15 @@ class Data {
         days!.add(new Days.fromJson(v));
       });
     }
-    dayWorkouts = json['day_workouts'] != null ? new DayWorkouts.fromJson(json['day_workouts']) : null;
+    dayWorkouts = json['day_workouts'] != null
+        ? new DayWorkouts.fromJson(json['day_workouts'])
+        : null;
     pdf = json['pdf'];
     workoutDetails = json['workout_details'] ?? "";
     workoutDetailsType = json['workout_details_type'] ?? "";
-    sleepingTime = json['sleeping_time'] != null ? new SleepingTime.fromJson(json['sleeping_time']) : null;
+    sleepingTime = json['sleeping_time'] != null
+        ? new SleepingTime.fromJson(json['sleeping_time'])
+        : null;
   }
 }
 
@@ -84,7 +103,9 @@ class Proteins {
   Proteins({this.caloriesTotal, this.caloriesDetails, this.food});
 
   Proteins.fromJson(Map<String, dynamic> json) {
-    caloriesTotal = json['calories_total'] != null ? new CaloriesTotal.fromJson(json['calories_total']) : null;
+    caloriesTotal = json['calories_total'] != null
+        ? new CaloriesTotal.fromJson(json['calories_total'])
+        : null;
     if (json['calories_details'] != null) {
       caloriesDetails = <CaloriesDetails>[];
       json['calories_details'].forEach((v) {
@@ -110,7 +131,9 @@ class CaloriesTotal {
   CaloriesTotal.fromJson(Map<String, dynamic> json) {
     taken = json['taken'];
     imposed = json['imposed'];
-    progress = json['progress'] != null ? new Progress.fromJson(json['progress']) : null;
+    progress = json['progress'] != null
+        ? new Progress.fromJson(json['progress'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -152,7 +175,14 @@ class CaloriesDetails {
   String? unit;
   String? color;
 
-  CaloriesDetails({this.id, this.qty, this.quality, this.calories, this.createdAt, this.unit, this.color});
+  CaloriesDetails(
+      {this.id,
+      this.qty,
+      this.quality,
+      this.calories,
+      this.createdAt,
+      this.unit,
+      this.color});
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -184,7 +214,14 @@ class Food {
   bool? isSellected;
   double? qty;
 
-  Food({this.id, this.title, this.qty, this.unit, this.caloriePerUnit, this.color, this.isSellected});
+  Food(
+      {this.id,
+      this.title,
+      this.qty,
+      this.unit,
+      this.caloriePerUnit,
+      this.color,
+      this.isSellected});
 
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -291,16 +328,20 @@ class SleepingTime {
   String? sleepingDuration;
   SleepingStatus? sleepingStatus;
 
-  SleepingTime({this.sleepingFrom, this.sleepingTo, this.sleepingDuration, this.sleepingStatus});
+  SleepingTime(
+      {this.sleepingFrom,
+      this.sleepingTo,
+      this.sleepingDuration,
+      this.sleepingStatus});
 
   SleepingTime.fromJson(Map<String, dynamic> json) {
     sleepingFrom = json['sleeping_from'];
     sleepingTo = json['sleeping_to'];
     sleepingDuration = json['sleeping_duration'];
-    sleepingStatus = json['sleeping_status'] != null ? new SleepingStatus.fromJson(json['sleeping_status']) : null;
-
+    sleepingStatus = json['sleeping_status'] != null
+        ? new SleepingStatus.fromJson(json['sleeping_status'])
+        : null;
   }
-
 }
 
 class SleepingStatus {
@@ -308,12 +349,15 @@ class SleepingStatus {
   String? name;
   String? image;
 
-  SleepingStatus({this.id, this.name, this.image,});
+  SleepingStatus({
+    this.id,
+    this.name,
+    this.image,
+  });
 
   SleepingStatus.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     image = json['image'];
   }
-
 }

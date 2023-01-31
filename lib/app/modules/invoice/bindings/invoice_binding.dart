@@ -5,7 +5,7 @@ class InvoiceBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<InvoiceController>(
-          () => InvoiceController(),
+      () => InvoiceController(),
     );
   }
 }

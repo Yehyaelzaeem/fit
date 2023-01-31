@@ -24,7 +24,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller.loading.value) return Scaffold(body: Container(child: CircularLoadingWidget()));
+      if (controller.loading.value)
+        return Scaffold(body: Container(child: CircularLoadingWidget()));
       if (controller.response.value.forceUpdate)
         return Scaffold(
           body: Column(
@@ -45,7 +46,9 @@ class HomeView extends GetView<HomeController> {
               kButtonDefault(
                 "Update",
                 func: () async {
-                  String url = Platform.isAndroid ? StringConst.PLAY_STORE : StringConst.APP_STORE;
+                  String url = Platform.isAndroid
+                      ? StringConst.PLAY_STORE
+                      : StringConst.APP_STORE;
                   bool canLaun = await canLaunch(url);
                   if (canLaun) launch(url);
                 },

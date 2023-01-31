@@ -192,142 +192,145 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                       ),
                                                     ),
                                                     controller
-                                                        .myPackagesResponse
-                                                        .data
-                                                        ?.orders?[index].paymentUrl==null?     Expanded(
-                                                      child: Center(
-                                                        child: GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (_) => InvoiceView(
-                                                                      packageId: controller.myPackagesResponse.data?.orders?[index].id,
-                                                                    )));
-                                                          },
-                                                          child: Center(
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                  color: kColorPrimary,
-                                                                  borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                      64),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: Colors
-                                                                          .grey
-                                                                          .withOpacity(
-                                                                          0.4),
-                                                                      blurRadius:
-                                                                      1,
-                                                                      spreadRadius:
-                                                                      1,
-                                                                      offset:
-                                                                      Offset(
-                                                                          0,
-                                                                          1),
+                                                                .myPackagesResponse
+                                                                .data
+                                                                ?.orders?[index]
+                                                                .paymentUrl ==
+                                                            null
+                                                        ? Expanded(
+                                                            child: Center(
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (_) => InvoiceView(
+                                                                                packageId: controller.myPackagesResponse.data?.orders?[index].id,
+                                                                              )));
+                                                                },
+                                                                child: Center(
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color:
+                                                                            kColorPrimary,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(64),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color:
+                                                                                Colors.grey.withOpacity(0.4),
+                                                                            blurRadius:
+                                                                                1,
+                                                                            spreadRadius:
+                                                                                1,
+                                                                            offset:
+                                                                                Offset(0, 1),
+                                                                          ),
+                                                                        ]),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              8,
+                                                                          vertical:
+                                                                              4),
+                                                                      child:
+                                                                          kTextHeader(
+                                                                        "Details ",
+                                                                        size:
+                                                                            16,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        bold:
+                                                                            true,
+                                                                        paddingH:
+                                                                            12,
+                                                                        paddingV:
+                                                                            4,
+                                                                      ),
                                                                     ),
-                                                                  ]),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                    8,
-                                                                    vertical:
-                                                                    4),
-                                                                child:
-                                                                kTextHeader(
-                                                                  "Details ",
-                                                                  size: 16,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  bold: true,
-                                                                  paddingH: 12,
-                                                                  paddingV: 4,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Expanded(
+                                                            child: Center(
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: controller
+                                                                            .myPackagesResponse
+                                                                            .data
+                                                                            ?.orders?[index]
+                                                                            .paymentUrlStatus ==
+                                                                        true
+                                                                    ? () {
+                                                                        Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(
+                                                                                builder: (_) => WebViewScreen(
+                                                                                      url: controller.myPackagesResponse.data!.orders![index].paymentUrl!,
+                                                                                      packageId: controller.myPackagesResponse.data!.orders?[index].id!,
+                                                                                    )));
+                                                                      }
+                                                                    : () {
+                                                                        Fluttertoast.showToast(
+                                                                            msg:
+                                                                                "  Payment is deactivated  ");
+                                                                      },
+                                                                child: Center(
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: BoxDecoration(
+                                                                        color: controller.myPackagesResponse.data?.orders?[index].paymentUrlStatus ==
+                                                                                true
+                                                                            ? kColorPrimary
+                                                                            : kColorAccent,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(64),
+                                                                        boxShadow: [
+                                                                          BoxShadow(
+                                                                            color:
+                                                                                Colors.grey.withOpacity(0.4),
+                                                                            blurRadius:
+                                                                                1,
+                                                                            spreadRadius:
+                                                                                1,
+                                                                            offset:
+                                                                                Offset(0, 1),
+                                                                          ),
+                                                                        ]),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .symmetric(
+                                                                          horizontal:
+                                                                              8,
+                                                                          vertical:
+                                                                              4),
+                                                                      child:
+                                                                          kTextHeader(
+                                                                        "Pay ",
+                                                                        size:
+                                                                            16,
+                                                                        color: Colors
+                                                                            .white,
+                                                                        bold:
+                                                                            true,
+                                                                        paddingH:
+                                                                            12,
+                                                                        paddingV:
+                                                                            4,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ),
-                                                    ):
-                                                    Expanded(
-                                                      child: Center(
-                                                        child: GestureDetector(
-                                                          onTap: controller
-                                                                      .myPackagesResponse
-                                                                      .data
-                                                                      ?.orders?[
-                                                                          index]
-                                                                      .paymentUrlStatus ==
-                                                                  true
-                                                              ? () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (_) => WebViewScreen(
-                                                                      url: controller.myPackagesResponse.data!.orders![index].paymentUrl!,
-                                                                      packageId: controller.myPackagesResponse.data!.orders?[index].id!,
-                                                                    )));
-
-                                                                }
-                                                              : () {
-                                                                           Fluttertoast.showToast(msg: "  Payment is deactivated  ");
-
-                                                          },
-                                                          child: Center(
-                                                            child: Container(
-                                                              decoration: BoxDecoration(
-                                                                  color:
-                                                                  controller
-                                                                      .myPackagesResponse
-                                                                      .data
-                                                                      ?.orders?[
-                                                                  index].paymentUrlStatus == true ? kColorPrimary:  kColorAccent,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              64),
-                                                                  boxShadow: [
-                                                                    BoxShadow(
-                                                                      color: Colors
-                                                                          .grey
-                                                                          .withOpacity(
-                                                                              0.4),
-                                                                      blurRadius:
-                                                                          1,
-                                                                      spreadRadius:
-                                                                          1,
-                                                                      offset:
-                                                                          Offset(
-                                                                              0,
-                                                                              1),
-                                                                    ),
-                                                                  ]),
-                                                              child: Padding(
-                                                                padding: const EdgeInsets
-                                                                        .symmetric(
-                                                                    horizontal:
-                                                                        8,
-                                                                    vertical:
-                                                                        4),
-                                                                child:
-                                                                    kTextHeader(
-                                                                "Pay ",
-                                                                  size: 16,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  bold: true,
-                                                                  paddingH: 12,
-                                                                  paddingV: 4,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                                 SizedBox(
@@ -344,57 +347,61 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                       .myPackagesResponse.data!.orders!.length),
                             ),
                           ),
-                    controller.myPackagesResponse.data!.subscriptionStatus==true ?  GestureDetector(
-                      onTap:() async {
-                        if (await controller.getFromCash() == "haveAllData") {
-                          Get.toNamed(Routes.SUBSCRIBE, arguments: null);
-                        } else if (await controller.getFromCash() ==
-                            "noLastName") {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => EditProfileView()));
-                        } else {
-                          Get.toNamed(Routes.SUBSCRIBE, arguments: null);
-                        }
-                      },
-                      child: Center(
-                        child: Container(
-                          width: Get.width / 1.4,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          margin: EdgeInsets.symmetric(vertical: 16),
-                          decoration: BoxDecoration(
-                            color: Color(0xffFFB62B),
-                            borderRadius: BorderRadius.circular(64),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 1,
-                                spreadRadius: 1,
-                                offset: Offset(0, 1),
+                    controller.myPackagesResponse.data!.subscriptionStatus ==
+                            true
+                        ? GestureDetector(
+                            onTap: () async {
+                              if (await controller.getFromCash() ==
+                                  "haveAllData") {
+                                Get.toNamed(Routes.SUBSCRIBE, arguments: null);
+                              } else if (await controller.getFromCash() ==
+                                  "noLastName") {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => EditProfileView()));
+                              } else {
+                                Get.toNamed(Routes.SUBSCRIBE, arguments: null);
+                              }
+                            },
+                            child: Center(
+                              child: Container(
+                                width: Get.width / 1.4,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                margin: EdgeInsets.symmetric(vertical: 16),
+                                decoration: BoxDecoration(
+                                  color: Color(0xffFFB62B),
+                                  borderRadius: BorderRadius.circular(64),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/img/premium.png',
+                                      width: 30,
+                                      height: 30,
+                                    ),
+                                    kTextHeader('Subscribe new package',
+                                        size: 16,
+                                        color: Colors.white,
+                                        bold: true,
+                                        paddingH: 16,
+                                        paddingV: 4),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/img/premium.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                              kTextHeader('Subscribe new package',
-                                  size: 16,
-                                  color: Colors.white,
-                                  bold: true,
-                                  paddingH: 16,
-                                  paddingV: 4),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ):SizedBox(),
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 );
               },

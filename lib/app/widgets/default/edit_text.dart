@@ -62,14 +62,16 @@ class EditText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: background, borderRadius: BorderRadius.circular(radius)),
+      decoration: BoxDecoration(
+          color: background, borderRadius: BorderRadius.circular(radius)),
       padding: EdgeInsets.all(padding),
       child: TextFormField(
         initialValue: value,
         focusNode: focusNode,
         autofocus: autofocus,
         controller: controller,
-        autovalidateMode: autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+        autovalidateMode:
+            autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         decoration: InputDecoration(
             border: noBorder
                 ? InputBorder.none
@@ -92,7 +94,10 @@ class EditText extends StatelessWidget {
             enabledBorder: !noBorder ? null : InputBorder.none,
             errorStyle: TextStyle(fontSize: 10),
             labelStyle: TextStyle(fontSize: fontSize, color: kColorAccent),
-            hintStyle: TextStyle(fontSize: fontSize, color: hintColor, fontWeight: FontWeight.w300),
+            hintStyle: TextStyle(
+                fontSize: fontSize,
+                color: hintColor,
+                fontWeight: FontWeight.w300),
             labelText: label ? hint : null,
             hintText: hint,
             counterStyle: TextStyle(color: Colors.green),
@@ -116,7 +121,8 @@ class EditText extends StatelessWidget {
                     iconData,
                     color: Colors.grey,
                   ),
-            contentPadding: EdgeInsets.symmetric(horizontal: contentPaddingH, vertical: contentPaddingV)),
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: contentPaddingH, vertical: contentPaddingV)),
         keyboardType: type,
         validator: (text) {
           if (validateFunc != null) return validateFunc!(text);

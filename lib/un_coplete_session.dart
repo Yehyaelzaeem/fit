@@ -15,7 +15,9 @@ class IncompleteData extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.width/3,),
+          SizedBox(
+            height: MediaQuery.of(context).size.width / 3,
+          ),
           Center(
             child: Icon(Icons.info),
           ),
@@ -23,9 +25,9 @@ class IncompleteData extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Center(
                 child: Text(
-                  "Sorry,  \n\ Please Sign In First",
-                  style: TextStyle(color: kColorPrimary, fontSize: 22),
-                )),
+              "Sorry,  \n\ Please Sign In First",
+              style: TextStyle(color: kColorPrimary, fontSize: 22),
+            )),
           ),
           kButton(
             'Sign in',
@@ -56,11 +58,11 @@ class IncompleteData extends StatelessWidget {
               onTap: () {
                 Get.toNamed(Routes.HOME);
               },
-              child: kTextHeader('Go Back To Home', color: kColorPrimary, size: 20)),
-
-
-          SizedBox(height: MediaQuery.of(context).size.width/4,),
-
+              child: kTextHeader('Go Back To Home',
+                  color: kColorPrimary, size: 20)),
+          SizedBox(
+            height: MediaQuery.of(context).size.width / 4,
+          ),
         ],
       ),
     );

@@ -145,12 +145,11 @@ class HomeDrawer extends GetView<HomeController> {
             // packages
 
             singleDrawerItem(
-              action: () {
-                Get.toNamed(Routes.MY_PACKAGES);
-              },
-              title: "My Packages",
-                image:"assets/icons/crown.svg"
-            ),
+                action: () {
+                  Get.toNamed(Routes.MY_PACKAGES);
+                },
+                title: "My Packages",
+                image: "assets/icons/crown.svg"),
 
             // //Profile
             textEditController.isLogggd == false
@@ -196,12 +195,12 @@ class HomeDrawer extends GetView<HomeController> {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
 
-      singleDrawerItem(
-            title: 'Orientation',
-            image: 'assets/icons/orientation.svg',
-            action: () {
-              Get.toNamed(Routes.Orientation);
-            }),
+            singleDrawerItem(
+                title: 'Orientation',
+                image: 'assets/icons/orientation.svg',
+                action: () {
+                  Get.toNamed(Routes.Orientation);
+                }),
 
             //CHEER_FULL
             FutureBuilder<bool>(
@@ -318,7 +317,11 @@ class HomeDrawer extends GetView<HomeController> {
               SvgPicture.asset(
                 image,
                 width: 25,
-                color: title =="Logout"? null:title =="My Packages"?null:kColorPrimary ,
+                color: title == "Logout"
+                    ? null
+                    : title == "My Packages"
+                        ? null
+                        : kColorPrimary,
               ),
               SizedBox(width: 16),
               Text(

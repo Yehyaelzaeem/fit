@@ -22,14 +22,17 @@ class OrdersView extends GetView<OrdersController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(
@@ -60,6 +63,7 @@ class OrdersView extends GetView<OrdersController> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -73,7 +77,8 @@ class OrdersView extends GetView<OrdersController> {
               PageLable(name: "My Orders"),
               SizedBox(height: 12),
               Obx(() {
-                if (controller.loading.value) return Center(child: CircularLoadingWidget());
+                if (controller.loading.value)
+                  return Center(child: CircularLoadingWidget());
                 // if (controller.requiredAuth.value) return IncompleteData();
                 return Column(
                   children: [
@@ -99,13 +104,17 @@ class OrdersView extends GetView<OrdersController> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: controller.selectedTap.value == 2 ? Colors.white : Color(0xFF414042),
+                                  color: controller.selectedTap.value == 2
+                                      ? Colors.white
+                                      : Color(0xFF414042),
                                   borderRadius: BorderRadius.circular(200),
                                 ),
                                 child: kTextbody(
                                   "Pending",
                                   paddingV: 8,
-                                  color: controller.selectedTap.value == 2 ? kColorPrimary : Colors.white,
+                                  color: controller.selectedTap.value == 2
+                                      ? kColorPrimary
+                                      : Colors.white,
                                 ),
                               ),
                             ),
@@ -117,13 +126,17 @@ class OrdersView extends GetView<OrdersController> {
                               },
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: controller.selectedTap.value == 1 ? Colors.white : Color(0xFF414042),
+                                  color: controller.selectedTap.value == 1
+                                      ? Colors.white
+                                      : Color(0xFF414042),
                                   borderRadius: BorderRadius.circular(200),
                                 ),
                                 child: kTextbody(
                                   "Accepted",
                                   paddingV: 8,
-                                  color: controller.selectedTap.value == 1 ? kColorPrimary : Colors.white,
+                                  color: controller.selectedTap.value == 1
+                                      ? kColorPrimary
+                                      : Colors.white,
                                 ),
                               ),
                             ),
@@ -134,12 +147,12 @@ class OrdersView extends GetView<OrdersController> {
                     if (controller.response.value.data != null)
                       if (controller.selectedTap.value == 2)
                         ...controller.response.value.data!.pending.map((e) {
-                          return singleOrderCard(e,context);
+                          return singleOrderCard(e, context);
                         }).toList(),
                     if (controller.response.value.data != null)
                       if (controller.selectedTap.value == 1)
                         ...controller.response.value.data!.completed.map((e) {
-                          return singleOrderCard(e,context);
+                          return singleOrderCard(e, context);
                         }).toList(),
                   ],
                 );
@@ -151,7 +164,7 @@ class OrdersView extends GetView<OrdersController> {
     );
   }
 
-  Widget singleOrderCard(Completed e,BuildContext context) {
+  Widget singleOrderCard(Completed e, BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       margin: EdgeInsets.symmetric(vertical: 8),
@@ -176,34 +189,39 @@ class OrdersView extends GetView<OrdersController> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   kTextbody("${e.price} L.E", color: kColorPrimary, bold: true),
-                  kTextbody("${getDelivertMethod(e.deliveryMethod)}", color: Colors.black, bold: true),
+                  kTextbody("${getDelivertMethod(e.deliveryMethod)}",
+                      color: Colors.black, bold: true),
                   kTextbody("${e.date}", color: Colors.black),
                   kTextbody("${e.status}", color: Colors.grey),
-                  e.visaPaymentStatus==true ? kTextbody("Payment Successful", color: Colors.grey):
-
-                    GestureDetector(
-                    onTap:e.paymentUrl==''?(){
-                      Fluttertoast.showToast(msg: "  Payment is deactivated  ");
-                    }: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => WebViewScreen(
-                                url: e.paymentUrl,
-                                fromCheerfull: "From Cheerful Order",
-                              )));
-                 //   print("result =>>>>>>>> $result");
-                    },
-                    child:Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(color: Colors.black, width: 1.6),
-                          borderRadius: BorderRadius.circular(8),
+                  e.visaPaymentStatus == true
+                      ? kTextbody("Payment Successful", color: Colors.grey)
+                      : GestureDetector(
+                          onTap: e.paymentUrl == ''
+                              ? () {
+                                  Fluttertoast.showToast(
+                                      msg: "  Payment is deactivated  ");
+                                }
+                              : () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => WebViewScreen(
+                                                url: e.paymentUrl,
+                                                fromCheerfull:
+                                                    "From Cheerful Order",
+                                              )));
+                                  //   print("result =>>>>>>>> $result");
+                                },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                border:
+                                    Border.all(color: Colors.black, width: 1.6),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: kTextbody('Payment Failed',
+                                  color: kRedColor, paddingV: 2)),
                         ),
-                        child: kTextbody('Payment Failed', color: kRedColor, paddingV: 2)),
-                  ),
-
-
                 ],
               )
             ],
@@ -226,7 +244,8 @@ class OrdersView extends GetView<OrdersController> {
                             children: [
                               SizedBox(height: 12),
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 4),
                                 margin: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(200),
@@ -241,7 +260,8 @@ class OrdersView extends GetView<OrdersController> {
                                   ],
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     kTextbody(
                                       "Delivery method :",
@@ -258,9 +278,11 @@ class OrdersView extends GetView<OrdersController> {
                                   ],
                                 ),
                               ),
-                              if (e.userInfo != null && e.userInfo!.address.isNotEmpty)
+                              if (e.userInfo != null &&
+                                  e.userInfo!.address.isNotEmpty)
                                 Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
                                   margin: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
@@ -275,7 +297,8 @@ class OrdersView extends GetView<OrdersController> {
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       kTextbody(
                                         "Address :",
@@ -283,14 +306,16 @@ class OrdersView extends GetView<OrdersController> {
                                         bold: true,
                                         align: TextAlign.start,
                                       ),
-                                      if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery')
+                                      if (e.deliveryMethod == 'Delivery' ||
+                                          e.deliveryMethod == 'delivery')
                                         Expanded(
                                             child: kTextbody(
                                           '${e.userInfo!.address}',
                                           color: Colors.black,
                                           align: TextAlign.start,
                                         )),
-                                      if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery')
+                                      if (e.deliveryMethod != 'Delivery' &&
+                                          e.deliveryMethod != 'delivery')
                                         Expanded(
                                             child: kTextbody(
                                           '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!}',
@@ -303,27 +328,86 @@ class OrdersView extends GetView<OrdersController> {
                               SizedBox(height: 12),
                               // if (e.deliveryMethod != 'Delivery' && e.deliveryMethod != 'delivery') kTextbody(controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!),
 
-                              if ((e.deliveryMethod != 'Delivery' || e.deliveryMethod != 'delivery') && controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation!.isNotEmpty)
+                              if ((e.deliveryMethod != 'Delivery' ||
+                                      e.deliveryMethod != 'delivery') &&
+                                  controller.globalController.mealFeatureHomeResponse
+                                          .value.data !=
+                                      null &&
+                                  controller
+                                          .globalController
+                                          .mealFeatureHomeResponse
+                                          .value
+                                          .data!
+                                          .info !=
+                                      null &&
+                                  controller
+                                          .globalController
+                                          .mealFeatureHomeResponse
+                                          .value
+                                          .data!
+                                          .info!
+                                          .pickupLocation !=
+                                      null &&
+                                  controller
+                                      .globalController
+                                      .mealFeatureHomeResponse
+                                      .value
+                                      .data!
+                                      .info!
+                                      .pickupLocation!
+                                      .isNotEmpty)
                                 Center(
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (e.deliveryMethod == 'Delivery' || e.deliveryMethod == 'delivery') {
-                                        if (e.userInfo != null && e.userInfo!.latitude != null) {
-                                          String lat = e.userInfo!.latitude.toString();
-                                          String lng = e.userInfo!.longitude.toString();
-                                          launch('http://www.google.com/maps/place/$lat,$lng');
+                                      if (e.deliveryMethod == 'Delivery' ||
+                                          e.deliveryMethod == 'delivery') {
+                                        if (e.userInfo != null &&
+                                            e.userInfo!.latitude != null) {
+                                          String lat =
+                                              e.userInfo!.latitude.toString();
+                                          String lng =
+                                              e.userInfo!.longitude.toString();
+                                          launch(
+                                              'http://www.google.com/maps/place/$lat,$lng');
                                         }
                                       } else {
-                                        String lat = e.userInfo!.latitude.toString();
-                                        String lng = e.userInfo!.longitude.toString();
-                                        launch('http://www.google.com/maps/place/$lat,$lng');
+                                        String lat =
+                                            e.userInfo!.latitude.toString();
+                                        String lng =
+                                            e.userInfo!.longitude.toString();
+                                        launch(
+                                            'http://www.google.com/maps/place/$lat,$lng');
 
                                         String location = "";
 
-                                        if (controller.globalController.mealFeatureHomeResponse.value.data != null) {
-                                          if (controller.globalController.mealFeatureHomeResponse.value.data!.info != null) {
-                                            if (controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation != null) {
-                                              location = controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupLocation!;
+                                        if (controller
+                                                .globalController
+                                                .mealFeatureHomeResponse
+                                                .value
+                                                .data !=
+                                            null) {
+                                          if (controller
+                                                  .globalController
+                                                  .mealFeatureHomeResponse
+                                                  .value
+                                                  .data!
+                                                  .info !=
+                                              null) {
+                                            if (controller
+                                                    .globalController
+                                                    .mealFeatureHomeResponse
+                                                    .value
+                                                    .data!
+                                                    .info!
+                                                    .pickupLocation !=
+                                                null) {
+                                              location = controller
+                                                  .globalController
+                                                  .mealFeatureHomeResponse
+                                                  .value
+                                                  .data!
+                                                  .info!
+                                                  .pickupLocation!;
                                             }
                                           }
                                         }
@@ -334,11 +418,13 @@ class OrdersView extends GetView<OrdersController> {
                                       width: Get.width / 1.6,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        border: Border.all(color: kColorPrimary),
+                                        border:
+                                            Border.all(color: kColorPrimary),
                                         borderRadius: BorderRadius.circular(8),
                                       ),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: <Widget>[
                                           Align(
                                             alignment: Alignment(0.0, 0.1),
@@ -374,14 +460,15 @@ class OrdersView extends GetView<OrdersController> {
                         color: kColorPrimary,
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: kTextbody("Location", color: Colors.white, paddingV: 8)),
+                      child: kTextbody("Location",
+                          color: Colors.white, paddingV: 8)),
                 ),
               ),
               SizedBox(width: 10),
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                  Get.dialog(
+                    Get.dialog(
                       Dialog(
                         child: SingleChildScrollView(
                           child: Column(
@@ -390,7 +477,8 @@ class OrdersView extends GetView<OrdersController> {
                               SizedBox(height: 8),
                               ...e.meals.reversed.map((element) {
                                 return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 4),
                                   margin: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(200),
@@ -405,17 +493,25 @@ class OrdersView extends GetView<OrdersController> {
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      kTextbody(element.name, color: kColorPrimary, bold: true, align: TextAlign.start),
-                                      kTextbody("${element.price} L.E", color: Colors.black, bold: true),
+                                      kTextbody(element.name,
+                                          color: kColorPrimary,
+                                          bold: true,
+                                          align: TextAlign.start),
+                                      kTextbody("${element.price} L.E",
+                                          color: Colors.black, bold: true),
                                     ],
                                   ),
                                 );
                               }).toList(),
                               Container(
                                 width: double.infinity,
-                                child: kTextbody("Instructions", size: 18, align: TextAlign.start, paddingH: 12),
+                                child: kTextbody("Instructions",
+                                    size: 18,
+                                    align: TextAlign.start,
+                                    paddingH: 12),
                               ),
                               SizedBox(height: 6),
                               Container(
@@ -446,7 +542,7 @@ class OrdersView extends GetView<OrdersController> {
                           ),
                         ),
                       ),
-                    ) ;
+                    );
                   },
                   child: Container(
                       decoration: BoxDecoration(
@@ -454,7 +550,8 @@ class OrdersView extends GetView<OrdersController> {
                         border: Border.all(color: Colors.black, width: 1.6),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: kTextbody("Details", color: Colors.black, paddingV: 8)),
+                      child: kTextbody("Details",
+                          color: Colors.black, paddingV: 8)),
                 ),
               ),
               SizedBox(width: 20),
@@ -467,12 +564,16 @@ class OrdersView extends GetView<OrdersController> {
 
   String getInsturctions(String deliveryMethod) {
     String instructions = "";
-    if (controller.globalController.mealFeatureHomeResponse.value.data == null) return "";
-    if (controller.globalController.mealFeatureHomeResponse.value.data!.info == null) return "";
+    if (controller.globalController.mealFeatureHomeResponse.value.data == null)
+      return "";
+    if (controller.globalController.mealFeatureHomeResponse.value.data!.info ==
+        null) return "";
     if (deliveryMethod == 'Delivery' || deliveryMethod == 'delivery') {
-      instructions = "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions}";
+      instructions =
+          "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions}";
     } else {
-      instructions = "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions}";
+      instructions =
+          "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions}";
     }
     return instructions;
   }

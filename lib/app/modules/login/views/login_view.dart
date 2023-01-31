@@ -36,9 +36,9 @@ class _LoginViewState extends State<LoginView> {
   void sendData() async {
     setState(() {
       showLoader = true;
-      if(kDebugMode){
-        pin='p30000';
-        password='123123';
+      if (kDebugMode) {
+        pin = 'p30000';
+        password = '123123';
       }
     });
     await ApiProvider().login(pin, password).then((value) async {
@@ -48,16 +48,19 @@ class _LoginViewState extends State<LoginView> {
           showLoader = false;
         });
         SharedHelper _shared = SharedHelper();
-        await _shared.writeData(CachingKey.TOKEN, loginResponse.data!.accessToken);
+        await _shared.writeData(
+            CachingKey.TOKEN, loginResponse.data!.accessToken);
         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
-        await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.patientId);
+        await _shared.writeData(
+            CachingKey.USER_ID, loginResponse.data!.patientId);
         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
-        await _shared.writeData(CachingKey.PHONE,loginResponse.data!.phone);
-        await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
+        await _shared.writeData(CachingKey.PHONE, loginResponse.data!.phone);
+        await _shared.writeData(
+            CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         await _shared.writeData(CachingKey.IS_LOGGED, true);
-        await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
-
+        await _shared.writeData(
+            CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
 
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
@@ -66,7 +69,8 @@ class _LoginViewState extends State<LoginView> {
         }
         bool isReggisterd2 = Get.isRegistered<HomeController>(tag: 'diary');
         if (isReggisterd2) {
-          HomeController textEditController = Get.find<HomeController>(tag: 'home');
+          HomeController textEditController =
+              Get.find<HomeController>(tag: 'home');
           textEditController.refreshController(true);
           textEditController.isLogggd.value = true;
         }
@@ -176,7 +180,11 @@ class _LoginViewState extends State<LoginView> {
                             SizedBox(height: 4),
                             InkWell(
                               onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => ForgetPassword()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgetPassword()));
                               },
                               child: Text(
                                 "Forgot Password?",
@@ -192,10 +200,13 @@ class _LoginViewState extends State<LoginView> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(height: MediaQuery.of(context).size.width / 14),
+                              SizedBox(
+                                  height:
+                                      MediaQuery.of(context).size.width / 14),
                               kButtonDefault(
                                 '  Sign in  ',
-                                marginH: MediaQuery.of(context).size.width / 4.5,
+                                marginH:
+                                    MediaQuery.of(context).size.width / 4.5,
                                 paddingV: 0,
                                 func: () {
                                   if (!key.currentState!.validate()) {
@@ -227,16 +238,24 @@ class _LoginViewState extends State<LoginView> {
                                 child: Padding(
                                   padding: const EdgeInsets.only(bottom: 4),
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         "Don't Have Account ? ",
-                                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 17),
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontSize: 17),
                                       ),
                                       Text(
                                         'Sign Up',
-                                        style: TextStyle(decoration: TextDecoration.underline, fontSize: 17, fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ],
                                   ),

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-MyOrdersResponse myOrdersResponseFromJson(String str) => MyOrdersResponse.fromJson(json.decode(str));
+MyOrdersResponse myOrdersResponseFromJson(String str) =>
+    MyOrdersResponse.fromJson(json.decode(str));
 
 class MyOrdersResponse {
   MyOrdersResponse({
@@ -13,7 +14,8 @@ class MyOrdersResponse {
   bool success;
   Data? data;
 
-  factory MyOrdersResponse.fromJson(Map<String, dynamic> json) => MyOrdersResponse(
+  factory MyOrdersResponse.fromJson(Map<String, dynamic> json) =>
+      MyOrdersResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -30,8 +32,14 @@ class Data {
   List<Completed> completed;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        pending: json["pending"] == null ? [] : List<Completed>.from(json["pending"].map((x) => Completed.fromJson(x))),
-        completed: json["completed"] == null ? [] : List<Completed>.from(json["completed"].map((x) => Completed.fromJson(x))),
+        pending: json["pending"] == null
+            ? []
+            : List<Completed>.from(
+                json["pending"].map((x) => Completed.fromJson(x))),
+        completed: json["completed"] == null
+            ? []
+            : List<Completed>.from(
+                json["completed"].map((x) => Completed.fromJson(x))),
       );
 }
 
@@ -65,12 +73,19 @@ class Completed {
         price: json["price"] == null ? null : json["price"].toDouble(),
         date: json["date"] == null ? null : json["date"],
         status: json["status"] == null ? null : json["status"],
-        deliveryMethod: json["delivery_method"] == null ? null : json["delivery_method"],
-    visaPaymentStatus: json["visa_payment_status"] == null ? null : json["visa_payment_status"],
-        userInfo: json["user_info"] == null ? null : UserInfo.fromJson(json["user_info"]),
+        deliveryMethod:
+            json["delivery_method"] == null ? null : json["delivery_method"],
+        visaPaymentStatus: json["visa_payment_status"] == null
+            ? null
+            : json["visa_payment_status"],
+        userInfo: json["user_info"] == null
+            ? null
+            : UserInfo.fromJson(json["user_info"]),
         note: json["note"] == null ? '' : json["note"],
-    paymentUrl: json["payment_url"] == null ? '' : json["payment_url"],
-        meals: json["meals"] == null ? [] : List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x))),
+        paymentUrl: json["payment_url"] == null ? '' : json["payment_url"],
+        meals: json["meals"] == null
+            ? []
+            : List<Meal>.from(json["meals"].map((x) => Meal.fromJson(x))),
       );
 }
 

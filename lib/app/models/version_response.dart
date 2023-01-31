@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-VersionResponse versionResponseFromJson(String str) => VersionResponse.fromJson(json.decode(str));
+VersionResponse versionResponseFromJson(String str) =>
+    VersionResponse.fromJson(json.decode(str));
 
 class VersionResponse {
   VersionResponse({
@@ -19,7 +20,8 @@ class VersionResponse {
   String message;
   bool forceUpdate;
 
-  factory VersionResponse.fromJson(Map<String, dynamic> json) => VersionResponse(
+  factory VersionResponse.fromJson(Map<String, dynamic> json) =>
+      VersionResponse(
         success: json["success"] ?? "",
         code: json["code"] ?? "",
         message: json["message"] ?? "",

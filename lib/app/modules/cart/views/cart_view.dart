@@ -21,7 +21,8 @@ class CartView extends GetView<CartController> {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Obx(() {
-            if (controller.loading.value) return Center(child: CircularLoadingWidget());
+            if (controller.loading.value)
+              return Center(child: CircularLoadingWidget());
 
             return SingleChildScrollView(
               child: Column(
@@ -32,10 +33,16 @@ class CartView extends GetView<CartController> {
                   header(),
                   SizedBox(height: 4),
                   ...controller.meals.reversed.map((e) {
-                    return singleItem(id: e.id!, title: "${e.name}", price: "${e.price} L.E");
+                    return singleItem(
+                        id: e.id!, title: "${e.name}", price: "${e.price} L.E");
                   }).toList(),
                   SizedBox(height: 12),
-                  header2("Total Price", Container(margin: EdgeInsets.symmetric(horizontal: 12), child: kTextbody("${controller.totalAmount()} L.E", color: Colors.white))),
+                  header2(
+                      "Total Price",
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 12),
+                          child: kTextbody("${controller.totalAmount()} L.E",
+                              color: Colors.white))),
 
                   SizedBox(height: 12),
                   // Container(
@@ -74,12 +81,19 @@ class CartView extends GetView<CartController> {
                                     Container(
                                       color: Color(0xFF414042),
                                       child: Center(
-                                        child: kTextHeader("Delivery", color: Colors.white, size: 30),
+                                        child: kTextHeader("Delivery",
+                                            color: Colors.white, size: 30),
                                       ),
                                     ),
                                     SizedBox(height: 12),
                                     TextInsideRec(
-                                      text: controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions!,
+                                      text: controller
+                                          .globalController
+                                          .mealFeatureHomeResponse
+                                          .value
+                                          .data!
+                                          .info!
+                                          .deliveryInstructions!,
                                     ),
                                     SizedBox(height: 12),
                                     // Padding(
@@ -123,11 +137,14 @@ class CartView extends GetView<CartController> {
                                             color: Color(0xffF1F1F1),
                                             width: 1,
                                           ), func: () {
-                                            Get.back();
-                                            controller.createOrder(payMethod: 'visa', shippingMethod: 'delivery', context: context);
-                                          }),
+                                        Get.back();
+                                        controller.createOrder(
+                                            payMethod: 'visa',
+                                            shippingMethod: 'delivery',
+                                            context: context);
+                                      }),
                                     ),
-                                  /*  Row(
+                                    /*  Row(
                                       children: [
                                         Expanded(
                                           child: kButtonDefault("Cash",
@@ -176,16 +193,19 @@ class CartView extends GetView<CartController> {
                                     Container(
                                       color: Color(0xFF414042),
                                       child: Center(
-                                        child: kTextHeader("Pick up", color: Colors.white, size: 30),
+                                        child: kTextHeader("Pick up",
+                                            color: Colors.white, size: 30),
                                       ),
                                     ),
                                     SizedBox(height: 12),
                                     Container(
                                       alignment: Alignment(0.0, 0.12),
                                       width: double.infinity,
-                                      margin: EdgeInsets.symmetric(horizontal: 12),
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 12),
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(9.0),
+                                        borderRadius:
+                                            BorderRadius.circular(9.0),
                                         color: const Color(0xFFF1F1F1),
                                       ),
                                       child: SizedBox(
@@ -194,9 +214,17 @@ class CartView extends GetView<CartController> {
                                             Align(
                                               alignment: Alignment(-0.09, 0.0),
                                               child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 12),
                                                 child: Text(
-                                                  controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions!,
+                                                  controller
+                                                      .globalController
+                                                      .mealFeatureHomeResponse
+                                                      .value
+                                                      .data!
+                                                      .info!
+                                                      .pickupInstructions!,
                                                   style: GoogleFonts.cairo(
                                                     fontSize: 13.0,
                                                     color: Colors.black,
@@ -207,31 +235,78 @@ class CartView extends GetView<CartController> {
                                               ),
                                             ),
                                             SizedBox(height: 20),
-                                            if (controller.globalController.mealFeatureHomeResponse.value.data != null && controller.globalController.mealFeatureHomeResponse.value.data!.info != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null && controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                                            if (controller
+                                                        .globalController
+                                                        .mealFeatureHomeResponse
+                                                        .value
+                                                        .data !=
+                                                    null &&
+                                                controller
+                                                        .globalController
+                                                        .mealFeatureHomeResponse
+                                                        .value
+                                                        .data!
+                                                        .info !=
+                                                    null &&
+                                                controller
+                                                        .globalController
+                                                        .mealFeatureHomeResponse
+                                                        .value
+                                                        .data!
+                                                        .info!
+                                                        .location !=
+                                                    null &&
+                                                controller
+                                                    .globalController
+                                                    .mealFeatureHomeResponse
+                                                    .value
+                                                    .data!
+                                                    .info!
+                                                    .location!
+                                                    .isNotEmpty)
                                               GestureDetector(
                                                 onTap: () {
-                                                  launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);
+                                                  launch(controller
+                                                      .globalController
+                                                      .mealFeatureHomeResponse
+                                                      .value
+                                                      .data!
+                                                      .info!
+                                                      .location!);
                                                 },
                                                 child: Container(
-                                                  alignment: Alignment(-0.04, -0.33),
+                                                  alignment:
+                                                      Alignment(-0.04, -0.33),
                                                   width: double.infinity,
-                                                  margin: EdgeInsets.symmetric(horizontal: 12),
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 12),
                                                   height: 39.0,
                                                   decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(9.0),
-                                                    color: const Color(0xFFF1F1F1),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            9.0),
+                                                    color:
+                                                        const Color(0xFFF1F1F1),
                                                     border: Border.all(
                                                       width: 1.0,
-                                                      color: const Color(0xFF7FC902),
+                                                      color: const Color(
+                                                          0xFF7FC902),
                                                     ),
                                                   ),
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
-                                                      Icon(Icons.location_on, color: kColorPrimary),
+                                                      Icon(Icons.location_on,
+                                                          color: kColorPrimary),
                                                       SizedBox(width: 4),
-                                                      kTextbody('Location', size: 18, color: kColorPrimary),
+                                                      kTextbody('Location',
+                                                          size: 18,
+                                                          color: kColorPrimary),
                                                     ],
                                                   ),
                                                 ),
@@ -249,7 +324,10 @@ class CartView extends GetView<CartController> {
                                           width: 1,
                                         ), func: () {
                                       Get.back();
-                                      controller.createOrder(shippingMethod: "pick_up", payMethod: "visa", context: context);
+                                      controller.createOrder(
+                                          shippingMethod: "pick_up",
+                                          payMethod: "visa",
+                                          context: context);
                                     }),
                                     SizedBox(height: 12),
                                   ],
@@ -287,7 +365,9 @@ class CartView extends GetView<CartController> {
         children: [
           Container(
             margin: EdgeInsets.symmetric(horizontal: 12),
-            child: Center(child: kTextbody(title, color: Colors.white, bold: true, size: 16)),
+            child: Center(
+                child: kTextbody(title,
+                    color: Colors.white, bold: true, size: 16)),
           ),
           action,
         ],
@@ -301,14 +381,17 @@ class CartView extends GetView<CartController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(
@@ -354,7 +437,9 @@ class CartView extends GetView<CartController> {
       child: Row(
         children: [
           SizedBox(width: 12),
-          Expanded(child: kTextbody("$title", color: kColorPrimary, align: TextAlign.start, bold: true)),
+          Expanded(
+              child: kTextbody("$title",
+                  color: kColorPrimary, align: TextAlign.start, bold: true)),
           kTextbody(price, color: Colors.black, paddingV: 12),
           SizedBox(width: 4),
           GestureDetector(

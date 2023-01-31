@@ -9,7 +9,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class NonUserSubscribeView extends StatefulWidget {
-
   NonUserSubscribeView();
 
   @override
@@ -23,14 +22,15 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
   late String phone;
   GlobalKey<FormState> key = GlobalKey();
 
-@override
+  @override
   void initState() {
-  if (kDebugMode) {
-    email = 'HossamNonUser@gmail.com';
-    name = 'Hossam Non User';
-    lastName = 'Hossam Non User';
-    phone = '01113040518';
-  }    super.initState();
+    if (kDebugMode) {
+      email = 'HossamNonUser@gmail.com';
+      name = 'Hossam Non User';
+      lastName = 'Hossam Non User';
+      phone = '01113040518';
+    }
+    super.initState();
   }
 
   @override
@@ -131,7 +131,8 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                   print(text);
                                 },
                                 validateFunc: (text) {
-                                  if (text.toString().isEmpty || !text.toString().contains("@")) {
+                                  if (text.toString().isEmpty ||
+                                      !text.toString().contains("@")) {
                                     return "Enter Valid Email";
                                   }
                                 },
@@ -169,7 +170,8 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                     SizedBox(
                                         height:
                                             MediaQuery.of(context).size.width /
-                                                14), kButtonDefault(
+                                                14),
+                                    kButtonDefault(
                                       '  Submit  ',
                                       marginH:
                                           MediaQuery.of(context).size.width /
@@ -179,7 +181,8 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                         if (!key.currentState!.validate()) {
                                           return;
                                         } else {
-                                          Navigator.pop(context,[name,lastName,email,phone]);
+                                          Navigator.pop(context,
+                                              [name, lastName, email, phone]);
                                           print("Done");
                                         }
                                       },

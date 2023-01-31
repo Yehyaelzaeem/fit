@@ -17,7 +17,8 @@ class PickMap extends GetView<ShippingDetailsController> {
             width: Get.width,
             height: Get.height - 50,
             child: MapPicker(
-              iconWidget: Icon(Icons.location_pin, color: kColorPrimary, size: 50),
+              iconWidget:
+                  Icon(Icons.location_pin, color: kColorPrimary, size: 50),
               mapPickerController: controller.mapPickerController,
               child: GoogleMap(
                 initialCameraPosition: controller.cameraPosition,
@@ -49,8 +50,10 @@ class PickMap extends GetView<ShippingDetailsController> {
                     Echo('isoCountryCode -> ${placemarks[0].isoCountryCode}');
                     Echo('country -> ${placemarks[0].country}');
                     Echo('postalCode -> ${placemarks[0].postalCode}');
-                    Echo('administrativeArea -> ${placemarks[0].administrativeArea}');
-                    Echo('subAdministrativeArea -> ${placemarks[0].subAdministrativeArea}');
+                    Echo(
+                        'administrativeArea -> ${placemarks[0].administrativeArea}');
+                    Echo(
+                        'subAdministrativeArea -> ${placemarks[0].subAdministrativeArea}');
                     Echo('locality -> ${placemarks[0].locality}');
                     Echo('subLocality -> ${placemarks[0].subLocality}');
                     Echo('thoroughfare -> ${placemarks[0].thoroughfare}');
@@ -105,12 +108,15 @@ class PickMap extends GetView<ShippingDetailsController> {
                   ),
                 ),
                 onPressed: () {
-                  controller.longitude.value = controller.cameraPosition.target.longitude.toString();
-                  controller.latitude.value = controller.cameraPosition.target.latitude.toString();
+                  controller.longitude.value =
+                      controller.cameraPosition.target.longitude.toString();
+                  controller.latitude.value =
+                      controller.cameraPosition.target.latitude.toString();
                   Get.back();
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(kColorPrimary),
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(kColorPrimary),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),

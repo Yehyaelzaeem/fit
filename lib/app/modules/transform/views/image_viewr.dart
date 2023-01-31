@@ -5,8 +5,10 @@ import 'package:photo_view/photo_view.dart';
 class CustomImageViewer extends StatelessWidget {
   final String image;
   final String tite;
+
   const CustomImageViewer({Key? key, required this.image, required this.tite})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -38,7 +38,7 @@ Widget kTextbody(String message,
       style: TextStyle(
         color: white ? Colors.white : color,
         fontSize: size,
-        fontWeight: bold ==true? FontWeight.bold : FontWeight.normal,
+        fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
       ),
       textAlign: align,
       maxLines: maxLines,

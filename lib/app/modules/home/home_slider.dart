@@ -74,10 +74,13 @@ class _HomeSliderState extends State<HomeSlider> {
                 return Container(
                     width: 8.0,
                     height: 8.0,
-                    margin: EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 4.0, horizontal: 2.0),
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _currentPage == index ? kColorPrimary : Colors.grey));
+                        color: _currentPage == index
+                            ? kColorPrimary
+                            : Colors.grey));
               }),
             ],
           ),

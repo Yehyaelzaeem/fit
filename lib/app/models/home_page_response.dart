@@ -114,7 +114,14 @@ class Items {
   String? image;
   Cover? cover;
 
-  Items({this.hasOrientation, this.id, this.title, this.text, this.link, this.image, this.cover});
+  Items(
+      {this.hasOrientation,
+      this.id,
+      this.title,
+      this.text,
+      this.link,
+      this.image,
+      this.cover});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];

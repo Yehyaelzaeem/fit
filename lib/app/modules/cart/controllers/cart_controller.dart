@@ -115,14 +115,15 @@ class CartController extends GetxController {
           ),
         );
       } else {
-        paymentUrl==""?  Fluttertoast.showToast(msg: "  Payment is deactivated  ")
-        :    Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (_) => WebViewScreen(
-                      url: paymentUrl,
-                      fromCheerfull: "From Cheerful Order",
-                    )));
+        paymentUrl == ""
+            ? Fluttertoast.showToast(msg: "  Payment is deactivated  ")
+            : Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => WebViewScreen(
+                          url: paymentUrl,
+                          fromCheerfull: "From Cheerful Order",
+                        )));
         print("URL ==========>${paymentUrl}");
       }
     } catch (e) {

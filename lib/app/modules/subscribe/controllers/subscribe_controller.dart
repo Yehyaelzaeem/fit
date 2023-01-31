@@ -27,19 +27,21 @@ class SubscribeController extends GetxController
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    userLastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    if (userPhone.value.isEmpty&&
-        userEmail.value.isEmpty&&
-        userName.value.isEmpty ) {
-     // Fluttertoast.showToast(msg: "Kindly enter your all data!");
+    userLastName.value =
+        await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    if (userPhone.value.isEmpty &&
+        userEmail.value.isEmpty &&
+        userName.value.isEmpty) {
+      // Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noPhone";
     } else if (userLastName.value.isEmpty) {
-    //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noLastName";
-    }else {
+    } else {
       print("Shared = true");
       return await "haveAllData";
-    };
+    }
+    ;
   }
 
   PackagePaymentResponse packagePaymentResponse = PackagePaymentResponse();
@@ -96,12 +98,13 @@ class SubscribeController extends GetxController
     return serviceIndex.value;
   }
 
-
   paymentClicked() {
     isPaymentClicked.value = !isPaymentClicked.value;
     update();
   }
-BuildContext? context;
+
+  BuildContext? context;
+
   @override
   void onInit() {
     if (Get.arguments != null) servicesResponse = Get.arguments;

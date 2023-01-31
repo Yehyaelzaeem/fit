@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-MealFeatureStatusResponse mealFeatureStatusResponseFromJson(String str) => MealFeatureStatusResponse.fromJson(json.decode(str));
+MealFeatureStatusResponse mealFeatureStatusResponseFromJson(String str) =>
+    MealFeatureStatusResponse.fromJson(json.decode(str));
 
-String mealFeatureStatusResponseToJson(MealFeatureStatusResponse data) => json.encode(data.toJson());
+String mealFeatureStatusResponseToJson(MealFeatureStatusResponse data) =>
+    json.encode(data.toJson());
 
 class MealFeatureStatusResponse {
   MealFeatureStatusResponse({
@@ -19,7 +21,8 @@ class MealFeatureStatusResponse {
   final bool? success;
   final Data? data;
 
-  factory MealFeatureStatusResponse.fromJson(Map<String, dynamic> json) => MealFeatureStatusResponse(
+  factory MealFeatureStatusResponse.fromJson(Map<String, dynamic> json) =>
+      MealFeatureStatusResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),

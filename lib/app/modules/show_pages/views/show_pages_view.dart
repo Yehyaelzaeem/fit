@@ -23,7 +23,8 @@ class ShowPagesView extends GetView<ShowPagesController> {
           centerTitle: true,
         ),
         body: Obx(() {
-          if (controller.selectedWidget.length > 0) return controller.selectedWidget[0].widget;
+          if (controller.selectedWidget.length > 0)
+            return controller.selectedWidget[0].widget;
 
           return SingleChildScrollView(
             child: Column(
@@ -96,7 +97,8 @@ class ShowPagesView extends GetView<ShowPagesController> {
   Widget defaultWidgets() {
     return Column(
       children: [
-        Container(width: double.infinity, child: kTextHeader('default widgets')),
+        Container(
+            width: double.infinity, child: kTextHeader('default widgets')),
         Column(
           children: [
             ...controller.defaultWidgets.map((singlePage) {

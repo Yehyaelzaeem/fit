@@ -24,8 +24,7 @@ class ServerErrorWidget extends StatelessWidget {
           SizedBox(height: 8),
           Text(Strings().serverError),
           SizedBox(height: 8),
-           kButtonDefault(Strings().retry, func: refresh),
-        
+          kButtonDefault(Strings().retry, func: refresh),
         ],
       ),
     );

@@ -82,7 +82,6 @@ class BlogsView extends GetView<HomeController> {
                 ),
               ),
             ),
-
           ],
         );
       },

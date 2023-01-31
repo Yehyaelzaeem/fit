@@ -36,7 +36,6 @@ class Data {
       });
     }
   }
-
 }
 
 class Packages {
@@ -47,7 +46,13 @@ class Packages {
   String? description;
   bool? paymentStatus;
 
-  Packages({this.id, this.price, this.duration,this.currency, this.description, this.paymentStatus});
+  Packages(
+      {this.id,
+      this.price,
+      this.duration,
+      this.currency,
+      this.description,
+      this.paymentStatus});
 
   Packages.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -57,5 +62,4 @@ class Packages {
     description = json['description'];
     paymentStatus = json['payment_status'];
   }
-
 }

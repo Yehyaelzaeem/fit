@@ -10,9 +10,11 @@ class CheerfulSocialsResponse {
     success = json['success'];
     if (json['data'] != null) {
       data = <CheerfulData>[];
-      json['data'].forEach((v) { data!.add(new CheerfulData.fromJson(v)); });
-    }  }
-
+      json['data'].forEach((v) {
+        data!.add(new CheerfulData.fromJson(v));
+      });
+    }
+  }
 }
 
 class CheerfulData {

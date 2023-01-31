@@ -8,6 +8,7 @@ class PolicyController extends GetxController {
   var storage = GetStorage();
 
   String policy = '<h1> Title </h1><p>${Strings().longText}</p>';
+
   @override
   void onInit() {
     super.onInit();

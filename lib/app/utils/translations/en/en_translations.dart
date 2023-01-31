@@ -5,7 +5,8 @@ final Map<String, String> enTranslation = {
   'walkThroughTitle3': 'Title 3',
   'walkThroughBody1':
       'Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.',
-  'walkThroughBody2': 'Reference site about Lorem Ipsum, giving information on its origins.',
+  'walkThroughBody2':
+      'Reference site about Lorem Ipsum, giving information on its origins.',
   'walkThroughBody3':
       'Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.',
   'skip': 'SKIP',
@@ -18,7 +19,8 @@ final Map<String, String> enTranslation = {
   'doNotHaveAnAccount': 'Don\'t have an account',
   'forgetPassword': 'Forget password',
   'alreadyHaveAccount': 'Already have account',
-  'byCreatingAccountMessage': 'By creating an accout you agree to our Terms and privacy policy',
+  'byCreatingAccountMessage':
+      'By creating an accout you agree to our Terms and privacy policy',
   'logout': 'Logout',
   'password': 'Password',
   'confitmPassword': 'Confitm password',
@@ -100,7 +102,8 @@ final Map<String, String> enTranslation = {
   'confirm': 'Confirm',
   'orderTime': 'Order time',
   'selectOrderTime': 'Select order time',
-  'cantAddProductFromOtherShop': 'Can\'t add product from different shop in same order',
+  'cantAddProductFromOtherShop':
+      'Can\'t add product from different shop in same order',
   'addToCart': 'Add to cart',
   'orderDateAndTime': 'Order time and date',
   'viewBasket': 'VIEW BASKET',
@@ -116,9 +119,8 @@ final Map<String, String> enTranslation = {
   'female': 'Female',
   'birthdate': 'Birthdate',
   'send': 'Send',
-
   'diary': 'Diary',
   'sesstion': 'Sesstions',
-  'longText': 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley',
-
+  'longText':
+      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley',
 };

@@ -23,11 +23,12 @@ class Data {
   String? videoUrl;
   String? image;
 
-  Data(
-      {this.id,
-      this.name,
-      this.videoUrl,
-      this.image,});
+  Data({
+    this.id,
+    this.name,
+    this.videoUrl,
+    this.image,
+  });
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -57,6 +57,7 @@ class _AddNewFoodState extends State<AddNewFood> {
 
   TextEditingController _controller = new TextEditingController();
   TextEditingController _controller2 = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +85,9 @@ class _AddNewFoodState extends State<AddNewFood> {
                   child: Scrollbar(
                     isAlwaysShown: true,
                     child: ListView.builder(
-                        itemCount: searchResult.isEmpty ? data!.length : searchResult.length,
+                        itemCount: searchResult.isEmpty
+                            ? data!.length
+                            : searchResult.length,
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
@@ -103,31 +106,43 @@ class _AddNewFoodState extends State<AddNewFood> {
                               });
                             },
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "${data![index].title}",
-                                        style: TextStyle(color: Color(int.parse("0xFF${data![index].color}")), fontSize: 17),
+                                        style: TextStyle(
+                                            color: Color(int.parse(
+                                                "0xFF${data![index].color}")),
+                                            fontSize: 17),
                                       ),
                                       Icon(
-                                        data![index].isSellected == true ? Icons.radio_button_checked : Icons.radio_button_off,
+                                        data![index].isSellected == true
+                                            ? Icons.radio_button_checked
+                                            : Icons.radio_button_off,
                                         color: kColorPrimary,
                                       )
                                     ],
                                   ),
                                   Text(
                                     "${data![index].caloriePerUnit} Per ${data![index].unit}",
-                                    style: TextStyle(color: Color(int.parse("0xFF${data![index].color}")), fontSize: 12, fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        color: Color(int.parse(
+                                            "0xFF${data![index].color}")),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Divider(),
                                   data![index].isSellected == true
                                       ? Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10),
                                           child: Column(
                                             children: [
                                               EditText(
@@ -135,23 +150,32 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                 value: null,
                                                 hint: 'Enter Quantity',
                                                 suffixData: Padding(
-                                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 16,
+                                                      vertical: 8),
                                                   child: Column(
                                                     children: [
                                                       Text("${unit}"),
-                                                      Text("${calories} Calories"),
+                                                      Text(
+                                                          "${calories} Calories"),
                                                     ],
                                                   ),
                                                 ),
                                                 radius: 12,
                                                 type: Platform.isIOS
-                                  ? TextInputType.numberWithOptions(
-                                      signed: true, decimal: true)
-                                  : TextInputType.numberWithOptions(
-                                      decimal: true, signed: false),
+                                                    ? TextInputType
+                                                        .numberWithOptions(
+                                                            signed: true,
+                                                            decimal: true)
+                                                    : TextInputType
+                                                        .numberWithOptions(
+                                                            decimal: true,
+                                                            signed: false),
                                                 updateFunc: (String text) {
                                                   setState(() {
-                                                    quantity = double.tryParse(text);
+                                                    quantity =
+                                                        double.tryParse(text);
                                                   });
                                                   print(quantity);
                                                 },
@@ -164,21 +188,35 @@ class _AddNewFoodState extends State<AddNewFood> {
                                               quantity == null
                                                   ? SizedBox()
                                                   : Padding(
-                                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 16,
+                                                          vertical: 16),
                                                       child: Text(
                                                         "Total Calories : ${quantity! * calories!} Calories",
-                                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
                                                     ),
                                               quantity == null
                                                   ? SizedBox()
                                                   : kButtonDefault(
                                                       '  Select  ',
-                                                      marginH: MediaQuery.of(context).size.width / 4.5,
+                                                      marginH:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width /
+                                                              4.5,
                                                       paddingV: 0,
                                                       func: () {
-                                                        selectedFood!.qty = quantity;
-                                                        Get.back(result: selectedFood);
+                                                        selectedFood!.qty =
+                                                            quantity;
+                                                        Get.back(
+                                                            result:
+                                                                selectedFood);
                                                       },
                                                       shadow: true,
                                                       paddingH: 30,

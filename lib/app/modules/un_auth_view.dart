@@ -15,7 +15,9 @@ class UnAuthView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(height: MediaQuery.of(context).size.width/3,),
+          SizedBox(
+            height: MediaQuery.of(context).size.width / 3,
+          ),
           Center(
             child: Image.asset(
               "assets/img/block-user.png",
@@ -61,11 +63,11 @@ class UnAuthView extends StatelessWidget {
               onTap: () {
                 Get.toNamed(Routes.HOME);
               },
-              child: kTextHeader('Go Back To Home', color: kColorPrimary, size: 20)),
-
-
-          SizedBox(height: MediaQuery.of(context).size.width/4,),
-
+              child: kTextHeader('Go Back To Home',
+                  color: kColorPrimary, size: 20)),
+          SizedBox(
+            height: MediaQuery.of(context).size.width / 4,
+          ),
         ],
       ),
     );

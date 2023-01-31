@@ -71,7 +71,8 @@ appDialog({
                         children: <Widget>[
                           Text(
                             cancelText,
-                            style: GoogleFonts.cairo(fontSize: 14.0, color: Colors.white),
+                            style: GoogleFonts.cairo(
+                                fontSize: 14.0, color: Colors.white),
                           ),
                         ],
                       ),
@@ -93,7 +94,8 @@ appDialog({
                         children: <Widget>[
                           Text(
                             confirmText,
-                            style: GoogleFonts.cairo(fontSize: 14.0, color: Colors.black),
+                            style: GoogleFonts.cairo(
+                                fontSize: 14.0, color: Colors.black),
                           ),
                         ],
                       ),

@@ -28,7 +28,6 @@ class DropDownStringsList extends StatelessWidget {
       //   id = '${item.id!}';
       //   title = item.title!;
       // }
-     
 
       // Echo('dropDownMenu  id $id , title $title');
       return DropdownMenuItem<String>(
@@ -52,10 +51,9 @@ class DropDownStringsList extends StatelessWidget {
 
     return DropdownButtonFormField<String>(
       isDense: true,
-      
-      autovalidateMode: /*  autoValidate ? AutovalidateMode.always :  */ AutovalidateMode.disabled,
+      autovalidateMode: /*  autoValidate ? AutovalidateMode.always :  */ AutovalidateMode
+          .disabled,
       decoration: InputDecoration(
-        
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),

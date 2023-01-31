@@ -14,7 +14,8 @@ class NotificationDetailsView extends StatefulWidget {
   const NotificationDetailsView({Key? key, this.id}) : super(key: key);
 
   @override
-  _NotificationDetailsViewState createState() => _NotificationDetailsViewState();
+  _NotificationDetailsViewState createState() =>
+      _NotificationDetailsViewState();
 }
 
 class _NotificationDetailsViewState extends State<NotificationDetailsView> {
@@ -23,7 +24,9 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
   MessageDetailsResponse ressponse = MessageDetailsResponse();
 
   void getData() async {
-    await ApiProvider().getMessagesDetailsData(widget.id ?? 0).then((value) async {
+    await ApiProvider()
+        .getMessagesDetailsData(widget.id ?? 0)
+        .then((value) async {
       if (value.success == true) {
         setState(() {
           ressponse = value;

@@ -15,6 +15,7 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
     pageColor: Colors.white,
     imagePadding: EdgeInsets.zero,
   );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +48,8 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
                 return PageViewModel(
                   titleWidget: kTextHeader(singleItem.title),
                   bodyWidget: kTextbody(singleItem.content),
-                  image: Image.asset('${singleItem.imageUrl}', width: Get.width / 1.2),
+                  image: Image.asset('${singleItem.imageUrl}',
+                      width: Get.width / 1.2),
                   decoration: pageDecoration,
                 );
               }).toList(),
@@ -59,7 +61,9 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
             nextFlex: 0,
             skip: kTextbody(Strings().skip),
             next: Icon(
-              controller.lang.value.contains('Englis') ? Icons.arrow_forward : Icons.arrow_back,
+              controller.lang.value.contains('Englis')
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
               color: Colors.black87,
             ),
             done: kTextbody(Strings().gotIt, bold: true),

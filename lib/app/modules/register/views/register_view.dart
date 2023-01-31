@@ -54,7 +54,8 @@ class _RegisterViewState extends State<RegisterView> {
       showLoader = true;
     });
     await ApiProvider()
-        .signUpApi(id, password, name,lastName, email, date, phone, password_confirmation)
+        .signUpApi(id, password, name, lastName, email, date, phone,
+            password_confirmation)
         .then((value) async {
       if (value.success == true) {
         setState(() {
@@ -156,14 +157,15 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 3) {
+                          if (text.toString().isEmpty ||
+                              text.toString().length < 3) {
                             return "Enter Valid Name";
                           }
                         },
                         type: TextInputType.text,
                       ),
                       SizedBox(height: 12),
-                //last name
+                      //last name
                       kTextbody('Last name', size: 18),
                       EditText(
                         value: '',
@@ -175,7 +177,8 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 3) {
+                          if (text.toString().isEmpty ||
+                              text.toString().length < 3) {
                             return "Enter Valid Name";
                           }
                         },
@@ -195,7 +198,8 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || !text.toString().contains("@")) {
+                          if (text.toString().isEmpty ||
+                              !text.toString().contains("@")) {
                             return "Enter Valid Email";
                           }
                         },
@@ -214,7 +218,8 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 10) {
+                          if (text.toString().isEmpty ||
+                              text.toString().length < 10) {
                             return "Enter Valid Mobile Number";
                           }
                         },
@@ -250,13 +255,16 @@ class _RegisterViewState extends State<RegisterView> {
                             child: Container(
                               width: MediaQuery.of(context).size.width / 3,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey, width: 1),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
                                 borderRadius: BorderRadius.circular(64),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     gender == "Female"
                                         ? Icon(
@@ -289,13 +297,16 @@ class _RegisterViewState extends State<RegisterView> {
                             child: Container(
                               width: MediaQuery.of(context).size.width / 3,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey, width: 1),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1),
                                 borderRadius: BorderRadius.circular(64),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     gender == "Male"
                                         ? Icon(
@@ -331,7 +342,8 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 6) {
+                          if (text.toString().isEmpty ||
+                              text.toString().length < 6) {
                             return "Enter Valid Password";
                           }
                         },
@@ -348,7 +360,8 @@ class _RegisterViewState extends State<RegisterView> {
                           print(text);
                         },
                         validateFunc: (text) {
-                          if (text.toString().isEmpty || text.toString().length < 6) {
+                          if (text.toString().isEmpty ||
+                              text.toString().length < 6) {
                             return "Enter Valid Password";
                           }
                         },
@@ -374,7 +387,8 @@ class _RegisterViewState extends State<RegisterView> {
                               shadow: true,
                               paddingH: 16,
                             ),
-                            SizedBox(height: MediaQuery.of(context).size.width / 14),
+                            SizedBox(
+                                height: MediaQuery.of(context).size.width / 14),
                             GestureDetector(
                                 onTap: () {
                                   Get.toNamed(Routes.LOGIN);
@@ -383,7 +397,8 @@ class _RegisterViewState extends State<RegisterView> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.only(bottom: 4),
-                                      child: kTextHeader('Sign in', color: kColorAccent),
+                                      child: kTextHeader('Sign in',
+                                          color: kColorAccent),
                                     ),
                                     Positioned(
                                         bottom: 8,
@@ -396,7 +411,8 @@ class _RegisterViewState extends State<RegisterView> {
                                         ))
                                   ],
                                 )),
-                            SizedBox(height: MediaQuery.of(context).size.width / 14),
+                            SizedBox(
+                                height: MediaQuery.of(context).size.width / 14),
                           ],
                         ),
                       )

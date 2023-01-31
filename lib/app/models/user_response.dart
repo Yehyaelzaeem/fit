@@ -66,7 +66,7 @@ class Data {
     id = json['id'];
     patientId = json['patient_id'];
     name = json['name'] ?? "";
-    lastName = json['last_name'] ==null ? "" : json['last_name'] ?? "";
+    lastName = json['last_name'] == null ? "" : json['last_name'] ?? "";
     email = json['email'] ?? "";
     phone = json['phone'] ?? "";
     dateOfBirth = json['date_of_birth'] ?? "";

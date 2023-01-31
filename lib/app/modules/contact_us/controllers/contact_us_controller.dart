@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 class ContactUsController extends GetxController {
   final contactResponse = ContactResponse().obs;
 
-  TextEditingController  contactEmail = new TextEditingController();
+  TextEditingController contactEmail = new TextEditingController();
   TextEditingController contactFirstName = new TextEditingController();
-  TextEditingController contactPhone =  new TextEditingController();
-  TextEditingController subject =  new TextEditingController();
-  TextEditingController  contactMessage =  new TextEditingController();
+  TextEditingController contactPhone = new TextEditingController();
+  TextEditingController subject = new TextEditingController();
+  TextEditingController contactMessage = new TextEditingController();
   bool contactLoading = false;
 
   @override
@@ -29,8 +29,8 @@ class ContactUsController extends GetxController {
     print(subject.text);
     print(contactPhone.text);
     await ApiProvider()
-        .sendContactData(contactFirstName.text, contactEmail.text, contactPhone.text, subject.text,
-            contactMessage.text)
+        .sendContactData(contactFirstName.text, contactEmail.text,
+            contactPhone.text, subject.text, contactMessage.text)
         .then((value) {
       if (value.success == true) {
         Get.offAllNamed(Routes.HOME);

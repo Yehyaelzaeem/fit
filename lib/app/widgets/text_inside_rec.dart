@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class TextInsideRec extends StatelessWidget {
   final String text;
+
   const TextInsideRec({
     required this.text,
     Key? key,

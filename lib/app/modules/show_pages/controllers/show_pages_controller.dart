@@ -24,14 +24,23 @@ class ShowPagesController extends GetxController {
     widgets.clear();
     defaultWidgets.clear();
 
-    pages.add(PageView(pageName: "Intro", route: Routes.INTRODUCTION_SCREEN, color: Colors.white));
-    pages.add(PageView(pageName: "About", route: Routes.ABOUT, color: Colors.greenAccent));
-    pages.add(PageView(pageName: "Policy", route: Routes.POLICY, color: Colors.redAccent));
+    pages.add(PageView(
+        pageName: "Intro",
+        route: Routes.INTRODUCTION_SCREEN,
+        color: Colors.white));
+    pages.add(PageView(
+        pageName: "About", route: Routes.ABOUT, color: Colors.greenAccent));
+    pages.add(PageView(
+        pageName: "Policy", route: Routes.POLICY, color: Colors.redAccent));
 
     widgets.add(WidgetView(
-        widgetName: "Auth err", widget: AuthErrorWidget(refresh: () {}), color: Colors.red));
+        widgetName: "Auth err",
+        widget: AuthErrorWidget(refresh: () {}),
+        color: Colors.red));
     widgets.add(WidgetView(
-        widgetName: "Server err", widget: ServerErrorWidget(refresh: () {}), color: Colors.orange));
+        widgetName: "Server err",
+        widget: ServerErrorWidget(refresh: () {}),
+        color: Colors.orange));
     widgets.add(WidgetView(
         widgetName: "Network err",
         widget: NoInternetConnection(refresh: () {}),
@@ -90,5 +99,6 @@ class WidgetView {
   late Widget widget;
   late Color color;
 
-  WidgetView({required this.widgetName, required this.color, required this.widget});
+  WidgetView(
+      {required this.widgetName, required this.color, required this.widget});
 }

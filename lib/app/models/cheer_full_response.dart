@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-CheerFullResponse cheerFullResponseFromJson(String str) => CheerFullResponse.fromJson(json.decode(str));
+CheerFullResponse cheerFullResponseFromJson(String str) =>
+    CheerFullResponse.fromJson(json.decode(str));
 
 class CheerFullResponse {
   CheerFullResponse({
@@ -17,7 +18,8 @@ class CheerFullResponse {
   bool? success;
   Data? data;
 
-  factory CheerFullResponse.fromJson(Map<String, dynamic> json) => CheerFullResponse(
+  factory CheerFullResponse.fromJson(Map<String, dynamic> json) =>
+      CheerFullResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
@@ -38,9 +40,12 @@ class Data {
   bool? pickup_option;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        isFaqActive: json["show_faq_page"] == null ? true : json["show_faq_page"],
+        isFaqActive:
+            json["show_faq_page"] == null ? true : json["show_faq_page"],
         isActive: json["is_active"] == null ? null : json["is_active"],
-        delivery_option: json["delivery_option"] == null ? null : json["delivery_option"],
-        pickup_option: json["pickup_option"] == null ? null : json["pickup_option"],
+        delivery_option:
+            json["delivery_option"] == null ? null : json["delivery_option"],
+        pickup_option:
+            json["pickup_option"] == null ? null : json["pickup_option"],
       );
 }

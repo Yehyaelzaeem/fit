@@ -87,15 +87,15 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   children: [
                     textEditController.currentIndex.value == 1
                         ? SvgPicture.asset(
-                      "assets/icons/home1.svg",
-                      width: 30,
-                      height: 30,
-                    )
+                            "assets/icons/home1.svg",
+                            width: 30,
+                            height: 30,
+                          )
                         : SvgPicture.asset(
-                      "assets/icons/home.svg",
-                      width: 30,
-                      height: 30,
-                    ),
+                            "assets/icons/home.svg",
+                            width: 30,
+                            height: 30,
+                          ),
                     kTextbody(
                       'Home',
                       color: textEditController.currentIndex.value == 1
@@ -119,15 +119,15 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
                   children: [
                     textEditController.currentIndex.value == 2
                         ? SvgPicture.asset(
-                      "assets/icons/doctor.svg",
-                      width: 30,
-                      height: 30,
-                    )
+                            "assets/icons/doctor.svg",
+                            width: 30,
+                            height: 30,
+                          )
                         : SvgPicture.asset(
-                      "assets/icons/doctor1.svg",
-                      width: 30,
-                      height: 30,
-                    ),
+                            "assets/icons/doctor1.svg",
+                            width: 30,
+                            height: 30,
+                          ),
                     kTextbody('Sessions',
                         color: textEditController.currentIndex.value == 2
                             ? kColorPrimary

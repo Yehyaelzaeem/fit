@@ -17,7 +17,8 @@ class OrientationRegisterView extends StatefulWidget {
   const OrientationRegisterView({Key? key, this.id}) : super(key: key);
 
   @override
-  _OrientationRegisterViewState createState() => _OrientationRegisterViewState();
+  _OrientationRegisterViewState createState() =>
+      _OrientationRegisterViewState();
 }
 
 class _OrientationRegisterViewState extends State<OrientationRegisterView> {
@@ -210,7 +211,8 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             print(text);
                           },
                           validateFunc: (text) {
-                            if (text.toString().isEmpty || text.toString().length < 10) {
+                            if (text.toString().isEmpty ||
+                                text.toString().length < 10) {
                               return "Enter Your Mobile Number At Least 10 Numbers";
                             }
                           },
@@ -294,13 +296,17 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  for (int i = 0; i < ress.data!.targets!.length; i++) {
+                                  for (int i = 0;
+                                      i < ress.data!.targets!.length;
+                                      i++) {
                                     setState(() {
-                                      ress.data!.targets![i].isSellected = false;
+                                      ress.data!.targets![i].isSellected =
+                                          false;
                                     });
                                   }
                                   setState(() {
-                                    ress.data!.targets![index].isSellected = true;
+                                    ress.data!.targets![index].isSellected =
+                                        true;
                                     target = ress.data!.targets![index].id;
                                   });
                                 },
@@ -314,7 +320,8 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      ress.data!.targets![index].isSellected == false
+                                      ress.data!.targets![index].isSellected ==
+                                              false
                                           ? Icon(
                                               Icons.radio_button_off,
                                               color: kColorPrimary,
@@ -324,10 +331,14 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                               color: kColorPrimary,
                                             ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text(ress.data!.targets![index].title ?? "",
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                            ress.data!.targets![index].title ??
+                                                "",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold, fontSize: 14)),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14)),
                                       ),
                                     ],
                                   ),
@@ -348,14 +359,19 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  for (int i = 0; i < ress.data!.hearingFrom!.length; i++) {
+                                  for (int i = 0;
+                                      i < ress.data!.hearingFrom!.length;
+                                      i++) {
                                     setState(() {
-                                      ress.data!.hearingFrom![i].isSellected = false;
+                                      ress.data!.hearingFrom![i].isSellected =
+                                          false;
                                     });
                                   }
                                   setState(() {
-                                    ress.data!.hearingFrom![index].isSellected = true;
-                                    hear_from = ress.data!.hearingFrom![index].id;
+                                    ress.data!.hearingFrom![index].isSellected =
+                                        true;
+                                    hear_from =
+                                        ress.data!.hearingFrom![index].id;
                                   });
                                 },
                                 child: Container(
@@ -368,7 +384,9 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      ress.data!.hearingFrom![index].isSellected == false
+                                      ress.data!.hearingFrom![index]
+                                                  .isSellected ==
+                                              false
                                           ? Icon(
                                               Icons.radio_button_off,
                                               color: kColorPrimary,
@@ -378,10 +396,15 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                               color: kColorPrimary,
                                             ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text(ress.data!.hearingFrom![index].title ?? "",
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                            ress.data!.hearingFrom![index]
+                                                    .title ??
+                                                "",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold, fontSize: 14)),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14)),
                                       ),
                                     ],
                                   ),
@@ -402,13 +425,17 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  for (int i = 0; i < ress.data!.packages!.length; i++) {
+                                  for (int i = 0;
+                                      i < ress.data!.packages!.length;
+                                      i++) {
                                     setState(() {
-                                      ress.data!.packages![i].isSellected = false;
+                                      ress.data!.packages![i].isSellected =
+                                          false;
                                     });
                                   }
                                   setState(() {
-                                    ress.data!.packages![index].isSellected = true;
+                                    ress.data!.packages![index].isSellected =
+                                        true;
                                     package = ress.data!.packages![index].id;
                                   });
                                 },
@@ -422,7 +449,8 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                       SizedBox(
                                         width: 20,
                                       ),
-                                      ress.data!.packages![index].isSellected == false
+                                      ress.data!.packages![index].isSellected ==
+                                              false
                                           ? Icon(
                                               Icons.radio_button_off,
                                               color: kColorPrimary,
@@ -432,10 +460,14 @@ class _OrientationRegisterViewState extends State<OrientationRegisterView> {
                                               color: kColorPrimary,
                                             ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                                        child: Text(ress.data!.packages![index].title ?? "",
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                            ress.data!.packages![index].title ??
+                                                "",
                                             style: TextStyle(
-                                                fontWeight: FontWeight.bold, fontSize: 14)),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14)),
                                       ),
                                     ],
                                   ),

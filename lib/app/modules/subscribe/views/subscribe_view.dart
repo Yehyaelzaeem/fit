@@ -43,7 +43,7 @@ class SubscribeView extends GetView<SubscribeController> {
                       HomeAppbar(),
                       SizedBox(height: 12),
                       Container(
-                        height: Get.height*0.2,
+                        height: Get.height * 0.2,
                         child: ListView.builder(
                             itemCount: controller.servicesResponse.data!.length,
                             shrinkWrap: true,
@@ -55,9 +55,10 @@ class SubscribeView extends GetView<SubscribeController> {
                                     controller.selectedIndex(index);
                                   },
                                   child: Container(
-                                    height: Get.height*0.12,
+                                    height: Get.height * 0.12,
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.symmetric(
@@ -68,19 +69,20 @@ class SubscribeView extends GetView<SubscribeController> {
                                             borderRadius:
                                                 BorderRadius.circular(25),
                                             border: Border.all(
-                                              color:
-                                                  controller.serviceIndex.value ==
-                                                          index
-                                                      ? kColorPrimary
-                                                      : Colors.transparent,
-                                              width:
-                                                  controller.serviceIndex.value ==
-                                                          index
-                                                      ? 1
-                                                      : 1,
+                                              color: controller
+                                                          .serviceIndex.value ==
+                                                      index
+                                                  ? kColorPrimary
+                                                  : Colors.transparent,
+                                              width: controller
+                                                          .serviceIndex.value ==
+                                                      index
+                                                  ? 1
+                                                  : 1,
                                             ),
                                             boxShadow: [
-                                              if (controller.serviceIndex.value ==
+                                              if (controller
+                                                      .serviceIndex.value ==
                                                   index)
                                                 BoxShadow(
                                                   color: kColorPrimary,
@@ -88,7 +90,8 @@ class SubscribeView extends GetView<SubscribeController> {
                                                   spreadRadius: 1,
                                                   offset: Offset(0, 0),
                                                 ),
-                                              if (controller.serviceIndex.value !=
+                                              if (controller
+                                                      .serviceIndex.value !=
                                                   index)
                                                 BoxShadow(
                                                   color: const Color(0xFF414042)
@@ -105,20 +108,21 @@ class SubscribeView extends GetView<SubscribeController> {
                                           ),
                                         ),
                                         Container(
-                                          width:
-                                              MediaQuery.of(context).size.width /
-                                                  3.2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              3.2,
                                           child: kTextHeader(
-                                            controller.servicesResponse
-                                                .data![index].name!,
-                                            bold: true,
-                                             size: 12,
-                                             color: controller.serviceIndex.value ==
-                                                  index
+                                              controller.servicesResponse
+                                                  .data![index].name!,
+                                              bold: true,
+                                              size: 12,
+                                              color: controller
+                                                          .serviceIndex.value ==
+                                                      index
                                                   ? kColorPrimary
-                                                  : Colors.black87
-                                            ),
-                                          ),
+                                                  : Colors.black87),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -182,7 +186,6 @@ class SubscribeView extends GetView<SubscribeController> {
                                                 child: Row(
                                                   children: [
                                                     Spacer(),
-
                                                     Column(
                                                       children: [
                                                         SizedBox(height: 8),
@@ -195,19 +198,19 @@ class SubscribeView extends GetView<SubscribeController> {
                                                                 white: true),
                                                             kTextHeader(
                                                                 controller
-                                                                    .servicesResponse
-                                                                    .data?[controller
-                                                                    .serviceIndex
-                                                                    .value]
-                                                                    .packages?[i]
-                                                                    .currency ??
+                                                                        .servicesResponse
+                                                                        .data?[controller
+                                                                            .serviceIndex
+                                                                            .value]
+                                                                        .packages?[
+                                                                            i]
+                                                                        .currency ??
                                                                     "",
-                                                                color: kColorPrimary,
+                                                                color:
+                                                                    kColorPrimary,
                                                                 bold: true,
-                                                              paddingV: 0,
-                                                              paddingH: 0
-
-                                                            ),
+                                                                paddingV: 0,
+                                                                paddingH: 0),
                                                           ],
                                                         ),
                                                         kTextHeader(
@@ -231,72 +234,100 @@ class SubscribeView extends GetView<SubscribeController> {
                                               Expanded(
                                                 child: Html(
                                                   data: controller
-                                                      .servicesResponse
-                                                      .data?[controller
-                                                          .serviceIndex.value]
-                                                      .packages?[i]
-                                                      .description??"",
-                                                ),
-                                              ),
-                                              controller.isPaymentClicked.value ==
-                                                      false
-                                                  ? kButton("Payment",
-                                                  color: controller
-                                                      .servicesResponse
-                                                      .data?[controller
-                                                      .serviceIndex.value]
-                                                      .packages?[i].paymentStatus==true? kColorPrimary:kColorAccent,
-                                                  func:  controller
-                                                  .servicesResponse
-                                                  .data?[controller
-                                                  .serviceIndex.value]
-                                                  .packages?[i].paymentStatus==true?() async {
-                                                      if(await controller.getFromCash() ==
-                                                          "haveAllData"){controller
-                                                          .packagePayment(context: context,
-                                                          packageId: controller
-                                                              .servicesResponse
-                                                              .data![controller
+                                                          .servicesResponse
+                                                          .data?[controller
                                                               .serviceIndex
                                                               .value]
-                                                              .packages![
-                                                          i]
-                                                              .id!)
-                                                          .then((value) {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (_) =>
-                                                                WebViewScreen(
-                                                                  url: controller
-                                                                      .packagePaymentResponse
-                                                                      .data!
-                                                                      .paymentUrl!,
-                                                                  packageId:
-                                                                  controller
-                                                                      .packagePaymentResponse
-                                                                      .data!
-                                                                      .id!,
-                                                                ),
-                                                          ),
-                                                        );
-                                                      });}  else if (await controller.getFromCash() ==
-                                                          "noLastName") {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (_) => EditProfileView()));
-                                                      } else{_navigateAndDisplaySelection(
-                                                          context: context,
-                                                          i: i);}
-
-                                                    }:(){
-                                                    Fluttertoast.showToast(msg: "  Payment is deactivated  ");
-                                                  })
-                                                  : Container(
-                                                height: 40,
-                                                child: Lottie.asset('assets/loader.json'),
+                                                          .packages?[i]
+                                                          .description ??
+                                                      "",
+                                                ),
                                               ),
+                                              controller.isPaymentClicked
+                                                          .value ==
+                                                      false
+                                                  ? kButton("Payment",
+                                                      color: controller
+                                                                  .servicesResponse
+                                                                  .data?[controller
+                                                                      .serviceIndex
+                                                                      .value]
+                                                                  .packages?[i]
+                                                                  .paymentStatus ==
+                                                              true
+                                                          ? kColorPrimary
+                                                          : kColorAccent,
+                                                      func: controller
+                                                                  .servicesResponse
+                                                                  .data?[controller
+                                                                      .serviceIndex
+                                                                      .value]
+                                                                  .packages?[i]
+                                                                  .paymentStatus ==
+                                                              true
+                                                          ? () async {
+                                                              if (await controller
+                                                                      .getFromCash() ==
+                                                                  "haveAllData") {
+                                                                controller
+                                                                    .packagePayment(
+                                                                        context:
+                                                                            context,
+                                                                        packageId: controller
+                                                                            .servicesResponse
+                                                                            .data![controller
+                                                                                .serviceIndex.value]
+                                                                            .packages![
+                                                                                i]
+                                                                            .id!)
+                                                                    .then(
+                                                                        (value) {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (_) =>
+                                                                              WebViewScreen(
+                                                                        url: controller
+                                                                            .packagePaymentResponse
+                                                                            .data!
+                                                                            .paymentUrl!,
+                                                                        packageId: controller
+                                                                            .packagePaymentResponse
+                                                                            .data!
+                                                                            .id!,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                });
+                                                              } else if (await controller
+                                                                      .getFromCash() ==
+                                                                  "noLastName") {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (_) =>
+                                                                                EditProfileView()));
+                                                              } else {
+                                                                _navigateAndDisplaySelection(
+                                                                    context:
+                                                                        context,
+                                                                    i: i);
+                                                              }
+                                                            }
+                                                          : () {
+                                                              Fluttertoast
+                                                                  .showToast(
+                                                                      msg:
+                                                                          "  Payment is deactivated  ");
+                                                            })
+                                                  : Container(
+                                                      height: 40,
+                                                      child: Lottie.asset(
+                                                          'assets/loader.json'),
+                                                    ),
                                             ],
                                           ),
                                         ),

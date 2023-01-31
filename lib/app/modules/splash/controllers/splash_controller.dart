@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 
 import '../../notification_api.dart';
 
-class SplashController extends GetxController with SingleGetTickerProviderMixin {
+class SplashController extends GetxController
+    with SingleGetTickerProviderMixin {
   final error = ''.obs;
 
   // final response = SplashResponse().obs;
@@ -16,22 +17,48 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
   AnimationController? animationController;
   Animation<double>? animation;
   var animationValue = (0.0).obs;
-  initLocalNotification(){
+
+  initLocalNotification() {
     NotificationApi.init(isScheduled: true);
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
+    Future.delayed(
+        Duration(seconds: 2),
+        () => NotificationApi.showScheduledNotification(
+              hour: 11,
+              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+              id: 1,
+            ));
+    Future.delayed(
+        Duration(seconds: 2),
+        () => NotificationApi.showScheduledNotification(
+              hour: 14,
+              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+              id: 2,
+            ));
+    Future.delayed(
+        Duration(seconds: 2),
+        () => NotificationApi.showScheduledNotification(
+              hour: 17,
+              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+              id: 3,
+            ));
+    Future.delayed(
+        Duration(seconds: 2),
+        () => NotificationApi.showScheduledNotification(
+              hour: 20,
+              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+              id: 4,
+            ));
   }
 
   @override
   void onInit() {
     super.onInit();
     initLocalNotification();
-    animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
-    animation = new CurvedAnimation(parent: animationController!, curve: Curves.fastOutSlowIn);
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animation = new CurvedAnimation(
+        parent: animationController!, curve: Curves.fastOutSlowIn);
   }
-
 
   @override
   void onReady() {
@@ -63,11 +90,15 @@ class SplashController extends GetxController with SingleGetTickerProviderMixin 
     final controller = Get.find<HomeController>(tag: 'home');
     //print("Controller Data ===> Logged : ${controller.isLogggd.value} ,  Name : ${controller.name.value},  Last Name : ${controller.lastName.value},Id : ${controller.id.value},  Image : ${controller.avatar.value}");
     print("Controller Data ===> Logged :   Id : ${controller.id.value}, ");
-    controller.isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    controller.name.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    controller.isLogggd.value =
+        await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    controller.name.value =
+        await SharedHelper().readString(CachingKey.USER_NAME);
     controller.id.value = await SharedHelper().readString(CachingKey.USER_ID);
-    controller.lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    controller.avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
+    controller.lastName.value =
+        await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    controller.avatar.value =
+        await SharedHelper().readString(CachingKey.AVATAR);
     if (controller.isLogggd.value == true) {
       Get.offAllNamed(Routes.HOME);
     } else {

@@ -27,7 +27,7 @@ class Data {
   List<Proteins>? carbs;
   List<Proteins>? fats;
 
-  Data({this.proteins, this.carbs,this.fats});
+  Data({this.proteins, this.carbs, this.fats});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['proteins'] != null) {
@@ -41,7 +41,8 @@ class Data {
       json['carbs_fats'].forEach((v) {
         carbs!.add(new Proteins.fromJson(v));
       });
-    }   if (json['fats'] != null) {
+    }
+    if (json['fats'] != null) {
       fats = <Proteins>[];
       json['fats'].forEach((v) {
         fats!.add(new Proteins.fromJson(v));

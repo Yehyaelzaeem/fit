@@ -5,7 +5,6 @@ import 'package:app/app/modules/diary/add_new_food.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
-import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
@@ -28,7 +27,6 @@ class DiaryView extends GetView<DiaryController> {
   @override
   final controller = Get.find(tag: 'diary');
 
-//controller.response.value.data?
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -998,7 +996,7 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
         deleteItem = true;
         setState(() {});
         if (widget.item.id == null) {
-          if (widget.type == 'Proteins')
+          if (widget.type == 'proteins')
             await widget.controller.caloriesDetails.remove(widget.item);
           else if (widget.type == 'carbs')
             await widget.controller.carbsDetails.remove(widget.item);

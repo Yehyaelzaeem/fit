@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import '../controllers/time_sleep_controller.dart';
 
 class TimeSleepView extends GetView<TimeSleepController> {
-
   DateTime dateTime = DateTime.now();
 
   @override
@@ -40,7 +39,8 @@ class TimeSleepView extends GetView<TimeSleepController> {
                               PageLable(name: "Sleep Time"),
                               SizedBox(height: Get.height * 0.02),
                               Container(
-                                height: MediaQuery.of(context).size.height *0.33,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.33,
                                 width: MediaQuery.of(context).size.width,
                                 child: simpleClock,
                               ),
@@ -121,11 +121,11 @@ class TimeSleepView extends GetView<TimeSleepController> {
                                     color: Color(0xffF1F1F1),
                                     width: 1,
                                   ), func: () {
-                                     controller.addSleepTime(
-                                  sleepTimeFrom:
-                                  controller.selectedTimeFrom.format(context),
+                                controller.addSleepTime(
+                                  sleepTimeFrom: controller.selectedTimeFrom
+                                      .format(context),
                                   sleepTimeTo:
-                                  controller.selectedTimeTo.format(context),
+                                      controller.selectedTimeTo.format(context),
                                 );
                               }),
                               SizedBox(height: 20),
@@ -174,7 +174,7 @@ class TimeSleepView extends GetView<TimeSleepController> {
         showTicks: true,
         showDigitalClock: false,
         datetime: dateTime,
-      //  key: const GlobalObjectKey(1),
+        //  key: const GlobalObjectKey(1),
       );
 
   Widget myTileRadioButton(

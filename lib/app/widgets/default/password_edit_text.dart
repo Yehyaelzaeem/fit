@@ -47,7 +47,9 @@ class _EditTextState extends State<EditTextPassword> {
       padding: EdgeInsets.all(4),
       child: TextFormField(
         obscureText: obscurePassword,
-        autovalidateMode: widget.autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+        autovalidateMode: widget.autoValidate
+            ? AutovalidateMode.always
+            : AutovalidateMode.disabled,
         initialValue: widget.value,
         decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -63,8 +65,12 @@ class _EditTextState extends State<EditTextPassword> {
               borderSide: BorderSide(color: kColorPrimary, width: 2),
             ),
             errorStyle: TextStyle(fontSize: 10),
-            labelStyle: TextStyle(fontSize: widget.fontSize,color: kColorAccent),
-            hintStyle: TextStyle(fontSize: widget.fontSize, color: Colors.black, fontWeight: FontWeight.w300),
+            labelStyle:
+                TextStyle(fontSize: widget.fontSize, color: kColorAccent),
+            hintStyle: TextStyle(
+                fontSize: widget.fontSize,
+                color: Colors.black,
+                fontWeight: FontWeight.w300),
             labelText: widget.hint,
             hintText: widget.hint,
             counterStyle: TextStyle(color: Colors.green),

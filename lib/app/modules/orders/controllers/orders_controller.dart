@@ -4,7 +4,8 @@ import 'package:app/globale_controller.dart';
 import 'package:get/get.dart';
 
 class OrdersController extends GetxController {
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
 
   final response = MyOrdersResponse(code: 200, success: false, data: null).obs;
   final error = ''.obs;

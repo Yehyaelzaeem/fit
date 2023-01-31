@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
 
@@ -66,15 +65,19 @@ class _ProfileViewState extends State<ProfileView> {
                 child: Center(
                   child: Container(
                     width: Get.width / 2,
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(color: Color(0xffFFB62B), borderRadius: BorderRadius.circular(64), boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.4),
-                        blurRadius: 1,
-                        spreadRadius: 1,
-                        offset: Offset(0, 1),
-                      ),
-                    ]),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                        color: Color(0xffFFB62B),
+                        borderRadius: BorderRadius.circular(64),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            blurRadius: 1,
+                            spreadRadius: 1,
+                            offset: Offset(0, 1),
+                          ),
+                        ]),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -83,7 +86,12 @@ class _ProfileViewState extends State<ProfileView> {
                           width: 30,
                           height: 30,
                         ),
-                        kTextHeader('Subscribe', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
+                        kTextHeader('Subscribe',
+                            size: 16,
+                            color: Colors.white,
+                            bold: true,
+                            paddingH: 16,
+                            paddingV: 4),
                       ],
                     ),
                   ),
@@ -138,7 +146,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 },
                               )),
                           kTextHeader('${ress.data!.name!}'),
-                          kTextfooter('ID : ${ress.data!.patientId!}', size: 14, color: Colors.black87, paddingV: 0),
+                          kTextfooter('ID : ${ress.data!.patientId!}',
+                              size: 14, color: Colors.black87, paddingV: 0),
                           SizedBox(height: 14),
                         ],
                       ),
@@ -147,15 +156,20 @@ class _ProfileViewState extends State<ProfileView> {
                     // edit your profile
                     InkWell(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfileView()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfileView()));
                       },
                       child: Container(
                         width: double.infinity,
-                        margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            kTextbody('Edit your profile', color: kColorPrimary),
+                            kTextbody('Edit your profile',
+                                color: kColorPrimary),
                             SizedBox(width: 6),
                             Icon(Icons.edit, size: 16, color: kColorPrimary),
                           ],
@@ -176,7 +190,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 Container(
                                     width: double.infinity,
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         kTextbody(
                                           'Next Session',
@@ -209,13 +224,15 @@ class _ProfileViewState extends State<ProfileView> {
                     //Package renewal date
                     Container(
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.history, size: 20, color: kColorPrimary),
                           SizedBox(width: 6),
-                          kTextbody('Package Renewal Date', color: Colors.black87),
+                          kTextbody('Package Renewal Date',
+                              color: Colors.black87),
                         ],
                       ),
                     ),
@@ -235,7 +252,9 @@ class _ProfileViewState extends State<ProfileView> {
                     // Target
                     SizedBox(height: 18),
 
-                    ress.data!.target == null ? SizedBox() : PageLable(name: "Target"),
+                    ress.data!.target == null
+                        ? SizedBox()
+                        : PageLable(name: "Target"),
                     SizedBox(height: 12),
                     ress.data!.target == null
                         ? SizedBox()
@@ -246,7 +265,8 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Total Weight:', bold: true),
-                                kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
+                                kTextbody(' ${ress.data!.target!.totalWeight}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -261,7 +281,8 @@ class _ProfileViewState extends State<ProfileView> {
                                 child: Row(
                                   children: [
                                     kTextbody('Fats Percentage:', bold: true),
-                                    kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
+                                    kTextbody(' ${ress.data!.target!.fats}',
+                                        color: kColorPrimary),
                                   ],
                                 ),
                               ),
@@ -274,7 +295,8 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Muscles Percentage:', bold: true),
-                                kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
+                                kTextbody(' ${ress.data!.target!.muscles}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -287,7 +309,8 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Water Percentage:', bold: true),
-                                kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
+                                kTextbody('  ${ress.data!.target!.water}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -299,7 +322,11 @@ class _ProfileViewState extends State<ProfileView> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               PageLable(name: "Last Body Composition"),
-                              ress.data!.lastBodyComposition == null ? kTextbody(' Unknown', paddingH: 36) : kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
+                              ress.data!.lastBodyComposition == null
+                                  ? kTextbody(' Unknown', paddingH: 36)
+                                  : kTextbody(
+                                      ' ${ress.data!.lastBodyComposition!.date}',
+                                      paddingH: 36),
                             ],
                           ),
                     SizedBox(height: 12),
@@ -312,7 +339,9 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Total Weight:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.totalWeight}', color: kColorPrimary),
+                                kTextbody(
+                                    '${ress.data!.lastBodyComposition!.totalWeight}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -325,7 +354,9 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Fats Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.fats}', color: kColorPrimary),
+                                kTextbody(
+                                    '${ress.data!.lastBodyComposition!.fats}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -338,7 +369,9 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Muscles Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.muscles}', color: kColorPrimary),
+                                kTextbody(
+                                    '${ress.data!.lastBodyComposition!.muscles}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -351,7 +384,9 @@ class _ProfileViewState extends State<ProfileView> {
                             child: Row(
                               children: [
                                 kTextbody('Water Percentage:', bold: true),
-                                kTextbody('${ress.data!.lastBodyComposition!.water}', color: kColorPrimary),
+                                kTextbody(
+                                    '${ress.data!.lastBodyComposition!.water}',
+                                    color: kColorPrimary),
                               ],
                             ),
                           ),
@@ -363,7 +398,8 @@ class _ProfileViewState extends State<ProfileView> {
                           onTap: () {
                             appDialog(
                               title: 'Delete Account',
-                              body: 'Are you sure you want to delete your account?',
+                              body:
+                                  'Are you sure you want to delete your account?',
                               confirmAction: () {
                                 ApiProvider().deleteAccount();
                                 YemenyPrefs prefs = YemenyPrefs();

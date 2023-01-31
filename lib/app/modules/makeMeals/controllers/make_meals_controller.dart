@@ -17,14 +17,17 @@ class MakeMealsController extends GetxController {
   final saveLoading = false.obs;
 
   RxList<Food> selectedFood = RxList<Food>();
+
   // RxList<Food> carbSelected = RxList<Food>();
   // RxList<Food> fatSelected = RxList<Food>();
 
   RxList<SingleMeal> meals = RxList<SingleMeal>();
+
   // RxList<Food> carb = RxList<Food>();
   // RxList<Food> fat = RxList<Food>();
 
   SingleMyMeal? meal;
+
   @override
   void onInit() {
     getNetworkData();
@@ -36,7 +39,8 @@ class MakeMealsController extends GetxController {
     loading.value = true;
     try {
       if (globalController.response.value.data.isEmpty) {
-        MealFoodListResponse mealFoodListResponse = await ApiProvider().getMealFoodList();
+        MealFoodListResponse mealFoodListResponse =
+            await ApiProvider().getMealFoodList();
         List<SingleMeal> data = [];
         mealFoodListResponse.data.forEach((element) {
           List<Food> food = [];
@@ -84,13 +88,16 @@ class MakeMealsController extends GetxController {
                 Food? food;
                 Amount? amount;
                 meal.food.forEach((item) {
-                  Echo('arguments item ${item.title} ${item.id} element ${element.title} ${element.id}');
+                  Echo(
+                      'arguments item ${item.title} ${item.id} element ${element.title} ${element.id}');
                   if (item.id == element.id) {
                     item.amounts.forEach((amountItem) {
-                      if (element.amount == amountItem.name) amount = amountItem;
+                      if (element.amount == amountItem.name)
+                        amount = amountItem;
                     });
                     if (amount != null) Echo('amount ${amount!.name}');
-                    if (amount != null) Echo('item.mealTitle ${item.mealTitle}');
+                    if (amount != null)
+                      Echo('item.mealTitle ${item.mealTitle}');
                     if (amount != null)
                       food = Food(
                         mealTitle: item.mealTitle,
@@ -182,7 +189,8 @@ class MakeMealsController extends GetxController {
   double totalPrice() {
     double total = 0;
     selectedFood.forEach((element) {
-      if (element.selectedAmount.price.isNotEmpty) total += double.parse(element.selectedAmount.price).round();
+      if (element.selectedAmount.price.isNotEmpty)
+        total += double.parse(element.selectedAmount.price).round();
     });
 
     // proteinSelected.forEach((element) {

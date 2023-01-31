@@ -25,15 +25,16 @@ class Data {
   UserInfo? userInfo;
   List<Meals>? meals;
 
-  Data({this.id,
-    this.price,
-    this.status,
-    this.deliveryMethod,
-    this.payMethod,
-    this.visaPaymentStatus,
-    this.date,
-    this.userInfo,
-    this.meals});
+  Data(
+      {this.id,
+      this.price,
+      this.status,
+      this.deliveryMethod,
+      this.payMethod,
+      this.visaPaymentStatus,
+      this.date,
+      this.userInfo,
+      this.meals});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,7 +54,6 @@ class Data {
       });
     }
   }
-
 }
 
 class UserInfo {
@@ -66,11 +66,11 @@ class UserInfo {
 
   UserInfo(
       {this.name,
-        this.email,
-        this.phone,
-        this.address,
-        this.latitude,
-        this.longitude});
+      this.email,
+      this.phone,
+      this.address,
+      this.latitude,
+      this.longitude});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -87,12 +87,15 @@ class Meals {
   String? name;
   int? price;
 
-  Meals({this.id, this.name, this.price,});
+  Meals({
+    this.id,
+    this.name,
+    this.price,
+  });
 
   Meals.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     price = json['price'];
   }
-
 }

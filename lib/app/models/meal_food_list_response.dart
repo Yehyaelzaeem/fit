@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-MealFoodListResponse mealFoodListResponseFromJson(String str) => MealFoodListResponse.fromJson(json.decode(str));
+MealFoodListResponse mealFoodListResponseFromJson(String str) =>
+    MealFoodListResponse.fromJson(json.decode(str));
 
 class MealFoodListResponse {
   MealFoodListResponse({
@@ -17,10 +18,14 @@ class MealFoodListResponse {
   final bool? success;
   final List<SingleMeal> data;
 
-  factory MealFoodListResponse.fromJson(Map<String, dynamic> json) => MealFoodListResponse(
+  factory MealFoodListResponse.fromJson(Map<String, dynamic> json) =>
+      MealFoodListResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? [] : List<SingleMeal>.from(json["data"].map((x) => SingleMeal.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<SingleMeal>.from(
+                json["data"].map((x) => SingleMeal.fromJson(x))),
       );
 }
 
@@ -38,7 +43,9 @@ class SingleMeal {
   factory SingleMeal.fromJson(Map<String, dynamic> json) => SingleMeal(
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
-        food: json["food"] == null ? [] : List<Food>.from(json["food"].map((x) => Food.fromJson(x))),
+        food: json["food"] == null
+            ? []
+            : List<Food>.from(json["food"].map((x) => Food.fromJson(x))),
       );
 }
 
@@ -61,7 +68,9 @@ class Food {
         mealTitle: "",
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? '' : json["title"],
-        amounts: json["amounts"] == null ? [] : List<Amount>.from(json["amounts"].map((x) => Amount.fromJson(x))),
+        amounts: json["amounts"] == null
+            ? []
+            : List<Amount>.from(json["amounts"].map((x) => Amount.fromJson(x))),
         selectedAmount: Amount(
           id: 0,
           calories: "",

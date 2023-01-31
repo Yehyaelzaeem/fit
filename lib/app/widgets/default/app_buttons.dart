@@ -45,7 +45,11 @@ Widget kButton(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   message,
-                  style: TextStyle(fontSize: textSize, fontWeight: bold == true ? FontWeight.bold : FontWeight.normal, color: textColor ?? Colors.white),
+                  style: TextStyle(
+                      fontSize: textSize,
+                      fontWeight:
+                          bold == true ? FontWeight.bold : FontWeight.normal,
+                      color: textColor ?? Colors.white),
                 ),
               )),
       ),
@@ -76,7 +80,10 @@ Widget kButtonDefault(
       child: Container(
         height: 45,
         // padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-        decoration: BoxDecoration(color: color == null ? kColorPrimary : color, borderRadius: BorderRadius.circular(250), border: border),
+        decoration: BoxDecoration(
+            color: color == null ? kColorPrimary : color,
+            borderRadius: BorderRadius.circular(250),
+            border: border),
         child: loading
             ? Center(
                 child: Container(
@@ -92,7 +99,11 @@ Widget kButtonDefault(
             : Center(
                 child: Text(
                 message,
-                style: TextStyle(fontSize: 16, fontWeight: bold == true ? FontWeight.bold : FontWeight.normal, color: textColor ?? Colors.white),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight:
+                        bold == true ? FontWeight.bold : FontWeight.normal,
+                    color: textColor ?? Colors.white),
               )),
       ),
     ),
@@ -134,7 +145,10 @@ Widget kButtonWithIcon(
                   ),
                 ),
               )
-            : Center(child: kTextHeader(message, color: textColor == null ? Colors.white : textColor, bold: bold)),
+            : Center(
+                child: kTextHeader(message,
+                    color: textColor == null ? Colors.white : textColor,
+                    bold: bold)),
       ),
     ),
   );

@@ -50,7 +50,11 @@ class _EditProfileViewState extends State<EditProfileView> {
   XFile? _imageFile;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: DateTime(1950, 8), lastDate: DateTime.now());
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(1950, 8),
+        lastDate: DateTime.now());
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
@@ -87,12 +91,14 @@ class _EditProfileViewState extends State<EditProfileView> {
         controller.id.value = loginResponse.data!.patientId!;
 
         Fluttertoast.showToast(msg: "${value.message}");
-         SharedHelper _shared = SharedHelper();
-         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
-         await _shared.writeData(CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
-         await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
+        SharedHelper _shared = SharedHelper();
+        await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
+        await _shared.writeData(
+            CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
+        await _shared.writeData(CachingKey.EMAIL, loginResponse.data!.email);
         // await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
-         await _shared.writeData(CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
+        await _shared.writeData(
+            CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
         // await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         // await _shared.writeData(CachingKey.IS_LOGGED, true);
         Get.offAllNamed(Routes.HOME);
@@ -111,7 +117,10 @@ class _EditProfileViewState extends State<EditProfileView> {
     if (passwordSaveLoading) return;
     passwordSaveLoading = true;
     setState(() {});
-    await ApiProvider().changePassword(password: password, confirmPassword: password_confirmation).then((value) async {
+    await ApiProvider()
+        .changePassword(
+            password: password, confirmPassword: password_confirmation)
+        .then((value) async {
       if (value.success == true) {
         setState(() {
           loginResponse = value;
@@ -260,7 +269,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                         : Container(
                                             width: 100,
                                             height: 100,
-                                            decoration: BoxDecoration(shape: BoxShape.circle),
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle),
                                             child: Image.file(
                                               File(_imageFile!.path),
                                               fit: BoxFit.cover,
@@ -288,7 +298,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text != null && text.toString().length < 3) {
+                                if (text != null &&
+                                    text.toString().length < 3) {
                                   return "Enter Valid Name";
                                 }
                               },
@@ -299,7 +310,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                             //User last name
                             kTextbody('Last name', size: 18),
                             EditText(
-                              value: '${ress.data?.lastName??""}',
+                              value: '${ress.data?.lastName ?? ""}',
                               updateFunc: (text) {
                                 setState(() {
                                   lastName = text;
@@ -307,7 +318,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text != null && text.toString().length < 3) {
+                                if (text != null &&
+                                    text.toString().length < 3) {
                                   return "Enter Valid Name";
                                 }
                               },
@@ -326,7 +338,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text != null && !text.toString().contains("@")) {
+                                if (text != null &&
+                                    !text.toString().contains("@")) {
                                   return "Enter Valid Email";
                                 }
                               },
@@ -344,7 +357,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text != null && text.toString().length < 10) {
+                                if (text != null &&
+                                    text.toString().length < 10) {
                                   return "Enter Valid Mobile Number";
                                 }
                               },
@@ -378,15 +392,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     });
                                   },
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width / 3,
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey, width: 1),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
                                       borderRadius: BorderRadius.circular(64),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           gender == "Female"
                                               ? Icon(
@@ -417,15 +435,19 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     });
                                   },
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width / 3,
+                                    width:
+                                        MediaQuery.of(context).size.width / 3,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.grey, width: 1),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 1),
                                       borderRadius: BorderRadius.circular(64),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           gender == "Male"
                                               ? Icon(
@@ -457,7 +479,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 children: [
                                   kButtonDefault(
                                     'Save',
-                                    marginH: MediaQuery.of(context).size.width / 4,
+                                    marginH:
+                                        MediaQuery.of(context).size.width / 4,
                                     paddingV: 0,
                                     func: () {
                                       SendData();
@@ -465,7 +488,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     shadow: true,
                                     paddingH: 16,
                                   ),
-                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width /
+                                              14),
                                 ],
                               ),
                             )
@@ -492,7 +518,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text.toString().isEmpty || text.toString().length < 6) {
+                                if (text.toString().isEmpty ||
+                                    text.toString().length < 6) {
                                   return "Enter Valid Password";
                                 }
                               },
@@ -509,7 +536,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 print(text);
                               },
                               validateFunc: (text) {
-                                if (text.toString().isEmpty || text.toString().length < 6) {
+                                if (text.toString().isEmpty ||
+                                    text.toString().length < 6) {
                                   return "Enter Valid Password";
                                 }
                               },
@@ -528,7 +556,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                                 children: [
                                   kButtonDefault(
                                     'Change password',
-                                    marginH: MediaQuery.of(context).size.width / 4,
+                                    marginH:
+                                        MediaQuery.of(context).size.width / 4,
                                     paddingV: 0,
                                     func: () {
                                       savePassword();
@@ -537,8 +566,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     paddingH: 16,
                                     loading: passwordSaveLoading,
                                   ),
-                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
-                                  SizedBox(height: MediaQuery.of(context).size.width / 14),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width /
+                                              14),
+                                  SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width /
+                                              14),
                                 ],
                               ),
                             )

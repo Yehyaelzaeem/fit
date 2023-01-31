@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-MyMealResponse MyMealResponseFromJson(String str) => MyMealResponse.fromJson(json.decode(str));
+MyMealResponse MyMealResponseFromJson(String str) =>
+    MyMealResponse.fromJson(json.decode(str));
 
 class MyMealResponse {
   MyMealResponse({
@@ -20,7 +21,10 @@ class MyMealResponse {
   factory MyMealResponse.fromJson(Map<String, dynamic> json) => MyMealResponse(
         code: json["code"] == null ? null : json["code"],
         success: json["success"] == null ? null : json["success"],
-        data: json["data"] == null ? null : List<SingleMyMeal>.from(json["data"].map((x) => SingleMyMeal.fromJson(x))),
+        data: json["data"] == null
+            ? null
+            : List<SingleMyMeal>.from(
+                json["data"].map((x) => SingleMyMeal.fromJson(x))),
       );
 }
 
@@ -47,7 +51,10 @@ class SingleMyMeal {
         name: json["name"] == null ? '' : json["name"],
         note: json["note"] == null ? '' : json["note"],
         price: json["price"] == null ? null : '${json["price"]}',
-        items: json["items"] == null ? [] : List<SingleMyMealItem>.from(json["items"].map((x) => SingleMyMealItem.fromJson(x))),
+        items: json["items"] == null
+            ? []
+            : List<SingleMyMealItem>.from(
+                json["items"].map((x) => SingleMyMealItem.fromJson(x))),
       );
 }
 
@@ -64,11 +71,15 @@ class SingleMyMealItem {
   final bool? error;
   final List<MealItem> items;
 
-  factory SingleMyMealItem.fromJson(Map<String, dynamic> json) => SingleMyMealItem(
+  factory SingleMyMealItem.fromJson(Map<String, dynamic> json) =>
+      SingleMyMealItem(
         error: false,
         id: json["id"] == null ? null : json["id"],
         title: json["title"] == null ? null : json["title"],
-        items: json["items"] == null ? [] : List<MealItem>.from(json["items"].map((x) => MealItem.fromJson(x))),
+        items: json["items"] == null
+            ? []
+            : List<MealItem>.from(
+                json["items"].map((x) => MealItem.fromJson(x))),
       );
 }
 

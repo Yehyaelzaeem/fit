@@ -13,6 +13,7 @@ class YemenyPrefs {
   String? getShippingName() {
     return box.read('ShippingName');
   }
+
   /// **********    ShippingName     ****************/
   setShippingLastName(String? val) {
     box.write('ShippingLastName', val);
@@ -92,7 +93,9 @@ class YemenyPrefs {
   }
 
   bool? getFirstTimeVisit() {
-    return box.read('firstTimeVisit') == null ? true : box.read('firstTimeVisit');
+    return box.read('firstTimeVisit') == null
+        ? true
+        : box.read('firstTimeVisit');
   }
 
   /// **********    Skip     ****************/
@@ -236,7 +239,9 @@ class YemenyPrefs {
   }
 
   Future<bool> getAlreadySendPhoneData() async {
-    return box.read('AlreadySendPhoneData') == null ? false : box.read('AlreadySendPhoneData');
+    return box.read('AlreadySendPhoneData') == null
+        ? false
+        : box.read('AlreadySendPhoneData');
   }
 
   void logout() async {

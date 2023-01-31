@@ -48,7 +48,7 @@ class WebViewScreen extends StatelessWidget {
         }
       },
     );    super.initState();
-  }*//*
+  }*/ /*
 
   @override
   Widget build(BuildContext context) {
@@ -157,18 +157,18 @@ class WebViewScreen extends StatelessWidget {
 /*    onLoadStop: (ctrl, url) async {
                     print("on load stop ===>$url");
                     //     pullToRefreshController.endRefreshing();
-                  },*//*
+                  },*/ /*
 
                   */
 /*   onPageFinished: (String link) {
                     print("WEB link =========== > $link");
 
-                  },*//*
+                  },*/ /*
 
                   */
 /*  shouldOverrideUrlLoading: (controller, shouldOverrideUrlLoadingRequest) async {
                       return ShouldOverrideUrlLoadingAction.ALLOW;
-                    }*//*
+                    }*/ /*
 
                 ),
               ),

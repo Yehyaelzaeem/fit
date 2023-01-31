@@ -18,5 +18,4 @@ class AboutController extends GetxController {
 
   @override
   void onClose() {}
-
 }

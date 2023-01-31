@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 
 class NotificationsController extends GetxController {
   RxList<NotificationModel> list = RxList();
+
   @override
   void onInit() {
     super.onInit();
@@ -36,5 +37,6 @@ class NotificationModel {
   String title;
   String desc;
   String date;
+
   NotificationModel(this.title, this.desc, this.date);
 }

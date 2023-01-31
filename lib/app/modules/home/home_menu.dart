@@ -13,14 +13,17 @@ class HomeMenu extends GetView<HomeController> {
       () => Container(
         width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(color: kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.4),
-            blurRadius: 2,
-            spreadRadius: 2,
-            offset: Offset(0, 0),
-          ),
-        ]),
+        decoration: BoxDecoration(
+            color: kColorAccent,
+            borderRadius: BorderRadius.circular(64),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.4),
+                blurRadius: 2,
+                spreadRadius: 2,
+                offset: Offset(0, 0),
+              ),
+            ]),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -34,12 +37,16 @@ class HomeMenu extends GetView<HomeController> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: controller.currectMenuIdex.value == 1 ? Colors.white : null,
+                    color: controller.currectMenuIdex.value == 1
+                        ? Colors.white
+                        : null,
                     borderRadius: BorderRadius.circular(64),
                   ),
                   child: kTextHeader(
                     Strings().services,
-                    color: controller.currectMenuIdex.value == 1 ? kColorPrimary : Colors.white,
+                    color: controller.currectMenuIdex.value == 1
+                        ? kColorPrimary
+                        : Colors.white,
                     bold: controller.currectMenuIdex.value == 1,
                   ),
                 ),
@@ -55,12 +62,16 @@ class HomeMenu extends GetView<HomeController> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: controller.currectMenuIdex.value == 2 ? Colors.white : null,
+                    color: controller.currectMenuIdex.value == 2
+                        ? Colors.white
+                        : null,
                     borderRadius: BorderRadius.circular(64),
                   ),
                   child: kTextHeader(
                     Strings().courses,
-                    color: controller.currectMenuIdex.value == 2 ? kColorPrimary : Colors.white,
+                    color: controller.currectMenuIdex.value == 2
+                        ? kColorPrimary
+                        : Colors.white,
                     bold: controller.currectMenuIdex.value == 2,
                   ),
                 ),
@@ -76,12 +87,16 @@ class HomeMenu extends GetView<HomeController> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: controller.currectMenuIdex.value == 3 ? Colors.white : null,
+                    color: controller.currectMenuIdex.value == 3
+                        ? Colors.white
+                        : null,
                     borderRadius: BorderRadius.circular(64),
                   ),
                   child: kTextHeader(
                     Strings().blog,
-                    color: controller.currectMenuIdex.value == 3 ? kColorPrimary : Colors.white,
+                    color: controller.currectMenuIdex.value == 3
+                        ? kColorPrimary
+                        : Colors.white,
                     bold: controller.currectMenuIdex.value == 3,
                   ),
                 ),

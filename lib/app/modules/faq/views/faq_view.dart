@@ -205,7 +205,6 @@ class _FaqViewState extends State<FaqView> {
                 padding: const EdgeInsets.symmetric(vertical: 100),
                 child: Center(child: CircularLoadingWidget()),
               )
-
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
@@ -222,11 +221,10 @@ class _FaqViewState extends State<FaqView> {
                           setState(() {
                             ress.data![index].isSellected = true;
                           });
-                        }else{
+                        } else {
                           setState(() {
                             ress.data![index].isSellected = false;
                           });
-
                         }
                       },
                       child: questionRow(ress.data![index]));

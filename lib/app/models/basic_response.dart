@@ -4,7 +4,8 @@
 
 import 'dart:convert';
 
-BasicResponse basicResponseFromJson(String str) => BasicResponse.fromJson(json.decode(str));
+BasicResponse basicResponseFromJson(String str) =>
+    BasicResponse.fromJson(json.decode(str));
 
 String basicResponseToJson(BasicResponse data) => json.encode(data.toJson());
 

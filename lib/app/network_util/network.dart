@@ -7,7 +7,7 @@ class NetworkUtil {
 
   NetworkUtil.internal();
 
-//  String base_url = "https://fofclinic.com/api/";
+  // String base_url = "https://fofclinic.com/api/";
   String base_url = "https://fofclinic.com/dev/public/api/";
   Dio dio = Dio();
 
@@ -54,7 +54,8 @@ class NetworkUtil {
     dio.options.baseUrl = base_url;
     try {
       response = await dio.post(url,
-          data: body, options: Options(headers: headers, requestEncoder: encoding));
+          data: body,
+          options: Options(headers: headers, requestEncoder: encoding));
     } on DioError catch (e) {
       if (e.response != null) {
         response = e.response;
@@ -90,7 +91,9 @@ class NetworkUtil {
       "Content-Type": "application/json",
     };
     return dio
-        .put(url, data: body, options: Options(headers: headers, requestEncoder: encoding))
+        .put(url,
+            data: body,
+            options: Options(headers: headers, requestEncoder: encoding))
         .then((Response response) {
       return handleResponse(response);
     });

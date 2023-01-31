@@ -19,7 +19,8 @@ class AddNewCalorie extends StatefulWidget {
 class _AddNewCalorieState extends State<AddNewCalorie> {
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
-  MyOtherCaloriesUnitsResponse otherCaloriesResponse = MyOtherCaloriesUnitsResponse();
+  MyOtherCaloriesUnitsResponse otherCaloriesResponse =
+      MyOtherCaloriesUnitsResponse();
   String? title;
   String? calorie_per_unit;
   String unitName = "Choose Unit";
@@ -51,7 +52,15 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
       showLoader = true;
     });
 
-    await ApiProvider().addOtherCalories(title: title, calPerUnti: calorie_per_unit, unit: unitID, unitQuantity: unit_qty, unitName: unit_name, type: widget.type).then((value) {
+    await ApiProvider()
+        .addOtherCalories(
+            title: title,
+            calPerUnti: calorie_per_unit,
+            unit: unitID,
+            unitQuantity: unit_qty,
+            unitName: unit_name,
+            type: widget.type)
+        .then((value) {
       if (value.success == true) {
         setState(() {
           showLoader = false;
@@ -144,19 +153,26 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                             child: InkWell(
                               onTap: () {
                                 setState(() {
-                                  unitName = otherCaloriesResponse.data![index].title!;
-                                  unit_name = otherCaloriesResponse.data![index].title!;
-                                  unitID = otherCaloriesResponse.data![index].id!;
+                                  unitName =
+                                      otherCaloriesResponse.data![index].title!;
+                                  unit_name =
+                                      otherCaloriesResponse.data![index].title!;
+                                  unitID =
+                                      otherCaloriesResponse.data![index].id!;
                                 });
                                 Navigator.pop(context);
                               },
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 4),
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
                                       "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
-                                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   SizedBox(

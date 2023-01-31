@@ -1,10 +1,8 @@
-
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationApi {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -16,10 +14,12 @@ class NotificationApi {
         'channel id',
         'channel name',
         'channel description',
-        importance: Importance.max,///<< to show in center of screen
+        importance: Importance.max,
+
+        ///<< to show in center of screen
         largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
       ),
-        iOS: IOSNotificationDetails(),
+      iOS: IOSNotificationDetails(),
     );
   }
 
@@ -62,7 +62,6 @@ class NotificationApi {
         payload: payLoad,
       );
 
-
   static Future showCustomScheduledNotification({
     int id = 0,
     String? title,
@@ -74,7 +73,7 @@ class NotificationApi {
         0,
         'water 💧',
         "Do not forget to drink water 💧",
-        _scheduleWeekly(Time(12,36), days: [
+        _scheduleWeekly(Time(12, 36), days: [
           DateTime.saturday,
           DateTime.sunday,
           DateTime.monday,
@@ -88,13 +87,9 @@ class NotificationApi {
         payload: payLoad,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
+            UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
-
-
-
-
 
   static Future showScheduledNotification({
     String? payLoad, //<< navigate content screen
@@ -106,15 +101,19 @@ class NotificationApi {
         id,
         ' 💧 Water 💧 ',
         "Do not forget to drink water",
-        _scheduleWeekly(Time(hour,), days: [
-          DateTime.saturday,
-          DateTime.sunday,
-          DateTime.monday,
-          DateTime.tuesday,
-          DateTime.wednesday,
-          DateTime.thursday,
-          DateTime.friday,
-        ]),
+        _scheduleWeekly(
+            Time(
+              hour,
+            ),
+            days: [
+              DateTime.saturday,
+              DateTime.sunday,
+              DateTime.monday,
+              DateTime.tuesday,
+              DateTime.wednesday,
+              DateTime.thursday,
+              DateTime.friday,
+            ]),
         await _notificationDetails(),
         payload: payLoad,
         androidAllowWhileIdle: true,

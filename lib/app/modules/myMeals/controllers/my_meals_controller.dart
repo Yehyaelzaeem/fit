@@ -8,6 +8,13 @@ class MyMealsController extends GetxController {
   final loading = false.obs;
   final requiredAuth = false.obs;
   final getMyMealsLoading = false.obs;
+
+  changeValue(value) {
+    value = !value;
+    print(value);
+    update();
+  }
+
   @override
   void onInit() async {
     getNetworkData();
@@ -41,7 +48,8 @@ class MyMealsController extends GetxController {
     getMyMealsLoading.value = true;
     try {
       await ApiProvider().deleteMeal(id: id);
-      response.value.data!.removeWhere((element) => element.id == int.parse(id));
+      response.value.data!
+          .removeWhere((element) => element.id == int.parse(id));
     } catch (e) {
       Get.snackbar('Error', '$e');
     }

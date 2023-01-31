@@ -327,61 +327,65 @@ class _HomePageViewState extends State<HomePageView> {
                                         ),
                                       ]),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                    child: kTextHeader("Details ",
-                                        size: 16,
-                                        color: Colors.white,
-                                        bold: true,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                    child: kTextHeader(
+                                      "Details ",
+                                      size: 16,
+                                      color: Colors.white,
+                                      bold: true,
                                       paddingH: 12,
                                       paddingV: 4,
-                                       ),
+                                    ),
                                   ),
                                 ),
                               ),
                             )
                           : SizedBox(),
-                  ress.data!.subscriptionStatus==true?    GestureDetector(
-                    onTap: () {
-                      Get.toNamed(
-                        Routes.SUBSCRIBE,
-                      );
-                    },
-                    child: Center(
-                      child: Container(
-                        width: Get.width / 2,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        margin: EdgeInsets.symmetric(vertical: 16),
-                        decoration: BoxDecoration(
-                            color: Color(0xffFFB62B),
-                            borderRadius: BorderRadius.circular(64),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.4),
-                                blurRadius: 1,
-                                spreadRadius: 1,
-                                offset: Offset(0, 1),
+                  ress.data!.subscriptionStatus == true
+                      ? GestureDetector(
+                          onTap: () {
+                            Get.toNamed(
+                              Routes.SUBSCRIBE,
+                            );
+                          },
+                          child: Center(
+                            child: Container(
+                              width: Get.width / 2,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 8),
+                              margin: EdgeInsets.symmetric(vertical: 16),
+                              decoration: BoxDecoration(
+                                  color: Color(0xffFFB62B),
+                                  borderRadius: BorderRadius.circular(64),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.4),
+                                      blurRadius: 1,
+                                      spreadRadius: 1,
+                                      offset: Offset(0, 1),
+                                    ),
+                                  ]),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/img/premium.png',
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                  kTextHeader('Subscribe',
+                                      size: 16,
+                                      color: Colors.white,
+                                      bold: true,
+                                      paddingH: 16,
+                                      paddingV: 4),
+                                ],
                               ),
-                            ]),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/img/premium.png',
-                              width: 30,
-                              height: 30,
                             ),
-                            kTextHeader('Subscribe',
-                                size: 16,
-                                color: Colors.white,
-                                bold: true,
-                                paddingH: 16,
-                                paddingV: 4),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ):SizedBox(),
+                          ),
+                        )
+                      : SizedBox(),
                   SizedBox(
                     height: 50,
                   ),

@@ -1,5 +1,4 @@
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
-import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';

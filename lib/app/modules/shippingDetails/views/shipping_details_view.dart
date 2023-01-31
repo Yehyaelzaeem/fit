@@ -135,7 +135,8 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                       controller.email.value = text;
                                     },
                                     validateFunc: (text) {
-                                      if (text != null && !text.toString().contains("@")) {
+                                      if (text != null &&
+                                          !text.toString().contains("@")) {
                                         return 'Please enter your email';
                                       }
                                       return null;
@@ -167,8 +168,10 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                 //First name
                                 Row(
                                   children: [
-                                    Icon(Icons.phone_iphone, color: kColorPrimary),
-                                    kTextbody('Mobile Number', size: 18, bold: true),
+                                    Icon(Icons.phone_iphone,
+                                        color: kColorPrimary),
+                                    kTextbody('Mobile Number',
+                                        size: 18, bold: true),
                                   ],
                                 ),
                                 Container(
@@ -217,8 +220,10 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                 //First name
                                 Row(
                                   children: [
-                                    Icon(Icons.location_city, color: kColorPrimary),
-                                    kTextbody('Detailed delivery address', size: 18, bold: true),
+                                    Icon(Icons.location_city,
+                                        color: kColorPrimary),
+                                    kTextbody('Detailed delivery address',
+                                        size: 18, bold: true),
                                   ],
                                 ),
                                 Container(
@@ -268,12 +273,14 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                 Row(
                                   children: [
                                     Icon(Icons.gps_fixed, color: kColorPrimary),
-                                    kTextbody('Current location', size: 18, bold: true),
+                                    kTextbody('Current location',
+                                        size: 18, bold: true),
                                   ],
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    if (controller.mapLoading.value == true) return;
+                                    if (controller.mapLoading.value == true)
+                                      return;
                                     controller.mapLoading.value = true;
                                     await controller.requestPermission();
                                     Get.dialog(PickMap());
@@ -286,19 +293,27 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                                     height: 50,
                                     child: Row(
                                       children: [
-                                        if (controller.textController.text.isEmpty && controller.latitude.value.isNotEmpty)
+                                        if (controller
+                                                .textController.text.isEmpty &&
+                                            controller
+                                                .latitude.value.isNotEmpty)
                                           Expanded(
                                             child: kTextbody(
                                               "${controller.latitude.value}, ${controller.longitude.value}",
                                             ),
                                           ),
-                                        if (controller.textController.text.isNotEmpty)
+                                        if (controller
+                                            .textController.text.isNotEmpty)
                                           Expanded(
                                             child: kTextbody(
                                               "${controller.textController.text}",
                                             ),
                                           ),
-                                        if (controller.textController.text.isEmpty && controller.latitude.value.isEmpty) kTextbody("Choose location", paddingH: 12, color: Colors.grey),
+                                        if (controller
+                                                .textController.text.isEmpty &&
+                                            controller.latitude.value.isEmpty)
+                                          kTextbody("Choose location",
+                                              paddingH: 12, color: Colors.grey),
                                       ],
                                     ),
                                   ),
@@ -331,7 +346,8 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
                             shadow: true,
                             paddingH: 16,
                           ),
-                          SizedBox(height: MediaQuery.of(context).size.width / 14),
+                          SizedBox(
+                              height: MediaQuery.of(context).size.width / 14),
                         ],
                       ),
                     )
@@ -351,14 +367,17 @@ class ShippingDetailsView extends GetView<ShippingDetailsController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(

@@ -46,10 +46,10 @@ dependencies:
   flutter_native_timezone: any
   rxdart: any
   timezone: any
-  webview_flutter: any
+  firebase_messaging: any
+  firebase_core: ^1.12.0
+  firebase_core_platform_interface: 4.5.1
 
-
-  # analog_clock_picker: ^0.0.1
 
 
 dependency_overrides:
@@ -66,7 +66,7 @@ flutter_icons:
   #  image_path: "assets/FitFatAppIcon.png"
   #  image_path: "assets/fitoverfat-logo.png"
   #  image_path: "assets/logo_transperrant.png"
-  image_path: "assets/app_logo.png"
+  image_path: "assets/big_logo.png"
 
 ##flutter pub run flutter_launcher_icons:main
 flutter:

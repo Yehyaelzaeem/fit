@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -18,21 +19,25 @@ class VimeoPlayerWidget extends StatelessWidget {
           children: [
             HomeAppbar(),
             Expanded(
-              child: link.contains('vimeo') ? AspectRatio(
-                aspectRatio: 16 / 9,
-                child:InAppWebView(
-                    initialUrlRequest: URLRequest(url: Uri.parse(_videoPage(link.split("/").last))),),
-              ) : Center(
-                child: kTextHeader(
-                    'No Vimeo Video Attached', color: kColorPrimary,
-                    bold: true),
-              ),
+              child: link.contains('vimeo')
+                  ? AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: InAppWebView(
+                        initialUrlRequest: URLRequest(
+                            url: Uri.parse(_videoPage(link.split("/").last))),
+                      ),
+                    )
+                  : Center(
+                      child: kTextHeader('No Vimeo Video Attached',
+                          color: kColorPrimary, bold: true),
+                    ),
             ),
           ],
         ),
       ),
     );
   }
+
   String _videoPage(String videoId) {
     final html = '''
             <html>
@@ -57,8 +62,7 @@ class VimeoPlayerWidget extends StatelessWidget {
             </html>
             ''';
     final String contentBase64 =
-    base64Encode(const Utf8Encoder().convert(html));
+        base64Encode(const Utf8Encoder().convert(html));
     return 'data:text/html;base64,$contentBase64';
   }
-
 }

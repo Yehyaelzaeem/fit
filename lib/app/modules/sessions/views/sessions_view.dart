@@ -176,7 +176,9 @@ class _SessionsViewState extends State<SessionsView> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 8),
                                             decoration: BoxDecoration(
-                                                color: sessionResponse.data![i].onPeriod ==false
+                                                color: sessionResponse.data![i]
+                                                            .onPeriod ==
+                                                        false
                                                     ? Colors.white
                                                     : redOpacityColor,
                                                 boxShadow: [

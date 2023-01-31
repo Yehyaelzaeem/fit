@@ -24,8 +24,7 @@ class NoInternetConnection extends StatelessWidget {
           SizedBox(height: 8),
           Text(Strings().noInternetConnection),
           SizedBox(height: 8),
-                    kButtonDefault(Strings().retry, func: refresh),
-
+          kButtonDefault(Strings().retry, func: refresh),
         ],
       ),
     );

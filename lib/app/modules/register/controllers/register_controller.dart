@@ -1,9 +1,9 @@
-
 import 'package:get/get.dart';
 
 class RegisterController extends GetxController {
   final genderIsMale = true.obs;
   final birthDate = ''.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -16,5 +16,4 @@ class RegisterController extends GetxController {
 
   @override
   void onClose() {}
-
 }
