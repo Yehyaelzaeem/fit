@@ -57,7 +57,7 @@ class MyMealsView extends GetView<MyMealsController> {
                   if (!controller.getMyMealsLoading.value &&
                       controller.response.value.data != null)
                     ...controller.response.value.data!.reversed.map((e) {
-                      return singleItem(meal: e);
+                      return singleItem(meal: e,context: context);
                     }).toList(),
                   SizedBox(height: 12),
                   Row(
@@ -227,121 +227,116 @@ class MyMealsView extends GetView<MyMealsController> {
     );
   }
 
-  Widget singleItem({required SingleMyMeal meal}) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Color(0xffF1F1F1),
-      ),
-      margin: EdgeInsets.symmetric(vertical: 4),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Checkbox(
-                  value: meal.selected,
-                  onChanged: (sts) {
-                    controller.response.update((val) {
-                      val!.data!.forEach((e) {
-                        if (e.id == meal.id) e.selected = sts!;
+  Widget singleItem({required SingleMyMeal meal,required BuildContext context}) {
+    return GetBuilder<MyMealsController>(
+      builder: (_) =>Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Color(0xffF1F1F1),
+        ),
+        margin: EdgeInsets.symmetric(vertical: 4),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Checkbox(
+                    value: meal.selected,
+                    onChanged: (sts) {
+                      controller.response.update((val) {
+                        val!.data!.forEach((e) {
+                          if (e.id == meal.id) e.selected = sts!;
+                        });
                       });
-                    });
-                    controller.changeValue(meal.selected);
-                  }),
-              SizedBox(width: 8),
-              Expanded(
-                  child: kTextbody("${meal.name}",
-                      color: kColorPrimary,
-                      align: TextAlign.start,
-                      bold: true)),
-              kTextbody("${meal.price} L.E", color: Colors.black),
-              SizedBox(width: 12),
-              GestureDetector(
-                onTap: () async {
-                  dynamic val =
-                      await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
-                  if (val != null) controller.getNetworkData();
-                },
-                child: Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: Colors.black, width: 1),
-                    ),
-                    margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                    child: Icon(
-                      Icons.edit,
-                      size: 18,
-                    )),
-              ),
-              SizedBox(width: 8),
-            ],
-          ),
-          meal.selected == true
-              ? Container(
-                width: 120,
-                height: 46,
-                decoration: BoxDecoration(
-                  color:Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(
-                      12),
+                      controller.changeValue(meal.selected);
+                    }),
+                SizedBox(width: 8),
+                Expanded(
+                    child: kTextbody("${meal.name}",
+                        color: kColorPrimary,
+                        align: TextAlign.start,
+                        bold: true)),
+                kTextbody("${controller.totalPrice(meal:meal)} L.E", color: Colors.black),
+                SizedBox(width: 12),
+                GestureDetector(
+                  onTap: () async {
+                    dynamic val =
+                        await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
+                    if (val != null) controller.getNetworkData();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: Colors.black, width: 1),
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      child: Icon(
+                        Icons.edit,
+                        size: 18,
+                      )),
                 ),
-                /**************************** number & add & minus *****************************/
-                child: Row(
+                SizedBox(width: 8),
+              ],
+            ),
+            meal.selected == true
+                ? Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Container(
+              width: 90,
+              height: 32,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+              ),
+              /**************************** number & add & minus *****************************/
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     /**************************** minus *****************************/
                     GestureDetector(
                       onTap: () {
-                  //      cubit.minus();
+                        controller.minus(meal: meal,);
                       },
                       child: Container(
-                        width: 40,
-                        height: 44,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(
-                             12),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           Icons.remove,
+                          size: 18,
                         ),
                       ),
                     ),
                     /**************************** number *****************************/
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 2.0),
-                      child: kTextHeader(
-                        "1"
-                      ),
-                    ),
+                    kTextHeader(meal.qty.toString()),
                     /**************************** add *****************************/
                     GestureDetector(
                       onTap: () {
-                   //     cubit.add();
+                        controller.add(meal: meal,);
                       },
                       child: Container(
-                        width: 40,
-                        height: 44,
+                        width: 32,
+                        height: 32,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius:
-                          BorderRadius.circular(
-                             12),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           Icons.add,
-                          //  color: ColorsManager.blackColor,
+                          size: 18,
                         ),
                       ),
                     ),
                   ],
-                ),
-              )
-              : SizedBox()
-        ],
+              ),
+            ),
+                )
+                : SizedBox(),
+          ],
+        ),
       ),
     );
   }

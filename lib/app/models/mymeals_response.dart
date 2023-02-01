@@ -34,15 +34,17 @@ class SingleMyMeal {
     required this.name,
     required this.note,
     this.price,
+    this.qty,
     required this.items,
     required this.selected,
   });
 
   bool selected;
   final int? id;
+   int? qty;
   final String name;
   final String? note;
-  final String? price;
+   String? price;
   final List<SingleMyMealItem> items;
 
   factory SingleMyMeal.fromJson(Map<String, dynamic> json) => SingleMyMeal(
@@ -50,6 +52,7 @@ class SingleMyMeal {
         id: json["id"] == null ? null : json["id"],
         name: json["name"] == null ? '' : json["name"],
         note: json["note"] == null ? '' : json["note"],
+         qty: json["qty"] == null ? '' : json["qty"],
         price: json["price"] == null ? null : '${json["price"]}',
         items: json["items"] == null
             ? []

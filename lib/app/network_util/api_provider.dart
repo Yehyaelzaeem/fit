@@ -716,6 +716,7 @@ class ApiProvider {
     required String meals,
     required String deliveryMethod,
     required String payMethod,
+    required String qtys,
   }) async {
     Echo("meals $meals");
     try {
@@ -730,6 +731,7 @@ class ApiProvider {
         'longitude': longitude,
         'meals': meals,
         'device_id': deviceId,
+        'qtys': qtys,
       });
       Response response = await _utils.post("create_shopping_cart", body: body);
       if (response.statusCode == 200) {
@@ -785,6 +787,7 @@ class ApiProvider {
       deviceId =
           '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
     }
+    print("deviceId $deviceId");
     Echo('deviceId = ${deviceId.replaceAll(' ', '')}');
     return deviceId.replaceAll(' ', '');
   }

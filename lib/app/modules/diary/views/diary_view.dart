@@ -255,12 +255,18 @@ class DiaryView extends GetView<DiaryController> {
                                             element.title == item.quality)
                                         .id!;
                                   }
+
                                   controller.updateProtineData(
                                     item.id,
                                     foodId,
                                     qty,
-                                    type: 'proteins',
+                               type:     type == 'proteins'
+                                        ? 'proteins'
+                                        : type == 'carbs'
+                                        ? 'carbs'
+                                        : 'fats',
                                   );
+
                                 } catch (e) {}
                               },
                             ),

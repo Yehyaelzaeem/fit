@@ -1,5 +1,6 @@
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class MyMealsController extends GetxController {
@@ -55,5 +56,34 @@ class MyMealsController extends GetxController {
     }
     getMyMealsLoading.value = false;
     response.refresh();
+  }
+
+  void add({
+    required SingleMyMeal meal,
+  }) {
+    meal.qty = meal.qty! + 1;
+    meal.qty! * int.parse(meal.price!);
+    update();
+  }
+
+  void minus({
+    required SingleMyMeal meal,
+  }) {
+    if (meal.qty == 1) {
+      Fluttertoast.showToast(msg: "Quantity can't be less than 1");
+    } else
+      meal.qty = meal.qty! - 1;
+    meal.qty! * int.parse(meal.price!);
+    update();
+  }
+
+  int totalPrice({
+    required SingleMyMeal meal,
+  }) {
+    int sum = int.parse(meal.price!);
+    if (meal.qty != 1) {
+      sum = int.parse(meal.price!) * meal.qty!;
+    }
+    return sum;
   }
 }

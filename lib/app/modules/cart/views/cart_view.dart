@@ -34,7 +34,10 @@ class CartView extends GetView<CartController> {
                   SizedBox(height: 4),
                   ...controller.meals.reversed.map((e) {
                     return singleItem(
-                        id: e.id!, title: "${e.name}", price: "${e.price} L.E");
+                        id: e.id!,
+                        title: "${e.name}",
+                        price: "${controller.mealPrice(meal:e)} L.E",
+                        qty: 'x${e.qty}');
                   }).toList(),
                   SizedBox(height: 12),
                   header2(
@@ -96,38 +99,6 @@ class CartView extends GetView<CartController> {
                                           .deliveryInstructions!,
                                     ),
                                     SizedBox(height: 12),
-                                    // Padding(
-                                    //   padding: const EdgeInsets.all(8.0),
-                                    //   child: TextFormField(
-                                    //     initialValue: '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.about!}',
-                                    //     enabled: false,
-                                    //     decoration: InputDecoration(
-                                    //         border: OutlineInputBorder(
-                                    //           borderRadius: BorderRadius.circular(4),
-                                    //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                    //         ),
-                                    //         disabledBorder: OutlineInputBorder(
-                                    //           borderRadius: BorderRadius.circular(4),
-                                    //           borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                                    //         ),
-                                    //         focusedBorder: OutlineInputBorder(
-                                    //           borderRadius: BorderRadius.circular(4),
-                                    //           borderSide: BorderSide(color: kColorPrimary, width: 2),
-                                    //         ),
-                                    //         errorStyle: TextStyle(fontSize: 10),
-                                    //         labelStyle: TextStyle(fontSize: 14, color: kColorAccent),
-                                    //         hintStyle: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w300),
-                                    //         hintText: '',
-                                    //         contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8)),
-                                    //     keyboardType: TextInputType.text,
-                                    //     validator: (text) {},
-                                    //     maxLines: 4,
-                                    //     onChanged: (newValue) {},
-                                    //     onFieldSubmitted: (newValue) {},
-                                    //     onSaved: (newValue) {},
-                                    //   ),
-                                    // ),
-                                    // SizedBox(height: 12),
                                     Container(
                                       width: double.infinity,
                                       child: kButtonDefault("Visa",
@@ -144,35 +115,6 @@ class CartView extends GetView<CartController> {
                                             context: context);
                                       }),
                                     ),
-                                    /*  Row(
-                                      children: [
-                                        Expanded(
-                                          child: kButtonDefault("Cash",
-                                              color: kColorPrimary,
-                                              textColor: Colors.white,
-                                              border: Border.all(
-                                                color: Color(0xffF1F1F1),
-                                                width: 1,
-                                              ), func: () {
-                                            Get.back();
-                                            controller.createOrder(payMethod: 'cash', shippingMethod: 'delivery', context: context);
-                                          }),
-                                        ),
-                                        Expanded(
-                                          child: kButtonDefault("Visa",
-                                              color: kColorPrimary,
-                                              textColor: Colors.white,
-                                              border: Border.all(
-                                                color: Color(0xffF1F1F1),
-                                                width: 1,
-                                              ), func: () {
-                                                Get.back();
-                                                controller.createOrder(payMethod: 'visa', shippingMethod: 'delivery', context: context);
-                                              }),
-                                        ),
-                                      ],
-                                    ),
-*/
                                     SizedBox(height: 12),
                                   ],
                                 ),
@@ -427,6 +369,7 @@ class CartView extends GetView<CartController> {
     required int id,
     required String title,
     required String price,
+    required String qty,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -437,9 +380,17 @@ class CartView extends GetView<CartController> {
       child: Row(
         children: [
           SizedBox(width: 12),
+          Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0)),
+              height: 20,
+              child: kTextbody(qty, color: kColorPrimary, size: 12)),
+          SizedBox(width: 4),
           Expanded(
               child: kTextbody("$title",
                   color: kColorPrimary, align: TextAlign.start, bold: true)),
+          SizedBox(width: 4),
           kTextbody(price, color: Colors.black, paddingV: 12),
           SizedBox(width: 4),
           GestureDetector(

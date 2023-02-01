@@ -42,10 +42,22 @@ class CartController extends GetxController {
   @override
   void onClose() {}
 
+
+  int mealPrice({
+    required SingleMyMeal meal,
+  }) {
+    int sum = int.parse(meal.price!);
+    if (meal.qty != 1) {
+      sum = int.parse(meal.price!) * meal.qty!;
+    }
+    return sum;
+  }
+
+
   totalAmount() {
     double total = 0;
     meals.forEach((element) {
-      if (element.price != null) total += double.parse(element.price!);
+      if (element.price != null) total += double.parse(element.price!)*element.qty!;
     });
     return total;
   }
@@ -66,9 +78,10 @@ class CartController extends GetxController {
     loading.value = true;
     try {
       String meals = '';
+      String qtys='' ;
       this.meals.forEach((element) {
         meals += '${element.id},';
-
+        qtys +='${element.qty},';
         // element.items.forEach((item) {
         //   item.items.forEach((subItem) {
         //     meals += '${subItem.id},';
@@ -76,6 +89,8 @@ class CartController extends GetxController {
         // });
       });
       meals = meals.replaceRange(meals.length - 1, meals.length, '');
+      qtys = qtys.replaceRange(qtys.length - 1, qtys.length, '');
+      print("qtys ${qtys}");
       String paymentUrl = await ApiProvider().createShoppingCart(
         name: name,
         lastName: lastName,
@@ -85,6 +100,7 @@ class CartController extends GetxController {
         latitude: latitude,
         longitude: longitude,
         meals: meals,
+        qtys: qtys,
         deliveryMethod: shippingMethod,
         payMethod: payMethod,
       );
@@ -124,7 +140,7 @@ class CartController extends GetxController {
                           url: paymentUrl,
                           fromCheerfull: "From Cheerful Order",
                         )));
-        print("URL ==========>${paymentUrl}");
+        print("URL ==========> ${paymentUrl}");
       }
     } catch (e) {
       Get.snackbar(Strings().notification, '$e');
