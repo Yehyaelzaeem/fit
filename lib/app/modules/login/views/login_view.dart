@@ -87,7 +87,6 @@ class _LoginViewState extends State<LoginView> {
           showLoader = false;
         });
         Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
       }
     });
   }

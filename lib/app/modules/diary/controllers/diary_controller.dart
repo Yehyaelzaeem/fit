@@ -8,6 +8,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../routes/app_pages.dart';
+
 class DiaryController extends GetxController {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
@@ -89,8 +91,11 @@ class DiaryController extends GetxController {
 
     await ApiProvider().getDiaryView(_date).then((value) {
       if (value.success == false && value.data == null) {
-        isLoading.value = false;
-        noSessions.value = true;
+      //  isLoading.value = false;
+      //  noSessions.value = true;
+        SharedHelper().logout();
+        Get.offAllNamed(Routes.LOGIN);
+        Fluttertoast.showToast(msg: "${value.message}");
       } else {
         if (value.data != null) {
           response.value = value;

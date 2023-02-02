@@ -10,7 +10,9 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../main_un_auth.dart';
 
 class SessionsView extends StatefulWidget {
@@ -33,7 +35,9 @@ class _SessionsViewState extends State<SessionsView> {
         });
         getAllSessionData();
       } else {
-        Fluttertoast.showToast(msg: "$value");
+        SharedHelper().logout();
+        Get.offAllNamed(Routes.LOGIN);
+        Fluttertoast.showToast(msg: "${value.message}");
         print("error");
       }
     });
@@ -49,7 +53,9 @@ class _SessionsViewState extends State<SessionsView> {
           isLoading = false;
         });
       } else {
-        // Fluttertoast.showToast(msg: "${sessionResponse}");
+        SharedHelper().logout();
+        Get.offAllNamed(Routes.LOGIN);
+//        Fluttertoast.showToast(msg: "${value.message}");
         print("error");
       }
     });
