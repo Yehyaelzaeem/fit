@@ -593,6 +593,16 @@ class ApiProvider {
     }
   }
 
+  Future<bool> getOrientationVideosStatusStatus() async {
+    Response response = await _utils.post("orientation_videos_status",);
+    if (response.statusCode == 200) {
+      print("Orientation Status => ${response.data['data']['orientation_videos_status']}");
+      return response.data['data']['orientation_videos_status'];
+    } else {
+      return response.data['data']['orientation_videos_status'];
+    }
+  }
+
   Future<MealFoodListResponse> getMealFoodList() async {
     String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({

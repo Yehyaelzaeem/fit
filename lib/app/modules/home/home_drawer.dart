@@ -194,14 +194,14 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
-
-            singleDrawerItem(
-                title: 'Orientation',
-                image: 'assets/icons/orientation.svg',
-                action: () {
-                  Get.toNamed(Routes.Orientation);
-                }),
-
+          textEditController.isLogggd.value == false
+                ? SizedBox()
+                :     controller.orientationStatus==false? SizedBox():singleDrawerItem(
+                    title: 'Orientation',
+                    image: 'assets/icons/orientation.svg',
+                    action: () {
+                      Get.toNamed(Routes.Orientation);
+                    }),
             //CHEER_FULL
             FutureBuilder<bool>(
               future: getCheerFullStatus(),
@@ -362,6 +362,20 @@ class HomeDrawer extends GetView<HomeController> {
       textEditController.faqStatus =
           kDebugMode ? true : cheerFullResponse.data!.isFaqActive!;
       return textEditController.faqStatus;
+    } catch (e) {
+      Echo('error response $e');
+    }
+    return true;
+  }
+
+  Future<bool> getOrientationStatus() async {
+    try {
+      if (controller.orientationStatus ?? true) return true;
+      textEditController.orientationStatus =
+          await ApiProvider().getOrientationVideosStatusStatus();
+      textEditController.orientationStatus =
+          kDebugMode ? true : textEditController.orientationStatus;
+      return controller.orientationStatus ?? true;
     } catch (e) {
       Echo('error response $e');
     }

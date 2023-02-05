@@ -55,9 +55,11 @@ class WebViewScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: [
-            HomeAppbar(
-              type: null,
-            ),
+            fromCheerfull == "From Cheerful Order"
+                ? appBar()
+                : HomeAppbar(
+                    type: null,
+                  ),
             Expanded(
               child: Center(
                 child: InAppWebView(
@@ -275,6 +277,51 @@ class WebViewScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget appBar() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+      width: MediaQuery.of(Get.context!).size.width,
+      height: 65,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
+      child: Stack(
+        children: [
+          Center(
+            child: Image.asset(kLogoChellFullRow, height: 60),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 30,
+                  color: Colors.black87,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

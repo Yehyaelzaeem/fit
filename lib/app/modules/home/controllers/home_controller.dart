@@ -16,6 +16,7 @@ class HomeController extends GetxController {
   late bool login = false;
   bool cheerFullStatus = false;
   bool faqStatus = false;
+  bool ?orientationStatus;
 
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
@@ -41,7 +42,7 @@ class HomeController extends GetxController {
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
 
     homeResponse.value = await ApiProvider().getHomeData();
-
+    orientationStatus =  await ApiProvider().getOrientationVideosStatusStatus();
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
