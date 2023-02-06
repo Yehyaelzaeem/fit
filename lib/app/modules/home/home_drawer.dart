@@ -172,9 +172,9 @@ class HomeDrawer extends GetView<HomeController> {
                     }),
             //Messages
 
-            /*textEditController.isLogggd.value == false
+            textEditController.isLogggd.value == false
                 ? SizedBox()
-                :*/ textEditController.cheerfulResponse.value.data?.isFaqActive ==
+                : textEditController.cheerfulResponse.value.data?.isFaqActive ==
                         false
                     ? SizedBox()
                     : singleDrawerItem(
