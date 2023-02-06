@@ -154,6 +154,7 @@ class ApiProvider {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
     print("FCM Token  =$deviceToken");
+    print("deviceId =$deviceId");
     FormData body = FormData.fromMap({
       'patient_id': id,
       'password': password,
@@ -196,11 +197,12 @@ class ApiProvider {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
     print("FCM Token  =$deviceToken");
+    print("deviceId =$deviceId");
     final GlobalController globalController =
         getx.Get.find<GlobalController>(tag: 'global');
     Echo('getProfile getProfile');
     Response response =
-        await _utils.get("profile?device_id==$deviceId&fcm_token=$deviceToken");
+        await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {

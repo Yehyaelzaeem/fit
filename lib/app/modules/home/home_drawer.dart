@@ -172,8 +172,19 @@ class HomeDrawer extends GetView<HomeController> {
                     }),
             //Messages
 
-            //CHEER_FULL
-            FutureBuilder<bool>(
+            /*textEditController.isLogggd.value == false
+                ? SizedBox()
+                :*/ textEditController.cheerfulResponse.value.data?.isFaqActive ==
+                        false
+                    ? SizedBox()
+                    : singleDrawerItem(
+                        title: 'FAQ', //todo transulate
+                        image: 'assets/icons/faq.svg',
+                        action: () {
+                          Get.toNamed(Routes.FAQ);
+                        }),
+            //FAQ
+            /*    FutureBuilder<bool>(
               future: getFaqStatus(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) if (snapshot.data!)
@@ -185,8 +196,7 @@ class HomeDrawer extends GetView<HomeController> {
                       });
                 return Container();
               },
-            ),
-
+            ),*/
             //Transformation
             singleDrawerItem(
                 title: 'Transformations', //todo transulate
@@ -194,16 +204,29 @@ class HomeDrawer extends GetView<HomeController> {
                 action: () {
                   Get.toNamed(Routes.TRANSFORM);
                 }),
-          textEditController.isLogggd.value == false
+            textEditController.isLogggd.value == false
                 ? SizedBox()
-                :     controller.orientationStatus==false? SizedBox():singleDrawerItem(
-                    title: 'Orientation',
-                    image: 'assets/icons/orientation.svg',
-                    action: () {
-                      Get.toNamed(Routes.Orientation);
-                    }),
+                : controller.orientationStatus == false
+                    ? SizedBox()
+                    : singleDrawerItem(
+                        title: 'Orientation',
+                        image: 'assets/icons/orientation.svg',
+                        action: () {
+                          Get.toNamed(Routes.Orientation);
+                        }),
             //CHEER_FULL
-            FutureBuilder<bool>(
+            /*textEditController.isLogggd.value == false
+                ? SizedBox()
+                :*/ textEditController.cheerfulResponse.value.data?.isActive ==
+                        false
+                    ? SizedBox()
+                    : singleDrawerItem(
+                        title: "Cheer-Full",
+                        image: 'assets/icons/cheer.svg',
+                        action: () {
+                          Get.toNamed(Routes.CHEER_FULL);
+                        }),
+            /*      FutureBuilder<bool>(
               future: getCheerFullStatus(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) if (snapshot.data!)
@@ -215,7 +238,7 @@ class HomeDrawer extends GetView<HomeController> {
                       });
                 return Container();
               },
-            ),
+            ),*/
             //Orders
             // singleDrawerItem(
             //     title: "My Orders",
@@ -336,6 +359,7 @@ class HomeDrawer extends GetView<HomeController> {
     );
   }
 
+/*
   Future<bool> getCheerFullStatus() async {
     try {
       if (textEditController.cheerFullStatus) return true;
@@ -353,6 +377,7 @@ class HomeDrawer extends GetView<HomeController> {
     }
     return true;
   }
+
 
   Future<bool> getFaqStatus() async {
     try {
@@ -381,7 +406,7 @@ class HomeDrawer extends GetView<HomeController> {
     }
     return true;
   }
-
+*/
   Future<bool> checkIfUserIsLogged() async {
     bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     textEditController.refreshController(false);

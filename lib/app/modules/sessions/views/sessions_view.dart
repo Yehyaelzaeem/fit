@@ -35,8 +35,11 @@ class _SessionsViewState extends State<SessionsView> {
         });
         getAllSessionData();
       } else {
+/*        setState(() {
+          ress = value;
+        });
         SharedHelper().logout();
-        Get.offAllNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.LOGIN);*/
         Fluttertoast.showToast(msg: "${value.message}");
         print("error");
       }

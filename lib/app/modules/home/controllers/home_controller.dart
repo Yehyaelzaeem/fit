@@ -7,15 +7,18 @@ import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
+import '../../../models/cheer_full_response.dart';
+
 class HomeController extends GetxController {
   final currentIndex = 0.obs;
   final selectedService = 0.obs;
   final currectMenuIdex = 1.obs;
   final homeResponse = HomePageResponse().obs;
   final userData = UserResponse().obs;
+  final cheerfulResponse = CheerFullResponse().obs;
   late bool login = false;
-  bool cheerFullStatus = false;
-  bool faqStatus = false;
+  //bool cheerFullStatus = false;
+  // bool faqStatus = false;
   bool ?orientationStatus;
 
   RxList<String> slider = RxList();
@@ -40,7 +43,7 @@ class HomeController extends GetxController {
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-
+    cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     homeResponse.value = await ApiProvider().getHomeData();
     orientationStatus =  await ApiProvider().getOrientationVideosStatusStatus();
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
