@@ -69,7 +69,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
     await ApiProvider()
         .editProfileApi(
-            // image: File(_imageFile!.path),
+             image: File(_imageFile!.path),
             password: password,
             name: name ?? ress.data!.name,
             lastName: lastName ?? ress.data!.lastName,
@@ -89,7 +89,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         controller.name.value = loginResponse.data!.name!;
         controller.lastName.value = loginResponse.data!.lastName!;
         controller.id.value = loginResponse.data!.patientId!;
-
+        controller.avatar.value = loginResponse.data!.image!;
         Fluttertoast.showToast(msg: "${value.message}");
         SharedHelper _shared = SharedHelper();
         await _shared.writeData(CachingKey.USER_NAME, loginResponse.data!.name);
@@ -99,7 +99,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         // await _shared.writeData(CachingKey.USER_ID, loginResponse.data!.id);
         await _shared.writeData(
             CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
-        // await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
+         await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         // await _shared.writeData(CachingKey.IS_LOGGED, true);
         Get.offAllNamed(Routes.HOME);
       } else {
@@ -158,10 +158,13 @@ class _EditProfileViewState extends State<EditProfileView> {
           loginResponse = value;
           showLoader = false;
         });
+        SharedHelper _shared = SharedHelper();
         final controller = Get.find<HomeController>(tag: 'home');
         controller.avatar.value = loginResponse.data!.image!;
         controller.name.value = loginResponse.data!.name!;
         controller.id.value = loginResponse.data!.patientId!;
+        controller.avatar.value = loginResponse.data!.image!;
+        await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         controller.isLogggd.value = true;
         Fluttertoast.showToast(msg: "${value.message}");
         Get.offAllNamed(Routes.HOME);

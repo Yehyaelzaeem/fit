@@ -23,6 +23,8 @@ class CartView extends GetView<CartController> {
           body: Obx(() {
             if (controller.loading.value)
               return Center(child: CircularLoadingWidget());
+            if (controller.isLoading.value)
+              return Center(child: CircularLoadingWidget());
 
             return SingleChildScrollView(
               child: Column(
@@ -36,7 +38,7 @@ class CartView extends GetView<CartController> {
                     return singleItem(
                         id: e.id!,
                         title: "${e.name}",
-                        price: "${controller.mealPrice(meal:e)} L.E",
+                        price: "${controller.mealPrice(meal: e)} L.E",
                         qty: 'x${e.qty}');
                   }).toList(),
                   SizedBox(height: 12),
@@ -69,217 +71,236 @@ class CartView extends GetView<CartController> {
 
                   SizedBox(height: 8),
 
-                  Row(
-                    children: [
-                      if (controller.globalController.delivery_option.value)
-                        Expanded(
-                            child: kButtonDefault("Delivery", func: () {
-                          Get.dialog(Dialog(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      color: Color(0xFF414042),
-                                      child: Center(
-                                        child: kTextHeader("Delivery",
-                                            color: Colors.white, size: 30),
-                                      ),
-                                    ),
-                                    SizedBox(height: 12),
-                                    TextInsideRec(
-                                      text: controller
-                                          .globalController
-                                          .mealFeatureHomeResponse
-                                          .value
-                                          .data!
-                                          .info!
-                                          .deliveryInstructions!,
-                                    ),
-                                    SizedBox(height: 12),
-                                    Container(
-                                      width: double.infinity,
-                                      child: kButtonDefault("Visa",
-                                          color: kColorPrimary,
-                                          textColor: Colors.white,
-                                          border: Border.all(
-                                            color: Color(0xffF1F1F1),
-                                            width: 1,
-                                          ), func: () {
-                                        Get.back();
-                                        controller.createOrder(
-                                            payMethod: 'visa',
-                                            shippingMethod: 'delivery',
-                                            context: context);
-                                      }),
-                                    ),
-                                    SizedBox(height: 12),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ));
-                        })),
-                      if (controller.globalController.pickup_option.value)
-                        Expanded(
-                            child: kButtonDefault("Pick up ", func: () {
-                          Get.dialog(Dialog(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 16),
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      color: Color(0xFF414042),
-                                      child: Center(
-                                        child: kTextHeader("Pick up",
-                                            color: Colors.white, size: 30),
-                                      ),
-                                    ),
-                                    SizedBox(height: 12),
-                                    Container(
-                                      alignment: Alignment(0.0, 0.12),
-                                      width: double.infinity,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 12),
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(9.0),
-                                        color: const Color(0xFFF1F1F1),
-                                      ),
-                                      child: SizedBox(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Align(
-                                              alignment: Alignment(-0.09, 0.0),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 12),
-                                                child: Text(
-                                                  controller
-                                                      .globalController
-                                                      .mealFeatureHomeResponse
-                                                      .value
-                                                      .data!
-                                                      .info!
-                                                      .pickupInstructions!,
-                                                  style: GoogleFonts.cairo(
-                                                    fontSize: 13.0,
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.w600,
-                                                    height: 1.38,
-                                                  ),
-                                                ),
-                                              ),
+                  controller.mealFeatureStatusResponse.data?.isActive == true
+                      ? Row(
+                          children: [
+                            if (controller.mealFeatureStatusResponse.data
+                                    ?.deliveryActive ??
+                                true)
+                              Expanded(
+                                  child: kButtonDefault("Delivery", func: () {
+                                Get.dialog(Dialog(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            color: Color(0xFF414042),
+                                            child: Center(
+                                              child: kTextHeader("Delivery",
+                                                  color: Colors.white,
+                                                  size: 30),
                                             ),
-                                            SizedBox(height: 20),
-                                            if (controller
-                                                        .globalController
-                                                        .mealFeatureHomeResponse
-                                                        .value
-                                                        .data !=
-                                                    null &&
-                                                controller
-                                                        .globalController
-                                                        .mealFeatureHomeResponse
-                                                        .value
-                                                        .data!
-                                                        .info !=
-                                                    null &&
-                                                controller
-                                                        .globalController
-                                                        .mealFeatureHomeResponse
-                                                        .value
-                                                        .data!
-                                                        .info!
-                                                        .location !=
-                                                    null &&
-                                                controller
-                                                    .globalController
-                                                    .mealFeatureHomeResponse
-                                                    .value
-                                                    .data!
-                                                    .info!
-                                                    .location!
-                                                    .isNotEmpty)
-                                              GestureDetector(
-                                                onTap: () {
-                                                  launch(controller
-                                                      .globalController
-                                                      .mealFeatureHomeResponse
-                                                      .value
-                                                      .data!
-                                                      .info!
-                                                      .location!);
-                                                },
-                                                child: Container(
-                                                  alignment:
-                                                      Alignment(-0.04, -0.33),
-                                                  width: double.infinity,
-                                                  margin: EdgeInsets.symmetric(
-                                                      horizontal: 12),
-                                                  height: 39.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            9.0),
-                                                    color:
-                                                        const Color(0xFFF1F1F1),
-                                                    border: Border.all(
-                                                      width: 1.0,
-                                                      color: const Color(
-                                                          0xFF7FC902),
+                                          ),
+                                          SizedBox(height: 12),
+                                          TextInsideRec(
+                                            text: controller
+                                                .globalController
+                                                .mealFeatureHomeResponse
+                                                .value
+                                                .data!
+                                                .info!
+                                                .deliveryInstructions!,
+                                          ),
+                                          SizedBox(height: 12),
+                                          Container(
+                                            width: double.infinity,
+                                            child: kButtonDefault("Visa",
+                                                color: kColorPrimary,
+                                                textColor: Colors.white,
+                                                border: Border.all(
+                                                  color: Color(0xffF1F1F1),
+                                                  width: 1,
+                                                ), func: () {
+                                              Get.back();
+                                              controller.createOrder(
+                                                  payMethod: 'visa',
+                                                  shippingMethod: 'delivery',
+                                                  context: context);
+                                            }),
+                                          ),
+                                          SizedBox(height: 12),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ));
+                              })),
+                            if (controller.mealFeatureStatusResponse.data
+                                    ?.pickupActive ??
+                                true)
+                              Expanded(
+                                  child: kButtonDefault("Pick up ", func: () {
+                                Get.dialog(Dialog(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 16),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            color: Color(0xFF414042),
+                                            child: Center(
+                                              child: kTextHeader("Pick up",
+                                                  color: Colors.white,
+                                                  size: 30),
+                                            ),
+                                          ),
+                                          SizedBox(height: 12),
+                                          Container(
+                                            alignment: Alignment(0.0, 0.12),
+                                            width: double.infinity,
+                                            margin: EdgeInsets.symmetric(
+                                                horizontal: 12),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(9.0),
+                                              color: const Color(0xFFF1F1F1),
+                                            ),
+                                            child: SizedBox(
+                                              child: Column(
+                                                children: <Widget>[
+                                                  Align(
+                                                    alignment:
+                                                        Alignment(-0.09, 0.0),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 12),
+                                                      child: Text(
+                                                        controller
+                                                            .globalController
+                                                            .mealFeatureHomeResponse
+                                                            .value
+                                                            .data!
+                                                            .info!
+                                                            .pickupInstructions!,
+                                                        style:
+                                                            GoogleFonts.cairo(
+                                                          fontSize: 13.0,
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          height: 1.38,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Icon(Icons.location_on,
-                                                          color: kColorPrimary),
-                                                      SizedBox(width: 4),
-                                                      kTextbody('Location',
-                                                          size: 18,
-                                                          color: kColorPrimary),
-                                                    ],
-                                                  ),
-                                                ),
+                                                  SizedBox(height: 20),
+                                                  if (controller
+                                                              .globalController
+                                                              .mealFeatureHomeResponse
+                                                              .value
+                                                              .data !=
+                                                          null &&
+                                                      controller
+                                                              .globalController
+                                                              .mealFeatureHomeResponse
+                                                              .value
+                                                              .data!
+                                                              .info !=
+                                                          null &&
+                                                      controller
+                                                              .globalController
+                                                              .mealFeatureHomeResponse
+                                                              .value
+                                                              .data!
+                                                              .info!
+                                                              .location !=
+                                                          null &&
+                                                      controller
+                                                          .globalController
+                                                          .mealFeatureHomeResponse
+                                                          .value
+                                                          .data!
+                                                          .info!
+                                                          .location!
+                                                          .isNotEmpty)
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        launch(controller
+                                                            .globalController
+                                                            .mealFeatureHomeResponse
+                                                            .value
+                                                            .data!
+                                                            .info!
+                                                            .location!);
+                                                      },
+                                                      child: Container(
+                                                        alignment: Alignment(
+                                                            -0.04, -0.33),
+                                                        width: double.infinity,
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal: 12),
+                                                        height: 39.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      9.0),
+                                                          color: const Color(
+                                                              0xFFF1F1F1),
+                                                          border: Border.all(
+                                                            width: 1.0,
+                                                            color: const Color(
+                                                                0xFF7FC902),
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                                Icons
+                                                                    .location_on,
+                                                                color:
+                                                                    kColorPrimary),
+                                                            SizedBox(width: 4),
+                                                            kTextbody(
+                                                                'Location',
+                                                                size: 18,
+                                                                color:
+                                                                    kColorPrimary),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
                                               ),
-                                          ],
-                                        ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 12),
+                                          kButtonDefault("Visa",
+                                              color: kColorPrimary,
+                                              textColor: Colors.white,
+                                              border: Border.all(
+                                                color: Color(0xffF1F1F1),
+                                                width: 1,
+                                              ), func: () {
+                                            Get.back();
+                                            controller.createOrder(
+                                                shippingMethod: "pick_up",
+                                                payMethod: "visa",
+                                                context: context);
+                                          }),
+                                          SizedBox(height: 12),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(height: 12),
-                                    kButtonDefault("Visa",
-                                        color: kColorPrimary,
-                                        textColor: Colors.white,
-                                        border: Border.all(
-                                          color: Color(0xffF1F1F1),
-                                          width: 1,
-                                        ), func: () {
-                                      Get.back();
-                                      controller.createOrder(
-                                          shippingMethod: "pick_up",
-                                          payMethod: "visa",
-                                          context: context);
-                                    }),
-                                    SizedBox(height: 12),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ));
-                        })),
-                    ],
-                  )
+                                  ),
+                                ));
+                              })),
+                          ],
+                        )
+                      : SizedBox()
                 ],
               ),
             );

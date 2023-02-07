@@ -7,6 +7,9 @@ import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+
+import '../../../routes/app_pages.dart';
 
 class NotificationDetailsView extends StatefulWidget {
   final int? id;
@@ -55,6 +58,9 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
         children: [
           HomeAppbar(
             type: null,
+            onBack: () {
+              Get.offAllNamed(Routes.HOME);
+            },
           ),
           SizedBox(height: 10),
           Row(

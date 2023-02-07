@@ -220,7 +220,7 @@ class ApiProvider {
               globalController.canDismissNewMessageDialog.value = true;
               globalController.removeNotificaitonCount.value = true;
               getx.Get.back();
-              getx.Get.toNamed(Routes.NOTIFICATIONS);
+              getx.Get.offNamed(Routes.NOTIFICATIONS);
             },
             cancelText: '',
             confirmText: 'Check it',
@@ -569,16 +569,19 @@ class ApiProvider {
     }
   }
 
-  Future<CheerFullResponse> getFaqStatus() async {
+  Future<bool> getFaqStatus() async {
     String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
       'device_id': deviceId,
     });
     Response response = await _utils.post("faq_status", body: body);
     if (response.statusCode == 200) {
-      return CheerFullResponse.fromJson(response.data);
+      print("FAQ Status => ${response.data['data']['show_faq_page']}");
+      print(response.data['data']['show_faq_page']);
+      print(response.data);
+      return response.data['data']['show_faq_page'];
     } else {
-      return CheerFullResponse.fromJson(response.data);
+      return response.data['data']['show_faq_page'];
     }
   }
 

@@ -8,11 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../models/meal_features_home_response.dart';
+import '../../../models/meal_features_status_response.dart';
+
 class CartController extends GetxController {
   final GlobalController globalController =
       Get.find<GlobalController>(tag: 'global');
   RxList<SingleMyMeal> meals = RxList<SingleMyMeal>();
+  MealFeatureStatusResponse  mealFeatureStatusResponse = MealFeatureStatusResponse();
+
   final loading = false.obs;
+  final isLoading = false.obs;
   late String name;
   late String lastName;
   late String phone;
@@ -20,9 +26,22 @@ class CartController extends GetxController {
   late String address;
   late String latitude;
   late String longitude;
+  void getStatus() async {
+    isLoading.value=true;
+    await ApiProvider().getMealFeaturesStatus().then((value) {
+      if (value.success == true) {
+        mealFeatureStatusResponse = value;
+        update();
+      } else {
+        Fluttertoast.showToast(msg: "Server Error");
+      }
+    });
+    isLoading.value=false;
 
+  }
   @override
   void onInit() {
+    getStatus();
     meals.value = Get.arguments;
     name = Get.parameters['name'] ?? '';
     lastName = Get.parameters['last_name'] ?? '';
@@ -31,6 +50,7 @@ class CartController extends GetxController {
     address = Get.parameters['address'] ?? '';
     latitude = Get.parameters['latitude'] ?? '';
     longitude = Get.parameters['longitude'] ?? '';
+
     super.onInit();
   }
 

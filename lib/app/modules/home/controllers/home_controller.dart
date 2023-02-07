@@ -8,6 +8,7 @@ import 'package:app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 import '../../../models/cheer_full_response.dart';
+import '../../../utils/helper/echo.dart';
 
 class HomeController extends GetxController {
   final currentIndex = 0.obs;
@@ -20,7 +21,7 @@ class HomeController extends GetxController {
   //bool cheerFullStatus = false;
   // bool faqStatus = false;
   bool ?orientationStatus;
-
+  bool ?faqStatus;
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
   var name = "".obs;
@@ -29,10 +30,13 @@ class HomeController extends GetxController {
   var avatar = "".obs;
   var isLogggd = false.obs;
   var id = "".obs;
+  late int newMessage = 0;
   final response =
       VersionResponse(success: false, code: 0, message: "", forceUpdate: false)
           .obs;
   final loading = false.obs;
+  UserResponse ress = UserResponse();
+
 
   @override
   void onInit() async {
@@ -46,6 +50,7 @@ class HomeController extends GetxController {
     cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     homeResponse.value = await ApiProvider().getHomeData();
     orientationStatus =  await ApiProvider().getOrientationVideosStatusStatus();
+    faqStatus = await ApiProvider().getFaqStatus();
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);

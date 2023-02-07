@@ -22,14 +22,9 @@ Future<void> main() async {
   getFireBaseNotifications();
 
   await GetStorage().initStorage;
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  if (Platform.isAndroid)
-    await FlutterLocalNotificationsPlugin().initialize(
-      initializationSettings,
-    );
+  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@drawable/applogo');
+  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+  if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
 
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");

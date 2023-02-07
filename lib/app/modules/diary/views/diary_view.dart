@@ -777,6 +777,7 @@ class DiaryView extends GetView<DiaryController> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.pop(Get.context!);
                             controller.workOutData.value = controller
                                 .response.value.data!.workouts![index].title!;

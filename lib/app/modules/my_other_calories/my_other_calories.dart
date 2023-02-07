@@ -100,7 +100,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: PageLable(name: "My Other Calories"),
+                        child: PageLable(name: "My other calories"),
                       ),
                     ],
                   ),

@@ -2,6 +2,7 @@ import 'package:app/app/models/general_response.dart';
 import 'package:app/app/models/messages_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -9,6 +10,7 @@ import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 import 'notification_details_view.dart';
 
@@ -76,7 +78,9 @@ class _NotificationsViewState extends State<NotificationsView> {
       children: [
         ListView(
           children: [
-            HomeAppbar(type: null),
+            HomeAppbar(type: null,onBack: (){
+              Get.offAllNamed(Routes.HOME);
+            },),
             SizedBox(height: 10),
             Row(
               children: [
@@ -111,7 +115,7 @@ class _NotificationsViewState extends State<NotificationsView> {
   Widget messageRow(Data element, int index) {
     return InkWell(
       onTap: () {
-        Navigator.push(
+        Navigator.pushReplacement(
             context,
             MaterialPageRoute(
                 builder: (context) => NotificationDetailsView(

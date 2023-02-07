@@ -174,7 +174,7 @@ class HomeDrawer extends GetView<HomeController> {
 
             textEditController.isLogggd.value == false
                 ? SizedBox()
-                : textEditController.cheerfulResponse.value.data?.isFaqActive ==
+                : textEditController.faqStatus ==
                         false
                     ? SizedBox()
                     : singleDrawerItem(
@@ -408,6 +408,8 @@ class HomeDrawer extends GetView<HomeController> {
   }
 */
   Future<bool> checkIfUserIsLogged() async {
+    Get.putAsync(
+            () async=>await Get.put(HomeController()));
     bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     textEditController.refreshController(false);
     return isLogged;

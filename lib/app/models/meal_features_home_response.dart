@@ -7,8 +7,6 @@ import 'dart:convert';
 MealFeatureStatusResponse mealFeatureStatusResponseFromJson(String str) =>
     MealFeatureStatusResponse.fromJson(json.decode(str));
 
-String mealFeatureStatusResponseToJson(MealFeatureStatusResponse data) =>
-    json.encode(data.toJson());
 
 class MealFeatureStatusResponse {
   MealFeatureStatusResponse({
@@ -27,26 +25,24 @@ class MealFeatureStatusResponse {
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
-
-  Map<String, dynamic> toJson() => {
-        "code": code == null ? null : code,
-        "success": success == null ? null : success,
-        "data": data == null ? null : data!.toJson(),
-      };
 }
 
 class Data {
   Data({
     this.isActive,
+    this.deliveryActive,
+    this.pickupActive,
   });
 
   final bool? isActive;
+  final bool? deliveryActive;
+  final bool? pickupActive;
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         isActive: json["is_active"] == null ? null : json["is_active"],
+        deliveryActive:
+            json["delivery_option"] == null ? null : json["delivery_option"],
+        pickupActive:
+            json["pickup_option"] == null ? null : json["pickup_option"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "is_active": isActive == null ? null : isActive,
-      };
 }
