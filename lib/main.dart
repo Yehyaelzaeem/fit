@@ -55,11 +55,19 @@ void getFireBaseNotifications() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message whilst in the foreground!');
     NotificationApi.showNotification(
-        id: 0, title: "FitOverFat", body: "While app is opened notification!!");
+        id: 0, title: message.notification?.title??"", body: message.notification?.body??"");
     print('Message data: ${message.data}');
-
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
     }
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+  });
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print("onBackgroundMessage");
   });
 }

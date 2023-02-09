@@ -215,10 +215,7 @@ class HomeDrawer extends GetView<HomeController> {
                           Get.toNamed(Routes.Orientation);
                         }),
             //CHEER_FULL
-            /*textEditController.isLogggd.value == false
-                ? SizedBox()
-                :*/ textEditController.cheerfulResponse.value.data?.isActive ==
-                        false
+           textEditController.cheerfulResponse.value.data?.isActive == false
                     ? SizedBox()
                     : singleDrawerItem(
                         title: "Cheer-Full",

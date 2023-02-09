@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../routes/app_pages.dart';
 
 class NotificationDetailsView extends StatefulWidget {
@@ -86,6 +86,8 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                     data: """${ressponse.data!.message}""",
                   ),
                 ),
+          Image.asset("assets/messages_icon.png",scale: 8,)
+
         ],
       ),
     );

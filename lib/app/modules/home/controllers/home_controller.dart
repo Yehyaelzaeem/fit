@@ -18,10 +18,11 @@ class HomeController extends GetxController {
   final userData = UserResponse().obs;
   final cheerfulResponse = CheerFullResponse().obs;
   late bool login = false;
+
   //bool cheerFullStatus = false;
   // bool faqStatus = false;
-  bool ?orientationStatus;
-  bool ?faqStatus;
+  bool? orientationStatus;
+  bool? faqStatus;
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
   var name = "".obs;
@@ -37,7 +38,6 @@ class HomeController extends GetxController {
   final loading = false.obs;
   UserResponse ress = UserResponse();
 
-
   @override
   void onInit() async {
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
@@ -49,7 +49,7 @@ class HomeController extends GetxController {
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     homeResponse.value = await ApiProvider().getHomeData();
-    orientationStatus =  await ApiProvider().getOrientationVideosStatusStatus();
+    orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
     faqStatus = await ApiProvider().getFaqStatus();
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();

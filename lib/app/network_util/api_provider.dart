@@ -38,11 +38,9 @@ import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
-// import 'package:dio/dio.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 
@@ -599,9 +597,12 @@ class ApiProvider {
   }
 
   Future<bool> getOrientationVideosStatusStatus() async {
-    Response response = await _utils.post("orientation_videos_status",);
+    Response response = await _utils.post(
+      "orientation_videos_status",
+    );
     if (response.statusCode == 200) {
-      print("Orientation Status => ${response.data['data']['orientation_videos_status']}");
+      print(
+          "Orientation Status => ${response.data['data']['orientation_videos_status']}");
       return response.data['data']['orientation_videos_status'];
     } else {
       return response.data['data']['orientation_videos_status'];
@@ -810,7 +811,7 @@ class ApiProvider {
   Future<String> kDeviceToken() async {
     String? token;
     token = await FirebaseMessaging.instance.getToken();
-    return token??"";
+    return token ?? "";
   }
 
   Future<VersionResponse> kAppVersion() async {
