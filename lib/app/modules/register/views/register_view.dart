@@ -54,8 +54,7 @@ class _RegisterViewState extends State<RegisterView> {
       showLoader = true;
     });
     await ApiProvider()
-        .signUpApi(id, password, name, lastName, email, date, phone,
-            password_confirmation)
+        .signUpApi(id, password, name, lastName, email, date, phone,gender, password_confirmation)
         .then((value) async {
       if (value.success == true) {
         setState(() {

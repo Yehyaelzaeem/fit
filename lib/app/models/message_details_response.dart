@@ -10,16 +10,6 @@ class MessageDetailsResponse {
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     success = json['success'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['success'] = this.success;
-    return data;
-  }
 }
 
 class Data {
@@ -27,6 +17,7 @@ class Data {
   String? subject;
   String? message;
   String? date;
+  bool? hasPlan;
 
   Data({this.id, this.subject, this.message, this.date});
 
@@ -35,14 +26,6 @@ class Data {
     subject = json['subject'];
     message = json['message'];
     date = json['date'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['subject'] = this.subject;
-    data['message'] = this.message;
-    data['date'] = this.date;
-    return data;
+    hasPlan = json['has_plan']??false;
   }
 }

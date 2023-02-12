@@ -11,14 +11,14 @@ import 'package:get/get.dart';
 import 'controllers/home_controller.dart';
 
 class HomeAppbar extends StatefulWidget {
-  final bool removeNotificaitonCount;
+  final bool removeNotificationsCount;
   final String? type;
   final Function? onBack;
 
   const HomeAppbar({
     Key? key,
     this.type,
-    this.removeNotificaitonCount = false,
+    this.removeNotificationsCount = false,
     this.onBack,
   }) : super(key: key);
 
@@ -143,7 +143,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(4.0),
                                             child: Text(
-                                              widget.removeNotificaitonCount
+                                              widget.removeNotificationsCount
                                                   ? "0"
                                                   : "$newMessage",
                                               style: TextStyle(
@@ -266,7 +266,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: Text(
-                                            widget.removeNotificaitonCount
+                                            widget.removeNotificationsCount
                                                 ? "0"
                                                 : "$newMessage",
                                             style: TextStyle(

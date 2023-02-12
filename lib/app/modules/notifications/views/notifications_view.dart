@@ -78,9 +78,7 @@ class _NotificationsViewState extends State<NotificationsView> {
       children: [
         ListView(
           children: [
-            HomeAppbar(type: null,onBack: (){
-              Get.offAllNamed(Routes.HOME);
-            },),
+            HomeAppbar(type: null,removeNotificationsCount: true,),
             SizedBox(height: 10),
             Row(
               children: [
@@ -115,7 +113,7 @@ class _NotificationsViewState extends State<NotificationsView> {
   Widget messageRow(Data element, int index) {
     return InkWell(
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => NotificationDetailsView(

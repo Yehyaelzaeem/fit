@@ -44,6 +44,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 
+import '../modules/home/home_appbar.dart';
+
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
 
@@ -190,17 +192,12 @@ class ApiProvider {
       return UserResponse.fromJson(response.data);
     }
   }
-
+late int newMessages =0;
   Future<UserResponse> getProfile() async {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
-    print("FCM Token  =$deviceToken");
-    print("deviceId =$deviceId");
-    final GlobalController globalController =
-        getx.Get.find<GlobalController>(tag: 'global');
-    Echo('getProfile getProfile');
-    Response response =
-        await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
+    final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
+    Response response = await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
@@ -216,9 +213,9 @@ class ApiProvider {
             cancelAction: null,
             confirmAction: () {
               globalController.canDismissNewMessageDialog.value = true;
-              globalController.removeNotificaitonCount.value = true;
+              globalController.removeNotificationsCount.value = true;
               getx.Get.back();
-              getx.Get.offNamed(Routes.NOTIFICATIONS);
+              getx.Get.toNamed(Routes.NOTIFICATIONS);
             },
             cancelText: '',
             confirmText: 'Check it',
@@ -405,6 +402,7 @@ class ApiProvider {
       "password": password,
       "password_confirmation": password_confirmation
     });
+    print(body.fields);
     Response response = await _utils.post("update_profile", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -421,6 +419,7 @@ class ApiProvider {
       String email,
       String date,
       String phone,
+      String gender,
       String password_confirmation) async {
     FormData body = FormData.fromMap({
       "patient_id": id,
@@ -429,9 +428,11 @@ class ApiProvider {
       "email": email,
       "phone": phone,
       "date_of_birth": date,
+      "gender": gender,
       "password": password,
       "password_confirmation": password_confirmation
     });
+    print(body.fields);
     Response response = await _utils.post("register", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);

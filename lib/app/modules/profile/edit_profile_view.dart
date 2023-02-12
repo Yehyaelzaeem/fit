@@ -69,7 +69,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
     await ApiProvider()
         .editProfileApi(
-             image: File(_imageFile!.path),
+             image:_imageFile==null?null: File(_imageFile!.path),
             password: password,
             name: name ?? ress.data!.name,
             lastName: lastName ?? ress.data!.lastName,
@@ -101,6 +101,8 @@ class _EditProfileViewState extends State<EditProfileView> {
             CachingKey.MOBILE_NUMBER, loginResponse.data!.phone);
          await _shared.writeData(CachingKey.AVATAR, loginResponse.data!.image);
         // await _shared.writeData(CachingKey.IS_LOGGED, true);
+        controller.isLogggd.value = true;
+        Fluttertoast.showToast(msg: "${value.message}");
         Get.offAllNamed(Routes.HOME);
       } else {
         setState(() {
@@ -144,7 +146,7 @@ class _EditProfileViewState extends State<EditProfileView> {
     });
     await ApiProvider()
         .editProfileApi(
-      image: File(_imageFile!.path),
+      image:_imageFile==null?null: File(_imageFile!.path),
       name: name ?? ress.data!.name,
       lastName: lastName ?? ress.data!.lastName,
       email: email ?? ress.data!.email,

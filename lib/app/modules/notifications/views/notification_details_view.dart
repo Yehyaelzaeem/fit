@@ -58,6 +58,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
         children: [
           HomeAppbar(
             type: null,
+            removeNotificationsCount: true,
             onBack: () {
               Get.offAllNamed(Routes.HOME);
             },
@@ -86,8 +87,12 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                     data: """${ressponse.data!.message}""",
                   ),
                 ),
-          Image.asset("assets/messages_icon.png",scale: 8,)
-
+          ressponse.data?.hasPlan == true
+              ? Image.asset(
+                  "assets/messages_icon.png",
+                  scale: 8,
+                )
+              : SizedBox()
         ],
       ),
     );
