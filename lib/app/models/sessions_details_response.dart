@@ -34,9 +34,9 @@ class Data {
   String? muscles;
   String? water;
   String? bodyComposition;
-  int? proteinsCalories;
-  int? carbsFatsCalories;
-  int? fatsCalories;
+  double? proteinsCalories;
+  double? carbsFatsCalories;
+  double? fatsCalories;
   String? followUp;
   List<FollowUpTable>? followUpTable;
 
@@ -66,9 +66,9 @@ class Data {
     muscles = json['muscles'];
     water = json['water'];
     bodyComposition = json['body_composition'];
-    proteinsCalories = json['proteins_calories'];
-    carbsFatsCalories = json['carbs_fats_calories'];
-    carbsFatsCalories = json['fats_calories'];
+    proteinsCalories = json['proteins_calories'].toDouble();
+    carbsFatsCalories = json['carbs_fats_calories'].toDouble();
+    carbsFatsCalories = json['fats_calories'].toDouble();
     followUp = json['follow_up'];
     if (json['follow_up_table'] != null) {
       followUpTable = <FollowUpTable>[];
@@ -175,13 +175,13 @@ class FollowUpTable {
 
 class ProteinsCalories {
   String? taken;
-  int? imposed;
+  double? imposed;
 
   ProteinsCalories({this.taken, this.imposed});
 
   ProteinsCalories.fromJson(Map<String, dynamic> json) {
     taken = json['taken'];
-    imposed = json['imposed'];
+    imposed = json['imposed'].toDouble();
   }
 
   Map<String, dynamic> toJson() {

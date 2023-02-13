@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../routes/app_pages.dart';
+import '../../home/views/home_view.dart';
 
 class NotificationDetailsView extends StatefulWidget {
   final int? id;
@@ -50,50 +51,57 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
     getData();
     super.initState();
   }
+  Future<bool> _willPopCallback() async {
+  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeView()));
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          HomeAppbar(
-            type: null,
-            removeNotificationsCount: true,
-            onBack: () {
-              Get.offAllNamed(Routes.HOME);
-            },
-          ),
-          SizedBox(height: 10),
-          Row(
-            children: [
-              PageLable(name: "Messages"),
-            ],
-          ),
-          isLoading == true
-              ? CircularLoadingWidget()
-              : Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: Text(
-                      "${ressponse.data!.subject}",
-                      style: TextStyle(color: kColorPrimary, fontSize: 20),
+    return WillPopScope(
+      onWillPop:_willPopCallback,
+      child: Scaffold(
+        body: ListView(
+          children: [
+            HomeAppbar(
+              type: null,
+              removeNotificationsCount: true,
+              onBack: () {
+                Get.offAllNamed(Routes.HOME);
+              },
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                PageLable(name: "Messages"),
+              ],
+            ),
+            isLoading == true
+                ? CircularLoadingWidget()
+                : Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24),
+                      child: Text(
+                        "${ressponse.data!.subject}",
+                        style: TextStyle(color: kColorPrimary, fontSize: 20),
+                      ),
                     ),
                   ),
-                ),
-          isLoading == true
-              ? SizedBox()
-              : Center(
-                  child: Html(
-                    data: """${ressponse.data!.message}""",
+            isLoading == true
+                ? SizedBox()
+                : Center(
+                    child: Html(
+                      data: """${ressponse.data!.message}""",
+                    ),
                   ),
-                ),
-          ressponse.data?.hasPlan == true
-              ? Image.asset(
-                  "assets/messages_icon.png",
-                  scale: 8,
-                )
-              : SizedBox()
-        ],
+            ressponse.data?.hasPlan == true
+                ? Image.asset(
+                    "assets/messages_icon.png",
+                    scale: 8,
+                  )
+                : SizedBox()
+          ],
+        ),
       ),
     );
   }

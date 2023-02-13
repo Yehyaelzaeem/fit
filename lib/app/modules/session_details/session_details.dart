@@ -350,128 +350,135 @@ class _SessionDetailsState extends State<SessionDetails> {
                   Center(
                       child: kButton("  Details  ", hight: 26, func: () {
                         CustomSheet(
+                          hight: MediaQuery.of(context).size.height*0.4,
                             context: context,
-                            widget: ListView(
-                              padding: EdgeInsets.all(16),
-                              children: [
-                                Text(
-                                  "Water : ${table.water} ml",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
+                            widget: Padding(
+                              padding: const EdgeInsets.only(left:12.0,right:12.0,top:20.0,),
+                              child: Scrollbar(
+                                isAlwaysShown: true,
+                                child: ListView(
+                                  children: [
+                                    VerticalSpace(),
+                                    Text(
+                                      "Water : ${table.water} ml",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    VerticalSpace(),
+                                    Divider(),
+                                    Text(
+                                      "Workout : ${table.workout != null ? table
+                                          .workout!.workoutType : "Not Yet"}",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: kColorPrimary),
+                                    ),
+                                    Text(
+                                      "${table.workout != null ? table.workout!
+                                          .workoutDesc : "   "}",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    VerticalSpace(),
+                                    Divider(),
+                                    Text(
+                                      "Sleep time : ${table.sleepingTime != null
+                                          ? table.sleepingTime?.sleepingDuration
+                                          : "Not Yet"}",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: kColorPrimary),
+                                    ),
+                                    Text(
+                                      "${table.sleepingTime != null
+                                          ? table.sleepingTime?.sleepingStatus?.name
+                                          : "   "}",
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    VerticalSpace(),
+                                    Divider(),
+                                    Text(
+                                      "Proteins",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    table.caloriesTable!.proteinsCaloriesTable!
+                                        .isEmpty
+                                        ? Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 50),
+                                      child: Center(
+                                        child: Text("No Data To Show"),
+                                      ),
+                                    )
+                                        : ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: table.caloriesTable!
+                                            .proteinsCaloriesTable!.length,
+                                        itemBuilder: (context, inIndex) {
+                                          return rowItem(table.caloriesTable!
+                                              .proteinsCaloriesTable![inIndex]);
+                                        }),
+                                    VerticalSpace(),
+                                    Divider(),
+                                    Text(
+                                      "Carbs",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    table.caloriesTable!.carbsFatsTable!.isEmpty
+                                        ? Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 50),
+                                      child: Center(
+                                        child: Text("No Data To Show"),
+                                      ),
+                                    )
+                                        : ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount: table
+                                            .caloriesTable!.carbsFatsTable!.length,
+                                        itemBuilder: (context, inIndex) {
+                                          return rowItem(table.caloriesTable!
+                                              .carbsFatsTable![inIndex]);
+                                        }),
+                                    VerticalSpace(),
+                                    Divider(),
+                                    Text(
+                                      "Fats",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    // table.caloriesTable!.fatsTable!.isEmpty
+                                    table.caloriesTable!.fatsTable!.isEmpty
+                                        ? Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 50),
+                                      child: Center(
+                                        child: Text("No Data To Show"),
+                                      ),
+                                    )
+                                        : ListView.builder(
+                                        shrinkWrap: true,
+                                        physics: NeverScrollableScrollPhysics(),
+                                        itemCount:
+                                        table.caloriesTable!.fatsTable!.length,
+                                        itemBuilder: (context, inIndex) {
+                                          return rowItem(table
+                                              .caloriesTable!.fatsTable![inIndex]);
+                                        }),
+                                    VerticalSpace(),
+                                  ],
                                 ),
-                                Divider(),
-                                Text(
-                                  "Workout : ${table.workout != null ? table
-                                      .workout!.workoutType : "Not Yet"}",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: kColorPrimary),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "${table.workout != null ? table.workout!
-                                      .workoutDesc : "   "}",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Divider(),
-                                Text(
-                                  "Sleep time : ${table.sleepingTime != null
-                                      ? table.sleepingTime?.sleepingDuration
-                                      : "Not Yet"}",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: kColorPrimary),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  "${table.sleepingTime != null
-                                      ? table.sleepingTime?.sleepingStatus?.name
-                                      : "   "}",
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                Divider(),
-                                Text(
-                                  "Proteins",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                table.caloriesTable!.proteinsCaloriesTable!
-                                    .isEmpty
-                                    ? Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 50),
-                                  child: Center(
-                                    child: Text("No Data To Show"),
-                                  ),
-                                )
-                                    : ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: table.caloriesTable!
-                                        .proteinsCaloriesTable!.length,
-                                    itemBuilder: (context, inIndex) {
-                                      return rowItem(table.caloriesTable!
-                                          .proteinsCaloriesTable![inIndex]);
-                                    }),
-                                Divider(),
-                                Text(
-                                  "Carbs",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                table.caloriesTable!.carbsFatsTable!.isEmpty
-                                    ? Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 50),
-                                  child: Center(
-                                    child: Text("No Data To Show"),
-                                  ),
-                                )
-                                    : ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount: table
-                                        .caloriesTable!.carbsFatsTable!.length,
-                                    itemBuilder: (context, inIndex) {
-                                      return rowItem(table.caloriesTable!
-                                          .carbsFatsTable![inIndex]);
-                                    }),
-                                Divider(),
-                                Text(
-                                  "Fats",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                // table.caloriesTable!.fatsTable!.isEmpty
-                                table.caloriesTable!.fatsTable!.isEmpty
-                                    ? Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 50),
-                                  child: Center(
-                                    child: Text("No Data To Show"),
-                                  ),
-                                )
-                                    : ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemCount:
-                                    table.caloriesTable!.fatsTable!.length,
-                                    itemBuilder: (context, inIndex) {
-                                      return rowItem(table
-                                          .caloriesTable!.fatsTable![inIndex]);
-                                    }),
-                              ],
+                              ),
                             ));
                       })),
                 ],
@@ -494,7 +501,11 @@ class _SessionDetailsState extends State<SessionDetails> {
       ),
     );
   }
-
+Widget VerticalSpace(){
+    return SizedBox(
+      height: 6,
+    );
+}
   void onClick() async {
     Permission permission = Permission.storage;
     bool status = await permission.status.isGranted;
