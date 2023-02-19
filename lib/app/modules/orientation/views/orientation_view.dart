@@ -1,6 +1,6 @@
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/orientation/controllers/orientation_controller.dart';
-import 'package:app/app/modules/videos/vimeo_player_widget.dart';
+import 'package:app/app/modules/videos/video_player_widget.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -68,7 +68,7 @@ class OrientationView extends GetView<OrientationController> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => VimeoPlayerWidget(
+                                      builder: (_) => VideoPlayerWidget(
                                           link: controller
                                                   .orientationVideosResponse
                                                   .data?[index]

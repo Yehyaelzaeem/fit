@@ -6,11 +6,13 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/home_view.dart';
+import 'notification_plan.dart';
 
 class NotificationDetailsView extends StatefulWidget {
   final int? id;
@@ -51,15 +53,17 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
     getData();
     super.initState();
   }
+
   Future<bool> _willPopCallback() async {
-  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>HomeView()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (_) => HomeView()));
     return true;
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop:_willPopCallback,
+      onWillPop: _willPopCallback,
       child: Scaffold(
         body: ListView(
           children: [
@@ -95,9 +99,20 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                     ),
                   ),
             ressponse.data?.hasPlan == true
-                ? Image.asset(
-                    "assets/messages_icon.png",
-                    scale: 8,
+                ? GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => NotificationPlan(
+                                    link: ressponse.data?.planUrl ??
+                                        "https://fofclinic.com/",
+                                  )));
+                    },
+                    child: Image.asset(
+                      "assets/messages_icon.png",
+                      scale: 8,
+                    ),
                   )
                 : SizedBox()
           ],

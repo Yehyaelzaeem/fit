@@ -13,6 +13,7 @@ class MyPackagesController extends GetxController
   final userEmail = ''.obs;
   final userName = ''.obs;
   final userLastName = ''.obs;
+  final invoice = ''.obs;
   MyPackagesResponse myPackagesResponse = MyPackagesResponse();
 
   void getMyPackagesList() async {
@@ -28,6 +29,7 @@ class MyPackagesController extends GetxController
   }
 
   Future<String> getFromCash() async {
+    invoice.value = await SharedHelper().readString(CachingKey.INVOICE);
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
@@ -49,7 +51,9 @@ class MyPackagesController extends GetxController
 
   @override
   void onInit() {
-    if (Get.arguments != null) myPackagesResponse = Get.arguments;
+    if (Get.arguments != null) {
+      myPackagesResponse = Get.arguments;
+    };
     getMyPackagesList();
     //  getFromCash();
     super.onInit();

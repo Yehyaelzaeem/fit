@@ -847,18 +847,15 @@ class DiaryView extends GetView<DiaryController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    kTextbody('Workout Description', size: 20, bold: true),
+                    kTextbody('Description', size: 20, bold: true),
                     EditText(
-                      focusNode: controller.workoutTitleDescFocus,
-                      // controller: controller,
                       radius: 12,
                       lines: 5,
+                      value: controller.workDesc,
                       type: TextInputType.multiline,
-                      value: '${controller.workDesc.value}',
-                      // hint: '${controller.workDesc.value}',
                       updateFunc: (text) {
-                        controller.workDesc.value = text;
-                        Echo("$controller.workDesc.value");
+                        controller.workDesc = text;
+                        Echo("${controller.workDesc}");
                       },
                       validateFunc: (text) {},
                     ),
@@ -869,8 +866,8 @@ class DiaryView extends GetView<DiaryController> {
                         marginH: MediaQuery.of(Get.context!).size.width / 5,
                         paddingV: 0,
                         func: () {
-                          controller.workoutTitleDescFocus.unfocus();
-                          if (controller.workDesc.value.trim() == "" ||
+                          FocusManager.instance.primaryFocus?.unfocus();
+                          if (controller.workDesc?.trim() == "" ||
                               controller.workOut.value == null) {
                             Fluttertoast.showToast(
                                 msg: "Enter Workout Description");

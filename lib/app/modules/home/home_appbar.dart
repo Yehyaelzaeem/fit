@@ -8,17 +8,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../myPackages/views/my_packages_view.dart';
 import 'controllers/home_controller.dart';
 
 class HomeAppbar extends StatefulWidget {
   final bool removeNotificationsCount;
   final String? type;
   final Function? onBack;
+  final bool? fromInvoice;
 
   const HomeAppbar({
     Key? key,
     this.type,
     this.removeNotificationsCount = false,
+    this.fromInvoice = false,
     this.onBack,
   }) : super(key: key);
 
@@ -92,7 +95,9 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         if (widget.onBack == null) {
                           Navigator.pop(context);
                         } else {
-                          Get.offAllNamed(Routes.HOME);
+                          widget.fromInvoice == true
+                              ? Get.toNamed(Routes.MY_PACKAGES)
+                              : Get.offAllNamed(Routes.HOME);
                           controller.currentIndex.value = 0;
                         }
                       },
@@ -204,7 +209,9 @@ class _HomeAppbarState extends State<HomeAppbar> {
                             if (widget.onBack == null) {
                               Navigator.pop(context);
                             } else {
-                              Get.offAllNamed(Routes.HOME);
+                              widget.fromInvoice == true
+                                  ? Get.toNamed(Routes.MY_PACKAGES)
+                                  : Get.offAllNamed(Routes.HOME);
                               controller.currentIndex.value = 0;
                             }
                           },

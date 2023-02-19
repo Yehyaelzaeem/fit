@@ -78,7 +78,7 @@ class _NotificationsViewState extends State<NotificationsView> {
       children: [
         ListView(
           children: [
-            HomeAppbar(type: null,removeNotificationsCount: true,),
+            HomeAppbar(type: null,),
             SizedBox(height: 10),
             Row(
               children: [
@@ -140,10 +140,12 @@ class _NotificationsViewState extends State<NotificationsView> {
                             paddingV: 12,
                             color: kColorPrimary,
                             align: TextAlign.start),
-                        kTextHeader('${element.subject}',
-                            paddingV: 12,
-                            color: Colors.black,
-                            align: TextAlign.start),
+                        Expanded(
+                          child: kTextHeader('${element.subject}',
+                              paddingV: 12,
+                              color: Colors.black,
+                              align: TextAlign.start),
+                        ),
                       ],
                     ),
                   ),

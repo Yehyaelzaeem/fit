@@ -23,6 +23,7 @@ class CachingKey extends Enum<String> {
   static const CachingKey MOBILE_NUMBER = const CachingKey('MOBILE_NUMBER');
   static const CachingKey AVATAR = const CachingKey('AVATAR');
   static const CachingKey PHONE = const CachingKey('PHONE');
+  static const CachingKey INVOICE = const CachingKey('INVOICE');
 }
 
 class A {

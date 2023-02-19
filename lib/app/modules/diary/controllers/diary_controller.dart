@@ -32,7 +32,7 @@ class DiaryController extends GetxController {
   final workOutData = ''.obs;
   final qtyProtine = ''.obs;
   final foodProtine = ''.obs;
-  final workDesc = ''.obs;
+  String? workDesc;
   final length = 0.obs;
   final workOut = 0.obs;
 
@@ -103,7 +103,7 @@ class DiaryController extends GetxController {
           showLoader.value = false;
           length.value = response.value.data!.water! + 3;
           workOut.value = response.value.data!.workouts![0].id!;
-          workDesc.value = response.value.data!.dayWorkouts == null
+          workDesc = response.value.data!.dayWorkouts == null
               ? " "
               : response.value.data!.dayWorkouts!.workoutDesc!;
           textEditController.text = response.value.data!.dayWorkouts == null
@@ -318,14 +318,11 @@ class DiaryController extends GetxController {
 
   void updateWork() async {
     workoutLoading.value = true;
-
-    await ApiProvider()
-        .createDiaryData(
+    await ApiProvider().createDiaryData(
       workOut: workOut.value,
-      workout_desc: workDesc.value,
+      workout_desc: workDesc,
       date: apiDate.value,
-    )
-        .then((value) {
+    ).then((value) {
       if (value.success == true) {
         workoutLoading.value = false;
         Fluttertoast.showToast(msg: "${value.message}");

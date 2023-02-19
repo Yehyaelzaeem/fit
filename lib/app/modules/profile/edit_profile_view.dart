@@ -42,6 +42,7 @@ class _EditProfileViewState extends State<EditProfileView> {
   GlobalKey<FormState> key2 = GlobalKey();
   bool showLoader = false;
   bool passwordSaveLoading = false;
+  bool profileSaveLoading = false;
   UserResponse loginResponse = UserResponse();
   UserResponse ress = UserResponse();
   DateTime selectedDate = DateTime.now();
@@ -65,6 +66,7 @@ class _EditProfileViewState extends State<EditProfileView> {
 
   void SendData() async {
     setState(() {
+      profileSaveLoading = true;
       showLoader = true;
     });
     await ApiProvider()
@@ -83,6 +85,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         setState(() {
           loginResponse = value;
           showLoader = false;
+          profileSaveLoading = false;
         });
         final controller = Get.find<HomeController>(tag: 'home');
         controller.avatar.value = loginResponse.data!.image!;
@@ -103,11 +106,12 @@ class _EditProfileViewState extends State<EditProfileView> {
         // await _shared.writeData(CachingKey.IS_LOGGED, true);
         controller.isLogggd.value = true;
         Fluttertoast.showToast(msg: "${value.message}");
-        Get.offAllNamed(Routes.HOME);
+     //   Get.offAllNamed(Routes.HOME);
       } else {
         setState(() {
           loginResponse = value;
           showLoader = false;
+          profileSaveLoading = false;
         });
         Fluttertoast.showToast(msg: "${value.message}");
         print("error");
@@ -189,7 +193,7 @@ class _EditProfileViewState extends State<EditProfileView> {
           date = ress.data!.dateOfBirth!.toUpperCase();
           formattedDate = date;
           isLoading = false;
-          gender = ress.data!.gender!;
+          gender = ress.data!.gender=="female"?gender="Female":gender="Male";
         });
       } else {
         Fluttertoast.showToast(msg: "Check Internet Connection");
@@ -492,6 +496,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                     },
                                     shadow: true,
                                     paddingH: 16,
+                                    loading: profileSaveLoading,
                                   ),
                                   SizedBox(
                                       height:

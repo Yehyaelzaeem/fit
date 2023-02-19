@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/routes/app_pages.dart';
@@ -20,11 +21,45 @@ Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   getFireBaseNotifications();
-
+  await Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
+  });
   await GetStorage().initStorage;
   const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@drawable/applogo');
-  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-  if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
+  final initializationSettingsIOS= IOSInitializationSettings();
+  final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS:initializationSettingsIOS );
+  await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
+  NotificationApi.init(isScheduled: true);
+  Future.delayed(
+      Duration(seconds: 5),
+          () => NotificationApi.showScheduledNotification(
+        hour: 11,
+        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+        id: 1,
+      ));
+  Future.delayed(
+      Duration(seconds: 5),
+          () => NotificationApi.showScheduledNotification(
+        hour: 14,
+        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+        id: 2,
+      ));
+  Future.delayed(
+      Duration(seconds: 5),
+          () => NotificationApi.showScheduledNotification(
+        hour: 17,
+        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+        id: 3,
+      ));
+  Future.delayed(
+      Duration(seconds: 5),
+          () => NotificationApi.showScheduledNotification(
+        hour: 20,
+        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
+        id: 4,
+      ));
 
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");

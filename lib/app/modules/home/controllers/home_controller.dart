@@ -6,6 +6,7 @@ import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/cheer_full_response.dart';
 import '../../../utils/helper/echo.dart';
@@ -37,9 +38,11 @@ class HomeController extends GetxController {
           .obs;
   final loading = false.obs;
   UserResponse ress = UserResponse();
-
+  SharedPreferences? preferences;
   @override
   void onInit() async {
+    await SharedHelper().removeData(CachingKey.INVOICE);
+
     isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     name.value = await SharedHelper().readString(CachingKey.USER_NAME);
     phone.value = await SharedHelper().readString(CachingKey.PHONE);
@@ -56,7 +59,6 @@ class HomeController extends GetxController {
       Get.offAllNamed(Routes.SPLASH);
     }
     Get.put(SessionsController(), tag: 'SessionsController');
-
     super.onInit();
 
     homeResponse.value.data!.slider!.forEach((v) {

@@ -496,7 +496,6 @@ late int newMessages =0;
     });
     Echo("${body}");
     Echo("api--> save_calories_details");
-
     Response response = await _utils.post(
       "save_calories_details",
       body: body,

@@ -18,14 +18,16 @@ class Data {
   String? message;
   String? date;
   bool? hasPlan;
+  String? planUrl;
 
-  Data({this.id, this.subject, this.message, this.date});
+  Data({this.id, this.subject, this.message, this.date, this.hasPlan, this.planUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     subject = json['subject'];
     message = json['message'];
     date = json['date'];
-    hasPlan = json['has_plan']??false;
+    hasPlan = json['has_plans']??false;
+    planUrl = json['plan_url'];
   }
 }

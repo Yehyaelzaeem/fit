@@ -6,8 +6,8 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class VimeoPlayerWidget extends StatelessWidget {
-  const VimeoPlayerWidget({Key? key, required this.link}) : super(key: key);
+class VideoPlayerWidget extends StatelessWidget {
+  const VideoPlayerWidget({Key? key, required this.link}) : super(key: key);
   final String link;
 
   @override

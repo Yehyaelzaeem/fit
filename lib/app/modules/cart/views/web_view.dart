@@ -10,10 +10,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
+import '../../../network_util/shared_helper.dart';
+
 class WebViewScreen extends StatelessWidget {
   final String url;
   final int? packageId;
   final String? fromCheerfull;
+  SharedHelper _shared = SharedHelper();
 
   WebViewScreen(
       {Key? key, required this.url, this.packageId, this.fromCheerfull})
@@ -84,6 +87,7 @@ class WebViewScreen extends StatelessWidget {
                           uri.path.toLowerCase().contains("success") ||
                           uri.path.toLowerCase().contains("Payment-Success")) {
                         if (fromCheerfull != "From Cheerful Order") {
+                          await SharedHelper().writeData(CachingKey.INVOICE,'INVOICE');
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
