@@ -27,7 +27,7 @@ class InvoiceView extends GetView<InvoiceController> {
 
   @override
   Widget build(BuildContext context) {
-    //  controller.getPackageDetails(packageId: packageId!);
+      controller.getPackageDetails(packageId: packageId!);
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: Scaffold(
