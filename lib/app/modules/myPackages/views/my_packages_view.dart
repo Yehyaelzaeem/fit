@@ -18,17 +18,17 @@ import 'package:get/get.dart';
 import '../../../network_util/shared_helper.dart';
 
 class MyPackagesView extends GetView<MyPackagesController> {
-  Future<bool> _willPopCallback() async {
-    if(await SharedHelper().readString(CachingKey.INVOICE)=='INVOICE'){
-      await Get.toNamed(
-        Routes.HOME,
-      );
-    }
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
+    Future<bool> _willPopCallback() async {
+      if (await SharedHelper().readString(CachingKey.INVOICE) == 'INVOICE') {
+        await Get.toNamed(
+          Routes.HOME,
+        );
+      }
+      return true;
+    }
+
     return Container(
       color: kColorPrimary,
       child: SafeArea(
@@ -226,7 +226,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                 child:
                                                                     GestureDetector(
                                                                   onTap: () {
-                                                                    Navigator.push(
+                                                                    Navigator.pushReplacement(
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (_) => InvoiceView(
@@ -287,7 +287,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                               .paymentUrlStatus ==
                                                                           true
                                                                       ? () {
-                                                                          Navigator.push(
+                                                                          Navigator.pushReplacement(
                                                                               context,
                                                                               MaterialPageRoute(
                                                                                   builder: (_) => WebViewScreen(
@@ -365,7 +365,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                               onTap: () async {
                                 if (await controller.getFromCash() ==
                                     "haveAllData") {
-                                  Get.toNamed(Routes.SUBSCRIBE,
+                                  Get.offNamed(Routes.SUBSCRIBE,
                                       arguments: null);
                                 } else if (await controller.getFromCash() ==
                                     "noLastName") {
@@ -374,7 +374,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                       MaterialPageRoute(
                                           builder: (_) => EditProfileView()));
                                 } else {
-                                  Get.toNamed(Routes.SUBSCRIBE,
+                                  Get.offNamed(Routes.SUBSCRIBE,
                                       arguments: null);
                                 }
                               },

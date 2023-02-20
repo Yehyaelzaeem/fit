@@ -20,34 +20,10 @@ class SplashController extends GetxController
 
   initLocalNotification() {
     NotificationApi.init(isScheduled: true);
-    Future.delayed(
-        Duration(seconds: 5),
-        () => NotificationApi.showScheduledNotification(
-              hour: 11,
-              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-              id: 1,
-            ));
-    Future.delayed(
-        Duration(seconds: 5),
-        () => NotificationApi.showScheduledNotification(
-              hour: 14,
-              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-              id: 2,
-            ));
-    Future.delayed(
-        Duration(seconds: 5),
-        () => NotificationApi.showScheduledNotification(
-              hour: 17,
-              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-              id: 3,
-            ));
-    Future.delayed(
-        Duration(seconds: 5),
-        () => NotificationApi.showScheduledNotification(
-              hour: 20,
-              scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-              id: 4,
-            ));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
+    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
   }
 
   @override

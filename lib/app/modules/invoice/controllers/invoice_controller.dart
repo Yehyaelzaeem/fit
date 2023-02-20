@@ -13,8 +13,7 @@ class InvoiceController extends GetxController {
   Future getPackageDetails({
     required int packageId,
   }) async {
-    await ApiProvider()
-        .paymentPackageDetails(packageId: packageId)
+    await ApiProvider().paymentPackageDetails(packageId: packageId)
         .then((value) {
       if (value.success == true) {
         packageDetailsResponse = value;
@@ -29,8 +28,7 @@ class InvoiceController extends GetxController {
   @override
   void onInit() {
     if (Get.arguments != null) packageDetailsResponse = Get.arguments;
-    Get.put(MyPackagesController());
-
+   // Get.lazyPut<MyPackagesController>(() => MyPackagesController());
     super.onInit();
   }
 

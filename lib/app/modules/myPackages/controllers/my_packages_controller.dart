@@ -5,8 +5,7 @@ import 'package:app/app/utils/helper/echo.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-class MyPackagesController extends GetxController
-    with SingleGetTickerProviderMixin {
+class MyPackagesController extends GetxController with SingleGetTickerProviderMixin {
   final error = ''.obs;
   final loading = true.obs;
   final userPhone = ''.obs;
@@ -15,12 +14,14 @@ class MyPackagesController extends GetxController
   final userLastName = ''.obs;
   final invoice = ''.obs;
   MyPackagesResponse myPackagesResponse = MyPackagesResponse();
-
   void getMyPackagesList() async {
     await ApiProvider().myPackagesResponse().then((value) {
+      print("Current => ${loading.value}");
       if (value.success == true) {
         myPackagesResponse = value;
+        print("Current => ${loading.value}");
         loading.value = false;
+        print("Current => ${loading.value}");
         update();
       } else {
         Fluttertoast.showToast(msg: "Server Error");
@@ -28,13 +29,27 @@ class MyPackagesController extends GetxController
     });
   }
 
+
+  @override
+  void onInit() {
+    print("Current => ${loading.value}");
+    getMyPackagesList();
+    if (Get.arguments != null) myPackagesResponse = Get.arguments;
+      getFromCash();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
   Future<String> getFromCash() async {
     invoice.value = await SharedHelper().readString(CachingKey.INVOICE);
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
     userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
     userLastName.value =
-        await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     if (userPhone.value.isEmpty &&
         userEmail.value.isEmpty &&
         userName.value.isEmpty) {
@@ -47,21 +62,6 @@ class MyPackagesController extends GetxController
       print("Shared = true");
       return await "haveAllData";
     }
-  }
-
-  @override
-  void onInit() {
-    if (Get.arguments != null) {
-      myPackagesResponse = Get.arguments;
-    };
-    getMyPackagesList();
-    //  getFromCash();
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
   }
 
   @override

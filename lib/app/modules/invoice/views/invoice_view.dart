@@ -19,9 +19,8 @@ class InvoiceView extends GetView<InvoiceController> {
 
   InvoiceView({Key? key, this.packageId}) : super(key: key);
 
-
   Future<bool> _willPopCallback() async {
-    await Get.toNamed(Routes.MY_PACKAGES,);
+    await Get.offNamed(Routes.MY_PACKAGES,);
     return true;
   }
 
@@ -62,7 +61,7 @@ class InvoiceView extends GetView<InvoiceController> {
                                   shape: Shape.box,
                                   color: kColorPrimary,
                                   borderRadius: BorderRadius.circular(
-                                      24.0), //remove this to get plane rectange
+                                      24.0),
                                 ),
                                 child: Card(
                                   elevation: 8.0,

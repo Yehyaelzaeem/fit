@@ -173,7 +173,7 @@ class WebViewScreen extends StatelessWidget {
                     }
                     return NavigationActionPolicy.ALLOW;
                   },
-                  onLoadStart: (webViewController, uri) {
+                  onLoadStart: (webViewController, uri)async {
                     if (Platform.isAndroid) {
                       print(
                           "WEB URI link =========== > ${Uri.parse(uri.toString())}");
@@ -181,6 +181,7 @@ class WebViewScreen extends StatelessWidget {
                       if (uri.path.contains("Success") ||
                           uri.path.contains("Payment-Success")) {
                         if (fromCheerfull != "From Cheerful Order") {
+                          await SharedHelper().writeData(CachingKey.INVOICE,'INVOICE');
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

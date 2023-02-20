@@ -10,6 +10,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../pdf_viewr.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/home_view.dart';
 import 'notification_plan.dart';
@@ -104,10 +105,17 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
+                              builder: (context) =>
+                                  PDFPreview(
+                                      res: ressponse.data?.planUrl??"",
+                                      name: "Plan Details")));
+                  /*    Navigator.push(
+                          context,
+                          MaterialPageRoute(
                               builder: (_) => NotificationPlan(
                                     link: ressponse.data?.planUrl ??
                                         "https://fofclinic.com/",
-                                  )));
+                                  )));*/
                     },
                     child: Image.asset(
                       "assets/messages_icon.png",

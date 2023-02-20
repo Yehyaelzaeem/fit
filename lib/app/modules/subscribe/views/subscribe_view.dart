@@ -283,7 +283,7 @@ class SubscribeView extends GetView<SubscribeController> {
                                                                     .then(
                                                                         (value) {
                                                                   Navigator
-                                                                      .push(
+                                                                      .pushReplacement(
                                                                     context,
                                                                     MaterialPageRoute(
                                                                       builder:

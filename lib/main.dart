@@ -7,8 +7,7 @@ import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -31,36 +30,8 @@ Future<void> main() async {
   final initializationSettingsIOS= IOSInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid,iOS:initializationSettingsIOS );
   await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
-  NotificationApi.init(isScheduled: true);
-  Future.delayed(
-      Duration(seconds: 5),
-          () => NotificationApi.showScheduledNotification(
-        hour: 11,
-        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-        id: 1,
-      ));
-  Future.delayed(
-      Duration(seconds: 5),
-          () => NotificationApi.showScheduledNotification(
-        hour: 14,
-        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-        id: 2,
-      ));
-  Future.delayed(
-      Duration(seconds: 5),
-          () => NotificationApi.showScheduledNotification(
-        hour: 17,
-        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-        id: 3,
-      ));
-  Future.delayed(
-      Duration(seconds: 5),
-          () => NotificationApi.showScheduledNotification(
-        hour: 20,
-        scheduleDate: DateTime.now().add(Duration(seconds: 2)),
-        id: 4,
-      ));
-
+  if (Platform.isAndroid) await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
+  if (Platform.isIOS) await FlutterLocalNotificationsPlugin().initialize(initializationSettings,);
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");
   Get.put(InvoiceController());

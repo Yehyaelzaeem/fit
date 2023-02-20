@@ -300,7 +300,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                   SizedBox(width: 14,),
                   kTextbody("${table.date}", bold: true),
                   Spacer(),
-                  table.caloriesTable!.carbsFatsTable!.isNotEmpty ||
+                  table.caloriesTable!.carbsFatsTable!.isNotEmpty ||table.caloriesTable!.fatsTable!.isNotEmpty ||
                       table.caloriesTable!.proteinsCaloriesTable!.isNotEmpty
                       ? Image.asset(
                     'assets/big_logo.png',

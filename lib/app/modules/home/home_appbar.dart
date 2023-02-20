@@ -96,7 +96,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                           Navigator.pop(context);
                         } else {
                           widget.fromInvoice == true
-                              ? Get.toNamed(Routes.MY_PACKAGES)
+                              ? Get.offNamed(Routes.MY_PACKAGES)
                               : Get.offAllNamed(Routes.HOME);
                           controller.currentIndex.value = 0;
                         }
@@ -210,7 +210,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                               Navigator.pop(context);
                             } else {
                               widget.fromInvoice == true
-                                  ? Get.toNamed(Routes.MY_PACKAGES)
+                                  ? Get.offNamed(Routes.MY_PACKAGES)
                                   : Get.offAllNamed(Routes.HOME);
                               controller.currentIndex.value = 0;
                             }
