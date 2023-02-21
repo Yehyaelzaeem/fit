@@ -1,7 +1,6 @@
 import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
-import 'package:app/app/modules/myPackages/controllers/my_packages_controller.dart';
 import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
@@ -15,17 +14,80 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../models/my_packages_response.dart';
+import '../../../network_util/api_provider.dart';
 import '../../../network_util/shared_helper.dart';
 
-class MyPackagesView extends GetView<MyPackagesController> {
+class MyPackagesView extends StatefulWidget {
+  @override
+  State<MyPackagesView> createState() => _MyPackagesViewState();
+}
+
+class _MyPackagesViewState extends State<MyPackagesView> {
+
+  final error = ''.obs;
+  final loading = true.obs;
+  final userPhone = ''.obs;
+  final userEmail = ''.obs;
+  final userName = ''.obs;
+  final userLastName = ''.obs;
+  final invoice = ''.obs;
+  MyPackagesResponse myPackagesResponse = MyPackagesResponse();
+  void getMyPackagesList() async {
+    await ApiProvider().myPackagesResponse().then((value) {
+      print("Current => ${loading.value}");
+      if (value.success == true) {
+        myPackagesResponse = value;
+        print("Current => ${loading.value}");
+        loading.value = false;
+        print("Current => ${loading.value}");
+      } else {
+        Fluttertoast.showToast(msg: "Server Error");
+      }
+    });
+  }
+  Future<String> getFromCash() async {
+    invoice.value = await SharedHelper().readString(CachingKey.INVOICE);
+    userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
+    userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
+    userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    userLastName.value =
+    await SharedHelper().readString(CachingKey.USER_LAST_NAME);
+    if (userPhone.value.isEmpty &&
+        userEmail.value.isEmpty &&
+        userName.value.isEmpty) {
+      //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      return await "noPhone";
+    } else if (userLastName.value.isEmpty) {
+      //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      return await "noLastName";
+    } else {
+      print("Shared = true");
+      return await "haveAllData";
+    }
+  }
+
+
+  @override
+  void initState() {
+    getMyPackagesList();
+    if (Get.arguments != null) myPackagesResponse = Get.arguments;
+    getFromCash();
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Future<bool> _willPopCallback() async {
-      if (await SharedHelper().readString(CachingKey.INVOICE) == 'INVOICE') {
+ /*     if (await SharedHelper().readString(CachingKey.INVOICE) == 'INVOICE') {
         await Get.toNamed(
           Routes.HOME,
         );
-      }
+      }*/
+      await Get.toNamed(
+        Routes.HOME,
+      );
       return true;
     }
 
@@ -38,10 +100,26 @@ class MyPackagesView extends GetView<MyPackagesController> {
               backgroundColor: Colors.white,
               body: Obx(
                 () {
-                  if (controller.loading.value)
+                  if (loading.value)
                     return Center(child: CircularLoadingWidget());
-                  if (controller.error.value.isNotEmpty)
-                    return errorHandler(controller.error.value, controller);
+                  if (error.value.isNotEmpty)
+                    return Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: Get.height * 0.2),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              kEmptyPackage,
+                              scale: 5,
+                            ),
+                            SizedBox(
+                              height: 14,
+                            ),
+                            kTextbody("  Empty!  ", size: 16),
+                          ],
+                        ),
+                      ),
+                    );
                   return Column(
                     children: [
                       //App bar
@@ -55,7 +133,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                       SizedBox(height: 12),
                       PageLable(name: " My Packages"),
                       SizedBox(height: 12),
-                      controller.myPackagesResponse.data!.orders!.isEmpty
+                      myPackagesResponse.data!.orders!.isEmpty
                           ? Expanded(
                               child: Padding(
                                 padding: EdgeInsets.only(top: Get.height * 0.2),
@@ -88,8 +166,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                     children: [
                                                       Expanded(
                                                         child: kTextHeader(
-                                                            controller
-                                                                    .myPackagesResponse
+                                                           myPackagesResponse
                                                                     .data
                                                                     ?.orders?[
                                                                         index]
@@ -105,7 +182,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                             size: 20),
                                                       ),
                                                       kTextHeader(
-                                                          "${controller.myPackagesResponse.data?.orders?[index].price.toString() ?? ""} LE",
+                                                          "${myPackagesResponse.data?.orders?[index].price.toString() ?? ""} LE",
                                                           color: Colors.black,
                                                           align: TextAlign.end,
                                                           bold: true,
@@ -118,8 +195,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                     children: [
                                                       Expanded(
                                                         child: kTextHeader(
-                                                            controller
-                                                                    .myPackagesResponse
+                                                            myPackagesResponse
                                                                     .data
                                                                     ?.orders?[
                                                                         index]
@@ -131,8 +207,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                       ),
                                                       Spacer(),
                                                       kTextHeader(
-                                                          controller
-                                                                  .myPackagesResponse
+                                                         myPackagesResponse
                                                                   .data
                                                                   ?.orders?[
                                                                       index]
@@ -156,8 +231,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                 MainAxisAlignment
                                                                     .center,
                                                             children: [
-                                                              controller
-                                                                      .myPackagesResponse
+                                                              myPackagesResponse
                                                                       .data!
                                                                       .orders![
                                                                           index]
@@ -177,16 +251,14 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                       color:
                                                                           kRedColor),
                                                               kTextHeader(
-                                                                  controller
-                                                                              .myPackagesResponse
+                                                                  myPackagesResponse
                                                                               .data
                                                                               ?.orders?[
                                                                                   index]
                                                                               .paymentStatus ==
                                                                           ""
                                                                       ? ""
-                                                                      : controller
-                                                                              .myPackagesResponse
+                                                                      : myPackagesResponse
                                                                               .data!
                                                                               .orders![
                                                                                   index]
@@ -200,8 +272,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                   align:
                                                                       TextAlign
                                                                           .start,
-                                                                  color: controller
-                                                                          .myPackagesResponse
+                                                                  color:myPackagesResponse
                                                                           .data!
                                                                           .orders![
                                                                               index]
@@ -214,8 +285,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                           ),
                                                         ),
                                                       ),
-                                                      controller
-                                                                  .myPackagesResponse
+                                                     myPackagesResponse
                                                                   .data
                                                                   ?.orders?[
                                                                       index]
@@ -230,7 +300,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                         context,
                                                                         MaterialPageRoute(
                                                                             builder: (_) => InvoiceView(
-                                                                                  packageId: controller.myPackagesResponse.data?.orders?[index].id,
+                                                                                  packageId: myPackagesResponse.data?.orders?[index].id,
                                                                                 )));
                                                                   },
                                                                   child: Center(
@@ -280,8 +350,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                               child: Center(
                                                                 child:
                                                                     GestureDetector(
-                                                                  onTap: controller
-                                                                              .myPackagesResponse
+                                                                  onTap:myPackagesResponse
                                                                               .data
                                                                               ?.orders?[index]
                                                                               .paymentUrlStatus ==
@@ -291,8 +360,8 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                               context,
                                                                               MaterialPageRoute(
                                                                                   builder: (_) => WebViewScreen(
-                                                                                        url: controller.myPackagesResponse.data!.orders![index].paymentUrl!,
-                                                                                        packageId: controller.myPackagesResponse.data!.orders?[index].id!,
+                                                                                        url: myPackagesResponse.data!.orders![index].paymentUrl!,
+                                                                                        packageId: myPackagesResponse.data!.orders?[index].id!,
                                                                                       )));
                                                                         }
                                                                       : () {
@@ -303,7 +372,7 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                                                     child:
                                                                         Container(
                                                                       decoration: BoxDecoration(
-                                                                          color: controller.myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
+                                                                          color: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
                                                                               ? kColorPrimary
                                                                               : kColorAccent,
                                                                           borderRadius:
@@ -355,19 +424,19 @@ class MyPackagesView extends GetView<MyPackagesController> {
                                         ),
                                     separatorBuilder: (context, index) =>
                                         SizedBox(height: 12),
-                                    itemCount: controller.myPackagesResponse
+                                    itemCount: myPackagesResponse
                                         .data!.orders!.length),
                               ),
                             ),
-                      controller.myPackagesResponse.data!.subscriptionStatus ==
+                      myPackagesResponse.data!.subscriptionStatus ==
                               true
                           ? GestureDetector(
                               onTap: () async {
-                                if (await controller.getFromCash() ==
+                                if (await getFromCash() ==
                                     "haveAllData") {
                                   Get.offNamed(Routes.SUBSCRIBE,
                                       arguments: null);
-                                } else if (await controller.getFromCash() ==
+                                } else if (await getFromCash() ==
                                     "noLastName") {
                                   Navigator.push(
                                       context,

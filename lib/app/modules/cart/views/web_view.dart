@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
+import 'package:app/app/modules/myPackages/views/my_packages_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/widgets/default/text.dart';

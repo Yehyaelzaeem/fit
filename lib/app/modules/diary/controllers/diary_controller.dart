@@ -6,6 +6,7 @@ import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
@@ -36,9 +37,29 @@ class DiaryController extends GetxController {
   final length = 0.obs;
   final workOut = 0.obs;
 
+  getNotifications()async{
+    if(await Permission.accessNotificationPolicy.isPermanentlyDenied&&await Permission.accessNotificationPolicy.isDenied&&await Permission.accessNotificationPolicy.isRestricted){
+        Permission.notification.request();
+    }
+    await Permission.notification.isDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
+    await Permission.notification.isRestricted.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });   await Permission.notification.isPermanentlyDenied.then((value) {
+      if (value) {
+        Permission.notification.request();
+      }
+    });
+  }
   @override
   void onInit() {
     super.onInit();
+    getNotifications();
     getFromCash();
     //   _initData();
   }
