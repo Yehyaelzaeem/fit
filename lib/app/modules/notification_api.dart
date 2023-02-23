@@ -14,9 +14,7 @@ class NotificationApi {
         'channel id',
         'channel name',
         'channel description',
-        importance: Importance.max,
-
-        ///<< to show in center of screen
+        importance: Importance.max, ///<< to show in center of screen
         largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
       ),
       iOS: IOSNotificationDetails(),

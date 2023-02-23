@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
  import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/modules/subscribe/controllers/subscribe_controller.dart';
 import 'app/routes/app_pages.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   getFireBaseNotifications();
+  getNotificationPermission();
   await NotificationApi.init();
   await GetStorage().initStorage;
   Get.put(GlobalController(), tag: "global");
@@ -55,7 +57,7 @@ void getFireBaseNotifications() {
       id: 0,
       title: message.notification?.title ?? "",
       body: message.notification?.body ?? "",
-    //  payLoad: message.data['screen']=='video'?"Video ${message.data['video_id']??""}":"News ${message.data['blog_id']??""}",
+      payLoad:"",
     );
     if (message.notification != null) {
       print('Message also contained a notification: ${message.data}');
@@ -76,5 +78,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print("onBackgroundMessage");
     print("message $message");
     print("data ${message.data}");
+  });
+}
+
+Future getNotificationPermission()async{
+  Future<PermissionStatus> permissionStatus =
+  NotificationPermissions.getNotificationPermissionStatus();
+  permissionStatus.then((value) {
+    if(value.name!='granted'){
+      Future.delayed(const Duration(seconds: 5),(){
+        NotificationPermissions.requestNotificationPermissions();
+      });
+    }
   });
 }
