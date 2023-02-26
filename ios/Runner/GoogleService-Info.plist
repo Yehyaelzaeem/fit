@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>970769684240-6cbbq7bdqbbu0rpre7101e55c5cl2eeu.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.970769684240-6cbbq7bdqbbu0rpre7101e55c5cl2eeu</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBccA1xQCUbURxghGKw2PLJNw-lq1wexW8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>970769684240</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.fofclinic</string>
+	<key>PROJECT_ID</key>
+	<string>fitoverfat-3a88b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fitoverfat-3a88b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:970769684240:ios:1941380f1fd3385b007795</string>
+</dict>
+</plist>
