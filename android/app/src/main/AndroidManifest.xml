@@ -1,10 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.company.name">
+    package="com.company.name"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
 
     <application
         android:label="FitoverfaT"
@@ -13,6 +17,9 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:exported="true"
+            android:allowBackup="true"
+            tools:replace="android:exported"
+            android:supportsRtl="true"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -47,7 +54,9 @@
             </intent-filter>
         </activity>
         <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
-            android:exported="true">
+            android:exported="true"
+            tools:replace="android:exported"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action  android:name="android.intent.action.MY_PACKAGE_REPLACED"/>

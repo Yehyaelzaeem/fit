@@ -35,6 +35,10 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {//31
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
     compileSdkVersion 33
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

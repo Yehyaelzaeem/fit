@@ -9,6 +9,7 @@ import 'package:app/globale_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
  import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notification_permissions/notification_permissions.dart';
@@ -19,6 +20,8 @@ import 'app/routes/app_pages.dart';
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   getFireBaseNotifications();
   getNotificationPermission();
   await NotificationApi.init();
@@ -57,7 +60,6 @@ void getFireBaseNotifications() {
       id: 0,
       title: message.notification?.title ?? "",
       body: message.notification?.body ?? "",
-      payLoad:"",
     );
     if (message.notification != null) {
       print('Message also contained a notification: ${message.data}');
@@ -82,6 +84,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future getNotificationPermission()async{
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   Future<PermissionStatus> permissionStatus =
   NotificationPermissions.getNotificationPermissionStatus();
   permissionStatus.then((value) {

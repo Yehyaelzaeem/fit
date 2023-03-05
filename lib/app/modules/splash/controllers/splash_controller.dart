@@ -3,6 +3,7 @@ import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../../notification_api.dart';
@@ -13,7 +14,6 @@ class SplashController extends GetxController
 
   // final response = SplashResponse().obs;
   final response = ''.obs;
-
   AnimationController? animationController;
   Animation<double>? animation;
   var animationValue = (0.0).obs;

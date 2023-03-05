@@ -13,31 +13,30 @@ class NotificationApi {
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
-        'channel description',
         importance: Importance.max, ///<< to show in center of screen
         largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
       ),
-      iOS: IOSNotificationDetails(),
+      iOS: DarwinNotificationDetails(),
     );
   }
 
   static Future init({bool isScheduled = false}) async {
     final android = AndroidInitializationSettings('@drawable/applogo');
-    final iOS = IOSInitializationSettings();
+    final iOS = DarwinInitializationSettings();
     final settings = InitializationSettings(android: android, iOS: iOS);
 
     ///to open specific page
+/*
     final notificationDetails =
         await _notifications.getNotificationAppLaunchDetails();
     if (notificationDetails != null &&
         notificationDetails.didNotificationLaunchApp) {
       onNotifications.add(notificationDetails.payload);
     }
-
-    await _notifications.initialize(settings,
+await _notifications.initialize(settings,
         onSelectNotification: (payLoad) async {
       onNotifications.add(payLoad);
-    });
+    });*/
 
     if (isScheduled) {
       tz.initializeTimeZones();
@@ -50,14 +49,12 @@ class NotificationApi {
     int id = 0,
     String? title,
     String? body,
-    String? payLoad,
   }) async =>
       _notifications.show(
         id,
         title,
         body,
         await _notificationDetails(),
-        payload: payLoad,
       );
 
   static Future showCustomScheduledNotification({
