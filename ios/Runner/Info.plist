@@ -28,6 +28,8 @@
 	<string>This app need access to your media library</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>This app need access to your calendars</string>
+    <key>MinimumOSVersion</key>
+    <string>14.0</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app need access to your current location for locate your delivery location.</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -36,6 +38,11 @@
 	<string>This app need access to your media library to add/edit profile picture</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>This app need access to your speech recognition</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
