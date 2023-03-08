@@ -52,7 +52,7 @@ android {//31
     defaultConfig {
         applicationId "com.fofclinic"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 33
         //3329
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

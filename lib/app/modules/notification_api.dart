@@ -13,6 +13,8 @@ class NotificationApi {
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
+        icon: '@drawable/applogo',
+        priority: Priority.max,
         importance: Importance.max, ///<< to show in center of screen
         largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
       ),
@@ -46,12 +48,12 @@ await _notifications.initialize(settings,
   }
 
   static Future showNotification({
-    int id = 0,
+    int? id ,
     String? title,
     String? body,
   }) async =>
       _notifications.show(
-        id,
+        id!,
         title,
         body,
         await _notificationDetails(),
