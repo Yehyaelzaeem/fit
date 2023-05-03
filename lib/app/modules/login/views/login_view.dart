@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
       showLoader = true;
       if (kDebugMode) {
         pin = 'p30000';
-        password = '123123';
+        password = '123123G';
       }
     });
     await ApiProvider().login(pin, password).then((value) async {
@@ -86,7 +86,8 @@ class _LoginViewState extends State<LoginView> {
           loginResponse = value;
           showLoader = false;
         });
-        Fluttertoast.showToast(msg: "${value.message}");
+
+        Fluttertoast.showToast(msg: " ${value.message} ");
       }
     });
   }
