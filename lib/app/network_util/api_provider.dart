@@ -38,7 +38,7 @@ import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/globale_controller.dart';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -192,12 +192,16 @@ class ApiProvider {
       return UserResponse.fromJson(response.data);
     }
   }
-late int newMessages =0;
+
+  late int newMessages = 0;
+
   Future<UserResponse> getProfile() async {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
-    final GlobalController globalController = getx.Get.find<GlobalController>(tag: 'global');
-    Response response = await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
+    final GlobalController globalController =
+        getx.Get.find<GlobalController>(tag: 'global');
+    Response response =
+        await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {

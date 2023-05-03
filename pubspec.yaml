@@ -38,7 +38,6 @@ dependencies:
   google_maps_flutter: ^2.0.0
   map_picker: ^0.0.3
   geocoding: 2.0.0
-  platform_device_id: ^1.0.1
   auto_size_text: ^3.0.0
   analog_clock: ^0.1.1
   dotted_decoration: ^2.0.0
@@ -52,6 +51,7 @@ dependencies:
   firebase_core_platform_interface: 4.5.1
   expandable: ^5.0.1
   notification_permissions: ^0.6.1
+  device_info_plus: any
 
 
 

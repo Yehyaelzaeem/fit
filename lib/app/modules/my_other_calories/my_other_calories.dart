@@ -1,4 +1,5 @@
 import 'package:app/app/models/my_other_calories_response.dart';
+import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/home/views/home_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -68,6 +69,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   @override
   void initState() {
     getDiaryData();
+    Get.lazyPut(() => HomeController());
     super.initState();
   }
 

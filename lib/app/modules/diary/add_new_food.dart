@@ -193,7 +193,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                           horizontal: 16,
                                                           vertical: 16),
                                                       child: Text(
-                                                        "Total Calories : ${quantity! * calories!} Calories",
+                                                        "Total Calories : ${(quantity! * calories!).toStringAsFixed(2)} Calories",
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             fontWeight:
@@ -239,4 +239,5 @@ class _AddNewFoodState extends State<AddNewFood> {
       ),
     );
   }
+
 }
