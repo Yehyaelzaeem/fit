@@ -32,8 +32,7 @@ class PaymentController extends GetxController {
     required int packageId,
   }) async {
     await getFromCash();
-    await ApiProvider()
-        .packagePayment(
+/*    await ApiProvider().packagePayment(
       email: userEmail.value,
       name: userName.value,
       lastName: userLastName.value,
@@ -48,7 +47,7 @@ class PaymentController extends GetxController {
       } else {
         Fluttertoast.showToast(msg: "Server Error");
       }
-    });
+    });*/
   }
 
   @override

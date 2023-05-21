@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
@@ -174,8 +175,7 @@ class HomeDrawer extends GetView<HomeController> {
 
             textEditController.isLogggd.value == false
                 ? SizedBox()
-                : textEditController.faqStatus ==
-                        false
+                : textEditController.faqStatus == false
                     ? SizedBox()
                     : singleDrawerItem(
                         title: 'FAQ', //todo transulate
@@ -215,14 +215,14 @@ class HomeDrawer extends GetView<HomeController> {
                           Get.toNamed(Routes.Orientation);
                         }),
             //CHEER_FULL
-           textEditController.cheerfulResponse.value.data?.isActive == false
-                    ? SizedBox()
-                    : singleDrawerItem(
-                        title: "Cheer-Full",
-                        image: 'assets/icons/cheer.svg',
-                        action: () {
-                          Get.toNamed(Routes.CHEER_FULL);
-                        }),
+            textEditController.cheerfulResponse.value.data?.isActive == false
+                ? SizedBox()
+                : singleDrawerItem(
+                    title: "Cheer-Full",
+                    image: 'assets/icons/cheer.svg',
+                    action: () {
+                      Get.toNamed(Routes.CHEER_FULL);
+                    }),
             /*      FutureBuilder<bool>(
               future: getCheerFullStatus(),
               builder: (context, snapshot) {
@@ -405,8 +405,7 @@ class HomeDrawer extends GetView<HomeController> {
   }
 */
   Future<bool> checkIfUserIsLogged() async {
-    Get.putAsync(
-            () async=>await Get.put(HomeController()));
+    Get.putAsync(() async => await Get.put(HomeController()));
     bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     textEditController.refreshController(false);
     return isLogged;

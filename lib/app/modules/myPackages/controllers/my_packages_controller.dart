@@ -14,26 +14,27 @@ class MyPackagesController extends GetxController with SingleGetTickerProviderMi
   final userLastName = ''.obs;
   final invoice = ''.obs;
   MyPackagesResponse myPackagesResponse = MyPackagesResponse();
+  bool isLogged = false;
   void getMyPackagesList() async {
-    await ApiProvider().myPackagesResponse().then((value) {
-      print("Current => ${loading.value}");
-      if (value.success == true) {
-        myPackagesResponse = value;
-        print("Current => ${loading.value}");
-        loading.value = false;
-        print("Current => ${loading.value}");
-        update();
-      } else {
-        Fluttertoast.showToast(msg: "Server Error");
-      }
-    });
+    isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    if(isLogged){
+      await ApiProvider().myPackagesResponse().then((value) {
+        if (value.success == true) {
+          myPackagesResponse = value;
+          loading.value = false;
+          update();
+        } else {
+          Fluttertoast.showToast(msg: "Server Error");
+        }
+      });
+    }
   }
 
 
   @override
   void onInit() {
     print("Current => ${loading.value}");
-    getMyPackagesList();
+    if(!isLogged) getMyPackagesList();
     if (Get.arguments != null) myPackagesResponse = Get.arguments;
       getFromCash();
     super.onInit();
@@ -59,7 +60,6 @@ class MyPackagesController extends GetxController with SingleGetTickerProviderMi
       //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noLastName";
     } else {
-      print("Shared = true");
       return await "haveAllData";
     }
   }

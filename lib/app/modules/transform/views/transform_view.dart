@@ -87,7 +87,7 @@ class _TransformViewState extends State<TransformView> {
                           image: DecorationImage(
                               image:
                                   NetworkImage(ressponse.data![index].content!),
-                              fit: BoxFit.cover)),
+                              fit: BoxFit.contain)),
                     ),
                   ),
                 );

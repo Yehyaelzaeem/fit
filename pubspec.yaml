@@ -21,7 +21,7 @@ dependencies:
   google_fonts: ^2.1.0
   dio: ^4.0.0
   lottie: ^1.1.0
-  fluttertoast: ^8.0.8
+  fluttertoast: any
   url_launcher: ^6.0.9
   flutter_html: ^2.1.1
   shared_preferences: ^2.0.6
@@ -30,7 +30,7 @@ dependencies:
   flutter_launcher_icons: ^0.9.2
   flutter_staggered_animations: ^1.0.0
   photo_view: ^0.12.0
-  flutter_cached_pdfview: ^0.4.0-nullsafety
+ # flutter_cached_pdfview: ^0.4.0-nullsafety
   path_provider: ^2.0.4
   permission_handler: ^8.1.6
   flutter_local_notifications: ^12.0.4

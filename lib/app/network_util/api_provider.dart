@@ -33,6 +33,7 @@ import 'package:app/app/models/transformation_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/network.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
@@ -153,14 +154,13 @@ class ApiProvider {
   Future<UserResponse> login(String id, String password) async {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
-    print("FCM Token  =$deviceToken");
-    print("deviceId =$deviceId");
     FormData body = FormData.fromMap({
       'patient_id': id,
       'password': password,
-      'device_id': deviceId,
+      'device_id': deviceId + id,
       'fcm_token': deviceToken,
     });
+    print("Current sent Id ${deviceId + id}");
     Response response = await _utils.post("login", body: body);
     if (response.data["success"] == true) {
       return UserResponse.fromJson(response.data);
@@ -198,10 +198,15 @@ class ApiProvider {
   Future<UserResponse> getProfile() async {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
+    bool isGuestLogin = false;
+    isGuestLogin = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     final GlobalController globalController =
         getx.Get.find<GlobalController>(tag: 'global');
-    Response response =
-        await _utils.get("profile?device_id=$deviceId&fcm_token=$deviceToken");
+    Response response = await _utils.get(isGuestLogin
+        ? "profile?device_id=$deviceId&fcm_token=$deviceToken"
+        : "profile?fcm_token=$deviceToken");
+    print(
+        "Profile Url ${isGuestLogin ? "profile?device_id=$deviceId&fcm_token=$deviceToken" : "profile?fcm_token=$deviceToken"}");
     if (response.data["success"] == true) {
       UserResponse ur = UserResponse.fromJson(response.data);
       if (globalController.shoNewMessage.value) {
@@ -564,6 +569,7 @@ class ApiProvider {
       'device_id': deviceId,
     });
     Response response = await _utils.post("meals_features_status", body: body);
+    print("body => ${body.fields}");
     if (response.statusCode == 200) {
       return CheerFullResponse.fromJson(response.data);
     } else {
@@ -576,11 +582,11 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'device_id': deviceId,
     });
+    print("body => ${body.fields}");
     Response response = await _utils.post("faq_status", body: body);
     if (response.statusCode == 200) {
       print("FAQ Status => ${response.data['data']['show_faq_page']}");
       print(response.data['data']['show_faq_page']);
-      print(response.data);
       return response.data['data']['show_faq_page'];
     } else {
       return response.data['data']['show_faq_page'];
@@ -605,8 +611,6 @@ class ApiProvider {
       "orientation_videos_status",
     );
     if (response.statusCode == 200) {
-      print(
-          "Orientation Status => ${response.data['data']['orientation_videos_status']}");
       return response.data['data']['orientation_videos_status'];
     } else {
       return response.data['data']['orientation_videos_status'];
@@ -797,18 +801,43 @@ class ApiProvider {
 
   Future<String> kDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String userId = "";
+    String phone = "";
+    userId = await SharedHelper().readString(CachingKey.USER_ID);
+    bool isGuestLogin = false;
+    bool isGuest = false;
+    isGuestLogin = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
+    isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
+     phone = await SharedHelper().readString(CachingKey.PHONE);
     String deviceId = "";
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId =
-          '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}';
+      if (isGuest) {
+        deviceId = isGuestLogin
+            ? '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}${phone}'
+            : "";
+      } else if (!isGuest) {
+        deviceId =
+            '${androidInfo.id}${androidInfo.brand} ${androidInfo.device} ${androidInfo.model}${userId}';
+      }
     } else {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceId =
-          '${iosInfo.identifierForVendor}${iosInfo.utsname.machine}${iosInfo.utsname.version}${iosInfo.utsname.sysname}';
+      if (isGuest) {
+        deviceId = isGuestLogin
+            ? '${iosInfo.name}${iosInfo.utsname.version}${iosInfo.utsname.sysname}${phone}'
+            : '';
+      } else if (!isGuest) {
+        deviceId =
+            '${iosInfo.name}${iosInfo.utsname.version}${iosInfo.utsname.sysname}${userId}';
+      }
     }
-    print("deviceId $deviceId");
-    Echo('deviceId = ${deviceId.replaceAll(' ', '')}');
+    isGuest
+        ? Echo('Guest deviceId = ${deviceId.replaceAll(' ', '')}')
+        : Echo('User deviceId = ${deviceId.replaceAll(' ', '')}');
+    print("1 user id $userId");
+    print("2 is guest $isGuest");
+    print("3 is guest saved? $isGuestLogin + ${await SharedHelper().readString(CachingKey.PHONE)}");
+    print("3 is guest saved? $isGuestLogin + ${phone}");
     return deviceId.replaceAll(' ', '');
   }
 
@@ -849,16 +878,22 @@ class ApiProvider {
     required String phone,
     required String email,
     required int packageId,
+    required bool isGuest,
   }) async {
+    if(isGuest==true) await SharedHelper().writeData(CachingKey.PHONE, phone);
+    if(isGuest==true) await SharedHelper().writeData(CachingKey.IS_GUEST_SAVED,true);
+  if(isGuest==true)   await SharedHelper().writeData(CachingKey.USER_LAST_NAME, lastName);
+  if(isGuest==true)   await SharedHelper().writeData(CachingKey.EMAIL,email);
+  if(isGuest==true)   await SharedHelper().writeData(CachingKey.USER_NAME,name);
     String deviceId = await kDeviceInfo();
-
     FormData body = FormData.fromMap({
       "name": name,
       "last_name": lastName,
       "phone": phone,
       "email": email,
-      "device_id": deviceId,
+      "device_id":deviceId,
     });
+    print("final fields ${body.fields}");
     Response response =
         await _utils.post("book-service-package/$packageId", body: body);
     if (response.data["success"] == true) {

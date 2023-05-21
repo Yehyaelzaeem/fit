@@ -22,11 +22,13 @@ class SubscribeController extends GetxController
   final userEmail = ''.obs;
   final userName = ''.obs;
   final userLastName = ''.obs;
-
+  bool isGuest = false;
+  bool isGuestSaved = false;
+  String userId = "";
   Future<String> getFromCash() async {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
-    userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
+    userName.value =  await SharedHelper().readString(CachingKey.USER_NAME);
     userLastName.value =
         await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     if (userPhone.value.isEmpty &&
@@ -38,7 +40,6 @@ class SubscribeController extends GetxController
       //  Fluttertoast.showToast(msg: "Kindly enter your all data!");
       return await "noLastName";
     } else {
-      print("Shared = true");
       return await "haveAllData";
     }
     ;
@@ -54,28 +55,56 @@ class SubscribeController extends GetxController
     String? lastName,
     String? phone,
   }) async {
+    userId = await SharedHelper().readString(CachingKey.USER_ID);
+    isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
+    isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     paymentClicked();
-    await getFromCash();
-    await ApiProvider()
-        .packagePayment(
-      email: email ?? userEmail.value,
-      name: name ?? userName.value,
-      lastName: lastName ?? userLastName.value,
-      packageId: packageId,
-      phone: phone ?? userPhone.value,
-    )
-        .then((value) {
-      if (value.success == true) {
-        print("value data =>${value.data}");
-        packagePaymentResponse = value;
-        loading.value = false;
-        paymentClicked();
-        print(isPaymentClicked.value);
-        update();
-      } else {
-        Fluttertoast.showToast(msg: "Server Error");
-      }
-    });
+if(isGuest!=true)    await getFromCash();
+    if (userId.isNotEmpty) {
+      await ApiProvider()
+          .packagePayment(
+        email: email ?? userEmail.value,
+        name: name ?? userName.value,
+        lastName: lastName ?? userLastName.value,
+        packageId: packageId,
+        phone: phone ?? userPhone.value, isGuest: false
+
+      )
+          .then((value) {
+        if (value.success == true) {
+          print("value data =>${value.data}");
+          packagePaymentResponse = value;
+          loading.value = false;
+          paymentClicked();
+          print(isPaymentClicked.value);
+          update();
+        } else {
+          Fluttertoast.showToast(msg: "Server Error");
+        }
+      });
+    }  else  if  (isGuest) {
+      await ApiProvider()
+          .packagePayment(
+        email: email ?? userEmail.value,
+        name: name ?? userName.value,
+        lastName: lastName ?? userLastName.value,
+        packageId: packageId,
+        phone: phone ?? userPhone.value,
+        isGuest: true
+      ).then((value) async{
+        if (value.success == true) {
+          packagePaymentResponse = value;
+          loading.value = false;
+          paymentClicked();
+          print(isPaymentClicked.value);
+          update();
+        } else {
+          Fluttertoast.showToast(msg: "Server Error");
+        }
+      });
+    } else {
+      loading.value = false;
+    }
   }
 
   ServicesResponse servicesResponse = ServicesResponse();
@@ -109,7 +138,7 @@ class SubscribeController extends GetxController
   void onInit() {
     if (Get.arguments != null) servicesResponse = Get.arguments;
     getAllServicesData();
-    getFromCash();
+    if(isGuest!=true)  getFromCash();
     super.onInit();
   }
 

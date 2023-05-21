@@ -7,9 +7,17 @@ import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+
+import '../../../network_util/shared_helper.dart';
+import '../../../routes/app_pages.dart';
 
 class NonUserSubscribeView extends StatefulWidget {
-  NonUserSubscribeView();
+  NonUserSubscribeView({this.isGuest});
+
+  final bool? isGuest;
 
   @override
   _NonUserSubscribeViewState createState() => _NonUserSubscribeViewState();
@@ -20,6 +28,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
   late String name;
   late String lastName;
   late String phone;
+  late String confirmPhone;
   GlobalKey<FormState> key = GlobalKey();
 
   @override
@@ -29,6 +38,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
       name = 'Hossam Non User';
       lastName = 'Hossam Non User';
       phone = '01113040518';
+      confirmPhone = '01113040518';
     }
     super.initState();
   }
@@ -52,7 +62,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         SizedBox(height: 22),
-                        PageLable(name: " Payment"),
+                        if (widget.isGuest == null) PageLable(name: " Payment"),
                         Container(
                           width: double.infinity,
                           padding: EdgeInsets.symmetric(horizontal: 30),
@@ -148,6 +158,10 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                               EditText(
                                 value: kDebugMode ? '01113040518' : '',
                                 hint: '',
+                                type: TextInputType.phone,
+                                formatter: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 updateFunc: (text) {
                                   setState(() {
                                     phone = text;
@@ -157,6 +171,33 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                 validateFunc: (text) {
                                   if (text.toString().length < 11) {
                                     return "Enter Valid Phone Number";
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 12),
+                              //name
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8),
+                                child:
+                                    kTextbody('Confirm Phone Number', size: 18),
+                              ),
+                              EditText(
+                                value: kDebugMode ? '01113040518' : '',
+                                hint: '',
+                                type: TextInputType.phone,
+                                formatter: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                updateFunc: (text) {
+                                  setState(() {
+                                    confirmPhone = text;
+                                  });
+                                  print(text);
+                                },
+                                validateFunc: (text) {
+                                  if (phone != confirmPhone) {
+                                    return "Phone numbers are not the same";
                                   }
                                 },
                               ),
@@ -177,13 +218,27 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                           MediaQuery.of(context).size.width /
                                               4.5,
                                       paddingV: 0,
-                                      func: () {
+                                      func: () async {
                                         if (!key.currentState!.validate()) {
                                           return;
+                                        } else if (widget.isGuest != null &&
+                                            widget.isGuest == true) {
+                                          await SharedHelper().writeData(
+                                              CachingKey.PHONE, phone);
+                                          await SharedHelper().writeData(
+                                              CachingKey.IS_GUEST_SAVED, true);
+                                          Get.toNamed(Routes.MY_PACKAGES);
+                                          await SharedHelper().writeData(CachingKey.USER_LAST_NAME, lastName);
+                                          await SharedHelper().writeData(CachingKey.EMAIL,email);
+                                          await SharedHelper().writeData(CachingKey.USER_NAME,name);
                                         } else {
-                                          Navigator.pop(context,
-                                              [name, lastName, email, phone]);
-                                          print("Done");
+                                          Navigator.pop(context, [
+                                            name,
+                                            lastName,
+                                            email,
+                                            phone,
+                                            confirmPhone
+                                          ]);
                                         }
                                       },
                                       shadow: true,

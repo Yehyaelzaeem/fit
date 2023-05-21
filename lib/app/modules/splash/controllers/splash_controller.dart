@@ -30,8 +30,7 @@ class SplashController extends GetxController
   void onInit() {
     super.onInit();
     initLocalNotification();
-    animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animationController = AnimationController(vsync: this, duration: Duration(seconds: 1));
     animation = new CurvedAnimation(
         parent: animationController!, curve: Curves.fastOutSlowIn);
   }

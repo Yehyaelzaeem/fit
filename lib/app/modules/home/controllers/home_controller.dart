@@ -16,7 +16,6 @@ class HomeController extends GetxController {
   final selectedService = 0.obs;
   final currectMenuIdex = 1.obs;
   final homeResponse = HomePageResponse().obs;
-  final userData = UserResponse().obs;
   final cheerfulResponse = CheerFullResponse().obs;
   late bool login = false;
 
@@ -32,6 +31,7 @@ class HomeController extends GetxController {
   var avatar = "".obs;
   var isLogggd = false.obs;
   var id = "".obs;
+  var isGuest = false.obs;
   late int newMessage = 0;
   final response =
       VersionResponse(success: false, code: 0, message: "", forceUpdate: false)
@@ -50,15 +50,18 @@ class HomeController extends GetxController {
     id.value = await SharedHelper().readString(CachingKey.USER_ID);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
-    homeResponse.value = await ApiProvider().getHomeData();
-    orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
-    faqStatus = await ApiProvider().getFaqStatus();
+    isGuest.value=await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
+  if(isLogggd.value)  cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
+  if(isLogggd.value)  homeResponse.value = await ApiProvider().getHomeData();
+  if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
+  if(isLogggd.value)  faqStatus = await ApiProvider().getFaqStatus();
+
+
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
     }
-    Get.put(SessionsController(), tag: 'SessionsController');
+ //   Get.put(SessionsController(), tag: 'SessionsController');
     super.onInit();
 
     homeResponse.value.data!.slider!.forEach((v) {

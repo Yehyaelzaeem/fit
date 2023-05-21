@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
       showLoader = true;
       if (kDebugMode) {
         pin = 'p30000';
-        password = '123123G';
+        password = '123123';
       }
     });
     await ApiProvider().login(pin, password).then((value) async {
@@ -61,6 +61,10 @@ class _LoginViewState extends State<LoginView> {
         await _shared.writeData(CachingKey.IS_LOGGED, true);
         await _shared.writeData(
             CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
+        await _shared.writeData(
+            CachingKey.IS_GUEST_SAVED, false);
+        await _shared.writeData(
+            CachingKey.IS_GUEST, false);
 
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
