@@ -48,6 +48,7 @@ class OrdersView extends GetView<OrdersController> {
             child: GestureDetector(
               onTap: () {
                 Get.back();
+                Get.back();
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -63,103 +64,111 @@ class OrdersView extends GetView<OrdersController> {
       ),
     );
   }
+    Future<bool> _willPopCallback() async {
+     Get.back();
+     Get.back();
+      return true;
+    }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: kColorPrimary,
       child: SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: ListView(children: [
-              appBar(),
-              SizedBox(height: 12),
-              PageLable(name: "My Orders"),
-              SizedBox(height: 12),
-              Obx(() {
-                if (controller.loading.value)
-                  return Center(child: CircularLoadingWidget());
-                // if (controller.requiredAuth.value) return IncompleteData();
-                return Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFF414042),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xFF414042),
-                            blurRadius: 5,
-                            spreadRadius: 1,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(200),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                controller.selectedTap.value = 2;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: controller.selectedTap.value == 2
-                                      ? Colors.white
-                                      : Color(0xFF414042),
-                                  borderRadius: BorderRadius.circular(200),
-                                ),
-                                child: kTextbody(
-                                  "Pending",
-                                  paddingV: 8,
-                                  color: controller.selectedTap.value == 2
-                                      ? kColorPrimary
-                                      : Colors.white,
+        child: WillPopScope(
+          onWillPop:_willPopCallback,
+          child: Scaffold(
+              backgroundColor: Colors.white,
+              body: ListView(children: [
+                appBar(),
+                SizedBox(height: 12),
+                PageLable(name: "My Orders"),
+                SizedBox(height: 12),
+                Obx(() {
+                  if (controller.loading.value)
+                    return Center(child: CircularLoadingWidget());
+                  // if (controller.requiredAuth.value) return IncompleteData();
+                  return Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF414042),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF414042),
+                              blurRadius: 5,
+                              spreadRadius: 1,
+                              offset: Offset(0, 0),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(200),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.selectedTap.value = 2;
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedTap.value == 2
+                                        ? Colors.white
+                                        : Color(0xFF414042),
+                                    borderRadius: BorderRadius.circular(200),
+                                  ),
+                                  child: kTextbody(
+                                    "Pending",
+                                    paddingV: 8,
+                                    color: controller.selectedTap.value == 2
+                                        ? kColorPrimary
+                                        : Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                controller.selectedTap.value = 1;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: controller.selectedTap.value == 1
-                                      ? Colors.white
-                                      : Color(0xFF414042),
-                                  borderRadius: BorderRadius.circular(200),
-                                ),
-                                child: kTextbody(
-                                  "Accepted",
-                                  paddingV: 8,
-                                  color: controller.selectedTap.value == 1
-                                      ? kColorPrimary
-                                      : Colors.white,
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.selectedTap.value = 1;
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedTap.value == 1
+                                        ? Colors.white
+                                        : Color(0xFF414042),
+                                    borderRadius: BorderRadius.circular(200),
+                                  ),
+                                  child: kTextbody(
+                                    "Accepted",
+                                    paddingV: 8,
+                                    color: controller.selectedTap.value == 1
+                                        ? kColorPrimary
+                                        : Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    if (controller.response.value.data != null)
-                      if (controller.selectedTap.value == 2)
-                        ...controller.response.value.data!.pending.map((e) {
-                          return singleOrderCard(e, context);
-                        }).toList(),
-                    if (controller.response.value.data != null)
-                      if (controller.selectedTap.value == 1)
-                        ...controller.response.value.data!.completed.map((e) {
-                          return singleOrderCard(e, context);
-                        }).toList(),
-                  ],
-                );
-              }),
-              //* Subhect
-              SizedBox(height: Get.width / 14),
-            ])),
+                      if (controller.response.value.data != null)
+                        if (controller.selectedTap.value == 2)
+                          ...controller.response.value.data!.pending.map((e) {
+                            return singleOrderCard(e, context);
+                          }).toList(),
+                      if (controller.response.value.data != null)
+                        if (controller.selectedTap.value == 1)
+                          ...controller.response.value.data!.completed.map((e) {
+                            return singleOrderCard(e, context);
+                          }).toList(),
+                    ],
+                  );
+                }),
+                //* Subhect
+                SizedBox(height: Get.width / 14),
+              ])),
+        ),
       ),
     );
   }

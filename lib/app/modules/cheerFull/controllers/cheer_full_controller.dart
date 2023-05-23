@@ -6,6 +6,8 @@ import 'package:app/globale_controller.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../network_util/shared_helper.dart';
+
 class CheerFullController extends GetxController {
   final GlobalController globalController =
       Get.find<GlobalController>(tag: 'global');
@@ -14,7 +16,9 @@ class CheerFullController extends GetxController {
   final error = ''.obs;
   final loading = false.obs;
   final isLoading = true.obs;
-
+  bool isGuest = false;
+  bool isGuestSaved = false;
+  String userId = "";
   CheerfulSocialsResponse cheerfulSocialsResponse = CheerfulSocialsResponse();
 
   void getData() async {
@@ -33,6 +37,9 @@ class CheerFullController extends GetxController {
   void onInit() async {
     getNetworkData();
     getData();
+    userId = await SharedHelper().readString(CachingKey.USER_ID);
+    isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
+    isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     super.onInit();
   }
 

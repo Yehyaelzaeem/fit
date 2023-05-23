@@ -140,6 +140,6 @@ await _notifications.initialize(settings,
     while (!days.contains(scheduleDate.weekday)) {
       scheduleDate = scheduleDate.add(Duration(days: 1));
     }
-    return scheduleDate;
+    return scheduleDate.toLocal();
   }
 }

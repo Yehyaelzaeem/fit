@@ -51,10 +51,10 @@ class HomeController extends GetxController {
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     isGuest.value=await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
-  if(isLogggd.value)  cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
-  if(isLogggd.value)  homeResponse.value = await ApiProvider().getHomeData();
-  if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
-  if(isLogggd.value)  faqStatus = await ApiProvider().getFaqStatus();
+    cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
+    faqStatus = await ApiProvider().getFaqStatus();
+    if(isLogggd.value)  homeResponse.value = await ApiProvider().getHomeData();
+    if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
 
 
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
@@ -63,8 +63,7 @@ class HomeController extends GetxController {
     }
  //   Get.put(SessionsController(), tag: 'SessionsController');
     super.onInit();
-
-    homeResponse.value.data!.slider!.forEach((v) {
+    homeResponse.value.data?.slider?.forEach((v) {
       slider.add(v.image ??
           "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
     });

@@ -133,7 +133,7 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "8.4.4"
+    version: "8.5.0"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -433,6 +433,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.3.0"
+  flutter_cached_pdfview:
+    dependency: "direct main"
+    description:
+      name: flutter_cached_pdfview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   flutter_html:
     dependency: "direct main"
     description:
@@ -496,6 +503,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  flutter_pdfview:
+    dependency: transitive
+    description:
+      name: flutter_pdfview
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:

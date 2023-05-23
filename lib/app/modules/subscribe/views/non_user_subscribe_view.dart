@@ -15,9 +15,11 @@ import '../../../network_util/shared_helper.dart';
 import '../../../routes/app_pages.dart';
 
 class NonUserSubscribeView extends StatefulWidget {
-  NonUserSubscribeView({this.isGuest});
+  NonUserSubscribeView({this.isGuest, this.toCheer, this.toOrders});
 
   final bool? isGuest;
+  final bool? toCheer;
+  final bool? toOrders;
 
   @override
   _NonUserSubscribeViewState createState() => _NonUserSubscribeViewState();
@@ -223,14 +225,18 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                           return;
                                         } else if (widget.isGuest != null &&
                                             widget.isGuest == true) {
-                                          await SharedHelper().writeData(
-                                              CachingKey.PHONE, phone);
-                                          await SharedHelper().writeData(
-                                              CachingKey.IS_GUEST_SAVED, true);
-                                          Get.toNamed(Routes.MY_PACKAGES);
+                                          await SharedHelper().writeData(CachingKey.PHONE, phone);
+                                          await SharedHelper().writeData(CachingKey.IS_GUEST_SAVED, true);
                                           await SharedHelper().writeData(CachingKey.USER_LAST_NAME, lastName);
-                                          await SharedHelper().writeData(CachingKey.EMAIL,email);
-                                          await SharedHelper().writeData(CachingKey.USER_NAME,name);
+                                          await SharedHelper().writeData(CachingKey.EMAIL, email);
+                                          await SharedHelper().writeData(CachingKey.USER_NAME, name);
+                                          if (widget.toCheer == true) {
+                                            Get.offNamed(Routes.MY_MEALS);
+                                          } else if (widget.toOrders == true) {
+                                            Get.offNamed(Routes.ORDERS);
+                                          } else {
+                                            Get.toNamed(Routes.MY_PACKAGES);
+                                          }
                                         } else {
                                           Navigator.pop(context, [
                                             name,

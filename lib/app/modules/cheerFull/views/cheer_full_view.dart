@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../subscribe/views/non_user_subscribe_view.dart';
 import '../controllers/cheer_full_controller.dart';
 
 class CheerFullView extends GetView<CheerFullController> {
@@ -52,12 +53,36 @@ class CheerFullView extends GetView<CheerFullController> {
                         SizedBox(height: 20),
                         kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
                             func: () {
-                          Get.toNamed(Routes.MY_MEALS);
+                          if (controller.isGuestSaved) {
+                            Get.toNamed(Routes.MY_MEALS);
+                          } else if (controller.userId.isNotEmpty) {
+                            Get.toNamed(Routes.MY_MEALS);
+                          } else if (!controller.isGuestSaved&& controller.userId.isEmpty) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NonUserSubscribeView(
+                                    isGuest: true,toCheer:true,
+                                      )),
+                            );
+                          }
                         }),
                         SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(Routes.ORDERS);
+                            if (controller.isGuestSaved) {
+                              Get.toNamed(Routes.ORDERS);
+                            } else if (controller.userId.isNotEmpty) {
+                              Get.toNamed(Routes.ORDERS);
+                            } else if (!controller.isGuestSaved&& controller.userId.isEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => NonUserSubscribeView(
+                                      isGuest: true,toOrders:true
+                                    )),
+                              );
+                            }
                           },
                           child: Container(
                             width: double.infinity,

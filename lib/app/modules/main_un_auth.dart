@@ -38,11 +38,13 @@ class MainUnAuth extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                           child: Text(
-                        "Sorry, There is no packages,\n\please subscribe first",
+                        "Sorry, No orders available,\n\please order first",
                         style: TextStyle(color: kColorPrimary, fontSize: 22),
                       )),
                     ),
-                    GestureDetector(
+
+
+/*                    GestureDetector(
                       onTap: () {
                         Get.toNamed(Routes.SUBSCRIBE,arguments: null);
                       },
@@ -70,7 +72,7 @@ class MainUnAuth extends StatelessWidget {
                                 width: 30,
                                 height: 30,
                               ),
-                              kTextHeader('Subscribe',
+                              kTextHeader('Make my meals',
                                   size: 16,
                                   color: Colors.white,
                                   bold: true,
@@ -80,12 +82,31 @@ class MainUnAuth extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ),*/
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: kButton(
+                        'Make my meals',
+                        hight: 55,
+                        color: Color(0xffFFB62B),
+                        textSize: 20,
+                        bold: true,
+                        func: () {
+                          Get.toNamed(Routes.SUBSCRIBE,arguments: null);
+                        },
+                      ),
                     ),
 
                     SizedBox(height:24),
-                    GestureDetector(
-                      onTap: ()
-                        async{
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: kButton(
+                        'Get old orders',
+                        hight: 55,
+                        color: kColorAccent,
+                        textSize: 20,
+                        bold: true,
+                        func: () async{
                           final bool isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
                           if(!isGuestSaved){
                             Navigator.push(
@@ -93,32 +114,7 @@ class MainUnAuth extends StatelessWidget {
                               MaterialPageRoute(builder: (context) => NonUserSubscribeView(isGuest: true,)),
                             );
                           }
-                                           },
-                      child: Center(
-                        child: Container(
-                          width: Get.width / 2,
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                              color: kColorPrimary,
-                              borderRadius: BorderRadius.circular(64),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  blurRadius: 1,
-                                  spreadRadius: 1,
-                                  offset: Offset(0, 1),
-                                ),
-                              ]),
-                          child: Center(
-                            child: kTextHeader('Lost package?',
-                                size: 16,
-                                color: Colors.white,
-                                bold: true,
-                                paddingH: 16,
-                                paddingV: 4),
-                          ),
-                        ),
+                        },
                       ),
                     ),
                   ],

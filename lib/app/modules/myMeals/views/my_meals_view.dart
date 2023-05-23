@@ -13,120 +13,129 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+Future<bool> _willPopCallback() async {
+  Get.back();
+  Get.back();
+  return true;
+}
+
 class MyMealsView extends GetView<MyMealsController> {
   @override
   Widget build(BuildContext context) {
     return Container(
       color: kColorPrimary,
       child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: Obx(() {
-            if (controller.loading.value)
-              return Center(child: CircularLoadingWidget());
-            // if (controller.requiredAuth.value) return IncompleteData();
-            if (controller.error.value.isNotEmpty)
-              return Container(
-                  margin: EdgeInsets.only(top: Get.height / 3),
-                  child: Center(
-                      child: errorHandler(
-                    controller.error.value,
-                    controller,
-                  )));
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  //App bar
-                  appBar(),
-                  SizedBox(height: 20),
-                  header(),
-                  SizedBox(height: 4),
-                  if (controller.getMyMealsLoading.value)
-                    Container(height: 100, child: CircularLoadingWidget()),
-                  if (!controller.getMyMealsLoading.value &&
-                      controller.response.value.data != null &&
-                      controller.response.value.data!.isEmpty)
-                    Text(
-                      'No meals added',
-                      style: GoogleFonts.cairo(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black,
-                      ),
-                    ),
-                  if (!controller.getMyMealsLoading.value &&
-                      controller.response.value.data != null)
-                    ...controller.response.value.data!.reversed.map((e) {
-                      return singleItem(meal: e,context: context);
-                    }).toList(),
-                  SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: kButtonDefault(
-                          "Order Now",
-                          color: controller.response.value.data != null &&
-                                  controller.response.value.data!.isEmpty
-                              ? Colors.grey
-                              : kColorPrimary,
-                          func: () {
-                            List<SingleMyMeal> meals =
-                                controller.response.value.data == null
-                                    ? []
-                                    : controller.response.value.data!
-                                        .where((element) => element.selected)
-                                        .toList();
-                            if (meals.isEmpty) {
-                              Get.snackbar(
-                                'Error',
-                                'Please select at least one meal',
-                                backgroundColor: Colors.red,
-                                colorText: Colors.white,
-                              );
-                              return;
-                            }
-
-                            YemenyPrefs yemenyPrefs = YemenyPrefs();
-
-                            Get.offNamed(Routes.SHIPPING_DETAILS,
-                                arguments: meals,
-                                parameters: {
-                                  "name": yemenyPrefs.getShippingName() ?? '',
-                                  "last_name":
-                                      yemenyPrefs.getShippingLastName() ?? '',
-                                  "email": yemenyPrefs.getShippingEmail() ?? '',
-                                  "phone": yemenyPrefs.getShippingPhone() ?? '',
-                                  "detailedAddress":
-                                      yemenyPrefs.getShippingAddress() ?? '',
-                                  "latitude":
-                                      yemenyPrefs.getShippingLat() ?? '',
-                                  "longitude":
-                                      yemenyPrefs.getShippingLng() ?? '',
-                                  "address": yemenyPrefs
-                                          .getShippingCoordinatesAddress() ??
-                                      '',
-                                });
-                          },
+        child: WillPopScope(
+          onWillPop: _willPopCallback,
+          child: Scaffold(
+            backgroundColor: Colors.white,
+            body: Obx(() {
+              if (controller.loading.value)
+                return Center(child: CircularLoadingWidget());
+              // if (controller.requiredAuth.value) return IncompleteData();
+              if (controller.error.value.isNotEmpty)
+                return Container(
+                    margin: EdgeInsets.only(top: Get.height / 3),
+                    child: Center(
+                        child: errorHandler(
+                      controller.error.value,
+                      controller,
+                    )));
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    //App bar
+                    appBar(),
+                    SizedBox(height: 20),
+                    header(),
+                    SizedBox(height: 4),
+                    if (controller.getMyMealsLoading.value)
+                      Container(height: 100, child: CircularLoadingWidget()),
+                    if (!controller.getMyMealsLoading.value &&
+                        controller.response.value.data != null &&
+                        controller.response.value.data!.isEmpty)
+                      Text(
+                        'No meals added',
+                        style: GoogleFonts.cairo(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
                         ),
                       ),
-                      Expanded(
+                    if (!controller.getMyMealsLoading.value &&
+                        controller.response.value.data != null)
+                      ...controller.response.value.data!.reversed.map((e) {
+                        return singleItem(meal: e,context: context);
+                      }).toList(),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
                           child: kButtonDefault(
-                        "Delete",
-                        color: Color(0xffF1F1F1),
-                        textColor: Colors.red,
-                        func: () {
-                          if (controller.response.value.data != null &&
-                              controller.response.value.data!.isNotEmpty)
-                            controller.deleteMeals();
-                        },
-                        border: Border.all(color: Colors.red, width: 1),
-                      )),
-                    ],
-                  )
-                ],
-              ),
-            );
-          }),
+                            "Order Now",
+                            color: controller.response.value.data != null &&
+                                    controller.response.value.data!.isEmpty
+                                ? Colors.grey
+                                : kColorPrimary,
+                            func: () {
+                              List<SingleMyMeal> meals =
+                                  controller.response.value.data == null
+                                      ? []
+                                      : controller.response.value.data!
+                                          .where((element) => element.selected)
+                                          .toList();
+                              if (meals.isEmpty) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Please select at least one meal',
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                );
+                                return;
+                              }
+
+                              YemenyPrefs yemenyPrefs = YemenyPrefs();
+
+                              Get.offNamed(Routes.SHIPPING_DETAILS,
+                                  arguments: meals,
+                                  parameters: {
+                                    "name": yemenyPrefs.getShippingName() ?? '',
+                                    "last_name":
+                                        yemenyPrefs.getShippingLastName() ?? '',
+                                    "email": yemenyPrefs.getShippingEmail() ?? '',
+                                    "phone": yemenyPrefs.getShippingPhone() ?? '',
+                                    "detailedAddress":
+                                        yemenyPrefs.getShippingAddress() ?? '',
+                                    "latitude":
+                                        yemenyPrefs.getShippingLat() ?? '',
+                                    "longitude":
+                                        yemenyPrefs.getShippingLng() ?? '',
+                                    "address": yemenyPrefs
+                                            .getShippingCoordinatesAddress() ??
+                                        '',
+                                  });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                            child: kButtonDefault(
+                          "Delete",
+                          color: Color(0xffF1F1F1),
+                          textColor: Colors.red,
+                          func: () {
+                            if (controller.response.value.data != null &&
+                                controller.response.value.data!.isNotEmpty)
+                              controller.deleteMeals();
+                          },
+                          border: Border.all(color: Colors.red, width: 1),
+                        )),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            }),
+          ),
         ),
       ),
     );
@@ -163,6 +172,7 @@ class MyMealsView extends GetView<MyMealsController> {
             left: 0,
             child: GestureDetector(
               onTap: () {
+                Get.back();
                 Get.back();
               },
               child: Container(

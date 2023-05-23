@@ -551,11 +551,7 @@ class ApiProvider {
   }
 
   Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
-    String deviceId = await kDeviceInfo();
-    FormData body = FormData.fromMap({
-      'device_id': deviceId,
-    });
-    Response response = await _utils.post("meals_features_home", body: body);
+    Response response = await _utils.post("meals_features_home",);
     if (response.statusCode == 200) {
       return MealFeatureHomeResponse.fromJson(response.data);
     } else {
@@ -564,12 +560,8 @@ class ApiProvider {
   }
 
   Future<CheerFullResponse> getCheerFullStatus() async {
-    String deviceId = await kDeviceInfo();
-    FormData body = FormData.fromMap({
-      'device_id': deviceId,
-    });
-    Response response = await _utils.post("meals_features_status", body: body);
-    print("body => ${body.fields}");
+    Response response = await _utils.post("meals_features_status",);
+    print("meals_features_status");
     if (response.statusCode == 200) {
       return CheerFullResponse.fromJson(response.data);
     } else {
@@ -578,15 +570,8 @@ class ApiProvider {
   }
 
   Future<bool> getFaqStatus() async {
-    String deviceId = await kDeviceInfo();
-    FormData body = FormData.fromMap({
-      'device_id': deviceId,
-    });
-    print("body => ${body.fields}");
-    Response response = await _utils.post("faq_status", body: body);
+    Response response = await _utils.post("faq_status",);
     if (response.statusCode == 200) {
-      print("FAQ Status => ${response.data['data']['show_faq_page']}");
-      print(response.data['data']['show_faq_page']);
       return response.data['data']['show_faq_page'];
     } else {
       return response.data['data']['show_faq_page'];
@@ -594,11 +579,7 @@ class ApiProvider {
   }
 
   Future<MealFeatureStatusResponse> getMealFeaturesStatus() async {
-    String deviceId = await kDeviceInfo();
-    FormData body = FormData.fromMap({
-      'device_id': deviceId,
-    });
-    Response response = await _utils.post("meals_features_status", body: body);
+    Response response = await _utils.post("meals_features_status",);
     if (response.statusCode == 200) {
       return MealFeatureStatusResponse.fromJson(response.data);
     } else {
@@ -787,7 +768,7 @@ class ApiProvider {
     String deviceId = await kDeviceInfo();
     try {
       Response response = await _utils.post(
-        "my_orders?device_id=$deviceId",
+        "my_orders?device_id=$deviceId ",
       );
       if (response.statusCode == 200) {
         return MyOrdersResponse.fromJson(response.data);

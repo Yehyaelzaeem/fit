@@ -166,7 +166,7 @@ class HomeDrawer extends GetView<HomeController> {
             textEditController.isLogggd == false
                 ? SizedBox()
                 : singleDrawerItem(
-                    title: 'Messages', //todo transulate
+                    title: 'Messages',
                     image: 'assets/icons/messages.svg',
                     action: () {
                       Get.toNamed(Routes.NOTIFICATIONS);
@@ -178,7 +178,7 @@ class HomeDrawer extends GetView<HomeController> {
                 : textEditController.faqStatus == false
                     ? SizedBox()
                     : singleDrawerItem(
-                        title: 'FAQ', //todo transulate
+                        title: 'FAQ',
                         image: 'assets/icons/faq.svg',
                         action: () {
                           Get.toNamed(Routes.FAQ);
@@ -189,7 +189,7 @@ class HomeDrawer extends GetView<HomeController> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) if (snapshot.data!)
                   return singleDrawerItem(
-                      title: 'FAQ', //todo transulate
+                      title: 'FAQ',
                       image: 'assets/icons/faq.svg',
                       action: () {
                         Get.toNamed(Routes.FAQ);
