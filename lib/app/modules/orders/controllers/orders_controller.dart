@@ -25,8 +25,10 @@ class OrdersController extends GetxController {
     if (requiredAuth.value) return;
     error.value = '';
     getMyMealsLoading.value = true;
+    loading.value=false;
     try {
       response.value = await ApiProvider().myOrders();
+      loading.value=true;
       update();
     } catch (e) {
       error.value = '$e';

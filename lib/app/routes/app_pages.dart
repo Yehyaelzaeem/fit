@@ -185,6 +185,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MY_MEALS,
+
       page: () => MyMealsView(),
       binding: MyMealsBinding(),
     ),

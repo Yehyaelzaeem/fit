@@ -53,19 +53,7 @@ class CheerFullView extends GetView<CheerFullController> {
                         SizedBox(height: 20),
                         kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
                             func: () {
-                          if (controller.isGuestSaved) {
-                            Get.toNamed(Routes.MY_MEALS);
-                          } else if (controller.userId.isNotEmpty) {
-                            Get.toNamed(Routes.MY_MEALS);
-                          } else if (!controller.isGuestSaved&& controller.userId.isEmpty) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => NonUserSubscribeView(
-                                    isGuest: true,toCheer:true,
-                                      )),
-                            );
-                          }
+                              Get.toNamed(Routes.MY_MEALS);
                         }),
                         SizedBox(height: 20),
                         GestureDetector(

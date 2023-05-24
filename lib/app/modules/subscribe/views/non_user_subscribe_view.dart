@@ -15,11 +15,13 @@ import '../../../network_util/shared_helper.dart';
 import '../../../routes/app_pages.dart';
 
 class NonUserSubscribeView extends StatefulWidget {
-  NonUserSubscribeView({this.isGuest, this.toCheer, this.toOrders});
+  NonUserSubscribeView({this.isGuest, this.toCheer, this.toOrders, this.save, this.func});
 
   final bool? isGuest;
   final bool? toCheer;
   final bool? toOrders;
+  final bool? save;
+  final VoidCallback? func;
 
   @override
   _NonUserSubscribeViewState createState() => _NonUserSubscribeViewState();
@@ -234,8 +236,8 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                             Get.offNamed(Routes.MY_MEALS);
                                           } else if (widget.toOrders == true) {
                                             Get.offNamed(Routes.ORDERS);
-                                          } else {
-                                            Get.toNamed(Routes.MY_PACKAGES);
+                                          } else if(widget.save==true){
+                                            Navigator.pop(context, true);
                                           }
                                         } else {
                                           Navigator.pop(context, [

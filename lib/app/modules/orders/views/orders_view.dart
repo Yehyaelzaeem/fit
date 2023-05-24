@@ -85,9 +85,8 @@ class OrdersView extends GetView<OrdersController> {
                 PageLable(name: "My Orders"),
                 SizedBox(height: 12),
                 Obx(() {
-                  if (controller.loading.value)
+                  if (!controller.loading.value)
                     return Center(child: CircularLoadingWidget());
-                  // if (controller.requiredAuth.value) return IncompleteData();
                   return Column(
                     children: [
                       Container(
@@ -152,25 +151,46 @@ class OrdersView extends GetView<OrdersController> {
                           ],
                         ),
                       ),
-                      if (controller.response.value.data != null)
-                        if (controller.selectedTap.value == 2)
-                          ...controller.response.value.data!.pending.map((e) {
-                            return singleOrderCard(e, context);
-                          }).toList(),
-                      if (controller.response.value.data != null)
-                        if (controller.selectedTap.value == 1)
-                          ...controller.response.value.data!.completed.map((e) {
-                            return singleOrderCard(e, context);
-                          }).toList(),
+                       controller.selectedTap.value == 2?
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height,
+                          child: ListView.builder(
+                              itemCount:controller.response.value.data!.pending.length,
+                              itemBuilder: (context,index)=>
+                  controller.response.value.data!.pending==[]?buildEmpty():
+                              singleOrderCard(controller.response.value.data!.pending[index], context)),):
+                       SizedBox(
+                            height: MediaQuery.of(context).size.height,
+                            child: ListView.builder(
+                                itemCount:controller.response.value.data!.completed.length,
+                                itemBuilder: (context,index)=>
+                                controller.response.value.data!.completed==[]?buildEmpty():
+                                singleOrderCard(controller.response.value.data!.completed[index], context)),),
                     ],
                   );
                 }),
-                //* Subhect
-                SizedBox(height: Get.width / 14),
               ])),
         ),
       ),
     );
+  }
+
+  Padding buildEmpty() {
+    return Padding(
+                  padding: EdgeInsets.only(top: Get.height * 0.2),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        kEmptyPackage,
+                        scale: 5,
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      kTextbody("  Empty!  ", size: 16),
+                    ],
+                  ),
+                );
   }
 
   Widget singleOrderCard(Completed e, BuildContext context) {

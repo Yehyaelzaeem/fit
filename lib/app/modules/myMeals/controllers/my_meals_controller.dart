@@ -3,13 +3,18 @@ import 'package:app/app/network_util/api_provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../network_util/shared_helper.dart';
+
 class MyMealsController extends GetxController {
   final response = MyMealResponse().obs;
   final error = ''.obs;
   final loading = false.obs;
+  final viewOnly = false.obs;
   final requiredAuth = false.obs;
   final getMyMealsLoading = false.obs;
-
+  bool isGuest = false;
+  bool isGuestSaved = false;
+  String userId = "";
   changeValue(value) {
     value = !value;
     print(value);
@@ -18,14 +23,19 @@ class MyMealsController extends GetxController {
 
   @override
   void onInit() async {
-    getNetworkData();
-
+    userId = await SharedHelper().readString(CachingKey.USER_ID);
+    isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
+    isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
+    if(userId.isNotEmpty){
+      getNetworkData();
+    }else if(isGuestSaved){
+      getNetworkData();
+    }
     super.onInit();
   }
 
   getNetworkData() async {
-    // requiredAuth.value = !await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    // if (requiredAuth.value) return;
+
     error.value = '';
     getMyMealsLoading.value = true;
     try {

@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../subscribe/views/non_user_subscribe_view.dart';
+
 Future<bool> _willPopCallback() async {
   Get.back();
   Get.back();
@@ -47,25 +49,33 @@ class MyMealsView extends GetView<MyMealsController> {
                     //App bar
                     appBar(),
                     SizedBox(height: 20),
-                    header(),
+                    header(context),
                     SizedBox(height: 4),
                     if (controller.getMyMealsLoading.value)
                       Container(height: 100, child: CircularLoadingWidget()),
                     if (!controller.getMyMealsLoading.value &&
                         controller.response.value.data != null &&
                         controller.response.value.data!.isEmpty)
-                      Text(
-                        'No meals added',
-                        style: GoogleFonts.cairo(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                      Padding(
+                        padding: EdgeInsets.only(top: 45),
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              kEmptyPackage,
+                              scale: 5,
+                            ),
+                            SizedBox(
+                              height: 14,
+                            ),
+                            kTextbody("  No meals added  ", size: 16),
+                          ],
                         ),
                       ),
+
                     if (!controller.getMyMealsLoading.value &&
                         controller.response.value.data != null)
                       ...controller.response.value.data!.reversed.map((e) {
-                        return singleItem(meal: e,context: context);
+                        return singleItem(meal: e, context: context);
                       }).toList(),
                     SizedBox(height: 12),
                     Row(
@@ -102,8 +112,10 @@ class MyMealsView extends GetView<MyMealsController> {
                                     "name": yemenyPrefs.getShippingName() ?? '',
                                     "last_name":
                                         yemenyPrefs.getShippingLastName() ?? '',
-                                    "email": yemenyPrefs.getShippingEmail() ?? '',
-                                    "phone": yemenyPrefs.getShippingPhone() ?? '',
+                                    "email":
+                                        yemenyPrefs.getShippingEmail() ?? '',
+                                    "phone":
+                                        yemenyPrefs.getShippingPhone() ?? '',
                                     "detailedAddress":
                                         yemenyPrefs.getShippingAddress() ?? '',
                                     "latitude":
@@ -190,11 +202,39 @@ class MyMealsView extends GetView<MyMealsController> {
     );
   }
 
-  Widget header() {
+  Widget header(context) {
     return Row(
       children: [
         PageLable(name: "My meals"),
         Expanded(child: SizedBox(width: 10)),
+        if (!controller.isGuestSaved&&controller.userId.isEmpty)
+          GestureDetector(
+            onTap: (){
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NonUserSubscribeView(
+                        isGuest: true,toCheer:true
+                    )),
+              );
+            },
+            child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(200),
+                  border: Border.all(color: kColorAccent, width: 1),
+                  color: Colors.white,
+                ),
+                child: kTextbody(
+                  'Get old orders',
+                  paddingH: 6,
+                  paddingV: 8,
+                  color: kColorAccent,
+                ),
+              ),
+        ),
+          ),
         GestureDetector(
           onTap: () async {
             dynamic val = await Get.toNamed(Routes.MAKE_MEALS);
@@ -222,6 +262,7 @@ class MyMealsView extends GetView<MyMealsController> {
             ),
           ),
         ),
+
         SizedBox(width: 10),
       ],
     );
@@ -237,9 +278,10 @@ class MyMealsView extends GetView<MyMealsController> {
     );
   }
 
-  Widget singleItem({required SingleMyMeal meal,required BuildContext context}) {
+  Widget singleItem(
+      {required SingleMyMeal meal, required BuildContext context}) {
     return GetBuilder<MyMealsController>(
-      builder: (_) =>Container(
+      builder: (_) => Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: Color(0xffF1F1F1),
@@ -265,7 +307,8 @@ class MyMealsView extends GetView<MyMealsController> {
                         color: kColorPrimary,
                         align: TextAlign.start,
                         bold: true)),
-                kTextbody("${controller.totalPrice(meal:meal)} L.E", color: Colors.black),
+                kTextbody("${controller.totalPrice(meal: meal)} L.E",
+                    color: Colors.black),
                 SizedBox(width: 12),
                 GestureDetector(
                   onTap: () async {
@@ -290,60 +333,64 @@ class MyMealsView extends GetView<MyMealsController> {
             ),
             meal.selected == true
                 ? Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Container(
-              width: 90,
-              height: 32,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(12),
-              ),
-              /**************************** number & add & minus *****************************/
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    /**************************** minus *****************************/
-                    GestureDetector(
-                      onTap: () {
-                        controller.minus(meal: meal,);
-                      },
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.remove,
-                          size: 18,
-                        ),
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Container(
+                      width: 90,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      /**************************** number & add & minus *****************************/
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /**************************** minus *****************************/
+                          GestureDetector(
+                            onTap: () {
+                              controller.minus(
+                                meal: meal,
+                              );
+                            },
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.remove,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                          /**************************** number *****************************/
+                          kTextHeader(meal.qty.toString()),
+                          /**************************** add *****************************/
+                          GestureDetector(
+                            onTap: () {
+                              controller.add(
+                                meal: meal,
+                              );
+                            },
+                            child: Container(
+                              width: 32,
+                              height: 32,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    /**************************** number *****************************/
-                    kTextHeader(meal.qty.toString()),
-                    /**************************** add *****************************/
-                    GestureDetector(
-                      onTap: () {
-                        controller.add(meal: meal,);
-                      },
-                      child: Container(
-                        width: 32,
-                        height: 32,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          size: 18,
-                        ),
-                      ),
-                    ),
-                  ],
-              ),
-            ),
-                )
+                  )
                 : SizedBox(),
           ],
         ),

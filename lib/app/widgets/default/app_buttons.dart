@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 Widget kButton(
   String message, {
   Color? color,
+  Widget? child,
   Color? textColor,
   double paddingV = 6,
   double paddingH = 6,
@@ -43,14 +44,14 @@ Widget kButton(
             : Center(
                 child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
+                child: child==null?Text(
                   message,
                   style: TextStyle(
                       fontSize: textSize,
                       fontWeight:
                           bold == true ? FontWeight.bold : FontWeight.normal,
                       color: textColor ?? Colors.white),
-                ),
+                ):child,
               )),
       ),
     ),

@@ -21,9 +21,8 @@ class MainUnAuth extends StatelessWidget {
       body: (isGuest != null && isGuest == true)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                HomeAppbar(type: null),
                 Column(
                   children: [
                     Center(
@@ -38,55 +37,14 @@ class MainUnAuth extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                           child: Text(
-                        "Sorry, No orders available,\n\please order first",
+                        "Sorry, No packages available,\n\Please subscribe first",
                         style: TextStyle(color: kColorPrimary, fontSize: 22),
                       )),
                     ),
-
-
-/*                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.SUBSCRIBE,arguments: null);
-                      },
-                      child: Center(
-                        child: Container(
-                          width: Get.width / 2,
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                              color: Color(0xffFFB62B),
-                              borderRadius: BorderRadius.circular(64),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  blurRadius: 1,
-                                  spreadRadius: 1,
-                                  offset: Offset(0, 1),
-                                ),
-                              ]),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/img/premium.png',
-                                width: 30,
-                                height: 30,
-                              ),
-                              kTextHeader('Make my meals',
-                                  size: 16,
-                                  color: Colors.white,
-                                  bold: true,
-                                  paddingH: 16,
-                                  paddingV: 4),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),*/
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: kButton(
-                        'Make my meals',
+                        '',
                         hight: 55,
                         color: Color(0xffFFB62B),
                         textSize: 20,
@@ -94,14 +52,29 @@ class MainUnAuth extends StatelessWidget {
                         func: () {
                           Get.toNamed(Routes.SUBSCRIBE,arguments: null);
                         },
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/img/premium.png',
+                              width: 30,
+                              height: 30,
+                            ),
+                            kTextHeader('Subscribe',
+                                size: 20,
+                                color: Colors.white,
+                                bold: true,
+                                paddingH: 16,
+                                paddingV: 4),
+                          ],
+                        ),
                       ),
                     ),
-
-                    SizedBox(height:24),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: kButton(
-                        'Get old orders',
+                        'Get old package',
                         hight: 55,
                         color: kColorAccent,
                         textSize: 20,
@@ -119,7 +92,6 @@ class MainUnAuth extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 SizedBox()
               ],
             )

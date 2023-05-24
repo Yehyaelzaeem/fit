@@ -51,7 +51,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
     setState(() {
       showLoader = true;
     });
-
     await ApiProvider()
         .addOtherCalories(
             title: title,
@@ -66,11 +65,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
           showLoader = false;
         });
         Fluttertoast.showToast(msg: "${value.message}");
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => MyOtherCalories()));
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => MyOtherCalories()),
-        // );
         Navigator.of(context).pop();
         print("OK");
       } else {
@@ -206,7 +200,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                       value: '',
                       hint: 'Unit Quantity',
                       radius: 12,
-                      type: TextInputType.emailAddress,
+                      type: TextInputType.phone,
                       updateFunc: (text) {
                         setState(() {
                           unit_qty = text;
@@ -244,6 +238,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   ),
             kButtonDefault(
               '  Save  ',
+              loading: showLoader,
               marginH: MediaQuery.of(context).size.width / 4.5,
               paddingV: 0,
               func: () {
@@ -251,8 +246,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   print("Ererer");
                   return;
                 } else {
-                  addItem();
-                  print("Done");
+                if(showLoader==false)  addItem();
                 }
               },
               shadow: true,

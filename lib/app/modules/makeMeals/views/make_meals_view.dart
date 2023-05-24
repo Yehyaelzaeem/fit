@@ -9,6 +9,8 @@ import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
+import '../../subscribe/views/non_user_subscribe_view.dart';
 import '../controllers/make_meals_controller.dart';
 
 class MakeMealsView extends GetView<MakeMealsController> {
@@ -809,7 +811,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 "     Save     ",
                                 paddingH: 12,
                                 paddingV: 4,
-                                func: () {
+                                func: ()async {
                                   if (controller.mealName.isEmpty) {
                                     Get.snackbar(
                                         "Error", "Please enter meal name");
@@ -828,37 +830,24 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                         return;
                                       }
                                     });
-                                    // if (controller.fatSelected.isEmpty && controller.carbSelected.isEmpty && controller.proteinSelected.isEmpty) {
-                                    //   Get.snackbar("Error", "No food selected!");
-                                    //   return;
-                                    // }
 
-                                    // if (controller.proteinSelected.isNotEmpty) {
-                                    //   controller.proteinSelected.forEach((element) {
-                                    //     if (element.selectedAmount.calories.isEmpty) {
-                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
-                                    //       return;
-                                    //     }
-                                    //   });
-                                    // }
-                                    // if (controller.carbSelected.isNotEmpty) {
-                                    //   controller.carbSelected.forEach((element) {
-                                    //     if (element.selectedAmount.calories.isEmpty) {
-                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
-                                    //       return;
-                                    //     }
-                                    //   });
-                                    // }
-                                    // if (controller.fatSelected.isNotEmpty) {
-                                    //   controller.fatSelected.forEach((element) {
-                                    //     if (element.selectedAmount.calories.isEmpty) {
-                                    //       Get.snackbar("Error", "Please select amount for ${element.title}");
-                                    //       return;
-                                    //     }
-                                    //   });
                                   }
-
-                                  controller.saveMeal();
+                                  if (controller.isGuestSaved) {
+                                    controller.saveMeal();
+                                  } else if (controller.userId.isNotEmpty) {
+                                    controller.saveMeal();
+                                  } else if (!controller.isGuestSaved&& controller.userId.isEmpty) {
+                                   bool result= await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => NonUserSubscribeView(
+                                            isGuest: controller.isGuest,save:true,
+                                          )),
+                                    );
+                                   if(result==true) {
+                                      controller.saveMeal();
+                                    } else{}
+                                  }
                                 },
                                 loading: controller.saveLoading.value,
                               ),

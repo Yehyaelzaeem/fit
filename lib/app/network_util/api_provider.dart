@@ -599,11 +599,7 @@ class ApiProvider {
   }
 
   Future<MealFoodListResponse> getMealFoodList() async {
-    String deviceId = await kDeviceInfo();
-    FormData body = FormData.fromMap({
-      'device_id': deviceId,
-    });
-    Response response = await _utils.post("meals_food_list", body: body);
+    Response response = await _utils.post("meals_food_list",);
     Echo(response.data.toString());
     if (response.statusCode == 200) {
       return MealFoodListResponse.fromJson(response.data);
@@ -685,7 +681,6 @@ class ApiProvider {
     FormData body = FormData.fromMap({
       'device_id': deviceId,
     });
-    print('-------> my_meals');
     Response response = await _utils.post("my_meals", body: body);
     print('-------> ${response.data}');
     if (response.statusCode == 200 && response.data['success'] == true) {

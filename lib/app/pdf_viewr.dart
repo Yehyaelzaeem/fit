@@ -21,17 +21,13 @@ class _PDFPreviewState extends State<PDFPreview> {
           backgroundColor: PRIMART_COLOR,
           title: Text('${widget.name}', style: TextStyle(color: Colors.white)),
           centerTitle: true),
-      body: Stack(
-        children: [
-          PDF().fromUrl(
-            widget.res,
-            placeholder: (double progress) => Center(
-              child: Center(child: CircularLoadingWidget()),
-            ),
-            errorWidget: (dynamic error) =>
-                Center(child: Text(error.toString())),
-          ),
-        ],
+      body: PDF().fromUrl(
+        widget.res,
+        placeholder: (double progress) => Center(
+          child: Center(child: CircularLoadingWidget()),
+        ),
+        errorWidget: (dynamic error) =>
+            Center(child: Text(error.toString())),
       ),
     );
   }

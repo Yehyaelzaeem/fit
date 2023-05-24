@@ -1,6 +1,7 @@
 import 'package:app/app/models/meal_food_list_response.dart';
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/globale_controller.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,9 @@ class MakeMealsController extends GetxController {
   final error = ''.obs;
   final loading = false.obs;
   final saveLoading = false.obs;
-
+  bool isGuest = false;
+  bool isGuestSaved = false;
+  String userId = "";
   RxList<Food> selectedFood = RxList<Food>();
 
   // RxList<Food> carbSelected = RxList<Food>();
@@ -29,8 +32,13 @@ class MakeMealsController extends GetxController {
   SingleMyMeal? meal;
 
   @override
-  void onInit() {
+  void onInit() async{
+    userId = await SharedHelper().readString(CachingKey.USER_ID);
+    isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
+    isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     getNetworkData();
+
+
     super.onInit();
   }
 
@@ -66,7 +74,6 @@ class MakeMealsController extends GetxController {
         );
         globalController.response.value = res;
       }
-
       meals.value = globalController.response.value.data;
 
       // if (globalController.response.value.data!.where((element) => element.title! == "Protien").isNotEmpty) protein.value = globalController.response.value.data!.firstWhere((element) => element.title! == "Protien").food;
@@ -205,9 +212,8 @@ class MakeMealsController extends GetxController {
     return total;
   }
 
-  void saveMeal() async {
+  Future saveMeal() async {
     saveLoading.value = true;
-
     String foodIds = "";
     String amountIds = "";
     selectedFood.forEach((element) {
@@ -245,8 +251,18 @@ class MakeMealsController extends GetxController {
           foodIds: foodIds,
           note: note.value,
         );
+//// TODO handle it
+      if (isGuestSaved) {
+        Get.back(result: true);
 
-      Get.back(result: true);
+      } else if (userId.isNotEmpty) {
+        Get.back(result: true);
+
+      } else if (!isGuestSaved&&userId.isEmpty) {
+        Get.back(result: true);
+        Get.back(result: true);
+      }
+
     } catch (e) {
       Get.snackbar("Error", "$e");
       saveLoading.value = false;
