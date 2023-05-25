@@ -71,7 +71,6 @@ class MyMealsView extends GetView<MyMealsController> {
                           ],
                         ),
                       ),
-
                     if (!controller.getMyMealsLoading.value &&
                         controller.response.value.data != null)
                       ...controller.response.value.data!.reversed.map((e) {
@@ -141,8 +140,43 @@ class MyMealsView extends GetView<MyMealsController> {
                           },
                           border: Border.all(color: Colors.red, width: 1),
                         )),
+
                       ],
-                    )
+                    ),
+                    if (!controller.isGuestSaved&&controller.userId.isEmpty)SizedBox(height: 250,),
+                    if (!controller.isGuestSaved&&controller.userId.isEmpty)
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => NonUserSubscribeView(
+                                    isGuest: true,toCheer:true
+                                )),
+                          );
+                        },
+                        child: Padding(
+                          padding:  EdgeInsets.symmetric(horizontal: 160),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(200),
+                              border: Border.all(color: kColorAccent, width: 1),
+                              color: Colors.white,
+                            ),
+                            child:
+                            Center(
+                              child: kTextbody(
+                                'Get old meals',
+                                paddingH: 6,
+                                paddingV: 8,
+                                color: kColorAccent,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               );
@@ -207,34 +241,6 @@ class MyMealsView extends GetView<MyMealsController> {
       children: [
         PageLable(name: "My meals"),
         Expanded(child: SizedBox(width: 10)),
-        if (!controller.isGuestSaved&&controller.userId.isEmpty)
-          GestureDetector(
-            onTap: (){
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NonUserSubscribeView(
-                        isGuest: true,toCheer:true
-                    )),
-              );
-            },
-            child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(200),
-                  border: Border.all(color: kColorAccent, width: 1),
-                  color: Colors.white,
-                ),
-                child: kTextbody(
-                  'Get old orders',
-                  paddingH: 6,
-                  paddingV: 8,
-                  color: kColorAccent,
-                ),
-              ),
-        ),
-          ),
         GestureDetector(
           onTap: () async {
             dynamic val = await Get.toNamed(Routes.MAKE_MEALS);
