@@ -34,7 +34,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 
-android {//31
+android {
+    buildFeatures {
+        viewBinding true
+    }
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -53,7 +56,6 @@ android {//31
         applicationId "com.fofclinic"
         minSdkVersion 21
         targetSdkVersion 33
-        //3329
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true

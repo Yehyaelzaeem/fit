@@ -146,36 +146,30 @@ class MyMealsView extends GetView<MyMealsController> {
                     if (!controller.isGuestSaved&&controller.userId.isEmpty)SizedBox(height: 250,),
                     if (!controller.isGuestSaved&&controller.userId.isEmpty)
 
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NonUserSubscribeView(
-                                    isGuest: true,toCheer:true
-                                )),
-                          );
-                        },
-                        child: Padding(
-                          padding:  EdgeInsets.symmetric(horizontal: 160),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(200),
-                              border: Border.all(color: kColorAccent, width: 1),
+                      Row(
+                        children: [
+                          SizedBox(width: 80,),
+                          Expanded(
+                            child: kButtonDefault(
+                              "  Get old meals  ",
+                              bold: false,
                               color: Colors.white,
-                            ),
-                            child:
-                            Center(
-                              child: kTextbody(
-                                'Get old meals',
-                                paddingH: 6,
-                                paddingV: 8,
-                                color: kColorAccent,
-                                size: 20,
-                              ),
+                              textColor:kColorAccent,
+                              func: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NonUserSubscribeView(
+                                          isGuest: true,toCheer:true
+                                      )),
+                                );
+                              },
+                              border: Border.all(color: kColorAccent, width: 1),
                             ),
                           ),
-                        ),
+                          SizedBox(width: 80,),
+
+                        ],
                       ),
                   ],
                 ),
