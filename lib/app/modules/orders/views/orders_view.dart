@@ -64,11 +64,12 @@ class OrdersView extends GetView<OrdersController> {
       ),
     );
   }
-    Future<bool> _willPopCallback() async {
-     Get.back();
-     Get.back();
-      return true;
-    }
+
+  Future<bool> _willPopCallback() async {
+    Get.back();
+    Get.back();
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +77,7 @@ class OrdersView extends GetView<OrdersController> {
       color: kColorPrimary,
       child: SafeArea(
         child: WillPopScope(
-          onWillPop:_willPopCallback,
+          onWillPop: _willPopCallback,
           child: Scaffold(
               backgroundColor: Colors.white,
               body: ListView(children: [
@@ -151,21 +152,30 @@ class OrdersView extends GetView<OrdersController> {
                           ],
                         ),
                       ),
-                       controller.selectedTap.value == 2?
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: ListView.builder(
-                              itemCount:controller.response.value.data!.pending.length,
-                              itemBuilder: (context,index)=>
-                  controller.response.value.data!.pending==[]?buildEmpty():
-                              singleOrderCard(controller.response.value.data!.pending[index], context)),):
-                       SizedBox(
-                            height: MediaQuery.of(context).size.height,
-                            child: ListView.builder(
-                                itemCount:controller.response.value.data!.completed.length,
-                                itemBuilder: (context,index)=>
-                                controller.response.value.data!.completed==[]?buildEmpty():
-                                singleOrderCard(controller.response.value.data!.completed[index], context)),),
+                      if (controller.selectedTap.value == 2)
+                        controller.pending.length == []
+                            ? buildEmpty()
+                            : SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: ListView.builder(
+                                    itemCount: controller.pending.length,
+                                    itemBuilder: (context, index) =>
+                                        singleOrderCard(
+                                            controller.pending[index],
+                                            context)),
+                              ),
+                      if (controller.selectedTap.value == 1)
+                        controller.completed.length == 0
+                            ? buildEmpty()
+                            : SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: ListView.builder(
+                                    itemCount: controller.completed.length,
+                                    itemBuilder: (context, index) =>
+                                        singleOrderCard(
+                                            controller.completed[index],
+                                            context)),
+                              )
                     ],
                   );
                 }),
@@ -175,22 +185,22 @@ class OrdersView extends GetView<OrdersController> {
     );
   }
 
-  Padding buildEmpty() {
+  Widget buildEmpty() {
     return Padding(
-                  padding: EdgeInsets.only(top: Get.height * 0.2),
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        kEmptyPackage,
-                        scale: 5,
-                      ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      kTextbody("  Empty!  ", size: 16),
-                    ],
-                  ),
-                );
+      padding: EdgeInsets.only(top: Get.height * 0.2),
+      child: Column(
+        children: [
+          Image.asset(
+            kEmptyPackage,
+            scale: 5,
+          ),
+          SizedBox(
+            height: 14,
+          ),
+          kTextbody("  Empty!  ", size: 16),
+        ],
+      ),
+    );
   }
 
   Widget singleOrderCard(Completed e, BuildContext context) {

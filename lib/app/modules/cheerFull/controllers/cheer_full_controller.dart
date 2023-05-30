@@ -27,7 +27,7 @@ class CheerFullController extends GetxController {
         cheerfulSocialsResponse = value;
         isLoading.value = false;
       } else {
-        Fluttertoast.showToast(msg: "$value");
+        Fluttertoast.showToast(msg: "Something went wrong!");
         print("error");
       }
     });

@@ -7,6 +7,8 @@ class OrdersController extends GetxController {
   final GlobalController globalController =
       Get.find<GlobalController>(tag: 'global');
 
+  final List<Completed> pending=[];
+  final List<Completed> completed=[];
   final response = MyOrdersResponse(code: 200, success: false, data: null).obs;
   final error = ''.obs;
   final selectedTap = 2.obs;
@@ -14,7 +16,16 @@ class OrdersController extends GetxController {
   final loading = false.obs;
   final requiredAuth = false.obs;
   final getMyMealsLoading = false.obs;
-
+  filter({required MyOrdersResponse response}){
+    print("Pending list => ${pending.length}");
+    pending.addAll(
+        response.data!.pending.toList());
+    print("Pending list => ${pending.length}");
+    print("Completed list => ${completed.length}");
+    completed.addAll(
+        response.data!.completed.toList());
+    print("Completed list => ${completed.length}");
+  }
   @override
   void onInit() async {
     getNetworkData();
@@ -28,6 +39,7 @@ class OrdersController extends GetxController {
     loading.value=false;
     try {
       response.value = await ApiProvider().myOrders();
+      filter(response: response.value,);
       loading.value=true;
       update();
     } catch (e) {
@@ -45,3 +57,4 @@ class OrdersController extends GetxController {
     return mealsName;
   }
 }
+
