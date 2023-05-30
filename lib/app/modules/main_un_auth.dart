@@ -37,7 +37,7 @@ class MainUnAuth extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Center(
                           child: Text(
-                        "Sorry, No packages available,\n\Please subscribe first",
+                        "Sorry, No package available,\n\Please subscribe first",
                         style: TextStyle(color: kColorPrimary, fontSize: 22),
                       )),
                     ),

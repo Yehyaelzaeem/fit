@@ -153,7 +153,7 @@ class OrdersView extends GetView<OrdersController> {
                         ),
                       ),
                       if (controller.selectedTap.value == 2)
-                        controller.pending.length == []
+                        controller.pending.length == 0
                             ? buildEmpty()
                             : SizedBox(
                                 height: MediaQuery.of(context).size.height,
