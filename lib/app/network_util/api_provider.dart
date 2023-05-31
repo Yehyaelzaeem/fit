@@ -800,11 +800,10 @@ class ApiProvider {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       if (isGuest) {
         deviceId = isGuestLogin
-            ? '${iosInfo.name}${iosInfo.utsname.version}${iosInfo.utsname.sysname}${phone}'
+            ? '${iosInfo.name}${iosInfo.model}${phone}'
             : '';
       } else if (!isGuest) {
-        deviceId =
-            '${iosInfo.name}${iosInfo.utsname.version}${iosInfo.utsname.sysname}${userId}';
+        deviceId = '${iosInfo.name}${iosInfo.model}${userId}';
       }
     }
     isGuest
