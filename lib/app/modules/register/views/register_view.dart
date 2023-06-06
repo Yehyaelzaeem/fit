@@ -50,6 +50,7 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   void SendData() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     setState(() {
       showLoader = true;
     });
@@ -84,7 +85,6 @@ class _RegisterViewState extends State<RegisterView> {
           showLoader = false;
         });
         Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
       }
     });
   }
@@ -380,7 +380,6 @@ class _RegisterViewState extends State<RegisterView> {
                                   return;
                                 } else {
                                   SendData();
-                                  print("Done");
                                 }
                               },
                               shadow: true,

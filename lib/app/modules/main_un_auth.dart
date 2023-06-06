@@ -21,8 +21,9 @@ class MainUnAuth extends StatelessWidget {
       body: (isGuest != null && isGuest == true)
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                HomeAppbar(onBack: ()=>Navigator.pop(context),),
                 Column(
                   children: [
                     Center(

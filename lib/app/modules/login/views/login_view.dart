@@ -214,11 +214,10 @@ class _LoginViewState extends State<LoginView> {
                                 paddingV: 0,
                                 func: () {
                                   if (!key.currentState!.validate()) {
-                                    print("Ererer");
                                     return;
                                   } else {
+                                    FocusManager.instance.primaryFocus?.unfocus();
                                     sendData();
-                                    print("Done");
                                   }
                                 },
                                 shadow: true,
