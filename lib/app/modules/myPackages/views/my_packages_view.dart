@@ -754,7 +754,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                     : SizedBox(),
                               ],
                             )
-                          :MainUnAuth(isGuest:true);
+                          :MainUnAuth(isGuest:true,paymentStatus:  myPackagesResponse.data!.subscriptionStatus);
                 },
               )),
         ),

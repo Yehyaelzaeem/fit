@@ -8,22 +8,28 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../network_util/shared_helper.dart';
+import '../utils/helper/assets_path.dart';
 import '../widgets/default/text.dart';
+import '../widgets/page_lable.dart';
 
 class MainUnAuth extends StatelessWidget {
-  MainUnAuth({this.isGuest});
+  MainUnAuth({this.isGuest, this.paymentStatus});
 
   bool? isGuest;
+  bool? paymentStatus;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: (isGuest != null && isGuest == true)
+          ?  paymentStatus == true
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                HomeAppbar(onBack: ()=>Navigator.pop(context),),
+                HomeAppbar(
+                  onBack: () => Navigator.pop(context),
+                ),
                 Column(
                   children: [
                     Center(
@@ -42,36 +48,35 @@ class MainUnAuth extends StatelessWidget {
                         style: TextStyle(color: kColorPrimary, fontSize: 22),
                       )),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: kButton(
-                        '',
-                        hight: 55,
-                        color: Color(0xffFFB62B),
-                        textSize: 20,
-                        bold: true,
-                        func: () {
-                          Get.toNamed(Routes.SUBSCRIBE,arguments: null);
-                        },
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/img/premium.png',
-                              width: 30,
-                              height: 30,
+                   Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: kButton(
+                              '',
+                              hight: 55,
+                              color: Color(0xffFFB62B),
+                              textSize: 20,
+                              bold: true,
+                              func: () {
+                                Get.toNamed(Routes.SUBSCRIBE, arguments: null);
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/img/premium.png',
+                                    width: 30,
+                                    height: 30,
+                                  ),
+                                  kTextHeader('Subscribe',
+                                      size: 20,
+                                      color: Colors.white,
+                                      bold: true,
+                                      paddingH: 16,
+                                      paddingV: 4),
+                                ],
+                              ),
                             ),
-                            kTextHeader('Subscribe',
-                                size: 20,
-                                color: Colors.white,
-                                bold: true,
-                                paddingH: 16,
-                                paddingV: 4),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: kButton(
@@ -80,12 +85,16 @@ class MainUnAuth extends StatelessWidget {
                         color: kColorAccent,
                         textSize: 20,
                         bold: true,
-                        func: () async{
-                          final bool isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
-                          if(!isGuestSaved){
+                        func: () async {
+                          final bool isGuestSaved = await SharedHelper()
+                              .readBoolean(CachingKey.IS_GUEST_SAVED);
+                          if (!isGuestSaved) {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => NonUserSubscribeView(isGuest: true,)),
+                              MaterialPageRoute(
+                                  builder: (context) => NonUserSubscribeView(
+                                        isGuest: true,
+                                      )),
                             );
                           }
                         },
@@ -95,7 +104,40 @@ class MainUnAuth extends StatelessWidget {
                 ),
                 SizedBox()
               ],
-            )
+            ): Column(
+        children: [
+          //App bar
+          HomeAppbar(
+            onBack: () async {
+              await Get.toNamed(
+                Routes.HOME,
+              );
+            },
+          ),
+          SizedBox(height: 12),
+          PageLable(name: " My Packages"),
+          SizedBox(height: 12),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(
+                  top: Get.height * 0.2),
+              child: Column(
+                children: [
+                  Image.asset(
+                    kEmptyPackage,
+                    scale: 5,
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  kTextbody("  Empty!  ", size: 16),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(),
+        ],
+      )
           : Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
