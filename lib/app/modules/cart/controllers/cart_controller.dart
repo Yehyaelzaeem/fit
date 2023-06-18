@@ -163,7 +163,7 @@ class CartController extends GetxController {
         print("URL ==========> ${paymentUrl}");
       }
     } catch (e) {
-      Get.snackbar(Strings().notification, '$e');
+    print( e.toString());
     }
     loading.value = false;
   }

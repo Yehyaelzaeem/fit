@@ -45,6 +45,8 @@ class Packages {
   String? currency;
   String? description;
   bool? paymentStatus;
+  bool? applePayPayments;
+  bool? visaPayments;
 
   Packages(
       {this.id,
@@ -52,6 +54,8 @@ class Packages {
       this.duration,
       this.currency,
       this.description,
+      this.applePayPayments,
+      this.visaPayments,
       this.paymentStatus});
 
   Packages.fromJson(Map<String, dynamic> json) {
@@ -61,5 +65,7 @@ class Packages {
     currency = json['currency'];
     description = json['description'];
     paymentStatus = json['payment_status'];
+    applePayPayments = json['applepay_payments'];
+    visaPayments = json['visa_payments'];
   }
 }

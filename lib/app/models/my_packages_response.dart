@@ -15,6 +15,8 @@ class MyPackagesResponse {
 class Data {
   List<Orders>? orders;
   bool? subscriptionStatus;
+  bool? visaStatue;
+  bool? applePayStatus;
 
   Data({this.orders, this.subscriptionStatus});
 
@@ -26,6 +28,8 @@ class Data {
       });
     }
     subscriptionStatus = json['subscribtion_status'];
+    visaStatue = json['visa_payments'];
+    applePayStatus = json['applepay_payments'];
   }
 }
 

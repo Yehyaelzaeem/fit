@@ -25,7 +25,6 @@ class CartView extends GetView<CartController> {
               return Center(child: CircularLoadingWidget());
             if (controller.isLoading.value)
               return Center(child: CircularLoadingWidget());
-
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -95,6 +94,7 @@ class CartView extends GetView<CartController> {
                                             ),
                                           ),
                                           SizedBox(height: 12),
+
                                           TextInsideRec(
                                             text: controller
                                                 .globalController
@@ -121,7 +121,7 @@ class CartView extends GetView<CartController> {
                                                   context: context);
                                             }),
                                           ),
-                                          SizedBox(height: 12),
+                                          SizedBox(height: 4),
                                         ],
                                       ),
                                     ),
@@ -149,132 +149,77 @@ class CartView extends GetView<CartController> {
                                             ),
                                           ),
                                           SizedBox(height: 12),
-                                          Container(
-                                            alignment: Alignment(0.0, 0.12),
+                                          TextInsideRec(
+                                            text:  controller
+                                                .globalController
+                                                .mealFeatureHomeResponse
+                                                .value
+                                                .data!
+                                                .info!
+                                                .pickupInstructions!,
+                                          ),
+                                          if (controller.globalController.mealFeatureHomeResponse.value.data != null &&
+                                              controller.globalController.mealFeatureHomeResponse.value.data!.info != null &&
+                                              controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null &&
+                                              controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                                            Container(
                                             width: double.infinity,
-                                            margin: EdgeInsets.symmetric(
-                                                horizontal: 12),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(9.0),
-                                              color: const Color(0xFFF1F1F1),
-                                            ),
-                                            child: SizedBox(
-                                              child: Column(
-                                                children: <Widget>[
-                                                  Align(
-                                                    alignment:
-                                                        Alignment(-0.09, 0.0),
-                                                    child: Padding(
-                                                      padding: const EdgeInsets
-                                                              .symmetric(
-                                                          horizontal: 12),
-                                                      child: Text(
-                                                        controller
-                                                            .globalController
-                                                            .mealFeatureHomeResponse
-                                                            .value
-                                                            .data!
-                                                            .info!
-                                                            .pickupInstructions!,
-                                                        style:
-                                                            GoogleFonts.cairo(
-                                                          fontSize: 13.0,
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          height: 1.38,
+                                            margin: EdgeInsets.symmetric(horizontal: 12),
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(9.0), color: const Color(0xFFF1F1F1),),
+                                            child: Column(
+                                              children: <Widget>[
+                                                TextInsideRec(
+                                                  text:  controller
+                                                      .globalController
+                                                      .mealFeatureHomeResponse
+                                                      .value
+                                                      .data!
+                                                      .info!
+                                                      .pickupInstructions!,
+                                                ),
+                                                  GestureDetector(
+                                                    onTap: () {launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);},
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      height: 39.0,
+                                                      decoration:
+                                                          BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    9.0),
+                                                        color: const Color(
+                                                            0xFFF1F1F1),
+                                                        border: Border.all(
+                                                          width: 1.0,
+                                                          color: const Color(
+                                                              0xFF7FC902),
                                                         ),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                              Icons
+                                                                  .location_on,
+                                                              color:
+                                                                  kColorPrimary),
+                                                          SizedBox(width: 4),
+                                                          kTextbody(
+                                                              'Location',
+                                                              size: 18,
+                                                              color:
+                                                                  kColorPrimary),
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(height: 20),
-                                                  if (controller
-                                                              .globalController
-                                                              .mealFeatureHomeResponse
-                                                              .value
-                                                              .data !=
-                                                          null &&
-                                                      controller
-                                                              .globalController
-                                                              .mealFeatureHomeResponse
-                                                              .value
-                                                              .data!
-                                                              .info !=
-                                                          null &&
-                                                      controller
-                                                              .globalController
-                                                              .mealFeatureHomeResponse
-                                                              .value
-                                                              .data!
-                                                              .info!
-                                                              .location !=
-                                                          null &&
-                                                      controller
-                                                          .globalController
-                                                          .mealFeatureHomeResponse
-                                                          .value
-                                                          .data!
-                                                          .info!
-                                                          .location!
-                                                          .isNotEmpty)
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        launch(controller
-                                                            .globalController
-                                                            .mealFeatureHomeResponse
-                                                            .value
-                                                            .data!
-                                                            .info!
-                                                            .location!);
-                                                      },
-                                                      child: Container(
-                                                        alignment: Alignment(
-                                                            -0.04, -0.33),
-                                                        width: double.infinity,
-                                                        margin: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal: 12),
-                                                        height: 39.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      9.0),
-                                                          color: const Color(
-                                                              0xFFF1F1F1),
-                                                          border: Border.all(
-                                                            width: 1.0,
-                                                            color: const Color(
-                                                                0xFF7FC902),
-                                                          ),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                                Icons
-                                                                    .location_on,
-                                                                color:
-                                                                    kColorPrimary),
-                                                            SizedBox(width: 4),
-                                                            kTextbody(
-                                                                'Location',
-                                                                size: 18,
-                                                                color:
-                                                                    kColorPrimary),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                ],
-                                              ),
+                                              ],
                                             ),
                                           ),
                                           SizedBox(height: 12),
@@ -291,7 +236,7 @@ class CartView extends GetView<CartController> {
                                                 payMethod: "visa",
                                                 context: context);
                                           }),
-                                          SizedBox(height: 12),
+                                          SizedBox(height: 4),
                                         ],
                                       ),
                                     ),

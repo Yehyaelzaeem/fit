@@ -26,8 +26,10 @@ class HomeData {
   List<Slider>? slider;
   List<Services>? services;
   bool? subscriptionStatus;
+  bool? visaPaymentsStatus;
+  bool? applePayStatus;
 
-  HomeData({this.slider, this.services, this.subscriptionStatus});
+  HomeData({this.slider, this.services, this.subscriptionStatus, this.visaPaymentsStatus, this.applePayStatus});
 
   HomeData.fromJson(Map<String, dynamic> json) {
     if (json['slider'] != null) {
@@ -43,6 +45,8 @@ class HomeData {
       });
     }
     subscriptionStatus = json['subscribtion_status'];
+    visaPaymentsStatus = json['visa_payments'];
+    applePayStatus = json['applepay_payments'];
   }
 
   Map<String, dynamic> toJson() {

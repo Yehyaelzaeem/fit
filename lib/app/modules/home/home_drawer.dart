@@ -199,7 +199,7 @@ class HomeDrawer extends GetView<HomeController> {
             ),*/
             //Transformation
             singleDrawerItem(
-                title: 'Transformations', //todo transulate
+                title: 'Transformations',
                 image: 'assets/icons/transformation.svg',
                 action: () {
                   Get.toNamed(Routes.TRANSFORM);

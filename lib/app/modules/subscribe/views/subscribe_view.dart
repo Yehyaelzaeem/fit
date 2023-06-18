@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/profile/edit_profile_view.dart';
@@ -11,6 +13,7 @@ import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -140,6 +143,10 @@ class SubscribeView extends GetView<SubscribeController> {
                               child: AnimatedBuilder(
                                 animation: controller.pc,
                                 builder: (context, child) {
+                                  final payment = controller
+                                      .servicesResponse
+                                      .data?[controller.serviceIndex.value]
+                                      .packages;
                                   return PageView.builder(
                                     controller: controller.pc,
                                     onPageChanged: (value) {
@@ -243,11 +250,16 @@ class SubscribeView extends GetView<SubscribeController> {
                                                       "",
                                                 ),
                                               ),
-                                              controller.isPaymentClicked
-                                                          .value ==
-                                                      false
-                                                  ? kButton("Payment",
-                                                      color: controller
+                                              if (payment?[i].visaPayments !=
+                                                      null &&
+                                                  payment?[i].visaPayments ==
+                                                      true)
+                                                controller.isPaymentVisaClicked
+                                                            .value ==
+                                                        false
+                                                    ? kButton("Payment",
+                                                        color: kColorPrimary,
+                                                        func: controller
                                                                   .servicesResponse
                                                                   .data?[controller
                                                                       .serviceIndex
@@ -255,79 +267,179 @@ class SubscribeView extends GetView<SubscribeController> {
                                                                   .packages?[i]
                                                                   .paymentStatus ==
                                                               true
-                                                          ? kColorPrimary
-                                                          : kColorAccent,
-                                                      func: controller
-                                                                  .servicesResponse
-                                                                  .data?[controller
-                                                                      .serviceIndex
-                                                                      .value]
-                                                                  .packages?[i]
-                                                                  .paymentStatus ==
-                                                              true
-                                                          ? () async {
-                                                              if (await controller
-                                                                      .getFromCash() ==
-                                                                  "haveAllData") {
-                                                                controller
-                                                                    .packagePayment(
-                                                                        context:
-                                                                            context,
-                                                                        packageId: controller
-                                                                            .servicesResponse
-                                                                            .data![controller
-                                                                                .serviceIndex.value]
-                                                                            .packages![
-                                                                                i]
-                                                                            .id!)
-                                                                    .then(
-                                                                        (value) {
-                                                                  Navigator
-                                                                      .pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (_) =>
-                                                                              WebViewScreen(
-                                                                        url: controller
-                                                                            .packagePaymentResponse
-                                                                            .data!
-                                                                            .paymentUrl!,
-                                                                        packageId: controller
-                                                                            .packagePaymentResponse
-                                                                            .data!
-                                                                            .id!,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                });
-                                                              } else if (await controller
-                                                                      .getFromCash() ==
-                                                                  "noLastName") {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder:
-                                                                            (_) =>
-                                                                                EditProfileView()));
-                                                              } else {
-                                                                _navigateAndDisplaySelection(
-                                                                    context:
-                                                                        context,
-                                                                    i: i);
-                                                              }
-                                                            }
-                                                          : () {
+                                                          ?
+                                                            () async {
+                                                        if (await controller
+                                                                .getFromCash() ==
+                                                            "haveAllData") {
+                                                          controller
+                                                              .packagePayment(
+                                                                  context:
+                                                                      context,
+                                                                  packageId: controller
+                                                                      .servicesResponse
+                                                                      .data![controller
+                                                                          .serviceIndex
+                                                                          .value]
+                                                                      .packages![
+                                                                          i]
+                                                                      .id!,
+                                                                  payMethod:
+                                                                      "visa")
+                                                              .then((value) {
+                                                            Navigator
+                                                                .pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (_) =>
+                                                                    WebViewScreen(
+                                                                  url: controller
+                                                                      .packagePaymentResponse
+                                                                      .data!
+                                                                      .paymentUrl!,
+                                                                  packageId:
+                                                                      controller
+                                                                          .packagePaymentResponse
+                                                                          .data!
+                                                                          .id!,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          });
+                                                        } else if (await controller
+                                                                .getFromCash() ==
+                                                            "noLastName") {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (_) =>
+                                                                      EditProfileView()));
+                                                        } else {
+                                                          _navigateAndDisplaySelection(
+                                                              context: context,
+                                                              i: i);
+                                                        }
+                                                      }
+                                                         : () {
                                                               Fluttertoast
                                                                   .showToast(
                                                                       msg:
                                                                           "  Payment is deactivated  ");
-                                                            })
-                                                  : Container(
-                                                      height: 40,
-                                                      child: Lottie.asset(
-                                                          'assets/loader.json'),
-                                                    ),
+                                                            }
+                                                        )
+                                                    : Container(
+                                                        height: 40,
+                                                        child: Lottie.asset(
+                                                            'assets/loader.json'),
+                                                      ),
+                                              if (Platform.isIOS &&
+                                                  payment?[i]
+                                                          .applePayPayments !=
+                                                      null &&
+                                                  payment?[i]
+                                                          .applePayPayments ==
+                                                      true)
+                                                controller.isPaymentAppleClicked
+                                                            .value ==
+                                                        false
+                                                    ? kButton("Check out with",
+                                                        color:Colors.black,
+                                                        func: controller
+                                                            .servicesResponse
+                                                            .data?[controller
+                                                            .serviceIndex
+                                                            .value]
+                                                            .packages?[i]
+                                                            .paymentStatus ==
+                                                            true
+
+                                                            ? () async {
+                                                        if (await controller
+                                                                .getFromCash() ==
+                                                            "haveAllData") {
+                                                          controller
+                                                              .packagePayment(
+                                                                  context:
+                                                                      context,
+                                                                  packageId: controller
+                                                                      .servicesResponse
+                                                                      .data![controller
+                                                                          .serviceIndex
+                                                                          .value]
+                                                                      .packages![
+                                                                          i]
+                                                                      .id!,
+                                                                  payMethod:
+                                                                      "apple_pay")
+                                                              .then((value) {
+                                                            ///TODO HandleApplePay
+
+
+
+
+
+
+                                                            Fluttertoast.showToast(
+                                                                msg:
+                                                                    " HandleApplePay ");
+                                                          });
+                                                        } else if (await controller
+                                                                .getFromCash() ==
+                                                            "noLastName") {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (_) =>
+                                                                      EditProfileView()));
+                                                        } else {
+                                                          _navigateAndDisplaySelection(
+                                                              context: context,
+                                                              i: i);
+                                                        }
+                                                      }:() {
+                                                          Fluttertoast
+                                                              .showToast(
+                                                              msg:
+                                                              "  Payment is deactivated  ");
+                                                        },
+                                                        child: Row(
+                                                          children: [
+                                                            const Spacer(),
+                                                            Center(
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            16),
+                                                                child: Text(
+                                                                  "Check out with",
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal,
+                                                                      fontSize: 16,
+                                                                      color: Colors
+                                                                          .white),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 4,),
+                                                            SvgPicture.asset(
+                                                              "assets/img/apple-pay.svg",
+                                                              width: 40,
+                                                              color:
+                                                                  Colors.white,
+                                                              height: 40,
+                                                            ),
+                                                            const Spacer(),
+                                                          ],
+                                                        ))
+                                                    : Container(
+                                                        height: 40,
+                                                        child: Lottie.asset(
+                                                            'assets/loader.json'),
+                                                      )
                                             ],
                                           ),
                                         ),
@@ -383,7 +495,8 @@ class SubscribeView extends GetView<SubscribeController> {
             email: result[2],
             phone: result[3],
             packageId: controller.servicesResponse
-                .data![controller.serviceIndex.value].packages![i].id!)
+                .data![controller.serviceIndex.value].packages![i].id!,
+            payMethod: '')
         .then((value) {
       Navigator.push(
         context,

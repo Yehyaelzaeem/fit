@@ -11,7 +11,8 @@ class SubscribeController extends GetxController
     with SingleGetTickerProviderMixin {
   final error = ''.obs;
   final loading = false.obs;
-  final isPaymentClicked = false.obs;
+  final isPaymentAppleClicked = false.obs;
+  final isPaymentVisaClicked = false.obs;
   final serviceIndex = 0.obs;
   final currentPageIndex = 0.obs;
 
@@ -25,10 +26,11 @@ class SubscribeController extends GetxController
   bool isGuest = false;
   bool isGuestSaved = false;
   String userId = "";
+
   Future<String> getFromCash() async {
     userPhone.value = await SharedHelper().readString(CachingKey.PHONE);
     userEmail.value = await SharedHelper().readString(CachingKey.EMAIL);
-    userName.value =  await SharedHelper().readString(CachingKey.USER_NAME);
+    userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
     userLastName.value =
         await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     if (userPhone.value.isEmpty &&
@@ -50,6 +52,7 @@ class SubscribeController extends GetxController
   Future packagePayment({
     required BuildContext context,
     required int packageId,
+    required String payMethod,
     String? email,
     String? name,
     String? lastName,
@@ -58,8 +61,8 @@ class SubscribeController extends GetxController
     userId = await SharedHelper().readString(CachingKey.USER_ID);
     isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
     isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
-    paymentClicked();
-if(isGuest!=true)    await getFromCash();
+    payMethod=='visa' ?paymentVisaClicked(): paymentAppleClicked();
+    if (isGuest != true) await getFromCash();
     if (userId.isNotEmpty) {
       await ApiProvider()
           .packagePayment(
@@ -67,36 +70,34 @@ if(isGuest!=true)    await getFromCash();
         name: name ?? userName.value,
         lastName: lastName ?? userLastName.value,
         packageId: packageId,
-        phone: phone ?? userPhone.value, isGuest: false
-
+        phone: phone ?? userPhone.value,
+        isGuest: false,
+        payMethod: payMethod,
       )
           .then((value) {
         if (value.success == true) {
-          print("value data =>${value.data}");
           packagePaymentResponse = value;
           loading.value = false;
-          paymentClicked();
-          print(isPaymentClicked.value);
+          payMethod=='visa' ?paymentVisaClicked(): paymentAppleClicked();
           update();
         } else {
           Fluttertoast.showToast(msg: "Server Error");
         }
       });
-    }  else  if  (isGuest) {
+    } else if (isGuest) {
       await ApiProvider()
           .packagePayment(
-        email: email ?? userEmail.value,
-        name: name ?? userName.value,
-        lastName: lastName ?? userLastName.value,
-        packageId: packageId,
-        phone: phone ?? userPhone.value,
-        isGuest: true
-      ).then((value) async{
+              email: email ?? userEmail.value,
+              name: name ?? userName.value,
+              lastName: lastName ?? userLastName.value,
+              packageId: packageId,
+              phone: phone ?? userPhone.value,
+              isGuest: true, payMethod: payMethod)
+          .then((value) async {
         if (value.success == true) {
-          packagePaymentResponse = value;
+              packagePaymentResponse = value;
           loading.value = false;
-          paymentClicked();
-          print(isPaymentClicked.value);
+              payMethod=='visa' ?paymentVisaClicked(): paymentAppleClicked();
           update();
         } else {
           Fluttertoast.showToast(msg: "Server Error");
@@ -127,8 +128,12 @@ if(isGuest!=true)    await getFromCash();
     return serviceIndex.value;
   }
 
-  paymentClicked() {
-    isPaymentClicked.value = !isPaymentClicked.value;
+  paymentVisaClicked() {
+    isPaymentVisaClicked.value = !isPaymentVisaClicked.value;
+    update();
+  }
+ paymentAppleClicked() {
+    isPaymentAppleClicked.value = !isPaymentAppleClicked.value;
     update();
   }
 
@@ -138,7 +143,7 @@ if(isGuest!=true)    await getFromCash();
   void onInit() {
     if (Get.arguments != null) servicesResponse = Get.arguments;
     getAllServicesData();
-    if(isGuest!=true)  getFromCash();
+    if (isGuest != true) getFromCash();
     super.onInit();
   }
 

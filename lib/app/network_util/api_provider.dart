@@ -44,8 +44,10 @@ import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
+import 'package:get/get_core/src/get_main.dart';
 
 import '../modules/home/home_appbar.dart';
+import '../utils/translations/strings.dart';
 
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
@@ -735,6 +737,9 @@ class ApiProvider {
       });
       Response response = await _utils.post("create_shopping_cart", body: body);
       if (response.statusCode == 200) {
+        if(response.data['success']==false){
+          Get.snackbar(Strings().notification, response.data['message']);
+        }
         String id = '${response.data['data']['cart']['id']}';
         FormData body2 = FormData.fromMap({
           'delivery_method': deliveryMethod,
@@ -853,6 +858,7 @@ class ApiProvider {
     required String phone,
     required String email,
     required int packageId,
+    required String payMethod,
     required bool isGuest,
   }) async {
     if(isGuest==true) await SharedHelper().writeData(CachingKey.PHONE, phone);
@@ -867,8 +873,8 @@ class ApiProvider {
       "phone": phone,
       "email": email,
       "device_id":deviceId,
+      "pay_method":payMethod,
     });
-    print("final fields ${body.fields}");
     Response response =
         await _utils.post("book-service-package/$packageId", body: body);
     if (response.data["success"] == true) {

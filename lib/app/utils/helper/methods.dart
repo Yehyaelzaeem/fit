@@ -5,7 +5,6 @@ bool isValidPhoneNumber(String val) {
   //   multiLine: false,
   // );
   // return regExp.hasMatch(val);
-  //todo handle again
 
   if (val.length < 9)
     return false;

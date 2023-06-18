@@ -15,14 +15,15 @@ class TimeSleepController extends GetxController {
   TimeOfDay selectedTimeTo = TimeOfDay.now();
   String? select;
   RxBool? isToday;
-
+  final loadingButton = false.obs;
   addSleepTime({
     required String sleepTimeFrom,
     required String sleepTimeTo,
   }) async {
     if (selectedTimeFrom == selectedTimeTo) {
       Fluttertoast.showToast(msg: "Please, Select time first");
-    } else
+    } else {
+      loadingButton.value=true;
       await ApiProvider()
           .addSleepTime(
               sleepTimeFrom: sleepTimeFrom,
@@ -34,15 +35,17 @@ class TimeSleepController extends GetxController {
                       .toString()
                       .substring(0, 10))
           .then((value) {
+        value.code==200? loadingButton.value=false: loadingButton.value=true;
         Fluttertoast.showToast(msg: value.message.toString());
-        controllerDiary.onInit();
-        Get.toNamed(Routes.HOME);
+       controllerDiary.onInit();
+       Get.toNamed(Routes.HOME);
         isToday == false
             ? controllerDiary.getDiaryData(
                 controllerDiary.response.value.data!.days![1].date!)
             : controllerDiary.getDiaryData(
                 controllerDiary.response.value.data!.days![0].date!);
       });
+    }
   }
 
   onClickRadioButton(value) {
