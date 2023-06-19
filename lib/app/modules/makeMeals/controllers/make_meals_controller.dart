@@ -213,6 +213,7 @@ class MakeMealsController extends GetxController {
   }
 
   Future saveMeal() async {
+    print('Save Meal Problem');
     saveLoading.value = true;
     String foodIds = "";
     String amountIds = "";

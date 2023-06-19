@@ -53,6 +53,7 @@ class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
 
   Future<HomePageResponse> getHomeData() async {
+    print("BUG !!");
     Response response = await _utils.get("home");
     if (response.statusCode == 200) {
       return HomePageResponse.fromJson(response.data);

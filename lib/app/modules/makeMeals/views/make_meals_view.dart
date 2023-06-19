@@ -812,6 +812,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 paddingH: 12,
                                 paddingV: 4,
                                 func: ()async {
+                                  print('Save Meal Problem');
                                   if (controller.mealName.isEmpty) {
                                     Get.snackbar(
                                         "Error", "Please enter meal name");

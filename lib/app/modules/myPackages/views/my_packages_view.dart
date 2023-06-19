@@ -390,18 +390,14 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                                                               ),
                                                                             ),
                                                                           )
-                                                                        : (myPackagesResponse.data?.applePayStatus == true && Platform.isIOS)
+                                                                        : (myPackagesResponse.data?.applePayStatus == true &&
+                                                                                Platform.isIOS)
                                                                             ? Expanded(
                                                                                 child: Center(
                                                                                   child: GestureDetector(
                                                                                     onTap: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
                                                                                         ? () {
                                                                                             ///TODO HandleApplePay
-
-
-
-
-
 
                                                                                             Fluttertoast.showToast(msg: " HandleApplePay ");
                                                                                           }
@@ -680,49 +676,79 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                                                               ),
                                                                             ),
                                                                           )
-                                                                        : Expanded(
-                                                                            child:
-                                                                                Center(
-                                                                              child: GestureDetector(
-                                                                                onTap: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
-                                                                                    ? () {
-                                                                                        Navigator.pushReplacement(
-                                                                                            context,
-                                                                                            MaterialPageRoute(
-                                                                                                builder: (_) => WebViewScreen(
-                                                                                                      url: myPackagesResponse.data!.orders![index].paymentUrl!,
-                                                                                                      packageId: myPackagesResponse.data!.orders?[index].id!,
-                                                                                                    )));
-                                                                                      }
-                                                                                    : () {
-                                                                                        Fluttertoast.showToast(msg: "  Payment is deactivated  ");
-                                                                                      },
+                                                                        : myPackagesResponse.data?.visaStatue ==
+                                                                                true
+                                                                            ? Expanded(
                                                                                 child: Center(
-                                                                                  child: Container(
-                                                                                    decoration: BoxDecoration(color: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true ? kColorPrimary : kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
-                                                                                      BoxShadow(
-                                                                                        color: Colors.grey.withOpacity(0.4),
-                                                                                        blurRadius: 1,
-                                                                                        spreadRadius: 1,
-                                                                                        offset: Offset(0, 1),
-                                                                                      ),
-                                                                                    ]),
-                                                                                    child: Padding(
-                                                                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                                                                      child: kTextHeader(
-                                                                                        "Pay ",
-                                                                                        size: 16,
-                                                                                        color: Colors.white,
-                                                                                        bold: true,
-                                                                                        paddingH: 12,
-                                                                                        paddingV: 4,
+                                                                                  child: GestureDetector(
+                                                                                    onTap: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
+                                                                                        ? () {
+                                                                                            Navigator.pushReplacement(
+                                                                                                context,
+                                                                                                MaterialPageRoute(
+                                                                                                    builder: (_) => WebViewScreen(
+                                                                                                          url: myPackagesResponse.data!.orders![index].paymentUrl!,
+                                                                                                          packageId: myPackagesResponse.data!.orders?[index].id!,
+                                                                                                        )));
+                                                                                          }
+                                                                                        : () {
+                                                                                            Fluttertoast.showToast(msg: "  Payment is deactivated  ");
+                                                                                          },
+                                                                                    child: Center(
+                                                                                      child: Container(
+                                                                                        decoration: BoxDecoration(color: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true ? kColorPrimary : kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
+                                                                                          BoxShadow(
+                                                                                            color: Colors.grey.withOpacity(0.4),
+                                                                                            blurRadius: 1,
+                                                                                            spreadRadius: 1,
+                                                                                            offset: Offset(0, 1),
+                                                                                          ),
+                                                                                        ]),
+                                                                                        child: Padding(
+                                                                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                                                          child: kTextHeader(
+                                                                                            "Pay ",
+                                                                                            size: 16,
+                                                                                            color: Colors.white,
+                                                                                            bold: true,
+                                                                                            paddingH: 12,
+                                                                                            paddingV: 4,
+                                                                                          ),
+                                                                                        ),
                                                                                       ),
                                                                                     ),
                                                                                   ),
                                                                                 ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
+                                                                              )
+                                                                            : (myPackagesResponse.data?.applePayStatus == true && Platform.isIOS)
+                                                                                ? Expanded(
+                                                                                    child: Center(
+                                                                                      child: GestureDetector(
+                                                                                        onTap: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true
+                                                                                            ? () {
+                                                                                                ///TODO HandleApplePay
+
+                                                                                                Fluttertoast.showToast(msg: " HandleApplePay ");
+                                                                                              }
+                                                                                            : () {
+                                                                                                Fluttertoast.showToast(msg: "  Payment is deactivated  ");
+                                                                                              },
+                                                                                        child: Center(
+                                                                                          child: Container(
+                                                                                            child: Padding(
+                                                                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                                                              child: SvgPicture.asset(
+                                                                                                "assets/img/pay.svg",
+                                                                                                color: Colors.black,
+                                                                                                height: 50,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )
+                                                                                : SizedBox(),
                                                                   ],
                                                                 ),
                                                                 SizedBox(

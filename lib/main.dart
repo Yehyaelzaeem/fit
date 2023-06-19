@@ -6,6 +6,7 @@ import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
+import 'package:appspector/appspector.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
  import 'package:flutter/material.dart';
@@ -16,10 +17,19 @@ import 'package:notification_permissions/notification_permissions.dart';
 import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/modules/subscribe/controllers/subscribe_controller.dart';
 import 'app/routes/app_pages.dart';
+ runAppSpector() {
+  final config = Config()
+    ..iosApiKey = "Your iOS API_KEY"
+    ..androidApiKey = "android_NDA3NDkyZjUtMGFlNy00Y2M5LTg1MTQtMjA3YTQ1ZWQxOTgw";
+  // If you don't want to start all monitors you can specify a list of necessary ones
+  config.monitors = Monitors.all();
 
+  AppSpectorPlugin.run(config);
+}
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  runAppSpector();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   getFireBaseNotifications();

@@ -84,12 +84,18 @@ android {
 flutter {
     source '../..'
 }
-
+///TODO delete it
+repositories {
+    maven {
+        url "https://maven.appspector.com/artifactory/android-sdk"
+    }
+}
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //implementation platform('com.google.firebase:firebase-bom:31.2.0')
     implementation platform('com.google.firebase:firebase-bom:29.0.4')
     implementation 'com.google.firebase:firebase-analytics'
+    implementation "com.appspector:android-sdk:1.+"///TODO delete it
     implementation 'androidx.work:work-runtime-ktx:2.7.0-alpha05'
 
     constraints {
@@ -103,3 +109,5 @@ dependencies {
     }
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.android.application'///TODO delete it
+apply plugin: 'com.appspector.sdk'///TODO delete it
