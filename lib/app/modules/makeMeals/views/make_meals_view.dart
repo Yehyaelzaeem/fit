@@ -833,9 +833,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                     });
 
                                   }
-                                  if (controller.isGuestSaved) {
-                                    controller.saveMeal();
-                                  } else if (controller.userId.isNotEmpty) {
+                                  if (controller.isGuestSaved ||controller.userId.isNotEmpty) {
                                     controller.saveMeal();
                                   } else if (!controller.isGuestSaved&& controller.userId.isEmpty) {
                                    bool result= await Navigator.push(
