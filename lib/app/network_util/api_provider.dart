@@ -826,7 +826,7 @@ class ApiProvider {
       'platform': Platform.isAndroid ? 'android' : 'ios',
       'version': Platform.isAndroid
           ? StringConst.APP_Android_VERSION
-          : StringConst.APP_IOS_VERSION, //Updated 09/10/2022
+          : StringConst.APP_IOS_VERSION,
     });
     Response response = await _utils.post("api_version", body: body);
     if (response.data["success"] == true) {
