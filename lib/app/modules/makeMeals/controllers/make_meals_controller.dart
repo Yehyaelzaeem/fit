@@ -213,7 +213,6 @@ class MakeMealsController extends GetxController {
   }
 
   Future saveMeal() async {
-    print('Save Meal Problem');
     saveLoading.value = true;
     String foodIds = "";
     String amountIds = "";
@@ -245,13 +244,14 @@ class MakeMealsController extends GetxController {
           foodIds: foodIds,
           note: note.value,
         );
-      } else
+      } else {
         await ApiProvider().createNewMeal(
           name: mealName.value,
           amountsId: amountIds,
           foodIds: foodIds,
           note: note.value,
         );
+      }
 //// TODO handle it
       if (isGuestSaved) {
         Get.back(result: true);

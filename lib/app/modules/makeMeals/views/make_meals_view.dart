@@ -14,6 +14,7 @@ import '../../subscribe/views/non_user_subscribe_view.dart';
 import '../controllers/make_meals_controller.dart';
 
 class MakeMealsView extends GetView<MakeMealsController> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -812,7 +813,6 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 paddingH: 12,
                                 paddingV: 4,
                                 func: ()async {
-                                  print('Save Meal Problem');
                                   if (controller.mealName.isEmpty) {
                                     Get.snackbar(
                                         "Error", "Please enter meal name");

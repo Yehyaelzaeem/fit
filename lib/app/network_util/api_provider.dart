@@ -53,7 +53,6 @@ class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
 
   Future<HomePageResponse> getHomeData() async {
-    print("BUG !!");
     Response response = await _utils.get("home");
     if (response.statusCode == 200) {
       return HomePageResponse.fromJson(response.data);
@@ -625,13 +624,6 @@ class ApiProvider {
       "note": note,
       'device_id': deviceId,
     });
-
-    Echo("createNewMeal name $name");
-    Echo("createNewMeal food $foodIds");
-    Echo("createNewMeal amount $amountsId");
-    Echo("createNewMeal note $note");
-    Echo("createNewMeal device_id $deviceId");
-
     Response response = await _utils.post("new_meal", body: body);
     if (response.statusCode == 200) {
       return true;

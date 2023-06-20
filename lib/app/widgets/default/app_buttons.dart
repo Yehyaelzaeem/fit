@@ -21,7 +21,7 @@ Widget kButton(
     margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     child: InkWell(
       borderRadius: BorderRadius.circular(20),
-      onTap: func,
+      onTap:loading?(){}: func,
       child: Container(
         height: hight ?? 45,
         // padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),

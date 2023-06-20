@@ -53,9 +53,7 @@ class HomeController extends GetxController {
     isGuest.value=await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     faqStatus = await ApiProvider().getFaqStatus();
-    if(isLogggd.value)  homeResponse.value = await ApiProvider().getHomeData();
     if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
-
 
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
@@ -80,7 +78,6 @@ class HomeController extends GetxController {
     lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
     login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    homeResponse.value = await ApiProvider().getHomeData();
   }
 
   @override
