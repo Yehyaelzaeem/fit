@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../routes/app_pages.dart';
 import '../../main_un_auth.dart';
 import 'sleep_time_status.dart';
 
@@ -671,6 +672,26 @@ class DiaryView extends GetView<DiaryController> {
   Widget diaryFooter() {
     return Column(
       children: [
+        InkWell(
+          onTap: () async {
+            Get.toNamed(Routes.USUAL);
+            FocusScope.of(Get.context!).requestFocus(FocusNode());
+          },
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: Color(0xffF1F9E3),
+            ),
+            child: kButtonDefault(
+              'Usuals',
+              marginH: MediaQuery.of(Get.context!).size.width / 6,
+              paddingV: 0,
+              shadow: true,
+              paddingH: 12,
+            ),
+          ),
+        ),
         InkWell(
           onTap: () async {
             dynamic result = await Navigator.push(

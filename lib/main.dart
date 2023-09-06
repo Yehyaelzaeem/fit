@@ -14,6 +14,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:notification_permissions/notification_permissions.dart';
 import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/modules/subscribe/controllers/subscribe_controller.dart';
+import 'app/modules/usuals/controllers/usual_controller.dart';
 import 'app/routes/app_pages.dart';
 
 Future<void> main() async {
@@ -27,6 +28,7 @@ Future<void> main() async {
   await GetStorage().initStorage;
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");
+  Get.put(UsualController(), tag: "usual");
   Get.put(InvoiceController());
   Get.put(SubscribeController());
   runApp(

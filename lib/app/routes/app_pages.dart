@@ -61,6 +61,8 @@ import '../modules/timeSleep/bindings/time_sleep_binding.dart';
 import '../modules/timeSleep/views/time_sleep_view.dart';
 import '../modules/transform/bindings/transform_binding.dart';
 import '../modules/transform/views/transform_view.dart';
+import '../modules/usuals/bindings/usual_binding.dart';
+import '../modules/usuals/views/usual_view.dart';
 
 part 'app_routes.dart';
 
@@ -161,6 +163,11 @@ class AppPages {
       name: _Paths.DIARY,
       page: () => DiaryView(),
       binding: DiaryBinding(),
+    ),
+    GetPage(
+      name: _Paths.USUAL,
+      page: () => UsualView(),
+      binding: UsualBinding(),
     ),
     GetPage(
       name: _Paths.FAQ,

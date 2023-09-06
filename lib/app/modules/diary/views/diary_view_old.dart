@@ -1,6 +1,6 @@
 // import 'package:app/app/models/day_details_reposne.dart';
-// import 'package:app/app/modules/diary/add_new_food.dart';
-// import 'package:app/app/modules/diary/controllers/diary_controller.dart';
+// import 'package:app/app/modules/diary/save_new_meal.dart';
+// import 'package:app/app/modules/diary/controllers/usual_controller.dart';
 // import 'package:app/app/modules/home/home_drawer.dart';
 // import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
 // import 'package:app/app/network_util/api_provider.dart';
