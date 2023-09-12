@@ -35,6 +35,7 @@ class Data {
 
 class Orders {
   int? id;
+//  String? orderId;
   String? name;
   String? package;
   String? description;
@@ -48,6 +49,7 @@ class Orders {
 
   Orders({
     this.id,
+   // this.orderId,
     this.name,
     this.package,
     this.description,
@@ -62,6 +64,7 @@ class Orders {
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+//    orderId = json['order_id'];
     name = json['name'];
     package = json['package'];
     description = json['description'];

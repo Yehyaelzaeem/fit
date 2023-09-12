@@ -5,8 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 appDialog({
   required String title,
-  required Widget? image,
-  bool barrierDismissible = false,
+  Widget? image,
+  Widget? child,
+  bool barrierDismissible = true,
   String? body,
   Function? confirmAction,
   Function? cancelAction,
@@ -37,7 +38,9 @@ appDialog({
                 textAlign: TextAlign.center,
               ),
             ),
-            if (body != null)
+            if (child != null)  child,
+
+              if (body != null)
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(

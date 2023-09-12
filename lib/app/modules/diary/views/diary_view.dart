@@ -684,7 +684,7 @@ class DiaryView extends GetView<DiaryController> {
               color: Color(0xffF1F9E3),
             ),
             child: kButtonDefault(
-              'Usuals',
+              'My Meals',
               marginH: MediaQuery.of(Get.context!).size.width / 6,
               paddingV: 0,
               shadow: true,
@@ -768,7 +768,7 @@ class DiaryView extends GetView<DiaryController> {
               horizontal: 72,
             ),
             decoration: BoxDecoration(
-                color: kColorPrimary, borderRadius: BorderRadius.circular(50)),
+                color: Color(0xFF414042), borderRadius: BorderRadius.circular(50)),
           ),
         ),
         SizedBox(height: MediaQuery.of(Get.context!).size.width / 14),

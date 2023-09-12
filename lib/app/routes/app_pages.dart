@@ -62,6 +62,7 @@ import '../modules/timeSleep/views/time_sleep_view.dart';
 import '../modules/transform/bindings/transform_binding.dart';
 import '../modules/transform/views/transform_view.dart';
 import '../modules/usuals/bindings/usual_binding.dart';
+import '../modules/usuals/views/make_a_meal_view.dart';
 import '../modules/usuals/views/usual_view.dart';
 
 part 'app_routes.dart';
@@ -167,6 +168,11 @@ class AppPages {
     GetPage(
       name: _Paths.USUAL,
       page: () => UsualView(),
+      binding: UsualBinding(),
+    ),
+    GetPage(
+      name: _Paths.MALEAMEAL,
+      page: () => MakeAMealView(),
       binding: UsualBinding(),
     ),
     GetPage(
