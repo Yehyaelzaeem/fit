@@ -1,11 +1,13 @@
+import 'package:app/app/modules/usuals/widget/static_bar.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
 import '../../../widgets/default/text.dart';
 
 class CaloriesTypeItemWidget extends StatelessWidget {
-  const CaloriesTypeItemWidget({Key? key, required this.caloriesTypeName}) : super(key: key);
+  const CaloriesTypeItemWidget({Key? key, required this.caloriesTypeName, required this.totalCalories}) : super(key: key);
 final String caloriesTypeName;
+final String totalCalories;
   @override
   Widget build(BuildContext context) {
     return  Padding(
@@ -27,30 +29,14 @@ final String caloriesTypeName;
                     .center,
                 tapBodyToCollapse: false,
               ),
-              header:  kTextbody(caloriesTypeName, bold: true,align: TextAlign.start),
-              expanded: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              header:  Row(
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...List.generate(4, (index) => kTextbody('${caloriesTypeName}s Data ${index+1}'),),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...List.generate(4, (index) =>  kTextbody("100gm",),),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  ),
+                  Expanded(child: kTextbody(caloriesTypeName, bold: true,align: TextAlign.start)),
+                  kTextbody("($totalCalories Cal.)",align: TextAlign.start),
                 ],
               ),
+              expanded: StaticBar(type: caloriesTypeName.toLowerCase(),),
+
               collapsed: const SizedBox(),
             ),
           ),

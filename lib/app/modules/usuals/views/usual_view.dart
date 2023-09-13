@@ -31,24 +31,21 @@ class UsualView extends GetView<UsualController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(() {
-      if (controller.showLoader.value || controller.isLoading.value)
-        return Container(child: CircularLoadingWidget(), color: Colors.white);
-      return Column(
-        children: [
-          SizedBox(height: 24,),
-          HomeAppbar(
-            type: null,
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Container(
+    return SafeArea(
+      child: Scaffold(body: Obx(() {
+        if (controller.showLoader.value || controller.isLoading.value)
+          return Container(child: CircularLoadingWidget(), color: Colors.white);
+        return Column(
+          children: [
+            HomeAppbar(
+              type: null,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.horizontal(
                             right: Radius.circular(15.0),
@@ -67,57 +64,55 @@ class UsualView extends GetView<UsualController> {
                           ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding:
-                      EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                      child: GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.MALEAMEAL);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(200),
-                            border:
-                            Border.all(color: kColorPrimary, width: 1),
-                            color: Colors.white,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              SizedBox(width: 10),
-                              Icon(Icons.add, color: kColorPrimary),
-                              kTextbody(
-                                'Make a meal',
-                                paddingH: 6,
-                                paddingV: 8,
-                                color: kColorPrimary,
-                              ),
-                              SizedBox(width: 10),
-                            ],
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12,),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.MALEAMEAL);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(200),
+                              border:
+                              Border.all(color: kColorPrimary, width: 1),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                SizedBox(width: 10),
+                                Icon(Icons.add, color: kColorPrimary),
+                                kTextbody(
+                                  'Make a meal',
+                                  paddingH: 6,
+                                  paddingV: 8,
+                                  color: kColorPrimary,
+                                ),
+                                SizedBox(width: 10),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) => MealItemWidget(
-                          mealName: 'Meal ${index + 1}',
-                        ),
-                        separatorBuilder: (context, index) => SizedBox(
-                          height: 8,
-                        ),
-                        itemCount: 15))
-              ],
+                    ],
+                  ),
+                  Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) => MealItemWidget(
+                            mealName: 'Meal ${index + 1}', mealCalories: '600',
+                          ),
+                          separatorBuilder: (context, index) => SizedBox(
+                            height: 12,
+                          ),
+                          itemCount: 15))
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 24,),
-
-        ],
-      );
-    }));
+            SizedBox(height: 24,),
+          ],
+        );
+      })),
+    );
   }
 }

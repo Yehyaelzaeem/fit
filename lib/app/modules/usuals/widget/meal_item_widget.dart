@@ -11,86 +11,115 @@ import '../../../widgets/default/text.dart';
 import 'calories_type_item_widget.dart';
 
 class MealItemWidget extends StatelessWidget {
-  const MealItemWidget({Key? key, required this.mealName}) : super(key: key);
-final String mealName;
+  const MealItemWidget(
+      {Key? key, required this.mealName, required this.mealCalories})
+      : super(key: key);
+  final String mealName;
+  final String mealCalories;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
       decoration: BoxDecoration(
         color: Colors.grey[200],
       ),
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: Row(
         children: [
+          SizedBox(
+            width: 8,
+          ),
           Expanded(
-              child: kTextbody(mealName,
-                  color: kColorPrimary, align: TextAlign.start, bold: true)),
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              kTextbody(mealName,
+                  size: 18,
+                  color: kColorPrimary,
+                  align: TextAlign.start,
+                  bold: true),
+              SizedBox(
+                height: 4,
+              ),
+              kTextbody(
+                "($mealCalories Cal.)",
+                size: 14,
+                color: kColorAccent,
+                align: TextAlign.start,
+              ),
+            ],
+          )),
           PullDownButton(
             itemBuilder: (context) => [
               PullDownMenuItem(
                 icon: Icons.fastfood,
                 iconColor: Colors.brown,
-                title: 'Add to dairy',
+                title: '    Add to diary',
                 onTap: () {
                   Get.back();
                 },
               ),
-              const PullDownMenuDivider(),
               PullDownMenuItem(
                 icon: Icons.remove_red_eye,
                 iconColor: kColorPrimary,
-                title: 'View',
+                title: '    View',
                 onTap: () {
-                  appDialog(title: mealName,child: Column(children: [
-                    SizedBox(height: 8,),
-
-                    CaloriesTypeItemWidget(caloriesTypeName: 'Carb',),
-                    CaloriesTypeItemWidget(caloriesTypeName: 'Protein',),
-                    CaloriesTypeItemWidget(caloriesTypeName: 'Fat',),
-                    SizedBox(height: 18,),
-                    GestureDetector(
-                      onTap: ()=> Get.back(),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: kColorPrimary,
-                            borderRadius: BorderRadius.circular(16)
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            '    Close    ',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
+                  appDialog(
+                      title: "$mealName \n ($mealCalories Cal.)",
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 8,
+                          ),
+                          CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Proteins',
+                              totalCalories: "200"),
+                          CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Carbs', totalCalories: "400"),
+                          CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Fats', totalCalories: "300"),
+                          SizedBox(
+                            height: 18,
+                          ),
+                          GestureDetector(
+                            onTap: () => Get.back(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: kColorPrimary,
+                                  borderRadius: BorderRadius.circular(16)),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  '    Close    ',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                  ],));
+                        ],
+                      ));
                 },
               ),
-              const PullDownMenuDivider(),
               PullDownMenuItem(
                 icon: Icons.edit,
                 iconColor: Colors.blue,
-                title: 'Edit',
+                title: '    Edit',
                 onTap: () {
                   Get.toNamed(Routes.MALEAMEAL);
                 },
               ),
-              const PullDownMenuDivider(),
               PullDownMenuItem(
                 iconColor: Colors.red,
                 icon: Icons.delete,
-                title: 'Delete',
+                title: '    Delete',
+                isDestructive: true,
                 onTap: () {
                   appDialog(
-                    title: "Do you want to delete this meal?",
-                    body: mealName,
-                    image: Icon(Icons.delete,
-                        size: 40, color: Colors.red),
+                    title: "Do you want to delete $mealName?",
+                    image: Icon(Icons.delete, size: 24, color: Colors.red),
                     cancelAction: () {
                       Get.back();
                     },
@@ -104,9 +133,13 @@ final String mealName;
               ),
             ],
             buttonBuilder: (context, showMenu) => CupertinoButton(
+              pressedOpacity: 0.2,
               onPressed: showMenu,
               padding: EdgeInsets.zero,
-              child: const Icon(CupertinoIcons.ellipsis_circle),
+              child: const Icon(
+                CupertinoIcons.ellipsis_circle,
+                size: 30,
+              ),
             ),
           ),
 /*
