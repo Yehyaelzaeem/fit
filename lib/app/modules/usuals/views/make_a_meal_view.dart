@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/modules/diary/add_new_food.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/home_drawer.dart';
@@ -15,9 +14,9 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../models/usual_meals_data_reposne.dart';
 import '../../home/home_appbar.dart';
 import '../../main_un_auth.dart';
 import '../controllers/usual_controller.dart';
@@ -83,7 +82,7 @@ class MakeAMealView extends GetView<UsualController> {
                     ),
                     SizedBox(height: 12),
                     Divider(thickness: 2),
-                    rowWithProgressBar("Proteins", controller.response.value.data?.proteins),
+                   // rowWithProgressBar("Proteins", ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       child: Column(
@@ -109,7 +108,7 @@ class MakeAMealView extends GetView<UsualController> {
                       ),
                     ),
                     Divider(thickness: 2),
-                    rowWithProgressBar("Carbs", controller.response.value.data?.carbs),
+                //    rowWithProgressBar("Carbs", controller.response.value.data?.carbs),
                   /*  if (controller.refreshLoadingCarbs.value)
                       Container(
                         child: LinearProgressIndicator(color: kColorPrimary),
@@ -124,7 +123,7 @@ class MakeAMealView extends GetView<UsualController> {
                           return rowItem(controller.carbsDetails[indedx], 'carbs');
                         }),
                     Divider(thickness: 2),
-                    rowWithProgressBar("Fats", controller.response.value.data?.fats),
+                 //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       child: Column(
@@ -177,8 +176,11 @@ class MakeAMealView extends GetView<UsualController> {
       );
     }));
   }
+String getTotal(String total){
+    return total;
+}
 
-  Widget rowItem(CaloriesDetails item, String type) {
+  Widget rowItem(FoodCaloriesDetails item, String type) {
     return Container(
       height: 40,
       child: Column(
@@ -195,7 +197,6 @@ class MakeAMealView extends GetView<UsualController> {
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
                         flex: 8,
@@ -204,12 +205,12 @@ class MakeAMealView extends GetView<UsualController> {
                             showQualityDialog(
                               type == 'proteins'
                                   ? controller
-                                      .response.value.data!.proteins!.food!
+                                      .response.value.data!.proteins!
                                   : type == 'carbs'
                                       ? controller
-                                          .response.value.data!.carbs!.food!
+                                          .response.value.data!.carbs!
                                       : controller
-                                          .response.value.data!.fats!.food!,
+                                          .response.value.data!.fats!,
                               item,
                               type == 'proteins'
                                   ? 'proteins'
@@ -269,19 +270,19 @@ class MakeAMealView extends GetView<UsualController> {
                                   int foodId = 0;
                                   if (type == 'proteins') {
                                     foodId = controller
-                                        .response.value.data!.proteins!.food!
+                                        .response.value.data!.proteins!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
                                         .id!;
                                   } else if (type == 'carbs') {
                                     foodId = controller
-                                        .response.value.data!.carbs!.food!
+                                        .response.value.data!.carbs!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
                                         .id!;
                                   } else {
                                     foodId = controller
-                                        .response.value.data!.fats!.food!
+                                        .response.value.data!.fats!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
                                         .id!;
@@ -334,10 +335,10 @@ class MakeAMealView extends GetView<UsualController> {
                     onTap: () {
                       showQualityDialog(
                         type == 'proteins'
-                            ? controller.response.value.data!.proteins!.food!
+                            ? controller.response.value.data!.proteins!
                             : type == 'carbs'
-                                ? controller.response.value.data!.carbs!.food!
-                                : controller.response.value.data!.fats!.food!,
+                                ? controller.response.value.data!.carbs!
+                                : controller.response.value.data!.fats!,
                         item,
                         type == 'proteins'
                             ? 'proteins'
@@ -361,10 +362,9 @@ class MakeAMealView extends GetView<UsualController> {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: kTextbody(
-                    item.calories == null ? '' : '${item.calories}',
+                    item.calories == null ? '' : '${(item.calories*item.qty).toStringAsFixed(1)}',
                     color: Colors.black,
                     bold: false,
-                    size: 16,
                   ),
                 ),
               ),
@@ -393,7 +393,7 @@ class MakeAMealView extends GetView<UsualController> {
     );
   }
 
-  Widget rowWithProgressBar(String Title, Proteins? item) {
+  Widget rowWithProgressBar(String Title, String totalCalories) {
     return Column(
       children: [
         Padding(
@@ -418,42 +418,13 @@ class MakeAMealView extends GetView<UsualController> {
                 ],
               ),
               kTextHeader(
-              //    '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
-                  '00.00 / 00.00',
+                  totalCalories,
                   bold: false,
                   size: 20,
                   color: Colors.black),
             ],
           ),
         ),
-/*
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-          child: Stack(
-            children: [
-              Container(
-                height: 20,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-              Container(
-                height: 20,
-                width: MediaQuery.of(Get.context!).size.width *
-                    (item.caloriesTotal!.progress!.percentage!.toDouble() /
-                        100),
-                decoration: BoxDecoration(
-                  color: Color(
-                      int.parse("0xFF${item.caloriesTotal!.progress!.bg}")),
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ],
-          ),
-        ),
-*/
         SizedBox(
           height: 8,
         ),
@@ -502,11 +473,11 @@ class MakeAMealView extends GetView<UsualController> {
               onTap: () async {
                 FocusScope.of(Get.context!).requestFocus(FocusNode());
                 if (type == 'proteins') {
-                  controller.caloriesDetails.add(CaloriesDetails());
+                  controller.caloriesDetails.add(FoodCaloriesDetails());
                 } else if (type == 'carbs') {
-                  controller.carbsDetails.add(CaloriesDetails());
+                  controller.carbsDetails.add(FoodCaloriesDetails());
                 } else {
-                  controller.fatsDetails.add(CaloriesDetails());
+                  controller.fatsDetails.add(FoodCaloriesDetails());
                 }
               },
               child: Center(
@@ -570,11 +541,11 @@ class MakeAMealView extends GetView<UsualController> {
       ),
     );
   }
-
+  dynamic result;
   void showQualityDialog(
-      List<Food> food, CaloriesDetails item, String type) async {
+      List<Food> food, FoodCaloriesDetails item, String type) async {
     // show screen dialog
-    dynamic result = await showDialog(
+     result = await showDialog(
         context: Get.context!,
         builder: (context) {
           return Dialog(
@@ -589,12 +560,13 @@ class MakeAMealView extends GetView<UsualController> {
       item.quality = food.title;
       item.qty = food.qty;
       item.color = food.color;
+      item.calories = food.caloriePerUnit;
 
       controller.caloriesDetails.refresh();
       controller.carbsDetails.refresh();
       controller.fatsDetails.refresh();
       if (item.id == null) {
-        controller.createProtineData(food.id, food.qty!, type: type);
+      //  controller.createProtineData(food.id, food.qty!, type: type);
       } else {
       //  controller.updateProtineData(item.id, food.id, food.qty!, type: type);
       }
@@ -604,7 +576,7 @@ class MakeAMealView extends GetView<UsualController> {
 }
 
 class DeleteItemWidget extends StatefulWidget {
-  final CaloriesDetails item;
+  final FoodCaloriesDetails item;
   final UsualController controller;
   final String type;
 

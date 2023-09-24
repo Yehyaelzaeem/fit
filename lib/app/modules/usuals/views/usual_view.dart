@@ -66,7 +66,7 @@ class UsualView extends GetView<UsualController> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12,),
+                        padding: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
                         child: GestureDetector(
                           onTap: () {
                             Get.toNamed(Routes.MALEAMEAL);

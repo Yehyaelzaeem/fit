@@ -46,6 +46,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' as getx;
 import 'package:get/get_core/src/get_main.dart';
 
+import '../models/usual_meals_data_reposne.dart';
 import '../modules/home/home_appbar.dart';
 import '../utils/translations/strings.dart';
 
@@ -299,6 +300,16 @@ class ApiProvider {
       return DayDetailsResponse.fromJson(response.data);
     } else {
       return DayDetailsResponse.fromJson(response.data);
+    }
+  }
+
+  Future<UsualMealsDataResponse> getUsualMealsData() async {
+    Response response = await _utils.get("diary-meals/food-calories");
+    log('response ${response.data}');
+    if (response.data["success"] == true) {
+      return UsualMealsDataResponse.fromJson(response.data);
+    } else {
+      return UsualMealsDataResponse.fromJson(response.data);
     }
   }
 

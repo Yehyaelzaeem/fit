@@ -1,4 +1,3 @@
-import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/pdf_viewr.dart';
@@ -9,17 +8,19 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../models/day_details_reposne.dart';
+import '../../../models/usual_meals_data_reposne.dart';
 import '../../../routes/app_pages.dart';
 
 class UsualController extends GetxController {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
-  RxList<CaloriesDetails> caloriesDetails = RxList();
-  RxList<CaloriesDetails> carbsDetails = RxList();
-  RxList<CaloriesDetails> fatsDetails = RxList();
+  RxList<FoodCaloriesDetails> caloriesDetails = RxList();
+  RxList<FoodCaloriesDetails> carbsDetails = RxList();
+  RxList<FoodCaloriesDetails> fatsDetails = RxList();
   TextEditingController mealNameController = TextEditingController();
   final mealName = "".obs;
-  final response = DayDetailsResponse().obs;
+  final response = UsualMealsDataResponse().obs;
   FocusNode workoutTitleDescFocus = FocusNode();
   final isLoading = false.obs;
   final refreshLoadingProtine = false.obs;
@@ -38,141 +39,39 @@ class UsualController extends GetxController {
   final length = 0.obs;
   final workOut = 0.obs;
 
-  getNotifications()async{
-    if(await Permission.accessNotificationPolicy.isPermanentlyDenied&&await Permission.accessNotificationPolicy.isDenied&&await Permission.accessNotificationPolicy.isRestricted){
-        Permission.notification.request();
-    }
-    await Permission.notification.isDenied.then((value) {
-      if (value) {
-        Permission.notification.request();
-      }
-    });
-    await Permission.notification.isRestricted.then((value) {
-      if (value) {
-        Permission.notification.request();
-      }
-    });   await Permission.notification.isPermanentlyDenied.then((value) {
-      if (value) {
-        Permission.notification.request();
-      }
-    });
-  }
   @override
   void onInit() {
     super.onInit();
-    getNotifications();
-    getFromCash();
-    //   _initData();
+    usualMealsData();
   }
 
-  String _timezone = 'Unknown';
-  List<String> _availableTimezones = <String>[];
 
-  final isLogggd = false.obs;
-
-  void getFromCash() async {
-    isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    if (isLogggd.value != true) {
-      // Navigator.pushAndRemoveUntil(
-      //     Get.context!,
-      //     MaterialPageRoute(
-      //       builder: (context) => UnAuthView(),
-      //     ),
-      //     (Route<dynamic> route) => false);
-    } else {
-      getDiaryData(DateTime.now().toString().substring(0, 10));
-    }
-  }
-
-  void getDiaryDataRefreshResponse(String _date) async {
-    isLoading.value = true;
-    try {
-      await ApiProvider().getDiaryView(_date).then((value) {
-        if (value.success == false && value.data == null) {
-          noSessions.value = true;
-        } else {
-          response.value = value;
-        }
-      });
-    } catch (e) {}
-    isLoading.value = false;
-  }
-
-  void getDiaryData(String _date) async {
+  void usualMealsData() async {
+/*
     if (isLoading.value) return;
     if (refreshLoadingProtine.value) return;
     if (refreshLoadingCarbs.value) return;
     if (refreshLoadingFats.value) return;
     Echo('getDiaryData');
-    lastSelectedDate.value = _date;
     isLoading.value = true;
     caloriesDetails.clear();
     carbsDetails.clear();
     fatsDetails.clear();
-    Echo("====> Gittng Day $_date Info ");
+*/
+    isLoading.value = true;
 
-    await ApiProvider().getDiaryView(_date).then((value) {
-      if (value.success == false && value.data == null) {
-      //  isLoading.value = false;
-      //  noSessions.value = true;
-        SharedHelper().logout();
-        Get.offAllNamed(Routes.LOGIN);
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        if (value.data != null) {
-          response.value = value;
-          isLoading.value = false;
-          showLoader.value = false;
-          length.value = response.value.data!.water! + 3;
-          workOut.value = response.value.data!.workouts![0].id!;
-          workDesc = response.value.data!.dayWorkouts == null
-              ? " "
-              : response.value.data!.dayWorkouts!.workoutDesc!;
-          textEditController.text = response.value.data!.dayWorkouts == null
-              ? " "
-              : response.value.data!.dayWorkouts!.workoutDesc!;
-          workOutData.value = response.value.data!.dayWorkouts == null
-              ? " "
-              : response.value.data!.dayWorkouts!.workoutType!;
+    await ApiProvider().getUsualMealsData().then((value) {
 
-          if (response.value.data!.days![0].active == true) {
-            isToday.value = true;
-          } else {
-            isToday.value = false;
-          }
-          for (int i = 0; i < response.value.data!.days!.length; i++) {
-            if (response.value.data!.days![i].active == true) {
-              date.value = response.value.data!.days![i].dateFormat!;
-              apiDate.value = response.value.data!.days![i].date!;
-            } else {}
-          }
-          Echo(
-              "Percentage ${response.value.data!.proteins!.caloriesTotal!.progress!.percentage!.toDouble()} For ${response.value.data!.proteins!.caloriesTotal!.taken} / ${response.value.data!.proteins!.caloriesTotal!.imposed}");
-        } else {
-          if (lastSelectedDate.value.isNotEmpty) {
-            getDiaryData(lastSelectedDate.value);
-          } else {
-            getDiaryData(DateTime.now().toString().substring(0, 10));
-          }
-          response.value = value;
-          isLoading.value = false;
-          showLoader.value = false;
-          date.value = _date;
-          Echo("error");
-        }
-        // caloriesDetails.clear();
-        // carbsAndFats.clear();
-
-      ////  refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
-      ////  refreshCarbsList(response.value.data!.carbs!.caloriesDetails ?? []);
-      ////  refreshFatsList(response.value.data!.fats!.caloriesDetails ?? []);
-
-        // caloriesDetails.addAll(response.value.data!.proteins!.caloriesDetails!);
-        // carbsAndFats.addAll(response.value.data!.carbsFats!.caloriesDetails!);
+      if (value.data != null) {
+        showLoader.value = false;
+        response.value = value;
       }
+      isLoading.value = false;
+
     });
   }
 
+/*
   void refreshDiaryData(String _date, String type) async {
     Echo('refreshDiaryData');
     if (type == 'proteins') refreshLoadingProtine.value = true;
@@ -254,6 +153,7 @@ class UsualController extends GetxController {
     if (type == 'carbs') refreshLoadingCarbs.value = false;
     if (type == 'fats') refreshLoadingFats.value = false;
   }
+*/
 
   Future<void> deleteItemCalories(int id, String _date, String type) async {
     await ApiProvider()
@@ -261,10 +161,10 @@ class UsualController extends GetxController {
         .then((value) {
       if (value.success == true) {
         caloriesDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+       // refreshDiaryData(apiDate.value, type);
       } else {
         caloriesDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+   //     refreshDiaryData(apiDate.value, type);
         Fluttertoast.showToast(msg: "${value.message}");
       }
     });
@@ -276,10 +176,10 @@ class UsualController extends GetxController {
         .then((value) {
       if (value.success == true) {
         carbsDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+      //  refreshDiaryData(apiDate.value, type);
       } else {
         carbsDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+    //    refreshDiaryData(apiDate.value, type);
         Fluttertoast.showToast(msg: "${value.message}");
       }
     });
@@ -291,10 +191,10 @@ class UsualController extends GetxController {
         .then((value) {
       if (value.success == true) {
         fatsDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+   //     refreshDiaryData(apiDate.value, type);
       } else {
         fatsDetails.removeWhere((element) => element.id == id);
-        refreshDiaryData(apiDate.value, type);
+        //refreshDiaryData(apiDate.value, type);
         Fluttertoast.showToast(msg: "${value.message}");
       }
     });
@@ -307,7 +207,6 @@ class UsualController extends GetxController {
         .then((value) {
       if (value.success == true) {
         showLoader.value = false;
-        getDiaryData(apiDate.value);
         Fluttertoast.showToast(msg: "${value.message}");
       } else {
         // Fluttertoast.showToast(msg: "${value.message}");
@@ -371,18 +270,22 @@ class UsualController extends GetxController {
   }
 
   void launchURL(_url) async => await launch(_url);
+/*
 
   void createProtineData(int? food, double _quantity,
       {int? index, required String type}) async {
     if (type == 'proteins') refreshLoadingProtine.value = true;
     if (type == 'carbs') refreshLoadingCarbs.value = true;
     if (type == 'fats') refreshLoadingFats.value = true;
-    /*  await ApiProvider().createDiaryData(
+    */
+/*  await ApiProvider().createDiaryData(
         foodProtine: food, qtyProtiene: _quantity, date: apiDate.value);
     refreshDiaryData(apiDate.value, type);
-  }*/
+  }*//*
 
-    /* void updateProtineData(int? index, int? food, double _quantity,
+
+    */
+/* void updateProtineData(int? index, int? food, double _quantity,
       {required String type}) async {
     if (type == 'proteins') refreshLoadingProtine.value = true;
     if (type == 'carbs') refreshLoadingCarbs.value = true;
@@ -393,7 +296,9 @@ class UsualController extends GetxController {
         date: apiDate.value,
         id: index);
     refreshDiaryData(apiDate.value, type);
-  }*/
+  }*//*
+
+*/
 /*
     Color getColor(String title) {
       if (title == 'أنتويرب') return Colors.red;
@@ -487,6 +392,8 @@ class UsualController extends GetxController {
           fatsDetails..add(resItem);
         }
       });
-    }*/
+    }*//*
+
   }
+*/
 }

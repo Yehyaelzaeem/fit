@@ -4,6 +4,7 @@ class DayDetailsResponse {
   Data? data;
   String? message;
 
+
   DayDetailsResponse({this.code, this.success, this.data});
 
   DayDetailsResponse.fromJson(Map<String, dynamic> json) {
