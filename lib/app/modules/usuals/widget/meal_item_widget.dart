@@ -4,18 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
 import 'package:pull_down_button/pull_down_button.dart';
+import '../../../models/usual_meals_reposne.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/app_dialog.dart';
 import '../../../widgets/default/text.dart';
+import '../controllers/usual_controller.dart';
 import 'calories_type_item_widget.dart';
 
-class MealItemWidget extends StatelessWidget {
+class MealItemWidget extends StatefulWidget {
   const MealItemWidget(
-      {Key? key, required this.mealName, required this.mealCalories})
+      {Key? key, required this.mealName, this.proteins,this.mealId, required this.mealCalories, this.carbs, this.fats})
       : super(key: key);
   final String mealName;
   final String mealCalories;
+  final UsualProteins ?proteins;
+  final UsualProteins ?carbs;
+  final UsualProteins ?fats;
+  final int ?mealId;
+
+  @override
+  State<MealItemWidget> createState() => _MealItemWidgetState();
+}
+
+class _MealItemWidgetState extends State<MealItemWidget> {
+  UsualController controller = UsualController();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +46,7 @@ class MealItemWidget extends StatelessWidget {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              kTextbody(mealName,
+              kTextbody(widget.mealName,
                   size: 18,
                   color: kColorPrimary,
                   align: TextAlign.start,
@@ -42,7 +55,7 @@ class MealItemWidget extends StatelessWidget {
                 height: 4,
               ),
               kTextbody(
-                "($mealCalories Cal.)",
+                "(${widget.mealCalories} Cal.)",
                 size: 14,
                 color: kColorAccent,
                 align: TextAlign.start,
@@ -55,8 +68,8 @@ class MealItemWidget extends StatelessWidget {
                 icon: Icons.fastfood,
                 iconColor: Colors.brown,
                 title: '    Add to diary',
-                onTap: () {
-                  Get.back();
+                onTap: () async {
+                await  controller.addMealToDiary(mealId: widget.mealId!);
                 },
               ),
               PullDownMenuItem(
@@ -65,19 +78,18 @@ class MealItemWidget extends StatelessWidget {
                 title: '    View',
                 onTap: () {
                   appDialog(
-                      title: "$mealName \n ($mealCalories Cal.)",
+                      title: "${widget.mealName} \n (${widget.mealCalories} Cal.)",
                       child: Column(
                         children: [
                           SizedBox(
                             height: 8,
                           ),
-                          CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Proteins',
-                              totalCalories: "200"),
-                          CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Carbs', totalCalories: "400"),
-                          CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Fats', totalCalories: "300"),
+                          if(widget.proteins!=null)             CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Proteins', usualProteins: widget.proteins!, mealCalories: widget.mealCalories,),
+          if(widget.carbs!=null)    CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Carbs', usualProteins: widget.carbs!, mealCalories: widget.mealCalories,),
+                          if(widget.fats!=null)               CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Fats', usualProteins: widget.fats!, mealCalories: widget.mealCalories,),
                           SizedBox(
                             height: 18,
                           ),
@@ -116,16 +128,18 @@ class MealItemWidget extends StatelessWidget {
                 icon: Icons.delete,
                 title: '    Delete',
                 isDestructive: true,
-                onTap: () {
+                onTap: () async {
                   appDialog(
-                    title: "Do you want to delete $mealName?",
+                    title: "Do you want to delete ${widget.mealName}?",
                     image: Icon(Icons.delete, size: 24, color: Colors.red),
                     cancelAction: () {
                       Get.back();
                     },
                     cancelText: "No",
-                    confirmAction: () {
+                    confirmAction: () async {
                       Get.back();
+                      controller.deleteUsualMeal(widget.mealId!);
+                      await   controller.getMyUsualMeals();
                     },
                     confirmText: "Yes",
                   );
@@ -139,49 +153,15 @@ class MealItemWidget extends StatelessWidget {
               child: const Icon(
                 CupertinoIcons.ellipsis_circle,
                 size: 30,
-              ),
-            ),
-          ),
-/*
-          GestureDetector(
-            onTap: (){
-
-            },
-            child: Container(
-              decoration: BoxDecoration(
                 color: const Color(0xFF414042),
-                borderRadius: BorderRadius.circular(16)
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  'Actions',
-                  style: TextStyle(
-                    fontSize: 10.0,
-                    color: Colors.white,
-                  ),
-                ),
+
               ),
             ),
           ),
-*/
           SizedBox(
             width: 8,
           )
-          /*    GestureDetector(
-            onTap: ()  {},
-            child: Container(
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                margin: EdgeInsets.symmetric(horizontal: 6, vertical: 4),
-                child: Icon(
-                  Icons.settings,
-                  size: 18,
-                )),
-          ),*/
+
         ],
       ),
     );

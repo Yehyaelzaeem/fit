@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../../models/usual_meals_reposne.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/default/text.dart';
 import '../../diary/views/diary_view.dart';
 
 class StaticBar extends StatelessWidget {
-  const StaticBar({Key? key, required this.type}) : super(key: key);
+  const StaticBar({Key? key, required this.type, required this.usualProteins}) : super(key: key);
 final String type;
+  final UsualProteins usualProteins;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -53,52 +56,50 @@ final String type;
         Container(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  buildSpace(),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: kColorPrimary)
-                      ),
-                      child:kTextbody("6 gms"),
-                    ),
-                  ),
-                  buildSpace(color: Colors.white),
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4),
-                      width: double.infinity,
-                      child: kTextbody(
-                        'Meal Data',
-                        color: Colors.black,
-                        bold: false,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                  buildSpace(color: Colors.white),
-                  Expanded(
-                    flex: 2,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: kTextbody(
-                       '99',
-                        color: Colors.black,
-                        size: 16,
-                      ),
-                    ),
-                  ),
-                  buildSpace(),
-                ],
-              ),
+           ...List.generate(usualProteins.items!.length, (index) => Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
+               buildSpace(),
+               Expanded(
+                 flex: 3,
+                 child: Container(
+                   margin: EdgeInsets.symmetric(
+                       horizontal: 12, vertical: 8),
+                   width: double.infinity,
+                   decoration: BoxDecoration(
+                       borderRadius: BorderRadius.circular(4),
+                       border: Border.all(color: kColorPrimary)
+                   ),
+                   child:kTextbody("${usualProteins.items?[index].qty} ${usualProteins.items?[index].food?.unit}"),
+                 ),
+               ),
+               buildSpace(color: Colors.white),
+               Expanded(
+                 flex: 5,
+                 child: Container(
+                   margin: EdgeInsets.symmetric(horizontal: 4),
+                   width: double.infinity,
+                   child: kTextbody(
+                     "${usualProteins.items?[index].food?.title}",
+                     color: Colors.black,
+                     bold: false,
+                   ),
+                 ),
+               ),
+               buildSpace(color: Colors.white),
+               Expanded(
+                 flex: 2,
+                 child: FittedBox(
+                   fit: BoxFit.scaleDown,
+                   child: kTextbody(
+                     (usualProteins.items?[index].calories).toStringAsFixed(2),
+                     color: Colors.black,
+                   ),
+                 ),
+               ),
+               buildSpace(),
+             ],
+           )) ,
             ],
           ),
         )

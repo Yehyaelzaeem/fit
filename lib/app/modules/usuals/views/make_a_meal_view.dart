@@ -14,7 +14,9 @@ import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../models/usual_meals_data_reposne.dart';
 import '../../home/home_appbar.dart';
@@ -29,8 +31,6 @@ class MakeAMealView extends GetView<UsualController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Obx(() {
-      if (controller.showLoader.value || controller.isLoading.value)
-        return Container(child: CircularLoadingWidget(), color: Colors.white);
       return Column(
         children: [
           Expanded(
@@ -43,7 +43,7 @@ class MakeAMealView extends GetView<UsualController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                       padding: EdgeInsets.symmetric(vertical:16),
+                      padding: EdgeInsets.symmetric(vertical: 16),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.horizontal(
@@ -51,8 +51,8 @@ class MakeAMealView extends GetView<UsualController> {
                           ),
                           color: const Color(0xFF414042),
                         ),
-                        child:  Padding(
-                          padding: EdgeInsets.symmetric(vertical:8),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
                           child: Text(
                             '        Make a meal      ',
                             style: TextStyle(
@@ -87,12 +87,16 @@ class MakeAMealView extends GetView<UsualController> {
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       child: Column(
                         children: [
-                      /*    if (controller.refreshLoadingProtine.value)
+                          /*    if (controller.refreshLoadingProtine.value)
                             Container(
                               child: LinearProgressIndicator(
                                 color: kColorPrimary,
                               ),
                             ),*/
+                          Align(
+
+                              alignment:AlignmentDirectional.topStart,
+                              child: kTextHeader("Proteins", bold: true, size: 16)),
                           staticBar('proteins'),
                           if (controller.caloriesDetails.isEmpty)
                             SizedBox(height: 20),
@@ -102,17 +106,22 @@ class MakeAMealView extends GetView<UsualController> {
                               itemCount: controller.caloriesDetails.length,
                               itemBuilder: (context, indedx) {
                                 return rowItem(
-                                    controller.caloriesDetails[indedx], 'proteins');
+                                    controller.caloriesDetails[indedx],
+                                    'proteins');
                               }),
                         ],
                       ),
                     ),
-                    Divider(thickness: 2),
-                //    rowWithProgressBar("Carbs", controller.response.value.data?.carbs),
-                  /*  if (controller.refreshLoadingCarbs.value)
+                    //    rowWithProgressBar("Carbs", controller.response.value.data?.carbs),
+                    /*  if (controller.refreshLoadingCarbs.value)
                       Container(
                         child: LinearProgressIndicator(color: kColorPrimary),
                       ),*/
+                    Align(
+
+                        alignment:AlignmentDirectional.topStart,
+                        child: kTextHeader("Carbs", bold: true, size: 16)),
+
                     staticBar('carbs'),
                     if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
                     ListView.builder(
@@ -120,22 +129,28 @@ class MakeAMealView extends GetView<UsualController> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: controller.carbsDetails.length,
                         itemBuilder: (context, indedx) {
-                          return rowItem(controller.carbsDetails[indedx], 'carbs');
+                          return rowItem(
+                              controller.carbsDetails[indedx], 'carbs');
                         }),
-                    Divider(thickness: 2),
-                 //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
+                    //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 4),
                       child: Column(
                         children: [
-                        /*  if (controller.refreshLoadingFats.value)
+                          /*  if (controller.refreshLoadingFats.value)
                             Container(
                               child: LinearProgressIndicator(
                                 color: kColorPrimary,
                               ),
                             ),*/
+                          Align(
+
+                              alignment:AlignmentDirectional.topStart,
+                              child: kTextHeader("Fats", bold: true, size: 16)),
+
                           staticBar('fats'),
-                          if (controller.fatsDetails.isEmpty) SizedBox(height: 20),
+                          if (controller.fatsDetails.isEmpty)
+                            SizedBox(height: 20),
                           ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -153,9 +168,25 @@ class MakeAMealView extends GetView<UsualController> {
               ],
             ),
           ),
-          InkWell(
-            onTap: () {
-              Get.back();
+          controller.addLoading==true?
+        Container(
+      height: 40,
+      child: Lottie.asset(
+      'assets/loader.json'),
+      ):
+       InkWell(
+            onTap: () async {
+              if(controller.mealNameController.text.isEmpty){
+                Fluttertoast.showToast(msg: "Please, Enter meal name");
+              }else if(controller.foodItems.isEmpty){
+                Fluttertoast.showToast(msg: "Please, Add meal first");
+              }else{
+             await   controller.createUsualMeal(mealParameters: {
+                  "name": controller.mealNameController.text,
+                  "food_id":"${controller.foodItems.map((e) => e.foodId)}".replaceAll('(', '').replaceAll(')', ''),
+                  "qty": "${controller.foodItems.map((e) => e.quantity)}".replaceAll('(', '').replaceAll(')', ''),
+                });
+              }
             },
             child: Container(
               width: double.infinity,
@@ -176,9 +207,10 @@ class MakeAMealView extends GetView<UsualController> {
       );
     }));
   }
-String getTotal(String total){
+
+  String getTotal(String total) {
     return total;
-}
+  }
 
   Widget rowItem(FoodCaloriesDetails item, String type) {
     return Container(
@@ -204,13 +236,10 @@ String getTotal(String total){
                           onTap: () {
                             showQualityDialog(
                               type == 'proteins'
-                                  ? controller
-                                      .response.value.data!.proteins!
+                                  ? controller.response.value.data!.proteins!
                                   : type == 'carbs'
-                                      ? controller
-                                          .response.value.data!.carbs!
-                                      : controller
-                                          .response.value.data!.fats!,
+                                      ? controller.response.value.data!.carbs!
+                                      : controller.response.value.data!.fats!,
                               item,
                               type == 'proteins'
                                   ? 'proteins'
@@ -362,7 +391,9 @@ String getTotal(String total){
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: kTextbody(
-                    item.calories == null ? '' : '${(item.calories*item.qty).toStringAsFixed(1)}',
+                    item.calories == null
+                        ? ''
+                        : '${(item.calories * item.qty).toStringAsFixed(1)}',
                     color: Colors.black,
                     bold: false,
                   ),
@@ -417,11 +448,8 @@ String getTotal(String total){
                   ),
                 ],
               ),
-              kTextHeader(
-                  totalCalories,
-                  bold: false,
-                  size: 20,
-                  color: Colors.black),
+              kTextHeader(totalCalories,
+                  bold: false, size: 20, color: Colors.black),
             ],
           ),
         ),
@@ -500,9 +528,6 @@ String getTotal(String total){
     );
   }
 
-
-
-
   Widget itemWidget(
       {required String title, bool showDropDownArrow = false, String? color}) {
     return Container(
@@ -541,16 +566,17 @@ String getTotal(String total){
       ),
     );
   }
+
   dynamic result;
+
   void showQualityDialog(
       List<Food> food, FoodCaloriesDetails item, String type) async {
     // show screen dialog
-     result = await showDialog(
+    result = await showDialog(
         context: Get.context!,
         builder: (context) {
           return Dialog(
             child: SaveNewMeal(
-              date: controller.apiDate.value,
               list: food,
             ),
           );
@@ -561,14 +587,14 @@ String getTotal(String total){
       item.qty = food.qty;
       item.color = food.color;
       item.calories = food.caloriePerUnit;
-
+      controller.sendJsonData(food);
       controller.caloriesDetails.refresh();
       controller.carbsDetails.refresh();
       controller.fatsDetails.refresh();
       if (item.id == null) {
-      //  controller.createProtineData(food.id, food.qty!, type: type);
+        //  controller.createProtineData(food.id, food.qty!, type: type);
       } else {
-      //  controller.updateProtineData(item.id, food.id, food.qty!, type: type);
+        //  controller.updateProtineData(item.id, food.id, food.qty!, type: type);
       }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());

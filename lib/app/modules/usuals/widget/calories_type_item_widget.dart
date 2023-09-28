@@ -2,12 +2,15 @@ import 'package:app/app/modules/usuals/widget/static_bar.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 
+import '../../../models/usual_meals_reposne.dart';
 import '../../../widgets/default/text.dart';
 
 class CaloriesTypeItemWidget extends StatelessWidget {
-  const CaloriesTypeItemWidget({Key? key, required this.caloriesTypeName, required this.totalCalories}) : super(key: key);
-final String caloriesTypeName;
-final String totalCalories;
+  const CaloriesTypeItemWidget({Key? key, required this.usualProteins,required this.caloriesTypeName, required this.mealCalories,}) : super(key: key);
+final UsualProteins usualProteins;
+  final String caloriesTypeName;
+  final String mealCalories;
+
   @override
   Widget build(BuildContext context) {
     return  Padding(
@@ -32,11 +35,10 @@ final String totalCalories;
               header:  Row(
                 children: [
                   Expanded(child: kTextbody(caloriesTypeName, bold: true,align: TextAlign.start)),
-                  kTextbody("($totalCalories Cal.)",align: TextAlign.start),
+                  kTextbody("(${usualProteins.calories} Cal.)",align: TextAlign.start),
                 ],
               ),
-              expanded: StaticBar(type: caloriesTypeName.toLowerCase(),),
-
+              expanded: StaticBar(type: caloriesTypeName.toLowerCase(), usualProteins: usualProteins,),
               collapsed: const SizedBox(),
             ),
           ),

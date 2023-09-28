@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
 import 'package:app/app/models/cheer_full_response.dart';
@@ -47,6 +47,7 @@ import 'package:get/get.dart' as getx;
 import 'package:get/get_core/src/get_main.dart';
 
 import '../models/usual_meals_data_reposne.dart';
+import '../models/usual_meals_reposne.dart';
 import '../modules/home/home_appbar.dart';
 import '../utils/translations/strings.dart';
 
@@ -303,13 +304,72 @@ class ApiProvider {
     }
   }
 
+  /// usuals
+  Future<UsualMealsResponse> getMyUsualMeals() async {
+    Response response = await _utils.get("diary-meals");
+    log('response ${response.data}');
+    if (response.data["success"] == true) {
+      return UsualMealsResponse.fromJson(response.data);
+    } else {
+      return UsualMealsResponse.fromJson(response.data);
+    }
+  }
+
   Future<UsualMealsDataResponse> getUsualMealsData() async {
     Response response = await _utils.get("diary-meals/food-calories");
-    log('response ${response.data}');
+    log('UsualMealsDataResponse response ${response.data}');
     if (response.data["success"] == true) {
       return UsualMealsDataResponse.fromJson(response.data);
     } else {
       return UsualMealsDataResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> createUsualMeal(
+      {required Map<String, dynamic> mealParameters}) async {
+    FormData body = FormData.fromMap(mealParameters);
+    Response response =
+        await _utils.post("diary-meals/new_diary_meal", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> mealToDiary({required int mealId}) async {
+    FormData body = FormData.fromMap({
+      "meal_id": mealId,
+      "date": DateFormat('yyyy-MM-dd').format(DateTime.now())
+    });
+    Response response =
+        await _utils.post("diary-meals/meal_to_diary", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> updateUsualMeal(
+      {required Map<String, dynamic> mealParameters}) async {
+    FormData body = FormData.fromMap(mealParameters);
+    Response response = await _utils
+        .post("diary-meals/new_diary_meal/${mealParameters['id']}", body: body);
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
+    }
+  }
+
+  Future<GeneralResponse> deleteUsualMeal({required int mealId}) async {
+    Response response =
+        await _utils.post("diary-meals/delete_diary_meal/$mealId");
+    if (response.data["success"] == true) {
+      return GeneralResponse.fromJson(response.data);
+    } else {
+      return GeneralResponse.fromJson(response.data);
     }
   }
 
@@ -564,7 +624,9 @@ class ApiProvider {
   }
 
   Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
-    Response response = await _utils.post("meals_features_home",);
+    Response response = await _utils.post(
+      "meals_features_home",
+    );
     if (response.statusCode == 200) {
       return MealFeatureHomeResponse.fromJson(response.data);
     } else {
@@ -573,7 +635,9 @@ class ApiProvider {
   }
 
   Future<CheerFullResponse> getCheerFullStatus() async {
-    Response response = await _utils.post("meals_features_status",);
+    Response response = await _utils.post(
+      "meals_features_status",
+    );
     print("meals_features_status");
     if (response.statusCode == 200) {
       return CheerFullResponse.fromJson(response.data);
@@ -583,7 +647,9 @@ class ApiProvider {
   }
 
   Future<bool> getFaqStatus() async {
-    Response response = await _utils.post("faq_status",);
+    Response response = await _utils.post(
+      "faq_status",
+    );
     if (response.statusCode == 200) {
       return response.data['data']['show_faq_page'];
     } else {
@@ -592,7 +658,9 @@ class ApiProvider {
   }
 
   Future<MealFeatureStatusResponse> getMealFeaturesStatus() async {
-    Response response = await _utils.post("meals_features_status",);
+    Response response = await _utils.post(
+      "meals_features_status",
+    );
     if (response.statusCode == 200) {
       return MealFeatureStatusResponse.fromJson(response.data);
     } else {
@@ -612,7 +680,9 @@ class ApiProvider {
   }
 
   Future<MealFoodListResponse> getMealFoodList() async {
-    Response response = await _utils.post("meals_food_list",);
+    Response response = await _utils.post(
+      "meals_food_list",
+    );
     Echo(response.data.toString());
     if (response.statusCode == 200) {
       return MealFoodListResponse.fromJson(response.data);
@@ -741,7 +811,7 @@ class ApiProvider {
       });
       Response response = await _utils.post("create_shopping_cart", body: body);
       if (response.statusCode == 200) {
-        if(response.data['success']==false){
+        if (response.data['success'] == false) {
           Get.snackbar(Strings().notification, response.data['message']);
         }
         String id = '${response.data['data']['cart']['id']}';
@@ -793,7 +863,7 @@ class ApiProvider {
     bool isGuest = false;
     isGuestLogin = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
-     phone = await SharedHelper().readString(CachingKey.PHONE);
+    phone = await SharedHelper().readString(CachingKey.PHONE);
     String deviceId = "";
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -808,9 +878,8 @@ class ApiProvider {
     } else {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       if (isGuest) {
-        deviceId = isGuestLogin
-            ? '${iosInfo.name}${iosInfo.model}${phone}'
-            : '';
+        deviceId =
+            isGuestLogin ? '${iosInfo.name}${iosInfo.model}${phone}' : '';
       } else if (!isGuest) {
         deviceId = '${iosInfo.name}${iosInfo.model}${userId}';
       }
@@ -820,7 +889,8 @@ class ApiProvider {
         : Echo('User deviceId = ${deviceId.replaceAll(' ', '')}');
     print("1 user id $userId");
     print("2 is guest $isGuest");
-    print("3 is guest saved? $isGuestLogin + ${await SharedHelper().readString(CachingKey.PHONE)}");
+    print(
+        "3 is guest saved? $isGuestLogin + ${await SharedHelper().readString(CachingKey.PHONE)}");
     print("3 is guest saved? $isGuestLogin + ${phone}");
     return deviceId.replaceAll(' ', '');
   }
@@ -865,19 +935,24 @@ class ApiProvider {
     required String payMethod,
     required bool isGuest,
   }) async {
-    if(isGuest==true) await SharedHelper().writeData(CachingKey.PHONE, phone);
-    if(isGuest==true) await SharedHelper().writeData(CachingKey.IS_GUEST_SAVED,true);
-  if(isGuest==true)   await SharedHelper().writeData(CachingKey.USER_LAST_NAME, lastName);
-  if(isGuest==true)   await SharedHelper().writeData(CachingKey.EMAIL,email);
-  if(isGuest==true)   await SharedHelper().writeData(CachingKey.USER_NAME,name);
+    if (isGuest == true)
+      await SharedHelper().writeData(CachingKey.PHONE, phone);
+    if (isGuest == true)
+      await SharedHelper().writeData(CachingKey.IS_GUEST_SAVED, true);
+    if (isGuest == true)
+      await SharedHelper().writeData(CachingKey.USER_LAST_NAME, lastName);
+    if (isGuest == true)
+      await SharedHelper().writeData(CachingKey.EMAIL, email);
+    if (isGuest == true)
+      await SharedHelper().writeData(CachingKey.USER_NAME, name);
     String deviceId = await kDeviceInfo();
     FormData body = FormData.fromMap({
       "name": name,
       "last_name": lastName,
       "phone": phone,
       "email": email,
-      "device_id":deviceId,
-      "pay_method":payMethod,
+      "device_id": deviceId,
+      "pay_method": payMethod,
     });
     Response response =
         await _utils.post("book-service-package/$packageId", body: body);

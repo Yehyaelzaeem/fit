@@ -77,10 +77,8 @@ class FoodCaloriesDetails {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['qty'] = this.qty;
-    data['quality'] = this.quality;
-    data['calories'] = this.calories;
+    data['food_id[]'] = this.id;
+    data['qty[]'] = this.qty;
     return data;
   }
 }
@@ -112,13 +110,11 @@ class Food {
     isSellected = false;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({required int foodId,required int quantity,}) {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['unit'] = this.unit;
-    data['calorie_per_unit'] = this.caloriePerUnit;
-    data['color'] = this.color;
+    data['food_id[]'] = foodId;
+    data['qty[]'] = quantity;
     return data;
   }
+
 }

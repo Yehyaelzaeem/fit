@@ -10,13 +10,11 @@ import 'package:get/get.dart';
 import '../../models/usual_meals_data_reposne.dart';
 
 class SaveNewMeal extends StatefulWidget {
-  final String? date;
   final List<Food> list;
 
   const SaveNewMeal({
     Key? key,
     required this.list,
-    this.date,
   }) : super(key: key);
 
   @override

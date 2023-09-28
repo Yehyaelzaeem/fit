@@ -1,3 +1,5 @@
+import 'package:app/app/modules/home/controllers/home_controller.dart';
+import 'package:app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/pdf_viewr.dart';
@@ -8,11 +10,12 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../models/day_details_reposne.dart';
 import '../../../models/usual_meals_data_reposne.dart';
+import '../../../models/usual_meals_reposne.dart';
 import '../../../routes/app_pages.dart';
+import '../../diary/controllers/diary_controller.dart';
 
-class UsualController extends GetxController {
+class UsualController extends GetxController  with SingleGetTickerProviderMixin {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
   RxList<FoodCaloriesDetails> caloriesDetails = RxList();
@@ -21,139 +24,108 @@ class UsualController extends GetxController {
   TextEditingController mealNameController = TextEditingController();
   final mealName = "".obs;
   final response = UsualMealsDataResponse().obs;
+  final mealsResponse = UsualMealsResponse().obs;
   FocusNode workoutTitleDescFocus = FocusNode();
   final isLoading = false.obs;
+  final deleteLoading = false.obs;
+  final addLoading = false.obs;
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
   final refreshLoadingFats = false.obs;
-  final isToday = false.obs;
   final noSessions = false.obs;
-  final showLoader = false.obs;
   final lastSelectedDate = ''.obs;
-  final date = ''.obs;
-  final apiDate = ''.obs;
-  final workOutData = ''.obs;
-  final qtyProtine = ''.obs;
-  final foodProtine = ''.obs;
+
   String? workDesc;
   final length = 0.obs;
   final workOut = 0.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    usualMealsData();
+    await  getMyUsualMeals();
   }
 
 
-  void usualMealsData() async {
-/*
-    if (isLoading.value) return;
-    if (refreshLoadingProtine.value) return;
-    if (refreshLoadingCarbs.value) return;
-    if (refreshLoadingFats.value) return;
-    Echo('getDiaryData');
+  Future usualMealsData() async {
     isLoading.value = true;
-    caloriesDetails.clear();
-    carbsDetails.clear();
-    fatsDetails.clear();
-*/
-    isLoading.value = true;
-
     await ApiProvider().getUsualMealsData().then((value) {
-
       if (value.data != null) {
-        showLoader.value = false;
         response.value = value;
       }
-      isLoading.value = false;
+    });
+    isLoading.value = false;
 
+  }
+  List<FoodItem> foodItems = [];
+   sendJsonData(Food myFood) {
+     FoodItem item = FoodItem(foodId: myFood.id!,quantity: myFood.qty!);
+     foodItems.add(item);
+  }
+
+  Future<void> createUsualMeal({required Map<String,dynamic> mealParameters}) async {
+    addLoading.value=true;
+
+    await ApiProvider().createUsualMeal(mealParameters: mealParameters)
+        .then((value) async {
+      if (value.success == true) {
+        addLoading.value=false;
+        Fluttertoast.showToast(msg: "${value.message}");
+        mealNameController.clear();
+        foodItems.clear();
+        carbsDetails.clear();
+        caloriesDetails.clear();
+        fatsDetails.clear();
+        await getMyUsualMeals();
+      } else {
+        Fluttertoast.showToast(msg: "${value.message}");
+        addLoading.value=false;
+      }
     });
   }
 
-/*
-  void refreshDiaryData(String _date, String type) async {
-    Echo('refreshDiaryData');
-    if (type == 'proteins') refreshLoadingProtine.value = true;
-    if (type == 'carbs') refreshLoadingCarbs.value = true;
-    if (type == 'fats') refreshLoadingFats.value = true;
-    lastSelectedDate.value = _date;
-    response.value = await ApiProvider().getDiaryView(_date);
-    if (response.value.data!.proteins!.caloriesDetails!.isEmpty &&
-        response.value.data!.carbs!.caloriesDetails!.isEmpty &&
-        response.value.data!.fats!.caloriesDetails!.isEmpty) {
-      if (type == 'proteins') refreshLoadingProtine.value = false;
-      if (type == 'carbs') refreshLoadingCarbs.value = false;
-      if (type == 'fats') refreshLoadingFats.value = false;
-      return;
-    } else {
-      // caloriesDetails.removeWhere((element) => element.id == null);
-      // carbsAndFats.removeWhere((element) => element.id == null);
-      response.value.data!.proteins!.caloriesDetails!.forEach((element) {
-        if (caloriesDetails
-                .where((element2) => element.id == element2.id)
-                .toList()
-                .length >
-            0) {
-          caloriesDetails.forEach((item) {
-            if (item.id == element.id) {
-              item.quality = element.quality;
-              item.qty = element.qty;
-              item.calories = element.calories;
-            }
-          });
-        } else {
-        //  refreshCaloriesList(response.value.data!.proteins!.caloriesDetails ?? []);
-        }
-      });
-      response.value.data!.carbs!.caloriesDetails!.forEach((element) {
-        if (carbsDetails
-                .where((element2) => element.id == element2.id)
-                .toList()
-                .length >
-            0) {
-          carbsDetails.forEach((item) {
-            if (item.id == element.id) {
-              item.quality = element.quality;
-              item.qty = element.qty;
-              item.calories = element.calories;
-            }
-          });
-        } else {
-      ///    refreshCarbsList(response.value.data!.carbs!.caloriesDetails ?? []);
-        }
-      });
-
-      response.value.data!.fats!.caloriesDetails!.forEach((element) {
-        if (fatsDetails
-                .where((element2) => element.id == element2.id)
-                .toList()
-                .length >
-            0) {
-          fatsDetails.forEach((item) {
-            if (item.id == element.id) {
-              item.quality = element.quality;
-              item.qty = element.qty;
-              item.calories = element.calories;
-            }
-          });
-        } else {
-     //     refreshFatsList(response.value.data!.fats!.caloriesDetails ?? []);
-        }
-      });
-    }
-    caloriesDetails.refresh();
-    carbsDetails.refresh();
-    fatsDetails.refresh();
-    caloriesDetails.forEach((element) {});
-    carbsDetails.forEach((element) {});
-    carbsDetails.forEach((element) {});
-    fatsDetails.forEach((element) {});
-    if (type == 'proteins') refreshLoadingProtine.value = false;
-    if (type == 'carbs') refreshLoadingCarbs.value = false;
-    if (type == 'fats') refreshLoadingFats.value = false;
+  Future addMealToDiary({required int mealId}) async {
+    await ApiProvider().mealToDiary(mealId: mealId)
+        .then((value) async {
+      if (value.success == true) {
+        Get.find<DiaryController>(tag: 'diary').onInit();
+        Fluttertoast.showToast(msg: "${value.message}");
+      } else {
+        Fluttertoast.showToast(msg: "${value.message}");
+      }
+    });
   }
-*/
+
+  Future getMyUsualMeals() async {
+     isLoading.value=true;
+     await ApiProvider().getMyUsualMeals().then((value) {
+      if (value.success == true) {
+        print( mealsResponse.value.data);
+        mealsResponse.value = value;
+        isLoading.value=false;
+      } else {
+        Fluttertoast.showToast(msg: "${value.message}");
+      }
+    });
+
+     isLoading.value=false;
+     update();
+  }
+
+  Future<void> deleteUsualMeal(int mealId) async {
+    deleteLoading.value=true;
+    await ApiProvider().deleteUsualMeal(mealId: mealId)
+        .then((value) async {
+      if (value.success == true) {
+        mealsResponse.value.data?.removeWhere((element) =>(element.id==mealId));
+        deleteLoading.value=false;
+
+        Fluttertoast.showToast(msg: "${value.message}");
+      } else {
+        Fluttertoast.showToast(msg: "${value.message}");
+      }
+    });
+  }
+
 
   Future<void> deleteItemCalories(int id, String _date, String type) async {
     await ApiProvider()
@@ -169,6 +141,7 @@ class UsualController extends GetxController {
       }
     });
   }
+
 
   Future<void> deleteItemCarbs(int id, String _date, String type) async {
     await ApiProvider()
@@ -199,42 +172,6 @@ class UsualController extends GetxController {
       }
     });
   }
-
-  void updateWaterData(String water) async {
-    showLoader.value = true;
-    await ApiProvider()
-        .createDiaryData(water: water, date: apiDate.value)
-        .then((value) {
-      if (value.success == true) {
-        showLoader.value = false;
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        // Fluttertoast.showToast(msg: "${value.message}");
-        Echo("error");
-      }
-    });
-  }
-
-  final workoutLoading = false.obs;
-
-  void updateWork() async {
-    workoutLoading.value = true;
-    await ApiProvider().createDiaryData(
-      workOut: workOut.value,
-      workout_desc: workDesc,
-      date: apiDate.value,
-    ).then((value) {
-      if (value.success == true) {
-        workoutLoading.value = false;
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        workoutLoading.value = false;
-        Fluttertoast.showToast(msg: "Server Error");
-        Echo("error");
-      }
-    });
-  }
-
   void downloadFile(String url) async {
     Navigator.push(
         Get.context!,
@@ -396,4 +333,17 @@ class UsualController extends GetxController {
 
   }
 */
+}
+class FoodItem {
+  int foodId;
+  double quantity;
+
+  FoodItem({required this.foodId,required this.quantity});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'food_id[]': foodId,
+      'qty[]': quantity,
+    };
+  }
 }

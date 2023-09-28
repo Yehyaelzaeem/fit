@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 import '../../notification_api.dart';
+import '../../usuals/controllers/usual_controller.dart';
 
 class SplashController extends GetxController
     with SingleGetTickerProviderMixin {
@@ -75,6 +76,7 @@ class SplashController extends GetxController
     controller.avatar.value =
         await SharedHelper().readString(CachingKey.AVATAR);
     if (controller.isLogggd.value == true) {
+      await Get.put(UsualController(), tag: "usual").usualMealsData();
       Get.offAllNamed(Routes.HOME);
     } else {
       Get.offAllNamed(Routes.AUTH);

@@ -19,6 +19,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../../utils/helper/assets_path.dart';
 import '../../home/home_appbar.dart';
 import '../../main_un_auth.dart';
 import '../controllers/usual_controller.dart';
@@ -27,13 +28,12 @@ import '../widget/meal_item_widget.dart';
 
 class UsualView extends GetView<UsualController> {
   @override
-  final controller = Get.find(tag: 'usual');
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(body: Obx(() {
-        if (controller.showLoader.value || controller.isLoading.value)
+        if ( controller.isLoading.value||controller.deleteLoading.value)
           return Container(child: CircularLoadingWidget(), color: Colors.white);
         return Column(
           children: [
@@ -98,14 +98,39 @@ class UsualView extends GetView<UsualController> {
                     ],
                   ),
                   Expanded(
-                      child: ListView.separated(
-                          itemBuilder: (context, index) => MealItemWidget(
-                            mealName: 'Meal ${index + 1}', mealCalories: '600',
-                          ),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 12,
-                          ),
-                          itemCount: 15))
+                      child:controller.mealsResponse.value.data!.isEmpty? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              kEmptyPackage,
+                              scale: 5,
+                            ),
+                            SizedBox(
+                              height: 14,
+                            ),
+                            kTextbody("  No Meals!  ", size: 16),
+                          ],
+                        ),
+                      ):
+
+                      RefreshIndicator(
+                        onRefresh: ()async{
+                       await   controller.getMyUsualMeals();
+                      },
+                        child: ListView.separated(
+                            itemBuilder: (context, index) => MealItemWidget(
+                              mealName: "${controller.mealsResponse.value.data?[index].name}", mealCalories: "${controller.mealsResponse.value.data?[index].totalCalories}",
+                              proteins: controller.mealsResponse.value.data?[index].proteins,
+                              carbs:controller.mealsResponse.value.data?[index].carbs,
+                              fats: controller.mealsResponse.value.data?[index].fats,
+                              mealId: controller.mealsResponse.value.data?[index].id,
+                            ),
+                            separatorBuilder: (context, index) => SizedBox(
+                              height: 12,
+                            ),
+                            itemCount: controller.mealsResponse.value.data!.length),
+                      ))
                 ],
               ),
             ),

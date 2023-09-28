@@ -66,7 +66,7 @@ class HomeController extends GetxController {
           "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
     });
     print(slider);
-    homeResponse.value.data!.services!.forEach((v) {
+    homeResponse.value.data?.services?.forEach((v) {
       servicesList.add(Services(id: v.id, title: v.title, items: v.items));
     });
   }

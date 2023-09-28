@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../main_un_auth.dart';
+import '../../usuals/controllers/usual_controller.dart';
 import 'sleep_time_status.dart';
 
 class DiaryView extends GetView<DiaryController> {
@@ -673,7 +674,7 @@ class DiaryView extends GetView<DiaryController> {
     return Column(
       children: [
         InkWell(
-          onTap: () async {
+          onTap: () {
             Get.toNamed(Routes.USUAL);
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
