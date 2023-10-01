@@ -1,3 +1,4 @@
+import 'package:app/app/modules/usuals/views/make_a_meal_view.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +14,17 @@ import '../controllers/usual_controller.dart';
 import 'calories_type_item_widget.dart';
 
 class MealItemWidget extends StatefulWidget {
-  const MealItemWidget(
-      {Key? key, required this.mealName, this.proteins,this.mealId, required this.mealCalories, this.carbs, this.fats})
-      : super(key: key);
+  const MealItemWidget({
+    Key? key,
+    required this.mealName,
+    this.meal,
+    this.mealId,
+    required this.mealCalories,
+  }) : super(key: key);
   final String mealName;
   final String mealCalories;
-  final UsualProteins ?proteins;
-  final UsualProteins ?carbs;
-  final UsualProteins ?fats;
-  final int ?mealId;
+  final MealData? meal;
+  final int? mealId;
 
   @override
   State<MealItemWidget> createState() => _MealItemWidgetState();
@@ -67,32 +70,43 @@ class _MealItemWidgetState extends State<MealItemWidget> {
               PullDownMenuItem(
                 icon: Icons.fastfood,
                 iconColor: Colors.brown,
-                title: '    Add to diary',
+                title: 'Add to diary',
                 onTap: () async {
-                await  controller.addMealToDiary(mealId: widget.mealId!);
+                  await controller.addMealToDiary(mealId: widget.mealId!).then((value) => Get.back());
                 },
               ),
               PullDownMenuItem(
                 icon: Icons.remove_red_eye,
                 iconColor: kColorPrimary,
-                title: '    View',
+                title: 'View',
                 onTap: () {
                   appDialog(
-                      title: "${widget.mealName} \n (${widget.mealCalories} Cal.)",
+                      title:
+                          "${widget.mealName} \n (${widget.mealCalories} Cal.)",
                       child: Column(
                         children: [
                           SizedBox(
                             height: 8,
                           ),
-                          if(widget.proteins!=null)             CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Proteins', usualProteins: widget.proteins!, mealCalories: widget.mealCalories,),
-          if(widget.carbs!=null)    CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Carbs', usualProteins: widget.carbs!, mealCalories: widget.mealCalories,),
-                          if(widget.fats!=null)               CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Fats', usualProteins: widget.fats!, mealCalories: widget.mealCalories,),
-                          SizedBox(
-                            height: 18,
-                          ),
+                          if (widget.meal?.proteins != null)
+                            CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Proteins',
+                              usualProteins: widget.meal!.proteins!,
+                              mealCalories: widget.mealCalories,
+                            ),
+                          if (widget.meal?.carbs != null)
+                            CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Carbs',
+                              usualProteins: widget.meal!.carbs!,
+                              mealCalories: widget.mealCalories,
+                            ),
+                          if (widget.meal?.fats != null)
+                            CaloriesTypeItemWidget(
+                              caloriesTypeName: 'Fats',
+                              usualProteins: widget.meal!.fats!,
+                              mealCalories: widget.mealCalories,
+                            ),
+                          SizedBox(height: 18),
                           GestureDetector(
                             onTap: () => Get.back(),
                             child: Container(
@@ -102,7 +116,7 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                               child: Padding(
                                 padding: EdgeInsets.all(8),
                                 child: Text(
-                                  '    Close    ',
+                                  '     Close     ',
                                   style: TextStyle(
                                     fontSize: 16.0,
                                     color: Colors.white,
@@ -118,15 +132,22 @@ class _MealItemWidgetState extends State<MealItemWidget> {
               PullDownMenuItem(
                 icon: Icons.edit,
                 iconColor: Colors.blue,
-                title: '    Edit',
+                title: 'Edit',
                 onTap: () {
-                  Get.toNamed(Routes.MALEAMEAL);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => MakeAMealView(
+                                mealData: widget.meal,
+                                mealId: widget.mealId,
+                                mealName: widget.mealName,
+                              )));
                 },
               ),
               PullDownMenuItem(
                 iconColor: Colors.red,
                 icon: Icons.delete,
-                title: '    Delete',
+                title: 'Delete',
                 isDestructive: true,
                 onTap: () async {
                   appDialog(
@@ -137,9 +158,12 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                     },
                     cancelText: "No",
                     confirmAction: () async {
-                      Get.back();
-                      controller.deleteUsualMeal(widget.mealId!);
-                      await   controller.getMyUsualMeals();
+                      controller
+                          .deleteUserUsualMeal(widget.mealId!)
+                          .then((value) {
+                        Get.back();
+                        Get.back();
+                      });
                     },
                     confirmText: "Yes",
                   );
@@ -154,14 +178,12 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 CupertinoIcons.ellipsis_circle,
                 size: 30,
                 color: const Color(0xFF414042),
-
               ),
             ),
           ),
           SizedBox(
             width: 8,
           )
-
         ],
       ),
     );

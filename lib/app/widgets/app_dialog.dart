@@ -19,8 +19,8 @@ appDialog({
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: EdgeInsets.only(top: image != null ? 6 : 10, bottom: 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: ListView(
+          shrinkWrap: true,
           children: [
             if (image != null) image,
             SizedBox(height: 4),

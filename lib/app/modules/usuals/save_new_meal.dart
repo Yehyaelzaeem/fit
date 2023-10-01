@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import '../../models/usual_meals_data_reposne.dart';
 
 class SaveNewMeal extends StatefulWidget {
-  final List<Food> list;
+  final List<FoodDataItem> list;
 
   const SaveNewMeal({
     Key? key,
@@ -23,14 +23,14 @@ class SaveNewMeal extends StatefulWidget {
 
 class _SaveNewMealState extends State<SaveNewMeal> {
   String food = "Choose Food";
-  Food? selectedFood;
+  FoodDataItem? selectedFood;
   double? quantity;
   int? foodId;
 
   String? unit = "";
   double? calories = 0;
-  List<Food> searchResult = [];
-  List<Food>? data;
+  List<FoodDataItem> searchResult = [];
+  List<FoodDataItem>? data;
   late String keyword;
 
   void search(String keyWord) {

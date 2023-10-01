@@ -675,6 +675,7 @@ class DiaryView extends GetView<DiaryController> {
       children: [
         InkWell(
           onTap: () {
+            Get.put(UsualController(), tag: "usual");
             Get.toNamed(Routes.USUAL);
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },

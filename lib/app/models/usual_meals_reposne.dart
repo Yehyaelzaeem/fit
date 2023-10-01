@@ -1,7 +1,9 @@
+import 'package:app/app/models/usual_meals_data_reposne.dart';
+
 class UsualMealsResponse {
   int? code;
   bool? success;
-  List<Data>? data;
+  List<MealData>? data;
   String? message;
 
   UsualMealsResponse({this.code, this.success, this.data});
@@ -11,9 +13,9 @@ class UsualMealsResponse {
     success = json['success'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <MealData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new MealData.fromJson(v));
       });
     }
   }
@@ -29,7 +31,7 @@ class UsualMealsResponse {
   }
 }
 
-class Data {
+class MealData {
   int? id;
   String? name;
   dynamic totalCalories;
@@ -37,7 +39,7 @@ class Data {
   UsualProteins? carbs;
   UsualProteins? fats;
 
-  Data(
+  MealData(
       {this.id,
         this.name,
         this.totalCalories,
@@ -45,7 +47,7 @@ class Data {
         this.carbs,
         this.fats});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  MealData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     totalCalories = json['total_calories'];
@@ -102,7 +104,7 @@ class UsualProteins {
 
 class Items {
   int? id;
-  FoodItem? food;
+  FoodDataItem? food;
   int? qty;
   dynamic calories;
 
@@ -110,7 +112,7 @@ class Items {
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    food = json['food'] != null ? new FoodItem.fromJson(json['food']) : null;
+    food = json['food'] != null ? new FoodDataItem.fromJson(json['food']) : null;
     qty = json['qty'];
     calories = json['calories'];
   }
@@ -118,21 +120,22 @@ class Items {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    if (this.food != null) {
-      data['food'] = this.food!.toJson();
-    }
     data['qty'] = this.qty;
     data['calories'] = this.calories;
     return data;
   }
 }
 
-class FoodItem {
+/*class FoodItem {
   int? id;
   String? title;
   String? unit;
   dynamic caloriePerUnit;
   String? color;
+
+
+
+
 
   FoodItem({this.id, this.title, this.unit, this.caloriePerUnit, this.color});
 
@@ -143,16 +146,6 @@ class FoodItem {
     caloriePerUnit = json['calorie_per_unit'];
     color = json['color'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['unit'] = this.unit;
-    data['calorie_per_unit'] = this.caloriePerUnit;
-    data['color'] = this.color;
-    return data;
-  }
-}
+}*/
 
 

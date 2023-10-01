@@ -1,14 +1,6 @@
 import 'dart:io';
-
-import 'package:app/app/modules/diary/add_new_food.dart';
-import 'package:app/app/modules/diary/controllers/diary_controller.dart';
-import 'package:app/app/modules/home/home_drawer.dart';
-import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
-import 'package:app/app/modules/notification_api.dart';
-import 'package:app/app/utils/helper/echo.dart';
+import 'package:app/app/models/usual_meals_reposne.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/widgets/custom_bottom_sheet.dart';
-import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -17,16 +9,47 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-
 import '../../../models/usual_meals_data_reposne.dart';
 import '../../home/home_appbar.dart';
-import '../../main_un_auth.dart';
 import '../controllers/usual_controller.dart';
 import '../save_new_meal.dart';
 
-class MakeAMealView extends GetView<UsualController> {
+class MakeAMealView extends StatefulWidget{
+   MakeAMealView({this.mealData, this.mealName, this.mealId});
+   late  MealData ? mealData;
+   final String ? mealName;
+   final int ? mealId;
+
   @override
-  final controller = Get.find(tag: 'usual');
+  State<MakeAMealView> createState() => _MakeAMealViewState();
+}
+
+class _MakeAMealViewState extends State<MakeAMealView> {
+  TextEditingController _mealName = TextEditingController();
+
+  final controller = Get.find<UsualController>(tag: 'usual');
+@override
+  void initState() {
+    super.initState();
+    if(widget.mealData!=null){
+      _mealName.text=widget.mealName??"";
+      if (widget.mealData?.proteins?.items?.length!=0) {
+        controller.caloriesDetails.clear();
+        controller.carbsDetails.clear();
+        controller.fatsDetails.clear();
+        widget.mealData?.proteins?.items?.forEach((element) {controller.caloriesDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
+      }
+      if (widget.mealData?.carbs?.items?.length!=0) {
+        widget.mealData?.carbs?.items?.forEach((element) {controller.carbsDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
+      }
+
+      if(widget.mealData?.fats?.items?.length!=0) {
+        widget.mealData?.fats?.items?.forEach((element) {controller.fatsDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
+
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,26 +88,22 @@ class MakeAMealView extends GetView<UsualController> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 18),
+                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                       child: EditText(
                         hint: 'Meal name',
                         hintColor: Color(0xff8D8D8D),
                         background: Color(0xffF1F1F1),
-                        controller: controller.mealNameController,
-                        updateFunc: (value) {
-                          controller.mealName.value = value;
-                        },
+                        controller: _mealName,
                         contentPaddingV: 0,
                         padding: 0,
                         noBorder: false,
                         radius: 4,
                       ),
                     ),
-                    SizedBox(height: 12),
-                    Divider(thickness: 2),
+                    SizedBox(height: 4),
                    // rowWithProgressBar("Proteins", ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         children: [
                           /*    if (controller.refreshLoadingProtine.value)
@@ -96,7 +115,17 @@ class MakeAMealView extends GetView<UsualController> {
                           Align(
 
                               alignment:AlignmentDirectional.topStart,
-                              child: kTextHeader("Proteins", bold: true, size: 16)),
+                              child:
+                              Text(
+                                'Proteins',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),),
+                          SizedBox(height: 8),
+
                           staticBar('proteins'),
                           if (controller.caloriesDetails.isEmpty)
                             SizedBox(height: 20),
@@ -117,24 +146,47 @@ class MakeAMealView extends GetView<UsualController> {
                       Container(
                         child: LinearProgressIndicator(color: kColorPrimary),
                       ),*/
-                    Align(
-
-                        alignment:AlignmentDirectional.topStart,
-                        child: kTextHeader("Carbs", bold: true, size: 16)),
-
-                    staticBar('carbs'),
-                    if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
-                    ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: controller.carbsDetails.length,
-                        itemBuilder: (context, indedx) {
-                          return rowItem(
-                              controller.carbsDetails[indedx], 'carbs');
-                        }),
-                    //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
+                    SizedBox(height: 4),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                      child: Column(
+                        children: [
+                          Align(
+
+                            alignment:AlignmentDirectional.topStart,
+                            child:
+                            Text(
+                              'Carbs',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+
+
+
+                          ),
+                          SizedBox(height: 8),
+                          staticBar('carbs'),
+                          if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: controller.carbsDetails.length,
+                              itemBuilder: (context, indedx) {
+                                return rowItem(
+                                    controller.carbsDetails[indedx], 'carbs');
+                              }),
+                        ],
+                      ),
+                    ),
+
+                    //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
+                    SizedBox(height: 4),
+
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
                       child: Column(
                         children: [
                           /*  if (controller.refreshLoadingFats.value)
@@ -146,7 +198,17 @@ class MakeAMealView extends GetView<UsualController> {
                           Align(
 
                               alignment:AlignmentDirectional.topStart,
-                              child: kTextHeader("Fats", bold: true, size: 16)),
+                              child:
+                              Text(
+                                'Fats',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                          ),                            SizedBox(height: 8),
+
 
                           staticBar('fats'),
                           if (controller.fatsDetails.isEmpty)
@@ -176,18 +238,46 @@ class MakeAMealView extends GetView<UsualController> {
       ):
        InkWell(
             onTap: () async {
-              if(controller.mealNameController.text.isEmpty){
-                Fluttertoast.showToast(msg: "Please, Enter meal name");
-              }else if(controller.foodItems.isEmpty){
-                Fluttertoast.showToast(msg: "Please, Add meal first");
-              }else{
-             await   controller.createUsualMeal(mealParameters: {
-                  "name": controller.mealNameController.text,
-                  "food_id":"${controller.foodItems.map((e) => e.foodId)}".replaceAll('(', '').replaceAll(')', ''),
-                  "qty": "${controller.foodItems.map((e) => e.quantity)}".replaceAll('(', '').replaceAll(')', ''),
-                });
-              }
-            },
+                      if (_mealName.text.isEmpty) {
+                        Fluttertoast.showToast(msg: "Please, Enter meal name");
+                      } else if (controller.foodItems.isEmpty) {
+                        Fluttertoast.showToast(msg: "Please, Add meal first");
+                      } else {
+                        if(widget.mealData==null){
+                          await controller.createUsualMeal(mealParameters: {
+                          "name": _mealName.text,
+                          "food_id":
+                              "${controller.foodItems.map((e) => e.foodId)}"
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', ''),
+                          "qty":
+                              "${controller.foodItems.map((e) => e.quantity)}"
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', ''),
+                        }).then((value) {
+                          Get.back();
+                          Get.back();
+                        });
+                      }else{
+                          await controller.updateCurrentUsualMeal(mealParameters: {
+                            "id": widget.mealId,
+                            "name": _mealName.text,
+                            "food_id":
+                            "${controller.foodItems.map((e) => e.foodId)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''),
+                            "qty":
+                            "${controller.foodItems.map((e) => e.quantity)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''),
+                          }).then((value) {
+                            Get.back();
+                            Get.back();
+                          });
+                        }
+                      }
+
+                  },
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 16),
@@ -195,7 +285,7 @@ class MakeAMealView extends GetView<UsualController> {
                 color: Color(0xffF1F9E3),
               ),
               child: kButtonDefault(
-                'Save Meal',
+                widget.mealData==null?     'Save Meal':'Update Meal',
                 marginH: MediaQuery.of(Get.context!).size.width / 6,
                 paddingV: 0,
                 shadow: true,
@@ -212,7 +302,7 @@ class MakeAMealView extends GetView<UsualController> {
     return total;
   }
 
-  Widget rowItem(FoodCaloriesDetails item, String type) {
+  Widget rowItem(FoodDataItem item, String type) {
     return Container(
       height: 40,
       child: Column(
@@ -301,19 +391,19 @@ class MakeAMealView extends GetView<UsualController> {
                                     foodId = controller
                                         .response.value.data!.proteins!
                                         .firstWhere((element) =>
-                                            element.title == item.quality)
+                                            element.title == item.title)
                                         .id!;
                                   } else if (type == 'carbs') {
                                     foodId = controller
                                         .response.value.data!.carbs!
                                         .firstWhere((element) =>
-                                            element.title == item.quality)
+                                            element.title == item.title)
                                         .id!;
                                   } else {
                                     foodId = controller
                                         .response.value.data!.fats!
                                         .firstWhere((element) =>
-                                            element.title == item.quality)
+                                            element.title == item.title)
                                         .id!;
                                   }
 /*
@@ -377,9 +467,9 @@ class MakeAMealView extends GetView<UsualController> {
                       );
                     },
                     child: itemWidget(
-                      title: item.quality == null ? '' : '${item.quality}',
+                      title: item.title == null ? '' : '${item.title}',
                       showDropDownArrow:
-                          item.quality == null || '${item.quality}'.isEmpty,
+                          item.title == null || '${item.title}'.isEmpty,
                       color: item.color,
                     ),
                   ),
@@ -391,9 +481,9 @@ class MakeAMealView extends GetView<UsualController> {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: kTextbody(
-                    item.calories == null
+                    item.caloriePerUnit == null
                         ? ''
-                        : '${(item.calories * item.qty).toStringAsFixed(1)}',
+                        : '${(item.caloriePerUnit ).toStringAsFixed(1)}',
                     color: Colors.black,
                     bold: false,
                   ),
@@ -501,11 +591,11 @@ class MakeAMealView extends GetView<UsualController> {
               onTap: () async {
                 FocusScope.of(Get.context!).requestFocus(FocusNode());
                 if (type == 'proteins') {
-                  controller.caloriesDetails.add(FoodCaloriesDetails());
+                  controller.caloriesDetails.add(FoodDataItem());
                 } else if (type == 'carbs') {
-                  controller.carbsDetails.add(FoodCaloriesDetails());
+                  controller.carbsDetails.add(FoodDataItem());
                 } else {
-                  controller.fatsDetails.add(FoodCaloriesDetails());
+                  controller.fatsDetails.add(FoodDataItem());
                 }
               },
               child: Center(
@@ -570,7 +660,7 @@ class MakeAMealView extends GetView<UsualController> {
   dynamic result;
 
   void showQualityDialog(
-      List<Food> food, FoodCaloriesDetails item, String type) async {
+      List<FoodDataItem> food, FoodDataItem item, String type) async {
     // show screen dialog
     result = await showDialog(
         context: Get.context!,
@@ -582,11 +672,12 @@ class MakeAMealView extends GetView<UsualController> {
           );
         });
     if (result != null) {
-      Food food = result as Food;
-      item.quality = food.title;
+      FoodDataItem food = result as FoodDataItem;
+      item.title = food.title;
       item.qty = food.qty;
       item.color = food.color;
-      item.calories = food.caloriePerUnit;
+      item.unit = food.unit;
+      item.caloriePerUnit = food.caloriePerUnit;
       controller.sendJsonData(food);
       controller.caloriesDetails.refresh();
       controller.carbsDetails.refresh();
@@ -602,7 +693,7 @@ class MakeAMealView extends GetView<UsualController> {
 }
 
 class DeleteItemWidget extends StatefulWidget {
-  final FoodCaloriesDetails item;
+  final FoodDataItem item;
   final UsualController controller;
   final String type;
 

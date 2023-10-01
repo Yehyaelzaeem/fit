@@ -15,9 +15,9 @@ class UsualMealsDataResponse {
 }
 
 class Data {
-  List<Food>? proteins;
-  List<Food>? fats;
-  List<Food>? carbs;
+  List<FoodDataItem>? proteins;
+  List<FoodDataItem>? fats;
+  List<FoodDataItem>? carbs;
 
   Data({
     this.proteins,
@@ -27,31 +27,32 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['proteins'] != null) {
-      proteins = <Food>[];
+      proteins = <FoodDataItem>[];
       json['proteins'].forEach((v) {
-        proteins!.add(new Food.fromJson(v));
+        proteins!.add(new FoodDataItem.fromJson(v));
       });
     }
     if (json['fats'] != null) {
-      fats = <Food>[];
+      fats = <FoodDataItem>[];
       json['fats'].forEach((v) {
-        fats!.add(new Food.fromJson(v));
+        fats!.add(new FoodDataItem.fromJson(v));
       });
     }
     if (json['carbs'] != null) {
-      carbs = <Food>[];
+      carbs = <FoodDataItem>[];
       json['carbs'].forEach((v) {
-        carbs!.add(new Food.fromJson(v));
+        carbs!.add(new FoodDataItem.fromJson(v));
       });
     }
   }
 }
 
+/*
 class FoodCaloriesDetails {
   int? id;
   double? qty;
   String? quality;
-  dynamic calories;
+  dynamic caloriePerUnit;
   String? unit;
   String? color;
   String? total;
@@ -60,7 +61,7 @@ class FoodCaloriesDetails {
       {this.id,
       this.qty,
       this.quality,
-      this.calories,
+      this.caloriePerUnit,
       this.unit,
       this.color,
         this.total});
@@ -69,52 +70,42 @@ class FoodCaloriesDetails {
     id = json['id'];
     qty = json['qty'].toDouble();
     quality = json['quality'];
-    calories = json['calorie_per_unit'];
+    caloriePerUnit = json['calorie_per_unit'];
     unit = json['unit'] ?? "GM";
     color = json['color'] ?? "FFFFFF";
     total =  json['calorie_per_unit']*json['qty'].toDouble();
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['food_id[]'] = this.id;
-    data['qty[]'] = this.qty;
-    return data;
-  }
 }
+*/
 
-class Food {
+class FoodDataItem {
   int? id;
   String? title;
   String? unit;
-  var caloriePerUnit;
+  dynamic caloriePerUnit;
   String? color;
   bool? isSellected;
-  double? qty;
+  dynamic qty;
+  dynamic total;
 
-  Food(
+  FoodDataItem(
       {this.id,
       this.title,
       this.qty,
       this.unit,
       this.caloriePerUnit,
       this.color,
+      this.total,
       this.isSellected});
 
-  Food.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    unit = json['unit'];
-    caloriePerUnit = json['calorie_per_unit'].toDouble();
-    color = json['color'];
+  FoodDataItem.fromJson(Map<String, dynamic>? json) {
+    id = json?['id'];
+    title = json?['title'];
+    unit = json?['unit'];
+    caloriePerUnit = json?['calorie_per_unit'].toDouble();
+    color = json?['color'];
     isSellected = false;
-  }
-
-  Map<String, dynamic> toJson({required int foodId,required int quantity,}) {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['food_id[]'] = foodId;
-    data['qty[]'] = quantity;
-    return data;
+    total =  json?['calorie_per_unit']??0.0*json?['qty']??0.0.toDouble();
   }
 
 }

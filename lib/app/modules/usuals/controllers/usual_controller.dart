@@ -18,11 +18,9 @@ import '../../diary/controllers/diary_controller.dart';
 class UsualController extends GetxController  with SingleGetTickerProviderMixin {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
-  RxList<FoodCaloriesDetails> caloriesDetails = RxList();
-  RxList<FoodCaloriesDetails> carbsDetails = RxList();
-  RxList<FoodCaloriesDetails> fatsDetails = RxList();
-  TextEditingController mealNameController = TextEditingController();
-  final mealName = "".obs;
+  RxList<FoodDataItem> caloriesDetails = RxList();
+  RxList<FoodDataItem> carbsDetails = RxList();
+  RxList<FoodDataItem> fatsDetails = RxList();
   final response = UsualMealsDataResponse().obs;
   final mealsResponse = UsualMealsResponse().obs;
   FocusNode workoutTitleDescFocus = FocusNode();
@@ -32,17 +30,11 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
   final refreshLoadingFats = false.obs;
-  final noSessions = false.obs;
   final lastSelectedDate = ''.obs;
-
-  String? workDesc;
-  final length = 0.obs;
-  final workOut = 0.obs;
-
   @override
   void onInit() async {
     super.onInit();
-    await  getMyUsualMeals();
+    await  getUserUsualMeals();
   }
 
 
@@ -57,29 +49,50 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
 
   }
   List<FoodItem> foodItems = [];
-   sendJsonData(Food myFood) {
+   sendJsonData(FoodDataItem myFood) {
      FoodItem item = FoodItem(foodId: myFood.id!,quantity: myFood.qty!);
      foodItems.add(item);
   }
 
   Future<void> createUsualMeal({required Map<String,dynamic> mealParameters}) async {
     addLoading.value=true;
-
+    isLoading.value=true;
     await ApiProvider().createUsualMeal(mealParameters: mealParameters)
         .then((value) async {
       if (value.success == true) {
         addLoading.value=false;
-        Fluttertoast.showToast(msg: "${value.message}");
-        mealNameController.clear();
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
         foodItems.clear();
         carbsDetails.clear();
         caloriesDetails.clear();
         fatsDetails.clear();
-        await getMyUsualMeals();
       } else {
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
         addLoading.value=false;
       }
+      isLoading.value=false;
+
+    });
+  }
+
+  Future<void> updateCurrentUsualMeal({required Map<String,dynamic> mealParameters}) async {
+    addLoading.value=true;
+    isLoading.value=true;
+    await ApiProvider().updateUsualMeal(mealParameters: mealParameters)
+        .then((value) async {
+      if (value.success == true) {
+        addLoading.value=false;
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
+        foodItems.clear();
+        carbsDetails.clear();
+        caloriesDetails.clear();
+        fatsDetails.clear();
+      } else {
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
+        addLoading.value=false;
+      }
+      isLoading.value=false;
+
     });
   }
 
@@ -88,42 +101,45 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
         .then((value) async {
       if (value.success == true) {
         Get.find<DiaryController>(tag: 'diary').onInit();
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       } else {
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       }
     });
   }
 
-  Future getMyUsualMeals() async {
+  Future getUserUsualMeals() async {
      isLoading.value=true;
      await ApiProvider().getMyUsualMeals().then((value) {
       if (value.success == true) {
+        print("Here success");
         print( mealsResponse.value.data);
         mealsResponse.value = value;
+        print("Here success ${mealsResponse.value.data?.length}");
         isLoading.value=false;
       } else {
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       }
     });
-
-     isLoading.value=false;
-     update();
   }
 
-  Future<void> deleteUsualMeal(int mealId) async {
-    deleteLoading.value=true;
-    await ApiProvider().deleteUsualMeal(mealId: mealId)
-        .then((value) async {
-      if (value.success == true) {
-        mealsResponse.value.data?.removeWhere((element) =>(element.id==mealId));
-        deleteLoading.value=false;
-
-        Fluttertoast.showToast(msg: "${value.message}");
+  Future<void> deleteUserUsualMeal(int mealId) async {
+    deleteLoading.value = true;
+    try {
+      final response = await ApiProvider().deleteUsualMeal(mealId: mealId);
+      if (response.success == true) {
+      //  print("Before ${mealsResponse.value.data!.length}");
+    //    mealsResponse.value.data!.removeWhere((element) => element.id == mealId);
+      //  print("After ${mealsResponse.value.data!.length}");
+        deleteLoading.value = false;
+        Fluttertoast.showToast(fontSize: 8,msg: "${response.message}");
       } else {
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${response.message}");
       }
-    });
+    } catch (error) {
+      print("Error: $error");
+      Fluttertoast.showToast(fontSize: 8,msg: "An error occurred while deleting the meal.");
+    }
   }
 
 
@@ -137,7 +153,7 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
       } else {
         caloriesDetails.removeWhere((element) => element.id == id);
    //     refreshDiaryData(apiDate.value, type);
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       }
     });
   }
@@ -153,7 +169,7 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
       } else {
         carbsDetails.removeWhere((element) => element.id == id);
     //    refreshDiaryData(apiDate.value, type);
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       }
     });
   }
@@ -168,7 +184,7 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
       } else {
         fatsDetails.removeWhere((element) => element.id == id);
         //refreshDiaryData(apiDate.value, type);
-        Fluttertoast.showToast(msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
       }
     });
   }

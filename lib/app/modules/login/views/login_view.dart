@@ -18,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../usuals/controllers/usual_controller.dart';
+
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -84,6 +86,7 @@ class _LoginViewState extends State<LoginView> {
         //   DiaryController controller = Get.find<DiaryController>(tag: 'diary');
         //   controller.onInit();
         // }
+        await Get.put(UsualController(), tag: "usual").usualMealsData();
         Get.offAndToNamed(Routes.HOME);
       } else {
         setState(() {

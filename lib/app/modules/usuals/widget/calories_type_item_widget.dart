@@ -34,8 +34,8 @@ final UsualProteins usualProteins;
               ),
               header:  Row(
                 children: [
-                  Expanded(child: kTextbody(caloriesTypeName, bold: true,align: TextAlign.start)),
-                  kTextbody("(${usualProteins.calories} Cal.)",align: TextAlign.start),
+                  Expanded(child: kTextbody("${caloriesTypeName}", bold: true,align: TextAlign.start)),
+                  Expanded(child: kTextbody("(${"${usualProteins.calories.toStringAsFixed(2)}"} Cal.)",align: TextAlign.end)),
                 ],
               ),
               expanded: StaticBar(type: caloriesTypeName.toLowerCase(), usualProteins: usualProteins,),

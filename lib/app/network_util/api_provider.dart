@@ -355,7 +355,7 @@ class ApiProvider {
       {required Map<String, dynamic> mealParameters}) async {
     FormData body = FormData.fromMap(mealParameters);
     Response response = await _utils
-        .post("diary-meals/new_diary_meal/${mealParameters['id']}", body: body);
+        .post("diary-meals/update_diary_meal/${mealParameters['id']}", body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
     } else {
