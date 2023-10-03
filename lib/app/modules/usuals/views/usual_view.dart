@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../models/usual_meals_reposne.dart';
 import '../../../network_util/api_provider.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/helper/assets_path.dart';
@@ -28,19 +29,7 @@ import '../save_new_meal.dart';
 import '../widget/meal_item_widget.dart';
 
 class UsualView extends GetView<UsualController> {
-  Future<void> getUserUsualMeals() async {
-    controller.isLoading.value = true;
-
-    final response = await ApiProvider().getMyUsualMeals();
-
-    if (response.success == true) {
-      controller.mealsResponse.value = response;
-    } else {
-      Fluttertoast.showToast(msg: "${response.message}");
-    }
-
-    controller.isLoading.value = false;
-  }
+  final controller = Get.find<UsualController>(tag: 'usual');
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -115,8 +104,8 @@ class UsualView extends GetView<UsualController> {
                         ),
                       ],
                     ),
-                    GetBuilder<UsualController>(
-                        builder: (context) {
+                    Obx(
+                       () {
                         return Expanded(
                             child:controller.mealsResponse.value.data!.isEmpty? Center(
                               child: Column(
@@ -133,7 +122,6 @@ class UsualView extends GetView<UsualController> {
                                 ],
                               ),
                             ):
-
                             RefreshIndicator(
                               onRefresh: ()async{
                              await   controller.getUserUsualMeals();

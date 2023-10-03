@@ -14,11 +14,12 @@ import '../../home/home_appbar.dart';
 import '../controllers/usual_controller.dart';
 import '../save_new_meal.dart';
 
-class MakeAMealView extends StatefulWidget{
-   MakeAMealView({this.mealData, this.mealName, this.mealId});
-   late  MealData ? mealData;
-   final String ? mealName;
-   final int ? mealId;
+class MakeAMealView extends StatefulWidget {
+  MakeAMealView({this.mealData, this.mealName, this.mealId});
+
+  late MealData? mealData;
+  final String? mealName;
+  final int? mealId;
 
   @override
   State<MakeAMealView> createState() => _MakeAMealViewState();
@@ -28,28 +29,59 @@ class _MakeAMealViewState extends State<MakeAMealView> {
   TextEditingController _mealName = TextEditingController();
 
   final controller = Get.find<UsualController>(tag: 'usual');
-@override
+
+  @override
   void initState() {
     super.initState();
-    if(widget.mealData!=null){
-      _mealName.text=widget.mealName??"";
-      if (widget.mealData?.proteins?.items?.length!=0) {
-        controller.caloriesDetails.clear();
-        controller.carbsDetails.clear();
-        controller.fatsDetails.clear();
-        widget.mealData?.proteins?.items?.forEach((element) {controller.caloriesDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
-      }
-      if (widget.mealData?.carbs?.items?.length!=0) {
-        widget.mealData?.carbs?.items?.forEach((element) {controller.carbsDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
-      }
+      _mealName.clear();
+      controller.caloriesDetails.clear();
+      controller.carbsDetails.clear();
+      controller.fatsDetails.clear();
+      controller.foodItems=[];
+    if (widget.mealData != null) {
+      _mealName.text = widget.mealName ?? "";
+      if (widget.mealData?.proteins?.items?.length != 0) {
+        widget.mealData?.proteins?.items?.forEach((element) {
+          controller.caloriesDetails.add(FoodDataItem(
+              id: element.food!.id,
+              title: element.food!.title,
+              qty: element.qty,
+              unit: element.food!.unit,
+              color: element.food!.color,
+              caloriePerUnit: element.food!.caloriePerUnit,
+              total: element.qty! * element.food!.caloriePerUnit));
+          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+        });
 
-      if(widget.mealData?.fats?.items?.length!=0) {
-        widget.mealData?.fats?.items?.forEach((element) {controller.fatsDetails.add(FoodDataItem(id:element.food!.id,title: element.food!.title,qty: element.qty,unit: element.food!.unit,color: element.food!.color,caloriePerUnit: element.food!.caloriePerUnit,total: element.qty!*element.food!.caloriePerUnit));});
-
+      }
+      if (widget.mealData?.carbs?.items?.length != 0) {
+        widget.mealData?.carbs?.items?.forEach((element) {
+          controller.carbsDetails.add(FoodDataItem(
+              id: element.food!.id,
+              title: element.food!.title,
+              qty: element.qty,
+              unit: element.food!.unit,
+              color: element.food!.color,
+              caloriePerUnit: element.food!.caloriePerUnit,
+              total: element.qty! * element.food!.caloriePerUnit));
+          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+        });
+      }
+      if (widget.mealData?.fats?.items?.length != 0) {
+        widget.mealData?.fats?.items?.forEach((element) {
+          controller.fatsDetails.add(FoodDataItem(
+              id: element.food!.id,
+              title: element.food!.title,
+              qty: element.qty,
+              unit: element.food!.unit,
+              color: element.food!.color,
+              caloriePerUnit: element.food!.caloriePerUnit,
+              total: element.qty! * element.food!.caloriePerUnit));
+          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+        });
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +120,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: EditText(
                         hint: 'Meal name',
                         hintColor: Color(0xff8D8D8D),
@@ -101,31 +133,23 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                       ),
                     ),
                     SizedBox(height: 4),
-                   // rowWithProgressBar("Proteins", ),
+                    // rowWithProgressBar("Proteins", ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(
                         children: [
-                          /*    if (controller.refreshLoadingProtine.value)
-                            Container(
-                              child: LinearProgressIndicator(
-                                color: kColorPrimary,
-                              ),
-                            ),*/
                           Align(
-
-                              alignment:AlignmentDirectional.topStart,
-                              child:
-                              Text(
-                                'Proteins',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),),
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              'Proteins',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
                           SizedBox(height: 8),
-
                           staticBar('proteins'),
                           if (controller.caloriesDetails.isEmpty)
                             SizedBox(height: 20),
@@ -141,21 +165,14 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                         ],
                       ),
                     ),
-                    //    rowWithProgressBar("Carbs", controller.response.value.data?.carbs),
-                    /*  if (controller.refreshLoadingCarbs.value)
-                      Container(
-                        child: LinearProgressIndicator(color: kColorPrimary),
-                      ),*/
                     SizedBox(height: 4),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Column(
                         children: [
                           Align(
-
-                            alignment:AlignmentDirectional.topStart,
-                            child:
-                            Text(
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
                               'Carbs',
                               style: TextStyle(
                                 fontSize: 20.0,
@@ -163,13 +180,11 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
-
-
-
                           ),
                           SizedBox(height: 8),
                           staticBar('carbs'),
-                          if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
+                          if (controller.carbsDetails.isEmpty)
+                            SizedBox(height: 20),
                           ListView.builder(
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
@@ -181,35 +196,23 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                         ],
                       ),
                     ),
-
-                    //   rowWithProgressBar("Fats", controller.response.value.data?.fats),
                     SizedBox(height: 4),
-
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Column(
                         children: [
-                          /*  if (controller.refreshLoadingFats.value)
-                            Container(
-                              child: LinearProgressIndicator(
-                                color: kColorPrimary,
-                              ),
-                            ),*/
                           Align(
-
-                              alignment:AlignmentDirectional.topStart,
-                              child:
-                              Text(
-                                'Fats',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                            alignment: AlignmentDirectional.topStart,
+                            child: Text(
+                              'Fats',
+                              style: TextStyle(
+                                fontSize: 20.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w800,
                               ),
-                          ),                            SizedBox(height: 8),
-
-
+                            ),
+                          ),
+                          SizedBox(height: 8),
                           staticBar('fats'),
                           if (controller.fatsDetails.isEmpty)
                             SizedBox(height: 20),
@@ -230,21 +233,41 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               ],
             ),
           ),
-          controller.addLoading==true?
-        Container(
-      height: 40,
-      child: Lottie.asset(
-      'assets/loader.json'),
-      ):
-       InkWell(
-            onTap: () async {
-                      if (_mealName.text.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please, Enter meal name");
-                      } else if (controller.foodItems.isEmpty) {
-                        Fluttertoast.showToast(msg: "Please, Add meal first");
+          controller.addLoading == true
+              ? Container(
+                  height: 40,
+                  child: Lottie.asset('assets/loader.json'),
+                )
+              : InkWell(
+                  onTap: () async {
+                    if (_mealName.text.isEmpty) {
+                      Fluttertoast.showToast(msg: "Please, Enter meal name");
+                    } else if (controller.foodItems.isEmpty &&
+                        widget.mealId == null) {
+                      Fluttertoast.showToast(msg: "Please, Add meal first");
+                    } else {
+                      if (widget.mealData == null) {
+                        await controller.createUsualMeal(mealParameters: {
+                          "name": _mealName.text,
+                          "food_id":
+                              "${controller.foodItems.map((e) => e.foodId)}"
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', ''),
+                          "qty":
+                              "${controller.foodItems.map((e) => e.quantity)}"
+                                  .replaceAll('(', '')
+                                  .replaceAll(')', ''),
+                        }).then((value) async {
+                          _mealName.clear();
+                         Get.back();
+                        });
                       } else {
-                        if(widget.mealData==null){
-                          await controller.createUsualMeal(mealParameters: {
+                   /*     print("${controller.foodItems.map((e) => e.quantity)}"
+                            .replaceAll('(', '')
+                            .replaceAll(')', ''));*/
+                        await controller
+                            .updateCurrentUsualMeal(mealParameters: {
+                          "id": widget.mealId,
                           "name": _mealName.text,
                           "food_id":
                               "${controller.foodItems.map((e) => e.foodId)}"
@@ -255,44 +278,26 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                                   .replaceAll('(', '')
                                   .replaceAll(')', ''),
                         }).then((value) {
-                          Get.back();
-                          Get.back();
+                         Get.back();
                         });
-                      }else{
-                          await controller.updateCurrentUsualMeal(mealParameters: {
-                            "id": widget.mealId,
-                            "name": _mealName.text,
-                            "food_id":
-                            "${controller.foodItems.map((e) => e.foodId)}"
-                                .replaceAll('(', '')
-                                .replaceAll(')', ''),
-                            "qty":
-                            "${controller.foodItems.map((e) => e.quantity)}"
-                                .replaceAll('(', '')
-                                .replaceAll(')', ''),
-                          }).then((value) {
-                            Get.back();
-                            Get.back();
-                          });
-                        }
                       }
-
+                    }
                   },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: Color(0xffF1F9E3),
-              ),
-              child: kButtonDefault(
-                widget.mealData==null?     'Save Meal':'Update Meal',
-                marginH: MediaQuery.of(Get.context!).size.width / 6,
-                paddingV: 0,
-                shadow: true,
-                paddingH: 12,
-              ),
-            ),
-          ),
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    decoration: BoxDecoration(
+                      color: Color(0xffF1F9E3),
+                    ),
+                    child: kButtonDefault(
+                      widget.mealData == null ? 'Save Meal' : 'Update Meal',
+                      marginH: MediaQuery.of(Get.context!).size.width / 6,
+                      paddingV: 0,
+                      shadow: true,
+                      paddingH: 12,
+                    ),
+                  ),
+                ),
         ],
       );
     }));
@@ -384,40 +389,19 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (text) {
                                 if (text.isEmpty) return;
-                                try {
-                                  double qty = double.parse(text);
-                                  int foodId = 0;
-                                  if (type == 'proteins') {
-                                    foodId = controller
-                                        .response.value.data!.proteins!
-                                        .firstWhere((element) =>
-                                            element.title == item.title)
-                                        .id!;
-                                  } else if (type == 'carbs') {
-                                    foodId = controller
-                                        .response.value.data!.carbs!
-                                        .firstWhere((element) =>
-                                            element.title == item.title)
-                                        .id!;
-                                  } else {
-                                    foodId = controller
-                                        .response.value.data!.fats!
-                                        .firstWhere((element) =>
-                                            element.title == item.title)
-                                        .id!;
-                                  }
-/*
-                                  controller.updateProtineData(
-                                    item.id,
-                                    foodId,
-                                    qty,
-                                    type: type == 'proteins'
-                                        ? 'proteins'
-                                        : type == 'carbs'
-                                            ? 'carbs'
-                                            : 'fats',
-                                  );*/
-                                } catch (e) {}
+                                if(text.isNum){
+                                  item.qty=text;
+                                  print(item.qty);
+                                  controller.foodItems.where((element) {
+                                    if(element.foodId==item.id){
+                                      double.parse(item.qty)*item.caloriePerUnit;}
+                                    controller.foodItems.add(FoodItem(foodId: item.id!, quantity: text));
+
+                                    return true;
+                                  });
+                                  setState(() {
+                                  });
+                                }
                               },
                             ),
                           ),
@@ -483,7 +467,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                   child: kTextbody(
                     item.caloriePerUnit == null
                         ? ''
-                        : '${(item.caloriePerUnit ).toStringAsFixed(1)}',
+                        : '${( double.parse(item.qty.toString()) * item.caloriePerUnit).toStringAsFixed(1)}',
                     color: Colors.black,
                     bold: false,
                   ),
@@ -682,11 +666,6 @@ class _MakeAMealViewState extends State<MakeAMealView> {
       controller.caloriesDetails.refresh();
       controller.carbsDetails.refresh();
       controller.fatsDetails.refresh();
-      if (item.id == null) {
-        //  controller.createProtineData(food.id, food.qty!, type: type);
-      } else {
-        //  controller.updateProtineData(item.id, food.id, food.qty!, type: type);
-      }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());
   }
@@ -709,51 +688,24 @@ class DeleteItemWidget extends StatefulWidget {
 }
 
 class _DeleteItemWidgetState extends State<DeleteItemWidget> {
-  bool deleteItem = false;
 
   @override
   Widget build(BuildContext context) {
-    if (deleteItem)
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: 14,
-            height: 14,
-            child: CircularProgressIndicator(
-              strokeWidth: 1.4,
-            ),
-          ),
-        ],
-      );
     return InkWell(
-      onTap: () async {
-        deleteItem = true;
-        setState(() {});
-        if (widget.item.id == null) {
-          if (widget.type == 'proteins')
-            await widget.controller.caloriesDetails.remove(widget.item);
-          else if (widget.type == 'carbs')
-            await widget.controller.carbsDetails.remove(widget.item);
-          else
-            await widget.controller.fatsDetails.remove(widget.item);
-        } else {
-          if (widget.type == 'proteins')
-            await widget.controller.deleteItemCalories(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
-          else if (widget.type == 'carbs')
-            await widget.controller.deleteItemCarbs(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
-          else
-            await widget.controller.deleteItemCarbs(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
-
-          await widget.controller.carbsDetails.remove(widget.item);
-          await widget.controller.fatsDetails.remove(widget.item);
+      onTap: () {
+        if (widget.type == 'proteins') {
+          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          widget.controller.caloriesDetails.removeWhere((element) => widget.item.id==element.id);
+        }
+        else if (widget.type == 'carbs') {
+          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          widget.controller.carbsDetails.removeWhere((element) => widget.item.id==element.id);
+        }
+        else {
+          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          widget.controller.fatsDetails.removeWhere((element) => widget.item.id==element.id);
         }
 
-        deleteItem = false;
-        setState(() {});
         FocusScope.of(Get.context!).requestFocus(FocusNode());
       },
       child: Icon(

@@ -570,6 +570,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                                         MediaQuery.of(context).size.width / 4,
                                     paddingV: 0,
                                     func: () {
+                                      FocusManager.instance.primaryFocus?.unfocus();
                                       savePassword();
                                     },
                                     shadow: true,

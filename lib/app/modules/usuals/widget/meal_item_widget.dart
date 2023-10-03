@@ -31,7 +31,7 @@ class MealItemWidget extends StatefulWidget {
 }
 
 class _MealItemWidgetState extends State<MealItemWidget> {
-  UsualController controller = UsualController();
+  final controller = Get.find<UsualController>(tag: 'usual');
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +81,7 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 title: 'View',
                 onTap: () {
                   appDialog(
+                    isList: true,
                       title:
                           "${widget.mealName} \n (${widget.mealCalories} Cal.)",
                       child: Column(
@@ -158,12 +159,9 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                     },
                     cancelText: "No",
                     confirmAction: () async {
+                      Get.back();
                       controller
-                          .deleteUserUsualMeal(widget.mealId!)
-                          .then((value) {
-                        Get.back();
-                        Get.back();
-                      });
+                          .deleteUserUsualMeal(widget.mealId!);
                     },
                     confirmText: "Yes",
                   );
