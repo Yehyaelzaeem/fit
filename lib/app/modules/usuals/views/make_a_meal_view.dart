@@ -8,6 +8,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lottie/lottie.dart';
 import '../../../models/usual_meals_data_reposne.dart';
 import '../../home/home_appbar.dart';
@@ -276,6 +277,8 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                         print("${controller.foodItems.map((e) => e.quantity)}"
                             .replaceAll('(', '')
                             .replaceAll(')', ''));*/
+
+
                         await controller
                             .updateCurrentUsualMeal(mealParameters: {
                           "id": widget.mealId,
@@ -403,16 +406,12 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                                 if (text.isNum) {
                                   item.qty = text;
                                   print(item.qty);
-                                  controller.foodItems.where((element) {
+                                  for (var element in controller.foodItems) {
                                     if (element.foodId == item.id) {
-                                      double.parse(item.qty) *
-                                          item.caloriePerUnit;
+                                      element.quantity = double.parse(item.qty);
+                                      double.parse(item.qty) * item.caloriePerUnit;
                                     }
-                                    controller.foodItems.add(FoodItem(
-                                        foodId: item.id!, quantity: text, mealName: item.title??""));
-
-                                    return true;
-                                  });
+                                  }
                                   setState(() {});
                                 }
                               },

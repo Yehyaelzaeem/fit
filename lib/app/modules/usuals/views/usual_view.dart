@@ -128,7 +128,8 @@ class UsualView extends GetView<UsualController> {
                             },
                               child: ListView.separated(
                                   itemBuilder: (context, index) => MealItemWidget(
-                                    mealName: "${controller.mealsResponse.value.data?[index].name}", mealCalories: "${controller.mealsResponse.value.data?[index].totalCalories}",
+                                    mealName: "${controller.mealsResponse.value.data?[index].name}",
+                                    mealCalories: controller.mealsResponse.value.data?[index].totalCalories.toStringAsFixed(2),
                                     meal: controller.mealsResponse.value.data?[index],
                                     mealId: controller.mealsResponse.value.data?[index].id,
                                   ),

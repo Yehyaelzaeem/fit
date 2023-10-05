@@ -76,8 +76,8 @@ class SplashController extends GetxController
     controller.avatar.value =
         await SharedHelper().readString(CachingKey.AVATAR);
     if (controller.isLogggd.value == true) {
-      await Get.put(UsualController(), tag: "usual").getUserUsualMeals();
-      await Get.put(UsualController(), tag: "usual").usualMealsData();
+       Get.put(UsualController(), tag: "usual").getUserUsualMeals();
+       Get.put(UsualController(), tag: "usual").usualMealsData();
       Get.offAllNamed(Routes.HOME);
     } else {
       Get.offAllNamed(Routes.AUTH);
