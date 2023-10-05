@@ -58,7 +58,7 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 height: 4,
               ),
               kTextbody(
-                "(${"${widget.mealCalories}"} Cal.)",
+                "(${widget.mealCalories} Cal.)",
                 size: 14,
                 color: kColorAccent,
                 align: TextAlign.start,
