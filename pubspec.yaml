@@ -55,9 +55,9 @@ dependencies:
   geolocator: any
   pull_down_button: ^0.9.3
   intl: any
-  appspector: ^0.9.0
+ #appspector: ^0.9.0
 
-
+#H
 
 dependency_overrides:
 
