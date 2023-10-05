@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/myPackages/controllers/my_packages_controller.dart';
 import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
+import 'package:appspector/appspector.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
  import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ import 'app/routes/app_pages.dart';
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  runAppSpector();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
   getFireBaseNotifications();
@@ -28,6 +31,7 @@ Future<void> main() async {
   await GetStorage().initStorage;
   Get.put(GlobalController(), tag: "global");
   Get.put(HomeController(), tag: "home");
+  Get.put(DiaryController(), tag: "diary");
   Get.put(UsualController(), tag: "usual");
   Get.put(InvoiceController());
   Get.put(SubscribeController());
@@ -98,12 +102,12 @@ Future getNotificationPermission()async{
   });
 }
 
-/*runAppSpector() {
+runAppSpector() {
   final config = Config()
     ..iosApiKey = "Your iOS API_KEY"
-    ..androidApiKey = "android_NDA3NDkyZjUtMGFlNy00Y2M5LTg1MTQtMjA3YTQ1ZWQxOTgw";
+    ..androidApiKey = "android_YzkyZjQ2NmEtMTQ0OS00YTVkLWJlODItYmIxOTdlYjkwNDQz";
   // If you don't want to start all monitors you can specify a list of necessary ones
   config.monitors = Monitors.all();
 
   AppSpectorPlugin.run(config);
-}*/
+}

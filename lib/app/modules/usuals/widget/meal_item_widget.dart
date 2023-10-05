@@ -58,7 +58,7 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 height: 4,
               ),
               kTextbody(
-                "(${widget.mealCalories} Cal.)",
+                "(${"${widget.mealCalories}"} Cal.)",
                 size: 14,
                 color: kColorAccent,
                 align: TextAlign.start,
@@ -72,7 +72,8 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 iconColor: Colors.brown,
                 title: 'Add to diary',
                 onTap: () async {
-                  await controller.addMealToDiary(mealId: widget.mealId!).then((value) => Get.back());
+                  await controller.addMealToDiary(mealId: widget.mealId!);
+                  Get.back();
                 },
               ),
               PullDownMenuItem(

@@ -67,7 +67,6 @@ class _LoginViewState extends State<LoginView> {
             CachingKey.IS_GUEST_SAVED, false);
         await _shared.writeData(
             CachingKey.IS_GUEST, false);
-
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
           DiaryController controller = Get.find<DiaryController>(tag: 'diary');
@@ -86,6 +85,7 @@ class _LoginViewState extends State<LoginView> {
         //   DiaryController controller = Get.find<DiaryController>(tag: 'diary');
         //   controller.onInit();
         // }
+        await Get.put(UsualController(), tag: "usual").getUserUsualMeals();
         await Get.put(UsualController(), tag: "usual").usualMealsData();
         Get.offAndToNamed(Routes.HOME);
       } else {

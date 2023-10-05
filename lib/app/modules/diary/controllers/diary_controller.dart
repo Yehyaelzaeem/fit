@@ -10,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../usuals/controllers/usual_controller.dart';
 
 class DiaryController extends GetxController {
   GlobalKey<FormState> key = GlobalKey();

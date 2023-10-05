@@ -105,7 +105,7 @@ class UsualProteins {
 class Items {
   int? id;
   FoodDataItem? food;
-  int? qty;
+  dynamic qty;
   dynamic calories;
 
   Items({this.id, this.food, this.qty, this.calories});

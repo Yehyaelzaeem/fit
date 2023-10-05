@@ -35,7 +35,7 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
   @override
   void onInit() async {
     super.onInit();
-    await  getUserUsualMeals();
+    await  usualMealsData();
   }
 
 
@@ -51,9 +51,10 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
   }
   List<FoodItem> foodItems = [];
    sendJsonData(FoodDataItem myFood) {
-     FoodItem item = FoodItem(foodId: myFood.id!,quantity: myFood.qty!);
+     FoodItem item = FoodItem(foodId: myFood.id!,quantity: myFood.qty!,mealName:myFood.title??"");
      foodItems.add(item);
   }
+
   Future<void> createUsualMeal({required Map<String,dynamic> mealParameters}) async {
     addLoading.value=true;
     isLoading.value=true;
@@ -188,9 +189,10 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
 
 class FoodItem {
   int foodId;
+  String mealName;
   dynamic quantity;
 
-  FoodItem({required this.foodId,required this.quantity});
+  FoodItem({required this.foodId,required this.quantity,required this.mealName});
 
   Map<String, dynamic> toJson() {
     return {

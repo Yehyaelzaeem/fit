@@ -33,11 +33,11 @@ class _MakeAMealViewState extends State<MakeAMealView> {
   @override
   void initState() {
     super.initState();
-      _mealName.clear();
-      controller.caloriesDetails.clear();
-      controller.carbsDetails.clear();
-      controller.fatsDetails.clear();
-      controller.foodItems=[];
+    _mealName.clear();
+    controller.caloriesDetails.clear();
+    controller.carbsDetails.clear();
+    controller.fatsDetails.clear();
+    controller.foodItems = [];
     if (widget.mealData != null) {
       _mealName.text = widget.mealName ?? "";
       if (widget.mealData?.proteins?.items?.length != 0) {
@@ -50,9 +50,9 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               color: element.food!.color,
               caloriePerUnit: element.food!.caloriePerUnit,
               total: element.qty! * element.food!.caloriePerUnit));
-          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+          controller.sendJsonData(
+              FoodDataItem(id: element.food!.id, qty: element.qty));
         });
-
       }
       if (widget.mealData?.carbs?.items?.length != 0) {
         widget.mealData?.carbs?.items?.forEach((element) {
@@ -64,7 +64,8 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               color: element.food!.color,
               caloriePerUnit: element.food!.caloriePerUnit,
               total: element.qty! * element.food!.caloriePerUnit));
-          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+          controller.sendJsonData(
+              FoodDataItem(id: element.food!.id, qty: element.qty));
         });
       }
       if (widget.mealData?.fats?.items?.length != 0) {
@@ -77,7 +78,8 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               color: element.food!.color,
               caloriePerUnit: element.food!.caloriePerUnit,
               total: element.qty! * element.food!.caloriePerUnit));
-          controller.sendJsonData(FoodDataItem(id: element.food!.id, qty: element.qty));
+          controller.sendJsonData(
+              FoodDataItem(id: element.food!.id, qty: element.qty));
         });
       }
     }
@@ -247,7 +249,13 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                       Fluttertoast.showToast(msg: "Please, Add meal first");
                     } else {
                       if (widget.mealData == null) {
-                        await controller.createUsualMeal(mealParameters: {
+               /*         print("${controller.foodItems.map((e) => e.foodId)}"
+                            .replaceAll('(', '')
+                            .replaceAll(')', ''));
+                        print("${controller.foodItems.map((e) => e.quantity)}"
+                            .replaceAll('(', '')
+                            .replaceAll(')', ''));*/
+                         await controller.createUsualMeal(mealParameters: {
                           "name": _mealName.text,
                           "food_id":
                               "${controller.foodItems.map((e) => e.foodId)}"
@@ -262,7 +270,10 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                          Get.back();
                         });
                       } else {
-                   /*     print("${controller.foodItems.map((e) => e.quantity)}"
+                       /* print("${controller.foodItems.map((e) => e.foodId)}"
+                            .replaceAll('(', '')
+                            .replaceAll(')', ''));
+                        print("${controller.foodItems.map((e) => e.quantity)}"
                             .replaceAll('(', '')
                             .replaceAll(')', ''));*/
                         await controller
@@ -389,18 +400,20 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                               textInputAction: TextInputAction.done,
                               onFieldSubmitted: (text) {
                                 if (text.isEmpty) return;
-                                if(text.isNum){
-                                  item.qty=text;
+                                if (text.isNum) {
+                                  item.qty = text;
                                   print(item.qty);
                                   controller.foodItems.where((element) {
-                                    if(element.foodId==item.id){
-                                      double.parse(item.qty)*item.caloriePerUnit;}
-                                    controller.foodItems.add(FoodItem(foodId: item.id!, quantity: text));
+                                    if (element.foodId == item.id) {
+                                      double.parse(item.qty) *
+                                          item.caloriePerUnit;
+                                    }
+                                    controller.foodItems.add(FoodItem(
+                                        foodId: item.id!, quantity: text, mealName: item.title??""));
 
                                     return true;
                                   });
-                                  setState(() {
-                                  });
+                                  setState(() {});
                                 }
                               },
                             ),
@@ -467,7 +480,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                   child: kTextbody(
                     item.caloriePerUnit == null
                         ? ''
-                        : '${( double.parse(item.qty.toString()) * item.caloriePerUnit).toStringAsFixed(1)}',
+                        : '${(double.parse(item.qty.toString()) * item.caloriePerUnit).toStringAsFixed(1)}',
                     color: Colors.black,
                     bold: false,
                   ),
@@ -688,24 +701,46 @@ class DeleteItemWidget extends StatefulWidget {
 }
 
 class _DeleteItemWidgetState extends State<DeleteItemWidget> {
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (widget.type == 'proteins') {
-          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
-          widget.controller.caloriesDetails.removeWhere((element) => widget.item.id==element.id);
+          if(widget.item.id==null){
+            widget.controller.foodItems.removeWhere((element) => widget.item.title==element.mealName);
+          }else{
+            widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          }
+          if(widget.item.title==null){
+            widget.controller.caloriesDetails.remove(widget.item);
+          }else{
+            widget.controller.caloriesDetails.removeWhere((element) => widget.item.title==element.title);
+          }
         }
         else if (widget.type == 'carbs') {
-          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
-          widget.controller.carbsDetails.removeWhere((element) => widget.item.id==element.id);
+          if(widget.item.id==null){
+            widget.controller.foodItems.removeWhere((element) => widget.item.title==element.mealName);
+          }else{
+            widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          }
+          if(widget.item.title==null){
+            widget.controller.carbsDetails.remove(widget.item);
+          }else{
+            widget.controller.carbsDetails.removeWhere((element) => widget.item.title==element.title);
+          }
         }
         else {
-          widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
-          widget.controller.fatsDetails.removeWhere((element) => widget.item.id==element.id);
+          if(widget.item.id==null){
+            widget.controller.foodItems.removeWhere((element) => widget.item.title==element.mealName);
+          }else{
+            widget.controller.foodItems.removeWhere((element) => widget.item.id==element.foodId);
+          }
+          if(widget.item.title==null){
+            widget.controller.fatsDetails.remove(widget.item);
+          }else{
+            widget.controller.fatsDetails.removeWhere((element) => widget.item.title==element.title);
+          }
         }
-
         FocusScope.of(Get.context!).requestFocus(FocusNode());
       },
       child: Icon(
