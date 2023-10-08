@@ -41,7 +41,7 @@ class _SaveNewMealState extends State<SaveNewMeal> {
         });
       }
     }
-    print(json.encode(searchResult));
+    // print(json.encode(searchResult));
     setState(() {
       data = searchResult;
     });
