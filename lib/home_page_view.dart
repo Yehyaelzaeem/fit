@@ -1,6 +1,7 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/modules/orientation_register/views/orientation_register_view.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,7 @@ class _HomePageViewState extends State<HomePageView> {
               SizedBox(
                 height: 16,
               ),
+              if(isIosInReview())...[
               Container(
                 decoration: BoxDecoration(
                     color: ACCENT_COLOR,
@@ -186,6 +188,7 @@ class _HomePageViewState extends State<HomePageView> {
                       );
                     }),
               ),
+               ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -342,7 +345,7 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             )
                           : SizedBox(),
-                  ress.data!.subscriptionStatus == true
+                  ress.data!.subscriptionStatus == true && !isIosInReview()
                       ? GestureDetector(
                           onTap: () {
                             Get.toNamed(

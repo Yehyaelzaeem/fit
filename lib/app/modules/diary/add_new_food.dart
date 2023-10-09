@@ -43,7 +43,7 @@ class _AddNewFoodState extends State<AddNewFood> {
         });
       }
     }
-    print(json.encode(searchResult));
+    // print(json.encode(searchResult));
     setState(() {
       data = searchResult;
     });

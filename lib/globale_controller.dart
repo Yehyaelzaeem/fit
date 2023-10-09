@@ -10,6 +10,7 @@ class GlobalController extends GetxController {
   final shoNewMessage = true.obs;
   final canDismissNewMessageDialog = false.obs;
   final removeNotificationsCount = false.obs;
+  final iosInReview = false.obs;
   final avatar = ''.obs;
   String? lastSelectedDate;
 }

@@ -3,6 +3,7 @@ import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
+import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
@@ -144,7 +145,7 @@ class HomeDrawer extends GetView<HomeController> {
             //     }),
             //
             // packages
-
+            if (!isIosInReview())
             singleDrawerItem(
                 action: () {
                   Get.toNamed(Routes.MY_PACKAGES);
@@ -215,6 +216,7 @@ class HomeDrawer extends GetView<HomeController> {
                           Get.toNamed(Routes.Orientation);
                         }),
             //CHEER_FULL
+            if (!isIosInReview())
             textEditController.cheerfulResponse.value.data?.isActive == false
                 ? SizedBox()
                 : singleDrawerItem(

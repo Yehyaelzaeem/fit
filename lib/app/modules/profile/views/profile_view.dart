@@ -4,6 +4,7 @@ import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
@@ -58,6 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               PageLable(name: "Profile"),
               Spacer(),
+              if (!isIosInReview())
               GestureDetector(
                 onTap: () {
                   Get.toNamed(Routes.MY_PACKAGES);

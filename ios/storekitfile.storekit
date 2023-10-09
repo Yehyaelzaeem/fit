@@ -1,0 +1,78 @@
+{
+  "identifier" : "933BAB81",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "1030",
+      "familyShareable" : false,
+      "internalID" : "2E3C16BD",
+      "localizations" : [
+        {
+          "description" : "subscription for 1 session",
+          "displayName" : "1 session",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "desc ",
+          "displayName" : "name",
+          "locale" : "ar"
+        }
+      ],
+      "productID" : "package_17",
+      "referenceName" : "package_17",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "1545",
+      "familyShareable" : false,
+      "internalID" : "7BA6F690",
+      "localizations" : [
+        {
+          "description" : "subscription 4 weeks",
+          "displayName" : "4 weeks",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "subscription 4 weeks",
+          "displayName" : "4 weeks",
+          "locale" : "ar"
+        }
+      ],
+      "productID" : "package_8",
+      "referenceName" : "package_8",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4120",
+      "familyShareable" : false,
+      "internalID" : "FB59453B",
+      "localizations" : [
+        {
+          "description" : "subscription 12 weeks",
+          "displayName" : "12 weeks",
+          "locale" : "en_US"
+        },
+        {
+          "description" : "subscription 12 weeks",
+          "displayName" : "12 weeks",
+          "locale" : "ar"
+        }
+      ],
+      "productID" : "package_9",
+      "referenceName" : "package_9",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}
