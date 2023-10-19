@@ -236,6 +236,7 @@ class MakeMealsController extends GetxController {
     amountIds.substring(0, amountIds.length - 1);
 
     try {
+      print("Meal => $meal");
       if (meal != null) {
         await ApiProvider().updateNewMeal(
           id: meal!.id.toString(),
@@ -255,15 +256,12 @@ class MakeMealsController extends GetxController {
 //// TODO handle it
       if (isGuestSaved) {
         Get.back(result: true);
-
       } else if (userId.isNotEmpty) {
         Get.back(result: true);
-
       } else if (!isGuestSaved&&userId.isEmpty) {
         Get.back(result: true);
         Get.back(result: true);
       }
-
     } catch (e) {
       Get.snackbar("Error", "$e");
       saveLoading.value = false;

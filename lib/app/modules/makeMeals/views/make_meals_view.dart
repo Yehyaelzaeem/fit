@@ -129,6 +129,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
                                                       "Select Quality",
@@ -140,35 +141,43 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                     if (meal.food.length > 0)
                                                       SizedBox(height: 12),
                                                     ...meal.food.map((item) {
-                                                      return GestureDetector(
-                                                        onTap: () {
-                                                          FocusScope.of(context)
-                                                              .requestFocus(
-                                                                  FocusNode());
-                                                          e.id = item.id;
-                                                          e.title = item.title;
-                                                          e.selectedAmount =
-                                                              Amount(
-                                                            id: 0,
-                                                            name: "select...",
-                                                            calories: "",
-                                                            price: "",
-                                                          );
-                                                          controller
-                                                              .selectedFood
-                                                              .refresh();
-                                                          Get.back();
-                                                        },
-                                                        child: Container(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  vertical: 8),
-                                                          child: Text(
-                                                            item.title,
-                                                            style: TextStyle(
-                                                                fontSize: 16),
+                                                      return Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        children: [
+                                                          const SizedBox(),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              FocusScope.of(context)
+                                                                  .requestFocus(
+                                                                      FocusNode());
+                                                              e.id = item.id;
+                                                              e.title = item.title;
+                                                              e.selectedAmount =
+                                                                  Amount(
+                                                                id: 0,
+                                                                name: "select...",
+                                                                calories: "",
+                                                                price: "",
+                                                              );
+                                                              controller
+                                                                  .selectedFood
+                                                                  .refresh();
+                                                              Get.back();
+                                                            },
+                                                            child: Container(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical: 8),
+                                                              child: Text(
+                                                                item.title,
+                                                                style: TextStyle(
+                                                                    fontSize: 16),
+                                                              ),
+                                                            ),
                                                           ),
-                                                        ),
+                                                          const Divider(thickness: 1.2,),
+                                                        ],
                                                       );
                                                     }),
                                                   ],

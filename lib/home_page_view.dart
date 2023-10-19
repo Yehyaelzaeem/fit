@@ -63,7 +63,7 @@ class _HomePageViewState extends State<HomePageView> {
               SizedBox(
                 height: 16,
               ),
-              if(isIosInReview())...[
+           //   if(isIosInReview)...[
               Container(
                 decoration: BoxDecoration(
                     color: ACCENT_COLOR,
@@ -188,7 +188,7 @@ class _HomePageViewState extends State<HomePageView> {
                       );
                     }),
               ),
-               ],
+     //          ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -345,7 +345,7 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             )
                           : SizedBox(),
-                  ress.data!.subscriptionStatus == true && !isIosInReview()
+                  ress.data!.subscriptionStatus == true //&& !isIosInReview
                       ? GestureDetector(
                           onTap: () {
                             Get.toNamed(

@@ -59,7 +59,7 @@ class _ProfileViewState extends State<ProfileView> {
             children: [
               PageLable(name: "Profile"),
               Spacer(),
-              if (!isIosInReview())
+           //   if (!isIosInReview)
               GestureDetector(
                 onTap: () {
                   Get.toNamed(Routes.MY_PACKAGES);

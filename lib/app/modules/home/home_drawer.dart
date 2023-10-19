@@ -145,7 +145,7 @@ class HomeDrawer extends GetView<HomeController> {
             //     }),
             //
             // packages
-            if (!isIosInReview())
+           // if (!isIosInReview)
             singleDrawerItem(
                 action: () {
                   Get.toNamed(Routes.MY_PACKAGES);
@@ -216,7 +216,8 @@ class HomeDrawer extends GetView<HomeController> {
                           Get.toNamed(Routes.Orientation);
                         }),
             //CHEER_FULL
-            if (!isIosInReview())
+     //
+             //      if (!isIosInReview)
             textEditController.cheerfulResponse.value.data?.isActive == false
                 ? SizedBox()
                 : singleDrawerItem(

@@ -658,6 +658,8 @@ class _MakeAMealViewState extends State<MakeAMealView> {
 
   void showQualityDialog(List<FoodDataItem> food, FoodDataItem item,
       String type) async {
+    print("Item Data => ${item.title}");
+    print("Item Data => ${item.id}");
     // show screen dialog
     result = await showDialog(
         context: Get.context!,
@@ -670,6 +672,9 @@ class _MakeAMealViewState extends State<MakeAMealView> {
         });
     if (result != null) {
       FoodDataItem food = result as FoodDataItem;
+      if (item.id != null) {
+        controller.foodItems.removeWhere((element) => element.foodId == item.id);
+      }
       item.title = food.title;
       item.qty = food.qty;
       item.color = food.color;
