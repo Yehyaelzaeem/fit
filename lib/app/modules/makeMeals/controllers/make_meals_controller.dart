@@ -41,6 +41,12 @@ class MakeMealsController extends GetxController {
 
     super.onInit();
   }
+  clearData(){
+    mealNameController.clear();
+    noteController.clear();
+    selectedFood.clear();
+   // meals.clear();
+  }
 
   getNetworkData() async {
     error.value = '';

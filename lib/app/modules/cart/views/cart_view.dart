@@ -168,7 +168,7 @@ class CartView extends GetView<CartController> {
                                             decoration: BoxDecoration(borderRadius: BorderRadius.circular(9.0), color: const Color(0xFFF1F1F1),),
                                             child: Column(
                                               children: <Widget>[
-                                                TextInsideRec(
+                                               /* TextInsideRec(
                                                   text:  controller
                                                       .globalController
                                                       .mealFeatureHomeResponse
@@ -176,7 +176,7 @@ class CartView extends GetView<CartController> {
                                                       .data!
                                                       .info!
                                                       .pickupInstructions!,
-                                                ),
+                                                ),*/
                                                   GestureDetector(
                                                     onTap: () {launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);},
                                                     child: Container(
