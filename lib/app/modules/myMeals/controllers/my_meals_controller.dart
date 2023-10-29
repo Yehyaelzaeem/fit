@@ -72,7 +72,7 @@ class MyMealsController extends GetxController {
     required SingleMyMeal meal,
   }) {
     meal.qty = meal.qty! + 1;
-    meal.qty! * int.parse(meal.price!);
+    meal.qty! * (double.tryParse('${meal.price}')?.floor() ?? 0);
     update();
   }
 
@@ -83,16 +83,21 @@ class MyMealsController extends GetxController {
       Fluttertoast.showToast(msg: "Quantity can't be less than 1");
     } else
       meal.qty = meal.qty! - 1;
-    meal.qty! * int.parse(meal.price!);
+    meal.qty!  * (double.tryParse('${meal.price}')?.floor() ?? 0);
     update();
   }
 
   int totalPrice({
     required SingleMyMeal meal,
   }) {
-    int sum = int.parse(meal.price!);
+    // int sum = int.parse(meal.price!);
+    // if (meal.qty != 1) {
+    //   sum = int.parse(meal.price!) * meal.qty!;
+    // }
+    // return sum;
+     int sum = double.tryParse('${meal.price}')?.floor() ?? 0;
     if (meal.qty != 1) {
-      sum = int.parse(meal.price!) * meal.qty!;
+      sum = (double.tryParse('${meal.price}')?.floor() ?? 0) * meal.qty!;
     }
     return sum;
   }
