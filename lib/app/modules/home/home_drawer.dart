@@ -10,6 +10,7 @@ import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/app_dialog.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
+import 'package:app/home_page_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,7 @@ import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
   final textEditController = Get.find<HomeController>(tag: 'home');
-  final GlobalController globalController =
-      Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +62,12 @@ class HomeDrawer extends GetView<HomeController> {
                   )
                 : Container(
                     width: double.infinity,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     color: Colors.white,
                     child: Column(
                       children: [
                         Obx(() {
-                          Echo(
-                              'drawer itemBuilder ${textEditController.avatar.value}');
+                          Echo('drawer itemBuilder ${textEditController.avatar.value}');
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                               // ignore: unnecessary_null_comparison
@@ -90,11 +88,9 @@ class HomeDrawer extends GetView<HomeController> {
                         // Text(prefs.getName()!)
                         ,
                         Obx(() {
-                          return kTextHeader('${textEditController.name.value}',
-                              size: 18);
+                          return kTextHeader('${textEditController.name.value}', size: 18);
                         }),
-                        kTextfooter('ID :  ${textEditController.id.value}',
-                            size: 14, color: Colors.black87, paddingV: 0),
+                        kTextfooter('ID :  ${textEditController.id.value}', size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
@@ -145,13 +141,13 @@ class HomeDrawer extends GetView<HomeController> {
             //     }),
             //
             // packages
-           // if (!isIosInReview)
-            singleDrawerItem(
-                action: () {
-                  Get.toNamed(Routes.MY_PACKAGES);
-                },
-                title: "My Packages",
-                image: "assets/icons/crown.svg"),
+            if (!globalIsIosInReview)
+              singleDrawerItem(
+                  action: () {
+                    Get.toNamed(Routes.MY_PACKAGES);
+                  },
+                  title: "My Packages",
+                  image: "assets/icons/crown.svg"),
 
             // //Profile
             textEditController.isLogggd == false
@@ -216,16 +212,16 @@ class HomeDrawer extends GetView<HomeController> {
                           Get.toNamed(Routes.Orientation);
                         }),
             //CHEER_FULL
-     //
-             //      if (!isIosInReview)
-            textEditController.cheerfulResponse.value.data?.isActive == false
-                ? SizedBox()
-                : singleDrawerItem(
-                    title: "Cheer-Full",
-                    image: 'assets/icons/cheer.svg',
-                    action: () {
-                      Get.toNamed(Routes.CHEER_FULL);
-                    }),
+            //
+            if (!globalIsIosInReview)
+              textEditController.cheerfulResponse.value.data?.isActive == false
+                  ? SizedBox()
+                  : singleDrawerItem(
+                      title: "Cheer-Full",
+                      image: 'assets/icons/cheer.svg',
+                      action: () {
+                        Get.toNamed(Routes.CHEER_FULL);
+                      }),
             /*      FutureBuilder<bool>(
               future: getCheerFullStatus(),
               builder: (context, snapshot) {
@@ -273,8 +269,7 @@ class HomeDrawer extends GetView<HomeController> {
                     action: () {
                       appDialog(
                         title: "Logout",
-                        image: Icon(Icons.exit_to_app,
-                            size: 50, color: Colors.red),
+                        image: Icon(Icons.exit_to_app, size: 50, color: Colors.red),
                         cancelAction: () {
                           Get.back();
                         },
@@ -327,8 +322,7 @@ class HomeDrawer extends GetView<HomeController> {
     );
   }
 
-  Widget singleDrawerItem(
-      {required String title, required String image, var action}) {
+  Widget singleDrawerItem({required String title, required String image, var action}) {
     return InkWell(
       onTap: action,
       child: Column(

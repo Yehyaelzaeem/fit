@@ -16,6 +16,8 @@ import 'app/network_util/api_provider.dart';
 import 'app/utils/theme/app_colors.dart';
 import 'app/widgets/default/text.dart';
 
+bool globalIsIosInReview = false;
+
 class HomePageView extends StatefulWidget {
   const HomePageView({Key? key}) : super(key: key);
 
@@ -40,6 +42,7 @@ class _HomePageViewState extends State<HomePageView> {
         });
         setState(() {});
         print(homeSliderList);
+        globalIsIosInReview = (ress.data!.subscriptionStatus == false);
       } else {
         Fluttertoast.showToast(msg: "$value");
         print("error");
@@ -63,132 +66,117 @@ class _HomePageViewState extends State<HomePageView> {
               SizedBox(
                 height: 16,
               ),
-           //   if(isIosInReview)...[
-              Container(
-                decoration: BoxDecoration(
-                    color: ACCENT_COLOR,
-                    borderRadius: BorderRadius.circular(50)),
-                height: 45,
-                child: ListView.builder(
-                    itemCount: ress.data!.services!.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            pageIndex = index;
-                            serviceIndex = 0;
-                          });
-                          print(index);
-                        },
-                        child: Material(
-                          elevation: pageIndex == index ? 10 : 0,
-                          shadowColor:
-                              pageIndex == index ? kColorPrimary : ACCENT_COLOR,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)),
+              if (!globalIsIosInReview) ...[
+                Container(
+                  decoration: BoxDecoration(color: ACCENT_COLOR, borderRadius: BorderRadius.circular(50)),
+                  height: 45,
+                  child: ListView.builder(
+                      itemCount: ress.data!.services!.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              pageIndex = index;
+                              serviceIndex = 0;
+                            });
+                            print(index);
+                          },
+                          child: Material(
+                            elevation: pageIndex == index ? 10 : 0,
+                            shadowColor: pageIndex == index ? kColorPrimary : ACCENT_COLOR,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              // padding: EdgeInsets.only(top: 8),
+                              decoration: BoxDecoration(
+                                color: pageIndex == index ? Colors.white : ACCENT_COLOR,
+                                borderRadius: BorderRadius.circular(64),
+                              ),
+                              child: Center(
+                                child: kTextHeader(
+                                  "${ress.data!.services![index].title}",
+                                  color: pageIndex == index ? kColorPrimary : Colors.white,
+                                  bold: pageIndex == index,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  height: 120,
+                  child: ListView.builder(
+                      itemCount: ress.data!.services![pageIndex].items!.length,
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            setState(() {
+                              serviceIndex = index;
+                            });
+                          },
                           child: Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            // padding: EdgeInsets.only(top: 8),
-                            decoration: BoxDecoration(
-                              color: pageIndex == index
-                                  ? Colors.white
-                                  : ACCENT_COLOR,
-                              borderRadius: BorderRadius.circular(64),
-                            ),
-                            child: Center(
-                              child: kTextHeader(
-                                "${ress.data!.services![index].title}",
-                                color: pageIndex == index
-                                    ? kColorPrimary
-                                    : Colors.white,
-                                bold: pageIndex == index,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Container(
-                height: 120,
-                child: ListView.builder(
-                    itemCount: ress.data!.services![pageIndex].items!.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            serviceIndex = index;
-                          });
-                        },
-                        child: Container(
-                          height: 150,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 28, vertical: 12),
-                                margin: EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(25),
-                                  border: Border.all(
-                                    color: serviceIndex == index
-                                        ? kColorPrimary
-                                        : Colors.transparent,
-                                    width: serviceIndex == index ? 1 : 1,
+                            height: 150,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                                  margin: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25),
+                                    border: Border.all(
+                                      color: serviceIndex == index ? kColorPrimary : Colors.transparent,
+                                      width: serviceIndex == index ? 1 : 1,
+                                    ),
+                                    boxShadow: [
+                                      if (serviceIndex == index)
+                                        BoxShadow(
+                                          color: kColorPrimary,
+                                          blurRadius: 1,
+                                          spreadRadius: 1,
+                                          offset: Offset(0, 0),
+                                        ),
+                                      if (serviceIndex != index)
+                                        BoxShadow(
+                                          color: const Color(0xFF414042).withOpacity(0.35),
+                                          offset: Offset(1, 1.0),
+                                          blurRadius: 3.0,
+                                        ),
+                                    ],
                                   ),
-                                  boxShadow: [
-                                    if (serviceIndex == index)
-                                      BoxShadow(
-                                        color: kColorPrimary,
-                                        blurRadius: 1,
-                                        spreadRadius: 1,
-                                        offset: Offset(0, 0),
-                                      ),
-                                    if (serviceIndex != index)
-                                      BoxShadow(
-                                        color: const Color(0xFF414042)
-                                            .withOpacity(0.35),
-                                        offset: Offset(1, 1.0),
-                                        blurRadius: 3.0,
-                                      ),
-                                  ],
-                                ),
-                                child: Image.network(
-                                  "${ress.data!.services![pageIndex].items![index].image}",
-                                  width: 50,
-                                  height: 40,
-                                ),
-                              ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 3.2,
-                                child: Text(
-                                  ress.data!.services![pageIndex].items![index]
-                                      .title!,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: serviceIndex == index
-                                        ? kColorPrimary
-                                        : Colors.black87,
-                                    fontWeight: FontWeight.bold,
+                                  child: Image.network(
+                                    "${ress.data!.services![pageIndex].items![index].image}",
+                                    width: 50,
+                                    height: 40,
                                   ),
                                 ),
-                              ),
-                            ],
+                                Container(
+                                  width: MediaQuery.of(context).size.width / 3.2,
+                                  child: Text(
+                                    ress.data!.services![pageIndex].items![index].title!,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: serviceIndex == index ? kColorPrimary : Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }),
-              ),
-     //          ],
+                        );
+                      }),
+                ),
+              ],
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -226,18 +214,12 @@ class _HomePageViewState extends State<HomePageView> {
                     padding: EdgeInsets.all(8),
                     // color: Colors.grey[300],
                     width: double.infinity,
-                    child: kTextbody(
-                        '${ress.data!.services![pageIndex].items![serviceIndex].text}',
-                        align: TextAlign.start,
-                        size: 15),
+                    child: kTextbody('${ress.data!.services![pageIndex].items![serviceIndex].text}', align: TextAlign.start, size: 15),
                   ),
-                  ress.data!.services![pageIndex].items![serviceIndex].cover!
-                              .type ==
-                          "image"
+                  ress.data!.services![pageIndex].items![serviceIndex].cover!.type == "image"
                       ? CachedNetworkImage(
                           width: double.infinity,
-                          imageUrl:
-                              '${ress.data!.services![pageIndex].items![serviceIndex].cover!.content}',
+                          imageUrl: '${ress.data!.services![pageIndex].items![serviceIndex].cover!.content}',
                           fadeInDuration: Duration(seconds: 2),
                           // errorWidget: (vtx, url, obj) {
                           //   return Image.network(
@@ -252,14 +234,11 @@ class _HomePageViewState extends State<HomePageView> {
                           },
                           fit: BoxFit.contain,
                         )
-                      : ress.data!.services![pageIndex].items![serviceIndex]
-                                  .cover!.type ==
-                              "video"
+                      : ress.data!.services![pageIndex].items![serviceIndex].cover!.type == "video"
                           ? Container(
                               child: Html(
                               shrinkWrap: true,
-                              data:
-                                  """${ress.data!.services![pageIndex].items![serviceIndex].cover!.content} """,
+                              data: """${ress.data!.services![pageIndex].items![serviceIndex].cover!.content} """,
                             ))
                           : Center(
                               child: SizedBox(),
@@ -267,28 +246,35 @@ class _HomePageViewState extends State<HomePageView> {
                   SizedBox(
                     height: 50,
                   ),
-                  ress.data!.services![pageIndex].items![serviceIndex]
-                              .hasOrientation ==
-                          true
+                  ress.data!.services![pageIndex].items![serviceIndex].hasOrientation == true
                       ? GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        OrientationRegisterView(
-                                            id: ress.data!.services![pageIndex]
-                                                .items![serviceIndex].id!)));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => OrientationRegisterView(id: ress.data!.services![pageIndex].items![serviceIndex].id!)));
                           },
                           child: Center(
                             child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               margin: EdgeInsets.symmetric(vertical: 16),
-                              decoration: BoxDecoration(
-                                  color: kColorPrimary,
-                                  borderRadius: BorderRadius.circular(64),
-                                  boxShadow: [
+                              decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
+                                ),
+                              ]),
+                              child: kTextHeader('Orientation Registration', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
+                            ),
+                          ),
+                        )
+                      : ress.data!.services![pageIndex].items![serviceIndex].hasOrientation == false && ress.data!.services![pageIndex].items![serviceIndex].link != null
+                          ? GestureDetector(
+                              onTap: () {
+                                _launchURL(ress.data!.services![pageIndex].items![serviceIndex].link);
+                              },
+                              child: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(color: kColorPrimary, borderRadius: BorderRadius.circular(64), boxShadow: [
                                     BoxShadow(
                                       color: Colors.grey.withOpacity(0.4),
                                       blurRadius: 1,
@@ -296,42 +282,8 @@ class _HomePageViewState extends State<HomePageView> {
                                       offset: Offset(0, 1),
                                     ),
                                   ]),
-                              child: kTextHeader('Orientation Registration',
-                                  size: 16,
-                                  color: Colors.white,
-                                  bold: true,
-                                  paddingH: 16,
-                                  paddingV: 4),
-                            ),
-                          ),
-                        )
-                      : ress.data!.services![pageIndex].items![serviceIndex]
-                                      .hasOrientation ==
-                                  false &&
-                              ress.data!.services![pageIndex]
-                                      .items![serviceIndex].link !=
-                                  null
-                          ? GestureDetector(
-                              onTap: () {
-                                _launchURL(ress.data!.services![pageIndex]
-                                    .items![serviceIndex].link);
-                              },
-                              child: Center(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: kColorPrimary,
-                                      borderRadius: BorderRadius.circular(64),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey.withOpacity(0.4),
-                                          blurRadius: 1,
-                                          spreadRadius: 1,
-                                          offset: Offset(0, 1),
-                                        ),
-                                      ]),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                                     child: kTextHeader(
                                       "Details ",
                                       size: 16,
@@ -345,7 +297,7 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             )
                           : SizedBox(),
-                  ress.data!.subscriptionStatus == true //&& !isIosInReview
+                  ress.data!.subscriptionStatus == true
                       ? GestureDetector(
                           onTap: () {
                             Get.toNamed(
@@ -355,20 +307,16 @@ class _HomePageViewState extends State<HomePageView> {
                           child: Center(
                             child: Container(
                               width: Get.width / 2,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                               margin: EdgeInsets.symmetric(vertical: 16),
-                              decoration: BoxDecoration(
-                                  color: Color(0xffFFB62B),
-                                  borderRadius: BorderRadius.circular(64),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.4),
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                      offset: Offset(0, 1),
-                                    ),
-                                  ]),
+                              decoration: BoxDecoration(color: Color(0xffFFB62B), borderRadius: BorderRadius.circular(64), boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
+                                ),
+                              ]),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -377,12 +325,7 @@ class _HomePageViewState extends State<HomePageView> {
                                     width: 30,
                                     height: 30,
                                   ),
-                                  kTextHeader('Subscribe',
-                                      size: 16,
-                                      color: Colors.white,
-                                      bold: true,
-                                      paddingH: 16,
-                                      paddingV: 4),
+                                  kTextHeader('Subscribe', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                                 ],
                               ),
                             ),

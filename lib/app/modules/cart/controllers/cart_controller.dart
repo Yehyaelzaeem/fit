@@ -12,10 +12,9 @@ import '../../../models/meal_features_home_response.dart';
 import '../../../models/meal_features_status_response.dart';
 
 class CartController extends GetxController {
-  final GlobalController globalController =
-      Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
   RxList<SingleMyMeal> meals = RxList<SingleMyMeal>();
-  MealFeatureStatusResponse  mealFeatureStatusResponse = MealFeatureStatusResponse();
+  MealFeatureStatusResponse mealFeatureStatusResponse = MealFeatureStatusResponse();
 
   final loading = false.obs;
   final isLoading = false.obs;
@@ -27,7 +26,7 @@ class CartController extends GetxController {
   late String latitude;
   late String longitude;
   void getStatus() async {
-    isLoading.value=true;
+    isLoading.value = true;
     await ApiProvider().getMealFeaturesStatus().then((value) {
       if (value.success == true) {
         mealFeatureStatusResponse = value;
@@ -36,9 +35,9 @@ class CartController extends GetxController {
         Fluttertoast.showToast(msg: "Server Error");
       }
     });
-    isLoading.value=false;
-
+    isLoading.value = false;
   }
+
   @override
   void onInit() {
     getStatus();
@@ -62,22 +61,20 @@ class CartController extends GetxController {
   @override
   void onClose() {}
 
-
   int mealPrice({
     required SingleMyMeal meal,
   }) {
-    int sum = int.parse(meal.price!);
+    int sum = (double.tryParse('${meal.price}')?.floor() ?? 0);
     if (meal.qty != 1) {
-      sum = int.parse(meal.price!) * meal.qty!;
+      sum = (double.tryParse('${meal.price}')?.floor() ?? 0) * meal.qty!;
     }
     return sum;
   }
 
-
   totalAmount() {
     double total = 0;
     meals.forEach((element) {
-      if (element.price != null) total += double.parse(element.price!)*element.qty!;
+      if (element.price != null) total += (double.parse(element.price!).floor()) * element.qty!;
     });
     return total;
   }
@@ -98,10 +95,10 @@ class CartController extends GetxController {
     loading.value = true;
     try {
       String meals = '';
-      String qtys='' ;
+      String qtys = '';
       this.meals.forEach((element) {
         meals += '${element.id},';
-        qtys +='${element.qty},';
+        qtys += '${element.qty},';
         // element.items.forEach((item) {
         //   item.items.forEach((subItem) {
         //     meals += '${subItem.id},';
@@ -139,11 +136,7 @@ class CartController extends GetxController {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 12),
-                  kTextbody(
-                      "Thank you for ordering from Cheer-Full \n \n 😍 Have a cheerful day 😍",
-                      color: Colors.black,
-                      bold: true,
-                      align: TextAlign.center),
+                  kTextbody("Thank you for ordering from Cheer-Full \n \n 😍 Have a cheerful day 😍", color: Colors.black, bold: true, align: TextAlign.center),
                   SizedBox(height: 12),
                 ],
               ),
@@ -163,7 +156,7 @@ class CartController extends GetxController {
         print("URL ==========> ${paymentUrl}");
       }
     } catch (e) {
-    print( e.toString());
+      print(e.toString());
     }
     loading.value = false;
   }
