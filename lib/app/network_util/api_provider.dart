@@ -897,7 +897,8 @@ class ApiProvider {
 
   Future<String> kDeviceToken() async {
     String? token;
-    token = await FirebaseMessaging.instance.getToken();
+    try{    token = await FirebaseMessaging.instance.getToken();
+    }catch(e){}
     return token ?? "";
   }
 
