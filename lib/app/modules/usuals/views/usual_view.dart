@@ -30,8 +30,13 @@ import '../widget/meal_item_widget.dart';
 
 class UsualView extends GetView<UsualController> {
   final controller = Get.find<UsualController>(tag: 'usual');
+  initData() async {
+    await controller.usualMealsData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    initData();
     return SafeArea(
       child: Obx(() {
 
