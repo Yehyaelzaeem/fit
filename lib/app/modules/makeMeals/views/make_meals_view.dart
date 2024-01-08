@@ -130,6 +130,7 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                               Get.back();
                                                             },
                                                             child: Container(
+                                                              width:double.infinity,
                                                               padding: EdgeInsets.symmetric(vertical: 8),
                                                               child: Text(
                                                                 item.title,
@@ -188,10 +189,15 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                                               Get.back();
                                                             },
                                                             child: Container(
+                                                              color: Colors.white,
+                                                              width:double.infinity,
+                                                              //alignment:Alignment.center,
                                                               padding: EdgeInsets.symmetric(vertical: 8),
-                                                              child: Text(
-                                                                item.name,
-                                                                style: TextStyle(fontSize: 16),
+                                                              child: Center(
+                                                                child: Text(
+                                                                  item.name,
+                                                                  style: TextStyle(fontSize: 16),
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
