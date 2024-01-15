@@ -5,7 +5,6 @@ import 'package:app/app/modules/diary/add_new_food.dart';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/home_drawer.dart';
 import 'package:app/app/modules/my_other_calories/my_other_calories.dart';
-import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
@@ -66,7 +65,7 @@ class DiaryView extends GetView<DiaryController> {
                   waterHeader(),
                   //*Water Bottles
                   waterBottles(),
-                  Divider(thickness: 2),
+                  Divider(thickness: 1),
                   rowWithProgressBar(
                       "Proteins", controller.response.value.data?.proteins),
                   Container(
@@ -93,7 +92,7 @@ class DiaryView extends GetView<DiaryController> {
                       ],
                     ),
                   ),
-                  Divider(thickness: 2),
+                  Divider(thickness: 1),
                   rowWithProgressBar(
                       "Carbs", controller.response.value.data?.carbs),
                   if (controller.refreshLoadingCarbs.value)
@@ -110,7 +109,7 @@ class DiaryView extends GetView<DiaryController> {
                         return rowItem(
                             controller.carbsDetails[indedx], 'carbs');
                       }),
-                  Divider(thickness: 2),
+                  Divider(thickness: 1),
                   rowWithProgressBar(
                       "Fats", controller.response.value.data?.fats),
                   Container(
@@ -138,7 +137,9 @@ class DiaryView extends GetView<DiaryController> {
                     ),
                   ),
                   SizedBox(height: 12),
-                  Divider(),
+                  Divider(
+                    thickness: 0.5,
+                  ),
                   diaryFooter(),
                 ],
               )
@@ -260,13 +261,12 @@ class DiaryView extends GetView<DiaryController> {
                                     item.id,
                                     foodId,
                                     qty,
-                               type:     type == 'proteins'
+                                    type: type == 'proteins'
                                         ? 'proteins'
                                         : type == 'carbs'
-                                        ? 'carbs'
-                                        : 'fats',
+                                            ? 'carbs'
+                                            : 'fats',
                                   );
-
                                 } catch (e) {}
                               },
                             ),
@@ -725,7 +725,7 @@ class DiaryView extends GetView<DiaryController> {
             ),
           ),
         ),
-        Divider(),
+        Divider(thickness: 0.5),
         SizedBox(height: 12),
         InkWell(
           onTap: () {
@@ -770,7 +770,8 @@ class DiaryView extends GetView<DiaryController> {
               horizontal: 72,
             ),
             decoration: BoxDecoration(
-                color: Color(0xFF414042), borderRadius: BorderRadius.circular(50)),
+                color: Color(0xFF414042),
+                borderRadius: BorderRadius.circular(50)),
           ),
         ),
         SizedBox(height: MediaQuery.of(Get.context!).size.width / 14),
@@ -888,8 +889,7 @@ class DiaryView extends GetView<DiaryController> {
                         paddingV: 0,
                         func: () {
                           FocusManager.instance.primaryFocus?.unfocus();
-                          if (controller.workDesc?.trim() == "" ||
-                              controller.workOut.value == null) {
+                          if (controller.workDesc?.trim() == "") {
                             Fluttertoast.showToast(
                                 msg: "Enter Workout Description");
                           } else {

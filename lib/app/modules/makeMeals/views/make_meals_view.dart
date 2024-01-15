@@ -9,7 +9,6 @@ import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../routes/app_pages.dart';
 import '../../subscribe/views/non_user_subscribe_view.dart';
 import '../controllers/make_meals_controller.dart';
 
@@ -22,9 +21,11 @@ class MakeMealsView extends GetView<MakeMealsController> {
         child: Scaffold(
             backgroundColor: Colors.white,
             body: Obx(() {
-              if (controller.loading.value) return Center(child: CircularLoadingWidget());
+              if (controller.loading.value)
+                return Center(child: CircularLoadingWidget());
 
-              if (controller.error.value.isNotEmpty) return errorHandler(controller.error.value, controller);
+              if (controller.error.value.isNotEmpty)
+                return errorHandler(controller.error.value, controller);
 
               return Column(
                 children: [
@@ -60,7 +61,8 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                     '${meal.title}',
                                     GestureDetector(
                                       onTap: () {
-                                        FocusScope.of(context).requestFocus(FocusNode());
+                                        FocusScope.of(context)
+                                            .requestFocus(FocusNode());
                                         controller.selectedFood.add(Food(
                                             amounts: [],
                                             mealTitle: meal.title ?? "",
@@ -74,7 +76,8 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(6),
-                                        margin: EdgeInsets.symmetric(horizontal: 12),
+                                        margin: EdgeInsets.symmetric(
+                                            horizontal: 12),
                                         child: Icon(
                                           Icons.add_box,
                                           color: kColorPrimary,
@@ -84,61 +87,110 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                     )),
                                 SizedBox(height: 12),
                                 body([
-                                  Expanded(flex: 5, child: kTextbody("Quality", color: kColorPrimary)),
-                                  Expanded(flex: 4, child: kTextbody("Quantity", color: kColorPrimary)),
-                                  Expanded(flex: 4, child: kTextbody("Calories", color: kColorPrimary)),
-                                  Expanded(flex: 4, child: kTextbody("Price", color: kColorPrimary)),
-                                  Expanded(flex: 2, child: kTextbody("", color: kColorPrimary)),
+                                  Expanded(
+                                      flex: 5,
+                                      child: kTextbody("Quality",
+                                          color: kColorPrimary)),
+                                  Expanded(
+                                      flex: 4,
+                                      child: kTextbody("Quantity",
+                                          color: kColorPrimary)),
+                                  Expanded(
+                                      flex: 4,
+                                      child: kTextbody("Calories",
+                                          color: kColorPrimary)),
+                                  Expanded(
+                                      flex: 4,
+                                      child: kTextbody("Price",
+                                          color: kColorPrimary)),
+                                  Expanded(
+                                      flex: 2,
+                                      child:
+                                          kTextbody("", color: kColorPrimary)),
                                 ], color: Color(0xFFE5E5E5)),
-                                ...controller.selectedFood.where((selectedFood) => selectedFood.mealTitle == meal.title).map((e) {
+                                ...controller.selectedFood
+                                    .where((selectedFood) =>
+                                        selectedFood.mealTitle == meal.title)
+                                    .map((e) {
                                   return body([
                                     Expanded(
                                       flex: 5,
                                       child: GestureDetector(
                                         onTap: () {
-                                          FocusScope.of(context).requestFocus(FocusNode());
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
                                           Get.dialog(Dialog(
                                             child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0)),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12, vertical: 16),
                                               child: SingleChildScrollView(
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Text(
                                                       "Select Quality",
-                                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
-                                                    if (meal.food.length > 0) SizedBox(height: 12),
+                                                    if (meal.food.length > 0)
+                                                      SizedBox(height: 12),
                                                     ...meal.food.map((item) {
                                                       return Column(
-                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
                                                         children: [
                                                           const SizedBox(),
                                                           GestureDetector(
                                                             onTap: () {
-                                                              FocusScope.of(context).requestFocus(FocusNode());
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .requestFocus(
+                                                                      FocusNode());
                                                               e.id = item.id;
-                                                              e.title = item.title;
-                                                              e.selectedAmount = Amount(
+                                                              e.title =
+                                                                  item.title;
+                                                              e.selectedAmount =
+                                                                  Amount(
                                                                 id: 0,
-                                                                name: "select...",
+                                                                name:
+                                                                    "select...",
                                                                 calories: "",
                                                                 price: "",
                                                               );
-                                                              controller.selectedFood.refresh();
+                                                              controller
+                                                                  .selectedFood
+                                                                  .refresh();
                                                               Get.back();
                                                             },
                                                             child: Container(
-                                                              width:double.infinity,
-                                                              padding: EdgeInsets.symmetric(vertical: 8),
+                                                              width: double
+                                                                  .infinity,
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          8),
                                                               child: Text(
                                                                 item.title,
-                                                                style: TextStyle(fontSize: 16),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16),
                                                               ),
                                                             ),
                                                           ),
-                                                          const Divider(thickness: 1.2),
+                                                          const Divider(
+                                                              thickness: 1.2),
                                                         ],
                                                       );
                                                     }),
@@ -149,7 +201,9 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                           ));
                                         },
                                         child: item(
-                                          title: e.title == null ? "Select..." : "${e.title}",
+                                          title: e.title == null
+                                              ? "Select..."
+                                              : "${e.title}",
                                           showDropDownArrow: true,
                                         ),
                                       ),
@@ -158,50 +212,89 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                       flex: 4,
                                       child: GestureDetector(
                                         onTap: () {
-                                          FocusScope.of(context).requestFocus(FocusNode());
-                                          if (meal.food.where((element) => element.id == e.id).isEmpty) return;
-                                          if (meal.food.firstWhere((element) => element.id == e.id).amounts.isEmpty) return;
+                                          FocusScope.of(context)
+                                              .requestFocus(FocusNode());
+                                          if (meal.food
+                                              .where((element) =>
+                                                  element.id == e.id)
+                                              .isEmpty) return;
+                                          if (meal.food
+                                              .firstWhere((element) =>
+                                                  element.id == e.id)
+                                              .amounts
+                                              .isEmpty) return;
                                           Get.dialog(Dialog(
                                             child: Container(
-                                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.0)),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 12, vertical: 16),
                                               child: SingleChildScrollView(
                                                 child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     Text(
                                                       "Select Quantity",
-                                                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
-                                                    if (meal.food.length > 0) SizedBox(height: 12),
-                                                    ...meal.food.firstWhere((element) => element.id == e.id).amounts.map((item) {
+                                                    if (meal.food.length > 0)
+                                                      SizedBox(height: 12),
+                                                    ...meal.food
+                                                        .firstWhere((element) =>
+                                                            element.id == e.id)
+                                                        .amounts
+                                                        .map((item) {
                                                       return Column(
                                                         children: [
                                                           GestureDetector(
                                                             onTap: () {
-                                                              FocusScope.of(context).requestFocus(FocusNode());
-                                                              e.selectedAmount = Amount(
+                                                              FocusScope.of(
+                                                                      context)
+                                                                  .requestFocus(
+                                                                      FocusNode());
+                                                              e.selectedAmount =
+                                                                  Amount(
                                                                 id: item.id,
                                                                 name: item.name,
-                                                                calories: item.calories,
-                                                                price: item.price,
+                                                                calories: item
+                                                                    .calories,
+                                                                price:
+                                                                    item.price,
                                                               );
-                                                              controller.selectedFood.refresh();
+                                                              controller
+                                                                  .selectedFood
+                                                                  .refresh();
                                                               Get.back();
                                                             },
                                                             child: Container(
-                                                              color: Colors.white,
-                                                              width:double.infinity,
-                                                              //alignment:Alignment.center,
-                                                              padding: EdgeInsets.symmetric(vertical: 8),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  item.name,
-                                                                  style: TextStyle(fontSize: 16),
-                                                                ),
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          8),
+                                                              width: double
+                                                                  .infinity,
+                                                              color: Colors
+                                                                  .transparent,
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Text(
+                                                                item.name,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16),
                                                               ),
                                                             ),
                                                           ),
-                                                          const Divider(thickness: 1.2),
+                                                          const Divider(
+                                                              thickness: 1.2),
                                                         ],
                                                       );
                                                     }),
@@ -213,22 +306,37 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                         },
                                         child: item(
                                           title: "${e.selectedAmount.name}",
-                                          showDropDownArrow: e.selectedAmount.name.isNotEmpty,
+                                          showDropDownArrow:
+                                              e.selectedAmount.name.isNotEmpty,
                                         ),
                                       ),
                                     ),
-                                    Expanded(flex: 4, child: item(title: "${double.tryParse(e.selectedAmount.calories)?.round() ?? ""}", showDropDownArrow: false)),
-                                    Expanded(flex: 4, child: item(title: e.selectedAmount.price.isEmpty ? "" : "${double.tryParse(e.selectedAmount.price)?.round() ?? ""} L.E", showDropDownArrow: false)),
+                                    Expanded(
+                                        flex: 4,
+                                        child: item(
+                                            title:
+                                                "${double.tryParse(e.selectedAmount.calories)?.round() ?? ""}",
+                                            showDropDownArrow: false)),
+                                    Expanded(
+                                        flex: 4,
+                                        child: item(
+                                            title: e.selectedAmount.price
+                                                    .isEmpty
+                                                ? ""
+                                                : "${double.tryParse(e.selectedAmount.price)?.round() ?? ""} L.E",
+                                            showDropDownArrow: false)),
                                     Expanded(
                                         flex: 2,
                                         child: GestureDetector(
                                           onTap: () {
-                                            FocusScope.of(context).requestFocus(FocusNode());
+                                            FocusScope.of(context)
+                                                .requestFocus(FocusNode());
                                             controller.selectedFood.remove(e);
                                           },
                                           child: Padding(
                                             padding: const EdgeInsets.all(6.0),
-                                            child: Icon(Icons.delete, color: Colors.red),
+                                            child: Icon(Icons.delete,
+                                                color: Colors.red),
                                           ),
                                         )),
                                   ]);
@@ -722,7 +830,8 @@ class MakeMealsView extends GetView<MakeMealsController> {
                           SizedBox(height: 12),
                           Container(
                             width: double.infinity,
-                            child: kTextbody("Note", align: TextAlign.start, paddingH: 12),
+                            child: kTextbody("Note",
+                                align: TextAlign.start, paddingH: 12),
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 12),
@@ -750,7 +859,8 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                 paddingV: 4,
                                 func: () async {
                                   if (controller.mealName.isEmpty) {
-                                    Get.snackbar("Error", "Please enter meal name");
+                                    Get.snackbar(
+                                        "Error", "Please enter meal name");
                                     return;
                                   }
                                   if (controller.selectedFood.isEmpty) {
@@ -759,26 +869,35 @@ class MakeMealsView extends GetView<MakeMealsController> {
                                   }
                                   bool canContinue = true;
                                   if (controller.selectedFood.isNotEmpty) {
-                                    for (int i = 0; i < controller.selectedFood.length; i++) {
-                                      if (controller.selectedFood[i].selectedAmount.calories.isEmpty) {
+                                    for (int i = 0;
+                                        i < controller.selectedFood.length;
+                                        i++) {
+                                      if (controller.selectedFood[i]
+                                          .selectedAmount.calories.isEmpty) {
                                         if (canContinue) canContinue = false;
-                                        if (controller.selectedFood[i].title.isEmpty) {
-                                          Get.snackbar("Error", "Please select amount");
+                                        if (controller
+                                            .selectedFood[i].title.isEmpty) {
+                                          Get.snackbar(
+                                              "Error", "Please select amount");
                                         } else {
-                                          Get.snackbar("Error", "Please select amount for ${controller.selectedFood[i].title}");
+                                          Get.snackbar("Error",
+                                              "Please select amount for ${controller.selectedFood[i].title}");
                                         }
                                       }
                                     }
                                   }
                                   if (!canContinue) return;
                                   if (canContinue) {
-                                    if (controller.isGuestSaved || controller.userId.isNotEmpty) {
+                                    if (controller.isGuestSaved ||
+                                        controller.userId.isNotEmpty) {
                                       controller.saveMeal();
-                                    } else if (!controller.isGuestSaved && controller.userId.isEmpty) {
+                                    } else if (!controller.isGuestSaved &&
+                                        controller.userId.isEmpty) {
                                       bool result = await Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => NonUserSubscribeView(
+                                            builder: (context) =>
+                                                NonUserSubscribeView(
                                                   isGuest: controller.isGuest,
                                                   save: true,
                                                 )),
@@ -840,14 +959,17 @@ class MakeMealsView extends GetView<MakeMealsController> {
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       width: MediaQuery.of(Get.context!).size.width,
       height: 65,
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.4),
-          blurRadius: 2,
-          spreadRadius: 2,
-          offset: Offset(0, 0),
-        ),
-      ]),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              blurRadius: 2,
+              spreadRadius: 2,
+              offset: Offset(0, 0),
+            ),
+          ]),
       child: Stack(
         children: [
           Center(
@@ -888,7 +1010,9 @@ class MakeMealsView extends GetView<MakeMealsController> {
         children: [
           Container(
             margin: EdgeInsets.symmetric(horizontal: 12),
-            child: Center(child: kTextbody(title, color: Colors.white, bold: true, size: 16)),
+            child: Center(
+                child: kTextbody(title,
+                    color: Colors.white, bold: true, size: 16)),
           ),
           action,
         ],

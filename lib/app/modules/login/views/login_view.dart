@@ -85,8 +85,8 @@ class _LoginViewState extends State<LoginView> {
         //   DiaryController controller = Get.find<DiaryController>(tag: 'diary');
         //   controller.onInit();
         // }
-        await Get.put(UsualController(), tag: "usual").getUserUsualMeals();
-        await Get.put(UsualController(), tag: "usual").usualMealsData();
+        // await Get.put(UsualController(), tag: "usual").getUserUsualMeals();
+        // await Get.put(UsualController(), tag: "usual").usualMealsData();
         Get.offAndToNamed(Routes.HOME);
       } else {
         setState(() {
@@ -94,7 +94,7 @@ class _LoginViewState extends State<LoginView> {
           showLoader = false;
         });
 
-        Fluttertoast.showToast(msg: " ${value.message} ");
+        //Fluttertoast.showToast(msg: " ${value.message} ");
       }
     });
   }

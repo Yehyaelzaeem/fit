@@ -1,7 +1,6 @@
 import 'package:app/app/models/mymeals_response.dart';
 import 'package:app/app/modules/cart/views/web_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/app/utils/translations/strings.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../models/meal_features_home_response.dart';
-import '../../../models/meal_features_status_response.dart';
 
 class CartController extends GetxController {
   final GlobalController globalController = Get.find<GlobalController>(tag: 'global');

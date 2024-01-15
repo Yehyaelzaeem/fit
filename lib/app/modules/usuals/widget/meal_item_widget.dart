@@ -1,12 +1,9 @@
 import 'package:app/app/modules/usuals/views/make_a_meal_view.dart';
-import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import '../../../models/usual_meals_reposne.dart';
-import '../../../routes/app_pages.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/app_dialog.dart';
 import '../../../widgets/default/text.dart';

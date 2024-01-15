@@ -91,6 +91,7 @@ class OrdersView extends GetView<OrdersController> {
                   return Column(
                     children: [
                       Container(
+                        height: 35,
                         decoration: BoxDecoration(
                           color: Color(0xFF414042),
                           boxShadow: [
@@ -111,6 +112,8 @@ class OrdersView extends GetView<OrdersController> {
                                   controller.selectedTap.value = 2;
                                 },
                                 child: Container(
+                                  height: 35,
+                                  alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: controller.selectedTap.value == 2
                                         ? Colors.white
@@ -133,6 +136,8 @@ class OrdersView extends GetView<OrdersController> {
                                   controller.selectedTap.value = 1;
                                 },
                                 child: Container(
+                                  height: 35,
+                                  alignment: Alignment.center,
                                   decoration: BoxDecoration(
                                     color: controller.selectedTap.value == 1
                                         ? Colors.white

@@ -11,7 +11,7 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
   final PageDecoration pageDecoration = const PageDecoration(
     titleTextStyle: TextStyle(fontSize: 28.0, fontWeight: FontWeight.w700),
     bodyTextStyle: TextStyle(fontSize: 19.0),
-    descriptionPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+    bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
     pageColor: Colors.white,
     imagePadding: EdgeInsets.zero,
   );
@@ -57,7 +57,8 @@ class IntroductionScreenView extends GetView<IntroductionScreenController> {
             onDone: () => controller.onDone(),
             onSkip: () => controller.onDone(),
             showSkipButton: true,
-            skipFlex: 0,
+            //skipFlex: 0,
+            skipOrBackFlex: 0,
             nextFlex: 0,
             skip: kTextbody(Strings().skip),
             next: Icon(

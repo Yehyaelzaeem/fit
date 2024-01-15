@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:core';
 
 abstract class Enum<T> {
   final T _value;

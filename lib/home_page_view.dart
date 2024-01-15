@@ -1,7 +1,6 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/modules/orientation_register/views/orientation_register_view.dart';
 import 'package:app/app/routes/app_pages.dart';
-import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';

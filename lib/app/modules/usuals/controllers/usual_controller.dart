@@ -1,21 +1,13 @@
-import 'package:app/app/modules/home/controllers/home_controller.dart';
-import 'package:app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/app/network_util/shared_helper.dart';
-import 'package:app/app/pdf_viewr.dart';
-import 'package:app/app/utils/helper/echo.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../models/usual_meals_data_reposne.dart';
 import '../../../models/usual_meals_reposne.dart';
-import '../../../routes/app_pages.dart';
 import '../../diary/controllers/diary_controller.dart';
 
-class UsualController extends GetxController  with SingleGetTickerProviderMixin {
+class UsualController extends GetxController with SingleGetTickerProviderMixin {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
   RxList<FoodDataItem> caloriesDetails = RxList();
@@ -35,9 +27,8 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
   @override
   void onInit() async {
     super.onInit();
-    await  usualMealsData();
+    await usualMealsData();
   }
-
 
   Future usualMealsData() async {
     isLoading.value = true;
@@ -47,80 +38,84 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
       }
     });
     isLoading.value = false;
-
   }
+
   List<FoodItem> foodItems = [];
-   sendJsonData(FoodDataItem myFood) {
-     FoodItem item = FoodItem(foodId: myFood.id!,quantity: myFood.qty!,mealName:myFood.title??"");
-     foodItems.add(item);
+  sendJsonData(FoodDataItem myFood) {
+    FoodItem item = FoodItem(
+        foodId: myFood.id!,
+        quantity: myFood.qty!,
+        mealName: myFood.title ?? "");
+    foodItems.add(item);
   }
 
-  Future<void> createUsualMeal({required Map<String,dynamic> mealParameters}) async {
-    addLoading.value=true;
-    isLoading.value=true;
-    await ApiProvider().createUsualMeal(mealParameters: mealParameters)
+  Future<void> createUsualMeal(
+      {required Map<String, dynamic> mealParameters}) async {
+    addLoading.value = true;
+    isLoading.value = true;
+    await ApiProvider()
+        .createUsualMeal(mealParameters: mealParameters)
         .then((value) async {
       if (value.success == true) {
-        addLoading.value=false;
-        mealsResponse.value=UsualMealsResponse();
+        addLoading.value = false;
+        mealsResponse.value = UsualMealsResponse();
         await getUserUsualMeals();
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
       } else {
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
-        addLoading.value=false;
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        addLoading.value = false;
       }
-      isLoading.value=false;
-
+      isLoading.value = false;
     });
   }
 
-  Future<void> updateCurrentUsualMeal({required Map<String,dynamic> mealParameters}) async {
-    addLoading.value=true;
-    isLoading.value=true;
-    await ApiProvider().updateUsualMeal(mealParameters: mealParameters)
+  Future<void> updateCurrentUsualMeal(
+      {required Map<String, dynamic> mealParameters}) async {
+    addLoading.value = true;
+    isLoading.value = true;
+    await ApiProvider()
+        .updateUsualMeal(mealParameters: mealParameters)
         .then((value) async {
       if (value.success == true) {
-        addLoading.value=false;
-        mealsResponse.value=UsualMealsResponse();
+        addLoading.value = false;
+        mealsResponse.value = UsualMealsResponse();
         await getUserUsualMeals();
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
       } else {
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
       }
-      isLoading.value=false;
-
+      isLoading.value = false;
     });
   }
 
   Future addMealToDiary({required int mealId}) async {
-    await ApiProvider().mealToDiary(mealId: mealId)
-        .then((value) async {
+    await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
       if (value.success == true) {
         Get.find<DiaryController>(tag: 'diary').onInit();
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
       } else {
-        Fluttertoast.showToast(fontSize: 10,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
       }
     });
   }
 
   Future getUserUsualMeals() async {
-     isLoading.value=true;
-     addLoading.value=true;
+    isLoading.value = true;
+    addLoading.value = true;
 
-     await ApiProvider().getMyUsualMeals().then((value) {
+    await ApiProvider().getMyUsualMeals().then((value) {
       if (value.success == true) {
         print("Here success");
-        print( mealsResponse.value.data);
+        print(mealsResponse.value.data);
         mealsResponse.value = value;
         print("Here success ${mealsResponse.value.data?.length}");
-        isLoading.value=false;
-        addLoading.value=false;
+        isLoading.value = false;
+        addLoading.value = false;
       } else {
-        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8, msg: "${value.message}");
       }
     });
-     kUpdate.value=kUpdate.value+1;
+    kUpdate.value = kUpdate.value + 1;
   }
 
   Future<void> deleteUserUsualMeal(int mealId) async {
@@ -128,21 +123,21 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
     try {
       final response = await ApiProvider().deleteUsualMeal(mealId: mealId);
       if (response.success == true) {
-        mealsResponse.value=UsualMealsResponse();
+        mealsResponse.value = UsualMealsResponse();
         await getUserUsualMeals();
         update();
         mealsResponse.refresh();
         deleteLoading.value = false;
-        Fluttertoast.showToast(fontSize: 8,msg: "${response.message}");
+        Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
       } else {
-        Fluttertoast.showToast(fontSize: 8,msg: "${response.message}");
+        Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
       }
     } catch (error) {
       print("Error: $error");
-      Fluttertoast.showToast(fontSize: 8,msg: "An error occurred while deleting the meal.");
+      Fluttertoast.showToast(
+          fontSize: 8, msg: "An error occurred while deleting the meal.");
     }
   }
-
 
   Future<void> deleteItemCalories(int id, String _date, String type) async {
     await ApiProvider()
@@ -155,7 +150,6 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
       }
     });
   }
-
 
   Future<void> deleteItemCarbs(int id, String _date, String type) async {
     await ApiProvider()
@@ -177,22 +171,19 @@ class UsualController extends GetxController  with SingleGetTickerProviderMixin 
         fatsDetails.removeWhere((element) => element.id == id);
       } else {
         fatsDetails.removeWhere((element) => element.id == id);
-        Fluttertoast.showToast(fontSize: 8,msg: "${value.message}");
+        Fluttertoast.showToast(fontSize: 8, msg: "${value.message}");
       }
     });
   }
-
 }
-
-
-
 
 class FoodItem {
   int foodId;
   String mealName;
   dynamic quantity;
 
-  FoodItem({required this.foodId,required this.quantity,required this.mealName});
+  FoodItem(
+      {required this.foodId, required this.quantity, required this.mealName});
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,5 +1,4 @@
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/modules/subscribe/views/non_user_subscribe_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/theme/app_colors.dart';

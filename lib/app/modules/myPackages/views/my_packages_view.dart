@@ -9,9 +9,7 @@ import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
-import 'package:app/app/widgets/error_handler_widget.dart';
 import 'package:app/app/widgets/page_lable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -21,7 +19,6 @@ import '../../../models/my_packages_response.dart';
 import '../../../network_util/api_provider.dart';
 import '../../../network_util/shared_helper.dart';
 import '../../main_un_auth.dart';
-import '../../subscribe/views/non_user_subscribe_view.dart';
 
 class MyPackagesView extends StatefulWidget {
   @override

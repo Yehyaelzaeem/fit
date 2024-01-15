@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:app/app/modules/home/home_appbar.dart';
 import 'package:app/app/modules/invoice/views/invoice_view.dart';
-import 'package:app/app/modules/myPackages/views/my_packages_view.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/widgets/default/text.dart';
@@ -88,7 +87,8 @@ class WebViewScreen extends StatelessWidget {
                           uri.path.toLowerCase().contains("success") ||
                           uri.path.toLowerCase().contains("Payment-Success")) {
                         if (fromCheerfull != "From Cheerful Order") {
-                          await SharedHelper().writeData(CachingKey.INVOICE,'INVOICE');
+                          await SharedHelper()
+                              .writeData(CachingKey.INVOICE, 'INVOICE');
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
@@ -174,7 +174,7 @@ class WebViewScreen extends StatelessWidget {
                     }
                     return NavigationActionPolicy.ALLOW;
                   },
-                  onLoadStart: (webViewController, uri)async {
+                  onLoadStart: (webViewController, uri) async {
                     if (Platform.isAndroid) {
                       print(
                           "WEB URI link =========== > ${Uri.parse(uri.toString())}");
@@ -182,7 +182,8 @@ class WebViewScreen extends StatelessWidget {
                       if (uri.path.contains("Success") ||
                           uri.path.contains("Payment-Success")) {
                         if (fromCheerfull != "From Cheerful Order") {
-                          await SharedHelper().writeData(CachingKey.INVOICE,'INVOICE');
+                          await SharedHelper()
+                              .writeData(CachingKey.INVOICE, 'INVOICE');
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

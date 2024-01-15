@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/app/utils/theme/app_colors.dart';
@@ -81,7 +80,7 @@ class _SaveNewMealState extends State<SaveNewMeal> {
                 ),
                 Expanded(
                   child: Scrollbar(
-                    isAlwaysShown: true,
+                    thumbVisibility: true,
                     child: ListView.builder(
                         itemCount: searchResult.isEmpty
                             ? data!.length
@@ -149,7 +148,7 @@ class _SaveNewMealState extends State<SaveNewMeal> {
                                                 hint: 'Enter Quantity',
                                                 suffixData: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 16,
                                                       vertical: 8),
                                                   child: Column(
@@ -187,7 +186,7 @@ class _SaveNewMealState extends State<SaveNewMeal> {
                                                   ? SizedBox()
                                                   : Padding(
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal: 16,
                                                           vertical: 16),
                                                       child: Text(
@@ -237,5 +236,4 @@ class _SaveNewMealState extends State<SaveNewMeal> {
       ),
     );
   }
-
 }

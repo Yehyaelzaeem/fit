@@ -1,11 +1,9 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 import '../../../models/usual_meals_reposne.dart';
 import '../../../utils/theme/app_colors.dart';
 import '../../../widgets/default/text.dart';
-import '../../diary/views/diary_view.dart';
 
 class StaticBar extends StatelessWidget {
   const StaticBar({Key? key, required this.type, required this.usualProteins}) : super(key: key);

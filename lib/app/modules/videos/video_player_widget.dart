@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:app/app/modules/home/home_appbar.dart';
-import 'package:app/app/modules/orientation/views/web_view_screen.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
@@ -23,10 +22,9 @@ class VideoPlayerWidget extends StatelessWidget {
               child: link.contains('vimeo')
                   ? AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: WebViewScreen(url: _videoPage(link.split("/").last)
-                     // InAppWebView(
-                      //  initialUrlRequest: URLRequest(
-                       //     url: Uri.parse(_videoPage(link.split("/").last))),
+                      child: InAppWebView(
+                        initialUrlRequest: URLRequest(
+                            url: Uri.parse(_videoPage(link.split("/").last))),
                       ),
                     )
                   : Center(

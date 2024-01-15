@@ -6,14 +6,11 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/page_lable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../../pdf_viewr.dart';
 import '../../../routes/app_pages.dart';
 import '../../home/views/home_view.dart';
-import 'notification_plan.dart';
 
 class NotificationDetailsView extends StatefulWidget {
   final int? id;

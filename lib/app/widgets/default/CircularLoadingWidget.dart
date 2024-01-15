@@ -8,11 +8,15 @@ class CircularLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: EdgeInsets.only(bottom: 40),
-        margin: EdgeInsets.only(bottom: 40),
-        child: Lottie.asset('assets/loader.json'),
+    return Container(
+      height: double.infinity,
+      width: double.infinity,
+      color: Colors.white,
+
+      child: Center(
+        child: Lottie.asset(
+          'assets/loader.json',
+        ),
       ),
     );
   }

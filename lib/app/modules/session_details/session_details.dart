@@ -8,7 +8,6 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:expandable/expandable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -59,146 +58,145 @@ class _SessionDetailsState extends State<SessionDetails> {
           isLoading == true
               ? CircularLoadingWidget()
               : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.horizontal(
-                        right: Radius.circular(15.0),
-                      ),
-                      color: const Color(0xFF414042),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.horizontal(
+                              right: Radius.circular(15.0),
+                            ),
+                            color: const Color(0xFF414042),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  '         Body Composition       ',
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CustomImageViewer(
+                                          image:
+                                              "${sessionResponse.data!.bodyComposition}",
+                                          tite: "Body Composition",
+                                        )));
+                            // downloadFile(sessionResponse.data!.bodyComposition!);
+                          },
+                          child: Container(
+                            width: 80,
+                            height: 40,
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 18, vertical: 4),
+                            decoration: BoxDecoration(
+                              // color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(64),
+                            ),
+                            child: Image.asset(
+                              "assets/img/view.png",
+                              color: kColorPrimary,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    child: Padding(
+                    Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Text(
-                            '         Body Composition       ',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 2,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  CustomImageViewer(
-                                    image:
-                                    "${sessionResponse.data!.bodyComposition}",
-                                    tite: "Body Composition",
-                                  )));
-                      // downloadFile(sessionResponse.data!.bodyComposition!);
-                    },
-                    child: Container(
-                      width: 80,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 4),
-                      decoration: BoxDecoration(
-                        // color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(64),
-                      ),
-                      child: Image.asset(
-                        "assets/img/view.png",
-                        color: kColorPrimary,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.grey[200]),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        "${sessionResponse.data!.date}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              infoRow("Height :", "${sessionResponse.data!.height} "),
-              infoRow("Total Weight :",
-                  "${sessionResponse.data!.totalWeight}"),
-              infoRow(
-                  "Fats Percentage :", "${sessionResponse.data!.fats}"),
-              infoRow("Muscles Percentage :",
-                  "${sessionResponse.data!.muscles}"),
-              infoRow(
-                  "Water Percentage :", "${sessionResponse.data!.water}"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(),
-                  Center(
-                      child: kButton("Follow up", hight: 45, func: () {
-                        _launchURL(sessionResponse.data!.followUp!);
-                      })),
-                ],
-              ),
-              Container(
-                  color: kColorAccent,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(),
-                            Text(
-                              "Day-to-Day Details",
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(color: Colors.grey[200]),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: Text(
+                              "${sessionResponse.data!.date}",
                               style: TextStyle(
-                                  color: Colors.white, fontSize: 15),
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
-                            Container(
-                              width: 1,
-                              height: 30,
-                              color: Colors.white,
-                            )
-                          ],
+                          ),
                         ),
                       ),
-                    ],
-                  )),
-              SizedBox(
-                height: 10,
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: sessionResponse.data!.followUpTable!.length,
-                  itemBuilder: (context, index) {
-                    return tableItem(
-                        sessionResponse.data!.followUpTable![index]);
-                  }),
-            ],
-          )
+                    ),
+                    infoRow("Height :", "${sessionResponse.data!.height} "),
+                    infoRow("Total Weight :",
+                        "${sessionResponse.data!.totalWeight}"),
+                    infoRow(
+                        "Fats Percentage :", "${sessionResponse.data!.fats}"),
+                    infoRow("Muscles Percentage :",
+                        "${sessionResponse.data!.muscles}"),
+                    infoRow(
+                        "Water Percentage :", "${sessionResponse.data!.water}"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(),
+                        Center(
+                            child: kButton("Follow up", hight: 45, func: () {
+                          _launchURL(sessionResponse.data!.followUp!);
+                        })),
+                      ],
+                    ),
+                    Container(
+                        color: kColorAccent,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(),
+                                  Text(
+                                    "Day-to-Day Details",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 15),
+                                  ),
+                                  Container(
+                                    width: 1,
+                                    height: 30,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: sessionResponse.data!.followUpTable!.length,
+                        itemBuilder: (context, index) {
+                          return tableItem(
+                              sessionResponse.data!.followUpTable![index]);
+                        }),
+                  ],
+                )
         ],
       ),
     );
@@ -247,10 +245,7 @@ class _SessionDetailsState extends State<SessionDetails> {
               kTextbody(' ${item.qty} ',
                   color: Colors.black, bold: false, size: 14),
               Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width / 2.3,
+                  width: MediaQuery.of(context).size.width / 2.3,
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -281,31 +276,31 @@ class _SessionDetailsState extends State<SessionDetails> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ExpandableNotifier(
-          initialExpanded:false,
+          initialExpanded: false,
           child: ScrollOnExpand(
             scrollOnExpand: false,
             scrollOnCollapse: false,
             child: ExpandablePanel(
-              theme:
-              const ExpandableThemeData(
-                headerAlignment:
-                ExpandablePanelHeaderAlignment
-                    .center,
+              theme: const ExpandableThemeData(
+                headerAlignment: ExpandablePanelHeaderAlignment.center,
                 tapBodyToCollapse: false,
               ),
               header: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   kTextbody("  Date  ", bold: true),
-                  SizedBox(width: 14,),
+                  SizedBox(
+                    width: 14,
+                  ),
                   kTextbody("${table.date}", bold: true),
                   Spacer(),
-                  table.caloriesTable!.carbsFatsTable!.isNotEmpty ||table.caloriesTable!.fatsTable!.isNotEmpty ||
-                      table.caloriesTable!.proteinsCaloriesTable!.isNotEmpty
+                  table.caloriesTable!.carbsFatsTable!.isNotEmpty ||
+                          table.caloriesTable!.fatsTable!.isNotEmpty ||
+                          table.caloriesTable!.proteinsCaloriesTable!.isNotEmpty
                       ? Image.asset(
-                    'assets/big_logo.png',
-                    scale: 20,
-                  )
+                          'assets/big_logo.png',
+                          scale: 20,
+                        )
                       : SizedBox(),
                 ],
               ),
@@ -328,16 +323,13 @@ class _SessionDetailsState extends State<SessionDetails> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       kTextbody(
-                        "${table.proteinsCalories?.taken} / ${table
-                            .proteinsCalories?.imposed}",
+                        "${table.proteinsCalories?.taken} / ${table.proteinsCalories?.imposed}",
                       ),
                       kTextbody(
-                        "${table.carbsFatsCalories?.taken} / ${table
-                            .carbsFatsCalories?.imposed}",
+                        "${table.carbsFatsCalories?.taken} / ${table.carbsFatsCalories?.imposed}",
                       ),
                       kTextbody(
-                        "${table.fatsCalories?.taken} / ${table.fatsCalories
-                            ?.imposed}",
+                        "${table.fatsCalories?.taken} / ${table.fatsCalories?.imposed}",
                       ),
                       kTextbody(
                         "${table.total?.taken} / ${table.total?.imposed}",
@@ -349,75 +341,74 @@ class _SessionDetailsState extends State<SessionDetails> {
                   ),
                   Center(
                       child: kButton("  Details  ", hight: 26, func: () {
-                        CustomSheet(
-                          hight: MediaQuery.of(context).size.height*0.4,
-                            context: context,
-                            widget: Padding(
-                              padding: const EdgeInsets.only(left:12.0,right:12.0,top:20.0,),
-                              child: Scrollbar(
-                                isAlwaysShown: true,
-                                child: ListView(
-                                  children: [
-                                    VerticalSpace(),
-                                    Text(
-                                      "Water : ${table.water} ml",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    VerticalSpace(),
-                                    Divider(),
-                                    Text(
-                                      "Workout : ${table.workout != null ? table
-                                          .workout!.workoutType : "Not Yet"}",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: kColorPrimary),
-                                    ),
-                                    Text(
-                                      "${table.workout != null ? table.workout!
-                                          .workoutDesc : "   "}",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    VerticalSpace(),
-                                    Divider(),
-                                    Text(
-                                      "Sleep time : ${table.sleepingTime != null
-                                          ? table.sleepingTime?.sleepingDuration
-                                          : "Not Yet"}",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: kColorPrimary),
-                                    ),
-                                    Text(
-                                      "${table.sleepingTime != null
-                                          ? table.sleepingTime?.sleepingStatus?.name
-                                          : "   "}",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    VerticalSpace(),
-                                    Divider(),
-                                    Text(
-                                      "Proteins",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    table.caloriesTable!.proteinsCaloriesTable!
+                    CustomSheet(
+                        hight: MediaQuery.of(context).size.height * 0.4,
+                        context: context,
+                        widget: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 12.0,
+                            right: 12.0,
+                            top: 20.0,
+                          ),
+                          child: Scrollbar(
+                            thumbVisibility: true,
+                            child: ListView(
+                              children: [
+                                VerticalSpace(),
+                                Text(
+                                  "Water : ${table.water} ml",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                VerticalSpace(),
+                                Divider(),
+                                Text(
+                                  "Workout : ${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: kColorPrimary),
+                                ),
+                                Text(
+                                  "${table.workout != null ? table.workout!.workoutDesc : "   "}",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                VerticalSpace(),
+                                Divider(),
+                                Text(
+                                  "Sleep time : ${table.sleepingTime != null ? table.sleepingTime?.sleepingDuration : "Not Yet"}",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: kColorPrimary),
+                                ),
+                                Text(
+                                  "${table.sleepingTime != null ? table.sleepingTime?.sleepingStatus?.name : "   "}",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                VerticalSpace(),
+                                Divider(),
+                                Text(
+                                  "Proteins",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                table.caloriesTable!.proteinsCaloriesTable!
                                         .isEmpty
-                                        ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 50),
-                                      child: Center(
-                                        child: Text("No Data To Show"),
-                                      ),
-                                    )
-                                        : ListView.builder(
+                                    ? Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 50),
+                                        child: Center(
+                                          child: Text("No Data To Show"),
+                                        ),
+                                      )
+                                    : ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
                                         itemCount: table.caloriesTable!
@@ -426,73 +417,71 @@ class _SessionDetailsState extends State<SessionDetails> {
                                           return rowItem(table.caloriesTable!
                                               .proteinsCaloriesTable![inIndex]);
                                         }),
-                                    VerticalSpace(),
-                                    Divider(),
-                                    Text(
-                                      "Carbs",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    table.caloriesTable!.carbsFatsTable!.isEmpty
-                                        ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 50),
-                                      child: Center(
-                                        child: Text("No Data To Show"),
-                                      ),
-                                    )
-                                        : ListView.builder(
+                                VerticalSpace(),
+                                Divider(),
+                                Text(
+                                  "Carbs",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                table.caloriesTable!.carbsFatsTable!.isEmpty
+                                    ? Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 50),
+                                        child: Center(
+                                          child: Text("No Data To Show"),
+                                        ),
+                                      )
+                                    : ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemCount: table
-                                            .caloriesTable!.carbsFatsTable!.length,
+                                        itemCount: table.caloriesTable!
+                                            .carbsFatsTable!.length,
                                         itemBuilder: (context, inIndex) {
                                           return rowItem(table.caloriesTable!
                                               .carbsFatsTable![inIndex]);
                                         }),
-                                    VerticalSpace(),
-                                    Divider(),
-                                    Text(
-                                      "Fats",
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    // table.caloriesTable!.fatsTable!.isEmpty
-                                    table.caloriesTable!.fatsTable!.isEmpty
-                                        ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 50),
-                                      child: Center(
-                                        child: Text("No Data To Show"),
-                                      ),
-                                    )
-                                        : ListView.builder(
+                                VerticalSpace(),
+                                Divider(),
+                                Text(
+                                  "Fats",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                // table.caloriesTable!.fatsTable!.isEmpty
+                                table.caloriesTable!.fatsTable!.isEmpty
+                                    ? Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 50),
+                                        child: Center(
+                                          child: Text("No Data To Show"),
+                                        ),
+                                      )
+                                    : ListView.builder(
                                         shrinkWrap: true,
                                         physics: NeverScrollableScrollPhysics(),
-                                        itemCount:
-                                        table.caloriesTable!.fatsTable!.length,
+                                        itemCount: table
+                                            .caloriesTable!.fatsTable!.length,
                                         itemBuilder: (context, inIndex) {
-                                          return rowItem(table
-                                              .caloriesTable!.fatsTable![inIndex]);
+                                          return rowItem(table.caloriesTable!
+                                              .fatsTable![inIndex]);
                                         }),
-                                    VerticalSpace(),
-                                  ],
-                                ),
-                              ),
-                            ));
-                      })),
+                                VerticalSpace(),
+                              ],
+                            ),
+                          ),
+                        ));
+                  })),
                 ],
               ),
               collapsed: const SizedBox(),
-              builder: (_, collapsed,
-                  expanded) {
+              builder: (_, collapsed, expanded) {
                 return Expandable(
                   collapsed: collapsed,
                   expanded: expanded,
-                  theme:
-                  const ExpandableThemeData(
-                      crossFadePoint:
-                      0),
+                  theme: const ExpandableThemeData(crossFadePoint: 0),
                 );
               },
             ),
@@ -501,11 +490,13 @@ class _SessionDetailsState extends State<SessionDetails> {
       ),
     );
   }
-Widget VerticalSpace(){
+
+  Widget VerticalSpace() {
     return SizedBox(
       height: 6,
     );
-}
+  }
+
   void onClick() async {
     Permission permission = Permission.storage;
     bool status = await permission.status.isGranted;

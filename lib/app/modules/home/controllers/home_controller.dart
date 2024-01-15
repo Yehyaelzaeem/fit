@@ -1,7 +1,6 @@
 import 'package:app/app/models/home_page_response.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/models/version_response.dart';
-import 'package:app/app/modules/sessions/controllers/sessions_controller.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -9,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/cheer_full_response.dart';
-import '../../../utils/helper/echo.dart';
 
 class HomeController extends GetxController {
   final currentIndex = 0.obs;

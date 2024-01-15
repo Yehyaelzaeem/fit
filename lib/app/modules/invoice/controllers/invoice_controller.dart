@@ -2,7 +2,6 @@ import 'package:app/app/models/package_details_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:get/get.dart';
 
-import '../../myPackages/controllers/my_packages_controller.dart';
 
 class InvoiceController extends GetxController {
   final error = ''.obs;

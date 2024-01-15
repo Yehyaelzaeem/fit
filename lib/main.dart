@@ -1,7 +1,5 @@
-import 'dart:io';
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
-import 'package:app/app/modules/myPackages/controllers/my_packages_controller.dart';
 import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
@@ -23,8 +21,12 @@ Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   // runAppSpector();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
   getFireBaseNotifications();
   getNotificationPermission();
   await NotificationApi.init();
@@ -88,14 +90,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   });
 }
 
-Future getNotificationPermission()async{
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.requestPermission();
+Future getNotificationPermission() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
   Future<PermissionStatus> permissionStatus =
-  NotificationPermissions.getNotificationPermissionStatus();
+      NotificationPermissions.getNotificationPermissionStatus();
   permissionStatus.then((value) {
-    if(value.name!='granted'){
-      Future.delayed(const Duration(seconds: 5),(){
+    if (value.name != 'granted') {
+      Future.delayed(const Duration(seconds: 5), () {
         NotificationPermissions.requestNotificationPermissions();
       });
     }

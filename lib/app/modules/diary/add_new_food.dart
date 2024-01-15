@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -83,7 +81,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                 ),
                 Expanded(
                   child: Scrollbar(
-                    isAlwaysShown: true,
+                    thumbVisibility: true,
                     child: ListView.builder(
                         itemCount: searchResult.isEmpty
                             ? data!.length
@@ -151,7 +149,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                 hint: 'Enter Quantity',
                                                 suffixData: Padding(
                                                   padding: const EdgeInsets
-                                                          .symmetric(
+                                                      .symmetric(
                                                       horizontal: 16,
                                                       vertical: 8),
                                                   child: Column(
@@ -189,7 +187,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                   ? SizedBox()
                                                   : Padding(
                                                       padding: const EdgeInsets
-                                                              .symmetric(
+                                                          .symmetric(
                                                           horizontal: 16,
                                                           vertical: 16),
                                                       child: Text(
@@ -239,5 +237,4 @@ class _AddNewFoodState extends State<AddNewFood> {
       ),
     );
   }
-
 }

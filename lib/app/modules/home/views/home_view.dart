@@ -58,22 +58,21 @@ class HomeView extends GetView<HomeController> {
           ),
         );
       return WillPopScope(
-          child: Container(
-            child: SafeArea(
-              child: Scaffold(
-                drawer: HomeDrawer(),
-                body: Obx(
-                  () => Column(
-                    children: [
-                      HomeAppbar(
-                        type: "home",
-                      ),
-                      Expanded(child: currentPage()),
-                      HomeBottomNavigationBar(),
-                    ],
-                  ),
+          child: SafeArea(
+            child: Scaffold(
+              drawer: HomeDrawer(),
+              body: Obx(
+                () => Column(
+                  children: [
+                    HomeAppbar(
+                      type: "home",
+                    ),
+                    Expanded(child: currentPage()),
+                    // HomeBottomNavigationBar()
+                  ],
                 ),
               ),
+              bottomNavigationBar: HomeBottomNavigationBar(),
             ),
           ),
           onWillPop: () async {

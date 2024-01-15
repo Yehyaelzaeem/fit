@@ -1,9 +1,6 @@
-import 'package:app/app/models/cheer_full_response.dart';
-import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:app/app/utils/helper/const_strings.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/utils/translations/strings.dart';
@@ -12,17 +9,16 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:app/home_page_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
   final textEditController = Get.find<HomeController>(tag: 'home');
-  final GlobalController globalController = Get.find<GlobalController>(tag: 'global');
+  final GlobalController globalController =
+      Get.find<GlobalController>(tag: 'global');
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +58,14 @@ class HomeDrawer extends GetView<HomeController> {
                   )
                 : Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                     color: Colors.white,
                     child: Column(
                       children: [
                         Obx(() {
-                          Echo('drawer itemBuilder ${textEditController.avatar.value}');
+                          Echo(
+                              'drawer itemBuilder ${textEditController.avatar.value}');
                           return ClipRRect(
                               borderRadius: BorderRadius.circular(250),
                               // ignore: unnecessary_null_comparison
@@ -88,9 +86,11 @@ class HomeDrawer extends GetView<HomeController> {
                         // Text(prefs.getName()!)
                         ,
                         Obx(() {
-                          return kTextHeader('${textEditController.name.value}', size: 18);
+                          return kTextHeader('${textEditController.name.value}',
+                              size: 18);
                         }),
-                        kTextfooter('ID :  ${textEditController.id.value}', size: 14, color: Colors.black87, paddingV: 0),
+                        kTextfooter('ID :  ${textEditController.id.value}',
+                            size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
                         ),
@@ -269,7 +269,8 @@ class HomeDrawer extends GetView<HomeController> {
                     action: () {
                       appDialog(
                         title: "Logout",
-                        image: Icon(Icons.exit_to_app, size: 50, color: Colors.red),
+                        image: Icon(Icons.exit_to_app,
+                            size: 50, color: Colors.red),
                         cancelAction: () {
                           Get.back();
                         },
@@ -322,7 +323,8 @@ class HomeDrawer extends GetView<HomeController> {
     );
   }
 
-  Widget singleDrawerItem({required String title, required String image, var action}) {
+  Widget singleDrawerItem(
+      {required String title, required String image, var action}) {
     return InkWell(
       onTap: action,
       child: Column(

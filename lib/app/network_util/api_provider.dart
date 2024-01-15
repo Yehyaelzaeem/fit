@@ -48,7 +48,6 @@ import 'package:get/get_core/src/get_main.dart';
 
 import '../models/usual_meals_data_reposne.dart';
 import '../models/usual_meals_reposne.dart';
-import '../modules/home/home_appbar.dart';
 import '../utils/translations/strings.dart';
 
 class ApiProvider {
@@ -354,8 +353,9 @@ class ApiProvider {
   Future<GeneralResponse> updateUsualMeal(
       {required Map<String, dynamic> mealParameters}) async {
     FormData body = FormData.fromMap(mealParameters);
-    Response response = await _utils
-        .post("diary-meals/update_diary_meal/${mealParameters['id']}", body: body);
+    Response response = await _utils.post(
+        "diary-meals/update_diary_meal/${mealParameters['id']}",
+        body: body);
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
     } else {
@@ -568,15 +568,16 @@ class ApiProvider {
     String? workout_desc,
   }) async {
     print(date);
+
     FormData body = FormData.fromMap({
-      "water": water,
+      if (water != null) "water": water,
       "date": date,
-      "food": foodProtine,
-      "qty": qtyProtiene,
-      "workout": workOut,
-      "workout_desc": workout_desc,
+      if (foodProtine != null) "food": foodProtine,
+      if (qtyProtiene != null) "qty": qtyProtiene,
+      if (workOut != null) "workout": workOut,
+      if (workout_desc != null) "workout_desc": workout_desc,
     });
-    Echo("${body}");
+
     Echo("api--> save_calories_details");
     Response response = await _utils.post(
       "save_calories_details",
@@ -897,8 +898,7 @@ class ApiProvider {
 
   Future<String> kDeviceToken() async {
     String? token;
-    try{    token = await FirebaseMessaging.instance.getToken();
-    }catch(e){}
+    token = await FirebaseMessaging.instance.getToken();
     return token ?? "";
   }
 

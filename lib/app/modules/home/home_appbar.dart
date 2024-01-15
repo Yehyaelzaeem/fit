@@ -4,11 +4,9 @@ import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../myPackages/views/my_packages_view.dart';
 import 'controllers/home_controller.dart';
 
 class HomeAppbar extends StatefulWidget {

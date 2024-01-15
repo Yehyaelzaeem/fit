@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
-import '../../../network_util/shared_helper.dart';
 import '../../../routes/app_pages.dart';
-import '../../myPackages/views/my_packages_view.dart';
 import '../controllers/invoice_controller.dart';
 
 class InvoiceView extends GetView<InvoiceController> {
