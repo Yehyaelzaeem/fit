@@ -18,8 +18,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../../usuals/controllers/usual_controller.dart';
-
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -63,10 +61,8 @@ class _LoginViewState extends State<LoginView> {
         await _shared.writeData(CachingKey.IS_LOGGED, true);
         await _shared.writeData(
             CachingKey.USER_LAST_NAME, loginResponse.data!.lastName);
-        await _shared.writeData(
-            CachingKey.IS_GUEST_SAVED, false);
-        await _shared.writeData(
-            CachingKey.IS_GUEST, false);
+        await _shared.writeData(CachingKey.IS_GUEST_SAVED, false);
+        await _shared.writeData(CachingKey.IS_GUEST, false);
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
           DiaryController controller = Get.find<DiaryController>(tag: 'diary');
@@ -94,7 +90,7 @@ class _LoginViewState extends State<LoginView> {
           showLoader = false;
         });
 
-        //Fluttertoast.showToast(msg: " ${value.message} ");
+        Fluttertoast.showToast(msg: " ${value.message} ");
       }
     });
   }
@@ -219,7 +215,9 @@ class _LoginViewState extends State<LoginView> {
                                   if (!key.currentState!.validate()) {
                                     return;
                                   } else {
-                                    FocusManager.instance.primaryFocus?.unfocus();
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                    key.currentState!.save();
                                     sendData();
                                   }
                                 },

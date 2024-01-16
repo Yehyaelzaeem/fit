@@ -1,10 +1,9 @@
 import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 final ThemeData lightTheme = ThemeData(
   useMaterial3: false,
-  cupertinoOverrideTheme: NoDefaultCupertinoThemeData(applyThemeToAll: false),
+  //cupertinoOverrideTheme: NoDefaultCupertinoThemeData(: false),
   primarySwatch: Colors.green,
   primaryColor: PRIMART_COLOR,
   dialogBackgroundColor: Colors.white,

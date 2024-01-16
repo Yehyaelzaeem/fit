@@ -20,17 +20,17 @@ class ContactUsView extends StatefulWidget {
 }
 
 class _ContactUsViewState extends State<ContactUsView> {
-  late String contactEmail;
+  String? contactEmail;
 
-  late String contactFirstName;
+  String? contactFirstName;
 
-  late String contactPhone;
+  String? contactPhone;
 
-  late String subject;
+  String? subject;
 
-  late String contactMessage;
+  String? contactMessage;
 
-  ContactResponse ress = ContactResponse();
+  ContactResponse? ress;
 
   bool isLoading = true;
 
@@ -42,6 +42,9 @@ class _ContactUsViewState extends State<ContactUsView> {
           isLoading = false;
         });
       } else {
+        setState(() {
+          isLoading = false;
+        });
         Fluttertoast.showToast(msg: "$value");
         print("error");
       }
@@ -85,7 +88,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       align: TextAlign.start,
                       color: Color(0xff7FC902),
                       bold: true),
-                  kTextbody('${ress.data!.contactInfo!.phone}',
+                  kTextbody('${ress!.data!.contactInfo!.phone}',
                       align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
@@ -103,7 +106,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       align: TextAlign.start,
                       color: Color(0xff7FC902),
                       bold: true),
-                  kTextbody("${ress.data!.contactInfo!.email}",
+                  kTextbody("${ress!.data!.contactInfo!.email}",
                       align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
@@ -121,7 +124,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       align: TextAlign.start,
                       color: Color(0xff7FC902),
                       bold: true),
-                  kTextbody("${ress.data!.contactInfo!.address}",
+                  kTextbody("${ress!.data!.contactInfo!.address}",
                       align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
@@ -139,7 +142,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       align: TextAlign.start,
                       color: Color(0xff7FC902),
                       bold: true),
-                  kTextbody("${ress.data!.contactInfo!.workingHours}",
+                  kTextbody("${ress!.data!.contactInfo!.workingHours}",
                       align: TextAlign.start, color: Colors.black, bold: true),
                 ],
               ),
@@ -359,6 +362,29 @@ class _ContactUsViewState extends State<ContactUsView> {
             //* Send Button
             Center(
                 child: kButtonDefault('Send', paddingV: 0, func: () async {
+              if (contactEmail == null) {
+                Fluttertoast.showToast(msg: "enter valid Email");
+                return;
+              }
+              if (contactPhone == null) {
+                Fluttertoast.showToast(msg: "enter valid Phone");
+                return;
+              }
+              if (contactFirstName == null) {
+                Fluttertoast.showToast(msg: "enter valid Name");
+                return;
+              }
+              if (subject == null) {
+                Fluttertoast.showToast(msg: "enter valid subject");
+                return;
+              }
+              if (contactMessage == null) {
+                Fluttertoast.showToast(msg: "enter valid Message");
+                return;
+              }
+              setState(() {
+                isLoading = true;
+              });
               print("SENDING");
               print(contactFirstName);
               print(contactEmail);
@@ -366,15 +392,21 @@ class _ContactUsViewState extends State<ContactUsView> {
               print(subject);
               print(contactPhone);
               await ApiProvider()
-                  .sendContactData(contactFirstName, contactEmail, contactPhone,
-                      subject, contactMessage)
+                  .sendContactData(contactFirstName!, contactEmail!,
+                      contactPhone!, subject!, contactMessage!)
                   .then((value) {
                 if (value.success == true) {
                   Get.offAllNamed(Routes.HOME);
                   Fluttertoast.showToast(msg: "${value.message}");
+                  setState(() {
+                    isLoading = false;
+                  });
                 } else {
                   Fluttertoast.showToast(msg: "${value.message}");
                   print("error");
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
               });
             }, shadow: true, paddingH: 50)),
@@ -386,9 +418,9 @@ class _ContactUsViewState extends State<ContactUsView> {
                 child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: ress.data!.socialMedia!.length,
+                    itemCount: ress!.data!.socialMedia!.length,
                     itemBuilder: (contaxt, index) {
-                      return socoialItem(ress.data!.socialMedia![index]);
+                      return socoialItem(ress!.data!.socialMedia![index]);
                     }),
               ),
             ),

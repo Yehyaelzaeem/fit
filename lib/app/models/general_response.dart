@@ -8,7 +8,9 @@ class GeneralResponse {
   GeneralResponse.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     success = json['success'];
-    message = json['success'] == false ? json['errors'] : json['message'];
+    message = json['success'] == false
+        ? json['message'] ?? json["errors"]
+        : json['message'];
   }
 
   Map<String, dynamic> toJson() {

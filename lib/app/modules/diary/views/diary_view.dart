@@ -95,20 +95,30 @@ class DiaryView extends GetView<DiaryController> {
                   Divider(thickness: 1),
                   rowWithProgressBar(
                       "Carbs", controller.response.value.data?.carbs),
-                  if (controller.refreshLoadingCarbs.value)
-                    Container(
-                      child: LinearProgressIndicator(color: kColorPrimary),
+
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 4),
+                    child: Column(
+                      children: [
+                        if (controller.refreshLoadingCarbs.value)
+                          Container(
+                              child: LinearProgressIndicator(
+                                  color: kColorPrimary)),
+                        staticBar('carbs'),
+                        if (controller.carbsDetails.isEmpty)
+                          SizedBox(height: 20),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: controller.carbsDetails.length,
+                            itemBuilder: (context, indedx) {
+                              return rowItem(
+                                  controller.carbsDetails[indedx], 'carbs');
+                            }),
+                      ],
                     ),
-                  staticBar('carbs'),
-                  if (controller.carbsDetails.isEmpty) SizedBox(height: 20),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: controller.carbsDetails.length,
-                      itemBuilder: (context, indedx) {
-                        return rowItem(
-                            controller.carbsDetails[indedx], 'carbs');
-                      }),
+                  ),
+
                   Divider(thickness: 1),
                   rowWithProgressBar(
                       "Fats", controller.response.value.data?.fats),
