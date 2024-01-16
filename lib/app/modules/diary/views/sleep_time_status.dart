@@ -51,9 +51,9 @@ class SleepTimeStatus extends GetView<DiaryController> {
                           errorWidget: (vtx, url, obj) {
                             return Container();
                           },
-                          placeholder: (ctx, url) {
-                            return CircularLoadingWidget();
-                          },
+                          // placeholder: (ctx, url) {
+                          //   return CircularLoadingWidget();
+                          // },
                           // fit: BoxFit.c,
                         ),
                         SizedBox(width: 8),
