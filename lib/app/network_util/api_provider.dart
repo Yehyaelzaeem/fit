@@ -828,7 +828,6 @@ class ApiProvider {
       return null;
     }
   }
-//////aaa
   Future<GeneralResponse> createUsualMeal(
       {required Map<String, dynamic> mealParameters}) async {
     final result = await Connectivity().checkConnectivity();
