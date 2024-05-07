@@ -1,13 +1,16 @@
 import 'package:app/app/network_util/api_provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../models/day_details_reposne.dart';
 import '../../../models/usual_meals_data_reposne.dart';
 import '../../../models/usual_meals_reposne.dart';
 import '../../diary/controllers/diary_controller.dart';
 
 class UsualController extends GetxController with SingleGetTickerProviderMixin {
+  final controllerDiary = Get.find<DiaryController>(tag: 'diary');
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
   RxList<FoodDataItem> caloriesDetails = RxList();
@@ -32,6 +35,7 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
 
   Future usualMealsData() async {
     isLoading.value = true;
+
     await ApiProvider().getUsualMealsData().then((value) {
       if (value.data != null) {
         response.value = value;
@@ -51,52 +55,178 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
 
   Future<void> createUsualMeal(
       {required Map<String, dynamic> mealParameters}) async {
-    addLoading.value = true;
-    isLoading.value = true;
-    await ApiProvider()
-        .createUsualMeal(mealParameters: mealParameters)
-        .then((value) async {
-      if (value.success == true) {
-        addLoading.value = false;
-        mealsResponse.value = UsualMealsResponse();
-        await getUserUsualMeals();
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-      } else {
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-        addLoading.value = false;
-      }
-      isLoading.value = false;
-    });
-  }
+    print('aaaab');
 
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      addLoading.value = true;
+      isLoading.value = true;
+      await ApiProvider()
+          .createUsualMeal(mealParameters: mealParameters)
+          .then((value) async {
+        if (value.success == true) {
+          addLoading.value = false;
+          mealsResponse.value = UsualMealsResponse();
+          await getUserUsualMeals();
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        } else {
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+          addLoading.value = false;
+        }
+        isLoading.value = false;
+      });
+    }else{
+      isLoading.value = true;
+      await ApiProvider()
+          .createUsualMeal(mealParameters: mealParameters);
+      MealData mealData = MealData(
+        id: 0,
+          name: mealParameters["name"],
+          totalCalories: mealParameters["calories"],
+          proteins: UsualProteins(items: []),
+          carbs: UsualProteins(items: []),
+          fats: UsualProteins(items: [])
+      );
+      List<int> foodIds = mealParameters["food_id"].toString().split(',').map((value) => int.parse(value.trim())).toList();
+     print(mealParameters["qty"]);
+      List<double> qtys = mealParameters["qty"].toString().split(',').map((value) => double.parse(value.trim())).toList();
+      double totalCalories = 0;
+      controllerDiary.response.value.data!.proteins!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.proteins?.items?.add(Items(
+            food: FoodDataItem.fromJson(element.toJson()),
+            qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      controllerDiary.response.value.data!.carbs!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.carbs?.items?.add(Items(
+            food: FoodDataItem.fromJson(element.toJson()),
+            qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      controllerDiary.response.value.data!.fats!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.fats?.items?.add(Items(
+            food: FoodDataItem.fromJson(element.toJson()),
+            qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      mealData.totalCalories = totalCalories ;
+      print(totalCalories);
+      mealsResponse.value.data?.add(mealData);
+      ApiProvider().saveMyUsualMealsLocally(mealsResponse.value);
+
+      kUpdate.value = kUpdate.value + 1;
+      isLoading.value = false;
+
+    }
+  }
   Future<void> updateCurrentUsualMeal(
       {required Map<String, dynamic> mealParameters}) async {
-    addLoading.value = true;
-    isLoading.value = true;
-    await ApiProvider()
-        .updateUsualMeal(mealParameters: mealParameters)
-        .then((value) async {
-      if (value.success == true) {
-        addLoading.value = false;
-        mealsResponse.value = UsualMealsResponse();
-        await getUserUsualMeals();
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-      } else {
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-      }
+
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      addLoading.value = true;
+      isLoading.value = true;
+      await ApiProvider()
+          .updateUsualMeal(mealParameters: mealParameters)
+          .then((value) async {
+        if (value.success == true) {
+          addLoading.value = false;
+          mealsResponse.value = UsualMealsResponse();
+          await getUserUsualMeals();
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        } else {
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        }
+        isLoading.value = false;
+      });
+    }else{
+      isLoading.value = true;
+      await ApiProvider()
+          .updateUsualMeal(mealParameters: mealParameters);
+      MealData mealData = MealData(
+          id: mealParameters["id"],
+          name: mealParameters["name"],
+          totalCalories: mealParameters["calories"],
+          proteins: UsualProteins(items: []),
+          carbs: UsualProteins(items: []),
+          fats: UsualProteins(items: [])
+      );
+      List<int> foodIds = mealParameters["food_id"].toString().split(',').map((value) => int.parse(value.trim())).toList();
+      print(mealParameters["qty"]);
+      List<double> qtys = mealParameters["qty"].toString().split(',').map((value) => double.parse(value.trim())).toList();
+      double totalCalories = 0;
+      controllerDiary.response.value.data!.proteins!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.proteins?.items?.add(Items(
+              food: FoodDataItem.fromJson(element.toJson()),
+              qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      controllerDiary.response.value.data!.carbs!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.carbs?.items?.add(Items(
+              food: FoodDataItem.fromJson(element.toJson()),
+              qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      controllerDiary.response.value.data!.fats!.food!.forEach((element) {
+        if(foodIds.contains(element.id)){
+          mealData.fats?.items?.add(Items(
+              food: FoodDataItem.fromJson(element.toJson()),
+              qty: qtys[foodIds.indexOf(element.id!)]
+          ),);
+          totalCalories = totalCalories+ (element.caloriePerUnit*qtys[foodIds.indexOf(element.id!)]);
+        }
+      });
+      mealData.totalCalories = totalCalories ;
+      print(totalCalories);
+      mealsResponse.value.data![mealsResponse.value.data!.indexWhere((element) => element.id==mealData.id)]=mealData;
+      ApiProvider().saveMyUsualMealsLocally(mealsResponse.value);
+
+      kUpdate.value = kUpdate.value + 1;
       isLoading.value = false;
-    });
+
+    }
   }
 
-  Future addMealToDiary({required int mealId}) async {
-    await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
-      if (value.success == true) {
-        Get.find<DiaryController>(tag: 'diary').onInit();
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-      } else {
-        Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-      }
-    });
+  Future addMealToDiary({required int mealId,required MealData? meal}) async {
+    final result = await Connectivity().checkConnectivity();
+
+    if (result != ConnectivityResult.none) {
+      await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
+        if (value.success == true) {
+          Get.find<DiaryController>(tag: 'diary').onInit();
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        } else {
+          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
+        }
+      });
+    }else{
+      meal?.proteins?.items?.forEach((element) async{
+        controllerDiary.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'proteins');
+      });
+      meal?.carbs?.items?.forEach((element) async{
+        controllerDiary.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'carbs');
+      });
+      meal?.fats?.items?.forEach((element) async{
+        controllerDiary.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'fats');
+      });
+
+    }
+
   }
 
   Future getUserUsualMeals() async {
@@ -119,23 +249,31 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
   }
 
   Future<void> deleteUserUsualMeal(int mealId) async {
-    deleteLoading.value = true;
-    try {
-      final response = await ApiProvider().deleteUsualMeal(mealId: mealId);
-      if (response.success == true) {
-        mealsResponse.value = UsualMealsResponse();
-        await getUserUsualMeals();
-        update();
-        mealsResponse.refresh();
-        deleteLoading.value = false;
-        Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
-      } else {
-        Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      deleteLoading.value = true;
+      try {
+        final response = await ApiProvider().deleteUsualMeal(mealId: mealId);
+        if (response.success == true) {
+          mealsResponse.value = UsualMealsResponse();
+          await getUserUsualMeals();
+          update();
+          mealsResponse.refresh();
+          deleteLoading.value = false;
+          Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
+        } else {
+          Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
+        }
+      } catch (error) {
+        print("Error: $error");
+        Fluttertoast.showToast(
+            fontSize: 8, msg: "An error occurred while deleting the meal.");
       }
-    } catch (error) {
-      print("Error: $error");
-      Fluttertoast.showToast(
-          fontSize: 8, msg: "An error occurred while deleting the meal.");
+    }else{
+      await ApiProvider().deleteUsualMealLocally(mealId);
+      mealsResponse.value.data?.removeWhere((element) => element.id==mealId);
+      update();
+      mealsResponse.refresh();
     }
   }
 

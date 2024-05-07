@@ -34,6 +34,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
   void initState() {
     super.initState();
     _mealName.clear();
+    print('usual');
     controller.caloriesDetails.clear();
     controller.carbsDetails.clear();
     controller.fatsDetails.clear();
@@ -42,14 +43,16 @@ class _MakeAMealViewState extends State<MakeAMealView> {
       _mealName.text = widget.mealName ?? "";
       if (widget.mealData?.proteins?.items?.length != 0) {
         widget.mealData?.proteins?.items?.forEach((element) {
+          print(element.food!.id);
           controller.caloriesDetails.add(FoodDataItem(
-              id: element.food!.id,
-              title: element.food!.title,
+              id: element.food?.id,
+              title: element.food?.title,
               qty: element.qty,
-              unit: element.food!.unit,
-              color: element.food!.color,
-              caloriePerUnit: element.food!.caloriePerUnit,
-              total: element.qty! * element.food!.caloriePerUnit));
+              unit: element.food?.unit,
+              color: element.food?.color,
+              caloriePerUnit: element.food?.caloriePerUnit,
+              total: element.food==null?0:element.qty! * element.food?.caloriePerUnit
+          ));
           controller.sendJsonData(
               FoodDataItem(id: element.food!.id, qty: element.qty));
         });
@@ -265,6 +268,17 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                     "${controller.foodItems.map((e) => e.quantity)}"
                         .replaceAll('(', '')
                         .replaceAll(')', ''),
+                    "calories":controller.foodItems.fold(0.0, (previousValue, element) => previousValue +
+                        (
+                            element.quantity*
+                                (controller.caloriesDetails.any((a) => element.foodId==a.id)?
+                            controller.caloriesDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
+                            controller.fatsDetails.any((a) => element.foodId==a.id)?
+                            controller.fatsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
+                            controller.carbsDetails.any((a) => element.foodId==a.id)?
+                            controller.carbsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:0)
+                        )
+                    )
                   }).then((value) async {
                     _mealName.clear();
                     Get.back();
@@ -284,8 +298,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                     "${controller.foodItems.map((e) => e.foodId)}"
                         .replaceAll('(', '')
                         .replaceAll(')', ''),
-                    "qty":
-                    "${controller.foodItems.map((e) => e.quantity)}"
+                    "qty": "${controller.foodItems.map((e) => e.quantity)}"
                         .replaceAll('(', '')
                         .replaceAll(')', ''),
                   }).then((value) {

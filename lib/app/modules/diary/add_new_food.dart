@@ -97,7 +97,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                               setState(() {
                                 data![index].isSellected = true;
                                 food = data![index].title!;
-                                foodId = data![index].id!;
+                                foodId = data![index].id??9999;
                                 unit = data![index].unit;
                                 calories = data![index].caloriePerUnit;
                                 selectedFood = data![index];
@@ -210,7 +210,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                               4.5,
                                                       paddingV: 0,
                                                       func: () {
-                                                        selectedFood!.qty =
+                                                        selectedFood?.qty =
                                                             quantity;
                                                         Get.back(
                                                             result:

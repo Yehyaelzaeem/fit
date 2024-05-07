@@ -4,6 +4,7 @@ import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/utils/helper/assets_path.dart';
 import 'package:app/app/utils/helper/echo.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -34,7 +35,10 @@ class _HomeAppbarState extends State<HomeAppbar> {
 
   void getUserData() async {
     Echo('getUserData');
-    await ApiProvider().getProfile().then((value) {
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+
+      await ApiProvider().getProfile().then((value) {
       if (value.success == true) {
         setState(() {
           ress = value;
@@ -51,6 +55,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
         Echo(' getUserData error ');
       }
     });
+    }
   }
 
   @override

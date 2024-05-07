@@ -15,6 +15,16 @@ class ServicesResponse {
       });
     }
   }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+
 }
 
 class Data {
@@ -35,6 +45,17 @@ class Data {
         packages!.add(new Packages.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['image'] = this.image;
+    if (this.packages != null) {
+      data['packages'] = this.packages!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
@@ -67,5 +88,18 @@ class Packages {
     paymentStatus = json['payment_status'];
     applePayPayments = json['applepay_payments'];
     visaPayments = json['visa_payments'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['price'] = this.price;
+    data['duration'] = this.duration;
+    data['currency'] = this.currency;
+    data['description'] = this.description;
+    data['payment_status'] = this.paymentStatus;
+    data['applepay_payments'] = this.applePayPayments;
+    data['visa_payments'] = this.visaPayments;
+
+    return data;
   }
 }

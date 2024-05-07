@@ -83,7 +83,10 @@ class _NotificationsViewState extends State<NotificationsView> {
               ],
             ),
             isLoading == true
-                ? CircularLoadingWidget()
+                ? SizedBox(
+                height: 32,
+                width: 48,
+                child: CircularLoadingWidget())
                 : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

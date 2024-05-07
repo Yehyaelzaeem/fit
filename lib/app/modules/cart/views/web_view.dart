@@ -66,7 +66,7 @@ class WebViewScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: Uri.parse(url)),
+                  initialUrlRequest: URLRequest(url: WebUri(url)),
                   initialUserScripts: UnmodifiableListView<UserScript>([]),
                   onWebViewCreated: (myController) async {
                     webViewController = myController;

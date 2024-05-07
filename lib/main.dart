@@ -1,6 +1,7 @@
 import 'package:app/app/modules/diary/controllers/diary_controller.dart';
 import 'package:app/app/modules/home/controllers/home_controller.dart';
 import 'package:app/app/modules/notification_api.dart';
+import 'package:app/app/modules/timeSleep/controllers/time_sleep_controller.dart';
 import 'package:app/app/utils/theme/app_theme.dart';
 import 'package:app/app/utils/translations/app_translations.dart';
 import 'package:app/globale_controller.dart';
@@ -26,7 +27,7 @@ Future<void> main() async {
   flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+      ?.requestNotificationsPermission();
   getFireBaseNotifications();
   getNotificationPermission();
   await NotificationApi.init();
@@ -37,6 +38,7 @@ Future<void> main() async {
   Get.put(UsualController(), tag: "usual");
   Get.put(InvoiceController());
   Get.put(SubscribeController());
+  // Get.put(TimeSleepController());
   runApp(
     GetMaterialApp(
       title: "FIT over FAT",
@@ -96,7 +98,7 @@ Future getNotificationPermission() async {
   flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestPermission();
+      ?.requestNotificationsPermission();
   Future<PermissionStatus> permissionStatus =
       NotificationPermissions.getNotificationPermissionStatus();
   permissionStatus.then((value) {

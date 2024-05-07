@@ -8,6 +8,7 @@ import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
 import '../../main_un_auth.dart';
 
+bool detailsLoaded = false;
 class SessionsView extends StatefulWidget {
   const SessionsView({Key? key}) : super(key: key);
 
@@ -49,12 +51,23 @@ class _SessionsViewState extends State<SessionsView> {
   SessionResponse sessionResponse = SessionResponse();
 
   void getAllSessionData() async {
-    await ApiProvider().getSessions().then((value) {
+    await ApiProvider().getSessions().then((value) async{
       if (value.success == true) {
         setState(() {
           sessionResponse = value;
           isLoading = false;
         });
+        final result = await Connectivity().checkConnectivity();
+        if (result != ConnectivityResult.none) {
+          if(!detailsLoaded){
+            detailsLoaded = true;
+          sessionResponse.data!.forEach((element) async{
+            await ApiProvider().getSessionDetails(element.id);
+            await Future.delayed(Duration(milliseconds: 200));
+          });
+          detailsLoaded = true;
+          }
+        }
       } else {
         SharedHelper().logout();
         Get.offAllNamed(Routes.LOGIN);
@@ -189,7 +202,8 @@ class _SessionsViewState extends State<SessionsView> {
                                                           .data![i].onPeriod ==
                                                       false
                                                   ? Colors.white
-                                                  : redOpacityColor,
+                                                  : Colors.white,
+                                                  // : redOpacityColor,
                                               boxShadow: [
                                                 BoxShadow(
                                                   color: Colors.grey
@@ -221,12 +235,17 @@ class _SessionsViewState extends State<SessionsView> {
                                                                   width: 1)),
                                                           Column(
                                                             children: [
-                                                              kTextbody(
-                                                                  '${sessionResponse.data![i].day ?? "Monday"}',
-                                                                  color:
-                                                                      kColorPrimary,
-                                                                  size: 16,
-                                                                  bold: true),
+                                                              InkWell(
+                                                                onTap:(){
+                                                                  print(sessionResponse.data![i].day);
+                                                                },
+                                                                child: kTextbody(
+                                                                    '${sessionResponse.data![i].day==' '?'Saturday':sessionResponse.data![i].day ?? "Monday"}',
+                                                                    color:
+                                                                        kColorPrimary,
+                                                                    size: 16,
+                                                                    bold: true),
+                                                              ),
                                                               kTextbody(
                                                                 '${sessionResponse.data![i].date}',
                                                                 color: Colors

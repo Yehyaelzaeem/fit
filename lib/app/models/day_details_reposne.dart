@@ -13,6 +13,14 @@ class DayDetailsResponse {
     message = json['success'] == false ? json["message"] : null;
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+    data['message'] = this.message;
+    data['data'] = this.data!.toJson();
+    return data;
+  }
 }
 
 class Data {
@@ -72,6 +80,32 @@ class Data {
         ? new SleepingTime.fromJson(json['sleeping_time'])
         : null;
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['proteins'] = this.proteins!.toJson();
+    data['carbs_fats'] = this.carbs!.toJson();
+    data['fats'] = this.fats!.toJson();
+    data['water'] = this.water;
+        if (this.workouts != null) {
+      data['workouts'] =
+          this.workouts!.map((v) => v.toJson()).toList();
+    }
+        if (this.days != null) {
+      data['days'] =
+          this.days!.map((v) => v.toJson()).toList();
+    }
+        if (this.dayWorkouts != null) {
+      data['day_workouts'] =
+          this.dayWorkouts!.toJson();
+    }
+    data['pdf'] = this.pdf;
+    data['workout_details'] = this.workoutDetails;
+    data['workout_details_type'] = this.workoutDetailsType;
+    data['sleeping_time'] = this.sleepingTime?.toJson();
+
+    return data;
+  }
 }
 
 class Days {
@@ -119,6 +153,20 @@ class Proteins {
         food!.add(new Food.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['calories_total'] = this.caloriesTotal?.toJson();
+    if (this.caloriesDetails != null) {
+      data['calories_details'] =
+          this.caloriesDetails!.map((v) => v.toJson()).toList();
+    }
+    if (this.food != null) {
+      data['food'] =
+          this.food!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
@@ -169,6 +217,7 @@ class Progress {
 
 class CaloriesDetails {
   int? id;
+  int? randomId;
   double? qty;
   String? quality;
   var calories;
@@ -178,6 +227,7 @@ class CaloriesDetails {
 
   CaloriesDetails(
       {this.id,
+        this.randomId,
       this.qty,
       this.quality,
       this.calories,
@@ -186,7 +236,9 @@ class CaloriesDetails {
       this.color});
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
+
     id = json['id'];
+    randomId = json['randomId'];
     qty = json['qty'].toDouble();
     quality = json['quality'];
     calories = json['calories'];
@@ -198,9 +250,12 @@ class CaloriesDetails {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['randomId'] = this.randomId;
     data['qty'] = this.qty;
+    data['unit'] = this.unit;
     data['quality'] = this.quality;
     data['calories'] = this.calories;
+    data['color'] = this.color;
     data['created_at'] = this.createdAt;
     return data;
   }
@@ -343,6 +398,15 @@ class SleepingTime {
         ? new SleepingStatus.fromJson(json['sleeping_status'])
         : null;
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['sleeping_from'] = this.sleepingFrom;
+    data['sleeping_to'] = this.sleepingTo;
+    data['sleeping_duration'] = this.sleepingDuration;
+    data['sleeping_status'] = this.sleepingStatus?.toJson();
+    return data;
+  }
 }
 
 class SleepingStatus {
@@ -360,5 +424,13 @@ class SleepingStatus {
     id = json['id'];
     name = json['name'];
     image = json['image'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['image'] = this.image;
+    return data;
   }
 }

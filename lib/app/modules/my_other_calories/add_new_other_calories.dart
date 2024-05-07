@@ -4,8 +4,11 @@ import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/widgets/custom_bottom_sheet.dart';
 import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import '../../models/my_other_calories_response.dart';
 
 class AddNewCalorie extends StatefulWidget {
   final int type;
@@ -48,35 +51,52 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
   }
 
   void addItem() async {
-    setState(() {
-      showLoader = true;
-    });
-    await ApiProvider()
-        .addOtherCalories(
-            title: title,
-            calPerUnti: calorie_per_unit,
-            unit: unitID,
-            unitQuantity: unit_qty,
-            unitName: unit_name,
-            type: widget.type)
-        .then((value) {
-      if (value.success == true) {
-        setState(() {
-          showLoader = false;
-        });
-        Fluttertoast.showToast(msg: "${value.message}");
-        Navigator.of(context).pop();
-        print("OK");
-      } else {
-        setState(() {
-          showLoader = false;
-        });
 
-        print("error");
-        Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
-      }
-    });
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      setState(() {
+        showLoader = true;
+      });
+      await ApiProvider()
+          .addOtherCalories(
+          title: title,
+          calPerUnti: calorie_per_unit,
+          unit: unitID,
+          unitQuantity: unit_qty,
+          unitName: unit_name,
+          type: widget.type)
+          .then((value) {
+        if (value.success == true) {
+          setState(() {
+            showLoader = false;
+          });
+          Fluttertoast.showToast(msg: "${value.message}");
+          Navigator.of(context).pop();
+          print("OK");
+        } else {
+          setState(() {
+            showLoader = false;
+          });
+
+          print("error");
+          Fluttertoast.showToast(msg: "${value.message}");
+          print("error");
+        }
+      });
+    }else{
+      await ApiProvider()
+          .addOtherCalories(
+          title: title,
+          calPerUnti: calorie_per_unit,
+          unit: unitID,
+          unitQuantity: unit_qty,
+          unitName: unit_name,
+          type: widget.type);
+
+
+      Fluttertoast.showToast(msg: "Saved successfully");
+      Navigator.of(context).pop(Proteins(title: title,qty: unit_name,calories: calorie_per_unit,calorie_per_unit: unitID));
+    }
   }
 
   @override

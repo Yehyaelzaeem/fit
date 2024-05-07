@@ -8,6 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'app/modules/home/home_slider.dart';
 // import 'app/modules/orientation_register/views/orientation_register_view.dart';
@@ -152,10 +153,14 @@ class _HomePageViewState extends State<HomePageView> {
                                         ),
                                     ],
                                   ),
-                                  child: Image.network(
-                                    "${ress.data!.services![pageIndex].items![index].image}",
+                                  child: CachedNetworkImage(
+                                    imageUrl:"${ress.data!.services![pageIndex].items![index].image}",
                                     width: 50,
                                     height: 40,
+                                    cacheManager: DefaultCacheManager(), // Use the default cache manager
+                                    placeholder: (ctx, url) {
+                                      return CircularLoadingWidget();
+                                    },
                                   ),
                                 ),
                                 Container(
@@ -220,7 +225,9 @@ class _HomePageViewState extends State<HomePageView> {
                           width: double.infinity,
                           imageUrl: '${ress.data!.services![pageIndex].items![serviceIndex].cover!.content}',
                           fadeInDuration: Duration(seconds: 2),
-                          // errorWidget: (vtx, url, obj) {
+                    cacheManager: DefaultCacheManager(), // Use the default cache manager
+
+                    // errorWidget: (vtx, url, obj) {
                           //   return Image.network(
                           //     "https://img.pikbest.com/png-images/qianku/404-error-model_2369179.png",
                           //     width: double.infinity,

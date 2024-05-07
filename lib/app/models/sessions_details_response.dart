@@ -68,7 +68,7 @@ class Data {
     bodyComposition = json['body_composition'];
     proteinsCalories = json['proteins_calories'].toDouble();
     carbsFatsCalories = json['carbs_fats_calories'].toDouble();
-    carbsFatsCalories = json['fats_calories'].toDouble();
+    carbsFatsCalories = (json['fats_calories']??0).toDouble();
     followUp = json['follow_up'];
     if (json['follow_up_table'] != null) {
       followUpTable = <FollowUpTable>[];

@@ -70,7 +70,7 @@ await _notifications.initialize(settings,
         0,
         'water 💧',
         "Do not forget to drink water 💧",
-        _scheduleWeekly(Time(12, 36), days: [
+        _scheduleWeekly(TimeInterval(12,Duration.zero), days: [
           DateTime.saturday,
           DateTime.sunday,
           DateTime.monday,
@@ -99,8 +99,9 @@ await _notifications.initialize(settings,
         ' 💧 Water 💧 ',
         "Do not forget to drink water",
         _scheduleWeekly(
-            Time(
+            TimeInterval(
               hour,
+              Duration.zero
             ),
             days: [
               DateTime.saturday,
@@ -119,23 +120,23 @@ await _notifications.initialize(settings,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
 
-  static tz.TZDateTime _scheduleDaily(Time time) {
+  static tz.TZDateTime _scheduleDaily(TimeInterval time) {
     final now = tz.TZDateTime.now(tz.local);
     final scheduleDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
       now.day,
-      time.hour,
-      time.minute,
-      time.second,
+      //time.hour,
+      //time.minute,
+     // time.second,
     );
     return scheduleDate.isBefore(now)
         ? scheduleDate.add(Duration(days: 1))
         : scheduleDate;
   }
 
-  static tz.TZDateTime _scheduleWeekly(Time time, {required List<int> days}) {
+  static tz.TZDateTime _scheduleWeekly(TimeInterval time, {required List<int> days}) {
     tz.TZDateTime scheduleDate = _scheduleDaily(time);
     while (!days.contains(scheduleDate.weekday)) {
       scheduleDate = scheduleDate.add(Duration(days: 1));

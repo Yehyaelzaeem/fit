@@ -82,7 +82,10 @@ class AboutView extends GetView<AboutController> {
                 );
               });
         }
-        return Center(child: CircularLoadingWidget());
+        return SizedBox(
+            height: 32,
+            width: 48,
+            child: CircularLoadingWidget());
       }),
       SizedBox(height: Get.width / 14),
     ]));

@@ -193,9 +193,7 @@ class DiaryView extends GetView<DiaryController> {
                               item,
                               type == 'proteins'
                                   ? 'proteins'
-                                  : type == 'carbs'
-                                      ? 'carbs'
-                                      : 'fats',
+                                  : type == 'carbs' ? 'carbs' : 'fats',
                             );
                           },
                           child: Container(
@@ -246,30 +244,30 @@ class DiaryView extends GetView<DiaryController> {
                                 if (text.isEmpty) return;
                                 try {
                                   double qty = double.parse(text);
-                                  int foodId = 0;
+                                  Food food = Food();
                                   if (type == 'proteins') {
-                                    foodId = controller
+                                    food = controller
                                         .response.value.data!.proteins!.food!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
-                                        .id!;
+                                        ;
                                   } else if (type == 'carbs') {
-                                    foodId = controller
+                                    food = controller
                                         .response.value.data!.carbs!.food!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
-                                        .id!;
+                                        ;
                                   } else {
-                                    foodId = controller
+                                    food = controller
                                         .response.value.data!.fats!.food!
                                         .firstWhere((element) =>
                                             element.title == item.quality)
-                                        .id!;
+                                        ;
                                   }
 
                                   controller.updateProtineData(
                                     item.id,
-                                    foodId,
+                                    food,
                                     qty,
                                     type: type == 'proteins'
                                         ? 'proteins'
@@ -330,7 +328,7 @@ class DiaryView extends GetView<DiaryController> {
                       title: item.quality == null ? '' : '${item.quality}',
                       showDropDownArrow:
                           item.quality == null || '${item.quality}'.isEmpty,
-                      color: item.color,
+                      color: item.color == 'FFFFFF'? '555555': item.color,
                     ),
                   ),
                 ),
@@ -398,13 +396,14 @@ class DiaryView extends GetView<DiaryController> {
                 ],
               ),
               kTextHeader(
-                  '${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}',
+                  item!=null?'${item!.caloriesTotal!.taken} / ${item.caloriesTotal!.imposed}':'',
                   bold: false,
                   size: 20,
                   color: Colors.black),
             ],
           ),
         ),
+        if(item!=null)
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
           child: Stack(
@@ -715,8 +714,7 @@ class DiaryView extends GetView<DiaryController> {
 
             if (result == null) {
               if (controller.lastSelectedDate.value.isNotEmpty)
-                controller.getDiaryDataRefreshResponse(
-                    controller.lastSelectedDate.value);
+                controller.getDiaryDataRefreshResponse(controller.lastSelectedDate.value);
             }
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
@@ -974,18 +972,43 @@ class DiaryView extends GetView<DiaryController> {
           );
         });
     if (result != null) {
+      print('resultFood');
+      print(result);
       Food food = result as Food;
+      print(food.color);
       item.quality = food.title;
       item.qty = food.qty;
       item.color = food.color;
+      if(food.qty!=null){
+        item.calories = food.qty! * food.caloriePerUnit;
+        print(item.calories);
+        item.unit = food.unit;
+      }
+      // controller.response.value.data?.fats!.caloriesTotal!.taken = controller.fatsDetails
+      //     .fold(0.0, (previousValue, element) => previousValue+(element.qty??0*element.calories??0));
+      //
+      // controller.caloriesDetails.forEach((element) {
+      //   print(element.calories);
+      //   print(element.toJson());
+      // });
+      // controller.response.value.data?.proteins!.caloriesTotal!.taken = controller.caloriesDetails
+      //     .fold(0.0, (previousValue, element) => previousValue+(element.qty??0*element.calories??0));
+      //
+      // controller.response.value.data?.carbs!.caloriesTotal!.taken = controller.carbsDetails
+      //     .fold(0.0, (previousValue, element) => previousValue+(element.qty??0*element.calories??0));
+
 
       controller.caloriesDetails.refresh();
       controller.carbsDetails.refresh();
       controller.fatsDetails.refresh();
       if (item.id == null) {
-        controller.createProtineData(food.id, food.qty!, type: type);
+        if(item.randomId==null) {
+          controller.createProtineData(food, food.qty!, type: type);
+        }else{
+          controller.updateDiaryDataLocally(item.randomId!,food, food.qty!, type: type);
+        }
       } else {
-        controller.updateProtineData(item.id, food.id, food.qty!, type: type);
+        controller.updateProtineData(item.id, food, food.qty!, type: type);
       }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -1028,9 +1051,9 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
       );
     return InkWell(
       onTap: () async {
-        deleteItem = true;
-        setState(() {});
-        if (widget.item.id == null) {
+        // deleteItem = true;
+        // setState(() {});
+        if (widget.item.id == null && widget.item.randomId == null) {
           if (widget.type == 'proteins')
             await widget.controller.caloriesDetails.remove(widget.item);
           else if (widget.type == 'carbs')
@@ -1038,24 +1061,44 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
           else
             await widget.controller.fatsDetails.remove(widget.item);
         } else {
-          if (widget.type == 'proteins')
-            await widget.controller.deleteItemCalories(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
-          else if (widget.type == 'carbs')
-            await widget.controller.deleteItemCarbs(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
-          else
-            await widget.controller.deleteItemCarbs(widget.item.id!,
-                widget.controller.lastSelectedDate.value, widget.type);
+          if(widget.item.randomId != null){
+            if (widget.type == 'proteins')
+              await widget.controller.deleteItemCaloriesCached(widget.item.randomId!,
+                  widget.controller.lastSelectedDate.value, widget.type);
+            else if (widget.type == 'carbs')
+              await widget.controller.deleteItemCarbsCached(widget.item.randomId!,
+                  widget.controller.lastSelectedDate.value, widget.type);
+            else
+              await widget.controller.deleteItemFatsCached(widget.item.randomId!,
+                  widget.controller.lastSelectedDate.value, widget.type);
 
-          await widget.controller.carbsDetails.remove(widget.item);
-          await widget.controller.fatsDetails.remove(widget.item);
+          }else {
+
+            CaloriesDetails deletedItem = widget.item;
+            await widget.controller.caloriesDetails.remove(widget.item);
+            await widget.controller.carbsDetails.remove(widget.item);
+            await widget.controller.fatsDetails.remove(widget.item);
+            setState(() {
+
+            });
+            if (widget.type == 'proteins')
+              await widget.controller.deleteItemCalories(deletedItem.id!,
+                  widget.controller.lastSelectedDate.value, widget.type);
+            else if (widget.type == 'carbs')
+              await widget.controller.deleteItemCarbs(deletedItem.id!,
+                  widget.controller.lastSelectedDate.value, widget.type);
+            else
+              await widget.controller.deleteItemFats(deletedItem.id!,
+                  widget.controller.lastSelectedDate.value, widget.type);
+
+          }
         }
 
         deleteItem = false;
         setState(() {});
         FocusScope.of(Get.context!).requestFocus(FocusNode());
-      },
+
+        },
       child: Icon(
         Icons.delete,
         color: Colors.redAccent,

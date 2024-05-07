@@ -10,6 +10,16 @@ class MessageDetailsResponse {
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     success = json['success'];
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
 }
 
 class Data {
@@ -29,5 +39,15 @@ class Data {
     date = json['date'];
     hasPlan = json['has_plans']??false;
     planUrl = json['plan_url'];
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['subject'] = this.subject;
+    data['message'] = this.message;
+    data['date'] = this.date;
+    data['has_plans'] = this.hasPlan;
+    data['plan_url'] = this.planUrl;
+    return data;
   }
 }

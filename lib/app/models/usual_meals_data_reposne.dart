@@ -12,6 +12,15 @@ class UsualMealsDataResponse {
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+    data['message'] = this.message;
+    data['data'] = this.data!.toJson();
+    return data;
+  }
 }
 
 class Data {
@@ -44,6 +53,23 @@ class Data {
         carbs!.add(new FoodDataItem.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.proteins != null) {
+      data['proteins'] =
+          this.proteins!.map((v) => v.toJson()).toList();
+    }
+    if (this.carbs != null) {
+      data['carbs'] =
+          this.carbs!.map((v) => v.toJson()).toList();
+    }
+    if (this.fats != null) {
+      data['fats'] =
+          this.fats!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 
@@ -108,4 +134,13 @@ class FoodDataItem {
     total =  json?['calorie_per_unit']??0.0*json?['qty']??0.0.toDouble();
   }
 
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['unit'] = this.unit;
+    data['calorie_per_unit'] = this.caloriePerUnit;
+    data['color'] = this.color;
+    return data;
+  }
 }

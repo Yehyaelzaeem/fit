@@ -10,6 +10,16 @@ class ContactResponse {
     success = json['success'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
 }
 
 class Data {
@@ -28,6 +38,18 @@ class Data {
         socialMedia!.add(new SocialMedia.fromJson(v));
       });
     }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.contactInfo != null) {
+      data['contact_info'] = this.contactInfo!.toJson();
+    }
+    if (this.socialMedia != null) {
+      data['social_media'] =
+          this.socialMedia!.map((v) => v.toJson()).toList();
+    }
+    return data;
   }
 }
 

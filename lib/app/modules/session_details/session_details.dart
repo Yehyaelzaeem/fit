@@ -30,6 +30,7 @@ class _SessionDetailsState extends State<SessionDetails> {
   SessionDetailsResponse sessionResponse = SessionDetailsResponse();
 
   void getAllSessionData() async {
+    print("idid");
     await ApiProvider().getSessionDetails(widget.id).then((value) {
       if (value.success == true) {
         setState(() {
@@ -56,7 +57,9 @@ class _SessionDetailsState extends State<SessionDetails> {
         children: [
           HomeAppbar(type: null),
           isLoading == true
-              ? CircularLoadingWidget()
+              ? SizedBox(
+              height: 100,
+              child: CircularLoadingWidget())
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -294,6 +297,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                   ),
                   kTextbody("${table.date}", bold: true),
                   Spacer(),
+                  if(table.caloriesTable!=null)
                   table.caloriesTable!.carbsFatsTable!.isNotEmpty ||
                           table.caloriesTable!.fatsTable!.isNotEmpty ||
                           table.caloriesTable!.proteinsCaloriesTable!.isNotEmpty

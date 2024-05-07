@@ -66,7 +66,10 @@ class _LoginViewState extends State<LoginView> {
         bool isReggisterd = Get.isRegistered<DiaryController>(tag: 'diary');
         if (isReggisterd) {
           DiaryController controller = Get.find<DiaryController>(tag: 'diary');
+          print("objectDairy");
+          await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10));
           controller.onInit();
+
         }
         bool isReggisterd2 = Get.isRegistered<HomeController>(tag: 'diary');
         if (isReggisterd2) {
@@ -74,6 +77,7 @@ class _LoginViewState extends State<LoginView> {
               Get.find<HomeController>(tag: 'home');
           textEditController.refreshController(true);
           textEditController.isLogggd.value = true;
+
         }
 
         // bool isReggisterd = Get.isRegistered<HomeC>(tag: 'diary');

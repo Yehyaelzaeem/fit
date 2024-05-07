@@ -122,6 +122,7 @@ class Items {
     data['id'] = this.id;
     data['qty'] = this.qty;
     data['calories'] = this.calories;
+    data['food'] = this.food?.toJson();
     return data;
   }
 }

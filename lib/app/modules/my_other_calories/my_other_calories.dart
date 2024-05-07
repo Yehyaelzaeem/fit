@@ -8,10 +8,13 @@ import 'package:app/app/utils/theme/app_colors.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:app/app/widgets/page_lable.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../models/day_details_reposne.dart' as dayDetails;
+import '../diary/controllers/diary_controller.dart';
 import 'add_new_other_calories.dart';
 import 'edit_other_calory.dart';
 
@@ -48,22 +51,24 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   }
 
   void deleteItem(int id) async {
-    await ApiProvider()
-        .deleteCalorie("delete_other_calories", id)
-        .then((value) {
-      if (value.success == true) {
-        setState(() {
-          isLoading = false;
-        });
-        getDiaryData();
-        Fluttertoast.showToast(msg: "${value.message}");
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        print("error");
-      }
-    });
+
+      await ApiProvider()
+          .deleteCalorie("delete_other_calories", id)
+          .then((value) {
+        if (value.success == true) {
+          setState(() {
+            isLoading = false;
+          });
+          getDiaryData();
+          Fluttertoast.showToast(msg: "${value.message}");
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+          print("error");
+        }
+      });
+
   }
 
   @override
@@ -224,8 +229,27 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                     color: Colors.grey,
                     height: 25),
                 InkWell(
-                  onTap: () {
-                    deleteItem(item.id!);
+                  onTap: () async{
+                    final result = await Connectivity().checkConnectivity();
+                    if (result != ConnectivityResult.none) {
+                      deleteItem(item.id!);
+                    }else{
+                      if(item.id!=null) {
+                        await ApiProvider().deleteOtherCalorieLocally(item.id!);
+                      }else{
+
+                      }
+                      if(type==1){
+                        otherCaloriesResponse.data!.proteins!.remove(item);
+                      }else if(type==2){
+                        otherCaloriesResponse.data!.carbs!.remove(item);
+                      }else if(type==3){
+                        otherCaloriesResponse.data!.fats!.remove(item);
+                      }
+                      setState(() {
+
+                      });
+                    }
                   },
                   child: Icon(Icons.delete, color: Colors.redAccent, size: 24),
                 ),
@@ -249,6 +273,51 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
               MaterialPageRoute(
                   builder: (context) => AddNewCalorie(type: type)));
           if (result == null) getDiaryData();
+          if(result!=null){
+
+            if (type == 1)otherCaloriesResponse.data!.proteins!.add(result);
+            if (type == 2) otherCaloriesResponse.data!.carbs!.add(result);
+            if (type == 3) otherCaloriesResponse.data!.fats!.add(result);
+
+            final controllerDiary = Get.find<DiaryController>(tag: 'diary');
+            Proteins a = result;
+            print("MYNEW");
+            print(a.toJson());
+            ItemResponse itemResponse =calculateItemDetails(a.qty!,int.parse(a.calories));
+            print(itemResponse.caloriesPerUnit);
+            print(itemResponse.units);
+            if (type == 1)
+              controllerDiary.response.value.data!.proteins!.food!.add(dayDetails.Food(
+                id: 9999,
+              title: a.title,
+              unit: itemResponse.units??a.qty,
+              qty: 1.0,
+              caloriePerUnit: double.parse(itemResponse.caloriesPerUnit??a.calories),
+              color: 'F00000'
+
+            ));
+            if (type == 2) controllerDiary.response.value.data!.carbs!.food!.add(dayDetails.Food(
+                id: 9999,
+                title: a.title,
+                unit: itemResponse.units??a.qty,
+                qty: 1.0,
+                caloriePerUnit: double.parse(itemResponse.caloriesPerUnit??a.calories),
+                color: 'F00000'
+            ));
+            if (type == 3)
+              controllerDiary.response.value.data!.fats!.food!.add(dayDetails.Food(
+                id: 9999,
+                title: a.title,
+                unit: itemResponse.units??a.qty,
+                qty: 1.0,
+                caloriePerUnit: double.parse(itemResponse.caloriesPerUnit??a.calories),
+                color: 'F00000'
+            ));
+            await ApiProvider().saveDairyLocally(controllerDiary.response.value,controllerDiary.lastSelectedDate.value);
+
+            await ApiProvider().saveMyOtherCaloriesLocally(otherCaloriesResponse);
+          }
+
           setState(() {});
         },
         child: Row(
@@ -272,6 +341,25 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
         ),
       ),
     );
+  }
+
+  ItemResponse calculateItemDetails(String qty, int calories) {
+    String? caloriesPerUnit;
+    String? units;
+
+    // Splitting the qty string into quantity and unit
+    List<String> qtyParts = qty.split(" ");
+    if (qtyParts.length == 2) {
+      String quantity = qtyParts[0];
+      String unit = qtyParts[1];
+      // Calculating calories per unit
+      double quantityValue = double.tryParse(quantity) ?? 1.0;
+      double caloriesPerUnitValue = calories / quantityValue;
+      caloriesPerUnit = caloriesPerUnitValue.toStringAsFixed(2);
+      units = unit;
+    }
+
+    return ItemResponse(caloriesPerUnit: caloriesPerUnit, units: units);
   }
 
   Widget staticBar() {
@@ -322,4 +410,11 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
           ],
         ));
   }
+}
+
+class ItemResponse {
+  final String? caloriesPerUnit;
+  final String? units;
+
+  ItemResponse({this.caloriesPerUnit, this.units});
 }

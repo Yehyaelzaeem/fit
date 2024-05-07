@@ -24,7 +24,7 @@ class VideoPlayerWidget extends StatelessWidget {
                       aspectRatio: 16 / 9,
                       child: InAppWebView(
                         initialUrlRequest: URLRequest(
-                            url: Uri.parse(_videoPage(link.split("/").last))),
+                            url: WebUri(_videoPage(link.split("/").last))),
                       ),
                     )
                   : Center(

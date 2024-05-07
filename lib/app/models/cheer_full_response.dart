@@ -24,6 +24,15 @@ class CheerFullResponse {
         success: json["success"] == null ? null : json["success"],
         data: json["data"] == null ? null : Data.fromJson(json["data"]),
       );
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = this.code;
+    data['success'] = this.success;
+      data['data'] = this.data!.toJson();
+
+    return data;
+  }
 }
 
 class Data {
@@ -48,4 +57,12 @@ class Data {
         pickup_option:
             json["pickup_option"] == null ? null : json["pickup_option"],
       );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['show_faq_page'] = this.isFaqActive;
+    data['is_active'] = this.isActive;
+    data['delivery_option'] = this.delivery_option;
+    data['pickup_option'] = this.pickup_option;
+    return data;
+  }
 }
