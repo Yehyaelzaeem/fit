@@ -52,9 +52,9 @@ class TimeSleepController extends GetxController {
           Get.toNamed(Routes.HOME);
           isToday == false
               ? controllerDiary.getDiaryData(
-              controllerDiary.response.value.data!.days![1].date!)
+              controllerDiary.response.value.data!.days![1].date!,false)
               : controllerDiary.getDiaryData(
-              controllerDiary.response.value.data!.days![0].date!);
+              controllerDiary.response.value.data!.days![0].date!,false);
         });
       } else {
         loadingButton.value=false;
@@ -78,6 +78,7 @@ class TimeSleepController extends GetxController {
           )
         );
         await ApiProvider().saveDairyLocally(controllerDiary.response.value, controllerDiary.apiDate.value);
+        await ApiProvider().saveDairyToSendLocally(controllerDiary.response.value, controllerDiary.apiDate.value);
         controllerDiary.refreshDiaryData(controllerDiary.apiDate.value, "fats");
         Fluttertoast.showToast(msg: 'Saved successfully');
         Get.toNamed(Routes.HOME);

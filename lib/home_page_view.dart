@@ -3,6 +3,7 @@ import 'package:app/app/modules/orientation_register/views/orientation_register_
 import 'package:app/app/routes/app_pages.dart';
 import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -305,10 +306,17 @@ class _HomePageViewState extends State<HomePageView> {
                           : SizedBox(),
                   ress.data!.subscriptionStatus == true
                       ? GestureDetector(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.SUBSCRIBE,
-                            );
+                          onTap: () async{
+                            final result = await Connectivity().checkConnectivity();
+                            if (result != ConnectivityResult.none) {
+                              Get.toNamed(
+                                Routes.SUBSCRIBE,
+                              );
+                            }else{
+                              Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+                            }
+
                           },
                           child: Center(
                             child: Container(

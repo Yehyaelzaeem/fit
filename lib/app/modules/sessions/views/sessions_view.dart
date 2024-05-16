@@ -57,17 +57,17 @@ class _SessionsViewState extends State<SessionsView> {
           sessionResponse = value;
           isLoading = false;
         });
-        final result = await Connectivity().checkConnectivity();
-        if (result != ConnectivityResult.none) {
-          if(!detailsLoaded){
-            detailsLoaded = true;
-          sessionResponse.data!.forEach((element) async{
-            await ApiProvider().getSessionDetails(element.id);
-            await Future.delayed(Duration(milliseconds: 200));
-          });
-          detailsLoaded = true;
-          }
-        }
+        // final result = await Connectivity().checkConnectivity();
+        // if (result != ConnectivityResult.none) {
+        //   if(!detailsLoaded){
+        //     detailsLoaded = true;
+        //   sessionResponse.data!.forEach((element) async{
+        //     await ApiProvider().getSessionDetails(element.id);
+        //     await Future.delayed(Duration(milliseconds: 200));
+        //   });
+        //   detailsLoaded = true;
+        //   }
+        // }
       } else {
         SharedHelper().logout();
         Get.offAllNamed(Routes.LOGIN);

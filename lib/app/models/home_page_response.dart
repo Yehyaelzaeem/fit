@@ -57,6 +57,7 @@ class HomeData {
     if (this.services != null) {
       data['services'] = this.services!.map((v) => v.toJson()).toList();
     }
+    data['subscribtion_status'] = this.subscriptionStatus;
     return data;
   }
 }

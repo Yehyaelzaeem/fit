@@ -9,8 +9,10 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:app/globale_controller.dart';
 import 'package:app/home_page_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import 'controllers/home_controller.dart';
@@ -198,8 +200,14 @@ class HomeDrawer extends GetView<HomeController> {
             singleDrawerItem(
                 title: 'Transformations',
                 image: 'assets/icons/transformation.svg',
-                action: () {
-                  Get.toNamed(Routes.TRANSFORM);
+                action: () async{
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      Get.toNamed(Routes.TRANSFORM);
+    }else{
+      Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+    }
                 }),
             textEditController.isLogggd.value == false
                 ? SizedBox()
@@ -208,8 +216,14 @@ class HomeDrawer extends GetView<HomeController> {
                     : singleDrawerItem(
                         title: 'Orientation',
                         image: 'assets/icons/orientation.svg',
-                        action: () {
-                          Get.toNamed(Routes.Orientation);
+                        action: () async{
+                          final result = await Connectivity().checkConnectivity();
+                          if (result != ConnectivityResult.none) {
+                            Get.toNamed(Routes.Orientation);
+                          }else{
+                            Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+                          }
                         }),
             //CHEER_FULL
             //
@@ -219,9 +233,16 @@ class HomeDrawer extends GetView<HomeController> {
                   : singleDrawerItem(
                       title: "Cheer-Full",
                       image: 'assets/icons/cheer.svg',
-                      action: () {
-                        Get.toNamed(Routes.CHEER_FULL);
-                      }),
+    action: () async{
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+    Get.toNamed(Routes.CHEER_FULL);
+    }else{
+    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+    }
+    }
+                      ),
             /*      FutureBuilder<bool>(
               future: getCheerFullStatus(),
               builder: (context, snapshot) {
@@ -246,16 +267,28 @@ class HomeDrawer extends GetView<HomeController> {
             singleDrawerItem(
                 title: Strings().contactUs,
                 image: 'assets/icons/contact.svg',
-                action: () {
-                  Get.toNamed(Routes.CONTACT_US);
-                }),
+    action: () async{
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+    Get.toNamed(Routes.CONTACT_US);
+    }else{
+    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+    }
+    }),
             //About
             singleDrawerItem(
                 title: "About us",
                 image: 'assets/icons/about_us.svg',
-                action: () {
-                  Get.toNamed(Routes.ABOUT);
-                }),
+                action: () async{
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      Get.toNamed(Routes.ABOUT);
+    }else{
+    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+
+    }
+    }),
             textEditController.isLogggd.value == false
                 ? singleDrawerItem(
                     title: "Login",

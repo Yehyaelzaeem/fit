@@ -67,7 +67,7 @@ class _LoginViewState extends State<LoginView> {
         if (isReggisterd) {
           DiaryController controller = Get.find<DiaryController>(tag: 'diary');
           print("objectDairy");
-          await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10));
+          // await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10));
           controller.onInit();
 
         }

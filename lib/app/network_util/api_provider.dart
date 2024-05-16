@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:app/app/models/about_response.dart';
 import 'package:app/app/models/basic_response.dart';
@@ -524,12 +525,12 @@ class ApiProvider {
     return millisecondsSinceEpoch != null ? DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch) : null;
   }
 
-  Future<DayDetailsResponse> getDiaryView(String? date) async {
+  Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave) async {
     final result = await Connectivity().checkConnectivity();
     DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
 
 
-    if (result != ConnectivityResult.none) {
+    if (result != ConnectivityResult.none&&isNotSending) {
     print('date ====>$date');
     Response response = await _utils.get("calories_day_details?date=$date");
     log('api->calories_day_details?date=$date');
@@ -538,13 +539,17 @@ class ApiProvider {
       if(dayDetailsResponseTemp==null){
         saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
       }
-      saveDairyLocally(DayDetailsResponse.fromJson(response.data),date!);
+      if(!notSave) {
+        saveDairyLocally(DayDetailsResponse.fromJson(response.data), date!);
+      }
       return DayDetailsResponse.fromJson(response.data);
     } else {
       if(dayDetailsResponseTemp==null){
         saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
       }
-      saveDairyLocally(DayDetailsResponse.fromJson(response.data),date!);
+      if(!notSave) {
+        saveDairyLocally(DayDetailsResponse.fromJson(response.data),date!);
+      }
       return DayDetailsResponse.fromJson(response.data);
     }
     }else{
@@ -633,8 +638,38 @@ class ApiProvider {
     await SharedHelper().writeData(CachingKey.DAIRY, jsonEncode(existingData));
   }
 
+  Future<void> saveDairyToSendLocally(DayDetailsResponse dayDetailsResponse, String date) async {
+    // Read existing data
+    Map<String, dynamic> existingData = await readDairyToSendLocally();
+
+    // Check if the response date exists in the existing data
+    if (existingData.containsKey(date)) {
+      // Update existing entry for date4
+      print("exist");
+      existingData[date] = dayDetailsResponse.toJson();
+    } else {
+      // If the response date does not exist, add it to the map
+      print("Not exist");
+      existingData[date] = dayDetailsResponse.toJson();
+    }
+
+    // Save the updated map
+    await SharedHelper().writeData(CachingKey.DAIRY_TO_SEND, jsonEncode(existingData));
+  }
+
   Future<Map<String, dynamic>> readDairyLocally() async {
     String? dairy = await SharedHelper().readString(CachingKey.DAIRY);
+    if (dairy != null&&dairy!='') {
+      print(dairy);
+      print(jsonDecode(dairy));
+      return jsonDecode(dairy);
+    } else {
+      return {};
+    }
+  }
+
+  Future<Map<String, dynamic>> readDairyToSendLocally() async {
+    String? dairy = await SharedHelper().readString(CachingKey.DAIRY_TO_SEND);
     if (dairy != null&&dairy!='') {
       print(dairy);
       print(jsonDecode(dairy));
@@ -1381,6 +1416,7 @@ class ApiProvider {
   }
 
 
+
 // Function to save diary data locally
   Future<void> saveDiaryDataLocally(DiaryData data) async {
     List<String> dairyDataListJson = (await SharedHelper().readStringList(CachingKey.DAIRY_DATA_LIST)) ?? [];
@@ -1400,72 +1436,359 @@ class ApiProvider {
   }
 
 // Function to send locally saved diary data to API
-  Future<void> sendSavedDiaryData() async {
-    List<String> diaryDataList = (await SharedHelper().readStringList(CachingKey.DAIRY_DATA_LIST)) ?? [];
-    DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10));
-    for (String diaryDataJson in diaryDataList) {
-      DiaryData diaryData = DiaryData.fromJson(jsonDecode(diaryDataJson));
+//   Future<void> sendSavedDiaryData() async {
+//     List<String> diaryDataList = (await SharedHelper().readStringList(CachingKey.DAIRY_DATA_LIST)) ?? [];
+//     DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true);
+//
+//     List<String> dairySent = [];
+//
+//     List<DiaryEntry> dairySendList= [];
+//
+//     for (String diaryDataJson in diaryDataList) {
+//       DiaryData diaryData = DiaryData.fromJson(jsonDecode(diaryDataJson));
+//
+//
+//       final result = await Connectivity().checkConnectivity();
+//       if (result != ConnectivityResult.none) {
+//         dairySent.add(diaryDataJson);
+//         if (diaryData.id == null) {
+//           if(!dairySendList.any((element) => element.date==diaryData.date)){
+//             dairySendList.add(
+//                 DiaryEntry(date: diaryData.date, water: '0', food: [], qty: [], createdAt: [])
+//             );
+//           }
+//           if(diaryData.water!=null){
+//             dairySendList.firstWhere((element) => element.date==diaryData.date).water = diaryData.water!;
+//           }else
+//           if(diaryData.workOut!=null){
+//             dairySendList.firstWhere((element) => element.date==diaryData.date).workout = diaryData.workOut!;
+//             dairySendList.firstWhere((element) => element.date==diaryData.date).workoutDesc = diaryData.workoutDesc??'';
+//           }else
+//           if(diaryData.foodProtine!=null){
+//             if (diaryData.foodProtine != 9999) {
+//               dairySendList
+//                   .firstWhere((element) => element.date == diaryData.date)
+//                   .food
+//                   .add(diaryData.foodProtine!);
+//
+//               dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
+//               dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
+//             }else{
+//               if (dayDetailsResponse.data!.proteins!.food!.any((
+//                   element) => element.title == diaryData.foodName)) {
+//                 dairySendList
+//                     .firstWhere((element) => element.date == diaryData.date)
+//                     .food
+//                     .add(dayDetailsResponse.data!.proteins!.food!
+//                     .firstWhere((element) =>
+//                 element.title == diaryData.foodName).id!);
+//
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
+//
+//               }
+//               else
+//               if (dayDetailsResponse.data!.carbs!.food!.any((element) => element
+//                   .title == diaryData.foodName)) {
+//                 dairySendList
+//                     .firstWhere((element) => element.date == diaryData.date)
+//                     .food
+//                     .add(diaryData.foodProtine!);
+//                 dairySendList
+//                     .firstWhere((element) => element.date == diaryData.date)
+//                     .food
+//                     .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
+//                     element) => element.title == diaryData.foodName).id!);
+//
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
+//               }
+//               else
+//               if (dayDetailsResponse.data!.fats!.food!.any((element) => element
+//                   .title == diaryData.foodName)) {
+//                 dairySendList
+//                     .firstWhere((element) => element.date == diaryData.date)
+//                     .food
+//                     .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
+//                     element) => element.title == diaryData.foodName).id!);
+//
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
+//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
+//               }
+//             }
+//           }
+//           // if (diaryData.foodProtine != 9999) {
+//           //
+//           //   await ApiProvider().createDiaryData(
+//           //     date: diaryData.date,
+//           //     water: diaryData.water,
+//           //     foodProtine: diaryData.foodProtine,
+//           //     qtyProtiene: diaryData.qtyProtiene,
+//           //     workOut: diaryData.workOut,
+//           //     workout_desc: diaryData.workoutDesc,
+//           //   );
+//           // }
+//           // else {
+//           //   if (dayDetailsResponse.data!.proteins!.food!.any((
+//           //       element) => element.title == diaryData.foodName)) {
+//           //     await ApiProvider().createDiaryData(
+//           //       date: diaryData.date,
+//           //       water: diaryData.water,
+//           //       foodProtine: dayDetailsResponse.data!.proteins!.food!
+//           //           .firstWhere((element) =>
+//           //       element.title == diaryData.foodName).id,
+//           //       qtyProtiene: diaryData.qtyProtiene,
+//           //       workOut: diaryData.workOut,
+//           //       workout_desc: diaryData.workoutDesc,
+//           //     );
+//           //   }
+//           //   else
+//           //   if (dayDetailsResponse.data!.carbs!.food!.any((element) => element
+//           //       .title == diaryData.foodName)) {
+//           //     await ApiProvider().createDiaryData(
+//           //       date: diaryData.date,
+//           //       water: diaryData.water,
+//           //       foodProtine: dayDetailsResponse.data!.carbs!.food!.firstWhere((
+//           //           element) => element.title == diaryData.foodName).id,
+//           //       qtyProtiene: diaryData.qtyProtiene,
+//           //       workOut: diaryData.workOut,
+//           //       workout_desc: diaryData.workoutDesc,
+//           //     );
+//           //   }
+//           //   else
+//           //   if (dayDetailsResponse.data!.fats!.food!.any((element) => element
+//           //       .title == diaryData.foodName)) {
+//           //     await ApiProvider().createDiaryData(
+//           //       date: diaryData.date,
+//           //       water: diaryData.water,
+//           //       foodProtine: dayDetailsResponse.data!.fats!.food!.firstWhere((
+//           //           element) => element.title == diaryData.foodName).id,
+//           //       qtyProtiene: diaryData.qtyProtiene,
+//           //       workOut: diaryData.workOut,
+//           //       workout_desc: diaryData.workoutDesc,
+//           //     );
+//           //   }
+//           // }
+//         }
+//         else {
+//           await ApiProvider().editDiaryData(
+//             date: diaryData.date,
+//             water: diaryData.water,
+//             foodProtine: diaryData.foodProtine,
+//             qtyProtiene: diaryData.qtyProtiene,
+//             workOut: diaryData.workOut,
+//             workout_desc: diaryData.workoutDesc,
+//             id: diaryData.id,
+//           );
+//         }
+//
+//         if(dairySent.isNotEmpty){
+//
+//             for (DiaryEntry entry in dairySendList) {
+//               var formData = FormData.fromMap({
+//                 'date': entry.date,
+//                 'water': entry.water,
+//                 'food[]': entry.food,
+//                 'qty[]': entry.qty,
+//                 'created_at[]': entry.createdAt,
+//                 if(entry.workout!=null)
+//                 'workout': entry.workout??'',
+//                 if(entry.workout!=null)
+//                 'workout_desc': entry.workoutDesc??'',
+//               });
+//
+//               try {
+//                   Echo("api--> save_offline_diary");
+//                   Response response = await _utils.post(
+//                     "save_offline_diary",
+//                     body: formData,
+//                   );
+//
+//                   print(response.data);
+//                 if (response.data["success"] == true) {
+//                   // Remove the successfully sent entry from local storage
+//                 }
+//               } catch (e) {
+//                 // Handle the error, maybe break the loop or log the error
+//                 print("Error sending diary entry: $e");
+//               }
+//             }
+//         }
+//         // FormData body = FormData.fromMap({
+//         //   if (water != null) "water": water,
+//         //   "date": date,
+//         //   if (foodProtine != null) "food": foodProtine,
+//         //   if (qtyProtiene != null) "qty": qtyProtiene,
+//         //   if (workOut != null) "workout": workOut,
+//         //   if (workout_desc != null) "workout_desc": workout_desc,
+//         // });
+//         //
+//         // final result = await Connectivity().checkConnectivity();
+//         // if (result != ConnectivityResult.none) {
+//         //   Echo("api--> save_offline_diary");
+//         //   Response response = await _utils.post(
+//         //     "save_offline_diary",
+//         //     body: body,
+//         //   );
+//         //
+//         //   if (response.data["success"] == true) {
+//         //     return GeneralResponse.fromJson(response.data);
+//         //   } else {
+//         //     return GeneralResponse.fromJson(response.data);
+//         //   }
+//         // }
+//
+//       }else{
+//
+//       }
+//     }
+//
+//     dairySent.forEach((element) {
+//       if(diaryDataList.contains(element)){
+//         diaryDataList.remove(element);
+//       }
+//     });
+//
+//     if(diaryDataList.isEmpty){
+//       // Clear locally saved sleep time data after successfully sending to API
+//       await SharedHelper().removeData(CachingKey.DAIRY_DATA_LIST);
+//     }else{
+//       await SharedHelper().writeData(CachingKey.DAIRY_DATA_LIST, diaryDataList);
+//     }
+//
+//   }
 
-      if(diaryData.id ==null){
-        if(diaryData.foodProtine!=9999){
-          print("NO IDID");
-          await ApiProvider().createDiaryData(
-            date: diaryData.date,
-            water: diaryData.water,
-            foodProtine: diaryData.foodProtine,
-            qtyProtiene: diaryData.qtyProtiene,
-            workOut: diaryData.workOut,
-            workout_desc: diaryData.workoutDesc,
-          );
-        }else{
+  Future<void> sendSavedDiaryDataByDay() async {
+    Map<String, dynamic> existingData = await readDairyToSendLocally();
+    DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true);
+    List<DiaryEntry> dairySendList= [];
 
-          if(dayDetailsResponse.data!.proteins!.food!.any((element) => element.title == diaryData.foodName)){
-             await ApiProvider().createDiaryData(
-              date: diaryData.date,
-              water: diaryData.water,
-              foodProtine: dayDetailsResponse.data!.proteins!.food!.firstWhere((element) => element.title == diaryData.foodName).id,
-              qtyProtiene: diaryData.qtyProtiene,
-              workOut: diaryData.workOut,
-              workout_desc: diaryData.workoutDesc,
-            );
-          }else if(dayDetailsResponse.data!.carbs!.food!.any((element) => element.title == diaryData.foodName)){
-             await ApiProvider().createDiaryData(
-              date: diaryData.date,
-              water: diaryData.water,
-              foodProtine: dayDetailsResponse.data!.carbs!.food!.firstWhere((element) => element.title == diaryData.foodName).id,
-              qtyProtiene: diaryData.qtyProtiene,
-              workOut: diaryData.workOut,
-              workout_desc: diaryData.workoutDesc,
-            );
-          }else if(dayDetailsResponse.data!.fats!.food!.any((element) => element.title == diaryData.foodName)){
-             await ApiProvider().createDiaryData(
-              date: diaryData.date,
-              water: diaryData.water,
-              foodProtine: dayDetailsResponse.data!.fats!.food!.firstWhere((element) => element.title == diaryData.foodName).id,
-              qtyProtiene: diaryData.qtyProtiene,
-              workOut: diaryData.workOut,
-              workout_desc: diaryData.workoutDesc,
-            );
-          }
+    for (var key in existingData.keys) {
+      print ("Sending local key $key");
+      DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(existingData[key]);
+      dairySendList.add(
+          DiaryEntry(date: key, water: dayDetailsToSend.data!.water??0, food: [], qty: [], createdAt: [])
+      );
+      if(dayDetailsToSend.data!.water!=null){
+        dairySendList.firstWhere((element) => element.date==key).water = dayDetailsToSend.data!.water!;
+      }
+      if(dayDetailsToSend.data!.dayWorkouts!=null){
+        dairySendList.firstWhere((element) => element.date==key).workout = dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title==dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+        dairySendList.firstWhere((element) => element.date==key).workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
+            ? " "
+            : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+      }
+      dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
+        element.title == item.quality)) {
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(item.createdAt??DateTime.now().toString().substring(0,16));
+
         }
 
+      });
+      dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
+        element.title == item.quality)) {
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(item.createdAt??DateTime.now().toString().substring(0,16));
+
+        }
+
+      });
+
+      dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.fats!.food!.any((element) =>
+        element.title == item.quality)) {
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(item.createdAt??DateTime.now().toString().substring(0,16));
+
+        }
+
+      });
+
+    }
+
+
+    for (DiaryEntry entry in dairySendList) {
+      var formData = FormData.fromMap({
+        'date': entry.date,
+        'water': entry.water,
+        if(entry.workout!=null)
+          'workout': entry.workout??'',
+        if(entry.workout!=null)
+          'workout_desc': entry.workoutDesc??'',
+      });
+      for(int i=0;i<entry.food.length;i++){
+        formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
+        formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
+        formData.fields.add(MapEntry('created_at[$i]', entry.createdAt[i].toString()));
       }
-      else{
-        await ApiProvider().editDiaryData(
-          date: diaryData.date,
-          water: diaryData.water,
-          foodProtine: diaryData.foodProtine,
-          qtyProtiene: diaryData.qtyProtiene,
-          workOut: diaryData.workOut,
-          workout_desc: diaryData.workoutDesc,
-          id: diaryData.id,
+      print('formData.fields');
+      print(formData.fields);
+
+      try {
+        Echo("api--> save_offline_diary");
+        Response response = await _utils.post(
+          "save_offline_diary",
+          body: formData,
         );
+
+        print(response.data);
+        if (response.data["success"] == true) {
+          // Remove the successfully sent entry from local storage
+        }
+      } catch (e) {
+        // Handle the error, maybe break the loop or log the error
+        print("Error sending diary entry: $e");
       }
     }
 
-    // Clear locally saved sleep time data after successfully sending to API
-    await SharedHelper().removeData(CachingKey.DAIRY_DATA_LIST);
+
+    await SharedHelper().removeData(CachingKey.DAIRY_TO_SEND);
+
   }
+
+
 
   // Function to save diary data locally
   Future<void> removeCashedDiaryDataLocally(int randomId) async {
@@ -1581,7 +1904,7 @@ class ApiProvider {
   Future<bool> getFaqStatus() async {
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      Response response = await _utils.post(
+      Response response =  await _utils.post(
         "faq_status",
       );
       if (response.statusCode == 200) {
@@ -2018,6 +2341,7 @@ class DiaryData {
   final int? randomId;
   final int? id;
   final String? foodName;
+  final String? dateTime;
   dynamic caloriesPerUnit;
 
   DiaryData({
@@ -2030,6 +2354,7 @@ class DiaryData {
     this.randomId,
     this.id,
     this.foodName,
+    this.dateTime,
     this.caloriesPerUnit,
   });
 
@@ -2045,6 +2370,7 @@ class DiaryData {
       'id': id,
       'foodName': foodName,
       'caloriesPerUnit': caloriesPerUnit,
+      'dateTime': DateTime.now().toString().substring(0,16),
     };
   }
 
@@ -2059,6 +2385,7 @@ class DiaryData {
       randomId: json['randomId'],
       id: json['id'],
       foodName: json['foodName'],
+      dateTime: json['dateTime'],
       caloriesPerUnit: json['caloriesPerUnit'],
     );
   }
@@ -2140,4 +2467,48 @@ class OtherMealData {
   }
 
 
+}
+
+class DiaryEntry {
+  String date;
+  int water;
+  List<int> food;
+  List<double> qty;
+  List<String> createdAt;
+  int? workout;
+  String? workoutDesc;
+
+  DiaryEntry({
+    required this.date,
+    required this.water,
+    required this.food,
+    required this.qty,
+    required this.createdAt,
+    this.workout,
+    this.workoutDesc,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'date': date,
+      'water': water,
+      'food': food,
+      'qty': qty,
+      'created_at': createdAt,
+      'workout': workout,
+      'workout_desc': workoutDesc,
+    };
+  }
+
+  factory DiaryEntry.fromJson(Map<String, dynamic> json) {
+    return DiaryEntry(
+      date: json['date'],
+      water: json['water'],
+      food: List<int>.from(json['food']),
+      qty: List<double>.from(json['qty']),
+      createdAt: List<String>.from(json['created_at']),
+      workout: json['workout'],
+      workoutDesc: json['workout_desc'],
+    );
+  }
 }

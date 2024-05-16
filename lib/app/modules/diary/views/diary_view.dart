@@ -13,6 +13,7 @@ import 'package:app/app/widgets/default/app_buttons.dart';
 import 'package:app/app/widgets/default/edit_text.dart';
 import 'package:app/app/widgets/default/text.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -569,10 +570,10 @@ class DiaryView extends GetView<DiaryController> {
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         if (!controller.isToday.value) {
           controller
-              .getDiaryData(controller.response.value.data!.days![0].date!);
+              .getDiaryData(controller.response.value.data!.days![0].date!,isSending);
         } else {
           controller
-              .getDiaryData(controller.response.value.data!.days![1].date!);
+              .getDiaryData(controller.response.value.data!.days![1].date!,isSending);
         }
       },
       child: Container(
@@ -1054,12 +1055,27 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
         // deleteItem = true;
         // setState(() {});
         if (widget.item.id == null && widget.item.randomId == null) {
-          if (widget.type == 'proteins')
-            await widget.controller.caloriesDetails.remove(widget.item);
-          else if (widget.type == 'carbs')
-            await widget.controller.carbsDetails.remove(widget.item);
-          else
-            await widget.controller.fatsDetails.remove(widget.item);
+
+          if(widget.item.quality!=null) {
+            final result = await Connectivity().checkConnectivity();
+            if (result != ConnectivityResult.none) {
+              Fluttertoast.showToast(msg: "Waiting for sending data, please try again later",toastLength: Toast.LENGTH_LONG);
+            }else{
+              if (widget.type == 'proteins')
+                await widget.controller.caloriesDetails.remove(widget.item);
+              else if (widget.type == 'carbs')
+                await widget.controller.carbsDetails.remove(widget.item);
+              else
+                await widget.controller.fatsDetails.remove(widget.item);
+            }
+          }else{
+            if (widget.type == 'proteins')
+              await widget.controller.caloriesDetails.remove(widget.item);
+            else if (widget.type == 'carbs')
+              await widget.controller.carbsDetails.remove(widget.item);
+            else
+              await widget.controller.fatsDetails.remove(widget.item);
+          }
         } else {
           if(widget.item.randomId != null){
             if (widget.type == 'proteins')

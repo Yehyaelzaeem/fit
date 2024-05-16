@@ -208,7 +208,7 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
     if (result != ConnectivityResult.none) {
       await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
         if (value.success == true) {
-          Get.find<DiaryController>(tag: 'diary').onInit();
+          Get.find<DiaryController>(tag: 'diary').getDiaryData(lastSelectedDate.value,false);
           Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
         } else {
           Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
