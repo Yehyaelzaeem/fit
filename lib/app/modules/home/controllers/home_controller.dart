@@ -4,10 +4,12 @@ import 'package:app/app/models/version_response.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/network_util/shared_helper.dart';
 import 'package:app/app/routes/app_pages.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../models/cheer_full_response.dart';
+import '../../diary/controllers/diary_controller.dart';
 
 class HomeController extends GetxController {
   final currentIndex = 0.obs;
@@ -52,6 +54,18 @@ class HomeController extends GetxController {
     cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     faqStatus = await ApiProvider().getFaqStatus();
     if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      final controllerDiary = Get.find<DiaryController>(tag: 'diary');
+
+      await ApiProvider().sendSavedDiaryDataByDay();
+      await ApiProvider().sendSavedSleepTimes();
+
+      controllerDiary.getDiaryData(
+        controllerDiary.lastSelectedDate.value != '' ? controllerDiary.lastSelectedDate.value : DateTime
+            .now().toString().substring(0, 10),true);
+
+    }
 
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
@@ -85,7 +99,9 @@ class HomeController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+
+  }
 
   void updateCurrentIndex(int value) {
     currentIndex.value = value;

@@ -525,12 +525,12 @@ class ApiProvider {
     return millisecondsSinceEpoch != null ? DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch) : null;
   }
 
-  Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave) async {
+  Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave,bool isLive) async {
     final result = await Connectivity().checkConnectivity();
     DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
 
 
-    if (result != ConnectivityResult.none&&isNotSending) {
+    if (result != ConnectivityResult.none&&isNotSending && isLive) {
     print('date ====>$date');
     Response response = await _utils.get("calories_day_details?date=$date");
     log('api->calories_day_details?date=$date');
@@ -1387,7 +1387,7 @@ class ApiProvider {
     });
 
     final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
+    if (false) {
       Echo("api--> save_calories_details");
       Response response = await _utils.post(
         "save_calories_details",
@@ -1660,7 +1660,7 @@ class ApiProvider {
 
   Future<void> sendSavedDiaryDataByDay() async {
     Map<String, dynamic> existingData = await readDairyToSendLocally();
-    DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true);
+    DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true,true);
     List<DiaryEntry> dairySendList= [];
 
     for (var key in existingData.keys) {

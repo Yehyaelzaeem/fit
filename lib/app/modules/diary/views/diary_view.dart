@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../../network_util/api_provider.dart';
 import '../../../routes/app_pages.dart';
 import '../../main_un_auth.dart';
 import '../../usuals/controllers/usual_controller.dart';
@@ -266,16 +267,32 @@ class DiaryView extends GetView<DiaryController> {
                                         ;
                                   }
 
-                                  controller.updateProtineData(
-                                    item.id,
-                                    food,
-                                    qty,
-                                    type: type == 'proteins'
-                                        ? 'proteins'
-                                        : type == 'carbs'
-                                            ? 'carbs'
-                                            : 'fats',
-                                  );
+                                  if(item.id==null&&item.randomId!=null) {
+                                    controller.updateProtineDataRandomId(
+                                      item.randomId,
+                                      item.id,
+                                      food,
+                                      qty,
+                                      type: type == 'proteins'
+                                          ? 'proteins'
+                                          : type == 'carbs'
+                                          ? 'carbs'
+                                          : 'fats',
+                                    );
+                                  }else{
+
+                                    controller.updateProtineData(
+                                      item.id,
+                                      food,
+                                      qty,
+                                      type: type == 'proteins'
+                                          ? 'proteins'
+                                          : type == 'carbs'
+                                          ? 'carbs'
+                                          : 'fats',
+                                    );
+                                  }
+
                                 } catch (e) {}
                               },
                             ),
@@ -566,14 +583,24 @@ class DiaryView extends GetView<DiaryController> {
 
   Widget diaryDatesOptions() {
     Widget dayButton = InkWell(
-      onTap: () {
+      onTap: () async{
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         if (!controller.isToday.value) {
           controller
               .getDiaryData(controller.response.value.data!.days![0].date!,isSending);
+           ApiProvider().sendSavedDiaryDataByDay();
+           ApiProvider().sendSavedSleepTimes();
+
+          controller.refreshDiaryDataLive(controller.response.value.data!.days![0].date!);
         } else {
+
           controller
               .getDiaryData(controller.response.value.data!.days![1].date!,isSending);
+          ApiProvider().sendSavedSleepTimes();
+
+          ApiProvider().sendSavedDiaryDataByDay();
+          controller.refreshDiaryDataLive(controller.response.value.data!.days![1].date!);
+
         }
       },
       child: Container(
@@ -685,6 +712,14 @@ class DiaryView extends GetView<DiaryController> {
       children: [
         InkWell(
           onTap: () {
+            ApiProvider().sendSavedDiaryDataByDay().then((value){
+
+              controller.getDiaryData(
+                  controller.lastSelectedDate.value != '' ? controller.lastSelectedDate.value : DateTime
+                      .now().toString().substring(0, 10),true);
+            });
+            ApiProvider().sendSavedSleepTimes();
+
             Get.put(UsualController(), tag: "usual");
             Get.toNamed(Routes.USUAL);
             FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -706,6 +741,9 @@ class DiaryView extends GetView<DiaryController> {
         ),
         InkWell(
           onTap: () async {
+
+            ApiProvider().sendSavedDiaryDataByDay();
+            ApiProvider().sendSavedSleepTimes();
             dynamic result = await Navigator.push(
                 Get.context!,
                 MaterialPageRoute(
@@ -714,7 +752,7 @@ class DiaryView extends GetView<DiaryController> {
                         )));
 
             if (result == null) {
-              if (controller.lastSelectedDate.value.isNotEmpty)
+
                 controller.getDiaryDataRefreshResponse(controller.lastSelectedDate.value);
             }
             FocusScope.of(Get.context!).requestFocus(FocusNode());
@@ -1058,8 +1096,47 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
 
           if(widget.item.quality!=null) {
             final result = await Connectivity().checkConnectivity();
-            if (result != ConnectivityResult.none) {
-              Fluttertoast.showToast(msg: "Waiting for sending data, please try again later",toastLength: Toast.LENGTH_LONG);
+            if (result != ConnectivityResult.none){
+              if(widget.controller.isAdding == true) {
+                if (widget.type == 'proteins') {
+                  widget.controller.caloriesDeleted.add(widget.item);
+                  await widget.controller.caloriesDetails.remove(widget.item);
+                  await widget.controller.calculateProteins();
+
+                }
+                else if (widget.type == 'carbs') {
+                  widget.controller.carbsDeleted.add(widget.item);
+                  await widget.controller.carbsDetails.remove(widget.item);
+                  await widget.controller.calculateCarbs();
+
+                }
+                else {
+                  widget.controller.fatsDeleted.add(widget.item);
+                  await widget.controller.fatsDetails.remove(widget.item);
+                  await widget.controller.calculateFats();
+
+                }
+              }else{
+                await Future.delayed(Duration(seconds: 1));
+                if (widget.type == 'proteins') {
+                  widget.controller.caloriesDeleted.add(widget.item);
+                  await widget.controller.caloriesDetails.remove(widget.item);
+                  await widget.controller.calculateProteins();
+
+                }
+                else if (widget.type == 'carbs') {
+                  widget.controller.carbsDeleted.add(widget.item);
+                  await widget.controller.carbsDetails.remove(widget.item);
+                  await widget.controller.calculateCarbs();
+                }
+                else {
+                  widget.controller.fatsDeleted.add(widget.item);
+                  await widget.controller.fatsDetails.remove(widget.item);
+                  await widget.controller.calculateFats();
+                }
+                // await widget.controller.checkDeletion();
+
+              }
             }else{
               if (widget.type == 'proteins')
                 await widget.controller.caloriesDetails.remove(widget.item);

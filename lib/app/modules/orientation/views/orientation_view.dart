@@ -49,12 +49,12 @@ class OrientationView extends GetView<OrientationController> {
               : GridView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 10,vertical: 4),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 20,
-                    childAspectRatio: 0.92,
-                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 18,
+                    childAspectRatio: 0.9,
+                    mainAxisSpacing: 16,
                   ),
                   itemCount: controller.orientationVideosResponse.data?.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -107,7 +107,7 @@ class OrientationView extends GetView<OrientationController> {
                           Center(
                               child: kTextbody(
                                   controller.orientationVideosResponse
-                                          .data?[index].name ??
+                              .data?[index].name ??
                                       "",
                                   size: 12)),
                         ],

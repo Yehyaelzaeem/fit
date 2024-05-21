@@ -33,7 +33,7 @@ class TimeSleepController extends GetxController {
     } else {
       loadingButton.value=true;
       final result = await Connectivity().checkConnectivity();
-      if (result != ConnectivityResult.none) {
+      if (false) {
 
         await ApiProvider()
             .addSleepTime(

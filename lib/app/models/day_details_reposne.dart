@@ -237,9 +237,11 @@ class CaloriesDetails {
 
   CaloriesDetails.fromJson(Map<String, dynamic> json) {
 
+    print(json['qty']);
+
     id = json['id'];
     randomId = json['randomId'];
-    qty = json['qty'].toDouble();
+    qty = json['qty']==null?0.0:json['qty'].toDouble();
     quality = json['quality'];
     calories = json['calories'];
     createdAt = json['created_at'];
