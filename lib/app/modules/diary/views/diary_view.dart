@@ -586,21 +586,42 @@ class DiaryView extends GetView<DiaryController> {
       onTap: () async{
         FocusScope.of(Get.context!).requestFocus(FocusNode());
         if (!controller.isToday.value) {
-          controller
-              .getDiaryData(controller.response.value.data!.days![0].date!,isSending);
-           ApiProvider().sendSavedDiaryDataByDay();
-           ApiProvider().sendSavedSleepTimes();
+          final result = await Connectivity().checkConnectivity();
 
-          controller.refreshDiaryDataLive(controller.response.value.data!.days![0].date!);
+
+          if (result != ConnectivityResult.none) {
+            controller
+                .getDiaryData(
+                controller.response.value.data!.days![0].date!, isSending);
+            ApiProvider().sendSavedDiaryDataByDay();
+            ApiProvider().sendSavedSleepTimes();
+
+            controller.refreshDiaryDataLive(
+                controller.response.value.data!.days![0].date!);
+          }else{
+            controller
+                .getDiaryData(
+                controller.response.value.data!.days![0].date!, false);
+          }
         } else {
 
-          controller
-              .getDiaryData(controller.response.value.data!.days![1].date!,isSending);
-          ApiProvider().sendSavedSleepTimes();
+          final result = await Connectivity().checkConnectivity();
 
-          ApiProvider().sendSavedDiaryDataByDay();
-          controller.refreshDiaryDataLive(controller.response.value.data!.days![1].date!);
 
+          if (result != ConnectivityResult.none) {
+            controller
+                .getDiaryData(
+                controller.response.value.data!.days![1].date!, isSending);
+            ApiProvider().sendSavedSleepTimes();
+
+            ApiProvider().sendSavedDiaryDataByDay();
+            controller.refreshDiaryDataLive(
+                controller.response.value.data!.days![1].date!);
+          }else{
+            controller
+                .getDiaryData(
+                controller.response.value.data!.days![1].date!, isSending);
+          }
         }
       },
       child: Container(
@@ -721,7 +742,9 @@ class DiaryView extends GetView<DiaryController> {
             ApiProvider().sendSavedSleepTimes();
 
             Get.put(UsualController(), tag: "usual");
-            Get.toNamed(Routes.USUAL);
+            Get.toNamed(Routes.USUAL)!.then((value) => controller.getDiaryData(
+                controller.lastSelectedDate.value != '' ? controller.lastSelectedDate.value : DateTime
+                    .now().toString().substring(0, 10),true));
             FocusScope.of(Get.context!).requestFocus(FocusNode());
           },
           child: Container(
@@ -1044,10 +1067,26 @@ class DiaryView extends GetView<DiaryController> {
         if(item.randomId==null) {
           controller.createProtineData(food, food.qty!, type: type);
         }else{
-          controller.updateDiaryDataLocally(item.randomId!,food, food.qty!, type: type);
+          // print('CALC');
+          controller.updateProtineDataRandomId(
+            item.randomId,
+            item.id,
+            food,
+            food.qty!,
+            type: type == 'proteins'
+                ? 'proteins'
+                : type == 'carbs'
+                ? 'carbs'
+                : 'fats',
+          );
+          // controller.updateDiaryDataLocally(item.randomId!,food, food.qty!, type: type);
         }
       } else {
-        controller.updateProtineData(item.id, food, food.qty!, type: type);
+        controller.updateProtineData(item.id, food, food.qty!, type: type == 'proteins'
+        ? 'proteins'
+            : type == 'carbs'
+        ? 'carbs'
+            : 'fats',);
       }
     }
     FocusScope.of(Get.context!).requestFocus(FocusNode());

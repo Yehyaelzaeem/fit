@@ -133,20 +133,31 @@ class DiaryController extends GetxController {
         await ApiProvider().createOtherCaloriesData();
 
         await ApiProvider().sendSavedDiaryDataByDay();
+        await ApiProvider().sendSavedSleepTimes();
         await ApiProvider().sendDeleteCalorie();
         await ApiProvider().sendDeleteOtherCalorie();
+        getDiaryData(
+              lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+                  .now().toString().substring(0, 10),isSending);
+        // refreshDiaryDataLive(
+        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+        //         .now().toString().substring(0, 10)).then((value){
+          refreshDiaryData(apiDate.value, 'proteins');
+          refreshDiaryData(apiDate.value, 'carbs');
+          refreshDiaryData(apiDate.value, 'fats');
+        //
+        // });
         // You can add additional methods to send other saved data if needed
         // await controllerTimeSleep.sendSavedSleepTimes();
-        await ApiProvider().sendSavedSleepTimes();
         await ApiProvider().createUsualMealData();
         await ApiProvider().sendDeleteUsualMeal();
         isSending = false;
-        getDiaryData(
-            lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-                .now().toString().substring(0, 10),true);
-        // refreshDiaryDataLive(
+        // getDiaryData(
         //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //         .now().toString().substring(0, 10));
+        //         .now().toString().substring(0, 10),isSending);
+        refreshDiaryDataLive(
+            lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+                .now().toString().substring(0, 10));
 
         // refreshDiaryData(apiDate.value, 'proteins');
 
@@ -238,8 +249,9 @@ class DiaryController extends GetxController {
               : response.value.data!.dayWorkouts!.workoutType!;
           waterBottlesList.clear();
 
-          // print('response.value.data!.days![0].date');
-          // print(response.value.data!.days![0].date);
+          print('response.value.data!.days![0].date');
+          print(response.value.data!.days![0].date);
+          print(response.value.data!.days![1].date);
           if(response.value.data!.days![0].date != DateTime.now().toString().substring(0,10)){
             String date = DateTime.now().toString().substring(0,10);
             List<Days> newDays= List.generate(3, (index){
@@ -280,12 +292,14 @@ class DiaryController extends GetxController {
           } else {
             isToday.value = false;
           }
+          print('Update');
           for (int i = 0; i < response.value.data!.days!.length; i++) {
             if (response.value.data!.days![i].active == true) {
               date.value = response.value.data!.days![i].dateFormat!;
               apiDate.value = response.value.data!.days![i].date!;
             } else {}
           }
+
 
           for (int i = 1; i <= length.value; i++) {
             if (i <= response.value.data!.water!) {
@@ -488,7 +502,7 @@ class DiaryController extends GetxController {
     if (type == 'fats') refreshLoadingFats.value = false;
   }
 
-  void refreshDiaryDataLive(String _date) async {
+  Future refreshDiaryDataLive(String _date) async {
     Echo('refreshDiaryData');
     // if (type == 'proteins') refreshLoadingProtine.value = true;
     // if (type == 'carbs') refreshLoadingCarbs.value = true;
@@ -496,7 +510,7 @@ class DiaryController extends GetxController {
     lastSelectedDate.value = _date;
 
     // await checkDeletion();
-    response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,!isSending,false,true);
+    response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,true,false,true);
 
     if (response.value.data!.proteins!.caloriesDetails!.isEmpty &&
         response.value.data!.carbs!.caloriesDetails!.isEmpty &&
