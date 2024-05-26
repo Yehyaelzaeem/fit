@@ -94,7 +94,7 @@ class UsualView extends GetView<UsualController> {
                     ),
                     Obx(() {
                       return Expanded(
-                          child: controller.mealsResponse.value.data!.isEmpty
+                          child: controller.mealsResponse.value.data==null||controller.mealsResponse.value.data!.isEmpty
                               ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,

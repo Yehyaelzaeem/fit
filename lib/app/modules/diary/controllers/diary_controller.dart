@@ -32,7 +32,7 @@ class DiaryController extends GetxController {
 
   final response = DayDetailsResponse().obs;
   FocusNode workoutTitleDescFocus = FocusNode();
-  final isLoading = false.obs;
+  final isLoading = true.obs;
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
   final refreshLoadingFats = false.obs;
@@ -130,21 +130,20 @@ class DiaryController extends GetxController {
         // Fluttertoast.showToast(msg: "Connecting to live",toastLength: Toast.LENGTH_LONG);
 
         // If internet connection is available, send saved diary data
+        isLoading.value =  true;
         await ApiProvider().createOtherCaloriesData();
 
         await ApiProvider().sendSavedDiaryDataByDay();
         await ApiProvider().sendSavedSleepTimes();
         await ApiProvider().sendDeleteCalorie();
         await ApiProvider().sendDeleteOtherCalorie();
-        getDiaryData(
-              lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-                  .now().toString().substring(0, 10),isSending);
+        // getDiaryData(
+        //       lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+        //           .now().toString().substring(0, 10),isSending);
         // refreshDiaryDataLive(
         //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
         //         .now().toString().substring(0, 10)).then((value){
-          refreshDiaryData(apiDate.value, 'proteins');
-          refreshDiaryData(apiDate.value, 'carbs');
-          refreshDiaryData(apiDate.value, 'fats');
+
         //
         // });
         // You can add additional methods to send other saved data if needed
@@ -152,15 +151,22 @@ class DiaryController extends GetxController {
         await ApiProvider().createUsualMealData();
         await ApiProvider().sendDeleteUsualMeal();
         isSending = false;
-        // getDiaryData(
-        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //         .now().toString().substring(0, 10),isSending);
-        refreshDiaryDataLive(
+        getDiaryData(
             lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-                .now().toString().substring(0, 10));
+                .now().toString().substring(0, 10),isSending);
+        // refreshDiaryDataLive(
+        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+        //         .now().toString().substring(0, 10));
+        // refreshDiaryData(apiDate.value, 'proteins');
+        // refreshDiaryData(apiDate.value, 'carbs');
+        // refreshDiaryData(apiDate.value, 'fats');
 
         // refreshDiaryData(apiDate.value, 'proteins');
 
+      }else{
+        // getDiaryData(
+        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+        //         .now().toString().substring(0, 10),false);
       }
     });
   }
@@ -183,27 +189,36 @@ class DiaryController extends GetxController {
       // getDiaryData(DateTime.now().toString().substring(0, 10));
 
     } else {
-      getDiaryData(DateTime.now().toString().substring(0, 10),isSending);
+      final result = await Connectivity().checkConnectivity();
+      if (result == ConnectivityResult.none){
+        getDiaryData(DateTime.now().toString().substring(0, 10),isSending);
+
+      }
     }
   }
 
   void getDiaryDataRefreshResponse(String _date) async {
-    isLoading.value = true;
-    try {
-      await ApiProvider().getDiaryView(_date,!isSending,false,true).then((value) {
-        if (value.success == false && value.data == null) {
-          noSessions.value = true;
-        } else {
-          response.value = value;
-        }
-        if(isToday.value){
-          ApiProvider().getDiaryView(response.value.data!.days![1].date!.toString(),!isSending,false,true);
-        }else{
-          ApiProvider().getDiaryView(response.value.data!.days![0].date!.toString(),!isSending,false,true);
-        }
-      });
-    } catch (e) {}
-    isLoading.value = false;
+    if(isToday.value){
+      ApiProvider().getDiaryView(response.value.data!.days![1].date!.toString(),!isSending,false,true);
+    }else{
+      ApiProvider().getDiaryView(response.value.data!.days![0].date!.toString(),!isSending,false,true);
+    }
+    // isLoading.value = true;
+    // try {
+    //   await ApiProvider().getDiaryView(_date,!isSending,false,true).then((value) {
+    //     if (value.success == false && value.data == null) {
+    //       noSessions.value = true;
+    //     } else {
+    //       response.value = value;
+    //     }
+    //     if(isToday.value){
+    //       ApiProvider().getDiaryView(response.value.data!.days![1].date!.toString(),!isSending,false,true);
+    //     }else{
+    //       ApiProvider().getDiaryView(response.value.data!.days![0].date!.toString(),!isSending,false,true);
+    //     }
+    //   });
+    // } catch (e) {}
+    // isLoading.value = false;
   }
 
   void getDiaryData(String _date,bool isSending) async {
@@ -221,6 +236,10 @@ class DiaryController extends GetxController {
     carbsDetails.clear();
     fatsDetails.clear();
     Echo("====> Gittng Day $_date Info ");
+
+    if(sendingOffline == true){
+      await Future.delayed(Duration(seconds: 3));
+    }
 
     await ApiProvider().getDiaryView(_date,!isSending,false,true).then((value) async{
       if (value.success == false && value.data == null) {
@@ -249,9 +268,9 @@ class DiaryController extends GetxController {
               : response.value.data!.dayWorkouts!.workoutType!;
           waterBottlesList.clear();
 
-          print('response.value.data!.days![0].date');
-          print(response.value.data!.days![0].date);
-          print(response.value.data!.days![1].date);
+          // print('response.value.data!.days![0].date');
+          // print(response.value.data!.days![0].date);
+          // print(response.value.data!.days![1].date);
           if(response.value.data!.days![0].date != DateTime.now().toString().substring(0,10)){
             String date = DateTime.now().toString().substring(0,10);
             List<Days> newDays= List.generate(3, (index){

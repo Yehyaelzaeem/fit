@@ -205,7 +205,7 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
   Future addMealToDiary({required int mealId,required MealData? meal}) async {
     final result = await Connectivity().checkConnectivity();
 
-    if (result != ConnectivityResult.none) {
+    if (false) {
       await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
         if (value.success == true) {
           Get.find<DiaryController>(tag: 'diary').getDiaryData(lastSelectedDate.value,false);
@@ -224,6 +224,7 @@ class UsualController extends GetxController with SingleGetTickerProviderMixin {
       meal?.fats?.items?.forEach((element) async{
         controllerDiary.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'fats');
       });
+      Fluttertoast.showToast(fontSize: 10, msg: "Meal is added to diary successfully");
 
     }
 

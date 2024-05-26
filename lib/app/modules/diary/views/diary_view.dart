@@ -776,6 +776,7 @@ class DiaryView extends GetView<DiaryController> {
 
             if (result == null) {
 
+                controller.getDiaryData(controller.lastSelectedDate.value,false);
                 controller.getDiaryDataRefreshResponse(controller.lastSelectedDate.value);
             }
             FocusScope.of(Get.context!).requestFocus(FocusNode());

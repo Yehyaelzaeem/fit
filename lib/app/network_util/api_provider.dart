@@ -57,7 +57,7 @@ import '../utils/translations/strings.dart';
 
 DateTime? loadingSessions;
 DateTime? loadingHome;
-
+bool sendingOffline = false;
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
 
@@ -526,6 +526,8 @@ class ApiProvider {
   }
 
   Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave,bool isLive) async {
+
+   print(0900);
     final result = await Connectivity().checkConnectivity();
     DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
 
@@ -535,6 +537,7 @@ class ApiProvider {
     Response response = await _utils.get("calories_day_details?date=$date");
     log('api->calories_day_details?date=$date');
     log('response ${response.data}');
+    print('12response ${response.data}');
     if (response.data["success"] == true) {
       if(dayDetailsResponseTemp==null){
         saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
@@ -1659,133 +1662,148 @@ class ApiProvider {
 //   }
 
   Future<void> sendSavedDiaryDataByDay() async {
-    Map<String, dynamic> existingData = await readDairyToSendLocally();
-    DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true,true);
-    List<DiaryEntry> dairySendList= [];
+    if(!sendingOffline) {
+      sendingOffline = true;
+      Map<String, dynamic> existingData = await readDairyToSendLocally();
+      DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(
+          DateTime.now().toString().substring(0, 10), true, true, true);
+      List<DiaryEntry> dairySendList = [];
 
-    for (var key in existingData.keys) {
-      print ("Sending local key $key");
-      DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(existingData[key]);
-      dairySendList.add(
-          DiaryEntry(date: key, water: dayDetailsToSend.data!.water??0, food: [], qty: [], createdAt: [])
-      );
-      if(dayDetailsToSend.data!.water!=null){
-        dairySendList.firstWhere((element) => element.date==key).water = dayDetailsToSend.data!.water!;
-      }
-      if(dayDetailsToSend.data!.dayWorkouts!=null){
-        dairySendList.firstWhere((element) => element.date==key).workout = dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title==dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
-        dairySendList.firstWhere((element) => element.date==key).workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
-            ? " "
-            : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
-      }
-      dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
-        if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
-        element.title == item.quality)) {
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .food
-              .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
-              element) => element.title == item.quality).id!);
-
-
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .qty
-              .add(item.qty!);
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .createdAt
-              .add(item.createdAt??DateTime.now().toString().substring(0,16));
-
-        }
-
-      });
-      dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
-        if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
-        element.title == item.quality)) {
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .food
-              .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
-              element) => element.title == item.quality).id!);
-
-
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .qty
-              .add(item.qty!);
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .createdAt
-              .add(item.createdAt??DateTime.now().toString().substring(0,16));
-
-        }
-
-      });
-
-      dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
-        if (dayDetailsResponse.data!.fats!.food!.any((element) =>
-        element.title == item.quality)) {
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .food
-              .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
-              element) => element.title == item.quality).id!);
-
-
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .qty
-              .add(item.qty!);
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .createdAt
-              .add(item.createdAt??DateTime.now().toString().substring(0,16));
-
-        }
-
-      });
-
-    }
-
-
-    for (DiaryEntry entry in dairySendList) {
-      var formData = FormData.fromMap({
-        'date': entry.date,
-        'water': entry.water,
-        if(entry.workout!=null)
-          'workout': entry.workout??'',
-        if(entry.workout!=null)
-          'workout_desc': entry.workoutDesc??'',
-      });
-      for(int i=0;i<entry.food.length;i++){
-        formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
-        formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
-        formData.fields.add(MapEntry('created_at[$i]', entry.createdAt[i].toString()));
-      }
-      print('formData.fields');
-      print(formData.fields);
-
-      try {
-        Echo("api--> save_offline_diary");
-        Response response = await _utils.post(
-          "save_offline_diary",
-          body: formData,
+      for (var key in existingData.keys) {
+        print("Sending local key $key");
+        DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(
+            existingData[key]);
+        dairySendList.add(
+            DiaryEntry(date: key,
+                water: dayDetailsToSend.data!.water ?? 0,
+                food: [],
+                qty: [],
+                createdAt: [])
         );
-
-        print(response.data);
-        if (response.data["success"] == true) {
-          // Remove the successfully sent entry from local storage
+        if (dayDetailsToSend.data!.water != null) {
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .water = dayDetailsToSend.data!.water!;
         }
-      } catch (e) {
-        // Handle the error, maybe break the loop or log the error
-        print("Error sending diary entry: $e");
+        if (dayDetailsToSend.data!.dayWorkouts != null) {
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .workout =
+          dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title ==
+              dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+          dairySendList
+              .firstWhere((element) => element.date == key)
+              .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
+              ? " "
+              : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+        }
+        dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
+          if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
+          element.title == item.quality)) {
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .food
+                .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
+                element) => element.title == item.quality).id!);
+
+
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .qty
+                .add(item.qty!);
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .createdAt
+                .add(
+                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+          }
+        });
+        dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
+          if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
+          element.title == item.quality)) {
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .food
+                .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
+                element) => element.title == item.quality).id!);
+
+
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .qty
+                .add(item.qty!);
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .createdAt
+                .add(
+                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+          }
+        });
+
+        dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
+          if (dayDetailsResponse.data!.fats!.food!.any((element) =>
+          element.title == item.quality)) {
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .food
+                .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
+                element) => element.title == item.quality).id!);
+
+
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .qty
+                .add(item.qty!);
+            dairySendList
+                .firstWhere((element) => element.date == key)
+                .createdAt
+                .add(
+                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+          }
+        });
       }
+
+
+      for (DiaryEntry entry in dairySendList) {
+        var formData = FormData.fromMap({
+          'date': entry.date,
+          'water': entry.water,
+          if(entry.workout != null)
+            'workout': entry.workout ?? '',
+          if(entry.workout != null)
+            'workout_desc': entry.workoutDesc ?? '',
+        });
+        for (int i = 0; i < entry.food.length; i++) {
+          formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
+          formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
+          formData.fields.add(
+              MapEntry('created_at[$i]', entry.createdAt[i].toString()));
+        }
+        print('formData.fields');
+        print(formData.fields);
+
+        try {
+          Echo("api--> save_offline_diary");
+          Response response = await _utils.post(
+            "save_offline_diary",
+            body: formData,
+          );
+
+          print(response.data);
+          if (response.data["success"] == true) {
+            // Remove the successfully sent entry from local storage
+          }
+        } catch (e) {
+          // Handle the error, maybe break the loop or log the error
+          print("Error sending diary entry: $e");
+        }
+      }
+
+      sendingOffline = false;
+      await SharedHelper().removeData(CachingKey.DAIRY_TO_SEND);
+    }else{
+      await Future.delayed(Duration(seconds: 3));
     }
-
-
-    await SharedHelper().removeData(CachingKey.DAIRY_TO_SEND);
-
   }
 
 
