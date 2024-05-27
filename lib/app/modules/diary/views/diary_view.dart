@@ -590,6 +590,7 @@ class DiaryView extends GetView<DiaryController> {
 
 
           if (result != ConnectivityResult.none) {
+            print('GetDairyData } todayYEs');
             controller
                 .getDiaryData(
                 controller.response.value.data!.days![0].date!, isSending);

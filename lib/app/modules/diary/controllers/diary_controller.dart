@@ -106,11 +106,11 @@ class DiaryController extends GetxController {
       await ApiProvider().getOtherCaloriesUnit();
       print("Load First");
       await ApiProvider().saveLastLoadingTime(DateTime.now());
-      if (response.value.data == null) {
-        getDiaryData(
-            lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-                .now().toString().substring(0, 10),isSending);
-      }
+      // if (response.value.data == null) {
+      //   getDiaryData(
+      //       lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+      //           .now().toString().substring(0, 10),isSending);
+      // }
 
     }else{
       // if(otherLoaded==null ||otherLoaded!.isBefore(DateTime.now().subtract(Duration(seconds: 90)))){
@@ -135,8 +135,8 @@ class DiaryController extends GetxController {
 
         await ApiProvider().sendSavedDiaryDataByDay();
         await ApiProvider().sendSavedSleepTimes();
-        await ApiProvider().sendDeleteCalorie();
-        await ApiProvider().sendDeleteOtherCalorie();
+        // await ApiProvider().sendDeleteCalorie();
+        // await ApiProvider().sendDeleteOtherCalorie();
         // getDiaryData(
         //       lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
         //           .now().toString().substring(0, 10),isSending);
@@ -148,8 +148,8 @@ class DiaryController extends GetxController {
         // });
         // You can add additional methods to send other saved data if needed
         // await controllerTimeSleep.sendSavedSleepTimes();
-        await ApiProvider().createUsualMealData();
-        await ApiProvider().sendDeleteUsualMeal();
+        // await ApiProvider().createUsualMealData();
+        // await ApiProvider().sendDeleteUsualMeal();
         isSending = false;
         getDiaryData(
             lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
@@ -347,6 +347,7 @@ class DiaryController extends GetxController {
           }
           response.value = value;
           isLoading.value = false;
+          print("Not Loading");
           showLoader.value = false;
           date.value = _date;
           Echo("error");

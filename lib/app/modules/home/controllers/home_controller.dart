@@ -54,18 +54,18 @@ class HomeController extends GetxController {
     cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
     faqStatus = await ApiProvider().getFaqStatus();
     if(isLogggd.value)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-      final controllerDiary = Get.find<DiaryController>(tag: 'diary');
-
-      await ApiProvider().sendSavedDiaryDataByDay();
-      await ApiProvider().sendSavedSleepTimes();
-
-      controllerDiary.getDiaryData(
-        controllerDiary.lastSelectedDate.value != '' ? controllerDiary.lastSelectedDate.value : DateTime
-            .now().toString().substring(0, 10),true);
-
-    }
+    // final result = await Connectivity().checkConnectivity();
+    // if (result != ConnectivityResult.none) {
+    //   final controllerDiary = Get.find<DiaryController>(tag: 'diary');
+    //
+    //   await ApiProvider().sendSavedDiaryDataByDay();
+    //   await ApiProvider().sendSavedSleepTimes();
+    //
+    //   controllerDiary.getDiaryData(
+    //     controllerDiary.lastSelectedDate.value != '' ? controllerDiary.lastSelectedDate.value : DateTime
+    //         .now().toString().substring(0, 10),true);
+    //
+    // }
 
     if (homeResponse.value.success == false && homeResponse.value.code == 401) {
       SharedHelper().logout();
