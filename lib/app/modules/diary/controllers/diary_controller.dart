@@ -855,7 +855,7 @@ class DiaryController extends GetxController {
       response.value.data!.proteins!.caloriesTotal!.taken = 0.0.toStringAsFixed(2);
     }
     response.value.data!.proteins!.caloriesTotal!.taken = response.value.data!.proteins!
-        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString())).toStringAsFixed(2);
+        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString().replaceAll(',', ''))).toStringAsFixed(2);
     response.value.data!.proteins!.caloriesTotal!.progress?.percentage = (double.parse(response.value.data!.proteins!.caloriesTotal!.taken.toString())/double.parse(response.value.data!.proteins!.caloriesTotal!.imposed.toString()))*100.toInt();
     if(response.value.data!.proteins!.caloriesTotal!.progress?.percentage <100){
       response.value.data!.proteins!.caloriesTotal!.progress!.bg = '4169E1';
@@ -872,7 +872,7 @@ class DiaryController extends GetxController {
       response.value.data!.carbs!.caloriesTotal!.taken = 0.0.toStringAsFixed(2);
     }
     response.value.data!.carbs!.caloriesTotal!.taken = response.value.data!.carbs!
-        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString())).toStringAsFixed(2);
+        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString().replaceAll(',', ''))).toStringAsFixed(2);
 
     response.value.data!.carbs!.caloriesTotal!.progress?.percentage = (double.parse(response.value.data!.carbs!.caloriesTotal!.taken.toString())/double.parse(response.value.data!.carbs!.caloriesTotal!.imposed.toString()))*100.toInt();
     if(response.value.data!.carbs!.caloriesTotal!.progress?.percentage <100){
@@ -891,7 +891,7 @@ class DiaryController extends GetxController {
       response.value.data!.fats!.caloriesTotal!.taken = 0.0.toStringAsFixed(2);
     }
     response.value.data!.fats!.caloriesTotal!.taken = response.value.data!.fats!
-        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString())).toStringAsFixed(2);
+        .caloriesDetails!.fold(0.0, (previousValue, element) => previousValue+ double.parse(element.calories.toString().replaceAll(',', ''))).toStringAsFixed(2);
 
     response.value.data!.fats!.caloriesTotal!.progress?.percentage = (double.parse(response.value.data!.fats!.caloriesTotal!.taken.toString())/double.parse(response.value.data!.fats!.caloriesTotal!.imposed.toString()))*100.toInt();
     if(response.value.data!.fats!.caloriesTotal!.progress?.percentage <100){
