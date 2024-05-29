@@ -734,13 +734,13 @@ class DiaryView extends GetView<DiaryController> {
       children: [
         InkWell(
           onTap: () {
-            ApiProvider().sendSavedDiaryDataByDay().then((value){
-
-              controller.getDiaryData(
-                  controller.lastSelectedDate.value != '' ? controller.lastSelectedDate.value : DateTime
-                      .now().toString().substring(0, 10),true);
-            });
-            ApiProvider().sendSavedSleepTimes();
+            // ApiProvider().sendSavedDiaryDataByDay().then((value){
+            //
+            //   controller.getDiaryData(
+            //       controller.lastSelectedDate.value != '' ? controller.lastSelectedDate.value : DateTime
+            //           .now().toString().substring(0, 10),true);
+            // });
+            // ApiProvider().sendSavedSleepTimes();
 
             Get.put(UsualController(), tag: "usual");
             Get.toNamed(Routes.USUAL)!.then((value) => controller.getDiaryData(
