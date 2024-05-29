@@ -862,7 +862,7 @@ class DiaryController extends GetxController {
     }else if(response.value.data!.proteins!.caloriesTotal!.progress?.percentage >100){
       response.value.data!.proteins!.caloriesTotal!.progress!.bg = 'f00000';
     }
-    if((double.parse(response.value.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.proteins!.caloriesTotal!.taken.toString()))<50 && (double.parse(response.value.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.proteins!.caloriesTotal!.taken.toString()))>-25){
+    if((double.parse(response.value.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.proteins!.caloriesTotal!.taken.toString()))<=50 && (double.parse(response.value.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.proteins!.caloriesTotal!.taken.toString()))>=-25){
       response.value.data!.proteins!.caloriesTotal!.progress!.bg = '7fc902';
     }
   }
@@ -881,7 +881,7 @@ class DiaryController extends GetxController {
       response.value.data!.carbs!.caloriesTotal!.progress!.bg = 'f00000';
     }
 
-    if((double.parse(response.value.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.carbs!.caloriesTotal!.taken.toString()))<50 && (double.parse(response.value.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.carbs!.caloriesTotal!.taken.toString()))>-25){
+    if((double.parse(response.value.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.carbs!.caloriesTotal!.taken.toString()))<=50 && (double.parse(response.value.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.carbs!.caloriesTotal!.taken.toString()))>=-25){
       response.value.data!.carbs!.caloriesTotal!.progress!.bg = '7fc902';
     }
   }
@@ -900,7 +900,7 @@ class DiaryController extends GetxController {
       response.value.data!.fats!.caloriesTotal!.progress!.bg = 'f00000';
     }
 
-    if((double.parse(response.value.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.fats!.caloriesTotal!.taken.toString()))<50 && (double.parse(response.value.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.fats!.caloriesTotal!.taken.toString()))>-25){
+    if((double.parse(response.value.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.fats!.caloriesTotal!.taken.toString()))<=50 && (double.parse(response.value.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(response.value.data!.fats!.caloriesTotal!.taken.toString()))>=-25){
       response.value.data!.fats!.caloriesTotal!.progress!.bg = '7fc902';
     }
   }
