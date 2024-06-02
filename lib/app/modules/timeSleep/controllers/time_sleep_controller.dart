@@ -124,6 +124,7 @@ class TimeSleepController extends GetxController {
 
     SleepingTimesResponse? sleepingTimesResponse = await ApiProvider().readSleepingTimesLocally();
 
+    if(sleepingTimesResponse!=null){
     for (int i=0; i<sleepingTimesResponse!.data!.length;i++) {
       if (totalMinutes >= sleepingTimesResponse.data![i].from * 60 && totalMinutes < sleepingTimesResponse.data![i].to * 60) {
         return SleepingStatus(
@@ -131,6 +132,19 @@ class TimeSleepController extends GetxController {
           name: sleepingTimesResponse.data![i].name,
           image: sleepingTimesResponse.data![i].image,
         );
+      }
+    }}else{
+      print("plan2");
+      await ApiProvider().getSleepingTimesData();
+      sleepingTimesResponse = await ApiProvider().readSleepingTimesLocally();
+      for (int i=0; i<sleepingTimesResponse!.data!.length;i++) {
+        if (totalMinutes >= sleepingTimesResponse.data![i].from * 60 && totalMinutes < sleepingTimesResponse.data![i].to * 60) {
+          return SleepingStatus(
+            id: sleepingTimesResponse.data![i].id,
+            name: sleepingTimesResponse.data![i].name,
+            image: sleepingTimesResponse.data![i].image,
+          );
+        }
       }
     }
 

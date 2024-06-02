@@ -218,13 +218,16 @@ class ApiProvider {
   }
 
   Future<SleepingTimesResponse> getSleepingTimesData() async {
+    print("sleeping_times");
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
       Response response = await _utils.get("sleeping_times");
       if (response.statusCode == 200) {
+        print(response.data);
         saveSleepingTimesLocally(SleepingTimesResponse.fromJson(response.data));
         return SleepingTimesResponse.fromJson(response.data);
       } else {
+        print(response.data);
         saveSleepingTimesLocally(SleepingTimesResponse.fromJson(response.data));
         return SleepingTimesResponse.fromJson(response.data);
       }
@@ -237,11 +240,13 @@ class ApiProvider {
   }
   // Function to save Sleep Times data locally
   Future<void> saveSleepingTimesLocally(SleepingTimesResponse sleepingTimesResponse) async {
+    print('aaaaaa');
     await SharedHelper().writeData(CachingKey.SLEEPING_TIMES, jsonEncode(sleepingTimesResponse.toJson()));
   }
   Future<SleepingTimesResponse?> readSleepingTimesLocally() async {
     String? home = await SharedHelper().readString(CachingKey.SLEEPING_TIMES);
-    if(home!=null){
+    print("home$home home");
+    if(home!=null&&home!=''){
       return SleepingTimesResponse.fromJson(jsonDecode(home));
     }else{
       return null;

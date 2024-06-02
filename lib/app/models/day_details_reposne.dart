@@ -18,7 +18,7 @@ class DayDetailsResponse {
     data['code'] = this.code;
     data['success'] = this.success;
     data['message'] = this.message;
-    data['data'] = this.data!.toJson();
+    data['data'] = this.data?.toJson();
     return data;
   }
 }
