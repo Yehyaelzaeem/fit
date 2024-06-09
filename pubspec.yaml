@@ -1,5 +1,5 @@
 name: app
-version: 2.2.21+41
+version: 2.2.22+42
 publish_to: none
 description: A new project create by md.hurab@gmail.com .
 environment:
@@ -33,7 +33,7 @@ dependencies:
   flutter_cached_pdfview: ^0.4.1
   path_provider: ^2.0.4
   permission_handler: any
-  flutter_local_notifications: ^16.3.2
+  flutter_local_notifications: ^17.1.2
   flutter_math_fork: ^0.7.2
   google_maps_flutter: ^2.0.0
   map_picker: ^0.0.3

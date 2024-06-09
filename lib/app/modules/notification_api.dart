@@ -120,6 +120,88 @@ await _notifications.initialize(settings,
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
       );
 
+
+  static Future<void> scheduleDailyNotifications() async {
+    // final List<int> notificationTimes = [
+    //   19,
+    //   21,
+    //   11, // 11:00 AM
+    //   14, // 2:00 PM
+    //   17, // 5:00 PM
+    //   20, // 8:00 PM
+    // ];
+
+    // for (int i = 0; i < notificationTimes.length; i++) {
+    //   await showScheduledNotificationAtTime(
+    //     id: i, // Ensure each notification has a unique ID
+    //     time: notificationTimes[i],
+    //   );
+    // }
+  }
+
+  static Future<void> showScheduledNotificationAtTime({
+    // required int id,
+    // required int time,
+    String? payLoad,
+  }) async {
+
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+    if (DateTime.now().hour >= 11 && DateTime.now().hour <= 20) {
+      for (int i = 0; i < 24; i += 3) {
+
+        final tz.TZDateTime scheduledTime = now.add(Duration(minutes: i));
+
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+
+          DateTime.now().hour + DateTime.now().minute + DateTime.now().second,
+          ' 💧 Water 💧 ',
+          "Do not forget to drink water",
+          scheduledTime,
+          await _notificationDetails(),
+          payload: payLoad,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: DateTimeComponents.time,
+        );
+      }
+    }
+
+
+
+
+    // final tz.TZDateTime scheduledDate = await _nextInstanceOfTime(time);
+    //
+    // print('scheduledDate');
+    // print(scheduledDate.toString());
+    //
+    // await _notifications.zonedSchedule(
+    //   id,
+    //   ' 💧 Water 💧 ',
+    //   "Do not forget to drink water",
+    //   scheduledDate,
+    //   await _notificationDetails(),
+    //   payload: payLoad,
+    //   androidAllowWhileIdle: true,
+    //   uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+    //   matchDateTimeComponents: DateTimeComponents.time,
+    // );
+  }
+
+  static tz.TZDateTime _nextInstanceOfTime(int time) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(tz.local, now.year, now.month, now.day, time, 30, 0);
+
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    return scheduledDate;
+  }
+
   static tz.TZDateTime _scheduleDaily(TimeInterval time) {
     final now = tz.TZDateTime.now(tz.local);
     final scheduleDate = tz.TZDateTime(
@@ -127,8 +209,8 @@ await _notifications.initialize(settings,
       now.year,
       now.month,
       now.day,
-      //time.hour,
-      //time.minute,
+      time.value,
+     //  time.minute,
      // time.second,
     );
     return scheduleDate.isBefore(now)
@@ -141,6 +223,8 @@ await _notifications.initialize(settings,
     while (!days.contains(scheduleDate.weekday)) {
       scheduleDate = scheduleDate.add(Duration(days: 1));
     }
+    print('scheduleDate.toUtc()');
+    print(scheduleDate.toUtc());
     return scheduleDate.toLocal();
   }
 }

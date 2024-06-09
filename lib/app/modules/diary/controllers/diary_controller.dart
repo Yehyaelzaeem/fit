@@ -16,6 +16,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../login/views/login_view.dart';
 DateTime? otherLoaded;
 bool isSending = false;
 class DiaryController extends GetxController {
@@ -74,18 +75,32 @@ class DiaryController extends GetxController {
     });
   }
 
+  bool isOnInit = false;
+
   @override
   void onInit() async{
     super.onInit();
-    isSending = true;
-    if(lastSelectedDate.value==''){
-      lastSelectedDate.value=DateTime.now().toString().substring(0, 10);
-    }
+    if(!isOnInit) {
+      isOnInit = true;
+      isSending = true;
+      if (lastSelectedDate.value == '') {
+        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+      }
 
-    getNotifications();
-    getFromCash();
-    await viewCachedRequests();
-    loadData();
+      getNotifications();
+      getFromCash();
+      await viewCachedRequests();
+      await loadData();
+      isOnInit = false;
+      // isLoading.value = false;
+      // if(iSLoggedNow) {
+      //   isLoading.value = true;
+      //   await Future.delayed(Duration(seconds: 10));
+      //   isLoading.value = false;
+      // }
+    }else{
+
+    }
     //   _initData();
   }
 
@@ -125,50 +140,22 @@ class DiaryController extends GetxController {
   }
   Future viewCachedRequests()async{
 // Listen for connectivity changes
-    Connectivity().onConnectivityChanged.listen((ConnectivityResult result) async {
-      if (result != ConnectivityResult.none) {
-        // Fluttertoast.showToast(msg: "Connecting to live",toastLength: Toast.LENGTH_LONG);
 
-        // If internet connection is available, send saved diary data
-        isLoading.value =  true;
-        await ApiProvider().createOtherCaloriesData();
+    final result = await Connectivity().checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      isLoading.value =  true;
+      await ApiProvider().createOtherCaloriesData();
 
-        await ApiProvider().sendSavedDiaryDataByDay();
-        await ApiProvider().sendSavedSleepTimes();
-        // await ApiProvider().sendDeleteCalorie();
-        // await ApiProvider().sendDeleteOtherCalorie();
-        // getDiaryData(
-        //       lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //           .now().toString().substring(0, 10),isSending);
-        // refreshDiaryDataLive(
-        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //         .now().toString().substring(0, 10)).then((value){
+      await ApiProvider().sendSavedDiaryDataByDay();
+      await ApiProvider().sendSavedSleepTimes();
+      isSending = false;
+      await getDiaryData(
+          lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
+              .now().toString().substring(0, 10),isSending);
+      isLoading.value =  false;
 
-        //
-        // });
-        // You can add additional methods to send other saved data if needed
-        // await controllerTimeSleep.sendSavedSleepTimes();
-        // await ApiProvider().createUsualMealData();
-        // await ApiProvider().sendDeleteUsualMeal();
-        isSending = false;
-        getDiaryData(
-            lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-                .now().toString().substring(0, 10),isSending);
-        // refreshDiaryDataLive(
-        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //         .now().toString().substring(0, 10));
-        // refreshDiaryData(apiDate.value, 'proteins');
-        // refreshDiaryData(apiDate.value, 'carbs');
-        // refreshDiaryData(apiDate.value, 'fats');
 
-        // refreshDiaryData(apiDate.value, 'proteins');
-
-      }else{
-        // getDiaryData(
-        //     lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-        //         .now().toString().substring(0, 10),false);
-      }
-    });
+    }
   }
 
 
@@ -221,7 +208,7 @@ class DiaryController extends GetxController {
     // isLoading.value = false;
   }
 
-  void getDiaryData(String _date,bool isSending) async {
+  Future getDiaryData(String _date,bool isSending) async {
     print("DATEDATE$_date");
     if(response.value.data!=null) {
       if (isLoading.value) return;
@@ -1196,7 +1183,7 @@ class DiaryController extends GetxController {
             qty: _quantity,
         quality: food.title,
         color: food.color,
-        calories: food.caloriePerUnit * _quantity,
+        calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
         unit: food.unit
     ));
     await calculateProteins();
@@ -1213,7 +1200,8 @@ class DiaryController extends GetxController {
             randomId: randomId,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit));
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit));
 
         await calculateCarbs();
 
@@ -1229,7 +1217,8 @@ class DiaryController extends GetxController {
             randomId: randomId,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit));
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit));
 
 
         await calculateFats();
@@ -1366,7 +1355,8 @@ class DiaryController extends GetxController {
           id: index,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit);
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit);
 
         await calculateProteins();
         await ApiProvider().saveDairyToSendLocally(response.value, apiDate.value);
@@ -1381,7 +1371,8 @@ class DiaryController extends GetxController {
             id: index,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit);
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit);
 
 
         await calculateCarbs();
@@ -1397,7 +1388,8 @@ class DiaryController extends GetxController {
             id: index,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit);
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit);
 
 
         await calculateFats();

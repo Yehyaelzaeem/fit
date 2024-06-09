@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+bool iSLoggedNow = false;
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
@@ -69,6 +70,7 @@ class _LoginViewState extends State<LoginView> {
           print("objectDairy");
           // await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10));
           controller.onInit();
+          iSLoggedNow = true;
 
         }
         bool isReggisterd2 = Get.isRegistered<HomeController>(tag: 'diary');
