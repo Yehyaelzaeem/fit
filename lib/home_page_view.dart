@@ -34,7 +34,7 @@ class _HomePageViewState extends State<HomePageView> {
   int serviceIndex = 0;
 
   void getHomeData() async {
-    await ApiProvider().getHomeData().then((value) {
+    await ApiProvider().getHomeData().then((value) async{
       if (value.success == true) {
         ress = value;
         isLoading = false;
@@ -42,10 +42,27 @@ class _HomePageViewState extends State<HomePageView> {
           homeSliderList.add(element.image!);
         });
         setState(() {});
-        print(homeSliderList);
         globalIsIosInReview = (ress.data!.subscriptionStatus == false);
       } else {
-        Fluttertoast.showToast(msg: "$value");
+        await ApiProvider().getHomeData(notLogged:true).then((value) {
+          if (value.success == true) {
+            ress = value;
+            isLoading = false;
+            ress.data!.slider!.forEach((element) {
+              homeSliderList.add(element.image!);
+            });
+            setState(() {});
+            globalIsIosInReview = (ress.data!.subscriptionStatus == false);
+          }else{
+
+            Fluttertoast.showToast(msg: "$value");
+            Fluttertoast.showToast(msg: "AAAXL");
+          }
+        });
+        // isLoading = false;
+        // setState(() {
+        //
+        // });
         print("error");
       }
     });

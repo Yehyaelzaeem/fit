@@ -1503,7 +1503,8 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             randomId: randomId,
-            calories: food.caloriePerUnit * _quantity,unit: food.unit);
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food.unit);
 
         await calculateProteins();
         await ApiProvider().saveDairyToSendLocally(response.value, apiDate.value);
@@ -1523,7 +1524,7 @@ class DiaryController extends GetxController {
               qty: _quantity,
               quality: food!.title,
               color: food.color,
-              calories: food.caloriePerUnit * _quantity,
+              calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
               randomId: randomId,
               unit: food.unit);
         }else{
@@ -1544,7 +1545,7 @@ class DiaryController extends GetxController {
               qty: _quantity,
               quality: food!.title,
               color: food.color,
-              calories: food.caloriePerUnit * _quantity,
+              calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
               unit: food.unit);
         }
 
@@ -1563,7 +1564,8 @@ class DiaryController extends GetxController {
             randomId: randomId,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit);
+            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            unit: food!.unit);
 
 
         await calculateFats();

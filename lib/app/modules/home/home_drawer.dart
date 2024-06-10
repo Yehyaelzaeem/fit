@@ -15,6 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../network_util/api_provider.dart';
 import 'controllers/home_controller.dart';
 
 class HomeDrawer extends GetView<HomeController> {
@@ -310,6 +311,7 @@ class HomeDrawer extends GetView<HomeController> {
                         cancelText: "No",
                         confirmAction: () {
                           prefs.logout();
+                          loadingHome=null;
                           Get.offAllNamed(Routes.SPLASH);
                         },
                         confirmText: "Yes",

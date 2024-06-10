@@ -78,6 +78,8 @@ class HomeBottomNavigationBar extends GetView<HomeController> {
           InkWell(
             onTap: () {
               textEditController.currentIndex.value = 1;
+              // final controllerHome = Get.find<HomeController>(tag: 'home');
+              // controllerHome.onInit();
             },
             child: Container(
               height: 60,

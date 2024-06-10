@@ -67,7 +67,7 @@ class HomeController extends GetxController {
     //
     // }
 
-    if (homeResponse.value.success == false && homeResponse.value.code == 401) {
+    if (homeResponse.value.success == false && (homeResponse.value.code == 200 || homeResponse.value.code == 401)) {
       SharedHelper().logout();
       Get.offAllNamed(Routes.SPLASH);
     }

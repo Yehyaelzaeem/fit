@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:notification_permissions/notification_permissions.dart';
@@ -17,10 +18,14 @@ import 'app/modules/invoice/controllers/invoice_controller.dart';
 import 'app/modules/subscribe/controllers/subscribe_controller.dart';
 import 'app/modules/usuals/controllers/usual_controller.dart';
 import 'app/routes/app_pages.dart';
-
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  tz.initializeTimeZones();
+  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone));
   // runAppSpector();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -65,11 +70,11 @@ void getFireBaseNotifications() {
   // while app is opened
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message whilst in the foreground!');
-    NotificationApi.showNotification(
-      id: 0,
-      title: message.notification?.title ?? "",
-      body: message.notification?.body ?? "",
-    );
+    // NotificationApi.showNotification(
+    //   id: 0,
+    //   title: message.notification?.title ?? "",
+    //   body: message.notification?.body ?? "",
+    // );
     if (message.notification != null) {
       print('Message also contained a notification: ${message.data}');
       print("message $message");

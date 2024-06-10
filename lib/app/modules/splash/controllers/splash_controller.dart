@@ -21,7 +21,8 @@ class SplashController extends GetxController
   initLocalNotification() {
     NotificationApi.init(isScheduled: true);
 
-    Future.delayed(Duration(seconds: 2),()=>    NotificationApi.scheduleDailyNotifications());
+
+    // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.scheduleDailyNotifications());
     NotificationApi.showScheduledNotificationAtTime();
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 2, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 5,));
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));

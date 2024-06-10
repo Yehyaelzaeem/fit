@@ -61,9 +61,9 @@ bool sendingOffline = false;
 class ApiProvider {
   NetworkUtil _utils = new NetworkUtil();
 
-  Future<HomePageResponse> getHomeData() async {
+  Future<HomePageResponse> getHomeData({bool notLogged = false}) async {
     final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none && (loadingHome==null||loadingHome!.isBefore(DateTime.now().subtract(Duration(minutes: 3))))) {
+    if ((result != ConnectivityResult.none && (loadingHome==null||loadingHome!.isBefore(DateTime.now().subtract(Duration(minutes: 6))))) || !notLogged) {
       Response response = await _utils.get("home");
       if (response.statusCode == 200) {
         loadingHome = DateTime.now();
@@ -85,7 +85,7 @@ class ApiProvider {
   }
   Future<HomePageResponse?> readHomeDataLocally() async {
     String? home = await SharedHelper().readString(CachingKey.HOME);
-    if(home!=null){
+    if(home!=null&& home!=''){
       return HomePageResponse.fromJson(jsonDecode(home));
     }else{
       return null;

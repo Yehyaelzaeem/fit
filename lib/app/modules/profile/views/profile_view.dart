@@ -1,6 +1,7 @@
 import 'package:app/app/data/database/shared_pref.dart';
 import 'package:app/app/models/user_response.dart';
 import 'package:app/app/modules/home/home_appbar.dart';
+import 'package:app/app/modules/notification_api.dart';
 import 'package:app/app/modules/profile/edit_profile_view.dart';
 import 'package:app/app/network_util/api_provider.dart';
 import 'package:app/app/routes/app_pages.dart';
@@ -356,6 +357,9 @@ class _ProfileViewState extends State<ProfileView> {
                               ],
                             ),
                           ),
+
+                    
+// ElevatedButton(onPressed: ()=> NotificationApi.showScheduledNotificationAtTime(), child: Text('alarm')),
 
                     if (ress.data!.showDeleteAccount!) SizedBox(height: 24),
                     if (ress.data!.showDeleteAccount!)
