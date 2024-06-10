@@ -117,10 +117,13 @@ class DiaryController extends GetxController {
       // await ApiProvider().getOrientationVideos();
       // await ApiProvider().getMessagesData();
       // await ApiProvider().getTransformationData();
-      await ApiProvider().getOtherCaloreis();
-      await ApiProvider().getOtherCaloriesUnit();
-      print("Load First");
-      await ApiProvider().saveLastLoadingTime(DateTime.now());
+      if(isLogged.value) {
+        await ApiProvider().getOtherCaloreis();
+        await ApiProvider().getOtherCaloriesUnit();
+
+        print("Load First");
+        await ApiProvider().saveLastLoadingTime(DateTime.now());
+      }
       // if (response.value.data == null) {
       //   getDiaryData(
       //       lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
@@ -162,11 +165,11 @@ class DiaryController extends GetxController {
   String _timezone = 'Unknown';
   List<String> _availableTimezones = <String>[];
 
-  final isLogggd = false.obs;
+  final isLogged = false.obs;
 
   void getFromCash() async {
-    isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    if (isLogggd.value != true) {
+    isLogged.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    if (isLogged.value != true) {
       // Navigator.pushAndRemoveUntil(
       //     Get.context!,
       //     MaterialPageRoute(
@@ -234,7 +237,7 @@ class DiaryController extends GetxController {
         //  noSessions.value = true;
         SharedHelper().logout();
         // Get.offAllNamed(Routes.LOGIN);
-        Fluttertoast.showToast(msg: "${value.message}");
+        // Fluttertoast.showToast(msg: "${value.message}");
       } else {
         if (value.data != null) {
 

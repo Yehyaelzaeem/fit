@@ -32,10 +32,10 @@ class DiaryView extends GetView<DiaryController> {
   Widget build(BuildContext context) {
     return Scaffold(
         drawer: Obx(() => Container(
-            key: Key('drawer_${controller.isLogggd.value}'),
+            key: Key('drawer_${controller.isLogged.value}'),
             child: HomeDrawer())),
         body: Obx(() {
-          if (!controller.isLogggd.value) return MainUnAuth();
+          if (!controller.isLogged.value) return MainUnAuth();
           if (controller.showLoader.value || controller.isLoading.value)
             return Container(
                 child: CircularLoadingWidget(), color: Colors.white);

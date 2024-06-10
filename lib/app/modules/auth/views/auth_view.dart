@@ -7,6 +7,7 @@ import 'package:app/app/widgets/default/text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../diary/controllers/diary_controller.dart';
 import '../controllers/auth_controller.dart';
 
 class AuthView extends GetView<AuthController> {
@@ -56,6 +57,8 @@ class AuthView extends GetView<AuthController> {
           GestureDetector(
               onTap: () async {
                 await SharedHelper().writeData(CachingKey.IS_GUEST, true);
+                DiaryController controller = Get.find<DiaryController>(tag: 'diary');
+                controller.isLogged.value = false;
                 Get.toNamed(Routes.HOME);
               },
               child: kTextHeader('Skip', color: kColorPrimary, size: 20))

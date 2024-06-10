@@ -17,7 +17,7 @@ import 'app/network_util/api_provider.dart';
 import 'app/utils/theme/app_colors.dart';
 import 'app/widgets/default/text.dart';
 
-bool globalIsIosInReview = false;
+bool globalIsIosInReview = true;
 
 class HomePageView extends StatefulWidget {
   const HomePageView({Key? key}) : super(key: key);
