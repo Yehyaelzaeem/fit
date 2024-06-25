@@ -37,6 +37,7 @@ class _SessionsViewState extends State<SessionsView> {
         });
         getAllSessionData();
       } else {
+
 /*        setState(() {
           ress = value;
         });
@@ -69,8 +70,11 @@ class _SessionsViewState extends State<SessionsView> {
         //   }
         // }
       } else {
+        final result = await Connectivity().checkConnectivity();
+        if (result != ConnectivityResult.none) {
         SharedHelper().logout();
         Get.offAllNamed(Routes.LOGIN);
+        }
 //        Fluttertoast.showToast(msg: "${value.message}");
         print("error");
       }
@@ -202,8 +206,7 @@ class _SessionsViewState extends State<SessionsView> {
                                                           .data![i].onPeriod ==
                                                       false
                                                   ? Colors.white
-                                                  : Colors.white,
-                                                  // : redOpacityColor,
+                                                  : redOpacityColor,
                                               boxShadow: [
                                                 BoxShadow(
                                                   color: Colors.grey
@@ -262,7 +265,7 @@ class _SessionsViewState extends State<SessionsView> {
                                                               hight: 35,
                                                               color: sessionResponse
                                                                           .data![
-                                                                              i]
+                                                                               i]
                                                                           .status ==
                                                                       "Pending"
                                                                   ? Colors.grey

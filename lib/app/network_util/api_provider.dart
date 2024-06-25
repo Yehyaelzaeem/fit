@@ -532,7 +532,6 @@ class ApiProvider {
 
   Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave,bool isLive) async {
 
-   print(0900);
     final result = await Connectivity().checkConnectivity();
     DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
 
@@ -1917,7 +1916,7 @@ class ApiProvider {
   }
   Future<CheerFullResponse?> readCheerFullLocally() async {
     String? meals = await SharedHelper().readString(CachingKey.CHEER_FULL);
-    if(meals!=null){
+    if(meals!=null && meals!=''){
       return CheerFullResponse.fromJson(jsonDecode(meals));
     }else{
       return null;
@@ -2287,12 +2286,14 @@ class ApiProvider {
       Response response = await _utils.get(
         "service-package-orders?device_id=$deviceId",
       );
+      print(response);
       if (response.statusCode == 200) {
         MyPackagesResponse myPackagesResponse =
             MyPackagesResponse.fromJson(response.data);
         return myPackagesResponse;
-      } else
+      } else{
         return Future.error("server");
+      }
     } catch (e) {
       Echo('error $e');
       return Future.error(e);

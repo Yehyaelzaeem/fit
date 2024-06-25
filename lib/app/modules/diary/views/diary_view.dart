@@ -640,7 +640,7 @@ class DiaryView extends GetView<DiaryController> {
     Widget dateDisplay = Container(
       width: MediaQuery.of(Get.context!).size.width / 1.5,
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 0),
       decoration: BoxDecoration(
           color: Colors.grey[200], borderRadius: BorderRadius.circular(4)),
       child: Center(

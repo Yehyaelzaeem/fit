@@ -56,7 +56,9 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['date'] = this.date;
+    data['day'] = this.day;
     data['status'] = this.status;
+    data['on_period'] = this.onPeriod;
     data['details_status'] = this.detailsStatus;
     return data;
   }

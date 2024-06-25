@@ -56,7 +56,7 @@ class _HomePageViewState extends State<HomePageView> {
           }else{
 
             Fluttertoast.showToast(msg: "$value");
-            Fluttertoast.showToast(msg: "AAAXL");
+            // Fluttertoast.showToast(msg: "AAAXL");
           }
         });
         // isLoading = false;

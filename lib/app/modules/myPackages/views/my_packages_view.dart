@@ -486,7 +486,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                                 size: 16,
                                                 color: Colors.white,
                                                 bold: true,
-                                                paddingH: 16,
+                                                paddingH: 15,
                                                 paddingV: 4),
                                           ],
                                         ),
@@ -816,7 +816,91 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                     : SizedBox(),
                               ],
                             )
-                          : MainUnAuth(
+                          :myPackagesResponse.data==null?
+                  Column(
+                    children: [
+                      //App bar
+                      HomeAppbar(
+                        onBack: () async {
+                          await Get.toNamed(
+                            Routes.HOME,
+                          );
+                        },
+                      ),
+                      SizedBox(height: 12),
+                      PageLable(name: " My Packages"),
+                      SizedBox(height: 12),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: Get.height * 0.2),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                kEmptyPackage,
+                                scale: 5,
+                              ),
+                              SizedBox(
+                                height: 14,
+                              ),
+                              kTextbody("  Empty!  ", size: 16),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                           GestureDetector(
+                        onTap: () async {
+                          Get.offNamed(
+                            Routes.SUBSCRIBE,
+                          );
+                        },
+                        child: Center(
+                          child: Container(
+                            width: Get.width / 1.4,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            margin: EdgeInsets.symmetric(
+                                vertical: 16),
+                            decoration: BoxDecoration(
+                              color: Color(0xffFFB62B),
+                              borderRadius:
+                              BorderRadius.circular(64),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey
+                                      .withOpacity(0.4),
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 1),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/img/premium.png',
+                                  width: 30,
+                                  height: 30,
+                                ),
+                                kTextHeader(
+                                    'Subscribe new package',
+                                    size: 16,
+                                    color: Colors.white,
+                                    bold: true,
+                                    paddingH: 16,
+                                    paddingV: 4),
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                  ,
+                    ],
+                  ):
+                  MainUnAuth(
                               isGuest: true,
                               paymentStatus:
                                   myPackagesResponse.data!.subscriptionStatus);

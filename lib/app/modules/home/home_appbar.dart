@@ -55,6 +55,25 @@ class _HomeAppbarState extends State<HomeAppbar> {
         Echo(' getUserData error ');
       }
     });
+    }else{
+      await ApiProvider().getProfile().then((value) {
+        if (value.success == true) {
+          setState(() {
+            ress = value;
+            newMessage = ress.data!.newMessages!;
+          });
+          if (ress.data != null && ress.data!.image != null) {
+            final controller = Get.find<HomeController>(tag: 'home');
+            controller.avatar.value = ress.data!.image!;
+            Echo(' getUserData avatart  ${controller.avatar.value}');
+          } else {
+            Echo(' getUserData avatart nulls');
+          }
+        } else {
+          Echo(' getUserData error ');
+        }
+      });
+
     }
   }
 

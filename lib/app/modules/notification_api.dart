@@ -11,8 +11,8 @@ class NotificationApi {
   static Future _notificationDetails() async {
     return NotificationDetails(
       android: AndroidNotificationDetails(
-        'channel id',
-        'channel name',
+        'water id',
+        'water name',
         icon: '@drawable/applogo',
         priority: Priority.max,
         importance: Importance.max,
@@ -38,23 +38,36 @@ class NotificationApi {
     }
   }
 
-  // static Future<void> scheduleDailyNotifications() async {
-  //   final times = [11, 14, 17, 20]; // Hours for 11 AM, 2 PM, 5 PM, 8 PM
-  //
-  //   for (int i = 0; i < times.length; i++) {
-  //     await _notifications.zonedSchedule(
-  //       i, // Ensure each notification has a unique ID
-  //       '💧 Water 💧',
-  //       "Do not forget to drink water",
-  //       _scheduleDaily(TimeInterval(times[i], 0)), // Schedule at specified hours
-  //       await _notificationDetails(),
-  //       payload: 'water_notification',
-  //       androidAllowWhileIdle: true,
-  //       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
-  //       matchDateTimeComponents: DateTimeComponents.time,
-  //     );
-  //   }
-  // }
+  static Future<void> scheduleDailyNotifications() async {
+    await _notifications.cancelAll();
+    final times = [ 11, 14, 17, 20 , 23]; // Hours for 11 AM, 2 PM, 5 PM, 8 PM
+
+    for (int i = 0; i < times.length; i++) {
+      await Future.delayed(Duration(seconds: 1)).then((value) async{
+        _notifications.zonedSchedule(
+          i+6, // Ensure each notification has a unique ID
+          '💧 Water 💧',
+          "Do not forget to drink water",
+          _scheduleDaily(TimeInterval(times[i], 00)), // Schedule at specified hours
+          await NotificationDetails(
+          android: AndroidNotificationDetails(
+          'water',
+          'water name',
+          icon: '@drawable/applogo',
+          priority: Priority.max,
+          importance: Importance.max,
+          largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
+        ),
+        iOS: DarwinNotificationDetails(),
+        ),
+        payload: 'water_notification',
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+        );
+      });
+    }
+  }
 
 
   static Future<void> showScheduledNotificationAtTime({
@@ -68,14 +81,14 @@ class NotificationApi {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-    if (DateTime.now().hour >= 11 && DateTime.now().hour <= 20) {
-      for (int i = 0; i < 24; i += 3) {
+    if (DateTime.now().hour >= 11 && DateTime.now().hour <= 23) {
+      for (int i = 0; i < 24; i += 1) {
 
         final tz.TZDateTime scheduledTime = now.add(Duration(hours: i));
 
         await flutterLocalNotificationsPlugin.zonedSchedule(
 
-          DateTime.now().hour + DateTime.now().minute + DateTime.now().second,
+          scheduledTime.hour,
           ' 💧 Water 💧 ',
           "Do not forget to drink water",
           scheduledTime,
@@ -104,6 +117,48 @@ class NotificationApi {
         ? scheduleDate.add(const Duration(days: 1))
         : scheduleDate;
   }
+
+
+  static Future showScheduledNotification({
+    String? payLoad, //<< navigate content screen
+    required int id,
+    required DateTime scheduleDate,
+    required int hour,
+  }) async =>
+      _notifications.zonedSchedule(
+        id,
+        ' 💧 Water 💧 ',
+        "Do not forget to drink water",
+        _scheduleWeekly(
+            TimeInterval(
+              hour,0
+            ),
+            days: [
+              DateTime.saturday,
+              DateTime.sunday,
+              DateTime.monday,
+              DateTime.tuesday,
+              DateTime.wednesday,
+              DateTime.thursday,
+              DateTime.friday,
+            ]),
+        await _notificationDetails(),
+        payload: payLoad,
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+      );
+
+  static tz.TZDateTime _scheduleWeekly(TimeInterval time, {required List<int> days}) {
+    tz.TZDateTime scheduleDate = _scheduleDaily(time);
+    while (!days.contains(scheduleDate.weekday)) {
+      scheduleDate = scheduleDate.add(Duration(days: 1));
+    }
+    return scheduleDate.toLocal();
+  }
+
+
 }
 
 class TimeInterval {

@@ -18,7 +18,7 @@ class SleepTimeStatus extends GetView<DiaryController> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(vertical:16,horizontal: 12),
       color: Color(0xffEFEFEF),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +85,7 @@ class SleepTimeStatus extends GetView<DiaryController> {
                     color: kColorPrimary,
                     borderRadius: BorderRadius.circular(200),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   child: Row(
                     children: [
                       Icon(Icons.timelapse, color: Colors.white),

@@ -23,12 +23,18 @@ class SplashController extends GetxController
 
 
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.scheduleDailyNotifications());
-    NotificationApi.showScheduledNotificationAtTime();
+    NotificationApi.scheduleDailyNotifications();
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 2, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 5,));
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
     // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
+
+    // Future.delayed(Duration(seconds: 10),()=>    NotificationApi.showScheduledNotification(hour: 11, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 1,));
+    // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 14, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 2,));
+    // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 17,scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 3,));
+    // Future.delayed(Duration(seconds: 2),()=>    NotificationApi.showScheduledNotification(hour: 20, scheduleDate: DateTime.now().add(Duration(seconds: 2)), id: 4,));
+
   }
 
   @override
