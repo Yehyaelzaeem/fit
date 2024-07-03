@@ -55,7 +55,6 @@ import '../models/usual_meals_reposne.dart';
 import '../modules/timeSleep/controllers/time_sleep_controller.dart';
 import '../utils/translations/strings.dart';
 
-DateTime? loadingSessions;
 DateTime? loadingHome;
 bool sendingOffline = false;
 class ApiProvider {
@@ -439,10 +438,10 @@ class ApiProvider {
 
   Future<SessionResponse> getSessions() async {
     final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none && (loadingSessions==null||loadingSessions!.isBefore(DateTime.now().subtract(Duration(minutes: 3))))) {
-    Response response = await _utils.get("sessions");
+
+    if (result != ConnectivityResult.none ) {
+      Response response = await _utils.get("sessions");
     if (response.data["success"] == true) {
-      loadingSessions = DateTime.now();
       saveSessionsLocally(SessionResponse.fromJson(response.data));
       return SessionResponse.fromJson(response.data);
     } else {
