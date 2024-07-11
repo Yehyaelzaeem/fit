@@ -93,17 +93,22 @@ class TimeSleepController extends GetxController {
     // Define date format with time
     DateFormat dateFormat = DateFormat('hh:mm a');
 
-    // Parse start and end time strings into DateTime objects
-    DateTime startTimeDT = dateFormat.parse(startTime)!;
-    DateTime endTimeDT = dateFormat.parse(endTime)!;
 
+    // Parse start and end time strings into DateTime objects
+    DateTime startTimeDT = parseTime(startTime,dateFormat);
+    DateTime endTimeDT = parseTime(endTime,dateFormat);
+
+    // If the end time is before the start time, add one day to the end time
+    if (endTimeDT.isBefore(startTimeDT)) {
+      endTimeDT = endTimeDT.add(Duration(days: 1));
+    }
     // Calculate time difference
     Duration difference = endTimeDT.difference(startTimeDT);
 
     // Check if the difference is negative
     if (difference.isNegative) {
       // Add 24 hours to the difference to get the positive time difference
-      difference += Duration(hours: 24);
+      difference += Duration(hours: 12);
     }
 
     // Convert difference to hours and minutes
@@ -166,6 +171,7 @@ class TimeSleepController extends GetxController {
       initialTime: selectedTimeFrom,
     );
     if (picked_s != null) {
+      print(picked_s);
       selectedTimeFrom = picked_s;
       selectedTimeFrom.format(context);
     }
@@ -207,12 +213,32 @@ class TimeSleepController extends GetxController {
     update();
   }
 
+
+  DateTime parseTime(String time, DateFormat format) {
+    // Check if the time contains AM or PM
+    if (!time.contains(RegExp(r'(AM|PM|am|pm)'))) {
+      // If not, assume it's in 24-hour format and add "AM" if it's before noon, "PM" otherwise
+      int hour = int.parse(time.split(':')[0]);
+      if (hour < 12) {
+        time += ' AM';
+      } else {
+        time += ' PM';
+      }
+    }
+
+    print('format.parse(time)');
+    print(format.parse(time));
+    return format.parse(time);
+  }
+
+
   TimeOfDay convertStringToTimeOfDay(String timeString) {
     // Define date format with time
     DateFormat dateFormat = DateFormat('hh:mm a');
 
+
     // Parse the time string into a DateTime object
-    DateTime dateTime = dateFormat.parse(timeString);
+    DateTime dateTime = parseTime(timeString,dateFormat);
 
     // Extract the hour and minute components
     int hour = dateTime.hour;

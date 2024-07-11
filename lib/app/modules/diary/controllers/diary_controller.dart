@@ -13,13 +13,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:restart_app/restart_app.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../login/views/login_view.dart';
 DateTime? otherLoaded;
 bool isSending = false;
-class DiaryController extends GetxController {
+class DiaryController extends GetxController  with WidgetsBindingObserver {
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
   RxList<SingleImageItem> waterBottlesList = RxList();
@@ -104,6 +106,8 @@ class DiaryController extends GetxController {
     //   _initData();
   }
 
+
+
   loadData()async{
 
     DateTime? lastLoadTime = await ApiProvider().getLastLoadingTime();
@@ -153,8 +157,8 @@ class DiaryController extends GetxController {
       await ApiProvider().sendSavedSleepTimes();
       isSending = false;
       await getDiaryData(
-          lastSelectedDate.value != '' ? lastSelectedDate.value : DateTime
-              .now().toString().substring(0, 10),isSending);
+          lastSelectedDate.value != '' ? lastSelectedDate.value :
+          DateTime.now().toString().substring(0, 10),isSending);
       isLoading.value =  false;
 
 
@@ -410,6 +414,7 @@ class DiaryController extends GetxController {
     // if (type == 'fats') refreshLoadingFats.value = true;
     lastSelectedDate.value = _date;
 
+
     // await checkDeletion();
     response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,!isSending,false,false);
 
@@ -510,6 +515,29 @@ class DiaryController extends GetxController {
     if (type == 'proteins') refreshLoadingProtine.value = false;
     if (type == 'carbs') refreshLoadingCarbs.value = false;
     if (type == 'fats') refreshLoadingFats.value = false;
+
+    if(isToday.value){
+      if(lastSelectedDate.value != DateTime.now().toString().substring(0, 10)){
+        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+        isToday.value = true;
+        print("loading1234");
+        await viewCachedRequests();
+        // response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,true,true,false);
+        // refreshDiaryData(lastSelectedDate.value, type);
+        onInit();
+      }
+    }else{
+      if(lastSelectedDate.value != DateTime.now().subtract(Duration(days: 1)).toString().substring(0, 10)){
+        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+        print("loading1234");
+        isToday.value = true;
+        await viewCachedRequests();
+        // response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,true,true,false);
+        // refreshDiaryData(lastSelectedDate.value, type);
+
+        onInit();
+      }
+    }
   }
 
   Future refreshDiaryDataLive(String _date) async {
@@ -1081,7 +1109,7 @@ class DiaryController extends GetxController {
                 )),
           );
         });
-  }
+    }
 
   void launchURL(_url) async => await launch(_url);
 
@@ -1681,6 +1709,37 @@ class DiaryController extends GetxController {
       }
     });
   }
+
+  static const String lastBackgroundTimeKey = 'last_background_time';
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    print('lastBackgroundTime');
+    print(state);
+
+    if (state == AppLifecycleState.paused) {
+      // App is going to background
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(lastBackgroundTimeKey, DateTime.now().millisecondsSinceEpoch);
+    } else if (state == AppLifecycleState.resumed) {
+      print('lastBackgroundTime');
+      // App is coming to foreground
+      final prefs = await SharedPreferences.getInstance();
+      int? lastBackgroundTime = prefs.getInt(lastBackgroundTimeKey);
+
+      print(lastBackgroundTime);
+      if (lastBackgroundTime != null) {
+        final lastBackgroundDateTime = DateTime.fromMillisecondsSinceEpoch(lastBackgroundTime);
+        final difference = DateTime.now().difference(lastBackgroundDateTime);
+
+        if (difference.inHours >= 1) {
+          // Restart the app if it's been in the background for more than 12 hours
+          Restart.restartApp();
+        }
+      }
+    }
+  }
+
 }
 
 class SingleImageItem {

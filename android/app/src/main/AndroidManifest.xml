@@ -2,6 +2,9 @@
     package="com.company.name"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/> <!-- Add this -->
@@ -10,8 +13,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 <!--    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>-->
 <!--    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>-->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="31" />
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
 
     <application
         android:label="FitoverfaT"
@@ -63,6 +65,19 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".YourBackgroundService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true" />
+
+        <receiver
+            android:name=".YourReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
     <meta-data
