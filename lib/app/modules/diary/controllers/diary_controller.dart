@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:app/app/models/day_details_reposne.dart';
 import 'package:app/app/network_util/api_provider.dart';
@@ -17,11 +18,48 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
 
-import '../../../routes/app_pages.dart';
-import '../../login/views/login_view.dart';
 DateTime? otherLoaded;
 bool isSending = false;
-class DiaryController extends GetxController  with WidgetsBindingObserver {
+class DiaryController extends GetxController {
+  static const String lastBackgroundTimeKey = "LAST_BACKGROUND_TIME";
+
+  late final AppLifecycleListener _listener;
+
+  DiaryController() {
+    _listener = AppLifecycleListener(this);
+    WidgetsBinding.instance!.addObserver(_listener);
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    WidgetsBinding.instance!.removeObserver(_listener);
+  }
+
+  void handleLifecycleChange(AppLifecycleState state) async {
+    if (state == AppLifecycleState.paused) {
+      // App is going to background
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(lastBackgroundTimeKey, DateTime.now().millisecondsSinceEpoch);
+    } else if (state == AppLifecycleState.resumed) {
+      // App is coming to foreground
+      final prefs = await SharedPreferences.getInstance();
+      int? lastBackgroundTime = prefs.getInt(lastBackgroundTimeKey);
+
+      if (lastBackgroundTime != null) {
+        final lastBackgroundDateTime = DateTime.fromMillisecondsSinceEpoch(lastBackgroundTime);
+        final difference = DateTime.now().difference(lastBackgroundDateTime);
+
+        if (difference.inMinutes >= 10) {
+          Restart.restartApp();
+
+          // Handle user-friendly approach (consider alternatives mentioned earlier)
+          // Show message or reload data based on your app logic
+        }
+      }
+    }
+  }
+
   GlobalKey<FormState> key = GlobalKey();
   TextEditingController textEditController = TextEditingController();
   RxList<SingleImageItem> waterBottlesList = RxList();
@@ -1710,37 +1748,73 @@ class DiaryController extends GetxController  with WidgetsBindingObserver {
     });
   }
 
-  static const String lastBackgroundTimeKey = 'last_background_time';
+}
+
+class AppLifecycleListener implements WidgetsBindingObserver {
+  final DiaryController controller;
+
+  AppLifecycleListener(this.controller);
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    print('lastBackgroundTime');
-    print(state);
-
-    if (state == AppLifecycleState.paused) {
-      // App is going to background
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(lastBackgroundTimeKey, DateTime.now().millisecondsSinceEpoch);
-    } else if (state == AppLifecycleState.resumed) {
-      print('lastBackgroundTime');
-      // App is coming to foreground
-      final prefs = await SharedPreferences.getInstance();
-      int? lastBackgroundTime = prefs.getInt(lastBackgroundTimeKey);
-
-      print(lastBackgroundTime);
-      if (lastBackgroundTime != null) {
-        final lastBackgroundDateTime = DateTime.fromMillisecondsSinceEpoch(lastBackgroundTime);
-        final difference = DateTime.now().difference(lastBackgroundDateTime);
-
-        if (difference.inHours >= 1) {
-          // Restart the app if it's been in the background for more than 12 hours
-          Restart.restartApp();
-        }
-      }
-    }
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    controller.handleLifecycleChange(state);
   }
 
+  @override
+  void didChangeAccessibilityFeatures() {
+    // TODO: implement didChangeAccessibilityFeatures
+  }
+
+  @override
+  void didChangeLocales(List<Locale>? locales) {
+    // TODO: implement didChangeLocales
+  }
+
+  @override
+  void didChangeMetrics() {
+    // TODO: implement didChangeMetrics
+  }
+
+  @override
+  void didChangePlatformBrightness() {
+    // TODO: implement didChangePlatformBrightness
+  }
+
+  @override
+  void didChangeTextScaleFactor() {
+    // TODO: implement didChangeTextScaleFactor
+  }
+
+  @override
+  void didHaveMemoryPressure() {
+    // TODO: implement didHaveMemoryPressure
+  }
+
+  @override
+  Future<bool> didPopRoute() {
+    // TODO: implement didPopRoute
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> didPushRoute(String route) {
+    // TODO: implement didPushRoute
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> didPushRouteInformation(RouteInformation routeInformation) {
+    // TODO: implement didPushRouteInformation
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<AppExitResponse> didRequestAppExit() {
+    // TODO: implement didRequestAppExit
+    throw UnimplementedError();
+  }
 }
+
 
 class SingleImageItem {
   int id;
