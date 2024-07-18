@@ -33,7 +33,7 @@ dependencies:
   flutter_cached_pdfview: ^0.4.1
   path_provider: ^2.0.4
   permission_handler: any
-  flutter_local_notifications: ^17.1.2
+  flutter_local_notifications: ^17.2.1+2
   flutter_math_fork: ^0.7.2
   google_maps_flutter: ^2.0.0
   map_picker: ^0.0.3

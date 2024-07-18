@@ -20,12 +20,18 @@ import 'app/modules/usuals/controllers/usual_controller.dart';
 import 'app/routes/app_pages.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:permission_handler/permission_handler.dart' as permission;
 Future<void> main() async {
   await WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   tz.initializeTimeZones();
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  await permission.Permission.notification.isDenied.then((value) {
+    if (value) {
+      permission.Permission.notification.request();
+    }
+  });
   // runAppSpector();
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();

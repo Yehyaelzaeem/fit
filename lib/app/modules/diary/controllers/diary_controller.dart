@@ -10,6 +10,7 @@ import 'package:app/app/utils/helper/echo.dart';
 import 'package:app/home_page_view.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
+
+import '../../../routes/app_pages.dart';
+import '../../../widgets/app_dialog.dart';
 
 DateTime? otherLoaded;
 bool isSending = false;
@@ -1793,12 +1797,32 @@ class AppLifecycleListener implements WidgetsBindingObserver {
   @override
   Future<bool> didPopRoute() {
     // TODO: implement didPopRoute
+    // return Future.value(true);
+    // if (Get.currentRoute == Routes.HOME) {
+    //   FocusScope.of(Get.context!).requestFocus(FocusNode());
+    //   appDialog(
+    //     title: 'Are you sure you want to exit?',
+    //     image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
+    //     cancelAction: () {
+    //       Get.back();
+    //       FocusScope.of(Get.context!).requestFocus(FocusNode());
+    //     },
+    //     confirmAction: () {
+    //       SystemNavigator.pop();
+    //     },
+    //     cancelText: 'No',
+    //     confirmText: 'Yes',
+    //   );
+    //   return Future.value(true); // Prevent the pop action
+    // }
+    return Future.value(false);
     throw UnimplementedError();
   }
 
   @override
   Future<bool> didPushRoute(String route) {
     // TODO: implement didPushRoute
+    // return Future.value(false);
     throw UnimplementedError();
   }
 
@@ -1811,6 +1835,8 @@ class AppLifecycleListener implements WidgetsBindingObserver {
   @override
   Future<AppExitResponse> didRequestAppExit() {
     // TODO: implement didRequestAppExit
+    // return Future.value(false);
+
     throw UnimplementedError();
   }
 }
