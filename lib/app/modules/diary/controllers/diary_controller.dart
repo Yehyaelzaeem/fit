@@ -54,11 +54,12 @@ class DiaryController extends GetxController {
         final lastBackgroundDateTime = DateTime.fromMillisecondsSinceEpoch(lastBackgroundTime);
         final difference = DateTime.now().difference(lastBackgroundDateTime);
 
-        if (difference.inMinutes >= 10) {
-          Restart.restartApp();
+        if (DateTime.now().toString().substring(0,10) != lastBackgroundDateTime.toString().substring(0,10)){
 
-          // Handle user-friendly approach (consider alternatives mentioned earlier)
-          // Show message or reload data based on your app logic
+          await Get.find<DiaryController>(tag: 'diary').viewCachedRequests();
+          // response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,true,true,false);
+          // refreshDiaryData(lastSelectedDate.value, type);
+          Get.find<DiaryController>(tag: 'diary').onInit();
         }
       }
     }
@@ -1429,6 +1430,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            createdAt: DateTime.now().toString().substring(0,16),
             unit: food!.unit);
 
         await calculateProteins();
@@ -1445,6 +1447,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            createdAt: DateTime.now().toString().substring(0,16),
             unit: food!.unit);
 
 
@@ -1462,6 +1465,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            createdAt: DateTime.now().toString().substring(0,16),
             unit: food!.unit);
 
 

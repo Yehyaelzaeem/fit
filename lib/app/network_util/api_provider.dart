@@ -1779,6 +1779,8 @@ class ApiProvider {
         for (int i = 0; i < entry.food.length; i++) {
           formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
           formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
+          print('entry.createdAt');
+          print(entry.createdAt[i].toString());
           formData.fields.add(
               MapEntry('created_at[$i]', entry.createdAt[i].toString()));
         }
