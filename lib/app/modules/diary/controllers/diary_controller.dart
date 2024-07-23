@@ -1257,6 +1257,7 @@ class DiaryController extends GetxController {
             qty: _quantity,
         quality: food.title,
         color: food.color,
+        createdAt: DateTime.now().toString().substring(0,16),
         calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
         unit: food.unit
     ));
@@ -1275,6 +1276,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+            createdAt: DateTime.now().toString().substring(0,16),
             unit: food!.unit));
 
         await calculateCarbs();
@@ -1291,6 +1293,7 @@ class DiaryController extends GetxController {
             randomId: randomId,
             qty: _quantity,quality: food!.title,
             color: food.color,
+            createdAt: DateTime.now().toString().substring(0,16),
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
             unit: food!.unit));
 
