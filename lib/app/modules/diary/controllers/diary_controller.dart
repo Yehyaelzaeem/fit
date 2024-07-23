@@ -17,10 +17,9 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:restart_app/restart_app.dart';
+import 'package:timezone/timezone.dart' as tz;
 
-import '../../../routes/app_pages.dart';
-import '../../../widgets/app_dialog.dart';
+
 
 DateTime? otherLoaded;
 bool isSending = false;
@@ -44,7 +43,7 @@ class DiaryController extends GetxController {
     if (state == AppLifecycleState.paused) {
       // App is going to background
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(lastBackgroundTimeKey, DateTime.now().millisecondsSinceEpoch);
+      await prefs.setInt(lastBackgroundTimeKey, getEgyptTime().millisecondsSinceEpoch);
     } else if (state == AppLifecycleState.resumed) {
       // App is coming to foreground
       final prefs = await SharedPreferences.getInstance();
@@ -52,9 +51,9 @@ class DiaryController extends GetxController {
 
       if (lastBackgroundTime != null) {
         final lastBackgroundDateTime = DateTime.fromMillisecondsSinceEpoch(lastBackgroundTime);
-        final difference = DateTime.now().difference(lastBackgroundDateTime);
+        final difference = getEgyptTime().difference(lastBackgroundDateTime);
 
-        if (DateTime.now().toString().substring(0,10) != lastBackgroundDateTime.toString().substring(0,10)){
+        if (getEgyptTime().toString().substring(0,10) != lastBackgroundDateTime.toString().substring(0,10)){
 
           await Get.find<DiaryController>(tag: 'diary').viewCachedRequests();
           // response.value = await ApiProvider().getDiaryView(lastSelectedDate.value,true,true,false);
@@ -129,7 +128,7 @@ class DiaryController extends GetxController {
       isOnInit = true;
       isSending = true;
       if (lastSelectedDate.value == '') {
-        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+        lastSelectedDate.value = getEgyptTime().toString().substring(0, 10);
       }
 
       getNotifications();
@@ -157,7 +156,7 @@ class DiaryController extends GetxController {
 
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-    if(lastLoadTime == null || lastLoadTime.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+    if(lastLoadTime == null || lastLoadTime.isBefore(getEgyptTime().subtract(Duration(days: 1)))) {
       // await ApiProvider().getContactData();
       // await ApiProvider().getAboutData();
       await ApiProvider().getSleepingTimesData();
@@ -169,7 +168,7 @@ class DiaryController extends GetxController {
         await ApiProvider().getOtherCaloriesUnit();
 
         print("Load First");
-        await ApiProvider().saveLastLoadingTime(DateTime.now());
+        await ApiProvider().saveLastLoadingTime(getEgyptTime());
       }
       // if (response.value.data == null) {
       //   getDiaryData(
@@ -178,12 +177,12 @@ class DiaryController extends GetxController {
       // }
 
     }else{
-      // if(otherLoaded==null ||otherLoaded!.isBefore(DateTime.now().subtract(Duration(seconds: 90)))){
-      //   await ApiProvider().getOtherCaloreis().then((value) => otherLoaded= DateTime.now());
+      // if(otherLoaded==null ||otherLoaded!.isBefore(getEgyptTime().subtract(Duration(seconds: 90)))){
+      //   await ApiProvider().getOtherCaloreis().then((value) => otherLoaded= getEgyptTime());
       // }
     }
     }else{
-      if(lastLoadTime!.isBefore(DateTime.now().subtract(Duration(days: 2)))){
+      if(lastLoadTime!.isBefore(getEgyptTime().subtract(Duration(days: 2)))){
         Fluttertoast.showToast(msg: "Please You want to connect the internet",toastLength: Toast.LENGTH_LONG);
       }
     }
@@ -201,7 +200,7 @@ class DiaryController extends GetxController {
       isSending = false;
       await getDiaryData(
           lastSelectedDate.value != '' ? lastSelectedDate.value :
-          DateTime.now().toString().substring(0, 10),isSending);
+          getEgyptTime().toString().substring(0, 10),isSending);
       isLoading.value =  false;
 
 
@@ -223,12 +222,12 @@ class DiaryController extends GetxController {
       //       builder: (context) => UnAuthView(),
       //     ),
       //     (Route<dynamic> route) => false);
-      // getDiaryData(DateTime.now().toString().substring(0, 10));
+      // getDiaryData(getEgyptTime().toString().substring(0, 10));
 
     } else {
       final result = await Connectivity().checkConnectivity();
       if (result == ConnectivityResult.none){
-        getDiaryData(DateTime.now().toString().substring(0, 10),isSending);
+        getDiaryData(getEgyptTime().toString().substring(0, 10),isSending);
 
       }
     }
@@ -308,8 +307,8 @@ class DiaryController extends GetxController {
           // print('response.value.data!.days![0].date');
           // print(response.value.data!.days![0].date);
           // print(response.value.data!.days![1].date);
-          if(response.value.data!.days![0].date != DateTime.now().toString().substring(0,10)){
-            String date = DateTime.now().toString().substring(0,10);
+          if(response.value.data!.days![0].date != getEgyptTime().toString().substring(0,10)){
+            String date = getEgyptTime().toString().substring(0,10);
             List<Days> newDays= List.generate(3, (index){
               if(index==0){
                 return  Days(date: date,dateFormat: DateFormat('EEEE, d MMMM y').format(DateTime.parse(date!)),active: response.value.data!.days!.firstWhere((element) => element.date == date).active);
@@ -320,7 +319,7 @@ class DiaryController extends GetxController {
                     .substring(0, 10),
                     dateFormat: DateFormat('EEEE, d MMMM y').format(
                         DateTime.parse(date!).subtract(Duration(days: 1))),
-                    active: response.value.data!.days!.firstWhere((element) => element.date == DateTime.now().subtract(Duration(days: 1)).toString().substring(0,10)).active
+                    active: response.value.data!.days!.firstWhere((element) => element.date == getEgyptTime().subtract(Duration(days: 1)).toString().substring(0,10)).active
                 );
               }else
               if(index==2) {
@@ -380,7 +379,7 @@ class DiaryController extends GetxController {
           if (lastSelectedDate.value.isNotEmpty) {
             getDiaryData(lastSelectedDate.value,isSending);
           } else {
-            getDiaryData(DateTime.now().toString().substring(0, 10),isSending);
+            getDiaryData(getEgyptTime().toString().substring(0, 10),isSending);
           }
           response.value = value;
           isLoading.value = false;
@@ -560,8 +559,8 @@ class DiaryController extends GetxController {
     if (type == 'fats') refreshLoadingFats.value = false;
 
     if(isToday.value){
-      if(lastSelectedDate.value != DateTime.now().toString().substring(0, 10)){
-        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+      if(lastSelectedDate.value != getEgyptTime().toString().substring(0, 10)){
+        lastSelectedDate.value = getEgyptTime().toString().substring(0, 10);
         isToday.value = true;
         print("loading1234");
         await viewCachedRequests();
@@ -570,8 +569,8 @@ class DiaryController extends GetxController {
         onInit();
       }
     }else{
-      if(lastSelectedDate.value != DateTime.now().subtract(Duration(days: 1)).toString().substring(0, 10)){
-        lastSelectedDate.value = DateTime.now().toString().substring(0, 10);
+      if(lastSelectedDate.value != getEgyptTime().subtract(Duration(days: 1)).toString().substring(0, 10)){
+        lastSelectedDate.value = getEgyptTime().toString().substring(0, 10);
         print("loading1234");
         isToday.value = true;
         await viewCachedRequests();
@@ -734,6 +733,7 @@ class DiaryController extends GetxController {
   //
   //   response.value = dayResponse;
   // }
+
   Future<void> deleteItemCalories(int id, String _date, String type) async {
 
     final result = await Connectivity().checkConnectivity();
@@ -1162,6 +1162,8 @@ class DiaryController extends GetxController {
     // if (type == 'fats') refreshLoadingFats.value = true;
 
     final result = await Connectivity().checkConnectivity();
+    DateTime formattedTime = getEgyptTime();
+
     if (false) {
       isAdding = true;
       if (type == 'proteins'){
@@ -1256,7 +1258,7 @@ class DiaryController extends GetxController {
             qty: _quantity,
         quality: food.title,
         color: food.color,
-        createdAt: DateTime.now().toString().substring(0,16),
+        createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
         calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
         unit: food.unit
     ));
@@ -1275,7 +1277,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateTime.now().toString().substring(0,16),
+            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
             unit: food!.unit));
 
         await calculateCarbs();
@@ -1292,7 +1294,7 @@ class DiaryController extends GetxController {
             randomId: randomId,
             qty: _quantity,quality: food!.title,
             color: food.color,
-            createdAt: DateTime.now().toString().substring(0,16),
+            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
             unit: food!.unit));
 
@@ -1345,6 +1347,8 @@ class DiaryController extends GetxController {
   Food? food,
       double _quantity,
       {required String type}) async {
+    DateTime formattedTime = getEgyptTime();
+
     // if (type == 'proteins') refreshLoadingProtine.value = true;
     // if (type == 'carbs') refreshLoadingCarbs.value = true;
     // if (type == 'fats') refreshLoadingFats.value = true;
@@ -1432,7 +1436,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateTime.now().toString().substring(0,16),
+            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
             unit: food!.unit);
 
         await calculateProteins();
@@ -1449,7 +1453,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateTime.now().toString().substring(0,16),
+            createdAt: getEgyptTime().toString().substring(0,16),
             unit: food!.unit);
 
 
@@ -1467,7 +1471,7 @@ class DiaryController extends GetxController {
             qty: _quantity,quality: food!.title,
             color: food.color,
             calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateTime.now().toString().substring(0,16),
+            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
             unit: food!.unit);
 
 
@@ -1661,6 +1665,16 @@ class DiaryController extends GetxController {
       if (type == 'fats') refreshLoadingFats.value = false;
 
     }
+
+  }
+
+
+  DateTime getEgyptTime(){
+    final egyptTimeZone = tz.getLocation('Africa/Cairo');
+    final nowInEgypt = tz.TZDateTime.now(egyptTimeZone);
+    final formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(nowInEgypt);
+
+    return DateTime.parse(formattedTime);
 
   }
 

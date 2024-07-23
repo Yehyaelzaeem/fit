@@ -54,6 +54,7 @@ import '../models/usual_meals_data_reposne.dart';
 import '../models/usual_meals_reposne.dart';
 import '../modules/timeSleep/controllers/time_sleep_controller.dart';
 import '../utils/translations/strings.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 DateTime? loadingHome;
 bool sendingOffline = false;
@@ -62,10 +63,10 @@ class ApiProvider {
 
   Future<HomePageResponse> getHomeData({bool notLogged = false}) async {
     final result = await Connectivity().checkConnectivity();
-    if ((result != ConnectivityResult.none && ((loadingHome==null||loadingHome!.isBefore(DateTime.now().subtract(Duration(minutes: 6)))) || !notLogged))) {
+    if ((result != ConnectivityResult.none && ((loadingHome==null||loadingHome!.isBefore(getEgyptTime().subtract(Duration(minutes: 6)))) || !notLogged))) {
       Response response = await _utils.get("home");
       if (response.statusCode == 200) {
-        loadingHome = DateTime.now();
+        loadingHome = getEgyptTime();
         saveHomeDataLocally(HomePageResponse.fromJson(response.data));
         return HomePageResponse.fromJson(response.data);
       } else {
@@ -925,7 +926,7 @@ class ApiProvider {
   Future<GeneralResponse> mealToDiary({required int mealId}) async {
     FormData body = FormData.fromMap({
       "meal_id": mealId,
-      "date": DateFormat('yyyy-MM-dd').format(DateTime.now())
+      "date": DateFormat('yyyy-MM-dd').format(getEgyptTime())
     });
     Response response =
         await _utils.post("diary-meals/meal_to_diary", body: body);
@@ -1444,7 +1445,7 @@ class ApiProvider {
 // Function to send locally saved diary data to API
 //   Future<void> sendSavedDiaryData() async {
 //     List<String> diaryDataList = (await SharedHelper().readStringList(CachingKey.DAIRY_DATA_LIST)) ?? [];
-//     DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(DateTime.now().toString().substring(0, 10),true,true);
+//     DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(getEgyptTime().toString().substring(0, 10),true,true);
 //
 //     List<String> dairySent = [];
 //
@@ -1669,7 +1670,7 @@ class ApiProvider {
       sendingOffline = true;
       Map<String, dynamic> existingData = await readDairyToSendLocally();
       DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(
-          DateTime.now().toString().substring(0, 10), true, true, true);
+          getEgyptTime().toString().substring(0, 10), true, true, true);
       List<DiaryEntry> dairySendList = [];
 
       for (var key in existingData.keys) {
@@ -1718,7 +1719,7 @@ class ApiProvider {
                 .firstWhere((element) => element.date == key)
                 .createdAt
                 .add(
-                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
           }
         });
         dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
@@ -1739,7 +1740,7 @@ class ApiProvider {
                 .firstWhere((element) => element.date == key)
                 .createdAt
                 .add(
-                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
           }
         });
 
@@ -1761,7 +1762,7 @@ class ApiProvider {
                 .firstWhere((element) => element.date == key)
                 .createdAt
                 .add(
-                item.createdAt ?? DateTime.now().toString().substring(0, 16));
+                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
           }
         });
       }
@@ -2352,9 +2353,19 @@ class ApiProvider {
     // Clear locally saved sleep time data after successfully sending to API
     await SharedHelper().removeData(CachingKey.SLEEP_TIMES);
   }
+
+
 }
 
 
+DateTime getEgyptTime(){
+  final egyptTimeZone = tz.getLocation('Africa/Cairo');
+  final nowInEgypt = tz.TZDateTime.now(egyptTimeZone);
+  final formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(nowInEgypt);
+
+  return DateTime.parse(formattedTime);
+
+}
 
 class DiaryData {
   final String date;
@@ -2395,7 +2406,7 @@ class DiaryData {
       'id': id,
       'foodName': foodName,
       'caloriesPerUnit': caloriesPerUnit,
-      'dateTime': DateTime.now().toString().substring(0,16),
+      'dateTime': getEgyptTime().toString().substring(0,16),
     };
   }
 

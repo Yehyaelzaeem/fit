@@ -62,8 +62,8 @@ class TimeSleepController extends GetxController {
           sleepTimeFrom: sleepTimeFrom,
           sleepTimeTo: sleepTimeTo,
             date: isToday == true
-                ? DateTime.now().toString().substring(0, 10)
-                : DateTime.now()
+                ? getEgyptTime().toString().substring(0, 10)
+                : getEgyptTime()
                 .subtract(Duration(days: 1))
                 .toString()
                 .substring(0, 10)
