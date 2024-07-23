@@ -734,7 +734,6 @@ class DiaryController extends GetxController {
   //
   //   response.value = dayResponse;
   // }
-
   Future<void> deleteItemCalories(int id, String _date, String type) async {
 
     final result = await Connectivity().checkConnectivity();
