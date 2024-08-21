@@ -1,132 +1,93 @@
-import 'package:app/app/modules/diary/controllers/diary_controller.dart';
-import 'package:app/app/modules/home/controllers/home_controller.dart';
-import 'package:app/app/modules/notification_api.dart';
-import 'package:app/app/modules/timeSleep/controllers/time_sleep_controller.dart';
-import 'package:app/app/utils/theme/app_theme.dart';
-import 'package:app/app/utils/translations/app_translations.dart';
-import 'package:app/globale_controller.dart';
-//import 'package:appspector/appspector.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_timezone/flutter_native_timezone.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:notification_permissions/notification_permissions.dart';
-import 'app/modules/invoice/controllers/invoice_controller.dart';
-import 'app/modules/subscribe/controllers/subscribe_controller.dart';
-import 'app/modules/usuals/controllers/usual_controller.dart';
-import 'app/routes/app_pages.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-import 'package:permission_handler/permission_handler.dart' as permission;
-Future<void> main() async {
-  await WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  tz.initializeTimeZones();
-  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(currentTimeZone));
-  await permission.Permission.notification.isDenied.then((value) {
+
+import 'config/localization/cubit/l10n_cubit.dart';
+import 'config/localization/l10n/l10n.dart';
+import 'config/navigation/navigation.dart';
+import 'config/theme/light_theme.dart';
+import 'core/resources/app_colors.dart';
+import 'core/services/bloc_observer.dart';
+import 'core/utils/constants.dart';
+import 'firebase_options.dart';
+import 'modules/auth/cubit/auth_cubit/auth_cubit.dart';
+import 'modules/general/cubits/general_data_cubit.dart';
+import 'di_container.dart' as di;
+import 'package:permission_handler/permission_handler.dart';
+
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await di.init();
+  Bloc.observer = MyBlocObserver();
+  await Permission.notification.isDenied.then((value) {
     if (value) {
-      permission.Permission.notification.request();
+      Permission.notification.request();
     }
   });
-  // runAppSpector();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
-  getFireBaseNotifications();
-  getNotificationPermission();
-  await NotificationApi.init();
-  await GetStorage().initStorage;
-  Get.put(GlobalController(), tag: "global");
-  Get.put(HomeController(), tag: "home");
-  Get.put(DiaryController(), tag: "diary");
-  Get.put(UsualController(), tag: "usual");
-  Get.put(InvoiceController());
-  Get.put(SubscribeController());
-  // Get.put(TimeSleepController());
+
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  int _orderID;
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    _orderID = ((notificationAppLaunchDetails!.notificationResponse!.payload != null && notificationAppLaunchDetails.notificationResponse!.payload!.isNotEmpty)
+        ? int.parse(notificationAppLaunchDetails.notificationResponse!.payload!)
+        : null)!;
+  }
+  // await MyNotification.initialize(flutterLocalNotificationsPlugin);
+  // FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+
   runApp(
-    GetMaterialApp(
-      title: "FIT over FAT",
-      enableLog: true,
-      initialRoute: Routes.SPLASH,
-      getPages: AppPages.routes,
-      theme: lightTheme,
-      themeMode: ThemeMode.light,
-      smartManagement: SmartManagement.keepFactory,
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.cupertino,
-      transitionDuration: Duration(milliseconds: 500),
-      locale: Locale('en'),
-      textDirection: TextDirection.ltr,
-      color: Colors.green,
-      translations: AppTranslation(),
+    MultiBlocProvider(
+      providers: [
+        // BlocProvider(create: (_) => di.sl<L10nCubit>()),
+        // BlocProvider(create: (_) => di.sl<LayoutCubit>()),
+        BlocProvider(create: (_) => di.sl<GeneralDataCubit>()),
+        BlocProvider(create: (_) => di.sl<AuthCubit>()),
+
+      ],
+      child: const MyApp(),
     ),
   );
 }
 
-void getFireBaseNotifications() {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  print("messaging ${messaging.app.name}");
-  // while app is opened
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    // NotificationApi.showNotification(
-    //   id: 0,
-    //   title: message.notification?.title ?? "",
-    //   body: message.notification?.body ?? "",
-    // );
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.data}');
-      print("message $message");
-      print("data ${message.data}");
-    }
-  });
-  // while app is closed
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("message $message");
-    print("data ${message.data}");
-  });
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "FIT over FAT",
+      theme: lightTheme,
+      debugShowCheckedModeBanner: false,
+      initialRoute: Routes.splashScreen,
+      navigatorKey: NavigationService.navigationKey,
+      onGenerateRoute: RouteGenerator.onGenerateRoute,
+      // localizationsDelegates: L10n.localizationDelegates,
+      // supportedLocales: L10n.supportedLocales,
+      // localeResolutionCallback: L10n.setFallbackLocale,
+      // locale: BlocProvider.of<L10nCubit>(context, listen: true).appLocale,
+    );
+  }
 }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("onBackgroundMessage");
-    print("message $message");
-    print("data ${message.data}");
-  });
-}
 
-Future getNotificationPermission() async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
-  Future<PermissionStatus> permissionStatus =
-      NotificationPermissions.getNotificationPermissionStatus();
-  permissionStatus.then((value) {
-    if (value.name != 'granted') {
-      Future.delayed(const Duration(seconds: 5), () {
-        NotificationPermissions.requestNotificationPermissions();
-      });
-    }
-  });
-}
-
-// runAppSpector() {
-//   final config = Config()
-//     ..iosApiKey = "Your iOS API_KEY"
-//     ..androidApiKey = "android_YzkyZjQ2NmEtMTQ0OS00YTVkLWJlODItYmIxOTdlYjkwNDQz";
-//   // If you don't want to start all monitors you can specify a list of necessary ones
-//   config.monitors = Monitors.all();
-//
-//   AppSpectorPlugin.run(config);
-// }
+final ThemeData lightTheme = ThemeData(
+  useMaterial3: false,
+  //cupertinoOverrideTheme: NoDefaultCupertinoThemeData(: false),
+  primarySwatch: Colors.green,
+  primaryColor: AppColors.PRIMART_COLOR,
+  dialogBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.white,
+  fontFamily: 'appFont',
+  // textTheme: TextTheme(
+  //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+  // ),
+);
