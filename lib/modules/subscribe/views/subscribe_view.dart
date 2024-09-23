@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +15,7 @@ import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/error_handler_widget.dart';
+import '../../cart/views/web_view.dart';
 import '../../home/view/widgets/home_appbar.dart';
 import '../controllers/subscribe_controller.dart';
 import 'non_user_subscribe_view.dart';
@@ -37,7 +39,7 @@ class SubscribeView extends GetView<SubscribeController> {
                 if (controller.error.value.isNotEmpty)
                   return errorHandler(controller.error.value, controller);
                 return SizedBox(
-                  height: Get.height,
+                  height: deviceHeight,
                   child: Column(
                     children: [
                       //App bar

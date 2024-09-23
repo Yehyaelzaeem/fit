@@ -1,4 +1,5 @@
 
+import 'package:app/config/navigation/navigation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -233,9 +234,9 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                           await SharedHelper().writeData(CachingKey.EMAIL, email);
                                           await SharedHelper().writeData(CachingKey.USER_NAME, name);
                                           if (widget.toCheer == true) {
-                                            Get.offNamed(Routes.MY_MEALS);
+                                            NavigationService.pushReplacement(context,Routes.myMeals);
                                           } else if (widget.toOrders == true) {
-                                            Get.offNamed(Routes.ORDERS);
+                                            NavigationService.pushReplacement(context,Routes.orders);
                                           } else if(widget.save==true){
                                             Navigator.pop(context, true);
                                           }else {

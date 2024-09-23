@@ -3,6 +3,7 @@ import 'package:app/core/resources/app_assets.dart';
 
 import '../../../core/models/my_orders_response.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/utils/globals.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/edit_text.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -364,7 +365,7 @@ class OrdersView extends GetView<OrdersController> {
                                           e.deliveryMethod != 'delivery')
                                         Expanded(
                                             child: kTextbody(
-                                          '${controller.globalController.mealFeatureHomeResponse.value.data!.info!.address!}',
+                                          '${mealFeatureHomeResponse.data!.info!.address!}',
                                           color: Colors.black,
                                           align: TextAlign.start,
                                         )),
@@ -376,28 +377,19 @@ class OrdersView extends GetView<OrdersController> {
 
                               if ((e.deliveryMethod != 'Delivery' ||
                                       e.deliveryMethod != 'delivery') &&
-                                  controller.globalController.mealFeatureHomeResponse
-                                          .value.data !=
+                                  mealFeatureHomeResponse
+                                          .data !=
                                       null &&
-                                  controller
-                                          .globalController
-                                          .mealFeatureHomeResponse
-                                          .value
+                                  mealFeatureHomeResponse
                                           .data!
                                           .info !=
                                       null &&
-                                  controller
-                                          .globalController
-                                          .mealFeatureHomeResponse
-                                          .value
+                                  mealFeatureHomeResponse
                                           .data!
                                           .info!
                                           .pickupLocation !=
                                       null &&
-                                  controller
-                                      .globalController
-                                      .mealFeatureHomeResponse
-                                      .value
+                                  mealFeatureHomeResponse
                                       .data!
                                       .info!
                                       .pickupLocation!
@@ -426,31 +418,19 @@ class OrdersView extends GetView<OrdersController> {
 
                                         String location = "";
 
-                                        if (controller
-                                                .globalController
-                                                .mealFeatureHomeResponse
-                                                .value
+                                        if (mealFeatureHomeResponse
                                                 .data !=
                                             null) {
-                                          if (controller
-                                                  .globalController
-                                                  .mealFeatureHomeResponse
-                                                  .value
+                                          if (mealFeatureHomeResponse
                                                   .data!
                                                   .info !=
                                               null) {
-                                            if (controller
-                                                    .globalController
-                                                    .mealFeatureHomeResponse
-                                                    .value
+                                            if (mealFeatureHomeResponse
                                                     .data!
                                                     .info!
                                                     .pickupLocation !=
                                                 null) {
-                                              location = controller
-                                                  .globalController
-                                                  .mealFeatureHomeResponse
-                                                  .value
+                                              location = mealFeatureHomeResponse
                                                   .data!
                                                   .info!
                                                   .pickupLocation!;
@@ -610,16 +590,16 @@ class OrdersView extends GetView<OrdersController> {
 
   String getInsturctions(String deliveryMethod) {
     String instructions = "";
-    if (controller.globalController.mealFeatureHomeResponse.value.data == null)
+    if (mealFeatureHomeResponse.data == null)
       return "";
-    if (controller.globalController.mealFeatureHomeResponse.value.data!.info ==
+    if (mealFeatureHomeResponse.data!.info ==
         null) return "";
     if (deliveryMethod == 'Delivery' || deliveryMethod == 'delivery') {
       instructions =
-          "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.deliveryInstructions}";
+          "${mealFeatureHomeResponse.data!.info!.deliveryInstructions}";
     } else {
       instructions =
-          "${controller.globalController.mealFeatureHomeResponse.value.data!.info!.pickupInstructions}";
+          "${mealFeatureHomeResponse.data!.info!.pickupInstructions}";
     }
     return instructions;
   }

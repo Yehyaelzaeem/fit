@@ -1,7 +1,11 @@
 
+import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
 import 'package:app/core/resources/app_colors.dart';
+import 'package:app/core/resources/app_values.dart';
+import 'package:app/core/utils/globals.dart';
 import 'package:app/core/utils/shared_helper.dart';
+import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +16,7 @@ import 'package:get/get.dart';
 
 import '../../../../config/navigation/routes.dart';
 import '../../../../core/services/api_provider.dart';
+import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/strings.dart';
 import '../../../../core/view/widgets/app_dialog.dart';
 import '../../../../core/view/widgets/default/text.dart';
@@ -23,10 +28,10 @@ class HomeDrawer extends StatefulWidget {
 const HomeDrawer({Key? key}) : super(key: key);
 
 @override
-State<HomeScreen> createState() => _HomeScreenState();
+State<HomeDrawer> createState() => _HomeDrawerState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeDrawerState extends State<HomeDrawer> {
 late final HomeCubit homeCubit;
 late final GeneralDataCubit generalDataCubit;
 
@@ -36,7 +41,8 @@ void initState() {
 super.initState();
 homeCubit = BlocProvider.of<HomeCubit>(context);
 generalDataCubit = BlocProvider.of<GeneralDataCubit>(context);
-homeCubit.onInit();
+homeCubit.onInit(BlocProvider.of<DiaryCubit>(context));
+checkIfUserIsLogged();
 }
 //
 // final homeCubit = Get.find<HomeController>(tag: 'home');
@@ -45,29 +51,40 @@ homeCubit.onInit();
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: checkIfUserIsLogged(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return Container();
-        }
-        return itemBuilder(snapshot.data);
-      },
-    );
+    return  BlocConsumer<HomeCubit, HomeStates>(
+        listener: (context, state) {
+      if (state is SendReportFailureState) {
+        Alerts.showToast(state.failure.message);
+      }
+
+    },
+    builder: (context, state) => state is GetHomeLoadingState
+    ?  Container()
+        : itemBuilder()
+        );
   }
 
-  Widget itemBuilder(bool? data) {
+  Widget itemBuilder() {
     SharedHelper prefs = SharedHelper();
 
     return Container(
-      width: Get.width / 1.5,
+      width: deviceWidth / 1.5,
       height: double.infinity,
       color: Colors.white,
-      child: SingleChildScrollView(
+      child: BlocConsumer<HomeCubit, HomeStates>(
+        listener: (context, state) {
+      if (state is SendReportFailureState) {
+        Alerts.showToast(state.failure.message);
+      }
+
+    },
+    builder: (context, state) => state is GetHomeLoadingState
+    ?  Container()
+        :SingleChildScrollView(
         child: Column(
           children: <Widget>[
             // if (prefs.getUserId() != null)
-            homeCubit.isLogggd.value == false
+            currentUser == null
                 ? Column(
                     children: [
                       Padding(
@@ -86,33 +103,27 @@ homeCubit.onInit();
                     color: Colors.white,
                     child: Column(
                       children: [
-                        Obx(() {
-                          Echo(
-                              'drawer itemBuilder ${homeCubit.avatar.value}');
-                          return ClipRRect(
-                              borderRadius: BorderRadius.circular(250),
-                              // ignore: unnecessary_null_comparison
-                              child: CachedNetworkImage(
-                                imageUrl: '${homeCubit.avatar.value}',
-                                fit: BoxFit.cover,
-                                height: 80,
-                                width: 80,
-                                placeholder: (ctx, url) {
-                                  return profileImageHolder();
-                                },
-                                errorWidget: (context, url, error) {
-                                  return profileImageHolder();
-                                },
-                              ));
-                        })
+                        ClipRRect(
+                            borderRadius: BorderRadius.circular(250),
+                            // ignore: unnecessary_null_comparison
+                            child: CachedNetworkImage(
+                              imageUrl: '${currentUser?.data?.image}',
+                              fit: BoxFit.cover,
+                              height: 80,
+                              width: 80,
+                              placeholder: (ctx, url) {
+                                return profileImageHolder();
+                              },
+                              errorWidget: (context, url, error) {
+                                return profileImageHolder();
+                              },
+                            ))
                         // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
                         // Text(prefs.getName()!)
                         ,
-                        Obx(() {
-                          return kTextHeader('${homeCubit.name.value}',
-                              size: 18);
-                        }),
-                        kTextfooter('ID :  ${homeCubit.id.value}',
+                         kTextHeader('${currentUser?.data?.name}',
+                              size: 18),
+                        kTextfooter('ID :  ${currentUser?.data?.id}',
                             size: 14, color: Colors.black87, paddingV: 0),
                         SizedBox(
                           height: 24,
@@ -167,33 +178,33 @@ homeCubit.onInit();
             if (!globalIsIosInReview)
               singleDrawerItem(
                   action: () {
-                    Get.toNamed(Routes.myPackagesView);
+                    NavigationService.push(context,Routes.myPackagesView);
                   },
                   title: "My Packages",
                   image: "assets/icons/crown.svg"),
 
             // //Profile
-            homeCubit.isLogggd == false
+            currentUser == null
                 ? SizedBox()
                 : singleDrawerItem(
                     title: Strings().profile,
                     image: 'assets/icons/user.svg',
                     action: () {
-                      Get.toNamed(Routes.profile);
+                      NavigationService.push(context,Routes.profile);
                     }),
 
             //Messages
-            homeCubit.isLogggd == false
+            currentUser == null
                 ? SizedBox()
                 : singleDrawerItem(
                     title: 'Messages',
                     image: 'assets/icons/messages.svg',
                     action: () {
-                      Get.toNamed(Routes.notificationScreen);
+                      NavigationService.push(context,Routes.notificationScreen);
                     }),
             //Messages
 
-            homeCubit.isLogggd.value == false
+            currentUser == null
                 ? SizedBox()
                 : homeCubit.faqStatus == false
                     ? SizedBox()
@@ -201,7 +212,7 @@ homeCubit.onInit();
                         title: 'FAQ',
                         image: 'assets/icons/faq.svg',
                         action: () {
-                          Get.toNamed(Routes.faqs);
+                          NavigationService.push(context,Routes.faqs);
                         }),
             //FAQ
             /*    FutureBuilder<bool>(
@@ -212,7 +223,7 @@ homeCubit.onInit();
                       title: 'FAQ',
                       image: 'assets/icons/faq.svg',
                       action: () {
-                        Get.toNamed(Routes.FAQ);
+                        NavigationService.push(context,Routes.FAQ);
                       });
                 return Container();
               },
@@ -224,13 +235,13 @@ homeCubit.onInit();
                 action: () async{
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      Get.toNamed(Routes.transformView);
+      NavigationService.push(context,Routes.transformView);
     }else{
       Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
 
     }
                 }),
-            homeCubit.isLogggd.value == false
+            currentUser == null
                 ? SizedBox()
                 : homeCubit.orientationStatus == false
                     ? SizedBox()
@@ -240,7 +251,7 @@ homeCubit.onInit();
                         action: () async{
                           final result = await Connectivity().checkConnectivity();
                           if (result != ConnectivityResult.none) {
-                            Get.toNamed(Routes.Orientation);
+                            NavigationService.push(context,Routes.orientation);
                           }else{
                             Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
 
@@ -257,7 +268,7 @@ homeCubit.onInit();
     action: () async{
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-    Get.toNamed(Routes.CHEER_FULL);
+    NavigationService.push(context,Routes.cheerful);
     }else{
     Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
 
@@ -272,7 +283,7 @@ homeCubit.onInit();
                       title: "Cheer-Full",
                       image: 'assets/icons/cheer.svg',
                       action: () {
-                        Get.toNamed(Routes.CHEER_FULL);
+                        NavigationService.push(context,Routes.CHEER_FULL);
                       });
                 return Container();
               },
@@ -282,7 +293,7 @@ homeCubit.onInit();
             //     title: "My Orders",
             //     image: 'assets/img/ic_orders.png',
             //     action: () {
-            //       Get.toNamed(Routes.ORDERS);
+            //       NavigationService.push(context,Routes.ORDERS);
             //     }),
             //Contact
             singleDrawerItem(
@@ -291,7 +302,7 @@ homeCubit.onInit();
     action: () async{
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-    Get.toNamed(Routes.contactUs);
+    NavigationService.push(context,Routes.contactUs);
     }else{
     Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
 
@@ -304,18 +315,18 @@ homeCubit.onInit();
                 action: () async{
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      Get.toNamed(Routes.about);
+      NavigationService.push(context,Routes.about);
     }else{
     Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
 
     }
     }),
-            homeCubit.isLogggd.value == false
+            currentUser == null
                 ? singleDrawerItem(
                     title: "Login",
                     image: "assets/icons/logout.svg",
                     action: () {
-                      Get.offAllNamed(Routes.authScreen);
+                      NavigationService.pushReplacementAll(context,Routes.authScreen);
                     })
                 : singleDrawerItem(
                     title: Strings().logout,
@@ -330,9 +341,9 @@ homeCubit.onInit();
                         },
                         cancelText: "No",
                         confirmAction: () {
-                          prefs.logout();
+                          // prefs.logout();
                           loadingHome=null;
-                          Get.offAllNamed(Routes.splashScreen);
+                          NavigationService.pushReplacementAll(context,Routes.splashScreen);
                         },
                         confirmText: "Yes",
                       );
@@ -365,7 +376,7 @@ homeCubit.onInit();
           ],
         ),
       ),
-    );
+    ));
   }
 
   Widget profileImageHolder() {
@@ -458,10 +469,10 @@ homeCubit.onInit();
     return true;
   }
 */
-  Future<bool> checkIfUserIsLogged() async {
+  Future checkIfUserIsLogged() async {
     // Get.putAsync(() async => await Get.put(HomeController()));
-    bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
+    // bool isLogged = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     homeCubit.refreshController(false);
-    return isLogged;
+    // return isLogged;
   }
 }

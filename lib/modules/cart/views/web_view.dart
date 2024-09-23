@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'package:app/core/resources/app_assets.dart';
 
+import '../../../config/navigation/navigation_services.dart';
 import '../../../config/navigation/routes.dart';
 import '../../../core/utils/shared_helper.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 
 import '../../home/view/widgets/home_appbar.dart';
+import '../../invoice/views/invoice_view.dart';
 
 
 class WebViewScreen extends StatelessWidget {
@@ -121,7 +123,7 @@ class WebViewScreen extends StatelessWidget {
                             ),
                           );
                         } else {
-                          Get.offNamed(Routes.ORDERS);
+                          NavigationService.pushReplacement(context,Routes.orders);
                           Get.dialog(
                             Dialog(
                               child: Padding(
@@ -157,7 +159,7 @@ class WebViewScreen extends StatelessWidget {
                                 children: [
                                   SizedBox(height: 12),
                                   Image.asset(
-                                    kFailed,
+                                    AppImages.kFailed,
                                     scale: 10,
                                   ),
                                   SizedBox(height: 12),
@@ -201,7 +203,7 @@ class WebViewScreen extends StatelessWidget {
                                   children: [
                                     SizedBox(height: 12),
                                     Image.asset(
-                                      kSuccessful,
+                                      AppImages.kSuccessful,
                                       scale: 10,
                                     ),
                                     SizedBox(height: 12),
@@ -216,7 +218,7 @@ class WebViewScreen extends StatelessWidget {
                             ),
                           );
                         } else {
-                          Get.offNamed(Routes.ORDERS);
+                          NavigationService.pushReplacement(context,Routes.orders);
                           Get.dialog(
                             Dialog(
                               child: Padding(
@@ -252,7 +254,7 @@ class WebViewScreen extends StatelessWidget {
                                 children: [
                                   SizedBox(height: 12),
                                   Image.asset(
-                                    kFailed,
+                                    AppImages.kFailed,
                                     scale: 10,
                                   ),
                                   SizedBox(height: 12),
@@ -309,7 +311,7 @@ class WebViewScreen extends StatelessWidget {
       child: Stack(
         children: [
           Center(
-            child: Image.asset(kLogoChellFullRow, height: 60),
+            child: Image.asset(AppImages.kLogoChellFullRow, height: 60),
           ),
           Positioned(
             top: 0,

@@ -56,6 +56,7 @@ class CachingKey extends Enum<String> {
   static const CachingKey Meals_Creation_LIST = const CachingKey('Meals_Creation_LIST');
   static const CachingKey OTHER_CALORIES_CREATION = const CachingKey('OTHER_CALORIES_CREATION');
   static const CachingKey LAST_LOADING_TIME = const CachingKey('LAST_LOADING_TIME');
+  static const CachingKey DAIRY_TEMP = const CachingKey('DAIRY_TEMP');
 }
 
 class A {
@@ -81,11 +82,11 @@ class SharedHelper {
     _shared.clear();
   }
 
-  logout() async {
-    _shared = await SharedPreferences.getInstance();
-    _shared.clear();
-    // Get.offAllNamed(Routes.SPLASH);
-  }
+  // logout() async {
+  //   _shared = await SharedPreferences.getInstance();
+  //   _shared.clear();
+  //   // Get.offAllNamed(Routes.SPLASH);
+  // }
 
   writeData(CachingKey key, value) async {
     _shared = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:app/config/navigation/navigation.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -49,6 +50,7 @@ import '../models/usual_meals_data_reposne.dart';
 import '../models/usual_meals_reposne.dart';
 import '../models/version_response.dart';
 import '../utils/const_strings.dart';
+import '../utils/globals.dart';
 import '../utils/shared_helper.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -380,11 +382,11 @@ class ApiProvider {
               : "profile?fcm_token=$deviceToken"}");
       if (response.data["success"] == true) {
         UserResponse ur = UserResponse.fromJson(response.data);
-        if (globalController.shoNewMessage.value) {
+        if (shoNewMessage) {
           if (ur.data != null &&
               ur.data!.newMessages != null &&
               ur.data!.newMessages! > 0) {
-            globalController.shoNewMessage.value = false;
+            shoNewMessage = false;
 
             appDialog(
               title: 'You have a new message from \n Dr/ Ramy Mansour',
@@ -392,10 +394,10 @@ class ApiProvider {
               barrierDismissible: false,
               cancelAction: null,
               confirmAction: () {
-                globalController.canDismissNewMessageDialog.value = true;
-                globalController.removeNotificationsCount.value = true;
-                getx.Get.back();
-                getx.Get.toNamed(Routes.NOTIFICATIONS);
+                canDismissNewMessageDialog = true;
+                removeNotificationsCount = true;
+                NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
+                NavigationService.push(NavigationService.navigationKey.currentState!.context,Routes.notificationScreen);
               },
               cancelText: '',
               confirmText: 'Check it',
@@ -454,6 +456,7 @@ class ApiProvider {
   return ur??SessionResponse();
   }
   }
+
   Future<void> saveSessionsLocally(SessionResponse sessionResponse) async {
     await SharedHelper().writeData(CachingKey.SESSIONS, jsonEncode(sessionResponse.toJson()));
   }
@@ -530,100 +533,100 @@ class ApiProvider {
     return millisecondsSinceEpoch != null ? DateTime.fromMillisecondsSinceEpoch(millisecondsSinceEpoch) : null;
   }
 
-  Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave,bool isLive) async {
-
-    final result = await Connectivity().checkConnectivity();
-    DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
-
-
-    if (result != ConnectivityResult.none&&isNotSending && isLive) {
-    print('date ====>$date');
-    Response response = await _utils.get("calories_day_details?date=$date");
-    log('api->calories_day_details?date=$date');
-    log('response ${response.data}');
-    print('12response ${response.data}');
-    if (response.data["success"] == true) {
-      if(dayDetailsResponseTemp==null){
-        saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
-      }
-      if(!notSave) {
-        saveDairyLocally(DayDetailsResponse.fromJson(response.data), date!);
-      }
-      return DayDetailsResponse.fromJson(response.data);
-    } else {
-      if(dayDetailsResponseTemp==null){
-        saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
-      }
-      if(!notSave) {
-        saveDairyLocally(DayDetailsResponse.fromJson(response.data),date!);
-      }
-      return DayDetailsResponse.fromJson(response.data);
-    }
-    }else{
-      print(date);
-      Map<String, dynamic> dairy = await readDairyLocally();
-      dynamic data = dairy[date];
-      if (data != null) {
-        return DayDetailsResponse.fromJson(data);
-      } else {
-        if(dayDetailsResponseTemp!=null){
-          // if(dayDetailsResponseTemp.data?.days!.any((element) => element.date==date)??true){
-          //   dayDetailsResponseTemp.data?.days?.forEach((element) {
-          //     print(element.date);
-          //     print(element.dateFormat);
-          //     print(element.active);
-          //     if(element.date==date){
-          //       element.active = true;
-          //     }else{
-          //       element.active = false;
-          //     }
-          //
-          //   });
-          //   dayDetailsResponseTemp.data?.days?.forEach((element) {
-          //
-          //     print(element.date);
-          //     print(element.dateFormat);
-          //     print(element.active);
-          //   });
-          // }else{
-            dayDetailsResponseTemp.data?.days = List.generate(3, (index){
-              if(index==0){
-                return  Days(date: date,dateFormat: DateFormat('EEEE, d MMMM y').format(DateTime.parse(date!)),active: true);
-              }else
-              if(index==1) {
-                return  Days(date: DateTime.parse(date!).subtract(Duration(days: 1))
-                    .toString()
-                    .substring(0, 10),
-                    dateFormat: DateFormat('EEEE, d MMMM y').format(
-                        DateTime.parse(date!).subtract(Duration(days: 1))),
-                    active: false);
-              }else
-              if(index==2) {
-              return  Days(date: DateTime.parse(date!).add(Duration(days: 1))
-                    .toString()
-                    .substring(0, 10),
-                    dateFormat: DateFormat('EEEE, d MMMM y').format(
-                        DateTime.parse(date).add(Duration(days: 1))),
-                    active: false);
-              }else{
-                return Days(date: DateTime.parse(date!).add(Duration(days: 1))
-                    .toString()
-                    .substring(0, 10),
-                    dateFormat: DateFormat('EEEE, d MMMM y').format(
-                        DateTime.parse(date).add(Duration(days: 1))),
-                    active: false);
-              }
-            });
-          // }
-          saveDairyLocally(dayDetailsResponseTemp,date!);
-
-        }
-
-        return dayDetailsResponseTemp??DayDetailsResponse();
-      }
-      return dairy[date]??DayDetailsResponse();
-    }
-  }
+  // Future<DayDetailsResponse> getDiaryView(String? date,bool isNotSending,bool notSave,bool isLive) async {
+  //
+  //   final result = await Connectivity().checkConnectivity();
+  //   DayDetailsResponse? dayDetailsResponseTemp = await readDairyTempLocally();
+  //
+  //
+  //   if (result != ConnectivityResult.none&&isNotSending && isLive) {
+  //   print('date ====>$date');
+  //   Response response = await _utils.get("calories_day_details?date=$date");
+  //   log('api->calories_day_details?date=$date');
+  //   log('response ${response.data}');
+  //   print('12response ${response.data}');
+  //   if (response.data["success"] == true) {
+  //     if(dayDetailsResponseTemp==null){
+  //       saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
+  //     }
+  //     if(!notSave) {
+  //       saveDairyLocally(DayDetailsResponse.fromJson(response.data), date!);
+  //     }
+  //     return DayDetailsResponse.fromJson(response.data);
+  //   } else {
+  //     if(dayDetailsResponseTemp==null){
+  //       saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
+  //     }
+  //     if(!notSave) {
+  //       saveDairyLocally(DayDetailsResponse.fromJson(response.data),date!);
+  //     }
+  //     return DayDetailsResponse.fromJson(response.data);
+  //   }
+  //   }else{
+  //     print(date);
+  //     Map<String, dynamic> dairy = await readDairyLocally();
+  //     dynamic data = dairy[date];
+  //     if (data != null) {
+  //       return DayDetailsResponse.fromJson(data);
+  //     } else {
+  //       if(dayDetailsResponseTemp!=null){
+  //         // if(dayDetailsResponseTemp.data?.days!.any((element) => element.date==date)??true){
+  //         //   dayDetailsResponseTemp.data?.days?.forEach((element) {
+  //         //     print(element.date);
+  //         //     print(element.dateFormat);
+  //         //     print(element.active);
+  //         //     if(element.date==date){
+  //         //       element.active = true;
+  //         //     }else{
+  //         //       element.active = false;
+  //         //     }
+  //         //
+  //         //   });
+  //         //   dayDetailsResponseTemp.data?.days?.forEach((element) {
+  //         //
+  //         //     print(element.date);
+  //         //     print(element.dateFormat);
+  //         //     print(element.active);
+  //         //   });
+  //         // }else{
+  //           dayDetailsResponseTemp.data?.days = List.generate(3, (index){
+  //             if(index==0){
+  //               return  Days(date: date,dateFormat: DateFormat('EEEE, d MMMM y').format(DateTime.parse(date!)),active: true);
+  //             }else
+  //             if(index==1) {
+  //               return  Days(date: DateTime.parse(date!).subtract(Duration(days: 1))
+  //                   .toString()
+  //                   .substring(0, 10),
+  //                   dateFormat: DateFormat('EEEE, d MMMM y').format(
+  //                       DateTime.parse(date!).subtract(Duration(days: 1))),
+  //                   active: false);
+  //             }else
+  //             if(index==2) {
+  //             return  Days(date: DateTime.parse(date!).add(Duration(days: 1))
+  //                   .toString()
+  //                   .substring(0, 10),
+  //                   dateFormat: DateFormat('EEEE, d MMMM y').format(
+  //                       DateTime.parse(date).add(Duration(days: 1))),
+  //                   active: false);
+  //             }else{
+  //               return Days(date: DateTime.parse(date!).add(Duration(days: 1))
+  //                   .toString()
+  //                   .substring(0, 10),
+  //                   dateFormat: DateFormat('EEEE, d MMMM y').format(
+  //                       DateTime.parse(date).add(Duration(days: 1))),
+  //                   active: false);
+  //             }
+  //           });
+  //         // }
+  //         saveDairyLocally(dayDetailsResponseTemp,date!);
+  //
+  //       }
+  //
+  //       return dayDetailsResponseTemp??DayDetailsResponse();
+  //     }
+  //     return dairy[date]??DayDetailsResponse();
+  //   }
+  // }
 
   Future<void> saveDairyLocally(DayDetailsResponse dayDetailsResponse, String date) async {
     // Read existing data
@@ -1440,375 +1443,153 @@ class ApiProvider {
     await SharedHelper().writeData(CachingKey.DAIRY_DATA_LIST, dairyDataListJson);
   }
 
-// Function to send locally saved diary data to API
-//   Future<void> sendSavedDiaryData() async {
-//     List<String> diaryDataList = (await SharedHelper().readStringList(CachingKey.DAIRY_DATA_LIST)) ?? [];
-//     DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(getEgyptTime().toString().substring(0, 10),true,true);
-//
-//     List<String> dairySent = [];
-//
-//     List<DiaryEntry> dairySendList= [];
-//
-//     for (String diaryDataJson in diaryDataList) {
-//       DiaryData diaryData = DiaryData.fromJson(jsonDecode(diaryDataJson));
-//
-//
-//       final result = await Connectivity().checkConnectivity();
-//       if (result != ConnectivityResult.none) {
-//         dairySent.add(diaryDataJson);
-//         if (diaryData.id == null) {
-//           if(!dairySendList.any((element) => element.date==diaryData.date)){
-//             dairySendList.add(
-//                 DiaryEntry(date: diaryData.date, water: '0', food: [], qty: [], createdAt: [])
-//             );
-//           }
-//           if(diaryData.water!=null){
-//             dairySendList.firstWhere((element) => element.date==diaryData.date).water = diaryData.water!;
-//           }else
-//           if(diaryData.workOut!=null){
-//             dairySendList.firstWhere((element) => element.date==diaryData.date).workout = diaryData.workOut!;
-//             dairySendList.firstWhere((element) => element.date==diaryData.date).workoutDesc = diaryData.workoutDesc??'';
-//           }else
-//           if(diaryData.foodProtine!=null){
-//             if (diaryData.foodProtine != 9999) {
-//               dairySendList
-//                   .firstWhere((element) => element.date == diaryData.date)
-//                   .food
-//                   .add(diaryData.foodProtine!);
-//
-//               dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
-//               dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
-//             }else{
-//               if (dayDetailsResponse.data!.proteins!.food!.any((
-//                   element) => element.title == diaryData.foodName)) {
-//                 dairySendList
-//                     .firstWhere((element) => element.date == diaryData.date)
-//                     .food
-//                     .add(dayDetailsResponse.data!.proteins!.food!
-//                     .firstWhere((element) =>
-//                 element.title == diaryData.foodName).id!);
-//
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
-//
-//               }
-//               else
-//               if (dayDetailsResponse.data!.carbs!.food!.any((element) => element
-//                   .title == diaryData.foodName)) {
-//                 dairySendList
-//                     .firstWhere((element) => element.date == diaryData.date)
-//                     .food
-//                     .add(diaryData.foodProtine!);
-//                 dairySendList
-//                     .firstWhere((element) => element.date == diaryData.date)
-//                     .food
-//                     .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
-//                     element) => element.title == diaryData.foodName).id!);
-//
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
-//               }
-//               else
-//               if (dayDetailsResponse.data!.fats!.food!.any((element) => element
-//                   .title == diaryData.foodName)) {
-//                 dairySendList
-//                     .firstWhere((element) => element.date == diaryData.date)
-//                     .food
-//                     .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
-//                     element) => element.title == diaryData.foodName).id!);
-//
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).qty.add(diaryData.qtyProtiene!);
-//                 dairySendList.firstWhere((element) => element.date==diaryData.date).createdAt.add(diaryData.dateTime!);
-//               }
-//             }
-//           }
-//           // if (diaryData.foodProtine != 9999) {
-//           //
-//           //   await ApiProvider().createDiaryData(
-//           //     date: diaryData.date,
-//           //     water: diaryData.water,
-//           //     foodProtine: diaryData.foodProtine,
-//           //     qtyProtiene: diaryData.qtyProtiene,
-//           //     workOut: diaryData.workOut,
-//           //     workout_desc: diaryData.workoutDesc,
-//           //   );
-//           // }
-//           // else {
-//           //   if (dayDetailsResponse.data!.proteins!.food!.any((
-//           //       element) => element.title == diaryData.foodName)) {
-//           //     await ApiProvider().createDiaryData(
-//           //       date: diaryData.date,
-//           //       water: diaryData.water,
-//           //       foodProtine: dayDetailsResponse.data!.proteins!.food!
-//           //           .firstWhere((element) =>
-//           //       element.title == diaryData.foodName).id,
-//           //       qtyProtiene: diaryData.qtyProtiene,
-//           //       workOut: diaryData.workOut,
-//           //       workout_desc: diaryData.workoutDesc,
-//           //     );
-//           //   }
-//           //   else
-//           //   if (dayDetailsResponse.data!.carbs!.food!.any((element) => element
-//           //       .title == diaryData.foodName)) {
-//           //     await ApiProvider().createDiaryData(
-//           //       date: diaryData.date,
-//           //       water: diaryData.water,
-//           //       foodProtine: dayDetailsResponse.data!.carbs!.food!.firstWhere((
-//           //           element) => element.title == diaryData.foodName).id,
-//           //       qtyProtiene: diaryData.qtyProtiene,
-//           //       workOut: diaryData.workOut,
-//           //       workout_desc: diaryData.workoutDesc,
-//           //     );
-//           //   }
-//           //   else
-//           //   if (dayDetailsResponse.data!.fats!.food!.any((element) => element
-//           //       .title == diaryData.foodName)) {
-//           //     await ApiProvider().createDiaryData(
-//           //       date: diaryData.date,
-//           //       water: diaryData.water,
-//           //       foodProtine: dayDetailsResponse.data!.fats!.food!.firstWhere((
-//           //           element) => element.title == diaryData.foodName).id,
-//           //       qtyProtiene: diaryData.qtyProtiene,
-//           //       workOut: diaryData.workOut,
-//           //       workout_desc: diaryData.workoutDesc,
-//           //     );
-//           //   }
-//           // }
-//         }
-//         else {
-//           await ApiProvider().editDiaryData(
-//             date: diaryData.date,
-//             water: diaryData.water,
-//             foodProtine: diaryData.foodProtine,
-//             qtyProtiene: diaryData.qtyProtiene,
-//             workOut: diaryData.workOut,
-//             workout_desc: diaryData.workoutDesc,
-//             id: diaryData.id,
-//           );
-//         }
-//
-//         if(dairySent.isNotEmpty){
-//
-//             for (DiaryEntry entry in dairySendList) {
-//               var formData = FormData.fromMap({
-//                 'date': entry.date,
-//                 'water': entry.water,
-//                 'food[]': entry.food,
-//                 'qty[]': entry.qty,
-//                 'created_at[]': entry.createdAt,
-//                 if(entry.workout!=null)
-//                 'workout': entry.workout??'',
-//                 if(entry.workout!=null)
-//                 'workout_desc': entry.workoutDesc??'',
-//               });
-//
-//               try {
-//                   Echo("api--> save_offline_diary");
-//                   Response response = await _utils.post(
-//                     "save_offline_diary",
-//                     body: formData,
-//                   );
-//
-//                   print(response.data);
-//                 if (response.data["success"] == true) {
-//                   // Remove the successfully sent entry from local storage
-//                 }
-//               } catch (e) {
-//                 // Handle the error, maybe break the loop or log the error
-//                 print("Error sending diary entry: $e");
-//               }
-//             }
-//         }
-//         // FormData body = FormData.fromMap({
-//         //   if (water != null) "water": water,
-//         //   "date": date,
-//         //   if (foodProtine != null) "food": foodProtine,
-//         //   if (qtyProtiene != null) "qty": qtyProtiene,
-//         //   if (workOut != null) "workout": workOut,
-//         //   if (workout_desc != null) "workout_desc": workout_desc,
-//         // });
-//         //
-//         // final result = await Connectivity().checkConnectivity();
-//         // if (result != ConnectivityResult.none) {
-//         //   Echo("api--> save_offline_diary");
-//         //   Response response = await _utils.post(
-//         //     "save_offline_diary",
-//         //     body: body,
-//         //   );
-//         //
-//         //   if (response.data["success"] == true) {
-//         //     return GeneralResponse.fromJson(response.data);
-//         //   } else {
-//         //     return GeneralResponse.fromJson(response.data);
-//         //   }
-//         // }
-//
-//       }else{
-//
-//       }
-//     }
-//
-//     dairySent.forEach((element) {
-//       if(diaryDataList.contains(element)){
-//         diaryDataList.remove(element);
-//       }
-//     });
-//
-//     if(diaryDataList.isEmpty){
-//       // Clear locally saved sleep time data after successfully sending to API
-//       await SharedHelper().removeData(CachingKey.DAIRY_DATA_LIST);
-//     }else{
-//       await SharedHelper().writeData(CachingKey.DAIRY_DATA_LIST, diaryDataList);
-//     }
-//
-//   }
 
-  Future<void> sendSavedDiaryDataByDay() async {
-    if(!sendingOffline) {
-      sendingOffline = true;
-      Map<String, dynamic> existingData = await readDairyToSendLocally();
-      DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(
-          getEgyptTime().toString().substring(0, 10), true, true, true);
-      List<DiaryEntry> dairySendList = [];
-
-      for (var key in existingData.keys) {
-        print("Sending local key $key");
-        DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(
-            existingData[key]);
-        dairySendList.add(
-            DiaryEntry(date: key,
-                water: dayDetailsToSend.data!.water ?? 0,
-                food: [],
-                qty: [],
-                createdAt: [])
-        );
-        if (dayDetailsToSend.data!.water != null) {
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .water = dayDetailsToSend.data!.water!;
-        }
-        if (dayDetailsToSend.data!.dayWorkouts != null) {
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .workout =
-          dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title ==
-              dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
-          dairySendList
-              .firstWhere((element) => element.date == key)
-              .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
-              ? " "
-              : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
-        }
-        dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
-          if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
-          element.title == item.quality)) {
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .food
-                .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
-                element) => element.title == item.quality).id!);
-
-
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .qty
-                .add(item.qty!);
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .createdAt
-                .add(
-                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
-          }
-        });
-        dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
-          if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
-          element.title == item.quality)) {
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .food
-                .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
-                element) => element.title == item.quality).id!);
-
-
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .qty
-                .add(item.qty!);
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .createdAt
-                .add(
-                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
-          }
-        });
-
-        dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
-          if (dayDetailsResponse.data!.fats!.food!.any((element) =>
-          element.title == item.quality)) {
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .food
-                .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
-                element) => element.title == item.quality).id!);
-
-
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .qty
-                .add(item.qty!);
-            dairySendList
-                .firstWhere((element) => element.date == key)
-                .createdAt
-                .add(
-                item.createdAt ?? getEgyptTime().toString().substring(0, 16));
-          }
-        });
-      }
-
-
-      for (DiaryEntry entry in dairySendList) {
-        var formData = FormData.fromMap({
-          'date': entry.date,
-          'water': entry.water,
-          if(entry.workout != null)
-            'workout': entry.workout ?? '',
-          if(entry.workout != null)
-            'workout_desc': entry.workoutDesc ?? '',
-        });
-        for (int i = 0; i < entry.food.length; i++) {
-          formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
-          formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
-          print('entry.createdAt');
-          print(entry.createdAt[i].toString());
-          formData.fields.add(
-              MapEntry('created_at[$i]', entry.createdAt[i].toString()));
-        }
-        print('formData.fields');
-        print(formData.fields);
-
-        try {
-          Echo("api--> save_offline_diary");
-          Response response = await _utils.post(
-            "save_offline_diary",
-            body: formData,
-          );
-
-          print(response.data);
-          if (response.data["success"] == true) {
-            // Remove the successfully sent entry from local storage
-          }
-        } catch (e) {
-          // Handle the error, maybe break the loop or log the error
-          print("Error sending diary entry: $e");
-        }
-      }
-
-      sendingOffline = false;
-      await SharedHelper().removeData(CachingKey.DAIRY_TO_SEND);
-    }else{
-      await Future.delayed(Duration(seconds: 3));
-    }
-  }
+  // Future<void> sendSavedDiaryDataByDay() async {
+  //   if(!sendingOffline) {
+  //     sendingOffline = true;
+  //     Map<String, dynamic> existingData = await readDairyToSendLocally();
+  //     DayDetailsResponse dayDetailsResponse = await ApiProvider().getDiaryView(
+  //         getEgyptTime().toString().substring(0, 10), true, true, true);
+  //     List<DiaryEntry> dairySendList = [];
+  //
+  //     for (var key in existingData.keys) {
+  //       print("Sending local key $key");
+  //       DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(
+  //           existingData[key]);
+  //       dairySendList.add(
+  //           DiaryEntry(date: key,
+  //               water: dayDetailsToSend.data!.water ?? 0,
+  //               food: [],
+  //               qty: [],
+  //               createdAt: [])
+  //       );
+  //       if (dayDetailsToSend.data!.water != null) {
+  //         dairySendList
+  //             .firstWhere((element) => element.date == key)
+  //             .water = dayDetailsToSend.data!.water!;
+  //       }
+  //       if (dayDetailsToSend.data!.dayWorkouts != null) {
+  //         dairySendList
+  //             .firstWhere((element) => element.date == key)
+  //             .workout =
+  //         dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title ==
+  //             dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+  //         dairySendList
+  //             .firstWhere((element) => element.date == key)
+  //             .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
+  //             ? " "
+  //             : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+  //       }
+  //       dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
+  //         if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
+  //         element.title == item.quality)) {
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .food
+  //               .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
+  //               element) => element.title == item.quality).id!);
+  //
+  //
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .qty
+  //               .add(item.qty!);
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .createdAt
+  //               .add(
+  //               item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+  //         }
+  //       });
+  //       dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
+  //         if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
+  //         element.title == item.quality)) {
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .food
+  //               .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
+  //               element) => element.title == item.quality).id!);
+  //
+  //
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .qty
+  //               .add(item.qty!);
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .createdAt
+  //               .add(
+  //               item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+  //         }
+  //       });
+  //
+  //       dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
+  //         if (dayDetailsResponse.data!.fats!.food!.any((element) =>
+  //         element.title == item.quality)) {
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .food
+  //               .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
+  //               element) => element.title == item.quality).id!);
+  //
+  //
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .qty
+  //               .add(item.qty!);
+  //           dairySendList
+  //               .firstWhere((element) => element.date == key)
+  //               .createdAt
+  //               .add(
+  //               item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+  //         }
+  //       });
+  //     }
+  //
+  //
+  //     for (DiaryEntry entry in dairySendList) {
+  //       var formData = FormData.fromMap({
+  //         'date': entry.date,
+  //         'water': entry.water,
+  //         if(entry.workout != null)
+  //           'workout': entry.workout ?? '',
+  //         if(entry.workout != null)
+  //           'workout_desc': entry.workoutDesc ?? '',
+  //       });
+  //       for (int i = 0; i < entry.food.length; i++) {
+  //         formData.fields.add(MapEntry('food[$i]', entry.food[i].toString()));
+  //         formData.fields.add(MapEntry('qty[$i]', entry.qty[i].toString()));
+  //         print('entry.createdAt');
+  //         print(entry.createdAt[i].toString());
+  //         formData.fields.add(
+  //             MapEntry('created_at[$i]', entry.createdAt[i].toString()));
+  //       }
+  //       print('formData.fields');
+  //       print(formData.fields);
+  //
+  //       try {
+  //         Echo("api--> save_offline_diary");
+  //         Response response = await _utils.post(
+  //           "save_offline_diary",
+  //           body: formData,
+  //         );
+  //
+  //         print(response.data);
+  //         if (response.data["success"] == true) {
+  //           // Remove the successfully sent entry from local storage
+  //         }
+  //       } catch (e) {
+  //         // Handle the error, maybe break the loop or log the error
+  //         print("Error sending diary entry: $e");
+  //       }
+  //     }
+  //
+  //     sendingOffline = false;
+  //     await SharedHelper().removeData(CachingKey.DAIRY_TO_SEND);
+  //   }else{
+  //     await Future.delayed(Duration(seconds: 3));
+  //   }
+  // }
 
 
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
 import 'package:app/core/resources/app_colors.dart';
+import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +16,10 @@ import '../../../core/utils/shared_helper.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/page_lable.dart';
+import '../../cart/views/web_view.dart';
 import '../../home/view/widgets/home_appbar.dart';
+import '../../invoice/views/invoice_view.dart';
+import '../../main_un_auth.dart';
 
 class MyPackagesView extends StatefulWidget {
   @override
@@ -109,7 +113,8 @@ class _MyPackagesViewState extends State<MyPackagesView> {
           Routes.HOME,
         );
       }*/
-      await Get.toNamed(
+      await NavigationService.push(
+        context,
         Routes.homeScreen,
       );
       return true;
@@ -129,7 +134,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                   if (error.value.isNotEmpty)
                     return Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(top: Get.height * 0.2),
+                        padding: EdgeInsets.only(top: deviceHeight * 0.2),
                         child: Column(
                           children: [
                             Image.asset(
@@ -360,7 +365,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                                                                       },
                                                                                 child: Center(
                                                                                   child: Container(
-                                                                                    decoration: BoxDecoration(color: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true ? AppColors.PRIMART_COLOR : kColorAccent, borderRadius: BorderRadius.circular(64), boxShadow: [
+                                                                                    decoration: BoxDecoration(color: myPackagesResponse.data?.orders?[index].paymentUrlStatus == true ? AppColors.PRIMART_COLOR : AppColors.ACCENT_COLOR, borderRadius: BorderRadius.circular(64), boxShadow: [
                                                                                       BoxShadow(
                                                                                         color: Colors.grey.withOpacity(0.4),
                                                                                         blurRadius: 1,
@@ -435,7 +440,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                     onTap: () async {
                                       if (await getFromCash() ==
                                           "haveAllData") {
-                                        Get.offNamed(Routes.SUBSCRIBE,
+                                        NavigationService.pushReplacement(context,Routes.subscribeView,
                                             arguments: null);
                                       } else if (await getFromCash() ==
                                           "noLastName") {
@@ -443,7 +448,7 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                             Routes.editProfileScreen);
 
                                       } else {
-                                        Get.offNamed(Routes.SUBSCRIBE,
+                                        NavigationService.pushReplacement(context,Routes.subscribeView,
                                             arguments: null);
                                       }
                                     },
@@ -762,8 +767,8 @@ class _MyPackagesViewState extends State<MyPackagesView> {
                                         true
                                     ? GestureDetector(
                                         onTap: () async {
-                                          Get.offNamed(
-                                            Routes.SUBSCRIBE,
+                                          NavigationService.pushReplacement(context,
+                                            Routes.subscribeView,
                                           );
                                         },
                                         child: Center(
@@ -846,8 +851,8 @@ class _MyPackagesViewState extends State<MyPackagesView> {
 
                            GestureDetector(
                         onTap: () async {
-                          Get.offNamed(
-                            Routes.SUBSCRIBE,
+                          NavigationService.pushReplacement(context,
+                            Routes.subscribeView,
                           );
                         },
                         child: Center(

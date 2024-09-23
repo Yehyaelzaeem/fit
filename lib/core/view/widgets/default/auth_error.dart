@@ -1,9 +1,8 @@
 
+import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/view/widgets/default/app_buttons.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import '../../../../config/navigation/routes.dart';
 import '../../../utils/strings.dart';
 
 class AuthErrorWidget extends StatelessWidget {
@@ -29,7 +28,7 @@ class AuthErrorWidget extends StatelessWidget {
           Text(Strings().requireLoginMessage),
           SizedBox(height: 8),
           kButtonDefault(Strings().login, func: () {
-            Get.toNamed(Routes.loginScreen);
+            NavigationService.push(context,Routes.loginScreen);
           }),
         ],
       ),

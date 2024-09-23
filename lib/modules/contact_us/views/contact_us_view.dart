@@ -1,8 +1,10 @@
+import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../config/navigation/navigation_services.dart';
 import '../../../config/navigation/routes.dart';
 import '../../../core/models/contact_response.dart';
 import '../../../core/services/api_provider.dart';
@@ -397,7 +399,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                       contactPhone!, subject!, contactMessage!)
                   .then((value) {
                 if (value.success == true) {
-                  Get.offAllNamed(Routes.homeScreen);
+                  NavigationService.pushReplacementAll(context,Routes.homeScreen);
                   Fluttertoast.showToast(msg: "${value.message}");
                   setState(() {
                     isLoading = false;
@@ -414,14 +416,14 @@ class _ContactUsViewState extends State<ContactUsView> {
             Center(child: kTextbody('Our Social media links', size: 14)),
 
             Container(
-              height: Get.height * 0.12,
+              height: deviceHeight * 0.12,
               child: Center(
                 child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemCount: ress!.data!.socialMedia!.length,
                     itemBuilder: (contaxt, index) {
-                      return socoialItem(ress!.data!.socialMedia![index]);
+                      return socialItem(ress!.data!.socialMedia![index]);
                     }),
               ),
             ),
@@ -429,7 +431,7 @@ class _ContactUsViewState extends State<ContactUsView> {
           ]);
   }
 
-  Widget socoialItem(SocialMedia data) {
+  Widget socialItem(SocialMedia data) {
     return InkWell(
       onTap: () async {
         String fallbackUrl = '${data.link}';

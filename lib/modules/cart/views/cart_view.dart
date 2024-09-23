@@ -1,17 +1,60 @@
 
+import 'package:app/core/resources/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/models/mymeals_response.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/utils/globals.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/page_lable.dart';
 import '../../../core/view/widgets/text_inside_rec.dart';
-import '../controllers/cart_controller.dart';
+import '../cubits/cart_cubit.dart';
 
-class CartView extends GetView<CartController> {
+class CartView extends StatefulWidget {
+
+  final String name;
+  final String lastName;
+  final String phone;
+  final String email;
+  final String address;
+  final String latitude;
+  final String longitude;
+  final List<SingleMyMeal> meals;
+
+  const CartView({Key? key,
+    required this.name,
+    required this.lastName,
+    required this.phone,
+    required this.email,
+    required this.address,
+    required this.latitude,
+    required this.longitude,
+    required this.meals,
+  }) : super(key: key);
+
+
+  @override
+  _CartViewState createState() => _CartViewState();
+}
+
+class _CartViewState extends State<CartView> {
+  late final CartCubit cartCubit;
+
+
+  @override
+  void initState() {
+    super.initState();
+    cartCubit = BlocProvider.of<CartCubit>(context);
+    cartCubit.onInit();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,9 +63,9 @@ class CartView extends GetView<CartController> {
         child: Scaffold(
           backgroundColor: Colors.white,
           body: Obx(() {
-            if (controller.loading.value)
+            if (cartCubit.loading.value)
               return Center(child: CircularLoadingWidget());
-            if (controller.isLoading.value)
+            if (cartCubit.isLoading.value)
               return Center(child: CircularLoadingWidget());
             return SingleChildScrollView(
               child: Column(
@@ -32,11 +75,11 @@ class CartView extends GetView<CartController> {
                   SizedBox(height: 20),
                   header(),
                   SizedBox(height: 4),
-                  ...controller.meals.reversed.map((e) {
+                  ...cartCubit.meals.reversed.map((e) {
                     return singleItem(
                         id: e.id!,
                         title: "${e.name}",
-                        price: "${controller.mealPrice(meal: e)} L.E",
+                        price: "${cartCubit.mealPrice(meal: e)} L.E",
                         qty: 'x${e.qty}');
                   }).toList(),
                   SizedBox(height: 12),
@@ -44,7 +87,7 @@ class CartView extends GetView<CartController> {
                       "Total Price",
                       Container(
                           margin: EdgeInsets.symmetric(horizontal: 12),
-                          child: kTextbody("${controller.totalAmount()} L.E",
+                          child: kTextbody("${cartCubit.totalAmount()} L.E",
                               color: Colors.white))),
 
                   SizedBox(height: 12),
@@ -69,10 +112,10 @@ class CartView extends GetView<CartController> {
 
                   SizedBox(height: 8),
 
-                  controller.mealFeatureStatusResponse.data?.isActive == true
+                  cartCubit.mealFeatureStatusResponse.data?.isActive == true
                       ? Row(
                           children: [
-                            if (controller.mealFeatureStatusResponse.data
+                            if (cartCubit.mealFeatureStatusResponse.data
                                     ?.deliveryActive ??
                                 true)
                               Expanded(
@@ -95,10 +138,7 @@ class CartView extends GetView<CartController> {
                                           SizedBox(height: 12),
 
                                           TextInsideRec(
-                                            text: controller
-                                                .globalController
-                                                .mealFeatureHomeResponse
-                                                .value
+                                            text: mealFeatureHomeResponse
                                                 .data!
                                                 .info!
                                                 .deliveryInstructions!,
@@ -114,10 +154,20 @@ class CartView extends GetView<CartController> {
                                                   width: 1,
                                                 ), func: () {
                                               Get.back();
-                                              controller.createOrder(
+                                              cartCubit.createOrder(
                                                   payMethod: 'visa',
                                                   shippingMethod: 'delivery',
-                                                  context: context);
+                                                  context: context,
+
+                                                name: widget.name,
+                                                lastName: widget.lastName,
+                                                phone: widget.phone,
+                                                email: widget.email,
+                                                address: widget.address,
+                                                latitude: widget.latitude,
+                                                longitude: widget.longitude,
+
+                                              );
                                             }),
                                           ),
                                           SizedBox(height: 4),
@@ -127,7 +177,7 @@ class CartView extends GetView<CartController> {
                                   ),
                                 ));
                               })),
-                            if (controller.mealFeatureStatusResponse.data
+                            if (cartCubit.mealFeatureStatusResponse.data
                                     ?.pickupActive ??
                                 true)
                               Expanded(
@@ -149,18 +199,15 @@ class CartView extends GetView<CartController> {
                                           ),
                                           SizedBox(height: 12),
                                           TextInsideRec(
-                                            text:  controller
-                                                .globalController
-                                                .mealFeatureHomeResponse
-                                                .value
+                                            text:  mealFeatureHomeResponse
                                                 .data!
                                                 .info!
                                                 .pickupInstructions!,
                                           ),
-                                          if (controller.globalController.mealFeatureHomeResponse.value.data != null &&
-                                              controller.globalController.mealFeatureHomeResponse.value.data!.info != null &&
-                                              controller.globalController.mealFeatureHomeResponse.value.data!.info!.location != null &&
-                                              controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!.isNotEmpty)
+                                          if (mealFeatureHomeResponse.data != null &&
+                                              mealFeatureHomeResponse.data!.info != null &&
+                                              mealFeatureHomeResponse.data!.info!.location != null &&
+                                              mealFeatureHomeResponse.data!.info!.location!.isNotEmpty)
                                             Container(
                                             width: double.infinity,
                                             margin: EdgeInsets.symmetric(horizontal: 12),
@@ -168,8 +215,8 @@ class CartView extends GetView<CartController> {
                                             child: Column(
                                               children: <Widget>[
                                                /* TextInsideRec(
-                                                  text:  controller
-                                                      .globalController
+                                                  text:  cartCubit
+                                                      .globalcartCubit
                                                       .mealFeatureHomeResponse
                                                       .value
                                                       .data!
@@ -177,7 +224,7 @@ class CartView extends GetView<CartController> {
                                                       .pickupInstructions!,
                                                 ),*/
                                                   GestureDetector(
-                                                    onTap: () {launch(controller.globalController.mealFeatureHomeResponse.value.data!.info!.location!);},
+                                                    onTap: () {launch(mealFeatureHomeResponse.data!.info!.location!);},
                                                     child: Container(
                                                       width: double.infinity,
                                                       height: 39.0,
@@ -230,10 +277,21 @@ class CartView extends GetView<CartController> {
                                                 width: 1,
                                               ), func: () {
                                             Get.back();
-                                            controller.createOrder(
+                                            cartCubit.createOrder(
                                                 shippingMethod: "pick_up",
                                                 payMethod: "visa",
-                                                context: context);
+                                                context: context,
+
+                                              name: widget.name,
+                                              lastName: widget.lastName,
+                                              phone: widget.phone,
+                                              email: widget.email,
+                                              address: widget.address,
+                                              latitude: widget.latitude,
+                                              longitude: widget.longitude,
+
+
+                                            );
                                           }),
                                           SizedBox(height: 4),
                                         ],
@@ -303,7 +361,7 @@ class CartView extends GetView<CartController> {
         children: [
           Center(
             child: Image.asset(
-              kLogoChellFullRow,
+              AppImages.kLogoChellFullRow,
               height: 44,
             ),
           ),
@@ -360,7 +418,7 @@ class CartView extends GetView<CartController> {
           SizedBox(width: 4),
           GestureDetector(
             onTap: () {
-              controller.deleteMeal(id);
+              cartCubit.deleteMeal(id);
             },
             child: Container(
                 padding: EdgeInsets.all(6),

@@ -1,5 +1,7 @@
 
+import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/resources.dart';
+import 'package:app/core/utils/globals.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:get/get.dart';
 import '../../../../config/navigation/routes.dart';
 import '../../../../core/models/user_response.dart';
 import '../../../../core/services/api_provider.dart';
+import '../../../profile/cubits/profile_cubit.dart';
 import '../../cubits/home_cubit.dart';
 
 
@@ -35,52 +38,54 @@ class _HomeAppbarState extends State<HomeAppbar> {
   late int newMessage = 0;
   var isPortrait;
 
-  void getUserData() async {
-    Echo('getUserData');
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-
-      await ApiProvider().getProfile().then((value) {
-      if (value.success == true) {
-        setState(() {
-          ress = value;
-          newMessage = ress.data!.newMessages!;
-        });
-        if (ress.data != null && ress.data!.image != null) {
-          BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
-          Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
-        } else {
-          Echo(' getUserData avatart nulls');
-        }
-      } else {
-        Echo(' getUserData error ');
-      }
-    });
-    }else{
-      await ApiProvider().getProfile().then((value) {
-        if (value.success == true) {
-          setState(() {
-            ress = value;
-            newMessage = ress.data!.newMessages!;
-          });
-          if (ress.data != null && ress.data!.image != null) {
-            BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
-            Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
-          } else {
-            Echo(' getUserData avatart nulls');
-          }
-        } else {
-          Echo(' getUserData error ');
-        }
-      });
-
-    }
-  }
+  late final ProfileCubit profileCubit;
 
   @override
   void initState() {
+    // TODO: implement initState
+    super.initState();
+    profileCubit = BlocProvider.of<ProfileCubit>(context);
     getUserData();
     super.initState();
+  }
+
+  void getUserData() async {
+    Echo('getUserData');
+    await profileCubit.getProfile().then((value) {
+      // if (value.success == true) {
+      //   setState(() {
+      //     ress = value;
+      //     newMessage = ress.data!.newMessages!;
+      //   });
+      //   if (ress.data != null && ress.data!.image != null) {
+      //     BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
+      //     Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
+      //   } else {
+      //     Echo(' getUserData avatart nulls');
+      //   }
+      // } else {
+      //   Echo(' getUserData error ');
+      // }
+    });
+
+    // await ApiProvider().getProfile().then((value) {
+    //   if (value.success == true) {
+    //     setState(() {
+    //       ress = value;
+    //       newMessage = ress.data!.newMessages!;
+    //     });
+    //     if (ress.data != null && ress.data!.image != null) {
+    //       BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
+    //       Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
+    //     } else {
+    //       Echo(' getUserData avatart nulls');
+    //     }
+    //   } else {
+    //     Echo(' getUserData error ');
+    //   }
+    // });
+
+
   }
 
   @override
@@ -117,8 +122,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                           Navigator.pop(context);
                         } else {
                           widget.fromInvoice == true
-                              ? Get.offNamed(Routes.myPackagesView)
-                              : Get.offAllNamed(Routes.homeScreen);
+                              ? NavigationService.pushReplacement(context,Routes.myPackagesView)
+                              : NavigationService.pushReplacementAll(context,Routes.homeScreen);
                           BlocProvider.of<HomeCubit>(context).currentIndex.value = 0;
                         }
                       },
@@ -153,7 +158,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                   onTap: () {
                                     newMessage = 0;
                                     setState(() {});
-                                    Get.toNamed(Routes.notificationScreen);
+                                    NavigationService.push(context,Routes.notificationScreen);
                                   },
                                   child: Stack(
                                     children: [
@@ -195,8 +200,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
 
-                                  if (BlocProvider.of<HomeCubit>(context).isLogggd.value)
-                                    Get.toNamed(Routes.profile);
+                                  if (currentUser!=null)
+                                    NavigationService.push(context,Routes.profile);
                                 },
                                 child: Container(
                                   width: 40,
@@ -231,8 +236,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                               Navigator.pop(context);
                             } else {
                               widget.fromInvoice == true
-                                  ? Get.offNamed(Routes.myPackagesView)
-                                  : Get.offAllNamed(Routes.homeScreen);
+                                  ? NavigationService.pushReplacement(context,Routes.myPackagesView)
+                                  : NavigationService.pushReplacementAll(context,Routes.homeScreen);
                               BlocProvider.of<HomeCubit>(context).currentIndex.value = 0;
                             }
                           },
@@ -278,7 +283,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 onTap: () {
                                   newMessage = 0;
                                   setState(() {});
-                                  Get.toNamed(Routes.notificationScreen);
+                                  NavigationService.push(context,Routes.notificationScreen);
                                 },
                                 child: Stack(
                                   children: [
@@ -320,8 +325,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
 
-                                if (BlocProvider.of<HomeCubit>(context).isLogggd.value)
-                                  Get.toNamed(Routes.profile);
+                                if (currentUser!=null)
+                                  NavigationService.push(context,Routes.profile);
                               },
                               child: Container(
                                 width: 40,

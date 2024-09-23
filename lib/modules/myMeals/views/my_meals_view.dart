@@ -1,27 +1,48 @@
-import 'package:app/app/data/database/shared_pref.dart';
-import 'package:app/app/models/mymeals_response.dart';
-import 'package:app/app/modules/makeMeals/controllers/make_meals_controller.dart';
-import 'package:app/app/modules/myMeals/controllers/my_meals_controller.dart';
-import 'package:app/app/routes/app_pages.dart';
-import 'package:app/app/utils/helper/assets_path.dart';
-import 'package:app/app/utils/theme/app_colors.dart';
-import 'package:app/app/widgets/default/CircularLoadingWidget.dart';
-import 'package:app/app/widgets/default/app_buttons.dart';
-import 'package:app/app/widgets/default/text.dart';
-import 'package:app/app/widgets/error_handler_widget.dart';
-import 'package:app/app/widgets/page_lable.dart';
+
+import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/resources/app_assets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
+import '../../../core/database/shared_pref.dart';
+import '../../../core/models/mymeals_response.dart';
+import '../../../core/resources/app_colors.dart';
+import '../../../core/utils/alerts.dart';
+import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
+import '../../../core/view/widgets/default/app_buttons.dart';
+import '../../../core/view/widgets/default/text.dart';
+import '../../../core/view/widgets/error_handler_widget.dart';
+import '../../../core/view/widgets/page_lable.dart';
+import '../../makeMeals/views/make_meals_view.dart';
 import '../../subscribe/views/non_user_subscribe_view.dart';
+import '../cubits/my_meals_cubit.dart';
 
 Future<bool> _willPopCallback() async {
-  Get.back();
-  Get.back();
+  NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
+  NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
   return true;
 }
 
-class MyMealsView extends GetView<MyMealsController> {
+class MyMealsView extends StatefulWidget {
+  const MyMealsView({Key? key}) : super(key: key);
+
+  @override
+  _MakeMealsViewState createState() => _MakeMealsViewState();
+}
+
+class _MakeMealsViewState extends State<MakeMealsView> {
+  late final MyMealsCubit myMealsCubit;
+
+
+  @override
+  void initState() {
+    super.initState();
+    myMealsCubit = BlocProvider.of<MyMealsCubit>(context);
+    myMealsCubit.onInit();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,15 +53,15 @@ class MyMealsView extends GetView<MyMealsController> {
           child: Scaffold(
             backgroundColor: Colors.white,
             body: Obx(() {
-              if (controller.loading.value) return Center(child: CircularLoadingWidget());
-              // if (controller.requiredAuth.value) return IncompleteData();
-              if (controller.error.value.isNotEmpty)
+              if (myMealsCubit.loading.value) return Center(child: CircularLoadingWidget());
+              // if (myMealsCubit.requiredAuth.value) return IncompleteData();
+              if (myMealsCubit.error.value.isNotEmpty)
                 return Container(
                     margin: EdgeInsets.only(top: Get.height / 3),
                     child: Center(
                         child: errorHandler(
-                      controller.error.value,
-                      controller,
+                      myMealsCubit.error.value,
+                      myMealsCubit,
                     )));
               return SingleChildScrollView(
                 child: Column(
@@ -50,14 +71,14 @@ class MyMealsView extends GetView<MyMealsController> {
                     SizedBox(height: 20),
                     header(context),
                     SizedBox(height: 4),
-                    if (controller.getMyMealsLoading.value) Container(height: 100, child: CircularLoadingWidget()),
-                    if (!controller.getMyMealsLoading.value && controller.response.value.data != null && controller.response.value.data!.isEmpty)
+                    if (myMealsCubit.getMyMealsLoading.value) Container(height: 100, child: CircularLoadingWidget()),
+                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isEmpty)
                       Padding(
                         padding: EdgeInsets.only(top: 45),
                         child: Column(
                           children: [
                             Image.asset(
-                              kEmptyPackage,
+                              AppImages.kEmptyPackage,
                               scale: 5,
                             ),
                             SizedBox(
@@ -67,9 +88,9 @@ class MyMealsView extends GetView<MyMealsController> {
                           ],
                         ),
                       ),
-                    if (!controller.getMyMealsLoading.value && controller.response.value.data != null)
-                      ...controller.response.value.data!.reversed.map((e) {
-                        return singleItem(meal: e, context: context);
+                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.value.data != null)
+                      ...myMealsCubit.response.value.data!.reversed.map((e) {
+                        return singleItem(meal: e, context: context,myMealsCubit: myMealsCubit);
                       }).toList(),
                     SizedBox(height: 12),
                     Row(
@@ -77,9 +98,9 @@ class MyMealsView extends GetView<MyMealsController> {
                         Expanded(
                           child: kButtonDefault(
                             "Order Now",
-                            color: controller.response.value.data != null && controller.response.value.data!.isEmpty ? Colors.grey : kColorPrimary,
+                            color: myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isEmpty ? Colors.grey : kColorPrimary,
                             func: () {
-                              List<SingleMyMeal> meals = controller.response.value.data == null ? [] : controller.response.value.data!.where((element) => element.selected).toList();
+                              List<SingleMyMeal> meals = myMealsCubit.response.value.data == null ? [] : myMealsCubit.response.value.data!.where((element) => element.selected).toList();
                               if (meals.isEmpty) {
                                 Get.snackbar(
                                   'Error',
@@ -92,7 +113,9 @@ class MyMealsView extends GetView<MyMealsController> {
 
                               YemenyPrefs yemenyPrefs = YemenyPrefs();
 
-                              Get.offNamed(Routes.SHIPPING_DETAILS, arguments: meals, parameters: {
+                              NavigationService.pushReplacement(context,Routes.shippingDetailsView,
+                                  arguments: {
+                                "meals": meals,
                                 "name": yemenyPrefs.getShippingName() ?? '',
                                 "last_name": yemenyPrefs.getShippingLastName() ?? '',
                                 "email": yemenyPrefs.getShippingEmail() ?? '',
@@ -111,17 +134,17 @@ class MyMealsView extends GetView<MyMealsController> {
                           color: Color(0xffF1F1F1),
                           textColor: Colors.red,
                           func: () {
-                            if (controller.response.value.data != null && controller.response.value.data!.isNotEmpty) controller.deleteMeals();
+                            if (myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isNotEmpty) myMealsCubit.deleteMeals();
                           },
                           border: Border.all(color: Colors.red, width: 1),
                         )),
                       ],
                     ),
-                    if (!controller.isGuestSaved && controller.userId.isEmpty)
+                    if (!myMealsCubit.isGuestSaved && myMealsCubit.userId.isEmpty)
                       SizedBox(
                         height: 250,
                       ),
-                    if (!controller.isGuestSaved && controller.userId.isEmpty)
+                    if (!myMealsCubit.isGuestSaved && myMealsCubit.userId.isEmpty)
                       Row(
                         children: [
                           SizedBox(
@@ -132,14 +155,14 @@ class MyMealsView extends GetView<MyMealsController> {
                               "  Get old meals  ",
                               bold: false,
                               color: Colors.white,
-                              textColor: kColorAccent,
+                              textColor: AppColors.ACCENT_COLOR,
                               func: () {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(builder: (context) => NonUserSubscribeView(isGuest: true, toCheer: true)),
                                 );
                               },
-                              border: Border.all(color: kColorAccent, width: 1),
+                              border: Border.all(color: AppColors.ACCENT_COLOR, width: 1),
                             ),
                           ),
                           SizedBox(
@@ -175,7 +198,7 @@ class MyMealsView extends GetView<MyMealsController> {
         children: [
           Center(
             child: Image.asset(
-              kLogoChellFullRow,
+              AppImages.kLogoChellFullRow,
               height: 44,
             ),
           ),
@@ -210,14 +233,14 @@ class MyMealsView extends GetView<MyMealsController> {
         Expanded(child: SizedBox(width: 10)),
         GestureDetector(
           onTap: () async {
-            bool status = await Get.isRegistered<MakeMealsController>();
-            //remove controller
-            if (status) {
-              Get.delete<MakeMealsController>();
-              await Future.delayed(Duration(milliseconds: 100));
-            }
-            dynamic val = await Get.toNamed(Routes.MAKE_MEALS);
-            if (val != null) controller.getNetworkData();
+            // bool status = await Get.isRegistered<MakeMealsController>();
+            // //remove controller
+            // if (status) {
+            //   Get.delete<MakeMealsController>();
+            //   await Future.delayed(Duration(milliseconds: 100));
+            // }
+            dynamic val = await NavigationService.push(context,Routes.makeMeals);
+            if (val != null) myMealsCubit.getNetworkData();
           },
           child: Container(
             decoration: BoxDecoration(
@@ -256,9 +279,17 @@ class MyMealsView extends GetView<MyMealsController> {
     );
   }
 
-  Widget singleItem({required SingleMyMeal meal, required BuildContext context}) {
-    return GetBuilder<MyMealsController>(
-      builder: (_) => Container(
+  Widget singleItem({required SingleMyMeal meal, required MyMealsCubit myMealsCubit, required BuildContext context}) {
+    return BlocConsumer<MyMealsCubit, MyMealsStates>(
+      listener: (context, state) {
+        if (state is GetMyMealsFailureState) {
+          Alerts.showToast(state.failure.message);
+        }
+
+      },
+      builder: (context, state) => state is GetMyMealsLoadingState
+          ?  Container()
+          : Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: Color(0xffF1F1F1),
@@ -271,21 +302,21 @@ class MyMealsView extends GetView<MyMealsController> {
                 Checkbox(
                     value: meal.selected,
                     onChanged: (sts) {
-                      controller.response.update((val) {
+                      myMealsCubit.response.update((val) {
                         val!.data!.forEach((e) {
                           if (e.id == meal.id) e.selected = sts!;
                         });
                       });
-                      controller.changeValue(meal.selected);
+                      myMealsCubit.changeValue(meal.selected);
                     }),
                 SizedBox(width: 8),
                 Expanded(child: kTextbody("${meal.name}", color: kColorPrimary, align: TextAlign.start, bold: true)),
-                kTextbody("${controller.totalPrice(meal: meal)} L.E", color: Colors.black),
+                kTextbody("${myMealsCubit.totalPrice(meal: meal)} L.E", color: Colors.black),
                 SizedBox(width: 12),
                 GestureDetector(
                   onTap: () async {
-                    dynamic val = await Get.toNamed(Routes.MAKE_MEALS, arguments: meal);
-                    if (val != null) controller.getNetworkData();
+                    dynamic val = await Get.toNamed(Routes.makeMeals, arguments: meal);
+                    if (val != null) myMealsCubit.getNetworkData();
                   },
                   child: Container(
                       padding: EdgeInsets.all(4),
@@ -319,7 +350,7 @@ class MyMealsView extends GetView<MyMealsController> {
                           /**************************** minus *****************************/
                           GestureDetector(
                             onTap: () {
-                              controller.minus(
+                              myMealsCubit.minus(
                                 meal: meal,
                               );
                             },
@@ -341,7 +372,7 @@ class MyMealsView extends GetView<MyMealsController> {
                           /**************************** add *****************************/
                           GestureDetector(
                             onTap: () {
-                              controller.add(meal: meal);
+                              myMealsCubit.add(meal: meal);
                             },
                             child: Container(
                               width: 32,

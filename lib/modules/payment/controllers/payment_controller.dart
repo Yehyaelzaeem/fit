@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 
+import '../../../config/navigation/navigation_services.dart';
 import '../../../config/navigation/routes.dart';
 import '../../../core/models/payment_package_response.dart';
 import '../../../core/services/api_provider.dart';
@@ -21,8 +22,8 @@ class PaymentController extends GetxController {
     userLastName.value =
         await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     if (userPhone.value.isEmpty && userLastName.value.isEmpty) {
-      SharedHelper().logout();
-      Get.offAllNamed(Routes.loginScreen);
+      // SharedHelper().logout();
+      NavigationService.pushReplacementAll(NavigationService.navigationKey.currentState!.context,Routes.loginScreen);
     }
   }
 

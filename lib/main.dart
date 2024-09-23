@@ -1,28 +1,39 @@
+import 'package:app/modules/home/cubits/home_cubit.dart';
+import 'package:app/modules/profile/cubits/profile_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'config/localization/cubit/l10n_cubit.dart';
-import 'config/localization/l10n/l10n.dart';
 import 'config/navigation/navigation.dart';
-import 'config/theme/light_theme.dart';
 import 'core/resources/app_colors.dart';
 import 'core/services/bloc_observer.dart';
-import 'core/utils/constants.dart';
-import 'firebase_options.dart';
+
+import 'modules/about/cubits/about_cubit.dart';
 import 'modules/auth/cubit/auth_cubit/auth_cubit.dart';
+import 'modules/diary/cubits/diary_cubit.dart';
 import 'modules/general/cubits/general_data_cubit.dart';
 import 'di_container.dart' as di;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
+import 'modules/other_calories/cubits/other_calories_cubit.dart';
+import 'modules/sessions/cubits/session_cubit.dart';
+import 'modules/timeSleep/cubits/time_sleep_cubit.dart';
+import 'modules/usuals/cubits/usual_cubit.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+import 'package:permission_handler/permission_handler.dart' as permission;
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
+  tz.initializeTimeZones();
+  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+  tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
   await di.init();
   Bloc.observer = MyBlocObserver();
@@ -47,10 +58,18 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        // BlocProvider(create: (_) => di.sl<L10nCubit>()),
+        BlocProvider(create: (_) => di.sl<L10nCubit>()),
         // BlocProvider(create: (_) => di.sl<LayoutCubit>()),
         BlocProvider(create: (_) => di.sl<GeneralDataCubit>()),
         BlocProvider(create: (_) => di.sl<AuthCubit>()),
+        BlocProvider(create: (_) => di.sl<HomeCubit>()),
+        BlocProvider(create: (_) => di.sl<ProfileCubit>()),
+        BlocProvider(create: (_) => di.sl<UsualCubit>()),
+        BlocProvider(create: (_) => di.sl<DiaryCubit>()),
+        BlocProvider(create: (_) => di.sl<TimeSleepCubit>()),
+        BlocProvider(create: (_) => di.sl<SessionCubit>()),
+        BlocProvider(create: (_) => di.sl<OtherCaloriesCubit>()),
+        BlocProvider(create: (_) => di.sl<AboutCubit>()),
 
       ],
       child: const MyApp(),

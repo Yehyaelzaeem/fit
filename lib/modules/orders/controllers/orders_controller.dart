@@ -1,11 +1,12 @@
-import 'package:app/app/models/my_orders_response.dart';
-import 'package:app/app/network_util/api_provider.dart';
-import 'package:app/globale_controller.dart';
+
 import 'package:get/get.dart';
 
+import '../../../core/models/my_orders_response.dart';
+import '../../../core/services/api_provider.dart';
+
 class OrdersController extends GetxController {
-  final GlobalController globalController =
-      Get.find<GlobalController>(tag: 'global');
+  // final GlobalController globalController =
+  //     Get.find<GlobalController>(tag: 'global');
 
   final List<Completed> pending=[];
   final List<Completed> completed=[];

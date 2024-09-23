@@ -60,7 +60,7 @@ class AuthScreen extends StatelessWidget {
                 // await SharedHelper().writeData(CachingKey.IS_GUEST, true);
                 // DiaryController controller = Get.find<DiaryController>(tag: 'diary');
                 // controller.isLogged.value = false;
-                NavigationService.push(context,Routes.layoutScreen);
+                NavigationService.push(context,Routes.homeScreen);
 
               },
               child: kTextHeader('Skip', color: AppColors.PRIMART_COLOR, size: 20))

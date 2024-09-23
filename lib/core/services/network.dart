@@ -105,7 +105,7 @@ class NetworkUtil {
     print("RESPONSE : " + response.toString());
     if (statusCode == 401) {
       SharedHelper helper = SharedHelper();
-      helper.logout();
+      // helper.logout();
       throw new Exception("Unauthorized");
     } else if (statusCode != 200) {
 //      throw new Exception("Error while fetching data");

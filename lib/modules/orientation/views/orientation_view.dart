@@ -12,6 +12,7 @@ import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/error_handler_widget.dart';
 import '../../../core/view/widgets/page_lable.dart';
 import '../../home/view/widgets/home_appbar.dart';
+import '../../videos/video_player_widget.dart';
 
 
 class OrientationView extends StatefulWidget {
