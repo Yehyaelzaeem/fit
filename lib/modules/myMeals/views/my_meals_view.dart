@@ -1,6 +1,7 @@
 
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -28,10 +29,10 @@ class MyMealsView extends StatefulWidget {
   const MyMealsView({Key? key}) : super(key: key);
 
   @override
-  _MakeMealsViewState createState() => _MakeMealsViewState();
+  _MyMealsViewState createState() => _MyMealsViewState();
 }
 
-class _MakeMealsViewState extends State<MakeMealsView> {
+class _MyMealsViewState extends State<MyMealsView> {
   late final MyMealsCubit myMealsCubit;
 
 
@@ -39,7 +40,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
   void initState() {
     super.initState();
     myMealsCubit = BlocProvider.of<MyMealsCubit>(context);
-    myMealsCubit.onInit();
+    myMealsCubit.fetchMyMeals();
   }
 
 
@@ -52,12 +53,17 @@ class _MakeMealsViewState extends State<MakeMealsView> {
           onWillPop: _willPopCallback,
           child: Scaffold(
             backgroundColor: Colors.white,
-            body: Obx(() {
-              if (myMealsCubit.loading.value) return Center(child: CircularLoadingWidget());
+            body: BlocConsumer<MyMealsCubit, MyMealsStates>(
+                listener: (context, state) {
+
+                },
+                builder: (context, state) {
+
+              if (state is MyMealsLoading) return Center(child: CircularLoadingWidget());
               // if (myMealsCubit.requiredAuth.value) return IncompleteData();
-              if (myMealsCubit.error.value.isNotEmpty)
+              if (state is MyMealsError)
                 return Container(
-                    margin: EdgeInsets.only(top: Get.height / 3),
+                    margin: EdgeInsets.only(top: deviceHeight / 3),
                     child: Center(
                         child: errorHandler(
                       myMealsCubit.error.value,
@@ -72,7 +78,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                     header(context),
                     SizedBox(height: 4),
                     if (myMealsCubit.getMyMealsLoading.value) Container(height: 100, child: CircularLoadingWidget()),
-                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isEmpty)
+                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.data != null && myMealsCubit.response.data!.isEmpty)
                       Padding(
                         padding: EdgeInsets.only(top: 45),
                         child: Column(
@@ -88,8 +94,8 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                           ],
                         ),
                       ),
-                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.value.data != null)
-                      ...myMealsCubit.response.value.data!.reversed.map((e) {
+                    if (!myMealsCubit.getMyMealsLoading.value && myMealsCubit.response.data != null)
+                      ...myMealsCubit.response.data!.reversed.map((e) {
                         return singleItem(meal: e, context: context,myMealsCubit: myMealsCubit);
                       }).toList(),
                     SizedBox(height: 12),
@@ -98,15 +104,14 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                         Expanded(
                           child: kButtonDefault(
                             "Order Now",
-                            color: myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isEmpty ? Colors.grey : kColorPrimary,
+                            color: myMealsCubit.response.data != null && myMealsCubit.response.data!.isEmpty ? Colors.grey : kColorPrimary,
                             func: () {
-                              List<SingleMyMeal> meals = myMealsCubit.response.value.data == null ? [] : myMealsCubit.response.value.data!.where((element) => element.selected).toList();
+                              List<SingleMyMeal> meals = myMealsCubit.response.data == null ? [] : myMealsCubit.response.data!.where((element) => element.selected).toList();
                               if (meals.isEmpty) {
-                                Get.snackbar(
-                                  'Error',
+                                Alerts.showSnackBar(context,
                                   'Please select at least one meal',
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
+                                  // backgroundColor: Colors.red,
+                                  // colorText: Colors.white,
                                 );
                                 return;
                               }
@@ -134,7 +139,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                           color: Color(0xffF1F1F1),
                           textColor: Colors.red,
                           func: () {
-                            if (myMealsCubit.response.value.data != null && myMealsCubit.response.value.data!.isNotEmpty) myMealsCubit.deleteMeals();
+                            if (myMealsCubit.response.data != null && myMealsCubit.response.data!.isNotEmpty) myMealsCubit.deleteMeals();
                           },
                           border: Border.all(color: Colors.red, width: 1),
                         )),
@@ -184,7 +189,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16), boxShadow: [
         BoxShadow(
@@ -208,8 +213,8 @@ class _MakeMealsViewState extends State<MakeMealsView> {
             left: 0,
             child: GestureDetector(
               onTap: () {
-                Get.back();
-                Get.back();
+                NavigationService.goBack(context);
+                NavigationService.goBack(context);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -240,7 +245,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
             //   await Future.delayed(Duration(milliseconds: 100));
             // }
             dynamic val = await NavigationService.push(context,Routes.makeMeals);
-            if (val != null) myMealsCubit.getNetworkData();
+            if (val != null) myMealsCubit.fetchMyMeals();
           },
           child: Container(
             decoration: BoxDecoration(
@@ -302,11 +307,11 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                 Checkbox(
                     value: meal.selected,
                     onChanged: (sts) {
-                      myMealsCubit.response.update((val) {
-                        val!.data!.forEach((e) {
-                          if (e.id == meal.id) e.selected = sts!;
-                        });
-                      });
+                      // myMealsCubit.response.update((val) {
+                      //   val!.data!.forEach((e) {
+                      //     if (e.id == meal.id) e.selected = sts!;
+                      //   });
+                      // });
                       myMealsCubit.changeValue(meal.selected);
                     }),
                 SizedBox(width: 8),
@@ -316,7 +321,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                 GestureDetector(
                   onTap: () async {
                     dynamic val = await Get.toNamed(Routes.makeMeals, arguments: meal);
-                    if (val != null) myMealsCubit.getNetworkData();
+                    if (val != null) myMealsCubit.fetchMyMeals();
                   },
                   child: Container(
                       padding: EdgeInsets.all(4),

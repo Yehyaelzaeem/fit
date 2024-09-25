@@ -23,4 +23,6 @@ class StorageKeys {
   static const String MealsCreationList = "MealsCreationList";
   static const String DELETE_USUAL_MEAL = "DELETE_USUAL_MEAL";
   static const String ABOUT = "ABOUT";
+  static const String CHEER_FULL = "CHEER_FULL";
+  static const String DAIRY = "DAIRY";
 }

@@ -1,7 +1,6 @@
 import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../config/navigation/navigation_services.dart';

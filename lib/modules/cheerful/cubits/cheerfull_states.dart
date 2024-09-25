@@ -9,31 +9,22 @@ abstract class CheerFullStates {
 class CheerFullInitialState extends CheerFullStates {
   CheerFullInitialState();
 }
+class MealLoading extends CheerFullStates {}
 
-class GetCheerFullLoadingState extends CheerFullStates {
-  GetCheerFullLoadingState();
+class MealFeaturesLoaded extends CheerFullStates {
+  final MealFeatureHomeResponse mealFeatures;
+
+  MealFeaturesLoaded({required this.mealFeatures});
 }
 
-class GetCheerFullSuccessState extends CheerFullStates {
-  GetCheerFullSuccessState();
+class CheerFullStatusLoaded extends CheerFullStates {
+  final CheerFullResponse cheerFullStatus;
+
+  CheerFullStatusLoaded({required this.cheerFullStatus});
 }
 
-class GetCheerFullFailureState extends CheerFullStates {
-  final Failure failure;
+class MealError extends CheerFullStates {
+  final String message;
 
-  GetCheerFullFailureState(this.failure);
-}
-
-class GetProductLoadingState extends CheerFullStates {
-  GetProductLoadingState();
-}
-
-class GetProductSuccessState extends CheerFullStates {
-  GetProductSuccessState();
-}
-
-class GetProductFailureState extends CheerFullStates {
-  final Failure failure;
-
-  GetProductFailureState(this.failure);
+  MealError({required this.message});
 }

@@ -157,7 +157,7 @@ class AuthRepository extends BaseRepository {
 
   Future<Either<Failure, String>> logout() async {
     try {
-      await clearCache();
+      await clearCache(); 
       return Right(L10n.tr(NavigationService.navigationKey.currentContext!).logoutSuccess);
     } on Exception catch (e) {
       return Left(ErrorHandler.handle(e).failure);

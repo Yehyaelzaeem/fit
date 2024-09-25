@@ -34,6 +34,7 @@ class DiaryRepository extends BaseRepository {
 
         // If the device is connected and the data is live, make an API call
         if (result != ConnectivityResult.none && isNotSending && isLive) {
+          print('From live');
           final response = await _apiClient.get(url: "${EndPoints.caloriesDayDetails}?date=$date", requestBody: {});
 
           // Save locally if applicable
@@ -45,6 +46,8 @@ class DiaryRepository extends BaseRepository {
         } else {
           // If offline or data not live, return cached data
           final DayDetailsResponse? cachedData = await readDairyTempLocally();
+
+          print('from Local');
 
           if (cachedData != null) {
             return Response(data: cachedData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
@@ -131,7 +134,7 @@ class DiaryRepository extends BaseRepository {
   Future<MyOtherCaloriesResponse> getOtherCalories() async {
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      Response response = await _apiClient.get(url: "other_calories",requestBody: {});
+      Response response = await _apiClient.get(url: "/other_calories",requestBody: {});
       if (response.data["success"] == true) {
         await saveMyOtherCaloriesLocally(MyOtherCaloriesResponse.fromJson(response.data));
         return MyOtherCaloriesResponse.fromJson(response.data);
@@ -264,6 +267,100 @@ class DiaryRepository extends BaseRepository {
 
     // Populate the diarySendList based on existingData and dayDetailsResponse
     // (similar to the logic you already have)
+    for (var key in existingData.keys) {
+      print("Sending local key $key");
+      DayDetailsResponse dayDetailsToSend = DayDetailsResponse.fromJson(
+          existingData[key]);
+      diarySendList.add(
+          DiaryEntry(date: key,
+              water: dayDetailsToSend.data!.water ?? 0,
+              food: [],
+              qty: [],
+              createdAt: [])
+      );
+      if (dayDetailsToSend.data!.water != null) {
+        diarySendList
+            .firstWhere((element) => element.date == key)
+            .water = dayDetailsToSend.data!.water!;
+      }
+      if (dayDetailsToSend.data!.dayWorkouts != null) {
+        diarySendList
+            .firstWhere((element) => element.date == key)
+            .workout =
+        dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title ==
+            dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+        diarySendList
+            .firstWhere((element) => element.date == key)
+            .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
+            ? " "
+            : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+      }
+      dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
+        element.title == item.quality)) {
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.proteins!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(
+              item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+        }
+      });
+      dayDetailsToSend.data!.carbs!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.carbs!.food!.any((element) =>
+        element.title == item.quality)) {
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.carbs!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(
+              item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+        }
+      });
+
+      dayDetailsToSend.data!.fats!.caloriesDetails!.forEach((item) {
+        if (dayDetailsResponse.data!.fats!.food!.any((element) =>
+        element.title == item.quality)) {
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .food
+              .add(dayDetailsResponse.data!.fats!.food!.firstWhere((
+              element) => element.title == item.quality).id!);
+
+
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .qty
+              .add(item.qty!);
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .createdAt
+              .add(
+              item.createdAt ?? getEgyptTime().toString().substring(0, 16));
+        }
+      });
+    }
+
 
     return diarySendList;
   }

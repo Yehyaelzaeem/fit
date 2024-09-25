@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/resources.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -116,7 +117,7 @@ class PaymentView extends GetView<PaymentController> {
                       ),
                     ),
                     kButton("Confirm"),
-                    SizedBox(height: Get.height / 10),
+                    SizedBox(height: deviceHeight / 10),
                   ],
                 );
               },

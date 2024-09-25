@@ -5,9 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/database/shared_pref.dart';
+import '../../../../core/enums/http_request_state.dart';
 import '../../../../core/models/user_response.dart';
 import '../../../../core/resources/resources.dart';
 import '../../../../core/services/api_provider.dart';
+import '../../../../core/utils/globals.dart';
 import '../../../../core/view/views.dart';
 import '../../../../core/view/widgets/app_dialog.dart';
 import '../../../../core/view/widgets/default/CircularLoadingWidget.dart';
@@ -26,22 +28,21 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late final ProfileCubit profileCubit;
-  bool isLoading = true;
-
-  UserResponse ress = UserResponse();
-
   void getHomeData() async {
-    await ApiProvider().getProfile().then((value) {
-      if (value.success == true) {
-        setState(() {
-          ress = value;
-          isLoading = false;
-        });
-      } else {
-        Fluttertoast.showToast(msg: "$value");
-        print("error");
-      }
-    });
+    profileCubit = BlocProvider.of<ProfileCubit>(context);
+
+    profileCubit.getProfile();
+    // await ApiProvider().getProfile().then((value) {
+    //   if (value.success == true) {
+    //     setState(() {
+    //       ress = value;
+    //       isLoading = false;
+    //     });
+    //   } else {
+    //     Fluttertoast.showToast(msg: "$value");
+    //     print("error");
+    //   }
+    // });
   }
 
   @override
@@ -98,7 +99,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           SizedBox(height: 12),
           //profile card
-          isLoading == true
+        BlocConsumer<ProfileCubit, ProfileState>(
+
+    builder: (context, state) => state.httpRequestState==HttpRequestState.loading
               ? CircularLoadingWidget()
               : Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ClipRRect(
                         borderRadius: BorderRadius.circular(250),
                         child: CachedNetworkImage(
-                          imageUrl: "${ress.data!.image}",
+                          imageUrl: "${currentUser!.data!.image}",
                           fit: BoxFit.cover,
                           height: 80,
                           width: 80,
@@ -141,8 +144,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             return profileImageHolder();
                           },
                         )),
-                    kTextHeader('${ress.data!.name!}'),
-                    kTextfooter('ID : ${ress.data!.patientId!}', size: 14, color: Colors.black87, paddingV: 0),
+                    kTextHeader('${currentUser!.data!.name}'),
+                    kTextfooter('ID : ${currentUser!.data!.patientId!}', size: 14, color: Colors.black87, paddingV: 0),
                     SizedBox(height: 14),
                   ],
                 ),
@@ -169,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
 
               //Next session
-              ress.data!.nextSession == null
+              currentUser!.data!.nextSession == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -189,12 +192,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               size: 16,
                             ),
                             kTextbody(
-                              '${ress.data!.nextSession!.day}',
+                              '${currentUser!.data!.nextSession!.day}',
                               color: AppColors.PRIMART_COLOR,
                               size: 16,
                             ),
                             kTextbody(
-                              '${ress.data!.nextSession!.sessionDate}',
+                              '${currentUser!.data!.nextSession!.sessionDate}',
                               color: Colors.black,
                               size: 16,
                             ),
@@ -204,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         right: 26,
                         top: 3,
                         child: kTextfooter(
-                          '${ress.data!.nextSession!.status}',
+                          '${currentUser!.data!.nextSession!.status}',
                           color: kColorPrimary,
                         )),
                   ],
@@ -233,16 +236,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: kTextbody('${ress.data!.packageRenewalDate}'),
+                    child: kTextbody('${currentUser!.data!.packageRenewalDate}'),
                   ),
                 ],
               ),
               // Target
               SizedBox(height: 18),
 
-              ress.data!.target == null ? SizedBox() : PageLable(name: "Target"),
+              currentUser!.data!.target == null ? SizedBox() : PageLable(name: "Target"),
               SizedBox(height: 12),
-              ress.data!.target == null
+              currentUser!.data!.target == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -251,13 +254,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Total Weight:', bold: true),
-                    kTextbody(' ${ress.data!.target!.totalWeight}', color: kColorPrimary),
+                    kTextbody(' ${currentUser!.data!.target!.totalWeight}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.target == null
+              currentUser!.data!.target == null
                   ? SizedBox()
-                  : ress.data!.target == null
+                  : currentUser!.data!.target == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -266,11 +269,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Fats Percentage:', bold: true),
-                    kTextbody(' ${ress.data!.target!.fats}', color: kColorPrimary),
+                    kTextbody(' ${currentUser!.data!.target!.fats}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.target == null
+              currentUser!.data!.target == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -279,11 +282,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Muscles Percentage:', bold: true),
-                    kTextbody(' ${ress.data!.target!.muscles}', color: kColorPrimary),
+                    kTextbody(' ${currentUser!.data!.target!.muscles}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.target == null
+              currentUser!.data!.target == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -292,23 +295,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Water Percentage:', bold: true),
-                    kTextbody('  ${ress.data!.target!.water}', color: kColorPrimary),
+                    kTextbody('  ${currentUser!.data!.target!.water}', color: kColorPrimary),
                   ],
                 ),
               ),
               // Last Body Composition
               SizedBox(height: 18),
-              ress.data!.lastBodyComposition == null
+              currentUser!.data!.lastBodyComposition == null
                   ? SizedBox()
                   : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   PageLable(name: "Last Body Composition"),
-                  ress.data!.lastBodyComposition == null ? kTextbody(' Unknown', paddingH: 36) : kTextbody(' ${ress.data!.lastBodyComposition!.date}', paddingH: 36),
+                  currentUser!.data!.lastBodyComposition == null ? kTextbody(' Unknown', paddingH: 36) : kTextbody(' ${currentUser!.data!.lastBodyComposition!.date}', paddingH: 36),
                 ],
               ),
               SizedBox(height: 12),
-              ress.data!.lastBodyComposition == null
+              currentUser!.data!.lastBodyComposition == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -317,11 +320,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Total Weight:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.totalWeight}', color: kColorPrimary),
+                    kTextbody('${currentUser!.data!.lastBodyComposition!.totalWeight}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.lastBodyComposition == null
+              currentUser!.data!.lastBodyComposition == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -330,11 +333,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Fats Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.fats}', color: kColorPrimary),
+                    kTextbody('${currentUser!.data!.lastBodyComposition!.fats}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.lastBodyComposition == null
+              currentUser!.data!.lastBodyComposition == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -343,11 +346,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Muscles Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.muscles}', color: kColorPrimary),
+                    kTextbody('${currentUser!.data!.lastBodyComposition!.muscles}', color: kColorPrimary),
                   ],
                 ),
               ),
-              ress.data!.lastBodyComposition == null
+              currentUser!.data!.lastBodyComposition == null
                   ? SizedBox()
                   : Container(
                 width: double.infinity,
@@ -356,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 child: Row(
                   children: [
                     kTextbody('Water Percentage:', bold: true),
-                    kTextbody('${ress.data!.lastBodyComposition!.water}', color: kColorPrimary),
+                    kTextbody('${currentUser!.data!.lastBodyComposition!.water}', color: kColorPrimary),
                   ],
                 ),
               ),
@@ -364,12 +367,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 // ElevatedButton(onPressed: ()=> NotificationApi.showScheduledNotificationAtTime(), child: Text('alarm')),
 
-              if (ress.data!.showDeleteAccount!) SizedBox(height: 24),
-              if (ress.data!.showDeleteAccount!)
+              if (currentUser!.data!.showDeleteAccount!) SizedBox(height: 24),
+              if (currentUser!.data!.showDeleteAccount!)
                 Center(
                   child: GestureDetector(
                     onTap: () {
                       appDialog(
+                        context: context,
                         title: 'Delete Account',
                         body: 'Are you sure you want to delete your account?',
                         confirmAction: () {
@@ -402,9 +406,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                 ),
-              if (ress.data!.showDeleteAccount!) SizedBox(height: 40),
+              if (currentUser!.data!.showDeleteAccount!) SizedBox(height: 40),
             ],
-          ),
+          ), listener: (BuildContext context, ProfileState state) {
+
+        },),
         ],
       ),
     );

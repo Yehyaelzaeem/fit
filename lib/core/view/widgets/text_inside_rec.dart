@@ -1,3 +1,4 @@
+import 'package:app/core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +21,7 @@ class TextInsideRec extends StatelessWidget {
         color: const Color(0xFFF1F1F1),
       ),
       child: SizedBox(
-        width: Get.width / 1.3,
+        width: deviceWidth / 1.3,
         child: Column(
           children: <Widget>[
             SizedBox(height: 8),

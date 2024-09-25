@@ -1,4 +1,5 @@
 import 'package:app/modules/home/cubits/home_cubit.dart';
+import 'package:app/modules/myMeals/cubits/my_meals_cubit.dart';
 import 'package:app/modules/profile/cubits/profile_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,19 @@ import 'core/services/bloc_observer.dart';
 
 import 'modules/about/cubits/about_cubit.dart';
 import 'modules/auth/cubit/auth_cubit/auth_cubit.dart';
+import 'modules/cheerful/cubits/cheerfull_cubit.dart';
 import 'modules/diary/cubits/diary_cubit.dart';
 import 'modules/general/cubits/general_data_cubit.dart';
 import 'di_container.dart' as di;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 
+import 'modules/makeMeals/cubits/make_meals_cubit.dart';
+import 'modules/orders/cubits/order_cubit.dart';
 import 'modules/other_calories/cubits/other_calories_cubit.dart';
+import 'modules/packages/cubits/packages_cubit.dart';
 import 'modules/sessions/cubits/session_cubit.dart';
+import 'modules/subscribe/cubits/subscribe_cubit.dart';
 import 'modules/timeSleep/cubits/time_sleep_cubit.dart';
 import 'modules/usuals/cubits/usual_cubit.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -70,6 +76,12 @@ void main() async {
         BlocProvider(create: (_) => di.sl<SessionCubit>()),
         BlocProvider(create: (_) => di.sl<OtherCaloriesCubit>()),
         BlocProvider(create: (_) => di.sl<AboutCubit>()),
+        BlocProvider(create: (_) => di.sl<CheerFullCubit>()),
+        BlocProvider(create: (_) => di.sl<OrdersCubit>()),
+        BlocProvider(create: (_) => di.sl<MyMealsCubit>()),
+        BlocProvider(create: (_) => di.sl<MakeMealsCubit>()),
+        BlocProvider(create: (_) => di.sl<PackagesCubit>()),
+        BlocProvider(create: (_) => di.sl<SubscribeCubit>()),
 
       ],
       child: const MyApp(),

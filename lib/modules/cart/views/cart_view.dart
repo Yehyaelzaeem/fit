@@ -1,5 +1,6 @@
 
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -344,7 +345,7 @@ class _CartViewState extends State<CartView> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,

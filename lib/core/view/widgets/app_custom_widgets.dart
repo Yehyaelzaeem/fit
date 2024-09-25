@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-Widget backAppBarNoTitle() {
+import '../../../config/navigation/navigation_services.dart';
+
+Widget backAppBarNoTitle(BuildContext context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     child: Row(
@@ -10,7 +12,7 @@ Widget backAppBarNoTitle() {
       children: [
         GestureDetector(
           onTap: () {
-            Get.back();
+            NavigationService.goBack(context);
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

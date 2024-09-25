@@ -1,6 +1,8 @@
 
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/app_values.dart';
+import 'package:app/core/utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -35,9 +37,13 @@ class _CheerFullViewState extends State<CheerFullView> {
   void initState() {
     super.initState();
     cheerFullCubit = BlocProvider.of<CheerFullCubit>(context);
-    cheerFullCubit.onInit();
+    getData();
   }
 
+  getData()async{
+    await cheerFullCubit.fetchMealFeaturesHome();
+    cheerFullCubit.fetchCheerFullStatus();
+  }
 
 
   @override
@@ -47,93 +53,187 @@ class _CheerFullViewState extends State<CheerFullView> {
       child: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,
-            body: Obx(
-              () {
-                if (cheerFullCubit.loading.value)
+            body:
+            BlocBuilder<CheerFullCubit, CheerFullStates>(
+              builder: (context, state) {
+                if (state is MealLoading) {
                   return Center(child: CircularLoadingWidget());
-                if (cheerFullCubit.isLoading.value)
-                  return Center(child: CircularLoadingWidget());
+                }
 
-                if (cheerFullCubit.error.value.isNotEmpty)
-                  return errorHandler(cheerFullCubit.error.value, cheerFullCubit);
-
-                return SizedBox(
-                  height: Get.height,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        //App bar
-                        appBar(),
-                        //Slider
-                        CheerFullSlider(sliders: [
-                          ...cheerFullCubit.response.value.data!.sliders!
-                              .map((e) => e.image!)
-                              .toList(),
-                        ]),
-                        TextInsideRec(
-                          text: cheerFullCubit.response.value.data!.info!.about!,
-                        ),
-                        SizedBox(height: 20),
-                        kButtonWithIcon('Make My Meals', marginH: Get.width / 6,
-                            func: () {
-                              NavigationService.push(context,Routes.myMeals);
-                        }),
-                        SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            if (cheerFullCubit.isGuestSaved) {
-                              NavigationService.push(context,Routes.orders);
-                            } else if (cheerFullCubit.userId.isNotEmpty) {
-                              NavigationService.push(context,Routes.orders);
-                            } else if (!cheerFullCubit.isGuestSaved&& cheerFullCubit.userId.isEmpty) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => NonUserSubscribeView(
-                                      isGuest: true,toOrders:true
-                                    )),
-                              );
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            margin:
-                                EdgeInsets.symmetric(horizontal: Get.width / 6),
-                            padding: EdgeInsets.symmetric(vertical: 6),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(200.0),
-                              color: const Color(0xFFF1F1F1),
-                              border: Border.all(
-                                width: 1.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                            child: kTextHeader('My Orders'),
+                else if (state is CheerFullStatusLoaded) {
+                  return SizedBox(
+                    height: deviceHeight,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          //App bar
+                          appBar(),
+                          //Slider
+                          CheerFullSlider(sliders: [
+                            ...cheerFullCubit.response.data!.sliders!
+                                .map((e) => e.image!)
+                                .toList(),
+                          ]),
+                          TextInsideRec(
+                            text: cheerFullCubit.response.data!.info!.about!,
                           ),
-                        ),
-                        SizedBox(height: 20),
-                        cheerFullCubit.cheerfulSocialsResponse.data!.isEmpty
-                            ? Container()
-                            : Container(
-                                height: Get.height * 0.12,
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: cheerFullCubit
-                                        .cheerfulSocialsResponse.data!.length,
-                                    itemBuilder: (context, index) {
-                                      return socialMediaItem(cheerFullCubit
-                                          .cheerfulSocialsResponse
-                                          .data![index]);
-                                    }),
+                          SizedBox(height: 20),
+                          kButtonWithIcon('Make My Meals', marginH: deviceWidth / 6,
+                              func: () {
+                                NavigationService.push(context,Routes.myMeals);
+                              }),
+                          SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              if (currentUser!=null) {
+                                NavigationService.push(context,Routes.orders);
+                              } else
+                              //   if (cheerFullCubit.userId.isNotEmpty) {
+                              //   NavigationService.push(context,Routes.orders);
+                              // } else if (!cheerFullCubit.isGuestSaved&& cheerFullCubit.userId.isEmpty)
+                              {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NonUserSubscribeView(
+                                          isGuest: true,toOrders:true
+                                      )),
+                                );
+                              }
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              margin:
+                              EdgeInsets.symmetric(horizontal: deviceWidth / 6),
+                              padding: EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(200.0),
+                                color: const Color(0xFFF1F1F1),
+                                border: Border.all(
+                                  width: 1.0,
+                                  color: Colors.black,
+                                ),
                               ),
-                      ],
+                              child: kTextHeader('My Orders'),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          cheerFullCubit.cheerfulSocialsResponse.data?.isEmpty??true
+                              ? Container()
+                              : Container(
+                            height: deviceHeight * 0.12,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: cheerFullCubit
+                                    .cheerfulSocialsResponse.data!.length,
+                                itemBuilder: (context, index) {
+                                  return socialMediaItem(cheerFullCubit
+                                      .cheerfulSocialsResponse
+                                      .data![index]);
+                                }),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (state is MealError) {
+                  return Text(state.message);
+                }
+
+                return Container();
               },
-            )),
+            ),
+
+
+            // Obx(
+            //   () {
+            //     if (cheerFullCubit.loading.value)
+            //     if (cheerFullCubit.isLoading.value)
+            //       return Center(child: CircularLoadingWidget());
+            //
+            //     if (cheerFullCubit.error.value.isNotEmpty)
+            //       return errorHandler(cheerFullCubit.error.value, cheerFullCubit);
+            //
+            //     return SizedBox(
+            //       height: Get.height,
+            //       child: SingleChildScrollView(
+            //         child: Column(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           children: [
+            //             //App bar
+            //             appBar(),
+            //             //Slider
+            //             CheerFullSlider(sliders: [
+            //               ...cheerFullCubit.response.value.data!.sliders!
+            //                   .map((e) => e.image!)
+            //                   .toList(),
+            //             ]),
+            //             TextInsideRec(
+            //               text: cheerFullCubit.response.value.data!.info!.about!,
+            //             ),
+            //             SizedBox(height: 20),
+            //             kButtonWithIcon('Make My Meals', marginH: deviceWidth / 6,
+            //                 func: () {
+            //                   NavigationService.push(context,Routes.myMeals);
+            //             }),
+            //             SizedBox(height: 20),
+            //             GestureDetector(
+            //               onTap: () {
+            //                 if (cheerFullCubit.isGuestSaved) {
+            //                   NavigationService.push(context,Routes.orders);
+            //                 } else if (cheerFullCubit.userId.isNotEmpty) {
+            //                   NavigationService.push(context,Routes.orders);
+            //                 } else if (!cheerFullCubit.isGuestSaved&& cheerFullCubit.userId.isEmpty) {
+            //                   Navigator.push(
+            //                     context,
+            //                     MaterialPageRoute(
+            //                         builder: (context) => NonUserSubscribeView(
+            //                           isGuest: true,toOrders:true
+            //                         )),
+            //                   );
+            //                 }
+            //               },
+            //               child: Container(
+            //                 width: double.infinity,
+            //                 margin:
+            //                     EdgeInsets.symmetric(horizontal: deviceWidth / 6),
+            //                 padding: EdgeInsets.symmetric(vertical: 6),
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadius.circular(200.0),
+            //                   color: const Color(0xFFF1F1F1),
+            //                   border: Border.all(
+            //                     width: 1.0,
+            //                     color: Colors.black,
+            //                   ),
+            //                 ),
+            //                 child: kTextHeader('My Orders'),
+            //               ),
+            //             ),
+            //             SizedBox(height: 20),
+            //             cheerFullCubit.cheerfulSocialsResponse.data!.isEmpty
+            //                 ? Container()
+            //                 : Container(
+            //                     height: Get.height * 0.12,
+            //                     child: ListView.builder(
+            //                         shrinkWrap: true,
+            //                         scrollDirection: Axis.horizontal,
+            //                         itemCount: cheerFullCubit
+            //                             .cheerfulSocialsResponse.data!.length,
+            //                         itemBuilder: (context, index) {
+            //                           return socialMediaItem(cheerFullCubit
+            //                               .cheerfulSocialsResponse
+            //                               .data![index]);
+            //                         }),
+            //                   ),
+            //           ],
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // )
+        ),
       ),
     );
   }
@@ -142,7 +242,7 @@ class _CheerFullViewState extends State<CheerFullView> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -166,7 +266,7 @@ class _CheerFullViewState extends State<CheerFullView> {
             left: 0,
             child: GestureDetector(
               onTap: () {
-                Get.back();
+                NavigationService.goBack(context);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

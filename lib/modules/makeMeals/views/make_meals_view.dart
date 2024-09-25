@@ -1,8 +1,10 @@
 
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/resources.dart';
 import 'package:app/modules/makeMeals/cubits/make_meals_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../config/navigation/navigation_services.dart';
 import '../../../core/models/meal_food_list_response.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
@@ -138,7 +140,10 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                         onTap: () {
                                           FocusScope.of(context)
                                               .requestFocus(FocusNode());
-                                          Get.dialog(Dialog(
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
@@ -191,7 +196,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                               makeMealsCubit
                                                                   .selectedFood
                                                                   .refresh();
-                                                              Get.back();
+                                                              NavigationService.goBack(context);
                                                             },
                                                             child: Container(
                                                               width: double
@@ -217,7 +222,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                 ),
                                               ),
                                             ),
-                                          ));
+                                          );});
                                         },
                                         child: item(
                                           title: e.title == null
@@ -242,7 +247,10 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                   element.id == e.id)
                                               .amounts
                                               .isEmpty) return;
-                                          Get.dialog(Dialog(
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
                                             child: Container(
                                               decoration: BoxDecoration(
                                                   color: Colors.white,
@@ -290,7 +298,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                               makeMealsCubit
                                                                   .selectedFood
                                                                   .refresh();
-                                                              Get.back();
+                                                              NavigationService.goBack(context);
                                                             },
                                                             child: Container(
                                                               padding: EdgeInsets
@@ -321,7 +329,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                 ),
                                               ),
                                             ),
-                                          ));
+                                          );});
                                         },
                                         child: item(
                                           title: "${e.selectedAmount.name}",
@@ -909,7 +917,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                   if (canContinue) {
                                     if (makeMealsCubit.isGuestSaved ||
                                         makeMealsCubit.userId.isNotEmpty) {
-                                      makeMealsCubit.saveMeal();
+                                      makeMealsCubit.saveMeal(context);
                                     } else if (!makeMealsCubit.isGuestSaved &&
                                         makeMealsCubit.userId.isEmpty) {
                                       bool result = await Navigator.push(
@@ -922,7 +930,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
                                                 )),
                                       );
                                       if (result == true) {
-                                        makeMealsCubit.saveMeal();
+                                        makeMealsCubit.saveMeal(context);
                                       } else {}
                                     }
                                   }
@@ -976,7 +984,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -1003,7 +1011,7 @@ class _MakeMealsViewState extends State<MakeMealsView> {
             left: 0,
             child: GestureDetector(
               onTap: () {
-                Get.back();
+                NavigationService.goBack(context);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),

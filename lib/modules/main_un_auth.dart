@@ -1,5 +1,6 @@
 
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/resources.dart';
 import 'package:app/modules/subscribe/views/non_user_subscribe_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -122,7 +123,7 @@ class MainUnAuth extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(
-                  top: Get.height * 0.2),
+                  top: deviceHeight * 0.2),
               child: Column(
                 children: [
                   Image.asset(

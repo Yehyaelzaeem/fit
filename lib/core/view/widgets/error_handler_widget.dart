@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../resources/resources.dart';
 import '../../utils/strings.dart';
 import '../decorations/app_text_theme.dart';
 import 'default/auth_error.dart';
@@ -23,14 +24,14 @@ Widget errorHandler(String error, dynamic controller) {
     });
   } else {
     return Container(
-      width: Get.width,
+      width: deviceWidth,
       child: Center(
         child: Column(
           children: [
             Text(error),
             Container(
               margin: EdgeInsets.all(8),
-              width: Get.width / 3,
+              width: deviceWidth / 3,
               decoration: kRetryButtonAccentStyle,
               child: TextButton(
                   onPressed: () {

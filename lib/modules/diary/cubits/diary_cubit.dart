@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:app/core/resources/app_values.dart';
 import 'package:app/core/utils/globals.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   List<CaloriesDetails> caloriesDeleted = [];
   List<CaloriesDetails> carbsDeleted = [];
   List<CaloriesDetails> fatsDeleted = [];
+  MyOtherCaloriesResponse otherCaloriesResponse = MyOtherCaloriesResponse();
 
   DayDetailsResponse? dayDetailsResponse;
   FocusNode workoutTitleDescFocus = FocusNode();
@@ -80,7 +82,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
   final refreshLoadingFats = false.obs;
-  final isToday = false.obs;
+  bool isToday = false;
   final noSessions = false.obs;
   final showLoader = false.obs;
   final lastSelectedDate = ''.obs;
@@ -235,7 +237,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   }
 
   void getDiaryDataRefreshResponse(String _date) async {
-    if(isToday.value){
+    if(isToday){
       _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
     }else{
       _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
@@ -328,14 +330,14 @@ class DiaryCubit extends Cubit<DiaryState> {
                       );
                     }else
                     if(index==2) {
-                      return  Days(date: DateTime.parse(date!).add(Duration(days: 1))
+                      return  Days(date: DateTime.parse(date).add(Duration(days: 1))
                           .toString()
                           .substring(0, 10),
                           dateFormat: DateFormat('EEEE, d MMMM y').format(
                               DateTime.parse(date).add(Duration(days: 1))),
                           active: false);
                     }else{
-                      return Days(date: DateTime.parse(date!).add(Duration(days: 1))
+                      return Days(date: DateTime.parse(date).add(Duration(days: 1))
                           .toString()
                           .substring(0, 10),
                           dateFormat: DateFormat('EEEE, d MMMM y').format(
@@ -347,12 +349,13 @@ class DiaryCubit extends Cubit<DiaryState> {
                   _diaryRepository.saveDairyLocally(dayDetailsResponse!, date!);
                 }
 
+                print("CAaaaHnge");
                 if (dayDetailsResponse!.data!.days![0].active == true) {
-                  isToday.value = true;
+                  isToday = true;
                 } else {
-                  isToday.value = false;
+                  isToday = false;
                 }
-                print('Update');
+                emit(state);
                 for (int i = 0; i < dayDetailsResponse!.data!.days!.length; i++) {
                   if (dayDetailsResponse!.data!.days![i].active == true) {
                     date.value = dayDetailsResponse!.data!.days![i].dateFormat!;
@@ -434,9 +437,30 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   }
 
+  Future<void> saveDiaryLocally(DayDetailsResponse dayDetailsResponse, String date) async {
+    try {
+      await _diaryRepository.saveDairyLocally(dayDetailsResponse, date);
+      // emit(DiarySavedSuccess());
+    } catch (e) {
+      emit(DiaryError(e.toString()));
+    }
+  }
+
+  Future<void> saveDiaryToSend(DayDetailsResponse dayDetailsResponse, String date) async {
+    try {
+      await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse, date);
+      // emit(DiaryLoaded());
+    } catch (e) {
+      emit(DiaryError(e.toString()));
+    }
+  }
+
+
 
   Future<void> refreshDiaryData(String date, String type) async {
     emit(DiaryLoading());
+
+    print('Refresh');
 
     final result = await _diaryRepository.getDiaryView(date, !isSending, false, false);
 
@@ -775,7 +799,8 @@ class DiaryCubit extends Cubit<DiaryState> {
     emit(DiaryLoading());
     try {
       final response = await _diaryRepository.getOtherCalories();
-      // emit(DiaryLoadedOtherCalories(response));
+      otherCaloriesResponse = response;
+      emit(DiaryLoadedOtherCalories());
     } catch (e) {
       emit(DiaryError(e.toString()));
     }
@@ -935,17 +960,17 @@ class DiaryCubit extends Cubit<DiaryState> {
     }
   }
 
-  void downloadFile(String url) async {
+  void downloadFile(BuildContext context,String url) async {
     Navigator.push(
-        Get.context!,
+        context,
         MaterialPageRoute(
             builder: (context) =>
                 PDFPreview(res: "$url", name: "Calories Calculator")));
   }
 
-  void showPobUp(String text) {
+  void showPobUp(BuildContext context,String text) {
     showDialog(
-        context: Get.context!,
+        context: context,
         builder: (context) {
           return Dialog(
             backgroundColor: Colors.white,
@@ -953,7 +978,7 @@ class DiaryCubit extends Cubit<DiaryState> {
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0)),
-                height: MediaQuery.of(Get.context!).size.height / 1.5,
+                height: deviceHeight / 1.5,
                 padding: EdgeInsets.only(top: 8, left: 4, right: 4),
                 child: Scrollbar(
                   thumbVisibility: true,

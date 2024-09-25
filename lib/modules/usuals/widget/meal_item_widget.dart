@@ -1,3 +1,4 @@
+import 'package:app/config/navigation/navigation.dart';
 import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:app/modules/usuals/cubits/usual_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -98,6 +99,7 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                 onTap: () {
                   appDialog(
                     isList: true,
+                      context: context,
                       title:
                           "${widget.mealName} \n (${widget.mealCalories} Cal.)",
                       child: Column(
@@ -170,12 +172,13 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                   appDialog(
                     title: "Do you want to delete ${widget.mealName}?",
                     image: Icon(Icons.delete, size: 24, color: Colors.red),
+                    context: context,
                     cancelAction: () {
-                      Get.back();
+                      NavigationService.goBack(context);
                     },
                     cancelText: "No",
                     confirmAction: () async {
-                      Get.back();
+                      NavigationService.goBack(context);
                       usualCubit
                           .deleteUserUsualMeal(widget.mealId!);
                     },

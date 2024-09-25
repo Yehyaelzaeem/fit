@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../../core/models/orientation_videos_response.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/resources.dart';
 import '../../../core/services/api_provider.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -82,7 +83,7 @@ class _OrientationViewState extends State<OrientationView> {
           SizedBox(height: 12),
           orientationVideosResponse.data == null
               ? Padding(
-                  padding: EdgeInsets.only(top: Get.height * 0.2),
+                  padding: EdgeInsets.only(top: deviceHeight * 0.2),
                   child: Column(
                     children: [
                       Image.asset(
@@ -127,8 +128,8 @@ class _OrientationViewState extends State<OrientationView> {
                             child: Container(
                               height: MediaQuery.of(context).orientation ==
                                       Orientation.landscape
-                                  ? Get.height * 0.6
-                                  : Get.height * 0.18,
+                                  ? deviceHeight * 0.6
+                                  : deviceHeight * 0.18,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(24),
                                   image: DecorationImage(

@@ -1,4 +1,5 @@
 import 'package:analog_clock/analog_clock.dart';
+import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_values.dart';
 import 'package:app/modules/diary/cubits/diary_cubit.dart';
 
@@ -99,7 +100,11 @@ class _TimeSleepViewState extends State<TimeSleepView> {
                                 ],
                               ),
                             ),
-                            onTap: () => timeSleepCubit.selectTimeFrom(context),
+                            onTap: () => timeSleepCubit.selectTimeFrom(context).then((value){
+                              setState(() {
+
+                              });
+                            }),
                           ),
                           SizedBox(height: 12),
                           myTileRadioButton(
@@ -134,7 +139,11 @@ class _TimeSleepViewState extends State<TimeSleepView> {
                                 ],
                               ),
                             ),
-                            onTap: () => timeSleepCubit.selectTimeTo(context),
+                            onTap: () => timeSleepCubit.selectTimeTo(context).then((value) {
+                              setState(() {
+
+                              });
+                            }),
                           ),
                           SizedBox(height: 20),],
                       ),
@@ -148,8 +157,11 @@ class _TimeSleepViewState extends State<TimeSleepView> {
                                   .format(context),
                               sleepTimeTo:
                               timeSleepCubit.selectedTimeTo.format(context),
-                              isToday: true
-                            );
+                              isToday: true,
+                              diaryCubit: BlocProvider.of<DiaryCubit>(context)
+                            ).then((value) {
+                              NavigationService.goBack(context);
+                            });
                           }),
                       SizedBox(height: 20),
 
@@ -218,8 +230,12 @@ class _TimeSleepViewState extends State<TimeSleepView> {
           onChanged: (value) {
             timeSleepCubit.onClickRadioButton(value);
             value == "From"
-                ? timeSleepCubit.selectTimeFrom(context)
-                : timeSleepCubit.selectTimeTo(context);
+                ? timeSleepCubit.selectTimeFrom(context).then((value) {setState(() {
+
+                });})
+                : timeSleepCubit.selectTimeTo(context).then((value) {setState(() {
+
+            });});
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

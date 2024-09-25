@@ -27,7 +27,7 @@ class UsualRepository extends BaseRepository {
       httpRequest: () async {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
-          Response response = await _apiClient.get(url: "diary-meals/food-calories");
+          Response response = await _apiClient.get(url: "/diary-meals/food-calories");
           if (response.statusCode == 200) {
             await saveUsualMealsLocally(UsualMealsDataResponse.fromJson(response.data));
             return response;
@@ -107,7 +107,7 @@ class UsualRepository extends BaseRepository {
     if (result != ConnectivityResult.none) {
       FormData body = FormData.fromMap(mealParameters);
       Response response = await _apiClient.post(
-        url:"diary-meals/update_diary_meal/${mealParameters['id']}",
+        url:"/diary-meals/update_diary_meal/${mealParameters['id']}",
         requestBody: body,
       );
       if (response.data["success"] == true) {

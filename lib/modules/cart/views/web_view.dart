@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/resources.dart';
 
 import '../../../config/navigation/navigation_services.dart';
 import '../../../config/navigation/routes.dart';
@@ -295,7 +296,7 @@ class WebViewScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,

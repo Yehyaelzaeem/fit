@@ -20,6 +20,7 @@ import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/strings.dart';
 import '../../../../core/view/widgets/app_dialog.dart';
 import '../../../../core/view/widgets/default/text.dart';
+import '../../../auth/cubit/auth_cubit/auth_cubit.dart';
 import '../../../general/cubits/general_data_cubit.dart';
 import '../../cubits/home_cubit.dart';
 import '../screens/home_screen.dart';
@@ -84,14 +85,14 @@ checkIfUserIsLogged();
         child: Column(
           children: <Widget>[
             // if (prefs.getUserId() != null)
-            currentUser == null
+            currentUser?.data == null
                 ? Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Image.asset(
                           AppImages.kImgLogoWhiteNoBk,
-                          width: Get.width / 3,
+                          width: deviceWidth / 3,
                         ),
                       ),
                     ],
@@ -184,7 +185,7 @@ checkIfUserIsLogged();
                   image: "assets/icons/crown.svg"),
 
             // //Profile
-            currentUser == null
+            currentUser?.data == null
                 ? SizedBox()
                 : singleDrawerItem(
                     title: Strings().profile,
@@ -194,7 +195,7 @@ checkIfUserIsLogged();
                     }),
 
             //Messages
-            currentUser == null
+            currentUser?.data == null
                 ? SizedBox()
                 : singleDrawerItem(
                     title: 'Messages',
@@ -204,7 +205,7 @@ checkIfUserIsLogged();
                     }),
             //Messages
 
-            currentUser == null
+            currentUser?.data == null
                 ? SizedBox()
                 : homeCubit.faqStatus == false
                     ? SizedBox()
@@ -321,7 +322,7 @@ checkIfUserIsLogged();
 
     }
     }),
-            currentUser == null
+            currentUser?.data == null
                 ? singleDrawerItem(
                     title: "Login",
                     image: "assets/icons/logout.svg",
@@ -334,14 +335,16 @@ checkIfUserIsLogged();
                     action: () {
                       appDialog(
                         title: "Logout",
+                        context: context,
                         image: Icon(Icons.exit_to_app,
                             size: 50, color: Colors.red),
                         cancelAction: () {
-                          Get.back();
+                          NavigationService.goBack(context);
                         },
                         cancelText: "No",
                         confirmAction: () {
                           // prefs.logout();
+                          BlocProvider.of<AuthCubit>(context).logout();
                           loadingHome=null;
                           NavigationService.pushReplacementAll(context,Routes.splashScreen);
                         },

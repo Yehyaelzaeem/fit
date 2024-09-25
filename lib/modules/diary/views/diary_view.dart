@@ -597,7 +597,7 @@ class _DiaryViewState extends State<DiaryView> {
         InkWell(
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            diaryCubit.downloadFile(diaryCubit.dayDetailsResponse!.data!.pdf!);
+            diaryCubit.downloadFile(context,diaryCubit.dayDetailsResponse!.data!.pdf!);
           },
           child: Container(
             width: 80,
@@ -625,14 +625,13 @@ class _DiaryViewState extends State<DiaryView> {
       onTap: () async{
         FocusScope.of(context).requestFocus(FocusNode());
 
-        print('DASSSAS');
-        print(diaryCubit.isToday.value);
-        if (!diaryCubit.isToday.value) {
+        if (!diaryCubit.isToday) {
           final result = await Connectivity().checkConnectivity();
+          diaryCubit.isToday = true;
 
 
           if (result != ConnectivityResult.none) {
-            print('GetDairyData } todayYEs');
+
             diaryCubit
                 .getDiaryData(
                 diaryCubit.dayDetailsResponse!.data!.days![0].date!, isSending);
@@ -648,12 +647,14 @@ class _DiaryViewState extends State<DiaryView> {
                 diaryCubit.dayDetailsResponse!.data!.days![0].date!, false);
           }
         } else {
-
+          diaryCubit.isToday = false;
           final result = await Connectivity().checkConnectivity();
 
 
           if (result != ConnectivityResult.none) {
+
             print("Get Day");
+            print(diaryCubit.dayDetailsResponse!.data!.days![1].date.toString());
             diaryCubit
                 .getDiaryData(
                 diaryCubit.dayDetailsResponse!.data!.days![1].date!, isSending);
@@ -676,7 +677,7 @@ class _DiaryViewState extends State<DiaryView> {
         decoration: BoxDecoration(
             color: kColorPrimary, borderRadius: BorderRadius.circular(4)),
         child: Center(
-          child: kTextHeader(diaryCubit.isToday.value ? 'Yesterday' : 'Today',
+          child: kTextHeader(diaryCubit.isToday ? 'Yesterday' : 'Today',
               color: Colors.white, bold: true, size: 14),
         ),
       ),
@@ -692,7 +693,7 @@ class _DiaryViewState extends State<DiaryView> {
             color: Colors.black87, bold: true, size: 14),
       ),
     );
-    return diaryCubit.isToday.value == true
+    return diaryCubit.isToday == true
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -853,7 +854,7 @@ class _DiaryViewState extends State<DiaryView> {
                   .launchURL(diaryCubit.dayDetailsResponse!.data!.workoutDetails);
             } else {
               diaryCubit
-                  .showPobUp(diaryCubit.dayDetailsResponse!.data!.workoutDetails!);
+                  .showPobUp(context,diaryCubit.dayDetailsResponse!.data!.workoutDetails!);
             }
           },
           child: Container(
@@ -920,6 +921,9 @@ class _DiaryViewState extends State<DiaryView> {
                                 .dayDetailsResponse!.data!.workouts![index].title!;
                             diaryCubit.workOut.value = diaryCubit
                                 .dayDetailsResponse!.data!.workouts![index].id!;
+                            setState(() {
+
+                            });
                           },
                           child: Column(
                             children: [

@@ -155,7 +155,7 @@ class _SessionsViewState extends State<SessionsView> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              currentUser!.data!.nextSession == null
+                              currentUser?.data?.nextSession == null
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 18),

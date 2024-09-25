@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../../core/models/mymeals_response.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/resources.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/edit_text.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -63,7 +64,7 @@ class _CartViewState extends State<ShippingDetailsView> {
                     appBar(),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8),
-                      width: Get.width,
+                      width: deviceWidth,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -102,7 +103,7 @@ class _CartViewState extends State<ShippingDetailsView> {
 
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8),
-                      width: Get.width,
+                      width: deviceWidth,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -326,7 +327,7 @@ class _CartViewState extends State<ShippingDetailsView> {
                                   child: Container(
                                     color: Color(0xffeeeeee),
                                     margin: EdgeInsets.symmetric(horizontal: 8),
-                                    width: Get.width,
+                                    width: deviceWidth,
                                     height: 50,
                                     child: Row(
                                       children: [
@@ -402,7 +403,7 @@ class _CartViewState extends State<ShippingDetailsView> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,

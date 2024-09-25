@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:app/core/resources/resources.dart';
-import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../../config/navigation/navigation_services.dart';
 import '../../../../core/utils/const_strings.dart';
 import '../../../../core/view/widgets/app_dialog.dart';
 import '../../../../core/view/widgets/default/app_buttons.dart';
 import '../../../../core/view/widgets/default/text.dart';
-import '../../../diary/controllers/diary_controller.dart';
 import '../../../diary/views/diary_view.dart';
 import '../../../sessions/views/sessions_view.dart';
 import '../../cubits/home_cubit.dart';
@@ -97,19 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Future<bool> _willPopCallback(BuildContext context) async {
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     appDialog(
       title: 'Are you sure you want to exit?',
       image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
       cancelAction: () {
-        Get.back();
-        FocusScope.of(Get.context!).requestFocus(FocusNode());
+        NavigationService.goBack(context);
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       confirmAction: () {
         SystemNavigator.pop();
       },
       cancelText: 'No',
-      confirmText: 'Yes',
+      confirmText: 'Yes', context: context,
     );
 
     return false;

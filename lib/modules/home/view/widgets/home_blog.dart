@@ -2,6 +2,8 @@ import 'package:app/core/resources/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../core/resources/resources.dart';
+
 
 
 class BlogsView extends StatelessWidget {
@@ -23,7 +25,7 @@ const BlogsView({super.key});
                   margin: EdgeInsets.symmetric(vertical: 12),
                   alignment: Alignment(-0.14, -1.0),
                   padding: EdgeInsets.symmetric(vertical: 6, horizontal: 4),
-                  width: Get.width / 2.3,
+                  width: deviceWidth / 2.3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.horizontal(
                       right: Radius.circular(64.0),

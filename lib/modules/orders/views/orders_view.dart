@@ -1,10 +1,12 @@
 
-import 'package:app/core/resources/app_assets.dart';
+
+import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/resources/resources.dart';
+import 'package:app/modules/orders/cubits/order_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/models/my_orders_response.dart';
-import '../../../core/resources/app_colors.dart';
 import '../../../core/utils/globals.dart';
-import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/edit_text.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/page_lable.dart';
@@ -16,14 +18,29 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../cart/views/web_view.dart';
-import '../controllers/orders_controller.dart';
 
-class OrdersView extends GetView<OrdersController> {
-  Widget appBar() {
+class OrdersView extends StatefulWidget {
+  @override
+  State<OrdersView> createState() => _OrdersViewState();
+}
+
+class _OrdersViewState extends State<OrdersView> {
+  late final OrdersCubit ordersCubit;
+
+
+  @override
+  void initState() {
+    super.initState();
+    ordersCubit = BlocProvider.of<OrdersCubit>(context);
+    ordersCubit.fetchMyOrders();
+
+  }
+  
+  Widget appBar(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 6),
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      width: MediaQuery.of(Get.context!).size.width,
+      width: deviceWidth,
       height: 65,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -50,8 +67,8 @@ class OrdersView extends GetView<OrdersController> {
             left: 0,
             child: GestureDetector(
               onTap: () {
-                Get.back();
-                Get.back();
+                NavigationService.goBack(context);
+                NavigationService.goBack(context);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -69,8 +86,8 @@ class OrdersView extends GetView<OrdersController> {
   }
 
   Future<bool> _willPopCallback() async {
-    Get.back();
-    Get.back();
+    NavigationService.goBack(context);
+    NavigationService.goBack(context);
     return true;
   }
 
@@ -84,109 +101,302 @@ class OrdersView extends GetView<OrdersController> {
           child: Scaffold(
               backgroundColor: Colors.white,
               body: ListView(children: [
-                appBar(),
+                appBar(context),
                 SizedBox(height: 12),
                 PageLable(name: "My Orders"),
                 SizedBox(height: 12),
-                Obx(() {
-                  if (!controller.loading.value)
-                    return Center(child: CircularLoadingWidget());
-                  return Column(
-                    children: [
-                      Container(
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF414042),
-                          boxShadow: [
-                            BoxShadow(
+                BlocConsumer<OrdersCubit, OrdersState>(
+                  listener: (BuildContext context, OrdersState state) {
+
+                  },
+                  builder: (context, state) {
+                    if (state is OrdersLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (state is OrdersLoaded) {
+                      return Column(
+                        children: [
+                          Container(
+                            height: 35,
+                            decoration: BoxDecoration(
                               color: Color(0xFF414042),
-                              blurRadius: 5,
-                              spreadRadius: 1,
-                              offset: Offset(0, 0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Color(0xFF414042),
+                                  blurRadius: 5,
+                                  spreadRadius: 1,
+                                  offset: Offset(0, 0),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(200),
                             ),
-                          ],
-                          borderRadius: BorderRadius.circular(200),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.selectedTap.value = 2;
-                                },
-                                child: Container(
-                                  height: 35,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: controller.selectedTap.value == 2
-                                        ? Colors.white
-                                        : Color(0xFF414042),
-                                    borderRadius: BorderRadius.circular(200),
-                                  ),
-                                  child: kTextbody(
-                                    "Pending",
-                                    paddingV: 8,
-                                    color: controller.selectedTap.value == 2
-                                        ? kColorPrimary
-                                        : Colors.white,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ordersCubit.selectedTap = 2;
+                                      setState(() {
+
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 35,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: ordersCubit.selectedTap == 2
+                                            ? Colors.white
+                                            : Color(0xFF414042),
+                                        borderRadius: BorderRadius.circular(200),
+                                      ),
+                                      child: kTextbody(
+                                        "Pending",
+                                        paddingV: 8,
+                                        color: ordersCubit.selectedTap == 2
+                                            ? kColorPrimary
+                                            : Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Expanded(
-                              child: GestureDetector(
-                                onTap: () {
-                                  controller.selectedTap.value = 1;
-                                },
-                                child: Container(
-                                  height: 35,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: controller.selectedTap.value == 1
-                                        ? Colors.white
-                                        : Color(0xFF414042),
-                                    borderRadius: BorderRadius.circular(200),
-                                  ),
-                                  child: kTextbody(
-                                    "Accepted",
-                                    paddingV: 8,
-                                    color: controller.selectedTap.value == 1
-                                        ? kColorPrimary
-                                        : Colors.white,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ordersCubit.selectedTap = 1;
+                                      setState(() {
+
+                                      });
+                                    },
+                                    child: Container(
+                                      height: 35,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: ordersCubit.selectedTap == 1
+                                            ? Colors.white
+                                            : Color(0xFF414042),
+                                        borderRadius: BorderRadius.circular(200),
+                                      ),
+                                      child: kTextbody(
+                                        "Accepted",
+                                        paddingV: 8,
+                                        color: ordersCubit.selectedTap == 1
+                                            ? kColorPrimary
+                                            : Colors.white,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      if (controller.selectedTap.value == 2)
-                        controller.pending.length == 0
-                            ? buildEmpty()
-                            : SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                child: ListView.builder(
-                                    itemCount: controller.pending.length,
-                                    itemBuilder: (context, index) =>
-                                        singleOrderCard(
-                                            controller.pending[index],
-                                            context)),
-                              ),
-                      if (controller.selectedTap.value == 1)
-                        controller.completed.length == 0
-                            ? buildEmpty()
-                            : SizedBox(
-                                height: MediaQuery.of(context).size.height,
-                                child: ListView.builder(
-                                    itemCount: controller.completed.length,
-                                    itemBuilder: (context, index) =>
-                                        singleOrderCard(
-                                            controller.completed[index],
-                                            context)),
-                              )
-                    ],
-                  );
-                }),
+                          ),
+                          if (ordersCubit.selectedTap == 2)
+                            state.pendingOrders.length == 0
+                                ? buildEmpty()
+                                : SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              child: ListView.builder(
+                                  itemCount: state.pendingOrders.length,
+                                  itemBuilder: (context, index) =>
+                                      singleOrderCard(
+                                          state.pendingOrders[index],
+                                          context)),
+                            ),
+                          if (ordersCubit.selectedTap == 1)
+                            state.completedOrders.length == 0
+                                ? buildEmpty()
+                                : SizedBox(
+                              height: MediaQuery.of(context).size.height,
+                              child: ListView.builder(
+                                  itemCount: state.completedOrders.length,
+                                  itemBuilder: (context, index) =>
+                                      singleOrderCard(
+                                          state.completedOrders[index],
+                                          context)),
+                            )
+                        ],
+                      );
+                      // return Column(
+                      //   children: [
+                      //     Container(
+                      //       height: 35,
+                      //       decoration: BoxDecoration(
+                      //         color: Color(0xFF414042),
+                      //         boxShadow: [
+                      //           BoxShadow(
+                      //             color: Color(0xFF414042),
+                      //             blurRadius: 5,
+                      //             spreadRadius: 1,
+                      //             offset: Offset(0, 0),
+                      //           ),
+                      //         ],
+                      //         borderRadius: BorderRadius.circular(200),
+                      //       ),
+                      //       child: Row(
+                      //         children: [
+                      //           Expanded(
+                      //             child: GestureDetector(
+                      //               onTap: () {
+                      //                 // Handle tab switch to pending orders
+                      //               },
+                      //               child: Container(
+                      //                 height: 35,
+                      //                 alignment: Alignment.center,
+                      //                 decoration: BoxDecoration(
+                      //                   color: Colors.white,
+                      //                   borderRadius: BorderRadius.circular(200),
+                      //                 ),
+                      //                 child: Text("Pending"),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //           Expanded(
+                      //             child: GestureDetector(
+                      //               onTap: () {
+                      //                 // Handle tab switch to completed orders
+                      //               },
+                      //               child: Container(
+                      //                 height: 35,
+                      //                 alignment: Alignment.center,
+                      //                 decoration: BoxDecoration(
+                      //                   color: Color(0xFF414042),
+                      //                   borderRadius: BorderRadius.circular(200),
+                      //                 ),
+                      //                 child: Text("Completed", style: TextStyle(color: Colors.white)),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     state.pendingOrders.isEmpty
+                      //         ? Center(child: Text("No Pending Orders"))
+                      //         : ListView.builder(
+                      //       itemCount: state.pendingOrders.length,
+                      //       itemBuilder: (context, index) {
+                      //         return ListTile(
+                      //           title: Text(state.pendingOrders[index].name),
+                      //           subtitle: Text(state.pendingOrders[index].details),
+                      //         );
+                      //       },
+                      //     ),
+                      //     state.completedOrders.isEmpty
+                      //         ? Center(child: Text("No Completed Orders"))
+                      //         : ListView.builder(
+                      //       itemCount: state.completedOrders.length,
+                      //       itemBuilder: (context, index) {
+                      //         return ListTile(
+                      //           title: Text(state.completedOrders[index].name),
+                      //           subtitle: Text(state.completedOrders[index].details),
+                      //         );
+                      //       },
+                      //     ),
+                      //   ],
+                      // );
+                    } else if (state is OrdersError) {
+                      return Center(child: Text("Error: ${state.message}"));
+                    }
+
+                    return Container();
+                  },
+                ),
+                // Obx(() {
+                //   if (!controller.loading.value)
+                //     return Center(child: CircularLoadingWidget());
+                //   return Column(
+                //     children: [
+                //       Container(
+                //         height: 35,
+                //         decoration: BoxDecoration(
+                //           color: Color(0xFF414042),
+                //           boxShadow: [
+                //             BoxShadow(
+                //               color: Color(0xFF414042),
+                //               blurRadius: 5,
+                //               spreadRadius: 1,
+                //               offset: Offset(0, 0),
+                //             ),
+                //           ],
+                //           borderRadius: BorderRadius.circular(200),
+                //         ),
+                //         child: Row(
+                //           children: [
+                //             Expanded(
+                //               child: GestureDetector(
+                //                 onTap: () {
+                //                   controller.selectedTap.value = 2;
+                //                 },
+                //                 child: Container(
+                //                   height: 35,
+                //                   alignment: Alignment.center,
+                //                   decoration: BoxDecoration(
+                //                     color: controller.selectedTap.value == 2
+                //                         ? Colors.white
+                //                         : Color(0xFF414042),
+                //                     borderRadius: BorderRadius.circular(200),
+                //                   ),
+                //                   child: kTextbody(
+                //                     "Pending",
+                //                     paddingV: 8,
+                //                     color: controller.selectedTap.value == 2
+                //                         ? kColorPrimary
+                //                         : Colors.white,
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //             Expanded(
+                //               child: GestureDetector(
+                //                 onTap: () {
+                //                   controller.selectedTap.value = 1;
+                //                 },
+                //                 child: Container(
+                //                   height: 35,
+                //                   alignment: Alignment.center,
+                //                   decoration: BoxDecoration(
+                //                     color: ordersCubit.selectedTap == 1
+                //                         ? Colors.white
+                //                         : Color(0xFF414042),
+                //                     borderRadius: BorderRadius.circular(200),
+                //                   ),
+                //                   child: kTextbody(
+                //                     "Accepted",
+                //                     paddingV: 8,
+                //                     color: controller.selectedTap.value == 1
+                //                         ? kColorPrimary
+                //                         : Colors.white,
+                //                   ),
+                //                 ),
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       ),
+                //       if (controller.selectedTap.value == 2)
+                //         controller.pending.length == 0
+                //             ? buildEmpty()
+                //             : SizedBox(
+                //                 height: MediaQuery.of(context).size.height,
+                //                 child: ListView.builder(
+                //                     itemCount: controller.pending.length,
+                //                     itemBuilder: (context, index) =>
+                //                         singleOrderCard(
+                //                             controller.pending[index],
+                //                             context)),
+                //               ),
+                //       if (controller.selectedTap.value == 1)
+                //         controller.completed.length == 0
+                //             ? buildEmpty()
+                //             : SizedBox(
+                //                 height: MediaQuery.of(context).size.height,
+                //                 child: ListView.builder(
+                //                     itemCount: controller.completed.length,
+                //                     itemBuilder: (context, index) =>
+                //                         singleOrderCard(
+                //                             controller.completed[index],
+                //                             context)),
+                //               )
+                //     ],
+                //   );
+                // }),
               ])),
         ),
       ),
@@ -195,7 +405,7 @@ class OrdersView extends GetView<OrdersController> {
 
   Widget buildEmpty() {
     return Padding(
-      padding: EdgeInsets.only(top: Get.height * 0.2),
+      padding: EdgeInsets.only(top: deviceHeight * 0.2),
       child: Column(
         children: [
           Image.asset(
@@ -225,7 +435,7 @@ class OrdersView extends GetView<OrdersController> {
             children: [
               Expanded(
                 child: kTextHeader(
-                  controller.getMealsName(e.meals.reversed.toList()),
+                  ordersCubit.getMealsName(e.meals.reversed.toList()),
                   align: TextAlign.start,
                   paddingH: 12,
                   color: Colors.black,
@@ -441,7 +651,7 @@ class OrdersView extends GetView<OrdersController> {
                                       }
                                     },
                                     child: Container(
-                                      width: Get.width / 1.6,
+                                      width: deviceWidth / 1.6,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         border:

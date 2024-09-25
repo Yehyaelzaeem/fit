@@ -364,7 +364,7 @@ class ApiProvider {
 
   late int newMessages = 0;
 
-  Future<UserResponse> getProfile() async {
+  Future<UserResponse> getProfile(BuildContext context) async {
     String deviceId = await kDeviceInfo();
     String deviceToken = await kDeviceToken();
     bool isGuestLogin = false;
@@ -389,6 +389,7 @@ class ApiProvider {
             shoNewMessage = false;
 
             appDialog(
+              context: context,
               title: 'You have a new message from \n Dr/ Ramy Mansour',
               image: Icon(Icons.chat, size: 50, color: Colors.grey),
               barrierDismissible: false,
@@ -2051,7 +2052,6 @@ class ApiProvider {
     Response response = await _utils.get(
       "service-package-order/$packageId?device_id=$deviceId",
     );
-    print("Device id =>>$packageId");
     print("Device id =>>$deviceId");
 
     if (response.data["success"] == true) {

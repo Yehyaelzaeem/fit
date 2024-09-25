@@ -48,7 +48,7 @@ class TimeSleepRepository extends BaseRepository {
   // Save sleep time locally
   Future<void> saveSleepTimeLocally(SleepTime sleepTime) async {
     final data = sleepTime.toJson();
-    await _cacheClient.save(StorageKeys.SLEEP_TIME, data);
+    await _cacheClient.save(StorageKeys.SLEEP_TIME, jsonEncode(data));
   }
 
 

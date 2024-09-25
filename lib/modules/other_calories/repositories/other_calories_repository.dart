@@ -143,4 +143,6 @@ class OtherCaloriesRepository extends BaseRepository {
     // Clear cached data after syncing
     await _cacheClient.delete(StorageKeys.OTHER_CALORIES_CREATION);
   }
+
+
 }

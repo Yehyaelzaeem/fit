@@ -37,7 +37,6 @@ class ProfileRepository extends BaseRepository {
       httpRequest: () async {
         String deviceId = await _getDeviceInfo();
         String deviceToken = await _getDeviceToken();
-        await _cacheClient.save(StorageKeys.isAuthed, true);
         bool isGuestLogin = await  await _cacheClient.get(StorageKeys.IS_GUEST_SAVED)??false;
 
         final result = await Connectivity().checkConnectivity();
@@ -63,7 +62,16 @@ class ProfileRepository extends BaseRepository {
         }
 
       },
-      successReturn: (data) => UserResponse.fromJson(data),
+      successReturn: (data){
+        if(UserResponse.fromJson(data).success==true){
+          _cacheClient.save(StorageKeys.isAuthed, true);
+        }else{
+          _cacheClient.save(StorageKeys.isAuthed, false);
+
+        }
+
+        return UserResponse.fromJson(data);
+      },
     );
   }
 

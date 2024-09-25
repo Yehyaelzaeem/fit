@@ -24,16 +24,28 @@ class GetMyMealsFailureState extends MyMealsStates {
   GetMyMealsFailureState(this.failure);
 }
 
-class GetProductLoadingState extends MyMealsStates {
-  GetProductLoadingState();
+class MyMealsInitial extends MyMealsStates {}
+
+class MyMealsLoading extends MyMealsStates {}
+
+class MyMealsLoaded extends MyMealsStates {
+  final MyMealResponse myMeals;
+  MyMealsLoaded(this.myMeals);
 }
 
-class GetProductSuccessState extends MyMealsStates {
-  GetProductSuccessState();
-}
+class MyMealsError extends MyMealsStates {
+  final String error;
 
-class GetProductFailureState extends MyMealsStates {
-  final Failure failure;
-
-  GetProductFailureState(this.failure);
+  MyMealsError(this.error);
 }
+// Meal Details States
+  class MealDetailsLoading extends MyMealsStates {}
+
+  class MealDetailsLoaded extends MyMealsStates {
+  MealDetailsLoaded();
+  }
+
+  class MealDetailsError extends MyMealsStates {
+  final String error;
+  MealDetailsError(this.error);
+  }

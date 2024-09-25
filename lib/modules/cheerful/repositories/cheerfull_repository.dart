@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/base/repositories/base_repository.dart';
 import '../../../core/models/cheer_full_response.dart';
+import '../../../core/models/meal_features_status_response.dart';
 import '../../../core/services/error/failure.dart';
 import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/local/storage_keys.dart';
@@ -20,41 +21,54 @@ class CheerFullRepository extends BaseRepository {
 
   CheerFullRepository(this._apiClient, this._cacheClient, super.networkInfo);
 
+  // Get meal features home from API
+  Future<MealFeatureHomeResponse> getMealFeaturesHome() async {
+    Response response = await _apiClient.post(url:"/meals_features_home");
 
-  Future<Either<Failure, CheerFullResponse>> getCheerFullStatus() async {
-    return super.call<CheerFullResponse>(
-      httpRequest: () async {
-        final result = await Connectivity().checkConnectivity();
-        if (result != ConnectivityResult.none) {
-          Response response = await _apiClient.post(url: "meals_features_status");
-          if (response.statusCode == 200) {
-            await saveCheerFullLocally(CheerFullResponse.fromJson(response.data));
-            return response;
-          } else {
-            await saveCheerFullLocally(CheerFullResponse.fromJson(response.data));
-            return response;
-          }
-        } else {
-          CheerFullResponse? cachedResponse = await readCheerFullLocally();
-          return Response(
-            requestOptions: RequestOptions(path: ''),
-            data: cachedResponse?.toJson() ?? {},
-          );
-        }
-      },
-      successReturn: (data) => CheerFullResponse.fromJson(data),
-    );
+    if (response.statusCode == 200) {
+      return MealFeatureHomeResponse.fromJson(response.data);
+    } else {
+      throw Exception("Error fetching meal features home");
+    }
   }
 
+  // Get cheerful status from API or local cache
+  Future<CheerFullResponse> getCheerFullStatus() async {
+    final result = await Connectivity().checkConnectivity();
 
-  Future<void> saveCheerFullLocally(CheerFullResponse response) async {
-    await _cacheClient.save(StorageKeys.CheerFull, jsonEncode(response.toJson()));
+    if (result != ConnectivityResult.none) {
+      Response response = await _apiClient.post(url:"/meals_features_status");
 
+      if (response.statusCode == 200) {
+        final cheerFullResponse = CheerFullResponse.fromJson(response.data);
+        await saveCheerFullLocally(cheerFullResponse);
+        return cheerFullResponse;
+      } else {
+        throw Exception("Error fetching cheer full status from API");
+      }
+    } else {
+      // Fetch from local cache if offline
+      CheerFullResponse? cachedCheerFull = await readCheerFullLocally();
+      if (cachedCheerFull != null) {
+        return cachedCheerFull;
+      } else {
+        throw Exception("No cheer full data available offline");
+      }
+    }
   }
 
+  // Save cheerful status locally
+  Future<void> saveCheerFullLocally(CheerFullResponse cheerFullResponse) async {
+    await _cacheClient.save(StorageKeys.CHEER_FULL, jsonEncode(cheerFullResponse.toJson()));
+  }
+
+  // Read cheerful status from local cache
   Future<CheerFullResponse?> readCheerFullLocally() async {
-    String? units = await _cacheClient.get(StorageKeys.CheerFull);
-    return units != null ? CheerFullResponse.fromJson(jsonDecode(units)) : null;
+    String? cachedData = await _cacheClient.get(StorageKeys.CHEER_FULL);
+    if (cachedData != null && cachedData.isNotEmpty) {
+      return CheerFullResponse.fromJson(jsonDecode(cachedData));
+    }
+    return null;
   }
 
   Future<Either<Failure, bool>> getFaqStatus() async {

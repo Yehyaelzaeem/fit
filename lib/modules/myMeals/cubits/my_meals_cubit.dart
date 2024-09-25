@@ -20,7 +20,7 @@ class MyMealsCubit extends Cubit<MyMealsStates> {
   final MyMealsRepository _myMealsRepository;
 
   MyMealsCubit(this._myMealsRepository) : super(MyMealsInitialState());
-  final response = MyMealResponse().obs;
+  MyMealResponse response = MyMealResponse();
   final error = ''.obs;
   final loading = false.obs;
   final viewOnly = false.obs;
@@ -35,50 +35,39 @@ class MyMealsCubit extends Cubit<MyMealsStates> {
     emit(state);
   }
 
-  @override
   void onInit() async {
     userId = await SharedHelper().readString(CachingKey.USER_ID);
     isGuest = await SharedHelper().readBoolean(CachingKey.IS_GUEST);
     isGuestSaved = await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
     if(userId.isNotEmpty){
-      getNetworkData();
+      // getNetworkData();
     }else if(isGuestSaved){
-      getNetworkData();
+      // getNetworkData();
     }
   }
 
-  getNetworkData() async {
 
-    error.value = '';
-    getMyMealsLoading.value = true;
-    try {
-      response.value = await ApiProvider().getMyMeals();
-    } catch (e) {
-      error.value = '$e';
-    }
-    getMyMealsLoading.value = false;
-  }
 
   void deleteMeals() async {
-    response.value.data!.forEach((element) async {
+    response.data!.forEach((element) async {
       if (element.selected) {
         await networkDeleteMeal(element.id.toString());
       }
     });
-    response.refresh();
+emit(state);
   }
 
   networkDeleteMeal(String id) async {
     getMyMealsLoading.value = true;
     try {
       await ApiProvider().deleteMeal(id: id);
-      response.value.data!
+      response.data!
           .removeWhere((element) => element.id == int.parse(id));
     } catch (e) {
       Get.snackbar('Error', '$e');
     }
     getMyMealsLoading.value = false;
-    response.refresh();
+    emit(state);
   }
 
   void add({
@@ -113,5 +102,29 @@ class MyMealsCubit extends Cubit<MyMealsStates> {
       sum = (double.tryParse('${meal.price}')?.floor() ?? 0) * meal.qty!;
     }
     return sum;
+  }
+
+
+  // Fetch My Meals
+  Future<void> fetchMyMeals() async {
+    try {
+      emit(MyMealsLoading());
+      final myMeals = await _myMealsRepository.getMyMeals();
+      response = myMeals;
+      emit(MyMealsLoaded(myMeals));
+    } catch (error) {
+      emit(MyMealsError(error.toString()));
+    }
+  }
+
+  // Fetch Meal Details
+  Future<void> fetchMealDetails(String id) async {
+    try {
+      emit(MealDetailsLoading());
+      final mealDetails = await _myMealsRepository.getMealDetails(id);
+      emit(MealDetailsLoaded());
+    } catch (error) {
+      emit(MealDetailsError(error.toString()));
+    }
   }
 }

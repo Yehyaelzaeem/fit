@@ -1,4 +1,5 @@
 
+import '../../../config/navigation/navigation_services.dart';
 import '../../../core/models/meal_food_list_response.dart';
 import '../../../core/models/mymeals_response.dart';
 import 'package:flutter/cupertino.dart';
@@ -225,7 +226,7 @@ class MakeMealsCubit extends Cubit<MakeMealsStates> {
     return total;
   }
 
-  Future saveMeal() async {
+  Future saveMeal(BuildContext context) async {
     saveLoading.value = true;
     String foodIds = "";
     String amountIds = "";
@@ -268,12 +269,12 @@ class MakeMealsCubit extends Cubit<MakeMealsStates> {
       }
 //// TODO handle it
       if (isGuestSaved) {
-        Get.back(result: true);
+        NavigationService.goBack(context,true);
       } else if (userId.isNotEmpty) {
-        Get.back(result: true);
+        NavigationService.goBack(context,true);
       } else if (!isGuestSaved&&userId.isEmpty) {
-        Get.back(result: true);
-        Get.back(result: true);
+        NavigationService.goBack(context, true);
+        NavigationService.goBack(context,true);
       }
     } catch (e) {
       Get.snackbar("Error", "$e");

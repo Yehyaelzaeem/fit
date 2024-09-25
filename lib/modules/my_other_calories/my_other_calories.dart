@@ -9,7 +9,9 @@ import '../../config/navigation/routes.dart';
 import '../../core/models/day_details_reposne.dart' as dayDetails;
 import '../../core/models/my_other_calories_response.dart';
 import '../../core/resources/app_colors.dart';
+import '../../core/resources/app_values.dart';
 import '../../core/services/api_provider.dart';
+import '../../core/utils/alerts.dart';
 import '../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../core/view/widgets/default/text.dart';
 import '../../core/view/widgets/page_lable.dart';
@@ -17,6 +19,7 @@ import '../diary/controllers/diary_controller.dart';
 import '../diary/cubits/diary_cubit.dart';
 import '../home/view/screens/home_screen.dart';
 import '../home/view/widgets/home_appbar.dart';
+import '../other_calories/cubits/other_calories_cubit.dart';
 import 'add_new_other_calories.dart';
 import 'edit_other_calory.dart';
 
@@ -32,18 +35,29 @@ class MyOtherCalories extends StatefulWidget {
 class _MyOtherCaloriesState extends State<MyOtherCalories> {
   bool isLoading = true;
 
-  MyOtherCaloriesResponse otherCaloriesResponse = MyOtherCaloriesResponse();
+  late final DiaryCubit diaryCubit;
+  late final OtherCaloriesCubit otherCaloriesCubit;
+
+
+  @override
+  void initState() {
+    super.initState();
+    diaryCubit = BlocProvider.of<DiaryCubit>(context);
+    otherCaloriesCubit = BlocProvider.of<OtherCaloriesCubit>(context);
+    diaryCubit.fetchOtherCalories();
+  }
+  // MyOtherCaloriesResponse diaryCubit.otherCaloriesResponse = MyOtherCaloriesResponse();
 
   void getDiaryData() async {
     await ApiProvider().getOtherCaloreis().then((value) {
       if (value.success == true) {
         setState(() {
-          otherCaloriesResponse = value;
+          diaryCubit.otherCaloriesResponse = value;
           isLoading = false;
         });
       } else {
         setState(() {
-          otherCaloriesResponse = value;
+          diaryCubit.otherCaloriesResponse = value;
           isLoading = false;
         });
         // Fluttertoast.showToast(msg: "${value.message}");
@@ -74,12 +88,6 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   }
 
   @override
-  void initState() {
-    getDiaryData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
@@ -92,17 +100,29 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
         }
       },
       child: Scaffold(
-        body: isLoading == true
-            ? CircularLoadingWidget()
-            : ListView(
+        body: BlocConsumer<DiaryCubit, DiaryState>(
+            listener: (context, state) {
+              if (state is DiaryFailure) {
+                Alerts.showSnackBar(context, state.failure.message,duration: Time.t2s*2);
+              }
+
+              if (state is DiaryLoaded) {
+                Alerts.closeAllSnackBars(context);
+
+              }
+            },
+            builder: (context, state) =>
+              state is DiaryLoading
+                  ? CircularLoadingWidget()
+                  : ListView(
                 children: [
                   HomeAppbar(
                     type: null,
                     onBack: widget.canGoBack
                         ? null
                         : () {
-                            Get.offAndToNamed(Routes.homeScreen);
-                          },
+                      Get.offAndToNamed(Routes.homeScreen);
+                    },
                   ),
                   Row(
                     children: [
@@ -114,76 +134,77 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                   ),
                   rowWithProgressBar("Proteins", 1),
                   staticBar(),
-                  otherCaloriesResponse.data!.proteins!.isEmpty
+                  diaryCubit.otherCaloriesResponse.data!.proteins!.isEmpty
                       ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 24),
-                                Text("No Proteins Added Yet"),
-                              ],
-                            ),
-                          ),
-                        )
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          Text("No Proteins Added Yet"),
+                        ],
+                      ),
+                    ),
+                  )
                       : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount:
-                              otherCaloriesResponse.data!.proteins!.length,
-                          itemBuilder: (context, indedx) {
-                            return rowItem(
-                                otherCaloriesResponse.data!.proteins![indedx],
-                                1);
-                          }),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount:
+                      diaryCubit.otherCaloriesResponse.data!.proteins!.length,
+                      itemBuilder: (context, indedx) {
+                        return rowItem(
+                            diaryCubit.otherCaloriesResponse.data!.proteins![indedx],
+                            1);
+                      }),
                   SizedBox(height: 20),
                   rowWithProgressBar("Carbs", 2),
                   staticBar(),
-                  otherCaloriesResponse.data!.carbs!.isEmpty
+                  diaryCubit.otherCaloriesResponse.data!.carbs!.isEmpty
                       ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 24),
-                                Text("No Carbs Added Yet"),
-                              ],
-                            ),
-                          ),
-                        )
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          Text("No Carbs Added Yet"),
+                        ],
+                      ),
+                    ),
+                  )
                       : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: otherCaloriesResponse.data!.carbs!.length,
-                          itemBuilder: (context, i) {
-                            return rowItem(
-                                otherCaloriesResponse.data!.carbs![i], 2);
-                          }),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: diaryCubit.otherCaloriesResponse.data!.carbs!.length,
+                      itemBuilder: (context, i) {
+                        return rowItem(
+                            diaryCubit.otherCaloriesResponse.data!.carbs![i], 2);
+                      }),
                   SizedBox(height: 20),
                   rowWithProgressBar("Fats", 3),
                   staticBar(),
-                  otherCaloriesResponse.data!.fats!.isEmpty
+                  diaryCubit.otherCaloriesResponse.data!.fats!.isEmpty
                       ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Column(
-                              children: [
-                                SizedBox(height: 24),
-                                Text("No Fats Added Yet"),
-                              ],
-                            ),
-                          ),
-                        )
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          Text("No Fats Added Yet"),
+                        ],
+                      ),
+                    ),
+                  )
                       : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: otherCaloriesResponse.data!.fats!.length,
-                          itemBuilder: (context, j) {
-                            return rowItem(
-                                otherCaloriesResponse.data!.fats![j], 3);
-                          }),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: diaryCubit.otherCaloriesResponse.data!.fats!.length,
+                      itemBuilder: (context, j) {
+                        return rowItem(
+                            diaryCubit.otherCaloriesResponse.data!.fats![j], 3);
+                      }),
                 ],
-              ),
+              )
+            ),
       ),
     );
   }
@@ -241,11 +262,11 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
 
                       }
                       if(type==1){
-                        otherCaloriesResponse.data!.proteins!.remove(item);
+                        diaryCubit.otherCaloriesResponse.data!.proteins!.remove(item);
                       }else if(type==2){
-                        otherCaloriesResponse.data!.carbs!.remove(item);
+                        diaryCubit.otherCaloriesResponse.data!.carbs!.remove(item);
                       }else if(type==3){
-                        otherCaloriesResponse.data!.fats!.remove(item);
+                        diaryCubit.otherCaloriesResponse.data!.fats!.remove(item);
                       }
                       setState(() {
 
@@ -276,9 +297,9 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
           if (result == null) getDiaryData();
           if(result!=null){
 
-            if (type == 1)otherCaloriesResponse.data!.proteins!.add(result);
-            if (type == 2) otherCaloriesResponse.data!.carbs!.add(result);
-            if (type == 3) otherCaloriesResponse.data!.fats!.add(result);
+            if (type == 1)diaryCubit.otherCaloriesResponse.data!.proteins!.add(result);
+            if (type == 2) diaryCubit.otherCaloriesResponse.data!.carbs!.add(result);
+            if (type == 3) diaryCubit.otherCaloriesResponse.data!.fats!.add(result);
 
             // final controllerDiary = Get.find<DiaryController>(tag: 'diary');
             Proteins a = result;
@@ -316,7 +337,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
             ));
             await ApiProvider().saveDairyLocally(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse!,BlocProvider.of<DiaryCubit>(context).lastSelectedDate.value);
 
-            await ApiProvider().saveMyOtherCaloriesLocally(otherCaloriesResponse);
+            await ApiProvider().saveMyOtherCaloriesLocally(diaryCubit.otherCaloriesResponse);
           }
 
           setState(() {});

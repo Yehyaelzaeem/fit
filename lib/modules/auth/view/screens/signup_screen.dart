@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../../../config/localization/l10n/l10n.dart';
 import '../../../../config/navigation/navigation.dart';
 import '../../../../core/enums/http_request_state.dart';
 import '../../../../core/models/general_response.dart';
@@ -92,6 +90,14 @@ class _SignupScreenState extends State<SignupScreen> {
         Fluttertoast.showToast(msg: "${value.message}");
       }
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    authCubit = BlocProvider.of<AuthCubit>(context);
+
   }
 
   @override
@@ -453,8 +459,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   NavigationService.pushReplacementAll(context, Routes.authScreen);
                 }
               },
-              buildWhen: (prevState, state) => state.authRequestType == AuthRequestType.login,
-              builder: (context, state) => state.httpRequestState == HttpRequestState.loading
+              buildWhen: (prevState, state) => state.authRequestType == AuthRequestType.registration,
+              builder: (context, state) => state.httpRequestState != HttpRequestState.loading
                   ? SizedBox()
                       : Container(
                     child: Center(

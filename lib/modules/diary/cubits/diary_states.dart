@@ -27,8 +27,7 @@ class DiaryError extends DiaryState {
 
 
 class DiaryLoadedOtherCalories extends DiaryState {
-  final MyOtherCaloriesResponse response;
-  DiaryLoadedOtherCalories(this.response);
+  DiaryLoadedOtherCalories();
 }
 
 class DiaryLoadedOtherCaloriesUnits extends DiaryState {

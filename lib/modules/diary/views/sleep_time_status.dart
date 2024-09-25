@@ -1,5 +1,6 @@
 
 import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/resources/resources.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,7 +75,7 @@ class _SleepTimeStatusState extends State<SleepTimeStatus> {
                         ),
                         SizedBox(width: 8),
                         Container(
-                          width: Get.width / 2,
+                          width: deviceWidth / 2,
                           child: kTextHeader(
                               diaryCubit.dayDetailsResponse!.data?.sleepingTime
                                       ?.sleepingStatus?.name ??

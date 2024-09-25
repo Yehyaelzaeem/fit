@@ -52,20 +52,20 @@ class _HomeAppbarState extends State<HomeAppbar> {
   void getUserData() async {
     Echo('getUserData');
     await profileCubit.getProfile().then((value) {
-      // if (value.success == true) {
-      //   setState(() {
-      //     ress = value;
-      //     newMessage = ress.data!.newMessages!;
-      //   });
-      //   if (ress.data != null && ress.data!.image != null) {
-      //     BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
-      //     Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
-      //   } else {
-      //     Echo(' getUserData avatart nulls');
-      //   }
-      // } else {
-      //   Echo(' getUserData error ');
-      // }
+      if (profileCubit.ress.success == true) {
+        setState(() {
+          ress = profileCubit.ress;
+          newMessage = ress.data!.newMessages!;
+        });
+        if (ress.data != null && ress.data!.image != null) {
+          // BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
+          // Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
+        } else {
+          Echo(' getUserData avatart nulls');
+        }
+      } else {
+        Echo(' getUserData error ');
+      }
     });
 
     // await ApiProvider().getProfile().then((value) {

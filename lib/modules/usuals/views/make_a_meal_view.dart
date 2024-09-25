@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'package:app/core/resources/app_values.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import '../../../config/navigation/navigation_services.dart';
 import '../../../core/models/usual_meals_data_reposne.dart';
 import '../../../core/models/usual_meals_reposne.dart';
 import '../../../core/resources/app_colors.dart';
@@ -288,7 +290,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                     )
                   },diaryCubit: diaryCubit).then((value) async {
                     _mealName.clear();
-                    Get.back();
+                    NavigationService.goBack(context);
                   });
                 } else {
                   /* print("${usualCubit.foodItems.map((e) => e.foodId)}"
@@ -309,7 +311,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                         .replaceAll('(', '')
                         .replaceAll(')', ''),
                   },diaryCubit:diaryCubit).then((value) {
-                    Get.back();
+                    NavigationService.goBack(context);
                   });
                 }
               }
@@ -322,10 +324,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               ),
               child: kButtonDefault(
                 widget.mealData == null ? 'Save Meal' : 'Update Meal',
-                marginH: MediaQuery
-                    .of(Get.context!)
-                    .size
-                    .width / 6,
+                marginH: deviceWidth/ 6,
                 paddingV: 0,
                 shadow: true,
                 paddingH: 12,
@@ -606,7 +605,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
             flex: 1,
             child: InkWell(
               onTap: () async {
-                FocusScope.of(Get.context!).requestFocus(FocusNode());
+                FocusScope.of(context).requestFocus(FocusNode());
                 if (type == 'proteins') {
                   usualCubit.caloriesDetails.add(FoodDataItem());
                 } else if (type == 'carbs') {
@@ -682,7 +681,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
     print("Item Data => ${item.id}");
     // show screen dialog
     result = await showDialog(
-        context: Get.context!,
+        context: context,
         builder: (context) {
           return Dialog(
             child: SaveNewMeal(
@@ -705,7 +704,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
       usualCubit.carbsDetails.refresh();
       usualCubit.fatsDetails.refresh();
     }
-    FocusScope.of(Get.context!).requestFocus(FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
   }
 }
 
@@ -775,7 +774,7 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
             widget.item.title == element.title);
           }
         }
-        FocusScope.of(Get.context!).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Icon(
         Icons.delete,
