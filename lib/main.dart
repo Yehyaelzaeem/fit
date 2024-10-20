@@ -3,6 +3,7 @@ import 'package:app/modules/myMeals/cubits/my_meals_cubit.dart';
 import 'package:app/modules/profile/cubits/profile_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -40,6 +41,7 @@ void main() async {
   tz.initializeTimeZones();
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  // debugPaintSizeEnabled = false; // Show layout gridlines
 
   await di.init();
   Bloc.observer = MyBlocObserver();
@@ -117,6 +119,9 @@ final ThemeData lightTheme = ThemeData(
   primaryColor: AppColors.PRIMART_COLOR,
   dialogBackgroundColor: Colors.white,
   scaffoldBackgroundColor: Colors.white,
+
+  // colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.green)
+  //     .copyWith(secondary: Colors.deepOrange),
   fontFamily: 'appFont',
   // textTheme: TextTheme(
   //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),

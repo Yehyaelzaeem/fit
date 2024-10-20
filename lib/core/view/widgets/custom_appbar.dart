@@ -42,6 +42,7 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: title,
       shape: shape,
       automaticallyImplyLeading: showDefaultBackButton,
+
       actions: actions != null
           ? [
               Padding(
@@ -50,7 +51,8 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ]
           : null,
-      backgroundColor: bgColor,
+      backgroundColor: bgColor?? AppColors.offWhite,
+
       elevation: elevation,
       centerTitle: centerTitle,
       flexibleSpace: flexibleSpace,

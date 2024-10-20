@@ -49,16 +49,66 @@ class AppImages {
   static const String kEmptyPackage = '$_imagesPath/empty.png';
   static const String kSuccessful = '$_imagesPath/successful.png';
   static const String kFailed = '$_imagesPath/failed.png';
+  static const String cards = '$_imagesPath/Cards.svg';
+  static const String logoAppbar = "$_imagesPath/logo_appbar.svg";
+  static const String proteins = "$_imagesPath/proteins.png";
+  static const String carbs = "$_imagesPath/carbs.png";
+  static const String fats = "$_imagesPath/fats.svg";
+  static const String doctor = "$_imagesPath/doctor.png";
+
+
+
 }
 
 class AppIcons {
   static const String categories = "$_iconsPath/categories.svg";
   static const String home = "$_iconsPath/home.svg";
-  static const String plus = "$_iconsPath/plus.svg";
   static const String tools = "$_iconsPath/tools.svg";
   static const String user = "$_iconsPath/user.svg";
-  static const String maintenanceIcon = "$_iconsPath/maintenance_icon.svg";
-  static const String newEquipIcon = "$_iconsPath/new_equip_icon.svg";
-  static const String usedEquipIcon = "$_iconsPath/used_equip_icon.svg";
+  static const String notebook = "$_iconsPath/notebook.svg";
+
+  static const String drawerIcon = "$_iconsPath/drawer.svg";
+  static const String messages = "$_iconsPath/msg.svg";
+  static const String sleepIcon = "$_iconsPath/sleep_icon.svg";
+  static const String water200 = "$_iconsPath/water200.png";
+  static const String water400 = "$_iconsPath/water400.png";
+  static const String water600 = "$_iconsPath/water600.png";
+  static const String water800 = "$_iconsPath/water800.png";
+  static const String sessionBottom = "$_iconsPath/home_bottom.svg";
+  static const String homeBottom = "$_iconsPath/session_bottom.svg";
+  static const String diaryBottom = "$_iconsPath/diary_bottom.svg";
+  static const String minus = "$_iconsPath/minus.svg";
+  static const String plus = "$_iconsPath/plus.svg";
+  static const String carbs = "$_iconsPath/carbs.png";
+  static const String proteins = "$_iconsPath/proteins.png";
+  static const String fats = "$_iconsPath/fats.png";
+  static const String trash = "$_iconsPath/trash.png";
+  static const String trashSvg = "$_iconsPath/trash.svg";
+  static const String storeSvg = "$_iconsPath/store-Bold.svg";
+  static const String heartEmpty = "$_iconsPath/heart_empty.svg";
+  static const String heart = "$_iconsPath/heart.svg";
+  static const String pen = "$_iconsPath/pen.svg";
+  static const String workoutDetails = "$_iconsPath/workout_details.svg";
+  static const String notes = "$_iconsPath/notes.svg";
+  static const String buttonVariants = "$_iconsPath/button_variants.png";
+  static const String sessionCards = "$_iconsPath/session_cards.png";
+  static const String about = "$_iconsPath/info-circle.svg";
+  static const String userIcon = "$_iconsPath/user.svg";
+  static const String userRegular = "$_iconsPath/user-Regular.svg";
+  static const String transformation = "$_iconsPath/transformation.svg";
+  static const String orientation = "$_iconsPath/orientation.svg";
+  static const String send = "$_iconsPath/send.svg";
+  static const String logout = "$_iconsPath/logout.svg";
+  static const String cheerful = "$_iconsPath/ep--food 1.svg";
+  static const String exit = "$_iconsPath/exit.svg";
+
+  static const String w = "assets/water/w.svg";
+  static const String wb = "assets/water/wb.svg";
+  static const String w200 = "assets/water/w200.svg";
+  static const String w400 = "assets/water/w400.svg";
+  static const String w600 = "assets/water/w600.svg";
+  static const String w800 = "assets/water/w800.svg";
+
+
 }
 

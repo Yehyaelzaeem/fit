@@ -40,7 +40,7 @@ class OtherCaloriesRepository extends BaseRepository {
             "type": type,
           });
 
-          Response response = await _apiClient.post(url: "new_other_calories", requestBody: body);
+          Response response = await _apiClient.post(url: "/new_other_calories", requestBody: body);
           if (response.statusCode == 200) {
             await saveOtherCaloriesLocally(OtherMealData(
               title: title,
@@ -107,13 +107,40 @@ class OtherCaloriesRepository extends BaseRepository {
   }
 
   Future<void> saveOtherCaloriesLocally(OtherMealData data) async {
-    List<String> mealDataListJson = (await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION)) ?? [];
+    final cachedData = await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION);
+
+    List<String> mealDataListJson = [];
+
+    // Ensure the cached data is a List and contains Strings, otherwise handle it
+    if (cachedData != null && cachedData is List) {
+      try {
+        // Try casting each item in the list to String
+        mealDataListJson = cachedData.map((item) => item.toString()).toList();
+      } catch (e) {
+        // If casting fails, handle the error gracefully
+        print("Error casting cached data to List<String>: $e");
+      }
+    }
     mealDataListJson.add(jsonEncode(data.toJson()));
     await _cacheClient.save(StorageKeys.OTHER_CALORIES_CREATION, mealDataListJson);
   }
 
   Future<void> createOtherCaloriesData() async {
-    List<String> mealDataList = (await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION)) ?? [];
+    final cachedData = await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION);
+
+    List<String> mealDataList = [];
+
+    // Ensure the cached data is a List and contains Strings, otherwise handle it
+    if (cachedData != null && cachedData is List) {
+      try {
+        // Try casting each item in the list to String
+        mealDataList = cachedData.map((item) => item.toString()).toList();
+      } catch (e) {
+        // If casting fails, handle the error gracefully
+        print("Error casting cached data to List<String>: $e");
+      }
+    }
+    // List<String> mealDataList = (await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION))?? [];
 
     for (String mealDataJson in mealDataList) {
       OtherMealData otherCaloriesData = OtherMealData.fromJson(jsonDecode(mealDataJson));

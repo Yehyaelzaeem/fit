@@ -4,6 +4,7 @@ import 'package:app/core/resources/resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../config/navigation/navigation_services.dart';
@@ -76,7 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return WillPopScope(
         child: SafeArea(
           child: Scaffold(
-            drawer: HomeDrawer(),
+            extendBody: true,
+            // drawer: HomeDrawer(),
             body: Obx(
                   () => Column(
                 children: [
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
     FocusScope.of(context).requestFocus(FocusNode());
     appDialog(
       title: 'Are you sure you want to exit?',
-      image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
+      image: SvgPicture.asset(AppIcons.exit, width: AppSize.s48, color: AppColors.yellow),
       cancelAction: () {
         NavigationService.goBack(context);
         FocusScope.of(context).requestFocus(FocusNode());
@@ -121,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (homeCubit.currentIndex == 2) {
       return SessionsView();
     }
-    if (homeCubit.currentIndex == 1) {
+    if (homeCubit.currentIndex == 0) {
       return HomePageView();
     }
     // bool isReg = Get.isRegistered(tag: 'diary');

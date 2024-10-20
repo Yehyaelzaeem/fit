@@ -8,7 +8,11 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/models/cheer_full_response.dart';
+import '../../../core/models/faq_response.dart';
+import '../../../core/models/general_response.dart';
 import '../../../core/models/home_page_response.dart';
+import '../../../core/models/messages_response.dart';
+import '../../../core/models/orientation_videos_response.dart';
 import '../../../core/models/user_response.dart';
 import '../../../core/models/version_response.dart';
 import '../../../core/services/api_provider.dart';
@@ -27,7 +31,7 @@ class HomeCubit extends Cubit<HomeStates> {
 
   HomeCubit(this._homeRepository,this._diaryCubit) : super(HomeInitialState());
 
-  final currentIndex = 0.obs;
+  final currentIndex = 1.obs;
   final selectedService = 0.obs;
   final currectMenuIdex = 1.obs;
   HomePageResponse? homeResponse;
@@ -56,6 +60,10 @@ class HomeCubit extends Cubit<HomeStates> {
   final loading = false.obs;
   UserResponse ress = UserResponse();
   SharedPreferences? preferences;
+  FaqResponse faqResponse = FaqResponse();
+  OrientationVideosResponse orientationVideosResponse = OrientationVideosResponse();
+  MessagesResponse messagesResponse = MessagesResponse();
+
 
   void onInit(DiaryCubit diaryCubit) async {
     emit(GetHomeLoadingState());
@@ -69,9 +77,9 @@ class HomeCubit extends Cubit<HomeStates> {
     // login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     // lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
     // isGuest.value=await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
-    cheerfulResponse.value = await ApiProvider().getCheerFullStatus();
-    faqStatus = await ApiProvider().getFaqStatus();
-    if(currentUser!=null)  orientationStatus = await ApiProvider().getOrientationVideosStatusStatus();
+    cheerfulResponse.value = await _homeRepository.getCheerFullStatus();
+    faqStatus = await _homeRepository.getFaqStatus();
+    if(currentUser!=null)  orientationStatus = await _homeRepository.getOrientationVideosStatus();
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
 
@@ -131,8 +139,7 @@ class HomeCubit extends Cubit<HomeStates> {
             homeResponse = homePageData;
             globalIsIosInReview = (homeResponse?.data!.subscriptionStatus == false);
             homeResponse?.data?.slider?.forEach((v) {
-              slider.add(v.image ??
-                  "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
+              slider.add(v.image ?? "https://dev.matrixclouds.com/fitoverfat/public/uploads/choose_us/1627982041Cover.jpg");
             });
             homeResponse?.data?.services?.forEach((v) {
               servicesList.add(Services(id: v.id, title: v.title, items: v.items));
@@ -143,6 +150,57 @@ class HomeCubit extends Cubit<HomeStates> {
             });
             emit(HomePageSuccessState());
       },
+    );
+  }
+
+
+  Future<void> fetchFaqData() async {
+    try {
+      emit(FaqLoading());
+      final faqRes = await _homeRepository.getFaqData();
+      faqResponse = faqRes;
+      emit(FaqLoaded());
+    } catch (e) {
+      emit(FaqError(Failure(500,e.toString())));
+    }
+  }
+
+  Future<void> fetchOrientationVideos() async {
+    try {
+      emit(OrientationLoading());
+      final response = await _homeRepository.getOrientationVideos();
+      orientationVideosResponse = response;
+      emit(OrientationLoaded(response));
+    } catch (e) {
+      emit(OrientationError("Failed to load orientation videos."));
+    }
+  }
+
+  Future<void> fetchMessages() async {
+    emit(MessagesLoading());
+    final result = await _homeRepository.getMessagesData();
+    result.fold(
+          (failure) => emit(MessagesError(failure.message)),
+          (messagesResponse) {
+            this.messagesResponse = messagesResponse;
+            emit(MessagesLoaded());
+          },
+    );
+  }
+
+  GeneralResponse deleteRessponse = GeneralResponse();
+
+  Future<GeneralResponse?> deleteMessage(int id) async {
+    emit(MessagesDeleting());
+
+    final result = await _homeRepository.deleteMessage(id);
+    result.fold(
+          (failure) => emit(MessagesDeleteError(failure.message)),
+          (response){
+            deleteRessponse = response;
+            emit(MessagesDeleted());
+            // return response;
+          },
     );
   }
 

@@ -352,21 +352,18 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
 
 // Function to send locally saved sleep time data to API
   Future<void> sendSavedSleepTimes() async {
-    List<String> sleepTimesJson = (await SharedHelper().readStringList(CachingKey.SLEEP_TIMES)) ?? [];
-    List<SleepTime> sleepTimes = sleepTimesJson
-        .map((sleepTimeJson) => SleepTime.fromJson(jsonDecode(sleepTimeJson)))
-        .toList();
-
-    for (SleepTime sleepTime in sleepTimes) {
-      await _timeSleepRepository.addSleepTime(
-        sleepTimeFrom: sleepTime.sleepTimeFrom,
-        sleepTimeTo: sleepTime.sleepTimeTo,
-        date: sleepTime.date,
+    // List<String> sleepTimesJson = (await SharedHelper().readStringList(CachingKey.SLEEP_TIMES)) ?? [];
+    // List<SleepTime> sleepTimes = sleepTimesJson
+    //     .map((sleepTimeJson) => SleepTime.fromJson(jsonDecode(sleepTimeJson)))
+    //     .toList();
+    //
+    // for (SleepTime sleepTime in sleepTimes) {
+      await _timeSleepRepository.sendSavedSleepTimes(
       );
-    }
+
 
     // Clear locally saved sleep time data after successfully sending to API
-    await SharedHelper().removeData(CachingKey.SLEEP_TIMES);
+    // await SharedHelper().removeData(CachingKey.SLEEP_TIMES);
   }
 
   getSleepingTimesData() {

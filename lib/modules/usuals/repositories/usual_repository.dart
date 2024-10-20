@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import '../../../core/base/repositories/base_repository.dart';
 import '../../../core/models/general_response.dart';
 import '../../../core/models/usual_meals_data_reposne.dart';
+import '../../../core/models/usual_meals_reposne.dart';
 import '../../../core/services/error/failure.dart';
 import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/local/storage_keys.dart';
@@ -61,7 +62,7 @@ class UsualRepository extends BaseRepository {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
           FormData body = FormData.fromMap(mealParameters);
-          Response response = await _apiClient.post(url: "diary-meals/new_diary_meal", requestBody: body);
+          Response response = await _apiClient.post(url: "/diary-meals/new_diary_meal", requestBody: body);
           return response;
         } else {
           await createUsualMealLocally(UsualMealData(
@@ -126,7 +127,7 @@ class UsualRepository extends BaseRepository {
     }
   }
   Future<GeneralResponse> deleteUsualMeal({required int mealId}) async {
-    Response response = await _apiClient.post(url:"diary-meals/delete_diary_meal/$mealId");
+    Response response = await _apiClient.post(url:"/diary-meals/delete_diary_meal/$mealId");
     if (response.data["success"] == true) {
       return GeneralResponse.fromJson(response.data);
     } else {
@@ -149,4 +150,51 @@ class UsualRepository extends BaseRepository {
     // Clear locally saved deleted meals after successfully sending to API
     await _cacheClient.delete(StorageKeys.DELETE_USUAL_MEAL);
   }
+
+  Future<Either<Failure, UsualMealsResponse>> getMyUsualMeals() async {
+    return super.call<UsualMealsResponse>(
+      httpRequest: () async {
+        final result = await Connectivity().checkConnectivity();
+
+        if (result != ConnectivityResult.none) {
+          // Fetch from API when online
+          Response response = await _apiClient.get(url: "/diary-meals");
+
+          if (response.statusCode == 200) {
+            // Save locally for offline use
+            await saveMyUsualMealsLocally(UsualMealsResponse.fromJson(response.data));
+          }
+
+          // Return the response, whether successful or not
+          return response;
+        } else {
+          // When offline, fetch from local cache
+          UsualMealsResponse? cachedResponse = await readMyUsualMealsLocally();
+
+          // Simulate a Response object with cached data
+          return Response(
+            requestOptions: RequestOptions(path: ''),
+            data: cachedResponse?.toJson() ?? {},
+          );
+        }
+      },
+      successReturn: (data) => UsualMealsResponse.fromJson(data),
+    );
+  }
+
+  Future<void> saveMyUsualMealsLocally(UsualMealsResponse usualMealsResponse) async {
+    await _cacheClient.save(StorageKeys.MY_USUAL_MEALS, jsonEncode(usualMealsResponse.toJson()));
+  }
+
+  Future<UsualMealsResponse?> readMyUsualMealsLocally() async {
+    String? meals = await _cacheClient.get(StorageKeys.MY_USUAL_MEALS);
+    if (meals != null) {
+      return UsualMealsResponse.fromJson(jsonDecode(meals));
+    } else {
+      return null;
+    }
+  }
+
+
+
 }

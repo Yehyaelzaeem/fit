@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/models/general_response.dart';
 import '../../../../core/models/messages_response.dart';
 import '../../../../core/resources/resources.dart';
 import '../../../../core/services/api_provider.dart';
+import '../../../../core/utils/alerts.dart';
 import '../../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../../core/view/widgets/default/text.dart';
+import '../../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../../core/view/widgets/page_lable.dart';
+import '../../../home/cubits/home_cubit.dart';
 import '../../../home/view/widgets/home_appbar.dart';
 import 'notification_details_view.dart';
 
@@ -22,39 +26,33 @@ class _NotificationScreenState extends State<NotificationScreen> {
   bool isLoading = true;
   bool showLoader = false;
 
-  MessagesResponse ressponse = MessagesResponse();
+  late final HomeCubit homeCubit;
 
-  void getData() async {
-    await ApiProvider().getMessagesData().then((value) async {
-      if (value.success == true) {
-        setState(() {
-          ressponse = value;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          ressponse = value;
-        });
-        Fluttertoast.showToast(msg: "Check Internet Connection");
-        print("error");
-      }
-    });
+
+  @override
+  void initState() {
+    homeCubit = BlocProvider.of<HomeCubit>(context);
+    homeCubit.fetchMessages();
+    // getHomeData();
+    super.initState();
   }
+
+
 
   GeneralResponse deleteRessponse = GeneralResponse();
 
   void deleteMessage(int? id, int? index) async {
     print(id);
-    await ApiProvider().deleteMessage(id!).then((value) async {
-      if (value.success == true) {
+    await homeCubit.deleteMessage(id!).then((value) async {
+      if ( homeCubit.deleteRessponse.success == true) {
         setState(() {
-          deleteRessponse = value;
+          deleteRessponse = homeCubit.deleteRessponse;
           isLoading = false;
-          ressponse.data!.removeAt(index ?? 0);
+          homeCubit.messagesResponse.data!.removeAt(index ?? 0);
         });
       } else {
         setState(() {
-          deleteRessponse = value;
+          deleteRessponse =  homeCubit.deleteRessponse;
         });
         Fluttertoast.showToast(msg: "${deleteRessponse.message}");
         print("error");
@@ -62,11 +60,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     });
   }
 
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,25 +68,29 @@ class _NotificationScreenState extends State<NotificationScreen> {
           children: [
             ListView(
               children: [
-                HomeAppbar(type: null,),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    PageLable(name: "Messages"),
-                  ],
+                FitNewAppBar(
+                  title: "Messages",
                 ),
-                isLoading == true
-                    ? SizedBox(
+
+      BlocConsumer<HomeCubit, HomeStates>(
+        listener: (context, state) {
+          if (state is HomePageFailureState) {
+            Alerts.showToast(state.failure.message);
+          }
+
+        },
+        builder: (context, state) => state is MessagesLoading
+             ? SizedBox(
                     height: 32,
                     width: 48,
                     child: CircularLoadingWidget())
                     : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: ressponse.data!.length,
+                    itemCount: homeCubit.messagesResponse.data!.length,
                     itemBuilder: (context, index) {
-                      return messageRow(ressponse.data![index], index);
-                    })
+                      return messageRow(homeCubit.messagesResponse.data![index], index);
+                    })),
               ],
             ),
             showLoader == false
@@ -107,7 +104,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
               color: Colors.black.withOpacity(.9),
             )
           ],
-        ));
+        )
+    );
   }
 
   Widget messageRow(Data element, int index) {

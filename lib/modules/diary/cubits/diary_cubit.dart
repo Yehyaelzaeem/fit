@@ -13,12 +13,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/models/day_details_reposne.dart';
-
 import '../../../core/models/my_other_calories_response.dart';
 import '../../../core/models/other_calories_units_repose.dart';
 import '../../../core/services/error/failure.dart';
 import '../../../core/utils/shared_helper.dart';
-import '../../home/view/screens/home_screen.dart';
 import '../../other_calories/repositories/other_calories_repository.dart';
 import '../../pdf_viewr.dart';
 import '../../timeSleep/cubits/time_sleep_cubit.dart';
@@ -75,6 +73,8 @@ class DiaryCubit extends Cubit<DiaryState> {
   List<CaloriesDetails> carbsDeleted = [];
   List<CaloriesDetails> fatsDeleted = [];
   MyOtherCaloriesResponse otherCaloriesResponse = MyOtherCaloriesResponse();
+  MyOtherCaloriesUnitsResponse myOtherCaloriesUnitsResponse = MyOtherCaloriesUnitsResponse();
+  double waterSheetVal = 0;
 
   DayDetailsResponse? dayDetailsResponse;
   FocusNode workoutTitleDescFocus = FocusNode();
@@ -82,7 +82,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   final refreshLoadingProtine = false.obs;
   final refreshLoadingCarbs = false.obs;
   final refreshLoadingFats = false.obs;
-  bool isToday = false;
+  String chosenDay = 'today';
   final noSessions = false.obs;
   final showLoader = false.obs;
   final lastSelectedDate = ''.obs;
@@ -95,6 +95,11 @@ class DiaryCubit extends Cubit<DiaryState> {
   final length = 0.obs;
   final workOut = 0.obs;
   bool isAdding = false;
+
+  changeWaterSheetVal(double valWater){
+    waterSheetVal = valWater;
+    emit(DiaryLoaded());
+  }
 
   getNotifications() async {
     if (await Permission.accessNotificationPolicy.isPermanentlyDenied &&
@@ -121,32 +126,122 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   bool isOnInit = false;
 
-  void onInit() async{
-    if(!isOnInit) {
+
+  /// Start
+  ///
+  void onInit() async {
+    if (!isOnInit) {
       isOnInit = true;
       isSending = true;
+
+      // Set the default date if none is selected
       if (lastSelectedDate.value == '') {
         lastSelectedDate.value = getEgyptTime().toString().substring(0, 10);
       }
 
-      getNotifications();
-      getFromCash();
-      await viewCachedRequests();
-      await loadData();
-      isOnInit = false;
-      // isLoading.value = false;
-      // if(iSLoggedNow) {
-      //   isLoading.value = true;
-      //   await Future.delayed(Duration(seconds: 10));
-      //   isLoading.value = false;
-      // }
-    }else{
+      // Perform asynchronous tasks sequentially
+      await _initializeAppData();
+      await _syncOfflineData();
+      await _loadDiaryData();
 
+      isOnInit = false;
     }
-    //   _initData();
   }
 
+// Split initialization logic
+  Future<void> _initializeAppData() async {
+    getNotifications();  // Assuming this is quick
+    await getFromCash();
+  }
 
+// Centralized sync for offline data
+  Future<void> _syncOfflineData() async {
+    final connectivityStatus = await Connectivity().checkConnectivity();
+
+    if (connectivityStatus != ConnectivityResult.none) {
+      isLoading.value = true;
+      emit(DiaryLoading());
+
+      // Sync various cached data
+      await _otherCaloriesRepository.createOtherCaloriesData();
+      await _diaryRepository.sendSavedDiaryDataByDay();
+      await _timeSleepCubit.sendSavedSleepTimes();
+
+      // Refresh diary data after sync
+      isSending = false;
+      await getDiaryData(lastSelectedDate.value != ''
+          ? lastSelectedDate.value
+          : getEgyptTime().toString().substring(0, 10), isSending);
+
+      emit(DiaryLoaded());
+    }
+  }
+
+// Load the diary data (online/offline)
+  Future<void> _loadDiaryData() async {
+    await getDiaryData(
+        lastSelectedDate.value != ''
+            ? lastSelectedDate.value
+            : getEgyptTime().toString().substring(0, 10),
+        isSending
+    );
+  }
+
+// Example function to handle diary data retrieval (getDiaryData)
+  Future getDiaryData(String _date, bool isSending, {bool reset = true}) async {
+    print("Fetching diary for date: $_date");
+
+    if (dayDetailsResponse?.data != null && isLoading.value) return;
+
+    lastSelectedDate.value = _date;
+    isLoading.value = true;
+    emit(DiaryLoading());
+
+    // Fetch data from the repository
+    final result = await _diaryRepository.getDiaryView(_date, !isSending, false, true);
+
+    result.fold(
+            (failure) => emit(DiaryFailure(failure)),
+            (value) {
+          if (value.data != null) {
+            dayDetailsResponse = value;
+            _handleSuccessfulDiaryData(reset);
+          } else {
+            print("Error: no data returned.");
+            emit(DiaryFailure(Failure(500,'"No data available"')));
+          }
+        }
+    );
+  }
+
+// Handle successful diary data retrieval
+  void _handleSuccessfulDiaryData(bool reset) {
+    isLoading.value = false;
+    showLoader.value = false;
+
+    if (reset) emit(DiaryLoaded());
+
+    length.value = dayDetailsResponse!.data!.water! + 3;
+    // ... (additional handling code)
+
+    refreshCaloriesList(dayDetailsResponse!.data!.proteins!.caloriesDetails ?? []);
+    refreshCarbsList(dayDetailsResponse!.data!.carbs!.caloriesDetails ?? []);
+    refreshFatsList(dayDetailsResponse!.data!.fats!.caloriesDetails ?? []);
+  }
+
+  /// End
+
+
+
+  sendAndRefresh()async{
+    emit(DiaryLoading());
+    await sendSavedDiaryDataByDay();
+
+    await sendSavedSleepTimes();
+
+    refreshDiaryDataLive(
+        lastSelectedDate.value);
+  }
 
   Future<void> loadData() async {
     emit(DiaryLoading());
@@ -216,7 +311,7 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   final isLogged = false.obs;
 
-  void getFromCash() async {
+  Future getFromCash() async {
     isLogged.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
     if (isLogged.value != true) {
       // Navigator.pushAndRemoveUntil(
@@ -230,205 +325,27 @@ class DiaryCubit extends Cubit<DiaryState> {
     } else {
       final result = await Connectivity().checkConnectivity();
       if (result == ConnectivityResult.none){
-        getDiaryData(getEgyptTime().toString().substring(0, 10),isSending);
+        getDiaryData(getEgyptTime().toString().substring(0, 10),isSending,reset: false);
 
       }
     }
   }
 
   void getDiaryDataRefreshResponse(String _date) async {
-    if(isToday){
+    if(chosenDay=='today'){
       _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
     }else{
       _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
     }
-    // isLoading.value = true;
-    // try {
-    //   await _diaryRepository.getDiaryView(_date,!isSending,false,true).then((value) {
-    //     if (value.success == false && value.data == null) {
-    //       noSessions.value = true;
-    //     } else {
-    //       response.value = value;
-    //     }
-    //     if(isToday.value){
-    //       _diaryRepository.getDiaryView(response.value.data!.days![1].date!.toString(),!isSending,false,true);
-    //     }else{
-    //       _diaryRepository.getDiaryView(response.value.data!.days![0].date!.toString(),!isSending,false,true);
-    //     }
-    //   });
-    // } catch (e) {}
-    // isLoading.value = false;
   }
 
 
-
-  Future getDiaryData(String _date,bool isSending) async {
-    print("DATEDATE$_date");
-    if(dayDetailsResponse?.data!=null) {
-      if (isLoading.value) return;
-      if (refreshLoadingProtine.value) return;
-      if (refreshLoadingCarbs.value) return;
-      if (refreshLoadingFats.value) return;
-    }
-    lastSelectedDate.value = _date;
-    isLoading.value = true;
-    emit(DiaryLoading());
-
-    caloriesDetails.clear();
-    carbsDetails.clear();
-    fatsDetails.clear();
-
-    if(sendingOffline == true){
-      await Future.delayed(Duration(seconds: 3));
-    }
-
-    final result = await _diaryRepository.getDiaryView(_date,!isSending,false,true);
-
-    result.fold(
-          (failure) => emit(DiaryFailure(failure)),
-          (value) {
-            if (value.success == false && value.data == null) {
-              //  isLoading.value = false;
-              //  noSessions.value = true;
-              // SharedHelper().logout();
-              // Get.offAllNamed(Routes.LOGIN);
-              // Fluttertoast.showToast(msg: "${value.message}");
-            } else {
-              if (value.data != null) {
-
-
-                dayDetailsResponse = value;
-                isLoading.value = false;
-                showLoader.value = false;
-                emit(DiaryLoaded());
-                length.value = dayDetailsResponse!.data!.water! + 3;
-                workOut.value = dayDetailsResponse!.data!.workouts![0].id!;
-                workDesc = dayDetailsResponse!.data!.dayWorkouts == null
-                    ? " "
-                    : dayDetailsResponse!.data!.dayWorkouts!.workoutDesc!;
-                textEditController.text = dayDetailsResponse!.data!.dayWorkouts == null
-                    ? " "
-                    : dayDetailsResponse!.data!.dayWorkouts!.workoutDesc!;
-                workOutData.value = dayDetailsResponse!.data!.dayWorkouts == null
-                    ? " "
-                    : dayDetailsResponse!.data!.dayWorkouts!.workoutType!;
-                waterBottlesList.clear();
-
-                if(dayDetailsResponse!.data!.days![0].date != getEgyptTime().toString().substring(0,10)){
-                  String date = getEgyptTime().toString().substring(0,10);
-                  List<Days> newDays= List.generate(3, (index){
-                    if(index==0){
-                      return  Days(date: date,dateFormat: DateFormat('EEEE, d MMMM y').format(DateTime.parse(date)),active: dayDetailsResponse!.data!.days!.firstWhere((element) => element.date == date).active);
-                    }else
-                    if(index==1) {
-                      return  Days(date: DateTime.parse(date).subtract(Duration(days: 1))
-                          .toString()
-                          .substring(0, 10),
-                          dateFormat: DateFormat('EEEE, d MMMM y').format(
-                              DateTime.parse(date).subtract(Duration(days: 1))),
-                          active: dayDetailsResponse!.data!.days!.firstWhere((element) => element.date == getEgyptTime().subtract(Duration(days: 1)).toString().substring(0,10)).active
-                      );
-                    }else
-                    if(index==2) {
-                      return  Days(date: DateTime.parse(date).add(Duration(days: 1))
-                          .toString()
-                          .substring(0, 10),
-                          dateFormat: DateFormat('EEEE, d MMMM y').format(
-                              DateTime.parse(date).add(Duration(days: 1))),
-                          active: false);
-                    }else{
-                      return Days(date: DateTime.parse(date).add(Duration(days: 1))
-                          .toString()
-                          .substring(0, 10),
-                          dateFormat: DateFormat('EEEE, d MMMM y').format(
-                              DateTime.parse(date).add(Duration(days: 1))),
-                          active: false);
-                    }
-                  });
-                  dayDetailsResponse!.data!.days = newDays;
-                  _diaryRepository.saveDairyLocally(dayDetailsResponse!, date!);
-                }
-
-                print("CAaaaHnge");
-                if (dayDetailsResponse!.data!.days![0].active == true) {
-                  isToday = true;
-                } else {
-                  isToday = false;
-                }
-                emit(state);
-                for (int i = 0; i < dayDetailsResponse!.data!.days!.length; i++) {
-                  if (dayDetailsResponse!.data!.days![i].active == true) {
-                    date.value = dayDetailsResponse!.data!.days![i].dateFormat!;
-                    apiDate.value = dayDetailsResponse!.data!.days![i].date!;
-                  } else {}
-                }
-
-
-                for (int i = 1; i <= length.value; i++) {
-                  if (i <= dayDetailsResponse!.data!.water!) {
-                    waterBottlesList.add(
-                      SingleImageItem(
-                          id: i,
-                          imagePath: 'assets/img/im_holder1.png',
-                          selected: true),
-                    );
-                  } else {
-                    waterBottlesList.add(
-                      SingleImageItem(
-                          id: i,
-                          imagePath: 'assets/img/im_holder1.png',
-                          selected: false),
-                    );
-                  }
-                }
-
-              } else {
-                if (lastSelectedDate.value.isNotEmpty) {
-                  getDiaryData(lastSelectedDate.value,isSending);
-                } else {
-                  getDiaryData(getEgyptTime().toString().substring(0, 10),isSending);
-                }
-                dayDetailsResponse = value;
-                isLoading.value = false;
-                showLoader.value = false;
-                emit(DiaryLoaded());
-
-                date.value = _date;
-                print("error");
-              }
-
-              refreshCaloriesList(dayDetailsResponse!.data!.proteins!.caloriesDetails ?? []);
-              refreshCarbsList(dayDetailsResponse!.data!.carbs!.caloriesDetails ?? []);
-              refreshFatsList(dayDetailsResponse!.data!.fats!.caloriesDetails ?? []);
-      }
-            },
-    );
-
-
-    await _diaryRepository.getDiaryView(_date,!isSending,false,true).then((value) async{
-
-        // caloriesDetails.addAll(dayDetailsResponse!.data!.proteins!.caloriesDetails!);
-        // carbsAndFats.addAll(dayDetailsResponse!.data!.carbsFats!.caloriesDetails!);
-      }
-    );
-
-    try {
-      // important
-      // await _diaryRepository.getHomeData().then((value) {
-      //   if (value.success == true) {
-      //     globalIsIosInReview = (value.data!.subscriptionStatus == false);
-      //   } else {}
-      // });
-    } catch (e) {}
-
-
-  }
 
   addNewRow(String type){
-    if (type == 'proteins') {
+    if (type == 'Proteins') {
       caloriesDetails.add(CaloriesDetails());
       // diaryCubit.caloriesDetails.add(CaloriesDetails());
-    } else if (type == 'carbs') {
+    } else if (type == 'Carbs') {
       carbsDetails.add(CaloriesDetails());
     } else {
       fatsDetails.add(CaloriesDetails());
@@ -484,11 +401,9 @@ class DiaryCubit extends Cubit<DiaryState> {
             .toList()
             .length >
             0) {
-          print("element"+element.quality.toString()+element.randomId.toString());
 
           caloriesDetails.forEach((item) {
             if (item.id == element.id  && element.randomId == item.randomId) {
-              print("item"+item.quality.toString()+item.randomId.toString());
               item.quality = element.quality;
               item.qty = element.qty;
               item.calories = element.calories;
@@ -512,11 +427,8 @@ class DiaryCubit extends Cubit<DiaryState> {
 
 
           carbsDetails.forEach((item) {
-            print("item"+item.quality.toString()+item.randomId.toString());
             if (item.id == element.id && element.randomId == item.randomId) {
-              print(item.quality);
-              print(element.quality);
-              print("AAAA");
+
               item.quality = element.quality;
               item.qty = element.qty;
               item.calories = element.calories;
@@ -638,161 +550,62 @@ class DiaryCubit extends Cubit<DiaryState> {
 
 
   }
+  Future<void> deleteItem({
+    required int? id,
+    required int? randomId,
+    required String date,
+    required String type,
+    bool isCached = false,
+  }) async {
 
-
-  Future<void> deleteItemCalories(int id, String _date, String type) async {
-
-    final result = await Connectivity().checkConnectivity();
-    if (false) {
-      // dayDetailsResponse!.data!.proteins!
-      //     .caloriesDetails!.removeWhere((element) => element.id==id);
-      //
-      // await calculateProteins();
-      //
-      // await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //
-      // // refreshDiaryData(apiDate.value, type);
-      // await _diaryRepository
-      //     .deleteCalorie("delete_calories_details", id)
-      //     .then((value) {
-      //   if (value.success == true) {
-      //     caloriesDetails.removeWhere((element) => element.id == id);
-      //     // refreshDiaryData(apiDate.value, type);
-      //   } else {
-      //     caloriesDetails.removeWhere((element) => element.id == id);
-      //     // refreshDiaryData(apiDate.value, type);
-      //     Fluttertoast.showToast(msg: "${value.message}");
-      //   }
-      // });
-    }else{
-      await _diaryRepository.deleteCalorieLocally(id);
-
-      dayDetailsResponse!.data!.proteins!
-          .caloriesDetails!.removeWhere((element) => element.id==id);
-
-      await calculateProteins();
-
-      await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-      await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      refreshDiaryData(apiDate.value, type);
+    // Determine which list to update based on type
+    var detailsList;
+    switch (type) {
+      case 'proteins':
+        detailsList = dayDetailsResponse!.data!.proteins!.caloriesDetails!;
+        break;
+      case 'carbs':
+        detailsList = dayDetailsResponse!.data!.carbs!.caloriesDetails!;
+        break;
+      case 'fats':
+        detailsList = dayDetailsResponse!.data!.fats!.caloriesDetails!;
+        break;
+      default:
+        throw Exception('Unknown type: $type');
     }
-  }
 
-  Future<void> deleteItemCarbs(int id, String _date, String type) async {
-
-    final result = await Connectivity().checkConnectivity();
-    if (false) {
-      // dayDetailsResponse!.data!.carbs!
-      //     .caloriesDetails!.removeWhere((element) => element.id==id);
-      //
-      // await calculateCarbs();
-      //
-      // await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //
-      // // refreshDiaryData(apiDate.value, type);
-      // await _diaryRepository
-      //     .deleteCalorie("delete_calories_details", id)
-      //     .then((value) {
-      //   if (value.success == true) {
-      //     carbsDetails.removeWhere((element) => element.id == id);
-      //     // refreshDiaryData(apiDate.value, type);
-      //   } else {
-      //     carbsDetails.removeWhere((element) => element.id == id);
-      //     // refreshDiaryData(apiDate.value, type);
-      //     Fluttertoast.showToast(msg: "${value.message}");
-      //   }
-      // });
-
-    }else{
-      await _diaryRepository.deleteCalorieLocally(id);
-
-      dayDetailsResponse!.data!.carbs!
-          .caloriesDetails!.removeWhere((element) => element.id==id);
-
-      await calculateCarbs();
-
-      await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-      await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      refreshDiaryData(apiDate.value, type);
+    // Remove item based on id or randomId
+    if (isCached && randomId != null) {
+      detailsList.removeWhere((element) => element.randomId == randomId);
+    } if (isCached && randomId == null) {
+      detailsList.removeWhere((element) => element.randomId == randomId);
+    } else if (!isCached && id != null) {
+      detailsList.removeWhere((element) => element.id == id);
     }
-  }
 
-  Future<void> deleteItemFats(int id, String _date, String type) async {
-
-    final result = await Connectivity().checkConnectivity();
-    if (false) {
-
-    }else{
-      await _diaryRepository.deleteCalorieLocally(id);
-
-      dayDetailsResponse!.data!.fats!
-          .caloriesDetails!.removeWhere((element) => element.id==id);
-
-
-      await calculateFats();
-
-      await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-      await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      refreshDiaryData(apiDate.value, type);
+    // Recalculate the values for the specified nutrient
+    switch (type) {
+      case 'proteins':
+        caloriesDetails = detailsList;
+        await calculateProteins();
+        break;
+      case 'carbs':
+        carbsDetails = detailsList;
+        await calculateCarbs();
+        break;
+      case 'fats':
+        fatsDetails = detailsList;
+        await calculateFats();
+        break;
     }
-  }
 
-  Future<void> deleteItemCaloriesCached(int randomId, String _date, String type) async {
-
-    await _diaryRepository.removeCachedDiaryDataLocally(randomId);
-    // dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString())-double.parse(dayDetailsResponse!.data!.proteins!.caloriesDetails!.firstWhere((element) => element.randomId==randomId).calories.toString());
-    // dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress?.percentage = (double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString())/double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.imposed.toString()))*100.toInt();
-    // if(dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress?.percentage >0){
-    //   dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress!.bg = '4169E1';
-    // }else if(dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress?.percentage >100){
-    //   dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress!.bg = 'f00000';
-    // }
-    dayDetailsResponse!.data!.proteins!
-        .caloriesDetails!.removeWhere((element) => element.randomId==randomId);
-
-    await calculateProteins();
-
-    caloriesDetails.removeWhere((element) => element.randomId==randomId);
-    await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-    await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-    refreshDiaryData(apiDate.value, type);
-
-  }
-
-  Future<void> deleteItemCarbsCached(int randomId, String _date, String type) async {
-
-    await _diaryRepository.removeCachedDiaryDataLocally(randomId);
-
-    dayDetailsResponse!.data!.carbs!
-        .caloriesDetails!.removeWhere((element) => element.randomId==randomId);
-    carbsDetails.removeWhere((element) => element.randomId==randomId);
-
-
-    await calculateCarbs();
-
-
-    await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-    await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-    refreshDiaryData(apiDate.value, type);
-
-  }
-
-  Future<void> deleteItemFatsCached(int randomId, String _date, String type) async {
-
-    await _diaryRepository.removeCachedDiaryDataLocally(randomId);
-
-    dayDetailsResponse!.data!.fats!
-        .caloriesDetails!.removeWhere((element) => element.randomId==randomId);
-    fatsDetails.removeWhere((element) => element.randomId==randomId);
-
-    await calculateFats();
-
+    // Save updated data locally
     await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
     await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
 
-    refreshDiaryData(apiDate.value, type);
-
+    emit(DiaryLoaded());
   }
+
 
 
   Future<void> fetchOtherCalories() async {
@@ -806,10 +619,14 @@ class DiaryCubit extends Cubit<DiaryState> {
     }
   }
 
-  Future<void> fetchOtherCaloriesUnits() async {
+  Future<void> fetchOtherCaloriesUnits({bool changeState=false}) async {
     emit(DiaryLoading());
     try {
       final response = await _diaryRepository.getOtherCaloriesUnit();
+      myOtherCaloriesUnitsResponse = response;
+      if(changeState){
+        emit(DiaryLoaded());
+      }
       // emit(DiaryLoadedOtherCaloriesUnits(response));
     } catch (e) {
       emit(DiaryError(e.toString()));
@@ -832,6 +649,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     if((double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString()))<=50 && (double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString()))>=-25){
       dayDetailsResponse!.data!.proteins!.caloriesTotal!.progress!.bg = '7fc902';
     }
+    emit(DiaryLoaded());
   }
   calculateCarbs(){
     if(dayDetailsResponse!.data!.carbs!
@@ -851,6 +669,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     if((double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken.toString()))<=50 && (double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken.toString()))>=-25){
       dayDetailsResponse!.data!.carbs!.caloriesTotal!.progress!.bg = '7fc902';
     }
+    emit(DiaryLoaded());
   }
   calculateFats(){
     if(dayDetailsResponse!.data!.fats!
@@ -870,10 +689,11 @@ class DiaryCubit extends Cubit<DiaryState> {
     if((double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.taken.toString()))<=50 && (double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.imposed.toString())-double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.taken.toString()))>=-25){
       dayDetailsResponse!.data!.fats!.caloriesTotal!.progress!.bg = '7fc902';
     }
+    emit(DiaryLoaded());
   }
 
 
-  void updateWaterData(String water) async {
+  Future updateWaterData(String water) async {
 
     final result = await Connectivity().checkConnectivity();
     if (false) {
@@ -908,7 +728,6 @@ class DiaryCubit extends Cubit<DiaryState> {
       showLoader.value = false;
       emit(DiaryLoaded());
 
-      print("error");
 
       await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
       await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
@@ -920,44 +739,25 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   final workoutLoading = false.obs;
 
-  void updateWork() async {
+  Future updateWork() async {
     final result = await Connectivity().checkConnectivity();
-    if (true) {
-      await _diaryRepository
-          .createDiaryData(
-        workOut: workOut.value,
-        workoutDesc: workDesc,
-        date: apiDate.value,
-      );
-      Fluttertoast.showToast(msg: "Saved successfully");
+    // await _diaryRepository
+    //     .createDiaryData(
+    //   workOut: workOut.value,
+    //   workoutDesc: workDesc,
+    //   date: apiDate.value,
+    // );
+    Fluttertoast.showToast(msg: "Saved successfully");
 
-      dayDetailsResponse!.data!.dayWorkouts = DayWorkouts(
-          workoutType: workOutData.value,
-          workoutDesc: workDesc
-      );
+    dayDetailsResponse!.data!.dayWorkouts = DayWorkouts(
+        workoutType: workOutData.value,
+        workoutDesc: workDesc
+    );
 
-      await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-      await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      refreshDiaryData(apiDate.value, "carbs");
+    await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
+    await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
+    refreshDiaryData(apiDate.value, "carbs");
 
-    }else {
-      // workoutLoading.value = true;
-      // await _diaryRepository
-      //     .createDiaryData(
-      //   workOut: workOut.value,
-      //   workout_desc: workDesc,
-      //   date: apiDate.value,
-      // ).then((value) {
-      //   if (value.success == true) {
-      //     workoutLoading.value = false;
-      //     Fluttertoast.showToast(msg: "${value.message}");
-      //   } else {
-      //     workoutLoading.value = false;
-      //     Fluttertoast.showToast(msg: "Server Error");
-      //     Echo("error");
-      //   }
-      // });
-    }
   }
 
   void downloadFile(BuildContext context,String url) async {
@@ -1000,167 +800,123 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   void launchURL(_url) async => await launch(_url);
 
-  void createProtineData(Food? food, double _quantity,
-      {int? index, required String type}) async {
-    // if (type == 'proteins') refreshLoadingProtine.value = true;
-    // if (type == 'carbs') refreshLoadingCarbs.value = true;
-    // if (type == 'fats') refreshLoadingFats.value = true;
+  void createOrUpdateFoodData(Food? food, double _quantity,
+      {int? index, int? randomId, required String type, bool? hasNoId}) async {
 
-    final result = await Connectivity().checkConnectivity();
     DateTime formattedTime = getEgyptTime();
 
-    if (false) {
-      isAdding = true;
-      if (type == 'proteins'){
-        // dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.proteins!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
+    // Generate randomId if not provided
+    randomId ??= int.parse('${food!.id}${Random().nextInt(100).toString().padLeft(2, '0')}');
 
-        dayDetailsResponse!.data!.proteins!
-            .caloriesDetails!.add(CaloriesDetails(
-            qty: _quantity,
-            quality: food!.title,
-            color: food.color,
-            calories: food.caloriePerUnit * _quantity,
-            unit: food.unit
-        ));
+    CaloriesDetails newDetails = CaloriesDetails(
+      randomId: randomId,
+      qty: _quantity,
+      quality: food!.title,
+      color: food.color,
+      createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
+      calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
+      unit: food.unit,
+    );
 
-        await calculateProteins();
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        // refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'carbs'){
-        // dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.carbs!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
-
-        dayDetailsResponse!.data!.carbs!
-            .caloriesDetails!.add(CaloriesDetails(
-            qty: _quantity,
-            quality: food!.title,
-            color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit));
-
-        await calculateCarbs();
-
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        // refreshDiaryData(apiDate.value, type);
-      }else
-      if (type == 'fats'){
-        // dayDetailsResponse!.data!.fats!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.fats!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
-
-        dayDetailsResponse!.data!.fats!
-            .caloriesDetails!.add(CaloriesDetails(
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: food.caloriePerUnit * _quantity,unit: food!.unit));
-
-
-        await calculateFats();
-
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        // refreshDiaryData(apiDate.value, type);
-      }
-      // caloriesDetails.refresh();
-      // carbsDetails.refresh();
-      // fatsDetails.refresh();
-      // caloriesDetails.forEach((element) {
-      //   print(element.quality.toString() + element.qty.toString());
-      // });
-      // carbsDetails.forEach((element) {
-      //   print(element.quality.toString() + element.qty.toString());
-      // });
-      // carbsDetails.forEach((element) {
-      //   print(element.quality.toString() + element.qty.toString());
-      //
-      // });
-      // fatsDetails.forEach((element) {
-      //   print(element.quality.toString() + element.qty.toString());
-      //
-      // });
-      if (type == 'proteins') refreshLoadingProtine.value = false;
-      if (type == 'carbs') refreshLoadingCarbs.value = false;
-      if (type == 'fats') refreshLoadingFats.value = false;
-
-      await _diaryRepository.createDiaryData(
-          foodProtine: food!.id, qtyProtiene: _quantity, date: apiDate.value);
-      isAdding = false;
-
-      // await checkDeletion();
-
-      refreshDiaryData(apiDate.value, type);
-
-    }else{
-      int randomId =int.parse('${food!.id}${Random().nextInt(100).toString().padLeft(2,'0')}');
-      await _diaryRepository.createDiaryData(
-          randomId: randomId,
-          foodProtine: food.id,
-          foodName:food.title,
-          caloriesPerUnit:food.caloriePerUnit,
-          qtyProtiene: _quantity, date: apiDate.value);
-      if (type == 'proteins'){
-        // dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.proteins!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.proteins!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
-
-        dayDetailsResponse!.data!.proteins!
-            .caloriesDetails!.add(CaloriesDetails(
-            randomId: randomId,
-            qty: _quantity,
-            quality: food.title,
-            color: food.color,
-            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            unit: food.unit
-        ));
-        await calculateProteins();
-
-        print('After Calc');
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository. saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'carbs'){
-        // dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.carbs!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.carbs!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
-
-        dayDetailsResponse!.data!.carbs!
-            .caloriesDetails!.add(CaloriesDetails(
-            randomId: randomId,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
-            unit: food!.unit));
-
-        await calculateCarbs();
-
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }else
-      if (type == 'fats'){
-        // dayDetailsResponse!.data!.fats!.caloriesTotal!.taken = double.parse(dayDetailsResponse!.data!.fats!.caloriesTotal!.taken.toString())+(dayDetailsResponse!.data!.fats!.food!.firstWhere((element) => element.id==food.id).caloriePerUnit! *_quantity);
-
-        dayDetailsResponse!.data!.fats!
-            .caloriesDetails!.add(CaloriesDetails(
-            randomId: randomId,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            unit: food!.unit));
-
-
-        await calculateFats();
-
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      emit(DiaryLoaded());
-      if (type == 'proteins') refreshLoadingProtine.value = false;
-      if (type == 'carbs') refreshLoadingCarbs.value = false;
-      if (type == 'fats') refreshLoadingFats.value = false;
+    // List to update based on type
+    List<CaloriesDetails>? detailsList;
+    switch (type) {
+      case 'proteins':
+        detailsList = dayDetailsResponse!.data!.proteins!.caloriesDetails;
+        break;
+      case 'carbs':
+        detailsList = dayDetailsResponse!.data!.carbs!.caloriesDetails;
+        break;
+      default:
+        detailsList = dayDetailsResponse!.data!.fats!.caloriesDetails;
+        // break;
     }
+
+    // Check if item already exists (by randomId or index)
+    int existingIndex = detailsList!.indexWhere((element) => element.randomId == randomId);
+
+    if (existingIndex == -1) {
+      // Entry does not exist, add a new one
+      // detailsList.add(newDetails);
+      if(detailsList.isEmpty) {
+        detailsList.add(newDetails);
+
+      }else if(hasNoId==true) {
+        if(detailsList.last.quality != newDetails.quality || detailsList.last.calories!=newDetails.calories) {
+          detailsList.add(newDetails);
+        }else{
+          detailsList.last.randomId= newDetails.randomId;
+          switch (type) {
+            case 'proteins':
+              caloriesDetails = detailsList;
+              await calculateProteins();
+              break;
+            case 'carbs':
+              carbsDetails = detailsList;
+              await calculateCarbs();
+              break;
+            case 'fats':
+              fatsDetails = detailsList;
+              await calculateFats();
+              break;
+          }
+        }
+      }else{
+        switch (type) {
+          case 'proteins':
+            caloriesDetails.last.randomId = newDetails.randomId;
+            break;
+          case 'carbs':
+            carbsDetails.last.randomId = newDetails.randomId;
+            break;
+          default:
+            fatsDetails.last.randomId = newDetails.randomId;
+        // break;
+        }
+      }
+    } else {
+      // Entry exists, update it
+      detailsList[existingIndex] = newDetails;
+    }
+
+    // Recalculate the nutrient values
+    switch (type) {
+      case 'proteins':
+        await calculateProteins();
+        break;
+      case 'carbs':
+        await calculateCarbs();
+        break;
+      default:
+        await calculateFats();
+        // break;
+    }
+
+    // switch (type) {
+    //   case 'proteins':
+    //     dayDetailsResponse!.data!.proteins!.caloriesDetails = detailsList;
+    //     break;
+    //   case 'carbs':
+    //     dayDetailsResponse!.data!.carbs!.caloriesDetails = detailsList;
+    //     break;
+    //   case 'fats':
+    //     dayDetailsResponse!.data!.fats!.caloriesDetails = detailsList;
+    //     dayDetailsResponse!.data!.fats!.caloriesDetails = detailsList;
+    //     break;
+    // }
+
+    // Save data locally and refresh the diary
+    await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
+    await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
+      // await refreshDiaryData(apiDate.value, type);
+
+    emit(DiaryLoaded());
+
   }
+
 
   updateDiaryDataLocally(int randomId,Food? food, double _quantity,
       {int? index, required String type})async{
-    print("randomId");
 
     await _diaryRepository.saveDiaryDataLocally(
       DiaryData(
@@ -1172,327 +928,6 @@ class DiaryCubit extends Cubit<DiaryState> {
     );
   }
 
-  void updateProtineData(
-      int? index,
-      Food? food,
-      double _quantity,
-      {required String type}) async {
-    DateTime formattedTime = getEgyptTime();
-
-    // if (type == 'proteins') refreshLoadingProtine.value = true;
-    // if (type == 'carbs') refreshLoadingCarbs.value = true;
-    // if (type == 'fats') refreshLoadingFats.value = true;
-
-
-    final result = await Connectivity().checkConnectivity();
-    if (false) {
-      // if (type == 'proteins'){
-      //
-      //   dayDetailsResponse!.data!.proteins!
-      //       .caloriesDetails![dayDetailsResponse!.data!.proteins!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food.unit);
-      //
-      //   await calculateProteins();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }
-      // if (type == 'carbs'){
-      //
-      //   dayDetailsResponse!.data!.carbs!
-      //       .caloriesDetails![dayDetailsResponse!.data!.carbs!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food!.unit);
-      //
-      //
-      //   await calculateCarbs();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }else
-      // if (type == 'fats'){
-      //
-      //   dayDetailsResponse!.data!.fats!
-      //       .caloriesDetails![dayDetailsResponse!.data!.fats!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food!.unit);
-      //
-      //
-      //   await calculateFats();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }
-      // caloriesDetails.refresh();
-      // carbsDetails.refresh();
-      // fatsDetails.refresh();
-      //
-      // if (type == 'proteins') refreshLoadingProtine.value = false;
-      // if (type == 'carbs') refreshLoadingCarbs.value = false;
-      // if (type == 'fats') refreshLoadingFats.value = false;
-      //
-      // await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //
-      // // refreshDiaryData(apiDate.value, type);
-      // await _diaryRepository.editDiaryData(
-      //     foodProtine: food!.id,
-      //     qtyProtiene: _quantity,
-      //     date: apiDate.value,
-      //     id: index);
-      // refreshDiaryData(apiDate.value, type);
-    }else{
-      // await _diaryRepository.editDiaryData(
-      //     foodProtine: food!.id,
-      //     qtyProtiene: _quantity,
-      //     date: apiDate.value,
-      //     id: index);
-
-      if (type == 'proteins'){
-
-        dayDetailsResponse!.data!.proteins!
-            .caloriesDetails![dayDetailsResponse!.data!.proteins!
-            .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-            id: index,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
-            unit: food!.unit);
-
-        await calculateProteins();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'carbs'){
-
-        dayDetailsResponse!.data!.carbs!
-            .caloriesDetails![dayDetailsResponse!.data!.carbs!
-            .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-            id: index,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: getEgyptTime().toString().substring(0,16),
-            unit: food!.unit);
-
-
-        await calculateCarbs();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'fats'){
-
-        dayDetailsResponse!.data!.fats!
-            .caloriesDetails![dayDetailsResponse!.data!.fats!
-            .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-            id: index,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            createdAt: DateFormat('yyyy-MM-dd HH:mm').format(formattedTime),
-            unit: food!.unit);
-
-
-        await calculateFats();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      emit(DiaryLoaded());
-
-      if (type == 'proteins') refreshLoadingProtine.value = false;
-      if (type == 'carbs') refreshLoadingCarbs.value = false;
-      if (type == 'fats') refreshLoadingFats.value = false;
-
-    }
-
-  }
-
-  void updateProtineDataRandomId(
-      int? randomId,
-      int? index,
-      Food? food,
-      double _quantity,
-      {required String type}) async {
-    // if (type == 'proteins') refreshLoadingProtine.value = true;
-    // if (type == 'carbs') refreshLoadingCarbs.value = true;
-    // if (type == 'fats') refreshLoadingFats.value = true;
-
-
-    final result = await Connectivity().checkConnectivity();
-    if (false) {
-      // if (type == 'proteins'){
-      //
-      //   dayDetailsResponse!.data!.proteins!
-      //       .caloriesDetails![dayDetailsResponse!.data!.proteins!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food.unit);
-      //
-      //   await calculateProteins();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }
-      // if (type == 'carbs'){
-      //
-      //   dayDetailsResponse!.data!.carbs!
-      //       .caloriesDetails![dayDetailsResponse!.data!.carbs!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food!.unit);
-      //
-      //
-      //   await calculateCarbs();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }else
-      // if (type == 'fats'){
-      //
-      //   dayDetailsResponse!.data!.fats!
-      //       .caloriesDetails![dayDetailsResponse!.data!.fats!
-      //       .caloriesDetails!.indexWhere((element) => element.id == index)] = CaloriesDetails(
-      //       id: index,
-      //       qty: _quantity,quality: food!.title,
-      //       color: food.color,
-      //       calories: food.caloriePerUnit * _quantity,unit: food!.unit);
-      //
-      //
-      //   await calculateFats();
-      //
-      //   await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //   // refreshDiaryData(apiDate.value, type);
-      // }
-      // caloriesDetails.refresh();
-      // carbsDetails.refresh();
-      // fatsDetails.refresh();
-      //
-      // if (type == 'proteins') refreshLoadingProtine.value = false;
-      // if (type == 'carbs') refreshLoadingCarbs.value = false;
-      // if (type == 'fats') refreshLoadingFats.value = false;
-      //
-      // await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-      //
-      // // refreshDiaryData(apiDate.value, type);
-      // await _diaryRepository.editDiaryData(
-      //     foodProtine: food!.id,
-      //     qtyProtiene: _quantity,
-      //     date: apiDate.value,
-      //     id: index);
-      // refreshDiaryData(apiDate.value, type);
-    }else{
-      // await _diaryRepository.editDiaryData(
-      //     foodProtine: food!.id,
-      //     qtyProtiene: _quantity,
-      //     date: apiDate.value,
-      //     id: index);
-
-      if (type == 'proteins'){
-
-
-        dayDetailsResponse!.data!.proteins!
-            .caloriesDetails![dayDetailsResponse!.data!.proteins!
-            .caloriesDetails!.indexWhere((element) => element.id == index && element.randomId == randomId)] = CaloriesDetails(
-            id: index,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            randomId: randomId,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            unit: food.unit);
-
-        await calculateProteins();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'carbs'){
-
-        if(randomId!=null) {
-
-          dayDetailsResponse!.data!.carbs!
-              .caloriesDetails![dayDetailsResponse!.data!.carbs!
-              .caloriesDetails!.indexWhere((element) =>
-          element.id == index && element.randomId == randomId)]
-          = CaloriesDetails(
-              id: index,
-              qty: _quantity,
-              quality: food!.title,
-              color: food.color,
-              calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-              randomId: randomId,
-              unit: food.unit);
-        }else{
-          dayDetailsResponse!.data!.carbs!
-              .caloriesDetails!.forEach((element) {
-            print(element.randomId);
-          });
-          print(dayDetailsResponse!.data!.carbs!
-              .caloriesDetails![dayDetailsResponse!.data!.carbs!
-              .caloriesDetails!.indexWhere((element) =>
-          element.id == index)].quality);
-          dayDetailsResponse!.data!.carbs!
-              .caloriesDetails![dayDetailsResponse!.data!.carbs!
-              .caloriesDetails!.indexWhere((element) =>
-          element.id == index)]
-          = CaloriesDetails(
-              id: index,
-              qty: _quantity,
-              quality: food!.title,
-              color: food.color,
-              calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-              unit: food.unit);
-        }
-
-
-        await calculateCarbs();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      if (type == 'fats'){
-
-        dayDetailsResponse!.data!.fats!
-            .caloriesDetails![dayDetailsResponse!.data!.fats!
-            .caloriesDetails!.indexWhere((element) => element.id == index&& element.randomId == randomId)] = CaloriesDetails(
-            id: index,
-            randomId: randomId,
-            qty: _quantity,quality: food!.title,
-            color: food.color,
-            calories: (food.caloriePerUnit * _quantity).toStringAsFixed(2),
-            unit: food!.unit);
-
-
-        await calculateFats();
-        await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, apiDate.value);
-        await _diaryRepository.saveDairyLocally(dayDetailsResponse!, apiDate.value);
-        refreshDiaryData(apiDate.value, type);
-      }
-      emit(DiaryLoaded());
-
-      if (type == 'proteins') refreshLoadingProtine.value = false;
-      if (type == 'carbs') refreshLoadingCarbs.value = false;
-      if (type == 'fats') refreshLoadingFats.value = false;
-
-    }
-
-  }
 
 
   DateTime getEgyptTime(){
@@ -1520,22 +955,6 @@ class DiaryCubit extends Cubit<DiaryState> {
     caloriesDetails.addAll(list);
     caloriesDetails.addAll(emptyList);
     return;
-    list.forEach((resItem) {
-      if (caloriesDetails.where((item) {
-        return item.quality == resItem.quality && item.qty == resItem.qty;
-      }).length >
-          0) {
-        caloriesDetails.forEach((item) {
-          if (item.quality == resItem.quality && item.qty == resItem.qty) {
-            item.id = resItem.id;
-            item.calories = resItem.calories;
-            item.unit = resItem.unit;
-          }
-        });
-      } else {
-        caloriesDetails.add(resItem);
-      }
-    });
   }
 
   void refreshCarbsList(List<CaloriesDetails> list) {
@@ -1546,23 +965,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     carbsDetails.addAll(list);
     carbsDetails.addAll(emptyList);
     return;
-    list.forEach((resItem) {
-      if (carbsDetails.where((item) {
-        return item.quality == resItem.quality && item.qty == resItem.qty;
-      }).length >
-          0) {
-        carbsDetails
-          ..forEach((item) {
-            if (item.quality == resItem.quality && item.qty == resItem.qty) {
-              item.id = resItem.id;
-              item.calories = resItem.calories;
-              item.unit = resItem.unit;
-            }
-          });
-      } else {
-        carbsDetails..add(resItem);
-      }
-    });
+
   }
 
   void refreshFatsList(List<CaloriesDetails> list) {
@@ -1573,25 +976,38 @@ class DiaryCubit extends Cubit<DiaryState> {
     fatsDetails.addAll(list);
     fatsDetails.addAll(emptyList);
     return;
-    list.forEach((resItem) {
-      if (fatsDetails.where((item) {
-        return item.quality == resItem.quality && item.qty == resItem.qty;
-      }).length >
-          0) {
-        fatsDetails
-          ..forEach((item) {
-            if (item.quality == resItem.quality && item.qty == resItem.qty) {
-              item.id = resItem.id;
-              item.calories = resItem.calories;
-              item.unit = resItem.unit;
-            }
-          });
-      } else {
-        fatsDetails..add(resItem);
-      }
-    });
+
   }
 
+  Future saveMyOtherCaloriesLocally(MyOtherCaloriesResponse response)async{
+    await _diaryRepository.saveMyOtherCaloriesLocally(response);
+  }
+
+  Future<void> deleteCalorie(String endPoint, int id) async {
+    try {
+      emit(CalorieLoading());
+
+      // Call the repository method
+      final result = await _diaryRepository.deleteCalorie(endPoint, id);
+
+      result.fold(
+            (failure) {
+          // Handle failure case
+          emit(CalorieDeletedFailure(failure.message));
+        },
+            (response) {
+          // Handle success case
+          if (response.success??false) {
+            emit(CalorieDeletedSuccess(response.message??''));
+          } else {
+            emit(CalorieDeletedFailure("Failed to delete calorie entry."));
+          }
+        },
+      );
+    } catch (error) {
+      emit(CalorieDeletedFailure(error.toString()));
+    }
+  }
 
 }
 

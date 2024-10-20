@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../core/models/transformation_response.dart';
 import '../../../core/services/api_provider.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
+import '../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../core/view/widgets/page_lable.dart';
 import '../../home/view/widgets/home_appbar.dart';
 import 'image_viewr.dart';
@@ -51,14 +52,10 @@ class _TransformViewState extends State<TransformView> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(children: [
-      HomeAppbar(type: null),
-      SizedBox(height: 12),
-      Row(
-        children: [
-          PageLable(name: "Transformations"),
-        ],
-      ),
-      SizedBox(height: 12),
+          FitNewAppBar(
+            title: "Transformations",
+          ),
+
       isLoading == true
           ? SizedBox(
           height: 32,
@@ -94,7 +91,7 @@ class _TransformViewState extends State<TransformView> {
                         imageUrl: ressponse.data![index].content!,
                           width: double.infinity,
                           height: double.infinity,
-                          fit: BoxFit.contain,
+                          fit: BoxFit.fill,
                         cacheManager: DefaultCacheManager(), // Use the default cache manager
                         placeholder: (ctx, url) {
                           return CircularLoadingWidget();

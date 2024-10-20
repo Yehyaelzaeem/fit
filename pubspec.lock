@@ -1421,6 +1421,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  percent_indicator:
+    dependency: "direct main"
+    description:
+      name: percent_indicator
+      sha256: c37099ad833a883c9d71782321cb65c3a848c21b6939b6185f0ff6640d05814c
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.3"
   permission_handler:
     dependency: "direct main"
     description:
@@ -1645,6 +1653,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  simple_time_range_picker:
+    dependency: "direct main"
+    description:
+      name: simple_time_range_picker
+      sha256: edf72eabbd5724ff20aec84f7b52a29a0ee0a31974a5be623a6f27d5a14a8d4e
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   sky_engine:
     dependency: transitive
     description: flutter

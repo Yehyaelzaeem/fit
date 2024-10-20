@@ -29,7 +29,7 @@ class MyMealsRepository extends BaseRepository {
     });
 
     try {
-      Response response = await _apiClient.post(url: "my_meals", requestBody: body);
+      Response response = await _apiClient.post(url: "/my_meals", requestBody: body);
       if (response.statusCode == 200 && response.data['success'] == true) {
         return MyMealResponse.fromJson(response.data);
       } else {

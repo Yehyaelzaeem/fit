@@ -3,8 +3,10 @@ import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/app_assets.dart';
 import 'package:app/core/resources/app_colors.dart';
 import 'package:app/core/resources/app_values.dart';
+import 'package:app/core/resources/font_manager.dart';
 import 'package:app/core/utils/globals.dart';
 import 'package:app/core/utils/shared_helper.dart';
+import 'package:app/core/view/views.dart';
 import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -42,7 +44,7 @@ void initState() {
 super.initState();
 homeCubit = BlocProvider.of<HomeCubit>(context);
 generalDataCubit = BlocProvider.of<GeneralDataCubit>(context);
-homeCubit.onInit(BlocProvider.of<DiaryCubit>(context));
+// homeCubit.onInit(BlocProvider.of<DiaryCubit>(context));
 checkIfUserIsLogged();
 }
 //
@@ -52,24 +54,26 @@ checkIfUserIsLogged();
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<HomeCubit, HomeStates>(
-        listener: (context, state) {
-      if (state is SendReportFailureState) {
-        Alerts.showToast(state.failure.message);
-      }
-
-    },
-    builder: (context, state) => state is GetHomeLoadingState
-    ?  Container()
-        : itemBuilder()
-        );
+    return  Scaffold(
+      body: BlocConsumer<HomeCubit, HomeStates>(
+          listener: (context, state) {
+        if (state is SendReportFailureState) {
+          Alerts.showToast(state.failure.message);
+        }
+      
+      },
+      builder: (context, state) => state is GetHomeLoadingState
+      ?  Container()
+          : itemBuilder()
+          ),
+    );
   }
 
   Widget itemBuilder() {
     SharedHelper prefs = SharedHelper();
 
     return Container(
-      width: deviceWidth / 1.5,
+      // width: deviceWidth / 1.5,
       height: double.infinity,
       color: Colors.white,
       child: BlocConsumer<HomeCubit, HomeStates>(
@@ -82,300 +86,343 @@ checkIfUserIsLogged();
     builder: (context, state) => state is GetHomeLoadingState
     ?  Container()
         :SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // if (prefs.getUserId() != null)
-            currentUser?.data == null
-                ? Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        child: Image.asset(
-                          AppImages.kImgLogoWhiteNoBk,
-                          width: deviceWidth / 3,
-                        ),
+        child: Stack(
+          children: [
+            SizedBox(width: deviceWidth,height: deviceHeight,),
+            Positioned(
+              top: -64,
+              child: Container(
+                padding: EdgeInsets.all(AppSize.s32),
+                width: deviceWidth,
+                height: deviceWidth,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColors.primary.withOpacity(0.1)
+                ),
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.all(AppSize.s32),
+                  width: deviceWidth - AppSize.s56,
+                  height: deviceWidth - AppSize.s56,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primary.withOpacity(0.1)
+                  ),
+                  child: Container(
+                    padding: EdgeInsets.all(AppSize.s40),
+                    width: deviceWidth - AppSize.s100,
+                    height: deviceWidth - AppSize.s100,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary.withOpacity(0.1)
+                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(AppSize.s32),
+                      width: deviceWidth - AppSize.s100,
+                      height: deviceWidth - AppSize.s100,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary.withOpacity(0.1)
                       ),
-                    ],
-                  )
-                : Container(
-                    width: double.infinity,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                    color: Colors.white,
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(250),
-                            // ignore: unnecessary_null_comparison
-                            child: CachedNetworkImage(
-                              imageUrl: '${currentUser?.data?.image}',
-                              fit: BoxFit.cover,
-                              height: 80,
-                              width: 80,
-                              placeholder: (ctx, url) {
-                                return profileImageHolder();
-                              },
-                              errorWidget: (context, url, error) {
-                                return profileImageHolder();
-                              },
-                            ))
-                        // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
-                        // Text(prefs.getName()!)
-                        ,
-                         kTextHeader('${currentUser?.data?.name}',
-                              size: 18),
-                        kTextfooter('ID :  ${currentUser?.data?.id}',
-                            size: 14, color: Colors.black87, paddingV: 0),
-                        SizedBox(
-                          height: 24,
-                        ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Icon(Icons.circle, size: 13, color: kColorPrimary),
-                        //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
-                        //   ],
-                        // ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     Icon(Icons.circle, size: 13, color: kColorPrimary),
-                        //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
-                        //   ],
-                        // ),
-                      ],
-                    )),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
-            SizedBox(height: 14),
+            Column(
+              children: <Widget>[
 
-            //Home
-            // singleDrawerItem(
-            //     title: 'Home',
-            //     image: 'assets/img/ic_menu_home.png',
-            //     action: () {
-            //       Get.back();
-            //       controller.currentIndex.value = 0;
-            //     }),
-            //
-            // //Diary
-            // singleDrawerItem(
-            //     title: 'Diary',
-            //     image: 'assets/img/ic_diary_primary.png',
-            //     action: () {
-            //       Get.back();
-            //       controller.currentIndex.value = 1;
-            //     }),
-            //
-            // //Doctor
-            // singleDrawerItem(
-            //     title: 'Sessions',
-            //     image: 'assets/img/ic_menu_doctor.png',
-            //     action: () {
-            //       Get.back();
-            //       controller.currentIndex.value = 2;
-            //     }),
-            //
-            // packages
-            if (!globalIsIosInReview)
-              singleDrawerItem(
-                  action: () {
-                    NavigationService.push(context,Routes.myPackagesView);
-                  },
-                  title: "My Packages",
-                  image: "assets/icons/crown.svg"),
+                if(currentUser?.data == null)
+                  VerticalSpace(AppSize.s48),
+                
+                // if (prefs.getUserId() != null)
+                currentUser?.data == null
+                    ? Padding(
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: AppSize.s16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: AppSize.s64,
+                          ),  Padding(
+                            padding: const EdgeInsets.symmetric(vertical: AppSize.s20),
+                            child: Image.asset(
+                              AppImages.kImgLogoWhiteNoBk,
+                              width: deviceWidth / 3,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:AppSize.s16),
+                            child: InkWell(
+                                onTap: (){
+                                  NavigationService.goBack(context);
+                                },
+                                child: Icon(Icons.close)),
+                          ),
 
-            // //Profile
-            currentUser?.data == null
-                ? SizedBox()
-                : singleDrawerItem(
-                    title: Strings().profile,
+                        ],
+                      ),
+                    )
+                    : Container(
+                        padding:
+                            const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: AppSize.s56,
+                            ),
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                SizedBox(width: AppSize.s56,),
+                                ClipRRect(
+                                    borderRadius: BorderRadius.circular(250),
+                                    // ignore: unnecessary_null_comparison
+                                    child: CachedNetworkImage( 
+                                      imageUrl: '${currentUser?.data?.image}',
+                                      fit: BoxFit.cover,
+
+                                      height: AppSize.s100,
+                                      width: AppSize.s100,
+
+                                      placeholder: (ctx, url) {
+                                        return profileImageHolder();
+                                      },
+                                      errorWidget: (context, url, error) {
+                                        return profileImageHolder();
+                                      },
+                                    )),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal:AppSize.s16),
+                                  child: InkWell(
+                                      onTap: (){
+                                        NavigationService.goBack(context);
+                                      },
+                                      child: Icon(Icons.close)),
+                                ),
+
+                              ],
+                            )
+                            // if (prefs.getName() != null && prefs.getName()!.isNotEmpty)
+                            // Text(prefs.getName()!)
+                            ,
+                            SizedBox(
+                              height: AppSize.s8,
+                            ),
+                             CustomText(
+                                 '${currentUser?.data?.name}',
+                                  fontSize: FontSize.s20,
+                               fontWeight: FontWeightManager.semiBold,
+                             ),
+                            CustomText('ID :  ${currentUser?.data?.id}',
+                                fontSize: FontSize.s16, fontWeight: FontWeightManager.regular, ),
+                            SizedBox(
+                              height: 24,
+                            ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Icon(Icons.circle, size: 13, color: kColorPrimary),
+                            //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                            //   ],
+                            // ),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.center,
+                            //   children: [
+                            //     Icon(Icons.circle, size: 13, color: kColorPrimary),
+                            //     kTextfooter(' Active', color: kColorPrimary, size: 14, paddingV: 0),
+                            //   ],
+                            // ),
+                          ],
+                        )),
+
+                VerticalSpace(AppSize.s82),
+
+                if(currentUser?.data == null)
+                  VerticalSpace(AppSize.s48),
+                if (!globalIsIosInReview)
+                  singleDrawerItem(
+                      action: () {
+                        NavigationService.push(context,Routes.myPackagesView);
+                      },
+                      title: "My Packages",
+                      image: "assets/icons/crown.svg"),
+            
+                // //Profile
+                currentUser?.data == null
+                    ? SizedBox()
+                    : singleDrawerItem(
+                        title: Strings().profile,
                     image: 'assets/icons/user.svg',
-                    action: () {
-                      NavigationService.push(context,Routes.profile);
-                    }),
-
-            //Messages
-            currentUser?.data == null
-                ? SizedBox()
-                : singleDrawerItem(
-                    title: 'Messages',
-                    image: 'assets/icons/messages.svg',
-                    action: () {
-                      NavigationService.push(context,Routes.notificationScreen);
-                    }),
-            //Messages
-
-            currentUser?.data == null
-                ? SizedBox()
-                : homeCubit.faqStatus == false
-                    ? SizedBox()
-                    : singleDrawerItem(
-                        title: 'FAQ',
-                        image: 'assets/icons/faq.svg',
                         action: () {
-                          NavigationService.push(context,Routes.faqs);
+                          NavigationService.push(context,Routes.profile);
                         }),
-            //FAQ
-            /*    FutureBuilder<bool>(
-              future: getFaqStatus(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) if (snapshot.data!)
-                  return singleDrawerItem(
-                      title: 'FAQ',
-                      image: 'assets/icons/faq.svg',
-                      action: () {
-                        NavigationService.push(context,Routes.FAQ);
-                      });
-                return Container();
-              },
-            ),*/
-            //Transformation
-            singleDrawerItem(
-                title: 'Transformations',
-                image: 'assets/icons/transformation.svg',
-                action: () async{
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-      NavigationService.push(context,Routes.transformView);
-    }else{
-      Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
-
-    }
-                }),
-            currentUser == null
-                ? SizedBox()
-                : homeCubit.orientationStatus == false
+            
+                //Messages
+                currentUser?.data == null
                     ? SizedBox()
                     : singleDrawerItem(
-                        title: 'Orientation',
-                        image: 'assets/icons/orientation.svg',
-                        action: () async{
-                          final result = await Connectivity().checkConnectivity();
-                          if (result != ConnectivityResult.none) {
-                            NavigationService.push(context,Routes.orientation);
-                          }else{
-                            Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
-
-                          }
+                        title: 'Messages',
+                    image: 'assets/icons/messages.svg',
+                        action: () {
+                          NavigationService.push(context,Routes.notificationScreen);
                         }),
-            //CHEER_FULL
-            //
-            if (!globalIsIosInReview)
-              homeCubit.cheerfulResponse.value.data?.isActive == false
-                  ? SizedBox()
-                  : singleDrawerItem(
-                      title: "Cheer-Full",
-                      image: 'assets/icons/cheer.svg',
-    action: () async{
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-    NavigationService.push(context,Routes.cheerful);
-    }else{
-    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
-
-    }
-    }
-                      ),
-            /*      FutureBuilder<bool>(
-              future: getCheerFullStatus(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) if (snapshot.data!)
-                  return singleDrawerItem(
-                      title: "Cheer-Full",
-                      image: 'assets/icons/cheer.svg',
-                      action: () {
-                        NavigationService.push(context,Routes.CHEER_FULL);
-                      });
-                return Container();
-              },
-            ),*/
-            //Orders
-            // singleDrawerItem(
-            //     title: "My Orders",
-            //     image: 'assets/img/ic_orders.png',
-            //     action: () {
-            //       NavigationService.push(context,Routes.ORDERS);
-            //     }),
-            //Contact
-            singleDrawerItem(
-                title: Strings().contactUs,
-                image: 'assets/icons/contact.svg',
-    action: () async{
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-    NavigationService.push(context,Routes.contactUs);
-    }else{
-    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
-
-    }
-    }),
-            //About
-            singleDrawerItem(
-                title: "About us",
-                image: 'assets/icons/about_us.svg',
-                action: () async{
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-      NavigationService.push(context,Routes.about);
-    }else{
-    Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
-
-    }
-    }),
-            currentUser?.data == null
-                ? singleDrawerItem(
-                    title: "Login",
-                    image: "assets/icons/logout.svg",
-                    action: () {
-                      NavigationService.pushReplacementAll(context,Routes.authScreen);
-                    })
-                : singleDrawerItem(
-                    title: Strings().logout,
-                    image: 'assets/icons/logout.svg',
-                    action: () {
-                      appDialog(
-                        title: "Logout",
-                        context: context,
-                        image: Icon(Icons.exit_to_app,
-                            size: 50, color: Colors.red),
-                        cancelAction: () {
-                          NavigationService.goBack(context);
-                        },
-                        cancelText: "No",
-                        confirmAction: () {
-                          // prefs.logout();
-                          BlocProvider.of<AuthCubit>(context).logout();
-                          loadingHome=null;
-                          NavigationService.pushReplacementAll(context,Routes.splashScreen);
-                        },
-                        confirmText: "Yes",
-                      );
-                      // Get.defaultDialog(
-                      //   title: "Logout",
-                      //   middleText: Strings().logoutMessageConfirm,
-                      //   confirm: GestureDetector(
-                      //     onTap: () {},
-                      //     child: Container(
-                      //       padding: EdgeInsets.all(4),
-                      //       margin: EdgeInsets.symmetric(horizontal: 12),
-                      //       child: Text(
-                      //         "Yes",
-                      //         style: TextStyle(color: Colors.red),
-                      //       ),
-                      //     ),
-                      //   ),
-                      //   cancel: GestureDetector(
-                      //     onTap: () {
-                      //       Get.back();
-                      //     },
-                      //     child: Container(
-                      //       padding: EdgeInsets.all(4),
-                      //       margin: EdgeInsets.symmetric(horizontal: 12),
-                      //       child: Text("No"),
-                      //     ),
-                      //   ),
-                      // );
+                //Messages
+            
+                currentUser?.data == null
+                    ? SizedBox()
+                    : homeCubit.faqStatus == false
+                        ? SizedBox()
+                        : singleDrawerItem(
+                            title: 'FAQ',
+                    image: 'assets/icons/faq.svg',
+                            action: () {
+                              NavigationService.push(context,Routes.faqs);
+                            }),
+                //FAQ
+                /*    FutureBuilder<bool>(
+                  future: getFaqStatus(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) if (snapshot.data!)
+                      return singleDrawerItem(
+                          title: 'FAQ',
+                          image: 'assets/icons/faq.svg',
+                          action: () {
+                            NavigationService.push(context,Routes.FAQ);
+                          });
+                    return Container();
+                  },
+                ),*/
+                //Transformation
+                singleDrawerItem(
+                    title: 'Transformations',
+                    image: 'assets/icons/transformation.svg',
+                    action: () async{
+                final result = await Connectivity().checkConnectivity();
+                if (result != ConnectivityResult.none) {
+                  NavigationService.push(context,Routes.transformView);
+                }else{
+                  Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+                }
                     }),
+                currentUser == null
+                    ? SizedBox()
+                    : homeCubit.orientationStatus == false
+                        ? SizedBox()
+                        : singleDrawerItem(
+                            title: 'Orientation',
+                    image: 'assets/icons/orientation.svg',
+                            action: () async{
+                              final result = await Connectivity().checkConnectivity();
+                              if (result != ConnectivityResult.none) {
+                                NavigationService.push(context,Routes.orientation);
+                              }else{
+                                Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+            
+                              }
+                            }),
+                //CHEER_FULL
+                //
+                if (!globalIsIosInReview)
+                  homeCubit.cheerfulResponse.value.data?.isActive == false
+                      ? SizedBox()
+                      : singleDrawerItem(
+                          title: "Cheer-Full",
+                      image: 'assets/icons/cheer.svg',
+                action: () async{
+                final result = await Connectivity().checkConnectivity();
+                if (result != ConnectivityResult.none) {
+                NavigationService.push(context,Routes.cheerful);
+                }else{
+                Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+            
+                }
+                }
+                          ),
+                /*      FutureBuilder<bool>(
+                  future: getCheerFullStatus(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) if (snapshot.data!)
+                      return singleDrawerItem(
+                          title: "Cheer-Full",
+                          image: 'assets/icons/cheer.svg',
+                          action: () {
+                            NavigationService.push(context,Routes.CHEER_FULL);
+                          });
+                    return Container();
+                  },
+                ),*/
+                //Orders
+                // singleDrawerItem(
+                //     title: "My Orders",
+                //     image: 'assets/img/ic_orders.png',
+                //     action: () {
+                //       NavigationService.push(context,Routes.ORDERS);
+                //     }),
+                //Contact
+                singleDrawerItem(
+                    title: Strings().contactUs,
+                    image: 'assets/icons/contact.svg',
+                action: () async{
+                final result = await Connectivity().checkConnectivity();
+                if (result != ConnectivityResult.none) {
+                NavigationService.push(context,Routes.contactUs);
+                }else{
+                Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+            
+                }
+                }),
+                //About
+                singleDrawerItem(
+                    title: "About us",
+                    image: 'assets/icons/about_us.svg',
+                    action: () async{
+                final result = await Connectivity().checkConnectivity();
+                if (result != ConnectivityResult.none) {
+                  NavigationService.push(context,Routes.about);
+                }else{
+                Fluttertoast.showToast(msg: "Please connect the internet",toastLength: Toast.LENGTH_LONG);
+            
+                }
+                }),
+                currentUser?.data == null
+                    ? singleDrawerItem(
+                    isDifferent:true,
+                        title: "Login",
+                    image: "assets/icons/logout.svg",
+                        action: () {
+                          NavigationService.pushReplacementAll(context,Routes.authScreen);
+                        })
+                    : singleDrawerItem(
+                  isDifferent:true,
+                        title: 'Logout',
+                    image: "assets/icons/logout.svg",
+                        action: () {
+                          appDialog(
+                            title: "Logout",
+                            context: context,
+                            image: SvgPicture.asset("assets/icons/logout.svg",
+                                width: AppSize.s48, color: Colors.red),
+                            cancelAction: () {
+                              NavigationService.goBack(context);
+                            },
+                            cancelText: "No",
+                            confirmAction: () {
+                              // prefs.logout();
+                              BlocProvider.of<AuthCubit>(context).logout();
+                              loadingHome=null;
+                              NavigationService.pushReplacementAll(context,Routes.splashScreen);
+                            },
+                            confirmText: "Yes",
+                          );
+                        }),
+              ],
+            ),
           ],
         ),
       ),
@@ -393,29 +440,38 @@ checkIfUserIsLogged();
   }
 
   Widget singleDrawerItem(
-      {required String title, required String image, var action}) {
+      { bool isDifferent = false,required String title, required String image, var action}) {
     return InkWell(
       onTap: action,
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: isDifferent?MainAxisAlignment.center:MainAxisAlignment.start,
             children: [
-              SizedBox(width: 40),
-              SvgPicture.asset(
+              SizedBox(width: AppSize.s24),
+              image.contains('png')?Image.asset(
                 image,
                 width: 25,
-                color: title == "Logout"
-                    ? null
+                color: isDifferent
+                    ? AppColors.grey
+                    : title == "My Packages"
+                        ? null
+                        : AppColors.PRIMART_COLOR,
+              ):SvgPicture.asset(
+                image,
+                width: 25,
+                color: isDifferent
+                    ? AppColors.grey
                     : title == "My Packages"
                         ? null
                         : AppColors.PRIMART_COLOR,
               ),
-              SizedBox(width: 16),
+              SizedBox(width: AppSize.s12),
               Text(
                 title,
-                style: TextStyle(color: Colors.black, fontSize: 18),
-              )
+                style: TextStyle(color: isDifferent?AppColors.grey:Colors.black, fontSize: AppSize.s16,fontWeight: FontWeight.w600),
+              ),
+              SizedBox(width: AppSize.s24),
             ],
           ),
           SizedBox(height: 22),

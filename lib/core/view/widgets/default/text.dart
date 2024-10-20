@@ -1,4 +1,7 @@
+import 'package:app/core/view/views.dart';
 import 'package:flutter/material.dart';
+
+import '../../../resources/font_manager.dart';
 
 Widget kTextfooter(String message,
     {double size = 12,
@@ -15,7 +18,7 @@ Widget kTextfooter(String message,
       style: TextStyle(
         color: white ? Colors.white : color,
         fontSize: size,
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontWeight: bold ? FontWeight.bold : FontWeightManager.medium,
       ),
       textAlign: align,
     ),
@@ -33,13 +36,11 @@ Widget kTextbody(String message,
     Color color = Colors.black87}) {
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-    child: Text(
+    child: CustomText(
       message,
-      style: TextStyle(
         color: white ? Colors.white : color,
         fontSize: size,
-        fontWeight: bold == true ? FontWeight.bold : FontWeight.normal,
-      ),
+        fontWeight: bold == true ? FontWeight.bold : FontWeightManager.medium,
       textAlign: align,
       maxLines: maxLines,
       overflow: maxLines == null ? null : TextOverflow.ellipsis,
@@ -63,7 +64,7 @@ Widget kTextHeader(String message,
       style: TextStyle(
         color: white ? Colors.white : color,
         fontSize: size,
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontWeight: bold ? FontWeight.bold : FontWeightManager.medium,
       ),
       textAlign: align,
       maxLines: maxLines,

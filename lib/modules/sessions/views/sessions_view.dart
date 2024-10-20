@@ -1,20 +1,15 @@
 
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/resources/font_manager.dart';
+import 'package:app/core/view/views.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-
-import '../../../config/navigation/navigation_services.dart';
-import '../../../config/navigation/routes.dart';
-import '../../../core/models/session_response.dart';
-import '../../../core/models/user_response.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/app_values.dart';
-import '../../../core/services/api_provider.dart';
 import '../../../core/utils/alerts.dart';
 import '../../../core/utils/globals.dart';
-import '../../../core/utils/shared_helper.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -129,29 +124,26 @@ class _SessionsViewState extends State<SessionsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: AppColors.offWhite,
         body: !authCubit.isAuthed
                 ? MainUnAuth()
                 : BlocConsumer<SessionCubit, SessionStates>(
-    listener: (context, state) {
-    if (state is GetSessionFailureState) {
-    Alerts.showSnackBar(context, state.failure.message,duration: Time.t2s);
-    }
+                    listener: (context, state) {
+                    if (state is GetSessionFailureState) {
+                    Alerts.showSnackBar(context, state.failure.message,duration: Time.t2s);
+                    }
 
-    if (state is GetSessionSuccessState) {
-    Alerts.closeAllSnackBars(context);
+                    if (state is GetSessionSuccessState) {
+                    Alerts.closeAllSnackBars(context);
 
-    }
-    },
-    builder: (context, state) => state is GetSessionLoadingState
-    ? Container(child: CircularLoadingWidget())
+                    }
+                    },
+                    builder: (context, state) => state is GetSessionLoadingState
+                    ? Container(child: CircularLoadingWidget())
                     : ListView(
                         children: [
                           SizedBox(height: 6),
-                          Row(
-                            children: [
-                              PageLable(name: "My Sessions"),
-                            ],
-                          ),
+
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -164,53 +156,106 @@ class _SessionsViewState extends State<SessionsView> {
                                         " You Have No Sessions, Book Your Next Session",
                                       )),
                                     )
-                                  : Container(
-                                      width: double.infinity,
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 12),
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 8),
-                                      color: Color(0xffF1F1F1),
-                                      child: Stack(
-                                        children: [
-                                          Container(
-                                              width: double.infinity,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  kTextbody(
-                                                    'Next Session',
-                                                    color: Colors.black,
-                                                    size: 16,
-                                                  ),
-                                                  kTextbody(
-                                                      '${currentUser!.data!.nextSession!.day}',
-                                                      color: kColorPrimary,
-                                                      size: 16,
-                                                      bold: true),
-                                                  kTextbody(
-                                                    '${currentUser!.data!.nextSession!.sessionDate}',
-                                                    color: Colors.black,
-                                                    size: 16,
-                                                  ),
-                                                ],
-                                              )),
-                                          Positioned(
-                                              right: 26,
-                                              top: 3,
-                                              child: kTextfooter(
-                                                '${currentUser!.data!.nextSession!.status}',
-                                                color: kColorPrimary,
-                                              )),
-                                        ],
+                                  : Stack(
+                                    children: [
+                                      SvgPicture.asset(AppImages.cards,
+                                        width: deviceWidth,
+                                        fit: BoxFit.cover,
+
                                       ),
-                                    ),
+                                      Container(
+                                          width: double.infinity,
+
+                                          margin:
+                                              EdgeInsets.symmetric(vertical: 12),
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: AppSize.s2,horizontal: AppSize.s16),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                  width: double.infinity,
+                                                  child: Column(
+
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        padding: EdgeInsets.all(AppSize.s8),
+                                                        width: AppSize.s125,
+                                                        alignment: Alignment.center,
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors.customBlack,
+                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(AppSize.s16),bottomRight: Radius.circular(AppSize.s12))
+                                                        ),
+                                                        child: kTextfooter(
+                                                          '${currentUser!.data!.nextSession!.status}',
+                                                          color: AppColors.white,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: CustomText(
+                                                          'Next Sessions',
+                                                          color: Colors.white,
+                                                          fontSize: FontSize.s20,
+                                                          fontWeight: FontWeightManager.semiBold,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: AppSize.s32),
+                                                        child: CustomText(
+                                                            '${currentUser!.data!.nextSession!.day}',
+                                                            color: AppColors.black,
+                                                            fontSize: FontSize.s20,
+                                                            fontWeight: FontWeightManager.semiBold),
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          children: [
+                                                            CustomText(
+                                                              DateFormat('dd/MM/yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                                              color: Colors
+                                                                  .white,
+                                                              fontSize: FontSize.s16,
+                                                            ),
+                                                            HorizontalSpace(AppSize.s12),
+                                                            CustomText(
+                                                              DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                                              color: Colors
+                                                                  .white,
+                                                              fontSize: FontSize.s16,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+
+
+                                                    ],
+                                                  )),
+                                              // Positioned(
+                                              //     right: 26,
+                                              //     top: 3,
+                                              //     child: kTextfooter(
+                                              //       '${currentUser!.data!.nextSession!.status}',
+                                              //       color: kColorPrimary,
+                                              //     )),
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                               SizedBox(height: 12),
-                              PageLable(name: "Completed"),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal:AppSize.s16,vertical: AppSize.s8),
+                                child: CustomText('Completed',
+                                fontWeight: FontWeightManager.semiBold,
+                                  fontSize: FontSize.s20,
+                                ),
+                              ),
                               sessionCubit.sessionResponse!.data!.isEmpty
                                   ? Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                      padding: const EdgeInsets.symmetric(horizontal:AppSize.s16,vertical: AppSize.s8),
                                       child: Center(
                                           child: Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -226,28 +271,32 @@ class _SessionsViewState extends State<SessionsView> {
                                         return Container(
                                           width: double.infinity,
                                           margin: EdgeInsets.symmetric(
-                                              vertical: 12),
+                                              vertical: 12,horizontal: AppSize.s12),
                                           padding:
-                                              EdgeInsets.symmetric(vertical: 6),
+                                          EdgeInsets.symmetric(
+                                              vertical: AppSize.s16,),
                                           decoration: BoxDecoration(
                                               color: sessionCubit.sessionResponse!
                                                           .data![i].onPeriod ==
                                                       false
                                                   ? Colors.white
                                                   : AppColors.redOpacityColor,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 1,
-                                                  offset: Offset(0, 1),
-                                                  spreadRadius: 3,
-                                                )
-                                              ]),
+                                              // boxShadow: [
+                                              //   BoxShadow(
+                                              //     color: Colors.grey
+                                              //         .withOpacity(0.2),
+                                              //     blurRadius: 1,
+                                              //     offset: Offset(0, 1),
+                                              //     spreadRadius: 3,
+                                              //   )
+                                              // ],
+                                          borderRadius: BorderRadius.circular(AppSize.s12),
+                                          ),
                                           child: Stack(
                                             children: [
                                               Container(
                                                   width: double.infinity,
+                                                  padding: EdgeInsets.symmetric(horizontal:AppSize.s12),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -259,35 +308,58 @@ class _SessionsViewState extends State<SessionsView> {
                                                                 .center,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
-                                                                .end,
+                                                                .center,
                                                         children: [
-                                                          Expanded(
-                                                              child: SizedBox(
-                                                                  width: 1)),
+                                                          // HorizontalSpace(AppSize.s16),
                                                           Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               InkWell(
                                                                 onTap:(){
                                                                   print(sessionCubit.sessionResponse!.data![i].day);
                                                                 },
-                                                                child: kTextbody(
+                                                                child: CustomText(
                                                                     '${sessionCubit.sessionResponse!.data![i].day==' '?'Saturday':sessionCubit.sessionResponse!.data![i].day ?? "Monday"}',
                                                                     color:
-                                                                        kColorPrimary,
-                                                                    size: 16,
-                                                                    bold: true),
+                                                                        AppColors.primary,
+                                                                    fontWeight: FontWeightManager.medium,
+                                                                    fontSize: FontSize.s18,),
                                                               ),
-                                                              kTextbody(
-                                                                '${sessionCubit.sessionResponse!.data![i].date}',
-                                                                color: Colors
-                                                                    .black,
-                                                                size: 16,
+                                                              VerticalSpace(AppSize.s8),
+                                                              Row(
+                                                                children: [
+                                                                  CustomText(
+                                                                    DateFormat('dd/MM/yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(sessionCubit.sessionResponse!.data![i].date!)),
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize: FontSize.s16,
+                                                                  ),
+                                                                  HorizontalSpace(AppSize.s12),
+                                                                  CustomText(
+                                                                    DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(sessionCubit.sessionResponse!.data![i].date!)),
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize: FontSize.s16,
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ],
                                                           ),
                                                           Expanded(
                                                               child: SizedBox(
                                                                   width: 1)),
+                                                          sessionCubit.sessionResponse!.data![i].status != "Pending" ?
+                                                          InkWell(
+                                                              onTap: (){
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => SessionDetails(
+                                                                            id: sessionCubit.sessionResponse
+                                                                            !.data![i]
+                                                                                .id)));
+                                                              },
+                                                              child: Image.asset(AppIcons.buttonVariants)):
                                                           kButton(
                                                               '${sessionCubit.sessionResponse!.data![i].status == "Pending" ? "Pending" : "Details"}',
                                                               hight: 35,

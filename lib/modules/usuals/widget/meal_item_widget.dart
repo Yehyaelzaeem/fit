@@ -1,14 +1,17 @@
 import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/view/views.dart';
 import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:app/modules/usuals/cubits/usual_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 
 import '../../../core/models/usual_meals_reposne.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/resources.dart';
 import '../../../core/view/widgets/app_dialog.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../controllers/usual_controller.dart';
@@ -49,160 +52,182 @@ class _MealItemWidgetState extends State<MealItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 8,
-          ),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              kTextbody(widget.mealName,
-                  size: 18,
-                  color: kColorPrimary,
-                  align: TextAlign.start,
-                  bold: true),
-              SizedBox(
-                height: 4,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppSize.s12),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primary.withOpacity(0.2),
+                blurRadius: 2,
+                spreadRadius: 2,
+                offset: Offset(0, 0),
               ),
-              kTextbody(
-                "(${widget.mealCalories} Cal.)",
-                size: 14,
-                color: AppColors.ACCENT_COLOR,
-                align: TextAlign.start,
-              ),
-            ],
-          )),
-          PullDownButton(
-            itemBuilder: (context) => [
-              PullDownMenuItem(
-                icon: Icons.fastfood,
-                iconColor: Colors.brown,
-                title: 'Add to diary',
-                onTap: () async {
-                  await usualCubit.addMealToDiary(mealId: widget.mealId!,meal: widget.meal,diaryCubit:diaryCubit);
+            ]
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppSize.s12),
 
+          child: ExpansionTile(
+            backgroundColor: AppColors.white,
+            collapsedBackgroundColor: AppColors.white,
+            initiallyExpanded: false,
+            title: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                        widget.mealName,
+                      fontWeight: FontWeightManager.semiBold,
+                      fontSize: FontSize.s18,
+                    ),
+                    CustomText(
+                      "${widget.mealCalories} Cal.",
+                      fontSize: FontSize.s14,
+                      fontWeight: FontWeightManager.medium,
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Row(
+                    // mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: ()async{
+                          await usualCubit.addMealToDiary(mealId: widget.mealId!,meal: widget.meal,diaryCubit:diaryCubit);
 
-                  Get.back();
-                },
-              ),
-              PullDownMenuItem(
-                icon: Icons.remove_red_eye,
-                iconColor: kColorPrimary,
-                title: 'View',
-                onTap: () {
-                  appDialog(
-                    isList: true,
-                      context: context,
-                      title:
-                          "${widget.mealName} \n (${widget.mealCalories} Cal.)",
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 8,
-                          ),
-                          if (widget.meal?.proteins != null)
-                            CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Proteins',
-                              usualProteins: widget.meal!.proteins!,
-                              mealCalories: widget.mealCalories,
-                            ),
-                          if (widget.meal?.carbs != null)
-                            CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Carbs',
-                              usualProteins: widget.meal!.carbs!,
-                              mealCalories: widget.mealCalories,
-                            ),
-                          if (widget.meal?.fats != null)
-                            CaloriesTypeItemWidget(
-                              caloriesTypeName: 'Fats',
-                              usualProteins: widget.meal!.fats!,
-                              mealCalories: widget.mealCalories,
-                            ),
-                          SizedBox(height: 18),
-                          GestureDetector(
-                            onTap: () => Get.back(),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: kColorPrimary,
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Text(
-                                  '     Close     ',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.white,
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(AppSize.s8),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 0),
                                   ),
-                                ),
-                              ),
+                                ],
                             ),
-                          ),
-                        ],
-                      ));
-                },
-              ),
-              PullDownMenuItem(
-                icon: Icons.edit,
-                iconColor: Colors.blue,
-                title: 'Edit',
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => MakeAMealView(
-                                mealData: widget.meal,
-                                mealId: widget.mealId,
-                                mealName: widget.mealName,
-                              )));
-                },
-              ),
-              PullDownMenuItem(
-                iconColor: Colors.red,
-                icon: Icons.delete,
-                title: 'Delete',
-                isDestructive: true,
-                onTap: () async {
-                  appDialog(
-                    title: "Do you want to delete ${widget.mealName}?",
-                    image: Icon(Icons.delete, size: 24, color: Colors.red),
-                    context: context,
-                    cancelAction: () {
-                      NavigationService.goBack(context);
-                    },
-                    cancelText: "No",
-                    confirmAction: () async {
-                      NavigationService.goBack(context);
-                      usualCubit
-                          .deleteUserUsualMeal(widget.mealId!);
-                    },
-                    confirmText: "Yes",
-                  );
-                },
-              ),
-            ],
-            buttonBuilder: (context, showMenu) => CupertinoButton(
-              pressedOpacity: 0.2,
-              onPressed: showMenu,
-              padding: EdgeInsets.zero,
-              child: const Icon(
-                CupertinoIcons.ellipsis_circle,
-                size: 30,
-                color: const Color(0xFF414042),
-              ),
+                            child: SvgPicture.asset(AppIcons.storeSvg,height: FontSize.s18,width: FontSize.s18,)),
+                      ),
+                      HorizontalSpace(AppSize.s12),
+                      InkWell(
+                        onTap: (){
+
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,  // This will allow the bottom sheet to take full screen height if needed
+                            backgroundColor: AppColors.white.withOpacity(0.001),
+                            builder: (context) {
+                              return FractionallySizedBox(
+                                heightFactor: 0.8,  // Adjust the height factor to control how much space the bottom sheet takes
+                                child: MakeAMealView(
+                                  mealData: widget.meal,
+                                  mealId: widget.mealId,
+                                  mealName: widget.mealName,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(AppSize.s8),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ]
+                            ),
+                            child: SvgPicture.asset(AppIcons.pen,height: FontSize.s18,width: FontSize.s18,)),
+                      ),
+                      HorizontalSpace(AppSize.s12),
+                      InkWell(
+                          onTap: () async {
+                            appDialog(
+                              title: "Do you want to delete ${widget.mealName}?",
+                              image: Icon(Icons.delete, size: 24, color: Colors.red),
+                              context: context,
+                              cancelAction: () {
+                                NavigationService.goBack(context);
+                              },
+                              cancelText: "No",
+                              confirmAction: () async {
+                                NavigationService.goBack(context);
+                                usualCubit
+                                    .deleteUserUsualMeal(widget.mealId!);
+                              },
+                              confirmText: "Yes",
+                            );
+                          },
+
+                        child: Container(
+                          padding: EdgeInsets.all(AppSize.s8),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    blurRadius: 2,
+                                    spreadRadius: 2,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ]
+                            ),
+                            child: SvgPicture.asset(AppIcons.trashSvg,height: FontSize.s18,width: FontSize.s18,)),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
-          ),
-          SizedBox(
-            width: 8,
-          )
-        ],
-      ),
-    );
+
+            children: [
+              SizedBox(
+                height: 8,
+              ),
+              if (widget.meal?.proteins != null)
+
+                CaloriesTypeItemWidget(
+                  icon: AppIcons.proteins,
+                  caloriesTypeName: 'Proteins',
+                  usualProteins: widget.meal!.proteins!,
+                  mealCalories: widget.mealCalories,
+                ),
+              if (widget.meal?.carbs != null)
+                CaloriesTypeItemWidget(
+                  icon: AppIcons.carbs,
+                  caloriesTypeName: 'Carbs',
+                  usualProteins: widget.meal!.carbs!,
+                  mealCalories: widget.mealCalories,
+                ),
+              if (widget.meal?.fats != null)
+                CaloriesTypeItemWidget(
+                  icon: AppIcons.fats,
+                  caloriesTypeName: 'Fats',
+                  usualProteins: widget.meal!.fats!,
+                  mealCalories: widget.mealCalories,
+                ),
+              SizedBox(height: 18),
+
+            ],
+
+          )),
+      ));
+
+
+
   }
 }

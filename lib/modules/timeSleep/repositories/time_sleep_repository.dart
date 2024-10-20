@@ -51,6 +51,39 @@ class TimeSleepRepository extends BaseRepository {
     await _cacheClient.save(StorageKeys.SLEEP_TIME, jsonEncode(data));
   }
 
+  Future<void> sendSavedSleepTimes() async {
+    try {
+      // Retrieve locally saved sleep times from cache
+      final savedData = await _cacheClient.get(StorageKeys.SLEEP_TIME);
+
+      if (savedData != null) {
+        // Decode the stored JSON data into a SleepTime object
+        final sleepTime = SleepTime.fromJson(jsonDecode(savedData));
+
+        // Call the addSleepTime method to send the data to the API
+        final result = await addSleepTime(
+          sleepTimeFrom: sleepTime.sleepTimeFrom,
+          sleepTimeTo: sleepTime.sleepTimeTo,
+          date: sleepTime.date,
+        );
+
+        result.fold(
+              (failure) {
+            print("Failed to send saved sleep time: ${failure.message}");
+            // Handle the failure if needed
+          },
+              (response) {
+            print("Successfully sent saved sleep time.");
+            // You can remove the cached data after successful send, if needed
+            _cacheClient.delete(StorageKeys.SLEEP_TIME);
+          },
+        );
+      }
+    } catch (e) {
+      print("Error sending saved sleep time: $e");
+    }
+  }
+
 
   Future<Either<Failure, SleepingTimesResponse>> getSleepingTimesData() async {
     return super.call<SleepingTimesResponse>(

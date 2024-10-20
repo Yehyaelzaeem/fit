@@ -15,10 +15,12 @@ import '../../core/view/screens/undefined_route_screen.dart';
 import '../../modules/auth/view/screens/forget_password.dart';
 import '../../modules/cart/views/cart_view.dart';
 import '../../modules/faq/views/faq_view.dart';
+import '../../modules/home/view/widgets/home_drawer.dart';
 import '../../modules/layout/view/screens/layout_screen.dart';
 import '../../modules/makeMeals/views/make_meals_view.dart';
 import '../../modules/myMeals/views/my_meals_view.dart';
 import '../../modules/packages/view/my_packages_view.dart';
+import '../../modules/profile/view/screens/edit_profile_view.dart';
 import '../../modules/shippingDetails/views/shipping_details_view.dart';
 import '../../modules/splash/view/screens/splash_screen.dart';
 import '../../modules/subscribe/views/subscribe_view.dart';
@@ -39,10 +41,12 @@ class RouteGenerator {
         return platformPageRoute(const LoginScreen());
       case Routes.forgetPasswordScreen:
         return platformPageRoute(const ForgetPasswordScreen());
+      case Routes.homeDrawer:
+        return platformPageRoute(const HomeDrawer());
       case Routes.profile:
         return platformPageRoute(const ProfileScreen());
       case Routes.editProfileScreen:
-        return platformPageRoute(const EditProfileScreen());
+        return platformPageRoute(const EditProfileView());
       case Routes.signupScreen:
         return platformPageRoute(const SignupScreen());
       case Routes.homeScreen:

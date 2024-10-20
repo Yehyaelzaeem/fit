@@ -28,8 +28,7 @@ class UsualInitial extends UsualStates {}
 class UsualLoading extends UsualStates {}
 
 class UsualLoaded extends UsualStates {
-  final UsualMealsDataResponse data;
-  UsualLoaded(this.data);
+  UsualLoaded();
 }
 
 class UsualError extends UsualStates {
@@ -38,3 +37,18 @@ class UsualError extends UsualStates {
 }
 
 class UsualMealCreating extends UsualStates {}
+
+
+class MealsLoading extends UsualStates {}
+
+class MealsLoaded extends UsualStates {
+  final UsualMealsResponse mealsResponse;
+
+  MealsLoaded(this.mealsResponse);
+}
+
+class MealsError extends UsualStates {
+  final String message;
+
+  MealsError(this.message);
+}

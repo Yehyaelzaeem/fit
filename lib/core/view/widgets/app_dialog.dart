@@ -1,4 +1,5 @@
 import 'package:app/core/resources/app_colors.dart';
+import 'package:app/core/view/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,7 +46,7 @@ appDialog({
                     title,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 16,
+                      fontSize: FontSize.s18,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -63,61 +64,64 @@ appDialog({
                       textAlign: TextAlign.center,
                     ),
                   ),
-                SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (cancelAction != null)
-                      GestureDetector(
-                        onTap: () => cancelAction(),
-                        child: Container(
-                          width: deviceWidth / 5,
-                          height: 30,
-                          margin: EdgeInsets.symmetric(horizontal: 12),
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF7FC902),
-                            border: Border.all(color: Color(0xFF7FC902)),
-                            borderRadius: BorderRadius.circular(200),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                cancelText,
-                                style: GoogleFonts.cairo(
-                                    fontSize: 14.0, color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    if (confirmAction != null)
-                      GestureDetector(
-                        onTap: () => confirmAction(),
-                        child: Container(
-                          width: deviceWidth / 5,
-                          height: 30,
-                          margin: EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: AppColors.PRIMART_COLOR),
-                            borderRadius: BorderRadius.circular(200),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                confirmText,
-                                style: GoogleFonts.cairo(
-                                    fontSize: 14.0, color: Colors.black),
-                              ),
-                            ],
+                SizedBox(height: AppSize.s12),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (cancelAction != null)
+                        GestureDetector(
+                          onTap: () => cancelAction(),
+                          child: Container(
+                            width: deviceWidth / 4,
+                            height: AppSize.s40,
+                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            alignment: Alignment.centerLeft,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF7FC902),
+                              border: Border.all(color: Color(0xFF7FC902)),
+                              borderRadius: BorderRadius.circular(200),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                CustomText(
+                                  cancelText,
+                                      fontSize: 14.0,
+                                    color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                  ],
+                      if (confirmAction != null)
+                        GestureDetector(
+                          onTap: () => confirmAction(),
+                          child: Container(
+                            width: deviceWidth / 4,
+                            height: AppSize.s40,
+                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: AppColors.PRIMART_COLOR),
+                              borderRadius: BorderRadius.circular(200),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  confirmText,
+                                  style: GoogleFonts.cairo(
+                                      fontSize: 14.0, color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 )
               ],
             )
@@ -173,11 +177,12 @@ appDialog({
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
+                              CustomText(
                                 cancelText,
-                                style: GoogleFonts.cairo(
-                                    fontSize: 14.0, color: Colors.white),
-                              ),
+                                    fontSize: AppSize.s16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white),
+
                             ],
                           ),
                         ),
@@ -196,10 +201,12 @@ appDialog({
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(
+                              CustomText(
                                 confirmText,
-                                style: GoogleFonts.cairo(
-                                    fontSize: 14.0, color: Colors.black),
+                                    fontSize: AppSize.s16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+
                               ),
                             ],
                           ),

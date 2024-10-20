@@ -1,14 +1,22 @@
 
+import 'package:app/config/navigation/navigation.dart';
+import 'package:app/modules/other_calories/cubits/other_calories_cubit.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../core/models/my_other_calories_response.dart';
 import '../../core/models/other_calories_units_repose.dart';
+import '../../core/resources/resources.dart';
 import '../../core/services/api_provider.dart';
+import '../../core/utils/alerts.dart';
 import '../../core/view/widgets/custom_bottom_sheet.dart';
+import '../../core/view/widgets/custom_text.dart';
+import '../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../core/view/widgets/default/app_buttons.dart';
 import '../../core/view/widgets/default/edit_text.dart';
+import '../diary/cubits/diary_cubit.dart';
 import '../home/view/widgets/home_appbar.dart';
 
 
@@ -24,8 +32,8 @@ class AddNewCalorie extends StatefulWidget {
 class _AddNewCalorieState extends State<AddNewCalorie> {
   bool isLoading = true;
   GlobalKey<FormState> key = GlobalKey();
-  MyOtherCaloriesUnitsResponse otherCaloriesResponse =
-      MyOtherCaloriesUnitsResponse();
+  // MyOtherCaloriesUnitsResponse otherCaloriesResponse =
+  //     MyOtherCaloriesUnitsResponse();
   String? title;
   String? calorie_per_unit;
   String unitName = "Choose Unit";
@@ -35,21 +43,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
   bool showLoader = false;
 
   void getUnits() async {
-    await ApiProvider().getOtherCaloriesUnit().then((value) {
-      if (value.success == true) {
-        setState(() {
-          otherCaloriesResponse = value;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          otherCaloriesResponse = value;
-          isLoading = false;
-        });
-        // Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
-      }
-    });
+    await BlocProvider.of<DiaryCubit>(context).fetchOtherCaloriesUnits(changeState: true);
   }
 
   void addItem() async {
@@ -59,37 +53,41 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
       setState(() {
         showLoader = true;
       });
-      await ApiProvider()
-          .addOtherCalories(
+      await BlocProvider.of<OtherCaloriesCubit>(context).
+          addOtherCalories(
           title: title,
-          calPerUnti: calorie_per_unit,
+          calPerUnit: calorie_per_unit,
           unit: unitID,
           unitQuantity: unit_qty,
           unitName: unit_name,
           type: widget.type)
           .then((value) {
-        if (value.success == true) {
-          setState(() {
-            showLoader = false;
-          });
-          Fluttertoast.showToast(msg: "${value.message}");
+        setState(() {
+          showLoader = false;
+        });
           Navigator.of(context).pop();
-          print("OK");
-        } else {
-          setState(() {
-            showLoader = false;
-          });
-
-          print("error");
-          Fluttertoast.showToast(msg: "${value.message}");
-          print("error");
-        }
+        // if (value.success == true) {
+        //   setState(() {
+        //     showLoader = false;
+        //   });
+        //   Fluttertoast.showToast(msg: "${value.message}");
+        //   Navigator.of(context).pop();
+        //   print("OK");
+        // } else {
+        //   setState(() {
+        //     showLoader = false;
+        //   });
+        //
+        //   print("error");
+        //   Fluttertoast.showToast(msg: "${value.message}");
+        //   print("error");
+        // }
       });
     }else{
-      await ApiProvider()
-          .addOtherCalories(
+      await BlocProvider.of<OtherCaloriesCubit>(context).
+      addOtherCalories(
           title: title,
-          calPerUnti: calorie_per_unit,
+          calPerUnit: calorie_per_unit,
           unit: unitID,
           unitQuantity: unit_qty,
           unitName: unit_name,
@@ -110,12 +108,33 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Form(
+      body: BlocConsumer<DiaryCubit, DiaryState>(
+          listener: (context, state) {
+            if (state is DiaryFailure) {
+              Alerts.showSnackBar(context, state.failure.message,duration: Time.t2s*3);
+            }
+
+            if (state is DiaryLoaded) {
+              Alerts.closeAllSnackBars(context);
+
+            }
+          },
+          builder: (context, state) {
+              if(state is DiaryLoading)
+                return Container(
+                    child: CircularLoadingWidget(), color: Colors.white);
+            return Form(
         key: key,
         child: ListView(
           children: [
-            HomeAppbar(
-              type: null,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+              child: CustomText(
+                'Add other calories',
+                fontSize: AppSize.s16,
+                color: AppColors.black,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -128,7 +147,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   setState(() {
                     title = text;
                   });
-                  print(title);
                 },
                 validateFunc: (text) {
                   if (text.toString().isEmpty) {
@@ -148,7 +166,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   setState(() {
                     calorie_per_unit = text;
                   });
-                  print(calorie_per_unit);
                 },
                 validateFunc: (text) {
                   if (text.toString().isEmpty) {
@@ -162,7 +179,9 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                 CustomSheet(
                     context: context,
                     widget: ListView.builder(
-                        itemCount: otherCaloriesResponse.data!.length,
+                      shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data!.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: EdgeInsets.only(top: 16),
@@ -170,11 +189,11 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                               onTap: () {
                                 setState(() {
                                   unitName =
-                                      otherCaloriesResponse.data![index].title!;
+                                  BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data![index].title!;
                                   unit_name =
-                                      otherCaloriesResponse.data![index].title!;
+                                  BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data![index].title!;
                                   unitID =
-                                      otherCaloriesResponse.data![index].id!;
+                                  BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data![index].id!;
                                 });
                                 Navigator.pop(context);
                               },
@@ -184,7 +203,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                                     padding:
                                         const EdgeInsets.symmetric(vertical: 4),
                                     child: Text(
-                                      "${otherCaloriesResponse.data![index].title!.toUpperCase()}",
+                                      "${BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data![index].title!.toUpperCase()}",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 18,
@@ -276,7 +295,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
             ),
           ],
         ),
-      ),
+      );})
     );
   }
 }

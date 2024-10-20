@@ -31,7 +31,6 @@ class MyMealsCubit extends Cubit<MyMealsStates> {
   String userId = "";
   changeValue(value) {
     value = !value;
-    print(value);
     emit(state);
   }
 

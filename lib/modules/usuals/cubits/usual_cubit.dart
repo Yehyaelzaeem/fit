@@ -27,8 +27,8 @@ class UsualCubit extends Cubit<UsualStates> {
   RxList<FoodDataItem> caloriesDetails = RxList();
   RxList<FoodDataItem> carbsDetails = RxList();
   RxList<FoodDataItem> fatsDetails = RxList();
-  final response = UsualMealsDataResponse().obs;
-  final mealsResponse = UsualMealsResponse().obs;
+  UsualMealsDataResponse response = UsualMealsDataResponse();
+  UsualMealsResponse mealsResponse = UsualMealsResponse();
   FocusNode workoutTitleDescFocus = FocusNode();
   final isLoading = false.obs;
   final deleteLoading = false.obs;
@@ -50,7 +50,10 @@ class UsualCubit extends Cubit<UsualStates> {
 
     result.fold(
           (failure) => emit(UsualError(failure.message)),  // Emits error state if failed
-          (data) => emit(UsualLoaded(data)),  // Emits loaded state with data if successful
+          (data){
+            response = data;
+            emit(UsualLoaded());
+          },  // Emits loaded state with data if successful
     );
   }
 
@@ -65,7 +68,7 @@ class UsualCubit extends Cubit<UsualStates> {
           (failure) => emit(UsualError(failure.message)),  // Handle error
           (success) async {
         // If successful, update UsualMealsData
-        await getUserUsualMeals();
+        await getMyUsualMeals();
         Fluttertoast.showToast(fontSize: 10, msg: "${success.message}");
 
         // Update DiaryCubit with the new meal data
@@ -228,13 +231,13 @@ class UsualCubit extends Cubit<UsualStates> {
     if (result != ConnectivityResult.none) {
       addLoading.value = true;
       isLoading.value = true;
-      await ApiProvider()
+      await _usualRepository
           .updateUsualMeal(mealParameters: mealParameters)
           .then((value) async {
         if (value.success == true) {
           addLoading.value = false;
-          mealsResponse.value = UsualMealsResponse();
-          await getUserUsualMeals();
+          mealsResponse = UsualMealsResponse();
+          await getMyUsualMeals();
           Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
         } else {
           Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
@@ -243,7 +246,7 @@ class UsualCubit extends Cubit<UsualStates> {
       });
     }else{
       isLoading.value = true;
-      await ApiProvider()
+      await _usualRepository
           .updateUsualMeal(mealParameters: mealParameters);
       MealData mealData = MealData(
           id: mealParameters["id"],
@@ -254,7 +257,6 @@ class UsualCubit extends Cubit<UsualStates> {
           fats: UsualProteins(items: [])
       );
       List<int> foodIds = mealParameters["food_id"].toString().split(',').map((value) => int.parse(value.trim())).toList();
-      print(mealParameters["qty"]);
       List<double> qtys = mealParameters["qty"].toString().split(',').map((value) => double.parse(value.trim())).toList();
       double totalCalories = 0;
       diaryCubit.dayDetailsResponse!.data!.proteins!.food!.forEach((element) {
@@ -286,8 +288,8 @@ class UsualCubit extends Cubit<UsualStates> {
       });
       mealData.totalCalories = totalCalories ;
       print(totalCalories);
-      mealsResponse.value.data![mealsResponse.value.data!.indexWhere((element) => element.id==mealData.id)]=mealData;
-      ApiProvider().saveMyUsualMealsLocally(mealsResponse.value);
+      mealsResponse.data![mealsResponse.data!.indexWhere((element) => element.id==mealData.id)]=mealData;
+      _usualRepository.saveMyUsualMealsLocally(mealsResponse);
 
       kUpdate.value = kUpdate.value + 1;
       isLoading.value = false;
@@ -296,50 +298,39 @@ class UsualCubit extends Cubit<UsualStates> {
   }
 
   Future addMealToDiary({required int mealId,required MealData? meal,required DiaryCubit diaryCubit}) async {
-    final result = await Connectivity().checkConnectivity();
 
-    if (false) {
-      await ApiProvider().mealToDiary(mealId: mealId).then((value) async {
-        if (value.success == true) {
-          // Get.find<DiaryController>(tag: 'diary').getDiaryData(lastSelectedDate.value,false);
-          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-        } else {
-          Fluttertoast.showToast(fontSize: 10, msg: "${value.message}");
-        }
-      });
-    }else{
+
       meal?.proteins?.items?.forEach((element) async{
-        diaryCubit.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'proteins');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'proteins');
       });
       meal?.carbs?.items?.forEach((element) async{
-        diaryCubit.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'carbs');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'carbs');
       });
       meal?.fats?.items?.forEach((element) async{
-        diaryCubit.createProtineData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'fats');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'fats');
       });
       Fluttertoast.showToast(fontSize: 10, msg: "Meal is added to diary successfully");
 
-    }
 
   }
 
-  Future getUserUsualMeals() async {
-    isLoading.value = true;
-    addLoading.value = true;
+  Future<void> getMyUsualMeals() async {
+    // emit(MealsLoading());
+    emit(UsualLoading());  // Emits loading state
 
-    await ApiProvider().getMyUsualMeals().then((value) {
-      if (value.success == true) {
-        print("Here success");
-        print(mealsResponse.value.data);
-        mealsResponse.value = value;
-        print("Here success ${mealsResponse.value.data?.length}");
-        isLoading.value = false;
-        addLoading.value = false;
-      } else {
-        Fluttertoast.showToast(fontSize: 8, msg: "${value.message}");
-      }
-    });
-    kUpdate.value = kUpdate.value + 1;
+    final result = await _usualRepository.getMyUsualMeals();
+    result.fold(
+          (failure) {
+        emit(MealsError(failure.message));
+        Fluttertoast.showToast(msg: "Failed to fetch meals data");
+      },
+          (usualMealsResponse) {
+            mealsResponse = usualMealsResponse;
+        emit(MealsLoaded(usualMealsResponse));
+            emit(UsualLoaded());
+            // Fluttertoast.showToast(msg: "Meals data loaded successfully");
+      },
+    );
   }
 
   Future<void> deleteUserUsualMeal(int mealId) async {
@@ -347,27 +338,26 @@ class UsualCubit extends Cubit<UsualStates> {
     if (result != ConnectivityResult.none) {
       deleteLoading.value = true;
       try {
-        final response = await ApiProvider().deleteUsualMeal(mealId: mealId);
+        final response = await _usualRepository.deleteUsualMeal(mealId: mealId);
         if (response.success == true) {
-          mealsResponse.value = UsualMealsResponse();
-          await getUserUsualMeals();
+          mealsResponse = UsualMealsResponse();
+          await getMyUsualMeals();
           // update();
-          mealsResponse.refresh();
+          // mealsResponse.refresh();
           deleteLoading.value = false;
           Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
         } else {
           Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
         }
       } catch (error) {
-        print("Error: $error");
         Fluttertoast.showToast(
             fontSize: 8, msg: "An error occurred while deleting the meal.");
       }
     }else{
-      await ApiProvider().deleteUsualMealLocally(mealId);
-      mealsResponse.value.data?.removeWhere((element) => element.id==mealId);
+      await _usualRepository.deleteUsualMealLocally(mealId);
+      mealsResponse.data?.removeWhere((element) => element.id==mealId);
       // update();
-      mealsResponse.refresh();
+      // mealsResponse.refresh();
     }
   }
 

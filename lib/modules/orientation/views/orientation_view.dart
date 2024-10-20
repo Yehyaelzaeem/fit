@@ -1,6 +1,8 @@
 
 import 'package:app/core/resources/app_assets.dart';
+import 'package:app/core/view/views.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
@@ -8,10 +10,13 @@ import '../../../core/models/orientation_videos_response.dart';
 import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/resources.dart';
 import '../../../core/services/api_provider.dart';
+import '../../../core/utils/alerts.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/error_handler_widget.dart';
+import '../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../core/view/widgets/page_lable.dart';
+import '../../home/cubits/home_cubit.dart';
 import '../../home/view/widgets/home_appbar.dart';
 import '../../videos/video_player_widget.dart';
 
@@ -22,66 +27,46 @@ class OrientationView extends StatefulWidget {
 }
 
 class _OrientationViewState extends State<OrientationView> {
-  final loading = true.obs;
-  final response = OrientationVideosResponse().obs;
-  final error = ''.obs;
-  OrientationVideosResponse orientationVideosResponse =
-  OrientationVideosResponse();
 
 
-
-
-  void getData() async {
-    await ApiProvider().getOrientationVideos().then((value) {
-      if (value.success == true) {
-        orientationVideosResponse = value;
-        loading.value = false;
-      } else {
-        Fluttertoast.showToast(msg: "$value");
-        print("error");
-      }
-    });
-  }
-
-  getNetworkData() async {
-    error.value = '';
-    loading.value = true;
-    try {
-      response.value = await ApiProvider().getOrientationVideos();
-    } catch (e) {
-      error.value = '$e';
-    }
-    loading.value = false;
-  }
+  late final HomeCubit homeCubit;
 
 
   @override
   void initState() {
-    // TODO: implement initState
+    homeCubit = BlocProvider.of<HomeCubit>(context);
+    homeCubit.fetchOrientationVideos();
+    // getHomeData();
     super.initState();
-    getData();
   }
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(
-      () {
-        if (loading.value)
-          return Center(child: CircularLoadingWidget());
-        if (error.value.isNotEmpty)
-          return errorHandler(error.value, null);
+    return Scaffold(body:ListView(children: [
+      FitNewAppBar(
+        title: "Orientation",
+      ),
 
-        return ListView(children: [
-          HomeAppbar(type: null),
           SizedBox(height: 12),
-          Row(
-            children: [
-              PageLable(name: "Orientation"),
-            ],
-          ),
-          SizedBox(height: 12),
-          orientationVideosResponse.data == null
+
+          BlocConsumer<HomeCubit, HomeStates>(
+            listener: (context, state) {
+              if (state is HomePageFailureState) {
+                Alerts.showToast(state.failure.message);
+              }
+
+            },
+            builder: (context, state) => state is OrientationLoading
+                ? Container(
+              height: AppSize.s250,
+              padding: const EdgeInsets.symmetric(vertical: 100),
+              child: Center(child: CircularLoadingWidget()),
+            )
+                : homeCubit.orientationVideosResponse.data == null
               ? Padding(
                   padding: EdgeInsets.only(top: deviceHeight * 0.2),
                   child: Column(
@@ -107,7 +92,7 @@ class _OrientationViewState extends State<OrientationView> {
                     childAspectRatio: 0.9,
                     mainAxisSpacing: 16,
                   ),
-                  itemCount: orientationVideosResponse.data?.length,
+                  itemCount: homeCubit.orientationVideosResponse.data?.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: EdgeInsets.all(4),
@@ -120,7 +105,7 @@ class _OrientationViewState extends State<OrientationView> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) => VideoPlayerWidget(
-                                          link: orientationVideosResponse
+                                          link: homeCubit.orientationVideosResponse
                                                   .data?[index]
                                                   .videoUrl ??
                                               "")));
@@ -133,7 +118,7 @@ class _OrientationViewState extends State<OrientationView> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(24),
                                   image: DecorationImage(
-                                      image: NetworkImage(orientationVideosResponse
+                                      image: NetworkImage(homeCubit.orientationVideosResponse
                                               .data?[index]
                                               .image ??
                                           ""),
@@ -153,18 +138,19 @@ class _OrientationViewState extends State<OrientationView> {
                               ),
                             ),
                           ),
+                          VerticalSpace(AppSize.s2),
                           Center(
-                              child: kTextbody(
-                                  orientationVideosResponse
+                              child: CustomText(
+                                  homeCubit.orientationVideosResponse
                               .data?[index].name ??
                                       "",
-                                  size: 12)),
+                                  textAlign: TextAlign.center,
+                                  fontSize: FontSize.s14)),
                         ],
                       ),
                     );
-                  }),
-        ]);
-      },
-    ));
+                  }),),
+        ]),
+    );
   }
 }

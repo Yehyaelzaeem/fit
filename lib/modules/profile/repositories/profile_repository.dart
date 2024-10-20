@@ -17,7 +17,6 @@ import '../../../core/services/network/api_client.dart';
 import '../../../core/services/network/endpoints.dart';
 import '../../../core/utils/shared_helper.dart';
 import '../models/requests/update_profile_body.dart';
-import '../models/responses/user_model.dart';
 
 class ProfileRepository extends BaseRepository {
   final ApiClient _apiClient;
@@ -170,6 +169,56 @@ class ProfileRepository extends BaseRepository {
       httpRequest: () => _apiClient.post(url: EndPoints.deleteAccount, requestBody: {}),
       successReturn: (data)=> "success",
     );
+  }
+
+  Future<UserResponse> editProfile({
+    File? image,
+    String? password,
+    String? name,
+    String? lastName,
+    String? email,
+    String? date,
+    String? phone,
+    String? passwordConfirmation,
+    String? gender,
+  }) async {
+    FormData body = FormData.fromMap({
+      "image": image == null
+          ? null
+          : await MultipartFile.fromFile(image.path, filename: '${image.path}.png'),
+      "name": name,
+      "last_name": lastName,
+      "gender": gender,
+      "email": email,
+      "phone": phone,
+      "date_of_birth": date,
+      "password": password,
+      "password_confirmation": passwordConfirmation
+    });
+
+    Response response = await _apiClient.post(url: "/update_profile", requestBody: body);
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data); // Handle error properly
+    }
+  }
+
+  Future<UserResponse> changePassword({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    FormData body = FormData.fromMap({
+      'password': password,
+      'password_confirmation': confirmPassword
+    });
+
+    Response response = await _apiClient.post(url: "/change_password", requestBody: body);
+    if (response.data["success"] == true) {
+      return UserResponse.fromJson(response.data);
+    } else {
+      return UserResponse.fromJson(response.data); // Handle error properly
+    }
   }
 
 }

@@ -3,13 +3,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:get/get.dart';
 
 import '../../../core/models/about_response.dart';
 import '../../../core/resources/app_colors.dart';
-import '../../../core/services/api_provider.dart';
 import '../../../core/utils/alerts.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
+import '../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../core/view/widgets/page_lable.dart';
 import '../../home/view/widgets/home_appbar.dart';
 import '../cubits/about_cubit.dart';
@@ -39,9 +38,9 @@ class _AboutViewState extends State<AboutView> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(children: [
-      HomeAppbar(type: null),
-      SizedBox(height: 12),
-      PageLable(name: "About us"),
+          FitNewAppBar(
+            title: "About us",
+          ),
         BlocConsumer<AboutCubit, AboutState>(
             listener: (context, state) {
               if (state is AboutError) {

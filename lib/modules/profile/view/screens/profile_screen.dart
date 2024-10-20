@@ -2,7 +2,9 @@ import 'package:app/config/navigation/navigation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/database/shared_pref.dart';
 import '../../../../core/enums/http_request_state.dart';
@@ -174,45 +176,137 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //Next session
               currentUser!.data!.nextSession == null
                   ? SizedBox()
-                  : Container(
-                width: double.infinity,
-                margin: EdgeInsets.symmetric(vertical: 12),
-                padding: EdgeInsets.symmetric(vertical: 8),
-                color: Color(0xffF1F1F1),
-                child: Stack(
-                  children: [
-                    Container(
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            kTextbody(
-                              'Next Session',
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                            kTextbody(
-                              '${currentUser!.data!.nextSession!.day}',
-                              color: AppColors.PRIMART_COLOR,
-                              size: 16,
-                            ),
-                            kTextbody(
-                              '${currentUser!.data!.nextSession!.sessionDate}',
-                              color: Colors.black,
-                              size: 16,
-                            ),
-                          ],
-                        )),
-                    Positioned(
-                        right: 26,
-                        top: 3,
-                        child: kTextfooter(
-                          '${currentUser!.data!.nextSession!.status}',
-                          color: kColorPrimary,
-                        )),
-                  ],
-                ),
+                  :
+              Stack(
+                children: [
+                  SvgPicture.asset(AppImages.cards,
+                    width: deviceWidth,
+                    fit: BoxFit.cover,
+
+                  ),
+                  Container(
+                    width: double.infinity,
+
+                    margin:
+                    EdgeInsets.symmetric(vertical: 12),
+                    padding:
+                    EdgeInsets.symmetric(vertical: AppSize.s2,horizontal: AppSize.s16),
+                    child: Stack(
+                      children: [
+                        Container(
+                            width: double.infinity,
+                            child: Column(
+
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(AppSize.s8),
+                                  width: AppSize.s125,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.customBlack,
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(AppSize.s16),bottomRight: Radius.circular(AppSize.s12))
+                                  ),
+                                  child: kTextfooter(
+                                    '${currentUser!.data!.nextSession!.status}',
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CustomText(
+                                    'Next Sessions',
+                                    color: Colors.white,
+                                    fontSize: FontSize.s20,
+                                    fontWeight: FontWeightManager.semiBold,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: AppSize.s32),
+                                  child: CustomText(
+                                      '${currentUser!.data!.nextSession!.day}',
+                                      color: AppColors.black,
+                                      fontSize: FontSize.s20,
+                                      fontWeight: FontWeightManager.semiBold),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      CustomText(
+                                        DateFormat('dd, MMM, yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                        color: Colors
+                                            .white,
+                                        fontSize: FontSize.s16,
+                                      ),
+                                      HorizontalSpace(AppSize.s12),
+                                      CustomText(
+                                        DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                        color: Colors
+                                            .white,
+                                        fontSize: FontSize.s16,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+
+                              ],
+                            )),
+                        // Positioned(
+                        //     right: 26,
+                        //     top: 3,
+                        //     child: kTextfooter(
+                        //       '${currentUser!.data!.nextSession!.status}',
+                        //       color: kColorPrimary,
+                        //     )),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+
+
+              // Container(
+              //   width: double.infinity,
+              //   margin: EdgeInsets.symmetric(vertical: 12),
+              //   padding: EdgeInsets.symmetric(vertical: 8),
+              //   color: Color(0xffF1F1F1),
+              //   child: Stack(
+              //     children: [
+              //       Container(
+              //           width: double.infinity,
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.center,
+              //             children: [
+              //               kTextbody(
+              //                 'Next Session',
+              //                 color: Colors.black,
+              //                 size: 16,
+              //               ),
+              //               kTextbody(
+              //                 '${currentUser!.data!.nextSession!.day}',
+              //                 color: AppColors.PRIMART_COLOR,
+              //                 size: 16,
+              //               ),
+              //               kTextbody(
+              //                 '${currentUser!.data!.nextSession!.sessionDate}',
+              //                 color: Colors.black,
+              //                 size: 16,
+              //               ),
+              //             ],
+              //           )),
+              //       Positioned(
+              //           right: 26,
+              //           top: 3,
+              //           child: kTextfooter(
+              //             '${currentUser!.data!.nextSession!.status}',
+              //             color: kColorPrimary,
+              //           )),
+              //     ],
+              //   ),
+              // ),
 
               //Package renewal date
               Container(

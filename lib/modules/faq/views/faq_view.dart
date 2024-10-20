@@ -152,13 +152,16 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../core/models/faq_response.dart';
 import '../../../core/services/api_provider.dart';
+import '../../../core/utils/alerts.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../../core/view/widgets/page_lable.dart';
+import '../../home/cubits/home_cubit.dart';
 import '../../home/view/widgets/home_appbar.dart';
 
 class FaqView extends StatefulWidget {
@@ -169,28 +172,19 @@ class FaqView extends StatefulWidget {
 }
 
 class _FaqViewState extends State<FaqView> {
-  FaqResponse ress = FaqResponse();
-  bool isLoading = true;
+  late final HomeCubit homeCubit;
 
-  void getFaq() async {
-    await ApiProvider().getFaqtData().then((value) {
-      if (value.success == true) {
-        setState(() {
-          ress = value;
-          isLoading = false;
-        });
-      } else {
-        Fluttertoast.showToast(msg: "$value");
-        print("error");
-      }
-    });
-  }
 
   @override
   void initState() {
-    getFaq();
+    homeCubit = BlocProvider.of<HomeCubit>(context);
+    homeCubit.fetchFaqData();
+    // getHomeData();
     super.initState();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -201,15 +195,22 @@ class _FaqViewState extends State<FaqView> {
         SizedBox(height: 12),
         PageLable(name: "FAQ"),
         SizedBox(height: 12),
-        isLoading == true
-            ? Padding(
+        BlocConsumer<HomeCubit, HomeStates>(
+          listener: (context, state) {
+            if (state is HomePageFailureState) {
+              Alerts.showToast(state.failure.message);
+            }
+
+          },
+          builder: (context, state) => state is FaqLoading
+              ? Padding(
                 padding: const EdgeInsets.symmetric(vertical: 100),
                 child: Center(child: CircularLoadingWidget()),
               )
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: ress.data!.length,
+                itemCount: homeCubit.faqResponse.data!.length,
                 itemBuilder: (context, index) {
                   return InkWell(
                       onTap: () {
@@ -218,18 +219,19 @@ class _FaqViewState extends State<FaqView> {
                         //     ress.data![i].isSellected = false;
                         //   });
                         // }
-                        if (ress.data![index].isSellected == false) {
+                        if (homeCubit.faqResponse.data![index].isSellected == false) {
                           setState(() {
-                            ress.data![index].isSellected = true;
+                            homeCubit.faqResponse.data![index].isSellected = true;
                           });
                         } else {
                           setState(() {
-                            ress.data![index].isSellected = false;
+                            homeCubit.faqResponse.data![index].isSellected = false;
                           });
                         }
                       },
-                      child: questionRow(ress.data![index]));
+                      child: questionRow(homeCubit.faqResponse.data![index]));
                 })
+        ),
       ],
     ));
   }

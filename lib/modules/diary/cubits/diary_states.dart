@@ -34,3 +34,18 @@ class DiaryLoadedOtherCaloriesUnits extends DiaryState {
   final MyOtherCaloriesUnitsResponse response;
   DiaryLoadedOtherCaloriesUnits(this.response);
 }
+
+
+class CalorieLoading extends DiaryState {}
+
+class CalorieDeletedSuccess extends DiaryState {
+  final String message;
+
+  CalorieDeletedSuccess(this.message);
+}
+
+class CalorieDeletedFailure extends DiaryState {
+  final String errorMessage;
+
+  CalorieDeletedFailure(this.errorMessage);
+}

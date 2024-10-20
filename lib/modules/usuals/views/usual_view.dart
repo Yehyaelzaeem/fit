@@ -7,12 +7,17 @@ import 'package:get/get.dart';
 
 import '../../../config/navigation/routes.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/resources.dart';
+import '../../../core/utils/alerts.dart';
+import '../../../core/view/widgets/custom_text.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../diary/cubits/diary_cubit.dart';
 import '../../home/view/widgets/home_appbar.dart';
 import '../cubits/usual_cubit.dart';
 import '../widget/meal_item_widget.dart';
+import '../widget/section_meals.dart';
+import 'make_a_meal_view.dart';
 
 class UsualView extends StatefulWidget {
   const UsualView({
@@ -40,141 +45,127 @@ class _UsualViewState extends State<UsualView> {
 
 
   initData() async {
+    await usualCubit.getMyUsualMeals();
     await usualCubit.fetchUsualMealsData();
   }
 
   @override
   Widget build(BuildContext context) {
-    initData();
     return SafeArea(
-      child: Obx(() {
-        if (usualCubit.deleteLoading.value)
-          return Container(child: CircularLoadingWidget(), color: Colors.white);
+      child: BlocConsumer<UsualCubit, UsualStates>(
+          listener: (context, state) {
+            if (state is UsualError) {
+              Alerts.showSnackBar(context, state.message,duration: Time.t2s);
+            }
 
-        if (usualCubit.isLoading.value)
-          return Container(child: CircularLoadingWidget(), color: Colors.white);
-        if (usualCubit.addLoading.value)
-          return Container(child: CircularLoadingWidget(), color: Colors.white);
-        return Scaffold(
-          body: Column(
-            children: [
-              HomeAppbar(
-                type: null,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
+            if (state is UsualLoaded) {
+              Alerts.closeAllSnackBars(context);
+
+            }
+          },
+          builder: (context, state){
+            if (state is UsualLoading)
+              return Container(child: CircularLoadingWidget(), color: Colors.white);
+            MealsLoading;
+            if (usualCubit.isLoading.value)
+              return Container(child: CircularLoadingWidget(), color: Colors.white);
+            if (usualCubit.addLoading.value)
+              return Container(child: CircularLoadingWidget(), color: Colors.white);
+            return Scaffold(
+              backgroundColor: AppColors.offWhite,
+              body: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:8.0,vertical: AppSize.s32),
+                    child: Row(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.horizontal(
-                              right: Radius.circular(55.0),
-                            ),
-                            color: const Color(0xFF414042),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text(
-                              '        My Meals      ',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              NavigationService.push(context,Routes.makeMeals);
+                        InkWell(
+                            onTap: (){
+                              NavigationService.goBack(context);
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(200),
-                                border:
-                                    Border.all(color: kColorPrimary, width: 1),
-                                color: Colors.white,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  SizedBox(width: 10),
-                                  Icon(Icons.add, color: kColorPrimary),
-                                  kTextbody(
-                                    'Make a meal',
-                                    paddingH: 6,
-                                    paddingV: 8,
-                                    color: kColorPrimary,
-                                  ),
-                                  SizedBox(width: 10),
-                                ],
-                              ),
-                            ),
-                          ),
+                            child: Icon(Icons.arrow_back,color: AppColors.black,)),
+                        SizedBox(width: AppSize.s24,),
+                        CustomText(
+                          "My Meals",
+                          fontSize: FontSize.s20,
+                          fontWeight: FontWeightManager.medium,
                         ),
+                        Spacer(),
+                        InkWell(
+                            onTap: (){
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,  // This will allow the bottom sheet to take full screen height if needed
+                                backgroundColor: AppColors.white.withOpacity(0.001),
+                               
+                                builder: (context) {
+                                  return FractionallySizedBox(
+                                    heightFactor: 0.8,  // Adjust the height factor to control how much space the bottom sheet takes
+                                    child: MakeAMealView(
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            child: Icon(Icons.add_circle,color: AppColors.primary,size: AppSize.s32,)),
                       ],
                     ),
-                    Obx(() {
-                      return Expanded(
-                          child: usualCubit.mealsResponse.value.data==null||usualCubit.mealsResponse.value.data!.isEmpty
-                              ? Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                        AppImages.kEmptyPackage,
-                                        scale: 5,
-                                      ),
-                                      SizedBox(
-                                        height: 14,
-                                      ),
-                                      kTextbody("  No Meals!  ", size: 16),
-                                    ],
-                                  ),
-                                )
-                              : RefreshIndicator(
-                                  onRefresh: () async {
-                                    await usualCubit.fetchUsualMealsData();
-                                  },
-                                  child: ListView.separated(
-                                      itemBuilder: (context, index) =>
-                                          MealItemWidget(
-                                            mealName:
-                                                "${usualCubit.mealsResponse.value.data?[index].name}",
-                                            mealCalories: usualCubit
-                                                .mealsResponse
-                                                .value
-                                                .data?[index]
-                                                .totalCalories
-                                                .toStringAsFixed(2),
-                                            meal: usualCubit.mealsResponse.value
-                                                .data?[index],
-                                            mealId: usualCubit.mealsResponse
-                                                .value.data?[index].id,
-                                          ),
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                            height: 12,
-                                          ),
-                                      itemCount: usualCubit
-                                          .mealsResponse.value.data!.length),
-                                ));
-                    })
-                  ],
-                ),
+                  ),
+
+                  Expanded(
+                      child: usualCubit.mealsResponse.data==null||usualCubit.mealsResponse.data!.isEmpty
+                          ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              AppImages.kEmptyPackage,
+                              scale: 5,
+                            ),
+                            SizedBox(
+                              height: 14,
+                            ),
+                            kTextbody("  No Meals!  ", size: 16),
+                          ],
+                        ),
+                      )
+                          : RefreshIndicator(
+                        onRefresh: () async {
+                          await usualCubit.fetchUsualMealsData();
+                        },
+                        child: ListView.separated(
+                            itemBuilder: (context, index) =>
+                                MealItemWidget(
+                                  mealName:
+                                  "${usualCubit.mealsResponse.data?[index].name}",
+                                  mealCalories: usualCubit
+                                      .mealsResponse
+                                      .data?[index]
+                                      .totalCalories
+                                      .toStringAsFixed(2),
+                                  meal: usualCubit.mealsResponse
+                                      .data?[index],
+                                  mealId: usualCubit.mealsResponse
+                                      .data?[index].id,
+                                ),
+                            separatorBuilder: (context, index) =>
+                                SizedBox(
+                                  height: 12,
+                                ),
+                            itemCount: usualCubit
+                                .mealsResponse.data!.length),
+                      )),
+                  SizedBox(
+                    height: 24,
+                  ),
+                ],
               ),
-              SizedBox(
-                height: 24,
-              ),
-            ],
-          ),
-        );
-      }),
+            );
+          }
+
+      ),
+
+
     );
   }
 }

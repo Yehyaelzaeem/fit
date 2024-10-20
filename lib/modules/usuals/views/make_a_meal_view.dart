@@ -1,8 +1,11 @@
 import 'dart:io';
 import 'package:app/core/resources/app_values.dart';
+import 'package:app/core/resources/resources.dart';
+import 'package:app/core/view/views.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -15,9 +18,9 @@ import '../../../core/view/widgets/default/edit_text.dart';
 import '../../../core/view/widgets/default/text.dart';
 import '../../diary/cubits/diary_cubit.dart';
 import '../../home/view/widgets/home_appbar.dart';
-import '../controllers/usual_controller.dart';
 import '../cubits/usual_cubit.dart';
 import '../save_new_meal.dart';
+import '../widget/section_meals.dart';
 
 class MakeAMealView extends StatefulWidget {
   MakeAMealView({this.mealData, this.mealName, this.mealId});
@@ -99,38 +102,28 @@ class _MakeAMealViewState extends State<MakeAMealView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(() {
-      return Column(
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topRight: Radius.circular(AppSize.s24),topLeft: Radius.circular(AppSize.s24),),
+        color: AppColors.white
+      ),
+      child: Column(
         children: [
           Expanded(
             child: ListView(
               children: [
-                HomeAppbar(
-                  type: null,
-                ),
+
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.horizontal(
-                            right: Radius.circular(15.0),
-                          ),
-                          color: const Color(0xFF414042),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            '        Make a meal      ',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                      padding: EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+                      child: CustomText(
+                        'Make a meal',
+                        fontSize: AppSize.s16,
+                        color: AppColors.black,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     Container(
@@ -138,110 +131,42 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                       child: EditText(
                         hint: 'Meal name',
                         hintColor: Color(0xff8D8D8D),
-                        background: Color(0xffF1F1F1),
+                        // background: AppColors.offWhite,
                         controller: _mealName,
                         contentPaddingV: 0,
-                        padding: 0,
+                        padding: 4,
                         noBorder: false,
-                        radius: 4,
+                        radius: AppSize.s12,
                       ),
                     ),
                     SizedBox(height: 4),
                     // rowWithProgressBar("Proteins", ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional.topStart,
-                            child: Text(
-                              'Proteins',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          staticBar('proteins'),
-                          if (usualCubit.caloriesDetails.isEmpty)
-                            SizedBox(height: 20),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: usualCubit.caloriesDetails.length,
-                              itemBuilder: (context, indedx) {
-                                return rowItem(
-                                    usualCubit.caloriesDetails[indedx],
-                                    'proteins');
-                              }),
-                        ],
-                      ),
+                    MealsSection(
+                      icon: AppIcons.proteins,
+                      title: 'Proteins',
+                      type: 'proteins',
+                      usualCubit: usualCubit,
+                      caloriesDetails: usualCubit.caloriesDetails,
                     ),
+
                     SizedBox(height: 4),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional.topStart,
-                            child: Text(
-                              'Carbs',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          staticBar('carbs'),
-                          if (usualCubit.carbsDetails.isEmpty)
-                            SizedBox(height: 20),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: usualCubit.carbsDetails.length,
-                              itemBuilder: (context, indedx) {
-                                return rowItem(
-                                    usualCubit.carbsDetails[indedx], 'carbs');
-                              }),
-                        ],
-                      ),
+                    MealsSection(
+                      icon: AppIcons.carbs,
+                      title: 'Carbs',
+                      type: 'carbs',
+                      usualCubit: usualCubit,
+                      caloriesDetails: usualCubit.carbsDetails,
                     ),
+
                     SizedBox(height: 4),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional.topStart,
-                            child: Text(
-                              'Fats',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          staticBar('fats'),
-                          if (usualCubit.fatsDetails.isEmpty)
-                            SizedBox(height: 20),
-                          ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: usualCubit.fatsDetails.length,
-                              itemBuilder: (context, indedx) {
-                                return rowItem(
-                                    usualCubit.fatsDetails[indedx], 'fats');
-                              }),
-                        ],
-                      ),
+                    MealsSection(
+                      icon: AppIcons.fats,
+                      title: 'Fats',
+                      type: 'fats',
+                      usualCubit: usualCubit,
+                      caloriesDetails: usualCubit.fatsDetails,
                     ),
-                    Divider(),
+
                   ],
                 ),
               ],
@@ -252,88 +177,82 @@ class _MakeAMealViewState extends State<MakeAMealView> {
             height: 40,
             child: Lottie.asset('assets/loader.json'),
           )
-              : InkWell(
-            onTap: () async {
-              if (_mealName.text.isEmpty) {
-                Fluttertoast.showToast(msg: "Please, Enter meal name");
-              } else if (usualCubit.foodItems.isEmpty &&
-                  widget.mealId == null) {
-                Fluttertoast.showToast(msg: "Please, Add meal first");
-              } else {
-                if (widget.mealData == null) {
-                  /*         print("${usualCubit.foodItems.map((e) => e.foodId)}"
-                            .replaceAll('(', '')
-                            .replaceAll(')', ''));
-                        print("${usualCubit.foodItems.map((e) => e.quantity)}"
-                            .replaceAll('(', '')
-                            .replaceAll(')', ''));*/
-                  await usualCubit.createUsualMeal(mealParameters: {
-                    "name": _mealName.text,
-                    "food_id":
-                    "${usualCubit.foodItems.map((e) => e.foodId)}"
-                        .replaceAll('(', '')
-                        .replaceAll(')', ''),
-                    "qty":
-                    "${usualCubit.foodItems.map((e) => e.quantity)}"
-                        .replaceAll('(', '')
-                        .replaceAll(')', ''),
-                    "calories":usualCubit.foodItems.fold(0.0, (previousValue, element) => previousValue +
-                        (
-                            element.quantity*
-                                (usualCubit.caloriesDetails.any((a) => element.foodId==a.id)?
-                            usualCubit.caloriesDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
-                            usualCubit.fatsDetails.any((a) => element.foodId==a.id)?
-                            usualCubit.fatsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
-                            usualCubit.carbsDetails.any((a) => element.foodId==a.id)?
-                            usualCubit.carbsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:0)
-                        )
-                    )
-                  },diaryCubit: diaryCubit).then((value) async {
-                    _mealName.clear();
-                    NavigationService.goBack(context);
-                  });
+              :
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16,horizontal: AppSize.s24),
+            child: CustomButton(
+              onPressed: () async {
+                if (_mealName.text.isEmpty) {
+                  Fluttertoast.showToast(msg: "Please, Enter meal name");
+                } else if (usualCubit.foodItems.isEmpty &&
+                    widget.mealId == null) {
+                  Fluttertoast.showToast(msg: "Please, Add meal first");
                 } else {
-                  /* print("${usualCubit.foodItems.map((e) => e.foodId)}"
-                            .replaceAll('(', '')
-                            .replaceAll(')', ''));
-                        print("${usualCubit.foodItems.map((e) => e.quantity)}"
-                            .replaceAll('(', '')
-                            .replaceAll(')', ''));*/
-                  await usualCubit
-                      .updateCurrentUsualMeal(mealParameters: {
-                    "id": widget.mealId,
-                    "name": _mealName.text,
-                    "food_id":
-                    "${usualCubit.foodItems.map((e) => e.foodId)}"
-                        .replaceAll('(', '')
-                        .replaceAll(')', ''),
-                    "qty": "${usualCubit.foodItems.map((e) => e.quantity)}"
-                        .replaceAll('(', '')
-                        .replaceAll(')', ''),
-                  },diaryCubit:diaryCubit).then((value) {
-                    NavigationService.goBack(context);
-                  });
+                  if (widget.mealData == null) {
+                    /*         print("${usualCubit.foodItems.map((e) => e.foodId)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''));
+                            print("${usualCubit.foodItems.map((e) => e.quantity)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''));*/
+                    await usualCubit.createUsualMeal(mealParameters: {
+                      "name": _mealName.text,
+                      "food_id":
+                      "${usualCubit.foodItems.map((e) => e.foodId)}"
+                          .replaceAll('(', '')
+                          .replaceAll(')', ''),
+                      "qty":
+                      "${usualCubit.foodItems.map((e) => e.quantity)}"
+                          .replaceAll('(', '')
+                          .replaceAll(')', ''),
+                      "calories":usualCubit.foodItems.fold(0.0, (previousValue, element) => previousValue +
+                          (
+                              element.quantity*
+                                  (usualCubit.caloriesDetails.any((a) => element.foodId==a.id)?
+                                  usualCubit.caloriesDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
+                                  usualCubit.fatsDetails.any((a) => element.foodId==a.id)?
+                                  usualCubit.fatsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
+                                  usualCubit.carbsDetails.any((a) => element.foodId==a.id)?
+                                  usualCubit.carbsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:0)
+                          )
+                      )
+                    },diaryCubit: diaryCubit).then((value) async {
+                      _mealName.clear();
+                      NavigationService.goBack(context);
+                    });
+                  } else {
+                    /* print("${usualCubit.foodItems.map((e) => e.foodId)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''));
+                            print("${usualCubit.foodItems.map((e) => e.quantity)}"
+                                .replaceAll('(', '')
+                                .replaceAll(')', ''));*/
+                    await usualCubit
+                        .updateCurrentUsualMeal(mealParameters: {
+                      "id": widget.mealId,
+                      "name": _mealName.text,
+                      "food_id":
+                      "${usualCubit.foodItems.map((e) => e.foodId)}"
+                          .replaceAll('(', '')
+                          .replaceAll(')', ''),
+                      "qty": "${usualCubit.foodItems.map((e) => e.quantity)}"
+                          .replaceAll('(', '')
+                          .replaceAll(')', ''),
+                    },diaryCubit:diaryCubit).then((value) {
+                      NavigationService.goBack(context);
+                    });
+                  }
                 }
-              }
-            },
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: Color(0xffF1F9E3),
-              ),
-              child: kButtonDefault(
-                widget.mealData == null ? 'Save Meal' : 'Update Meal',
-                marginH: deviceWidth/ 6,
-                paddingV: 0,
-                shadow: true,
-                paddingH: 12,
-              ),
+              },
+              padding: EdgeInsets.all(AppSize.s12),
+              borderRadius: AppSize.s24,
+              text: widget.mealData == null ? 'Save Meal' : 'Update Meal',
             ),
-          ),
+          )
         ],
-      );
-    }));
+      ),
+    );
+
   }
 
   String getTotal(String total) {
@@ -364,10 +283,10 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                           onTap: () {
                             showQualityDialog(
                               type == 'proteins'
-                                  ? usualCubit.response.value.data!.proteins!
+                                  ? usualCubit.response.data!.proteins!
                                   : type == 'carbs'
-                                  ? usualCubit.response.value.data!.carbs!
-                                  : usualCubit.response.value.data!.fats!,
+                                  ? usualCubit.response.data!.carbs!
+                                  : usualCubit.response.data!.fats!,
                               item,
                               type == 'proteins'
                                   ? 'proteins'
@@ -469,10 +388,10 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                     onTap: () {
                       showQualityDialog(
                         type == 'proteins'
-                            ? usualCubit.response.value.data!.proteins!
+                            ? usualCubit.response.data!.proteins!
                             : type == 'carbs'
-                            ? usualCubit.response.value.data!.carbs!
-                            : usualCubit.response.value.data!.fats!,
+                            ? usualCubit.response.data!.carbs!
+                            : usualCubit.response.data!.fats!,
                         item,
                         type == 'proteins'
                             ? 'proteins'
@@ -508,14 +427,16 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
               Expanded(
                 flex: 1,
-                child: DeleteItemWidget(
-                  controller: usualCubit,
-                  item: item,
-                  type: type == 'proteins'
-                      ? 'proteins'
-                      : type == 'carbs'
-                      ? 'carbs'
-                      : 'fats',
+                child: Center(
+                  child: DeleteItemWidget(
+                    controller: usualCubit,
+                    item: item,
+                    type: type == 'proteins'
+                        ? 'proteins'
+                        : type == 'carbs'
+                        ? 'carbs'
+                        : 'fats',
+                  ),
                 ),
               ),
               Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
@@ -598,7 +519,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
           Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
             flex: 2,
-            child: kTextbody('Cal.', color: Colors.white, bold: true, size: 16),
+            child: kTextbody('Calories', color: Colors.white, bold: true, size: 16),
           ),
           Container(width: 1, height: 50, color: Color(0xffE1E1E3)),
           Expanded(
@@ -776,10 +697,9 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
         }
         FocusScope.of(context).requestFocus(FocusNode());
       },
-      child: Icon(
-        Icons.delete,
-        color: Colors.redAccent,
-        size: 26,
+      child: SvgPicture.asset(
+        AppIcons.trashSvg,
+        width: 26,
       ),
     );
   }

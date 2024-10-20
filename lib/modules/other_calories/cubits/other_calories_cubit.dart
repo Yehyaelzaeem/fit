@@ -1,5 +1,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../repositories/other_calories_repository.dart';
 part 'other_calories_states.dart';
@@ -36,7 +37,9 @@ class OtherCaloriesCubit  extends Cubit<OtherCaloriesStates> {
       },
           (response) {
         // Handle success case, emit success state
-        emit(DiarySuccess("Other calories added successfully."));
+            Fluttertoast.showToast(msg: "Other calories added successfully.");
+
+            emit(DiarySuccess("Other calories added successfully."));
       },
     );
   }

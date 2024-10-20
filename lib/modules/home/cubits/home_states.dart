@@ -78,3 +78,50 @@ class SendReportFailureState extends HomeStates {
 
   SendReportFailureState(this.failure);
 }
+
+class FaqLoading extends HomeStates {
+  FaqLoading();
+}
+
+class FaqLoaded extends HomeStates {
+  FaqLoaded();
+}
+
+class FaqError extends HomeStates {
+  final Failure failure;
+
+  FaqError(this.failure);
+}
+
+
+class OrientationLoading extends HomeStates {}
+
+class OrientationLoaded extends HomeStates {
+  final OrientationVideosResponse orientationVideosResponse;
+  OrientationLoaded(this.orientationVideosResponse);
+}
+
+class OrientationError extends HomeStates {
+  final String message;
+  OrientationError(this.message);
+}
+class MessagesLoading extends HomeStates {}
+
+class MessagesLoaded extends HomeStates {
+  MessagesLoaded();
+}
+
+class MessagesError extends HomeStates {
+  final String message;
+  MessagesError(this.message);
+}
+class MessagesDeleting extends HomeStates {}
+
+class MessagesDeleted extends HomeStates {
+  MessagesDeleted();
+}
+
+class MessagesDeleteError extends HomeStates {
+  final String message;
+  MessagesDeleteError(this.message);
+}

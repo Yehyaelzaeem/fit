@@ -62,6 +62,8 @@ class DiaryRepository extends BaseRepository {
 
   Future<void> saveDairyLocally(DayDetailsResponse dayDetailsResponse, String date) async {
     Map<String, dynamic> existingData = await readDairyLocally();
+    print('saveDairyLocally');
+
     existingData[date] = dayDetailsResponse.toJson();
     await _cacheClient.save(StorageKeys.DIARY, jsonEncode(existingData));
   }
@@ -72,14 +74,14 @@ class DiaryRepository extends BaseRepository {
     print('DAIRY_TO_SEND saving');
     Map<String, dynamic> existingData = await readDairyToSendLocally();
 
+    print('saveDairyToSendLocally');
+
     // Check if the response date exists in the existing data
     if (existingData.containsKey(date)) {
       // Update existing entry for date4
-      print("exist");
       existingData[date] = dayDetailsResponse.toJson();
     } else {
       // If the response date does not exist, add it to the map
-      print("Not exist");
       existingData[date] = dayDetailsResponse.toJson();
     }
 
@@ -160,7 +162,7 @@ class DiaryRepository extends BaseRepository {
   Future<MyOtherCaloriesUnitsResponse> getOtherCaloriesUnit() async {
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      Response response = await _apiClient.get(url: "other_calories_units",requestBody: {});
+      Response response = await _apiClient.get(url: "/other_calories_units",requestBody: {});
       if (response.data["success"] == true) {
         await saveMyOtherCaloriesUnitsLocally(MyOtherCaloriesUnitsResponse.fromJson(response.data));
         return MyOtherCaloriesUnitsResponse.fromJson(response.data);
@@ -407,7 +409,6 @@ class DiaryRepository extends BaseRepository {
       successReturn: (data) => GeneralResponse.fromJson(data),
     );
   }
-
   // Save calorie deletion data locally
   Future<void> deleteCalorieLocally(int id) async {
     List<String> calorieDataListJson = (await _cacheClient.get(StorageKeys.DeleteCalorie)) ?? [];
@@ -515,5 +516,6 @@ class DiaryRepository extends BaseRepository {
     // Write the updated list back to the cache
     await _cacheClient.save(StorageKeys.DAIRY_DATA_LIST, diaryDataListJson);
   }
+
 
 }

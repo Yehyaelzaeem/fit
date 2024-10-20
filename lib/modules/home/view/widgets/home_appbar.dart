@@ -2,10 +2,12 @@
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/resources.dart';
 import 'package:app/core/utils/globals.dart';
+import 'package:app/core/view/views.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../config/navigation/routes.dart';
@@ -34,7 +36,7 @@ class HomeAppbar extends StatefulWidget {
 }
 
 class _HomeAppbarState extends State<HomeAppbar> {
-  UserResponse ress = UserResponse();
+  // UserResponse ress = UserResponse();
   late int newMessage = 0;
   var isPortrait;
 
@@ -50,19 +52,17 @@ class _HomeAppbarState extends State<HomeAppbar> {
   }
 
   void getUserData() async {
-    Echo('getUserData');
     await profileCubit.getProfile().then((value) {
-      if (profileCubit.ress.success == true) {
+      if (currentUser?.success == true) {
         setState(() {
-          ress = profileCubit.ress;
-          newMessage = ress.data!.newMessages!;
+          newMessage = currentUser!.data!.newMessages!;
         });
-        if (ress.data != null && ress.data!.image != null) {
-          // BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
-          // Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
-        } else {
-          Echo(' getUserData avatart nulls');
-        }
+        // if (ress.data != null && ress.data!.image != null) {
+        //   // BlocProvider.of<HomeCubit>(context).avatar.value = ress.data!.image!;
+        //   // Echo(' getUserData avatart  ${BlocProvider.of<HomeCubit>(context).avatar.value}');
+        // } else {
+        //   Echo(' getUserData avatart nulls');
+        // }
       } else {
         Echo(' getUserData error ');
       }
@@ -95,21 +95,21 @@ class _HomeAppbarState extends State<HomeAppbar> {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 6),
         padding: EdgeInsets.symmetric(horizontal: 8),
         width: MediaQuery.of(context).size.width,
-        height: 65,
+        height: 70,
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                blurRadius: 2,
-                spreadRadius: 2,
-                offset: Offset(0, 0),
-              ),
-            ]),
+            color: AppColors.offWhite,
+          // borderRadius: BorderRadius.circular(16),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey.withOpacity(0.4),
+            //     blurRadius: 2,
+            //     spreadRadius: 2,
+            //     offset: Offset(0, 0),
+            //   ),
+            // ]
+        ),
         child: isPortrait
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,7 +148,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                     width: MediaQuery.of(context).size.width * 0.14,
                     child: Row(
                       children: [
-                        ress.data == null
+                        currentUser?.data == null
                             ? SizedBox(
                                 width: 50,
                               )
@@ -191,7 +191,8 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                   ),
                                 ),
                               ),
-                        ress.data == null
+                        HorizontalSpace(AppSize.s40),
+                        currentUser?.data == null
                             ? SizedBox(
                                 width: 40,
                               )
@@ -209,7 +210,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(200),
                                     child: CachedNetworkImage(
-                                      imageUrl: "${ress.data!.image}",
+                                      imageUrl: "${currentUser?.data?.image}",
                                       fit: BoxFit.cover,
                                       placeholder: (ctx, url) {
                                         return profileImageHolder();
@@ -253,32 +254,32 @@ class _HomeAppbarState extends State<HomeAppbar> {
                         )
                       : GestureDetector(
                           onTap: () {
-                            Scaffold.of(context).openDrawer();
+                            // Scaffold.of(context).openDrawer();
+                            NavigationService.push(context, Routes.homeDrawer);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(
-                              Icons.menu,
-                              color: Colors.black87,
-                              size: 30,
+                            child: SvgPicture.asset(
+                              AppIcons.drawerIcon,
                             ),
                           ),
                         ),
                   SizedBox(
-                    width: 25,
+                    width: AppSize.s24,
                   ),
                   Image.asset(
                     AppImages.kLogoRow,
                     height: 54,
                   ),
+
                   Row(
                     children: [
-                      ress.data == null
+                      currentUser?.data == null
                           ? SizedBox(
-                              width: 50,
+                              width: AppSize.s48,
                             )
                           : Container(
-                              width: 50,
+                        width: AppSize.s48,
                               child: GestureDetector(
                                 onTap: () {
                                   newMessage = 0;
@@ -287,14 +288,17 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 },
                                 child: Stack(
                                   children: [
-                                    Icon(
-                                      Icons.chat_bubble_outline,
-                                      color: Colors.black87,
-                                      size: 30,
+                                    Padding(
+                                      padding: const EdgeInsets.all(AppSize.s4),
+                                      child: SvgPicture.asset(
+                                        AppIcons.messages,
+                                        width: AppSize.s28,
+                                        color: AppColors.customBlack,
+                                      ),
                                     ),
                                     Positioned(
-                                      top: 4,
-                                      left: 16,
+                                      top: 0,
+                                      right: 8,
                                       child: Container(
                                         child: Padding(
                                           padding: const EdgeInsets.all(4.0),
@@ -304,11 +308,11 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                                 : "$newMessage",
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 16),
+                                                fontSize: FontSize.s14),
                                           ),
                                         ),
                                         decoration: BoxDecoration(
-                                            color: Colors.red,
+                                            color: AppColors.customBlack,
                                             shape: BoxShape.circle),
                                       ),
                                     )
@@ -316,7 +320,9 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 ),
                               ),
                             ),
-                      ress.data == null
+                      HorizontalSpace(AppSize.s20),
+
+                      currentUser?.data == null
                           ? SizedBox(
                               width: 40,
                             )
@@ -334,7 +340,7 @@ class _HomeAppbarState extends State<HomeAppbar> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(200),
                                   child: CachedNetworkImage(
-                                    imageUrl: "${ress.data!.image}",
+                                    imageUrl: "${currentUser!.data!.image}",
                                     fit: BoxFit.cover,
                                     placeholder: (ctx, url) {
                                       return profileImageHolder();

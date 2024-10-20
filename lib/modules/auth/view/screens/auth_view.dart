@@ -26,44 +26,47 @@ class AuthScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 66),
-          Column(
-            children: [
-              kButton(
-                'Sign in',
-                hight: 55,
-                marginH: 20,
-                bold: true,
-                paddingH: 0,
-                textSize: 20,
-                func: () {
-                  NavigationService.push(context,Routes.loginScreen);
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: kButton(
-                  'Sign up',
-                  hight: 55,
-                  color: AppColors.ACCENT_COLOR,
-                  textSize: 20,
-                  bold: true,
-                  func: () {
-                    NavigationService.push(context,Routes.signupScreen);
-
-                  },
-                ),
-              ),
-            ],
+          kButton(
+            'Sign in',
+            hight: 55,
+            marginH: 20,
+            bold: true,
+            paddingH: 0,
+            textSize: 20,
+            func: () {
+              NavigationService.push(context,Routes.loginScreen);
+            },
           ),
-          GestureDetector(
-              onTap: () async {
-                // await SharedHelper().writeData(CachingKey.IS_GUEST, true);
-                // DiaryController controller = Get.find<DiaryController>(tag: 'diary');
-                // controller.isLogged.value = false;
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: kButton(
+              'Sign up',
+              hight: 55,
+              color: AppColors.ACCENT_COLOR,
+              textSize: 20,
+              bold: true,
+              func: () {
+                NavigationService.push(context,Routes.signupScreen);
+
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: kButton(
+              'Skip',
+              hight: 55,
+              color: AppColors.lightGrey,
+              textColor: AppColors.black,
+              textSize: 20,
+              bold: true,
+              func: () {
                 NavigationService.push(context,Routes.homeScreen);
 
               },
-              child: kTextHeader('Skip', color: AppColors.PRIMART_COLOR, size: 20))
+            ),
+          ),
+
         ],
       ),
     );

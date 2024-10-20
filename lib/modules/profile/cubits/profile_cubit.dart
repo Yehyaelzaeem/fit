@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enums/http_request_state.dart';
@@ -81,5 +83,61 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
   }
 
+  // Edit profile
+  Future<void> editProfile({
+    File? image,
+    String? password,
+    String? name,
+    String? lastName,
+    String? email,
+    String? date,
+    String? phone,
+    String? passwordConfirmation,
+    String? gender,
+  }) async {
+    try {
+      emit(state.copyWith(
+        profileRequestType: ProfileRequestType.updateProfile,
+        httpRequestState: HttpRequestState.loading,
+      ));
+      UserResponse response = await _profileRepository.editProfile(
+        image: image,
+        password: password,
+        name: name,
+        lastName: lastName,
+        email: email,
+        date: date,
+        phone: phone,
+        passwordConfirmation: passwordConfirmation,
+        gender: gender,
+      );
+
+      currentUser = response;
+      emit(state.copyWith(
+          user: response, httpRequestState: HttpRequestState.success));
+    } catch (e) {
+      emit(state.copyWith(failure: Failure(500, "Failed to update profile"), httpRequestState: HttpRequestState.failure));
+    }
+  }
+
+  // Change password
+  Future<void> changePassword(String password, String confirmPassword) async {
+    try {
+      emit(state.copyWith(
+        profileRequestType: ProfileRequestType.updateProfile,
+        httpRequestState: HttpRequestState.loading,
+      ));
+      UserResponse response = await _profileRepository.changePassword(
+        password: password,
+        confirmPassword: confirmPassword,
+      );
+
+      currentUser = response;
+      emit(state.copyWith(
+          user: response, httpRequestState: HttpRequestState.success));
+    } catch (e) {
+      emit(state.copyWith(failure: Failure(500, "Failed to update password"), httpRequestState: HttpRequestState.failure));
+    }
+  }
 
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/config/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -212,9 +213,7 @@ class _SaveNewMealState extends State<SaveNewMeal> {
                                                       func: () {
                                                         selectedFood!.qty =
                                                             quantity;
-                                                        Get.back(
-                                                            result:
-                                                                selectedFood);
+                                                        NavigationService.goBack(context, selectedFood);
                                                       },
                                                       shadow: true,
                                                       paddingH: 30,

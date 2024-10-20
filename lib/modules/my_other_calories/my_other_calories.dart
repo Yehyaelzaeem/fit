@@ -1,19 +1,26 @@
 
+import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/resources/font_manager.dart';
+import 'package:app/core/view/views.dart';
+import 'package:app/modules/my_other_calories/component/category_tile.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../config/navigation/routes.dart';
 import '../../core/models/day_details_reposne.dart' as dayDetails;
 import '../../core/models/my_other_calories_response.dart';
+import '../../core/resources/app_assets.dart';
 import '../../core/resources/app_colors.dart';
 import '../../core/resources/app_values.dart';
 import '../../core/services/api_provider.dart';
 import '../../core/utils/alerts.dart';
 import '../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../core/view/widgets/default/text.dart';
+import '../../core/view/widgets/fit_new_app_bar.dart';
 import '../../core/view/widgets/page_lable.dart';
 import '../diary/controllers/diary_controller.dart';
 import '../diary/cubits/diary_cubit.dart';
@@ -49,40 +56,42 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
   // MyOtherCaloriesResponse diaryCubit.otherCaloriesResponse = MyOtherCaloriesResponse();
 
   void getDiaryData() async {
-    await ApiProvider().getOtherCaloreis().then((value) {
-      if (value.success == true) {
-        setState(() {
-          diaryCubit.otherCaloriesResponse = value;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          diaryCubit.otherCaloriesResponse = value;
-          isLoading = false;
-        });
-        // Fluttertoast.showToast(msg: "${value.message}");
-        print("error");
-      }
+    await diaryCubit.fetchOtherCalories().then((value) {
+      // if (value.success == true) {
+      //   setState(() {
+      //     diaryCubit.otherCaloriesResponse = value;
+      //     isLoading = false;
+      //   });
+      // } else {
+      //   setState(() {
+      //     diaryCubit.otherCaloriesResponse = value;
+      //     isLoading = false;
+      //   });
+      //   // Fluttertoast.showToast(msg: "${value.message}");
+      //   print("error");
+      // }
     });
   }
 
   void deleteItem(int id) async {
 
-      await ApiProvider()
-          .deleteCalorie("delete_other_calories", id)
+      await diaryCubit
+          .deleteCalorie("/delete_other_calories", id)
           .then((value) {
-        if (value.success == true) {
-          setState(() {
-            isLoading = false;
-          });
-          getDiaryData();
-          Fluttertoast.showToast(msg: "${value.message}");
-        } else {
-          setState(() {
-            isLoading = false;
-          });
-          print("error");
-        }
+        getDiaryData();
+
+        // if (value.success == true) {
+        //   setState(() {
+        //     isLoading = false;
+        //   });
+        //   getDiaryData();
+        //   Fluttertoast.showToast(msg: "${value.message}");
+        // } else {
+        //   setState(() {
+        //     isLoading = false;
+        //   });
+        //   print("error");
+        // }
       });
 
   }
@@ -116,25 +125,21 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                   ? CircularLoadingWidget()
                   : ListView(
                 children: [
-                  HomeAppbar(
-                    type: null,
-                    onBack: widget.canGoBack
-                        ? null
-                        : () {
-                      Get.offAndToNamed(Routes.homeScreen);
-                    },
+
+                  FitNewAppBar(
+                    title: "My other calories",
                   ),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: PageLable(name: "My other calories"),
-                      ),
-                    ],
+
+                  CategoryTile(
+                    icon: AppIcons.proteins,
+                    title: "Proteins",
+                    type: 1,
+
                   ),
-                  rowWithProgressBar("Proteins", 1),
+
+
                   staticBar(),
-                  diaryCubit.otherCaloriesResponse.data!.proteins!.isEmpty
+                  (diaryCubit.otherCaloriesResponse.data?.proteins??[]).isEmpty
                       ? Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -157,7 +162,12 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                             1);
                       }),
                   SizedBox(height: 20),
-                  rowWithProgressBar("Carbs", 2),
+                  CategoryTile(
+                    icon: AppIcons.carbs,
+                    title: "Carbs",
+                    type: 2,
+                  ),
+
                   staticBar(),
                   diaryCubit.otherCaloriesResponse.data!.carbs!.isEmpty
                       ? Center(
@@ -180,7 +190,11 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                             diaryCubit.otherCaloriesResponse.data!.carbs![i], 2);
                       }),
                   SizedBox(height: 20),
-                  rowWithProgressBar("Fats", 3),
+                  CategoryTile(
+                    icon: AppIcons.fats,
+                    title: "Fats",
+                    type: 3,
+                  ),
                   staticBar(),
                   diaryCubit.otherCaloriesResponse.data!.fats!.isEmpty
                       ? Center(
@@ -211,13 +225,32 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
 
   Widget rowItem(Proteins item, int type) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (c) => EditNewCalorie(
-                    type: type,
-                    proteins: item,
-                  ))),
+      onTap: () async{
+        dynamic result = await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,  // This will allow the bottom sheet to take full screen height if needed
+          backgroundColor: AppColors.white.withOpacity(0.001),
+
+          builder: (context) {
+            return FractionallySizedBox(
+              heightFactor: 0.8,  // Adjust the height factor to control how much space the bottom sheet takes
+              child: EditNewCalorie(
+                type: type,
+                proteins: item,
+              ),
+            );
+          },
+        );
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (c) => EditNewCalorie(
+        //           type: type,
+        //           proteins: item,
+        //         )))
+
+        if (result == null) getDiaryData();
+      },
       child: Column(
         children: [
           Padding(
@@ -233,13 +266,13 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                           child: kTextbody('${item.title}',
                               color: Colors.black, bold: false, size: 16))),
                 ),
-                Container(width: 2, color: Colors.grey, height: 25),
+                Container(width: 2,  height: 25),
                 Container(
                     width: MediaQuery.of(context).size.width / 4,
                     padding: EdgeInsets.all(4),
                     child: kTextbody('${item.qty}',
                         color: Colors.black, bold: false, size: 16)),
-                Container(width: 2, color: Colors.grey, height: 25),
+                Container(width: 2,  height: 25),
                 Container(
                     width: MediaQuery.of(context).size.width / 4,
                     padding: EdgeInsets.all(4),
@@ -248,7 +281,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 8),
                     width: 2,
-                    color: Colors.grey,
+                    // color: Colors.grey,
                     height: 25),
                 InkWell(
                   onTap: () async{
@@ -273,13 +306,18 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       });
                     }
                   },
-                  child: Icon(Icons.delete, color: Colors.redAccent, size: 24),
+                  child: SvgPicture.asset(
+                      AppIcons.trashSvg,
+                      width: 24),
                 ),
                 SizedBox(width: 4),
               ],
             ),
           ),
-          Divider(thickness: 2, color: Colors.grey),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSize.s12, vertical: 0),
+            child: Divider(thickness: 2, color: AppColors.lightGrey),
+          ),
         ],
       ),
     );
@@ -335,9 +373,9 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 caloriePerUnit: double.parse(itemResponse.caloriesPerUnit??a.calories),
                 color: 'F00000'
             ));
-            await ApiProvider().saveDairyLocally(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse!,BlocProvider.of<DiaryCubit>(context).lastSelectedDate.value);
+            await BlocProvider.of<DiaryCubit>(context).saveDiaryLocally(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse!,BlocProvider.of<DiaryCubit>(context).lastSelectedDate.value);
 
-            await ApiProvider().saveMyOtherCaloriesLocally(diaryCubit.otherCaloriesResponse);
+            await BlocProvider.of<DiaryCubit>(context).saveMyOtherCaloriesLocally(diaryCubit.otherCaloriesResponse);
           }
 
           setState(() {});
@@ -420,10 +458,11 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
               onTap: () {
                 // deleteItem(item.id!);
               },
-              child: Icon(
-                Icons.delete,
+              child: SvgPicture.asset(
+                AppIcons.trashSvg,
                 color: Color(0xFF414042),
-                size: 24,
+
+                width: 24,
               ),
             ),
             SizedBox(
@@ -433,6 +472,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
         ));
   }
 }
+
 
 class ItemResponse {
   final String? caloriesPerUnit;
