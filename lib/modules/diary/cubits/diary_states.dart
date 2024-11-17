@@ -49,3 +49,24 @@ class CalorieDeletedFailure extends DiaryState {
 
   CalorieDeletedFailure(this.errorMessage);
 }
+class FavoriteCalorieDeleted extends DiaryState {
+  final String errorMessage;
+
+  FavoriteCalorieDeleted(this.errorMessage);
+}
+
+
+// Adding Favorite Calorie States
+class FavoriteCalorieAdding extends DiaryState {} // When adding a favorite is in progress
+class FavoriteCalorieAdded extends DiaryState {} // When a favorite is added successfully online
+class FavoriteCalorieAddedOffline extends DiaryState {} // When a favorite is added successfully offline
+
+// Deleting Favorite Calorie States
+class FavoriteCalorieDeleting extends DiaryState {} // When deleting a favorite is in progress
+class FavoriteCalorieDeletedOffline extends DiaryState {} // When a favorite is deleted successfully offline
+
+// Syncing Favorite Actions States
+class FavoriteActionsSyncing extends DiaryState {} // When syncing favorite actions is in progress
+class FavoriteActionsSynced extends DiaryState {} // When syncing favorite actions is completed successfully
+class FavoriteActionsSyncFailed extends DiaryState {} // When syncing favorite actions fails
+

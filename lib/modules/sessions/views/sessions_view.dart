@@ -192,42 +192,50 @@ class _SessionsViewState extends State<SessionsView> {
                                                           color: AppColors.white,
                                                         ),
                                                       ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: CustomText(
-                                                          'Next Sessions',
-                                                          color: Colors.white,
-                                                          fontSize: FontSize.s20,
-                                                          fontWeight: FontWeightManager.semiBold,
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: AppSize.s32),
-                                                        child: CustomText(
-                                                            '${currentUser!.data!.nextSession!.day}',
-                                                            color: AppColors.black,
-                                                            fontSize: FontSize.s20,
-                                                            fontWeight: FontWeightManager.semiBold),
-                                                      ),
-                                                      Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: Row(
-                                                          children: [
-                                                            CustomText(
-                                                              DateFormat('dd/MM/yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize: FontSize.s16,
+                                                      VerticalSpace(AppSize.s8),
+                                                      Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets.symmetric(horizontal: AppSize.s8),
+                                                            child: CustomText(
+                                                              'Next Session',
+                                                              color: Colors.white,
+                                                              fontSize: FontSize.s20,
+                                                              fontWeight: FontWeightManager.semiBold,
                                                             ),
-                                                            HorizontalSpace(AppSize.s12),
-                                                            CustomText(
-                                                              DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
-                                                              color: Colors
-                                                                  .white,
-                                                              fontSize: FontSize.s16,
+                                                          ),
+                                                          VerticalSpace(AppSize.s8),
+                                                          Padding(
+                                                            padding: EdgeInsets.symmetric(horizontal: AppSize.s8),
+                                                            child: CustomText(
+                                                                '${currentUser!.data!.nextSession!.day}',
+                                                                color: AppColors.black,
+                                                                fontSize: FontSize.s20,
+                                                                fontWeight: FontWeightManager.semiBold),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsets.all(8.0),
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                CustomText(
+                                                                  DateFormat('dd/MM/yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: FontSize.s16,
+                                                                ),
+                                                                HorizontalSpace(AppSize.s12),
+                                                                CustomText(
+                                                                  DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: FontSize.s16,
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
 
 
@@ -314,7 +322,7 @@ class _SessionsViewState extends State<SessionsView> {
                                                           Column(
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
-                                                              InkWell(
+                                                              InkWell(  
                                                                 onTap:(){
                                                                   print(sessionCubit.sessionResponse!.data![i].day);
                                                                 },
@@ -359,7 +367,18 @@ class _SessionsViewState extends State<SessionsView> {
                                                                             !.data![i]
                                                                                 .id)));
                                                               },
-                                                              child: Image.asset(AppIcons.buttonVariants)):
+                                                              child: Container(
+                                                                  width: 38,
+                                                                  height: 38,
+                                                                  padding: const EdgeInsets.all(9),
+                                                                  decoration: ShapeDecoration(
+                                                                    color: Colors.white,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      side: BorderSide(width: 1, color: Color(0xFF7FC902)),
+                                                                      borderRadius: BorderRadius.circular(14),
+                                                                    ),
+                                                                  ),
+                                                                  child: SvgPicture.asset(AppIcons.arrowRight))):
                                                           kButton(
                                                               '${sessionCubit.sessionResponse!.data![i].status == "Pending" ? "Pending" : "Details"}',
                                                               hight: 35,

@@ -29,7 +29,10 @@ import '../../home/view/widgets/home_drawer.dart';
 import '../../main_un_auth.dart';
 import '../../my_other_calories/component/category_tile.dart';
 import '../../my_other_calories/my_other_calories.dart';
+import '../../sessions/cubits/session_cubit.dart';
+import '../../timeSleep/cubits/time_sleep_cubit.dart';
 import '../../usuals/controllers/usual_controller.dart';
+import '../../usuals/cubits/usual_cubit.dart';
 import '../add_new_food.dart';
 import '../controllers/diary_controller.dart';
 import '../cubits/diary_cubit.dart';
@@ -38,6 +41,7 @@ import 'components/diary_section.dart';
 import 'components/water_widget.dart';
 import 'sleep_time_status.dart';
 
+bool first = true;
 class DiaryView extends StatefulWidget {
   DiaryView();
 
@@ -61,8 +65,19 @@ class _DiaryViewState extends State<DiaryView> {
     authCubit = BlocProvider.of<AuthCubit>(context);
     homeCubit = BlocProvider.of<HomeCubit>(context);
     otherCaloriesCubit = BlocProvider.of<OtherCaloriesCubit>(context);
+   load();
+  }
+
+  load()async{
     homeCubit.loadHomePage();
-    diaryCubit.onInit();
+    await diaryCubit.onInit();
+    if(first){
+      BlocProvider.of<TimeSleepCubit>(context).getSleepingTimesData();
+      // BlocProvider.of<SessionCubit>(context).getSessionsAll();
+      BlocProvider.of<UsualCubit>(context).getMyUsualMeals();
+      diaryCubit.fetchOtherCalories();
+      first = false;
+    }
   }
 
 
@@ -165,7 +180,6 @@ class _DiaryViewState extends State<DiaryView> {
 
 
                   DiarySection(
-                    icon: AppIcons.proteins,
                     iconWidget: Container(
                       width: 35,
                       height: 28,
@@ -181,16 +195,15 @@ class _DiaryViewState extends State<DiaryView> {
                     item:diaryCubit.dayDetailsResponse?.data?.proteins,
                     diaryCubit: diaryCubit,
                     type: 'proteins',
-                    caloriesDetails: diaryCubit.caloriesDetails,
+                    caloriesDetails: diaryCubit.dayDetailsResponse?.data?.proteins?.caloriesDetails??[],
                   ),
 
                   DiarySection(
-                      icon: AppIcons.carbs,
                       title: "Carbs",
                       item:diaryCubit.dayDetailsResponse?.data?.carbs,
                     diaryCubit: diaryCubit,
                     type: 'carbs',
-                    caloriesDetails: diaryCubit.carbsDetails,
+                    caloriesDetails: diaryCubit.dayDetailsResponse?.data?.carbs?.caloriesDetails??[],
                     iconWidget: Container(
                       width: 35,
                       height: 28,
@@ -205,12 +218,11 @@ class _DiaryViewState extends State<DiaryView> {
 
                   ),
                   DiarySection(
-                    icon: AppIcons.fats,
                     title: "Fats",
                     item:diaryCubit.dayDetailsResponse?.data?.fats,
                     diaryCubit: diaryCubit,
                     type: 'fats',
-                    caloriesDetails: diaryCubit.fatsDetails,
+                    caloriesDetails: diaryCubit.dayDetailsResponse?.data?.fats?.caloriesDetails??[],
                     iconWidget: Container(
                       width: 35,
                       height: 28,
@@ -219,7 +231,7 @@ class _DiaryViewState extends State<DiaryView> {
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
                       ),
                       alignment: Alignment.center,
-                      child: SvgPicture.asset(AppImages.fats,width: 20,
+                      child: Image.asset(AppImages.fats,width: 20,
                         height: 20,),
                     ),
                   ),
@@ -232,236 +244,238 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  Widget rowItem(CaloriesDetails item, String type) {
-    return Container(
-      height: 40,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  // Widget rowItem(CaloriesDetails item, String type) {
+  //   return Container(
+  //     height: 40,
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  //
+  //             Expanded(
+  //               flex: 3,
+  //               child: Container(
+  //                 width: double.infinity,
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(4),
+  //                 ),
+  //                 child: Row(
+  //                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Expanded(
+  //                       flex: 8,
+  //                       child: GestureDetector(
+  //                         onTap: () {
+  //                           showQualityDialog(
+  //                             type == 'proteins'
+  //                                 ? diaryCubit
+  //                                     .dayDetailsResponse!.data!.proteins!.food!
+  //                                 : type == 'carbs'
+  //                                     ? diaryCubit
+  //                                         .dayDetailsResponse!.data!.carbs!.food!
+  //                                     : diaryCubit
+  //                                         .dayDetailsResponse!.data!.fats!.food!,
+  //                             item,
+  //                             type == 'proteins'
+  //                                 ? 'proteins'
+  //                                 : type == 'carbs' ? 'carbs' : 'fats',
+  //                           );
+  //                         },
+  //                         child: Container(
+  //                           margin: EdgeInsets.symmetric(
+  //                               horizontal: 2, vertical: 2),
+  //                           height: 34,
+  //                           child: TextFormField(
+  //                             textAlign: TextAlign.center,
+  //                             key: Key('foodName_${item.id}_${item.qty}'),
+  //                             decoration: InputDecoration(
+  //                               hintText: '',
+  //                               hintStyle: TextStyle(fontSize: 12),
+  //                               labelStyle: TextStyle(fontSize: 12),
+  //                               border: OutlineInputBorder(
+  //                                 borderRadius: BorderRadius.circular(4),
+  //                                 borderSide: BorderSide(
+  //                                     color: Colors.grey, width: 1.5),
+  //                               ),
+  //                               focusedBorder: OutlineInputBorder(
+  //                                 borderRadius: BorderRadius.circular(4),
+  //                                 borderSide: BorderSide(
+  //                                     color: kColorPrimary, width: 1),
+  //                               ),
+  //                               disabledBorder: OutlineInputBorder(
+  //                                 borderRadius: BorderRadius.circular(4),
+  //                                 borderSide: BorderSide(
+  //                                     color: Colors.grey, width: 1.5),
+  //                               ),
+  //                               contentPadding: EdgeInsets.only(
+  //                                   top: 10, bottom: 10, left: 2),
+  //                             ),
+  //                             style: TextStyle(
+  //                                 fontSize: 12.0,
+  //                                 height: 1.4,
+  //                                 color: Colors.black),
+  //                             enableInteractiveSelection: false,
+  //                             initialValue: item.qty == null
+  //                                 ? ''
+  //                                 : item.qty.toString().replaceAll('.0', ''),
+  //                             keyboardType: Platform.isIOS
+  //                                 ? TextInputType.numberWithOptions(
+  //                                     signed: true, decimal: true)
+  //                                 : TextInputType.numberWithOptions(
+  //                                     decimal: true, signed: false),
+  //                             // keyboardType: TextInputType.number,
+  //                             textInputAction: TextInputAction.done,
+  //                             onFieldSubmitted: (text) {
+  //                               if (text.isEmpty) return;
+  //                               try {
+  //                                 double qty = double.parse(text);
+  //                                 Food food = Food();
+  //                                 if (type == 'proteins') {
+  //                                   food = diaryCubit
+  //                                       .dayDetailsResponse!.data!.proteins!.food!
+  //                                       .firstWhere((element) =>
+  //                                           element.title == item.quality)
+  //                                       ;
+  //                                 } else if (type == 'carbs') {
+  //                                   food = diaryCubit
+  //                                       .dayDetailsResponse!.data!.carbs!.food!
+  //                                       .firstWhere((element) =>
+  //                                           element.title == item.quality)
+  //                                       ;
+  //                                 } else {
+  //                                   food = diaryCubit
+  //                                       .dayDetailsResponse!.data!.fats!.food!
+  //                                       .firstWhere((element) =>
+  //                                           element.title == item.quality)
+  //                                       ;
+  //                                 }
+  //
+  //                                 if(item.id==null&&item.randomId!=null) {
+  //                                   diaryCubit.createOrUpdateFoodData(
+  //                                     food,
+  //                                     qty,
+  //                                     type: type == 'proteins'
+  //                                         ? 'proteins'
+  //                                         : type == 'carbs'
+  //                                         ? 'carbs'
+  //                                         : 'fats',
+  //                                     randomId:item.randomId,
+  //                                     index:item.id,
+  //                                   );
+  //                                 }else{
+  //
+  //                                   diaryCubit.createOrUpdateFoodData(
+  //                                     // item.id,
+  //                                     food,
+  //                                     qty,
+  //                                     type: type == 'proteins'
+  //                                         ? 'proteins'
+  //                                         : type == 'carbs'
+  //                                         ? 'carbs'
+  //                                         : 'fats',
+  //                                     index:item.id,
+  //                                   );
+  //                                 }
+  //
+  //                               } catch (e) {}
+  //                             },
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     Expanded(
+  //                       flex: 5,
+  //                       child: FittedBox(
+  //                         fit: BoxFit.scaleDown,
+  //                         child: Container(
+  //                           padding: EdgeInsets.symmetric(horizontal: 1),
+  //                           child: kTextbody(
+  //                             item.unit == null ? '' : '${item.unit}',
+  //                             color: Colors.black,
+  //                             bold: false,
+  //                             size: 12,
+  //                             maxLines: 2,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     )
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  //             Expanded(
+  //               flex: 4,
+  //               child: Container(
+  //                 margin: EdgeInsets.symmetric(horizontal: 4),
+  //                 width: double.infinity,
+  //                 height: 34,
+  //                 child: GestureDetector(
+  //                   onTap: () {
+  //                     showQualityDialog(
+  //                       type == 'proteins'
+  //                           ? diaryCubit.dayDetailsResponse!.data!.proteins!.food!
+  //                           : type == 'carbs'
+  //                               ? diaryCubit.dayDetailsResponse!.data!.carbs!.food!
+  //                               : diaryCubit.dayDetailsResponse!.data!.fats!.food!,
+  //                       item,
+  //                       type == 'proteins'
+  //                           ? 'proteins'
+  //                           : type == 'carbs'
+  //                               ? 'carbs'
+  //                               : 'fats',
+  //                     );
+  //                   },
+  //                   child: itemWidget(
+  //                     title: item.quality == null ? '' : '${item.quality}',
+  //                     showDropDownArrow:
+  //                         item.quality == null || '${item.quality}'.isEmpty,
+  //                     color: item.color == 'FFFFFF'? '555555': item.color,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //             Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  //             Expanded(
+  //               flex: 2,
+  //               child: FittedBox(
+  //                 fit: BoxFit.scaleDown,
+  //                 child: kTextbody(
+  //                   item.calories == null ? '' : '${item.calories}',
+  //                   color: Colors.black,
+  //                   bold: false,
+  //                   size: 16,
+  //                 ),
+  //               ),
+  //             ),
+  //             Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  //             Expanded(
+  //               flex: 1,
+  //               child: DeleteItemWidget(
+  //                 controller: diaryCubit,
+  //                 item: item,
+  //                 index: index,
+  //                 type: type == 'proteins'
+  //                     ? 'proteins'
+  //                     : type == 'carbs'
+  //                         ? 'carbs'
+  //                         : 'fats',
+  //               ),
+  //             ),
+  //             Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
+  //           ],
+  //         ),
+  //         Divider(
+  //           height: 1,
+  //           color: Colors.black,
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-              Expanded(
-                flex: 3,
-                child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: GestureDetector(
-                          onTap: () {
-                            showQualityDialog(
-                              type == 'proteins'
-                                  ? diaryCubit
-                                      .dayDetailsResponse!.data!.proteins!.food!
-                                  : type == 'carbs'
-                                      ? diaryCubit
-                                          .dayDetailsResponse!.data!.carbs!.food!
-                                      : diaryCubit
-                                          .dayDetailsResponse!.data!.fats!.food!,
-                              item,
-                              type == 'proteins'
-                                  ? 'proteins'
-                                  : type == 'carbs' ? 'carbs' : 'fats',
-                            );
-                          },
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 2, vertical: 2),
-                            height: 34,
-                            child: TextFormField(
-                              textAlign: TextAlign.center,
-                              key: Key('foodName_${item.id}_${item.qty}'),
-                              decoration: InputDecoration(
-                                hintText: '',
-                                hintStyle: TextStyle(fontSize: 12),
-                                labelStyle: TextStyle(fontSize: 12),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(
-                                      color: Colors.grey, width: 1.5),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(
-                                      color: kColorPrimary, width: 1),
-                                ),
-                                disabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                  borderSide: BorderSide(
-                                      color: Colors.grey, width: 1.5),
-                                ),
-                                contentPadding: EdgeInsets.only(
-                                    top: 10, bottom: 10, left: 2),
-                              ),
-                              style: TextStyle(
-                                  fontSize: 12.0,
-                                  height: 1.4,
-                                  color: Colors.black),
-                              enableInteractiveSelection: false,
-                              initialValue: item.qty == null
-                                  ? ''
-                                  : item.qty.toString().replaceAll('.0', ''),
-                              keyboardType: Platform.isIOS
-                                  ? TextInputType.numberWithOptions(
-                                      signed: true, decimal: true)
-                                  : TextInputType.numberWithOptions(
-                                      decimal: true, signed: false),
-                              // keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done,
-                              onFieldSubmitted: (text) {
-                                if (text.isEmpty) return;
-                                try {
-                                  double qty = double.parse(text);
-                                  Food food = Food();
-                                  if (type == 'proteins') {
-                                    food = diaryCubit
-                                        .dayDetailsResponse!.data!.proteins!.food!
-                                        .firstWhere((element) =>
-                                            element.title == item.quality)
-                                        ;
-                                  } else if (type == 'carbs') {
-                                    food = diaryCubit
-                                        .dayDetailsResponse!.data!.carbs!.food!
-                                        .firstWhere((element) =>
-                                            element.title == item.quality)
-                                        ;
-                                  } else {
-                                    food = diaryCubit
-                                        .dayDetailsResponse!.data!.fats!.food!
-                                        .firstWhere((element) =>
-                                            element.title == item.quality)
-                                        ;
-                                  }
-
-                                  if(item.id==null&&item.randomId!=null) {
-                                    diaryCubit.createOrUpdateFoodData(
-                                      food,
-                                      qty,
-                                      type: type == 'proteins'
-                                          ? 'proteins'
-                                          : type == 'carbs'
-                                          ? 'carbs'
-                                          : 'fats',
-                                      randomId:item.randomId,
-                                      index:item.id,
-                                    );
-                                  }else{
-
-                                    diaryCubit.createOrUpdateFoodData(
-                                      // item.id,
-                                      food,
-                                      qty,
-                                      type: type == 'proteins'
-                                          ? 'proteins'
-                                          : type == 'carbs'
-                                          ? 'carbs'
-                                          : 'fats',
-                                      index:item.id,
-                                    );
-                                  }
-
-                                } catch (e) {}
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 5,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 1),
-                            child: kTextbody(
-                              item.unit == null ? '' : '${item.unit}',
-                              color: Colors.black,
-                              bold: false,
-                              size: 12,
-                              maxLines: 2,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
-              Expanded(
-                flex: 4,
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  width: double.infinity,
-                  height: 34,
-                  child: GestureDetector(
-                    onTap: () {
-                      showQualityDialog(
-                        type == 'proteins'
-                            ? diaryCubit.dayDetailsResponse!.data!.proteins!.food!
-                            : type == 'carbs'
-                                ? diaryCubit.dayDetailsResponse!.data!.carbs!.food!
-                                : diaryCubit.dayDetailsResponse!.data!.fats!.food!,
-                        item,
-                        type == 'proteins'
-                            ? 'proteins'
-                            : type == 'carbs'
-                                ? 'carbs'
-                                : 'fats',
-                      );
-                    },
-                    child: itemWidget(
-                      title: item.quality == null ? '' : '${item.quality}',
-                      showDropDownArrow:
-                          item.quality == null || '${item.quality}'.isEmpty,
-                      color: item.color == 'FFFFFF'? '555555': item.color,
-                    ),
-                  ),
-                ),
-              ),
-              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
-              Expanded(
-                flex: 2,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: kTextbody(
-                    item.calories == null ? '' : '${item.calories}',
-                    color: Colors.black,
-                    bold: false,
-                    size: 16,
-                  ),
-                ),
-              ),
-              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
-              Expanded(
-                flex: 1,
-                child: DeleteItemWidget(
-                  controller: diaryCubit,
-                  item: item,
-                  type: type == 'proteins'
-                      ? 'proteins'
-                      : type == 'carbs'
-                          ? 'carbs'
-                          : 'fats',
-                ),
-              ),
-              Container(width: 1, height: 38, color: Color(0xffE1E1E3)),
-            ],
-          ),
-          Divider(
-            height: 1,
-            color: Colors.black,
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget rowWithProgressBar(String Title, Proteins? item) {
     return Column(
@@ -853,8 +867,7 @@ class _DiaryViewState extends State<DiaryView> {
                       height: AppSize.s48,
                       onPressed:  () async {
 
-                        diaryCubit.sendSavedDiaryDataByDay();
-                        ApiProvider().sendSavedSleepTimes();
+                        diaryCubit.sendAndRefresh();
                         dynamic result = await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -879,8 +892,11 @@ class _DiaryViewState extends State<DiaryView> {
         SizedBox(height: AppSize.s20),
         InkWell(
           onTap: () {
+            print('diaryCubit.workDesc');
+            print(diaryCubit.workDesc);
+            print(diaryCubit.dayDetailsResponse?.data?.dayWorkouts?.workoutDesc);
             FocusScope.of(context).requestFocus(FocusNode());
-            showCustomBottomSheet(context, diaryCubit);
+            showCustomBottomSheet(context, diaryCubit,"workout");
             // if (diaryCubit.dayDetailsResponse!.data!.workoutDetailsType == "") {
             //   Fluttertoast.showToast(msg: "Nothing To Show ");
             // } else if (diaryCubit.dayDetailsResponse!.data!.workoutDetailsType ==
@@ -927,7 +943,7 @@ class _DiaryViewState extends State<DiaryView> {
         InkWell(
           onTap: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            showCustomBottomSheet(context, diaryCubit);
+            showCustomBottomSheet(context, diaryCubit,"notes");
           },
           child: Container(
             width: double.infinity,
@@ -1102,7 +1118,7 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
 
-  void showCustomBottomSheet(BuildContext context, DiaryCubit diaryCubit) {
+  void showCustomBottomSheet(BuildContext context, DiaryCubit diaryCubit,String type) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1110,14 +1126,15 @@ class _DiaryViewState extends State<DiaryView> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
-        return Padding(
+        return type=='workout'?Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
             left: 16,
             right: 16,
           ),
           child: Container(
-            height: deviceWidth*3/2,
+            height: diaryCubit.dayDetailsResponse!.data!.workoutDetailsType ==
+                "link"?AppSize.s350:deviceWidth*3/2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -1130,7 +1147,7 @@ class _DiaryViewState extends State<DiaryView> {
                       SvgPicture.asset(AppIcons.workoutDetails,color: AppColors.grey,),
                       SizedBox(width: AppSize.s8,),
                       CustomText(
-                        'Clinic notes',
+                        'Workout Details',
                         fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s16,
                       ),
 
@@ -1150,7 +1167,169 @@ class _DiaryViewState extends State<DiaryView> {
                               // );
                               Alerts.showToast("Enter Workout Description");
                             } else {
+
                               diaryCubit.updateWork().then((value) {
+                                NavigationService.goBack(context);
+                              });
+                            }
+                          },
+                          child: diaryCubit.workoutLoading.value
+                              ? CircularProgressIndicator()
+                              : CustomText("Save",color: AppColors.white,),
+                          color: AppColors.primary,
+                          padding: EdgeInsets.symmetric(horizontal: AppSize.s16,vertical: AppSize.s8)
+                          ,borderRadius: AppSize.s24,
+                        ),
+                      ),
+
+
+            ],
+                  ),
+                ),
+                diaryCubit.dayDetailsResponse!.data!.workoutDetailsType ==
+                    "link"?InkWell(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    if (diaryCubit.dayDetailsResponse!.data!.workoutDetailsType == "") {
+                      Fluttertoast.showToast(msg: "Nothing To Show ");
+                    } else if (diaryCubit.dayDetailsResponse!.data!.workoutDetailsType ==
+                        "link") {
+                      diaryCubit
+                          .launchURL(diaryCubit.dayDetailsResponse!.data!.workoutDetails);
+                    } else {
+                      diaryCubit
+                          .showPobUp(context,diaryCubit.dayDetailsResponse!.data!.workoutDetails!);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          "Workout Details",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(
+                            Icons.upload_sharp,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    height: 45,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 72,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Color(0xFF414042),
+                        borderRadius: BorderRadius.circular(50)),
+                  ),
+                ):Expanded(
+                      child: ScrollFader(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
+                            child: CustomText(
+                              diaryCubit.dayDetailsResponse!.data!.workoutDetails!,
+                              fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
+                            ),
+                          ),
+                        ),
+                      )
+                    ),
+
+                // Description input field
+                Container(
+                  color: Colors.white,
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 20),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomText(
+                              'Workout Description',
+                              fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s16,
+                            ),
+                            SizedBox(height: 8),
+                            TextFormField(
+                              maxLines: 5,
+                              initialValue: diaryCubit.workDesc,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onChanged: (text) {
+                                diaryCubit.workDesc = text;
+                              },
+                            ),
+                            SizedBox(height: 8),
+                            SizedBox(height: 16),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ):Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom, // Adjust for keyboard
+            left: 16,
+            right: 16,
+          ),
+          child: Container(
+            height: deviceWidth*3/2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // "Workout" Header
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(AppIcons.notes,color: AppColors.grey,),
+                      SizedBox(width: AppSize.s8,),
+                      CustomText(
+                        'Clinic notes',
+                        fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s16,
+                      ),
+
+                      Spacer(),
+                      TextButton(onPressed: (){
+                        NavigationService.goBack(context);
+                      }, child: CustomText(
+                        'cancel'
+                      )),
+                      Center(
+                        child: CustomButton(
+                          onPressed: () {
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            if (diaryCubit.clinicDesc?.trim() == "") {
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(content: Text("Enter Workout Description")),
+                              // );
+                              Alerts.showToast("Enter Daily notes");
+                            } else {
+
+                              diaryCubit.updateNote().then((value) {
                                 NavigationService.goBack(context);
                               });
                             }
@@ -1201,14 +1380,14 @@ class _DiaryViewState extends State<DiaryView> {
                             SizedBox(height: 8),
                             TextFormField(
                               maxLines: 5,
-                              initialValue: diaryCubit.workDesc,
+                              initialValue: diaryCubit.clinicDesc,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               onChanged: (text) {
-                                diaryCubit.workDesc = text;
+                                diaryCubit.clinicDesc = text;
                               },
                             ),
                             SizedBox(height: 8),
@@ -1275,7 +1454,7 @@ class _DiaryViewState extends State<DiaryView> {
           return Dialog(
             backgroundColor: AppColors.white.withOpacity(0.1),
             child: AddNewFood(
-              date: diaryCubit.apiDate.value,
+              date: diaryCubit.lastSelectedDate.value,
               list: food,
             ),
           );
@@ -1346,12 +1525,14 @@ class DeleteItemWidget extends StatefulWidget {
   final CaloriesDetails item;
   final DiaryCubit controller;
   final String type;
+  final int index;
 
   DeleteItemWidget({
     Key? key,
     required this.item,
     required this.controller,
     required this.type,
+    required this.index,
   }) : super(key: key);
 
   @override
@@ -1495,22 +1676,39 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
       //   },
       onTap: () async {
         if (widget.item.randomId != null) {
+          print(11);
           await widget.controller.deleteItem(
             id: null,
             randomId: widget.item.randomId!,
+            quality: widget.item.quality!,
             date: widget.controller.lastSelectedDate.value,
             type: widget.type,
             isCached: true,
           );
-        } else if (widget.item.id != null) {
+        }
+        else if (widget.item.id != null) {
           await widget.controller.deleteItem(
             id: widget.item.id!,
+            quality: widget.item.quality,
             randomId: null,
             date: widget.controller.lastSelectedDate.value,
             type: widget.type,
           );
-        }else{
-          print('still here');
+        }
+        else{
+          await widget.controller.deleteItemEmpty(
+            index: widget.index,
+            date: widget.controller.lastSelectedDate.value,
+            type: widget.type,
+          );
+          // await widget.controller.deleteItem(
+          //   id: null,
+          //   randomId: null,
+          //   date: widget.controller.lastSelectedDate.value,
+          //   type: widget.type,
+          // );
+          // print('still here');
+
         }
 
         // setState(() {

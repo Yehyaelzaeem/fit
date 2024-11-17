@@ -90,7 +90,7 @@ checkIfUserIsLogged();
           children: [
             SizedBox(width: deviceWidth,height: deviceHeight,),
             Positioned(
-              top: -64,
+              top: -100,
               child: Container(
                 padding: EdgeInsets.all(AppSize.s32),
                 width: deviceWidth,
@@ -134,13 +134,13 @@ checkIfUserIsLogged();
               children: <Widget>[
 
                 if(currentUser?.data == null)
-                  VerticalSpace(AppSize.s48),
+                  VerticalSpace(AppSize.s24),
                 
                 // if (prefs.getUserId() != null)
                 currentUser?.data == null
                     ? Padding(
                       padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: AppSize.s16),
+                      const EdgeInsets.symmetric( horizontal: AppSize.s16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +155,7 @@ checkIfUserIsLogged();
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal:AppSize.s16),
+                            padding: const EdgeInsets.symmetric(horizontal:AppSize.s16,vertical: AppSize.s24),
                             child: InkWell(
                                 onTap: (){
                                   NavigationService.goBack(context);
@@ -172,7 +172,7 @@ checkIfUserIsLogged();
                         child: Column(
                           children: [
                             SizedBox(
-                              height: AppSize.s56,
+                              height: AppSize.s32 - 2,
                             ),
 
                             Row(
@@ -198,7 +198,7 @@ checkIfUserIsLogged();
                                       },
                                     )),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal:AppSize.s16),
+                                  padding: const EdgeInsets.symmetric(horizontal:AppSize.s16,vertical: AppSize.s16),
                                   child: InkWell(
                                       onTap: (){
                                         NavigationService.goBack(context);
@@ -212,17 +212,17 @@ checkIfUserIsLogged();
                             // Text(prefs.getName()!)
                             ,
                             SizedBox(
-                              height: AppSize.s8,
+                              height: AppSize.s6,
                             ),
                              CustomText(
                                  '${currentUser?.data?.name}',
                                   fontSize: FontSize.s20,
                                fontWeight: FontWeightManager.semiBold,
                              ),
-                            CustomText('ID :  ${currentUser?.data?.id}',
+                            CustomText('ID : ${currentUser?.data?.id}',
                                 fontSize: FontSize.s16, fontWeight: FontWeightManager.regular, ),
                             SizedBox(
-                              height: 24,
+                              height: 30,
                             ),
                             // Row(
                             //   mainAxisAlignment: MainAxisAlignment.center,
@@ -244,7 +244,7 @@ checkIfUserIsLogged();
                 VerticalSpace(AppSize.s82),
 
                 if(currentUser?.data == null)
-                  VerticalSpace(AppSize.s48),
+                  VerticalSpace(AppSize.s64),
                 if (!globalIsIosInReview)
                   singleDrawerItem(
                       action: () {
@@ -257,7 +257,7 @@ checkIfUserIsLogged();
                 currentUser?.data == null
                     ? SizedBox()
                     : singleDrawerItem(
-                        title: Strings().profile,
+                        title: 'Profile',
                     image: 'assets/icons/user.svg',
                         action: () {
                           NavigationService.push(context,Routes.profile);
@@ -366,7 +366,7 @@ checkIfUserIsLogged();
                 //     }),
                 //Contact
                 singleDrawerItem(
-                    title: Strings().contactUs,
+                    title: 'Contact us',
                     image: 'assets/icons/contact.svg',
                 action: () async{
                 final result = await Connectivity().checkConnectivity();
@@ -406,8 +406,11 @@ checkIfUserIsLogged();
                           appDialog(
                             title: "Logout",
                             context: context,
-                            image: SvgPicture.asset("assets/icons/logout.svg",
-                                width: AppSize.s48, color: Colors.red),
+                            image: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset("assets/icons/logout.svg",
+                                  width: AppSize.s32, color: Colors.red),
+                            ),
                             cancelAction: () {
                               NavigationService.goBack(context);
                             },
@@ -469,7 +472,7 @@ checkIfUserIsLogged();
               SizedBox(width: AppSize.s12),
               Text(
                 title,
-                style: TextStyle(color: isDifferent?AppColors.grey:Colors.black, fontSize: AppSize.s16,fontWeight: FontWeight.w600),
+                style: TextStyle(color: isDifferent?AppColors.grey:Colors.black, fontSize: FontSize.s18,fontWeight: FontWeight.w600),
               ),
               SizedBox(width: AppSize.s24),
             ],

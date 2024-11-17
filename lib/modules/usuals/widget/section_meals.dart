@@ -14,14 +14,14 @@ import '../save_new_meal.dart';
 import '../views/make_a_meal_view.dart';
 
 class MealsSection extends StatefulWidget {
-  final String icon;
   final String title;
+  final Widget iconWidget;
   final String type;
   final UsualCubit usualCubit;
   final List<FoodDataItem> caloriesDetails;
   const MealsSection({super.key,
-    required this.icon,
     required this.title,
+    required this.iconWidget,
     required this.type,
     required this.usualCubit,
     required this.caloriesDetails,
@@ -60,12 +60,13 @@ class _MealsSectionState extends State<MealsSection> {
               initiallyExpanded: true,
               title: Row(
                 children: [
-                  Image.asset(widget.icon),
-                  HorizontalSpace(AppSize.s2),
+                  widget.iconWidget,
+                  HorizontalSpace(AppSize.s6),
                   SizedBox(
                       width: AppSize.s60,
-                      child: CustomText(widget.title,fontSize: FontSize.s16,fontWeight: FontWeightManager.medium,)),
-                  ],
+                      child: CustomText(widget.title,fontSize: FontSize.s14,fontWeight: FontWeight.w600,)),
+
+                ],
               ),
               children: [
 
@@ -75,19 +76,21 @@ class _MealsSectionState extends State<MealsSection> {
                       flex: 5,
                       child: Padding(
                         padding:  EdgeInsets.symmetric(horizontal:AppSize.s4),
-                        child: Container(
-                          padding: EdgeInsets.all(AppSize.s12),
-                          decoration: BoxDecoration(
-                              color: AppColors.customBlack,
-                              borderRadius: BorderRadius.circular(AppSize.s8)
-
-                          ),
-                          alignment: Alignment.center,
-                          child: CustomText(
-                            'Quantity',
-                            fontWeight: FontWeightManager.semiBold,
-                            color: Colors.white,
-                            fontSize: AppSize.s16,
+                        child: FittedBox(
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical:AppSize.s12,horizontal: AppSize.s12),
+                            decoration: BoxDecoration(
+                                color: AppColors.customBlack,
+                                borderRadius: BorderRadius.circular(AppSize.s8)
+                          
+                            ),
+                            alignment: Alignment.center,
+                            child: CustomText(
+                              'Quantity',
+                              fontWeight: FontWeightManager.semiBold,
+                              color: Colors.white,
+                              fontSize: AppSize.s16,
+                            ),
                           ),
                         ),
                       ),
@@ -138,6 +141,7 @@ class _MealsSectionState extends State<MealsSection> {
 
                   ],
                 ),
+
                 ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -145,7 +149,11 @@ class _MealsSectionState extends State<MealsSection> {
                     itemCount: widget.caloriesDetails.length,
                     itemBuilder: (context, indedx) {
                       return MealRowItem(item:widget.caloriesDetails[indedx],
-                        type:widget.type, usualCubit: widget.usualCubit,);
+                        type:widget.type, usualCubit: widget.usualCubit,refresh:(){
+                        setState(() {
+
+                        });
+                          });
                     }),
                 VerticalSpace(AppSize.s12),
 
@@ -187,10 +195,12 @@ class MealRowItem extends StatefulWidget {
   final FoodDataItem item;
   final String type;
   final UsualCubit usualCubit;
+  final VoidCallback refresh;
   const MealRowItem({super.key,
   required this.item,
     required this.type,
     required this.usualCubit,
+    required this.refresh,
   });
 
   @override
@@ -219,81 +229,90 @@ class _MealRowItemState extends State<MealRowItem> {
                       children: [
                         Expanded(
                           flex: 8,
-                          child: GestureDetector(
-                            onTap: () {
-                              showQualityDialog(
-                                widget.type == 'proteins'
-                                    ? widget.usualCubit.response.data!.proteins!
-                                    : widget.type == 'carbs'
-                                    ? widget.usualCubit.response.data!.carbs!
-                                    : widget.usualCubit.response.data!.fats!,
-                                widget.item,
-                                widget.type == 'proteins'
-                                    ? 'proteins'
-                                    : widget.type == 'carbs'
-                                    ? 'carbs'
-                                    : 'fats',
-                              );
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 2, vertical: 2),
-                              height: 34,
-                              child: TextFormField(
-                                textAlign: TextAlign.center,
-                                key: Key('foodName_${widget.item.id}_${widget.item.qty}'),
-                                decoration: InputDecoration(
-                                  hintText: '',
-                                  hintStyle: TextStyle(fontSize: 12),
-                                  labelStyle: TextStyle(fontSize: 12),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                    borderSide: BorderSide(
-                                        color: Colors.grey, width: 1.5),
+                          child: Padding(
+                            padding:  EdgeInsets.symmetric(horizontal:AppSize.s2),
+
+                            child: GestureDetector(
+                              onTap: () {
+                                showQualityDialog(
+                                  widget.type == 'proteins'
+                                      ? widget.usualCubit.response.data!.proteins!
+                                      : widget.type == 'carbs'
+                                      ? widget.usualCubit.response.data!.carbs!
+                                      : widget.usualCubit.response.data!.fats!,
+                                  widget.item,
+                                  widget.type == 'proteins'
+                                      ? 'proteins'
+                                      : widget.type == 'carbs'
+                                      ? 'carbs'
+                                      : 'fats',
+                                );
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 2),
+                                height: 34,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  key: Key('foodName_${widget.item.id}_${widget.item.qty}'),
+                                  decoration: InputDecoration(
+                                    hintText: '',
+                                    hintStyle: TextStyle(fontSize: 12),
+                                    labelStyle: TextStyle(fontSize: 12),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 2),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                          color: kColorPrimary, width: 2),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 1),
+                                    ),
+                                    contentPadding: EdgeInsets.only(
+                                        top: 10, bottom: 10, left: 2),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                    borderSide: BorderSide(
-                                        color: kColorPrimary, width: 1),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                    borderSide: BorderSide(
-                                        color: Colors.grey, width: 1.5),
-                                  ),
-                                  contentPadding: EdgeInsets.only(
-                                      top: 10, bottom: 10, left: 2),
-                                ),
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.4,
-                                    color: Colors.black),
-                                enableInteractiveSelection: false,
-                                initialValue: widget.item.qty == null
-                                    ? ''
-                                    : widget.item.qty.toString().replaceAll('.0', ''),
-                                keyboardType: Platform.isIOS
-                                    ? TextInputType.numberWithOptions(
-                                    signed: true, decimal: true)
-                                    : TextInputType.numberWithOptions(
-                                    decimal: true, signed: false),
-                                // keyboardType: TextInputType.number,
-                                textInputAction: TextInputAction.done,
-                                onFieldSubmitted: (text) {
-                                  if (text.isEmpty) return;
-                                  // if (text.isNum) {
-                                    widget.item.qty = text;
-                                    print(widget.item.qty);
-                                    for (var element in widget.usualCubit.foodItems) {
-                                      if (element.foodId == widget.item.id) {
-                                        double.parse(widget.item.qty) * widget.item.caloriePerUnit;
-                                        element.quantity = double.parse(widget.item.qty);
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      height: 1.4,
+                                      color: Colors.black),
+                                  enableInteractiveSelection: false,
+                                  initialValue: widget.item.qty == null
+                                      ? ''
+                                      : widget.item.qty.toString().replaceAll('.0', ''),
+                                  keyboardType: Platform.isIOS
+                                      ? TextInputType.numberWithOptions(
+                                      signed: true, decimal: true)
+                                      : TextInputType.numberWithOptions(
+                                      decimal: true, signed: false),
+                                  // keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.done,
+                                  onFieldSubmitted: (text) {
+                                    if (text.isEmpty) return;
+                                    // if (text.isNum) {
+                                      widget.item.qty = text;
+                                      print(widget.item.qty);
+                                      for (var element in widget.usualCubit.foodItems) {
+                                        if (element.foodId == widget.item.id) {
+                                          double.parse(widget.item.qty) * widget.item.caloriePerUnit;
+                                          element.quantity = double.parse(widget.item.qty);
+                                        }
                                       }
-                                    }
-                                    setState(() {});
-                                  // }
-                                },
+                                      setState(() {});
+                                    // }
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -373,11 +392,13 @@ class _MealRowItemState extends State<MealRowItem> {
                     ),
                   ),
                 ),
+
                 SizedBox(
                   width: AppSize.s32,
                   child: DeleteItemWidget(
                     controller: widget.usualCubit,
                     item: widget.item,
+                    refresh:widget.refresh,
                     type: widget.type == 'proteins'
                         ? 'proteins'
                         : widget.type == 'carbs'
@@ -403,7 +424,7 @@ class _MealRowItemState extends State<MealRowItem> {
       padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: Colors.grey, width: 1),
+        border: Border.all(color: Colors.black, width: 1),
         color: Colors.white,
       ),
       child: Row(
@@ -441,8 +462,6 @@ class _MealRowItemState extends State<MealRowItem> {
 
   void showQualityDialog(List<FoodDataItem> food, FoodDataItem item,
       String type) async {
-    print("Item Data => ${item.title}");
-    print("Item Data => ${item.id}");
     // show screen dialog
     result = await showDialog(
         context: context,

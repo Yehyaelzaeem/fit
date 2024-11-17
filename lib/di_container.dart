@@ -47,7 +47,7 @@ Future<void> init() async {
   // external
   final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
-  sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
+  sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true,)));
   sl.registerLazySingleton<Dio>(() => Dio());
   sl.registerLazySingleton<Connectivity>(() => Connectivity());
   sl.registerLazySingleton<PrettyDioLogger>(
@@ -85,7 +85,7 @@ Future<void> init() async {
 
   sl.registerFactory<HomeCubit>(() => HomeCubit(sl<HomeRepository>(),sl<DiaryRepository>()));
   sl.registerFactory<UsualCubit>(() => UsualCubit(sl<UsualRepository>()));
-  sl.registerFactory<DiaryCubit>(() => DiaryCubit(sl<DiaryRepository>(),sl<TimeSleepCubit>(),sl<OtherCaloriesRepository>(),));
+  sl.registerFactory<DiaryCubit>(() => DiaryCubit(sl<DiaryRepository>(),sl<TimeSleepCubit>(),sl<OtherCaloriesRepository>(),sl<UsualRepository>(),));
   sl.registerFactory<TimeSleepCubit>(() => TimeSleepCubit(sl<TimeSleepRepository>(),));
   sl.registerFactory<MyMealsCubit>(() => MyMealsCubit(sl<MyMealsRepository>()));
   sl.registerFactory<MakeMealsCubit>(() => MakeMealsCubit(sl<MakeMealsRepository>()));

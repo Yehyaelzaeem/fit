@@ -157,6 +157,7 @@ class DiaryEntry {
   List<String> createdAt;
   int? workout;
   String? workoutDesc;
+  String? clinicDesc;
 
   DiaryEntry({
     required this.date,
@@ -166,6 +167,7 @@ class DiaryEntry {
     required this.createdAt,
     this.workout,
     this.workoutDesc,
+    this.clinicDesc,
   });
 
   Map<String, dynamic> toJson() {
@@ -177,6 +179,7 @@ class DiaryEntry {
       'created_at': createdAt,
       'workout': workout,
       'workout_desc': workoutDesc,
+      'clinic_desc': clinicDesc,
     };
   }
 

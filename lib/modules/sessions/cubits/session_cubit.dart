@@ -40,6 +40,21 @@ class SessionCubit extends Cubit<SessionStates> {
     );
   }
 
+  Future<void> getSessionsAll() async {
+
+    final result = await _sessionRepository.getSessions();
+
+    result.fold(
+          (failure) => emit(GetSessionFailureState(failure)),
+          (session) {
+            sessionResponse = session;
+            sessionResponse!.data!.forEach((element) {
+              fetchSessionDetails(element.id);
+            }); 
+      },
+    );
+  }
+
   Future<void> fetchSessionDetails(int? id) async {
     emit(GetSessionDetailsLoadingState());
 
@@ -48,7 +63,6 @@ class SessionCubit extends Cubit<SessionStates> {
             (failure) => emit(GetSessionDetailsFailureState(failure)),
             (sessionDetails) {
           sessionDetailsResponse = sessionDetails;
-          print("ssssssssss ${sessionDetailsResponse?.data?.toJson()}");
           emit(GetSessionDetailsSuccessState());
         },
       );

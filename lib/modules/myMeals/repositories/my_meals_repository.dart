@@ -89,14 +89,7 @@ class MyMealsRepository extends BaseRepository {
         deviceId = '${iosInfo.name}${iosInfo.model}${userId}';
       }
     }
-    isGuest
-        ? Echo('Guest deviceId = ${deviceId.replaceAll(' ', '')}')
-        : Echo('User deviceId = ${deviceId.replaceAll(' ', '')}');
-    print("1 user id $userId");
-    print("2 is guest $isGuest");
-    print(
-        "3 is guest saved? $isGuestLogin + ${await SharedHelper().readString(CachingKey.PHONE)}");
-    print("3 is guest saved? $isGuestLogin + ${phone}");
+
     return deviceId.replaceAll(' ', '');
   }
 

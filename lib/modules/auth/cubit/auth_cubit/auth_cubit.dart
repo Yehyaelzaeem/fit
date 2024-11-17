@@ -115,9 +115,17 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold(
       (failure) => emit(state.copyWith(failure: failure, httpRequestState: HttpRequestState.failure)),
       (userModel) {
-        currentUser = userModel;
-        emit(state.copyWith(user: userModel, httpRequestState: HttpRequestState.success));
-      },
+
+        if(userModel.success??false){
+          currentUser = userModel;
+
+
+          emit(state.copyWith(user: userModel, httpRequestState: HttpRequestState.success));
+
+        }else{
+          emit(state.copyWith(failure: Failure(userModel.code??0, userModel.message??'Error'), httpRequestState: HttpRequestState.failure));
+        }
+        },
     );
   }
 

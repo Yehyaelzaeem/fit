@@ -160,6 +160,7 @@ import '../../../core/services/api_provider.dart';
 import '../../../core/utils/alerts.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/text.dart';
+import '../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../core/view/widgets/page_lable.dart';
 import '../../home/cubits/home_cubit.dart';
 import '../../home/view/widgets/home_appbar.dart';
@@ -191,9 +192,10 @@ class _FaqViewState extends State<FaqView> {
     return Scaffold(
         body: ListView(
       children: [
-        HomeAppbar(type: null),
-        SizedBox(height: 12),
-        PageLable(name: "FAQ"),
+        FitNewAppBar(
+          title: "FAQ",
+        ),
+
         SizedBox(height: 12),
         BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {
@@ -203,10 +205,7 @@ class _FaqViewState extends State<FaqView> {
 
           },
           builder: (context, state) => state is FaqLoading
-              ? Padding(
-                padding: const EdgeInsets.symmetric(vertical: 100),
-                child: Center(child: CircularLoadingWidget()),
-              )
+              ? Center(child: CircularLoadingWidget())
             : ListView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

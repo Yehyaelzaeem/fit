@@ -32,6 +32,8 @@ class ProfileRepository extends BaseRepository {
   // }
 
   Future<Either<Failure, UserResponse>> getCurrentUser() async {
+    print('profileget');
+
     return super.call<UserResponse>(
       httpRequest: () async {
         String deviceId = await _getDeviceInfo();
@@ -40,8 +42,11 @@ class ProfileRepository extends BaseRepository {
 
         final result = await Connectivity().checkConnectivity();
         print('profileget');
+        print('cachedUser');
 
         if (result != ConnectivityResult.none) {
+          print('cachedUser.da');
+
           final url = isGuestLogin
               ? "/profile?device_id=$deviceId&fcm_token=$deviceToken"
               : "/profile?fcm_token=$deviceToken";
@@ -83,8 +88,10 @@ class ProfileRepository extends BaseRepository {
   Future<UserResponse?> _readUserLocally() async {
 
     String? cachedData = await _cacheClient.get(StorageKeys.USER);
+    print ('jsonDecode(cachedData)');
 
     if (cachedData != null) {
+      print (jsonDecode(cachedData));
       return UserResponse.fromJson(jsonDecode(cachedData));
     }
     return null;
@@ -131,14 +138,6 @@ class ProfileRepository extends BaseRepository {
         deviceId = '${iosInfo.name}${iosInfo.model}${userId}';
       }
     }
-    isGuest
-        ? Echo('Guest deviceId = ${deviceId.replaceAll(' ', '')}')
-        : Echo('User deviceId = ${deviceId.replaceAll(' ', '')}');
-    print("1 user id $userId");
-    print("2 is guest $isGuest");
-    print(
-        "3 is guest saved? $isGuestLogin + ${await SharedHelper().readString(CachingKey.PHONE)}");
-    print("3 is guest saved? $isGuestLogin + ${phone}");
     return deviceId.replaceAll(' ', '');
   }
 

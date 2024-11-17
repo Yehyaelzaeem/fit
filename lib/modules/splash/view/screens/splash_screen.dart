@@ -1,22 +1,15 @@
 import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
-import '../../../../config/localization/l10n/l10n.dart';
 import '../../../../config/navigation/navigation_services.dart';
 import '../../../../config/navigation/routes.dart';
 import '../../../../core/resources/resources.dart';
-import '../../../../core/services/error/error_handler.dart';
-import '../../../../core/utils/alerts.dart';
-import '../../../../core/utils/shared_helper.dart';
 import '../../../auth/cubit/auth_cubit/auth_cubit.dart';
-import '../../../home/cubits/home_cubit.dart';
 import '../../../profile/cubits/profile_cubit.dart';
-import '../../../usuals/cubits/usual_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -34,12 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     authCubit = BlocProvider.of<AuthCubit>(context);
     profileCubit = BlocProvider.of<ProfileCubit>(context);
-    // Future.delayed(
-    //   Time.t2s,
-    //       () async {
-    //         fetchAndRedirect();
-    //       },
-    // );
+    Future.delayed(
+      Time.t2_5s,
+          () async {
+            fetchAndRedirect();
+          },
+    );
   }
 
   @override
@@ -48,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> fetchAndRedirect() async {
-    print(authCubit.isAuthed);
+
 
     if (authCubit.isAuthed) {
       profileCubit.getProfile();
@@ -65,12 +58,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.PRIMART_COLOR,
-      child: Scaffold(
-          body: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.white,
+    return Scaffold(
+              backgroundColor: AppColors.white,
               body: Column(
                 children: <Widget>[
                   Expanded(
@@ -78,22 +67,24 @@ class _SplashScreenState extends State<SplashScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AnimationConfiguration.staggeredList(
-                            position: 1,
-                            duration: Duration(seconds: 1),
-                            child: SlideAnimation(
-                              verticalOffset: 375.0,
-                              child: FadeInAnimation(
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 100),
-                                  child: Image.asset(
-                                    AppImages.kLogoColumn,
-                                    width: double.infinity,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          Image.asset(AppIcons.splashIcon),
+
+                          // AnimationConfiguration.staggeredList(
+                          //   position: 1,
+                          //   duration: Duration(seconds: 1),
+                          //   child: SlideAnimation(
+                          //     verticalOffset: 375.0,
+                          //     child: FadeInAnimation(
+                          //       child: Container(
+                          //         margin: EdgeInsets.symmetric(horizontal: 100),
+                          //         child: Image.asset(
+                          //           AppImages.kLogoColumn,
+                          //           width: double.infinity,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                           // AnimationConfiguration.staggeredList(
                           //   position: 1,
                           //   duration: Duration(seconds: 2),
@@ -107,36 +98,36 @@ class _SplashScreenState extends State<SplashScreen> {
                           //     ),
                           //   ),
                           // ),
-                          Container(
-                            width: deviceWidth,
-                            child: Center(
-                              child: DefaultTextStyle(
-                                style: const TextStyle(
-                                    fontSize: 18.0,
-                                    fontFamily: 'appFont',
-                                    color: Colors.white),
-                                child: AnimatedTextKit(
-                                  totalRepeatCount: 1,
-                                  animatedTexts: [
-                                    TyperAnimatedText('                     ',
-                                        speed: Duration(milliseconds: 45)),
-                                  ],
-                                  onFinished: () {
-                                    fetchAndRedirect();
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Container(
+                          //   width: deviceWidth,
+                          //   child: Center(
+                          //     child: DefaultTextStyle(
+                          //       style: const TextStyle(
+                          //           fontSize: 18.0,
+                          //           fontFamily: 'appFont',
+                          //           color: Colors.white),
+                          //       child: AnimatedTextKit(
+                          //         totalRepeatCount: 1,
+                          //         animatedTexts: [
+                          //           TyperAnimatedText('                     ',
+                          //               speed: Duration(milliseconds: 45)),
+                          //         ],
+                          //         onFinished: () {
+                          //           fetchAndRedirect();
+                          //         },
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          )),
-    );
+            )
+
+    ;
   }
 
   navigateNextPage() async {

@@ -13,7 +13,7 @@ class CaloriesTypeItemWidget extends StatelessWidget {
 final UsualProteins usualProteins;
   final String caloriesTypeName;
   final String mealCalories;
-  final String icon;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +52,12 @@ final UsualProteins usualProteins;
                     mainAxisSize: MainAxisSize.min,
                     children: [
 
-                      Image.asset(icon),
+                      icon,
                       HorizontalSpace(AppSize.s2),
                       kTextbody("${caloriesTypeName}", bold: true,align: TextAlign.start),
                     ],
                   )),
-                  Expanded(child: kTextbody("(${"${usualProteins.calories.toStringAsFixed(2)}"} Cal.)",align: TextAlign.end)),
+                  Expanded(child: kTextbody("(${"${usualProteins.calories!=null?usualProteins.calories.toStringAsFixed(2):0.0}"} Cal.)",align: TextAlign.end)),
                 ],
               ),
               expanded: StaticBar(type: caloriesTypeName.toLowerCase(), usualProteins: usualProteins,),

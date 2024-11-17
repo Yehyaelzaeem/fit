@@ -51,12 +51,12 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
     super.initState();
     diaryCubit = BlocProvider.of<DiaryCubit>(context);
     otherCaloriesCubit = BlocProvider.of<OtherCaloriesCubit>(context);
-    diaryCubit.fetchOtherCalories();
+    // diaryCubit.fetchOtherCalories();
   }
   // MyOtherCaloriesResponse diaryCubit.otherCaloriesResponse = MyOtherCaloriesResponse();
 
   void getDiaryData() async {
-    await diaryCubit.fetchOtherCalories().then((value) {
+    await diaryCubit.fetchOtherCalories(isChangeState: true).then((value) {
       // if (value.success == true) {
       //   setState(() {
       //     diaryCubit.otherCaloriesResponse = value;
@@ -131,10 +131,19 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                   ),
 
                   CategoryTile(
-                    icon: AppIcons.proteins,
                     title: "Proteins",
                     type: 1,
-
+                    icon: Container(
+                      width: 35,
+                      height: 28,
+                      decoration: ShapeDecoration(
+                        color: Color(0x4C7FC902),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Image.asset(AppImages.proteins,width: 20,
+                        height: 20,),
+                    ),
                   ),
 
 
@@ -163,13 +172,25 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       }),
                   SizedBox(height: 20),
                   CategoryTile(
-                    icon: AppIcons.carbs,
+                    icon: Container(
+                      width: 35,
+                      height: 28,
+                      decoration: ShapeDecoration(
+                        color: Color(0xFFB9E5F9),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Image.asset(
+                        AppImages.carbs,
+                        width: 20,
+                        height: 20,),
+                    ),
                     title: "Carbs",
                     type: 2,
                   ),
 
                   staticBar(),
-                  diaryCubit.otherCaloriesResponse.data!.carbs!.isEmpty
+                  diaryCubit.otherCaloriesResponse.data?.carbs?.isEmpty != false
                       ? Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -191,12 +212,22 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       }),
                   SizedBox(height: 20),
                   CategoryTile(
-                    icon: AppIcons.fats,
+                    icon: Container(
+                      width: 35,
+                      height: 28,
+                      decoration: ShapeDecoration(
+                        color: Color(0x3FCFC928),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Image.asset(AppImages.fats,width: 20,
+                        height: 20,),
+                    ),
                     title: "Fats",
                     type: 3,
                   ),
                   staticBar(),
-                  diaryCubit.otherCaloriesResponse.data!.fats!.isEmpty
+                  diaryCubit.otherCaloriesResponse.data?.fats?.isEmpty != false
                       ? Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
@@ -310,13 +341,13 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                       AppIcons.trashSvg,
                       width: 24),
                 ),
-                SizedBox(width: 4),
+                SizedBox(width: 10),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSize.s12, vertical: 0),
-            child: Divider(thickness: 2, color: AppColors.lightGrey),
+            padding: const EdgeInsets.symmetric(horizontal: AppSize.s8, vertical: 0),
+            child: Divider(thickness: 2, color: AppColors.lightGrey,height: 12,),
           ),
         ],
       ),
@@ -341,8 +372,6 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
 
             // final controllerDiary = Get.find<DiaryController>(tag: 'diary');
             Proteins a = result;
-            print("MYNEW");
-            print(a.toJson());
             ItemResponse itemResponse =calculateItemDetails(a.qty!,int.parse(a.calories));
             print(itemResponse.caloriesPerUnit);
             print(itemResponse.units);
@@ -466,7 +495,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
               ),
             ),
             SizedBox(
-              width: 4,
+              width: 8,
             ),
           ],
         ));

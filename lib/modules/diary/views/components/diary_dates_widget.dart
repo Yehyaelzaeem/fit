@@ -1,11 +1,9 @@
 import 'package:app/core/view/views.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/resources/resources.dart';
-import '../../../../core/view/widgets/default/text.dart';
 import '../../cubits/diary_cubit.dart';
 
 class DiaryDatesWidget extends StatefulWidget {
@@ -106,86 +104,104 @@ class _DiaryDatesWidgetState extends State<DiaryDatesWidget> {
         children: [
 
 
+          // DayTab(
+          //   isSelected: diaryCubit.chosenDay=='yesterday',
+          //   day: 'Yesterday',
+          //   date: DateTime.now().subtract(Duration(days: 1)),
+          //   onTap: ()async{
+          //     diaryCubit.chosenDay='yesterday';
+          //     final result = await Connectivity().checkConnectivity();
+          //
+          //
+          //     if (result != ConnectivityResult.none) {
+          //
+          //       diaryCubit
+          //           .getDiaryData(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now().subtract(Duration(days: 1))), isSending);
+          //       diaryCubit.sendSavedSleepTimes();
+          //
+          //       diaryCubit.sendSavedDiaryDataByDay();
+          //       diaryCubit.refreshDiaryDataLive(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now().subtract(Duration(days: 1))));
+          //     }else{
+          //       diaryCubit
+          //           .getDiaryData(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now().subtract(Duration(days: 1))), isSending);
+          //     }
+          //   },
+          //
+          // ),
           DayTab(
-            isSelected: diaryCubit.chosenDay=='yesterday',
+            isSelected: diaryCubit.chosenDay == 'yesterday',
             day: 'Yesterday',
             date: DateTime.now().subtract(Duration(days: 1)),
-            onTap: ()async{
-              diaryCubit.chosenDay='yesterday';
-              final result = await Connectivity().checkConnectivity();
-
-
-              if (result != ConnectivityResult.none) {
-
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![1].date!, isSending);
-                diaryCubit.sendSavedSleepTimes();
-
-                diaryCubit.sendSavedDiaryDataByDay();
-                diaryCubit.refreshDiaryDataLive(
-                    diaryCubit.dayDetailsResponse!.data!.days![1].date!);
-              }else{
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![1].date!, isSending);
-              }
-            },
-
+            onTap: () => diaryCubit.switchDay('yesterday'),
           ),
           DayTab(
-            isSelected: diaryCubit.chosenDay=='today',
-              day: 'Today',
-              date: DateTime.now(),
-            onTap:()async{
-              final result = await Connectivity().checkConnectivity();
-              diaryCubit.chosenDay='today';
-
-
-              if (result != ConnectivityResult.none) {
-
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![0].date!, isSending);
-                diaryCubit.sendSavedDiaryDataByDay();
-
-                diaryCubit.sendSavedSleepTimes();
-
-                diaryCubit.refreshDiaryDataLive(
-                    diaryCubit.dayDetailsResponse!.data!.days![0].date!);
-              }else{
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![0].date!, false);
-              }
-            }
+            isSelected: diaryCubit.chosenDay == 'today',
+            day: 'Today',
+            date: DateTime.now(),
+            onTap: () => diaryCubit.switchDay('today'),
           ),
           DayTab(
-            isSelected: diaryCubit.chosenDay=='tomorrow',
+            isSelected: diaryCubit.chosenDay == 'tomorrow',
             day: 'Tomorrow',
             date: DateTime.now().add(Duration(days: 1)),
-            onTap: ()async{
-              diaryCubit.chosenDay='tomorrow';
-              final result = await Connectivity().checkConnectivity();
-
-
-              if (result != ConnectivityResult.none) {
-
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![2].date!, isSending);
-                diaryCubit.sendSavedSleepTimes();
-
-                diaryCubit.sendSavedDiaryDataByDay();
-                diaryCubit.refreshDiaryDataLive(
-                    diaryCubit.dayDetailsResponse!.data!.days![2].date!);
-              }else{
-                diaryCubit
-                    .getDiaryData(
-                    diaryCubit.dayDetailsResponse!.data!.days![2].date!, isSending);
-              }
-            },
+            onTap: () => diaryCubit.switchDay('tomorrow'),
           ),
+          // DayTab(
+          //   isSelected: diaryCubit.chosenDay=='today',
+          //     day: 'Today',
+          //     date: DateTime.now(),
+          //   onTap:()async{
+          //     final result = await Connectivity().checkConnectivity();
+          //     diaryCubit.chosenDay='today';
+          //
+          //
+          //     if (result != ConnectivityResult.none) {
+          //
+          //       diaryCubit
+          //           .getDiaryData(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now()), isSending);
+          //       diaryCubit.sendSavedDiaryDataByDay();
+          //
+          //       diaryCubit.sendSavedSleepTimes();
+          //
+          //       diaryCubit.refreshDiaryDataLive(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now()));
+          //     }else{
+          //       diaryCubit
+          //           .getDiaryData(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now()), false);
+          //     }
+          //   }
+          // ),
+          // DayTab(
+          //   isSelected: diaryCubit.chosenDay=='tomorrow',
+          //   day: 'Tomorrow',
+          //   date: DateTime.now().add(Duration(days: 1)),
+          //   onTap: ()async{
+          //     diaryCubit.chosenDay='tomorrow';
+          //     final result = await Connectivity().checkConnectivity();
+          //
+          //
+          //     if (result != ConnectivityResult.none) {
+          //
+          //       diaryCubit
+          //           .getDiaryData(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now().add(Duration(days: 1))), isSending);
+          //       diaryCubit.sendSavedSleepTimes();
+          //
+          //       diaryCubit.sendSavedDiaryDataByDay();
+          //       diaryCubit.refreshDiaryDataLive(
+          //           DateFormat("yyyy-MM-dd").format(DateTime.now().add(Duration(days: 1))));
+          //     }else{
+          //       diaryCubit
+          //           .getDiaryData(
+          //       DateFormat("yyyy-MM-dd").format(DateTime.now().add(Duration(days: 1))), isSending);
+          //     }
+          //   },
+          // ),
 
 
         ],

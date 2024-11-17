@@ -78,6 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SafeArea(
           child: Scaffold(
             extendBody: true,
+            backgroundColor: AppColors.offWhite,
             // drawer: HomeDrawer(),
             body: Obx(
                   () => Column(
@@ -102,7 +103,12 @@ class _HomeScreenState extends State<HomeScreen> {
     FocusScope.of(context).requestFocus(FocusNode());
     appDialog(
       title: 'Are you sure you want to exit?',
-      image: SvgPicture.asset(AppIcons.exit, width: AppSize.s48, color: AppColors.yellow),
+      // image: Icon(Icons.warning_amber_rounded, size: 50, color: Colors.grey),
+
+      image: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SvgPicture.asset(AppIcons.exit, width: AppSize.s36, color: AppColors.yellow),
+      ),
       cancelAction: () {
         NavigationService.goBack(context);
         FocusScope.of(context).requestFocus(FocusNode());

@@ -15,6 +15,8 @@ import '../../../../core/view/widgets/default/edit_text.dart';
 import '../../../../core/view/widgets/default/password_edit_text.dart';
 import '../../../../core/view/widgets/default/text.dart';
 import '../../../../core/view/widgets/status_bar.dart';
+import '../../../sessions/cubits/session_cubit.dart';
+import '../../../timeSleep/cubits/time_sleep_cubit.dart';
 import '../../cubit/auth_cubit/auth_cubit.dart';
 import '../../models/requests/login_body.dart';
 
@@ -221,7 +223,9 @@ class _LoginScreenState extends State<LoginScreen> {
     Alerts.showToast(state.failure!.message);
     }
     if (state.httpRequestState == HttpRequestState.success) {
+
     NavigationService.pushReplacementAll(context, Routes.homeScreen);
+
     }
     },
     buildWhen: (prevState, state) => state.authRequestType == AuthRequestType.login,

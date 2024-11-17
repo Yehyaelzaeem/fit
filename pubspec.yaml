@@ -78,6 +78,10 @@ dependencies:
   sn_progress_dialog: ^1.1.3
   percent_indicator: ^4.2.3
   simple_time_range_picker: ^0.0.5
+  flutter_time_picker_spinner: ^2.0.0
+  flutter_analog_clock: ^1.0.3
+  smooth_page_indicator: ^1.1.0
+
 
 #H
 

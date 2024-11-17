@@ -12,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/resources/app_colors.dart';
 import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
@@ -29,7 +30,7 @@ State<SubscribeView> createState() => _MySubscribeViewState();
 
 class _MySubscribeViewState extends State<SubscribeView> {
   late final SubscribeCubit subscribeCubit;
-  PageController pc = new PageController(viewportFraction: 0.75);
+  PageController pc = new PageController(viewportFraction: 0.8);
 
   @override
   void initState() {
@@ -156,6 +157,7 @@ class _MySubscribeViewState extends State<SubscribeView> {
                       );
                     }),
               ),
+
               subscribeCubit
                   .servicesResponse
                   .data?[subscribeCubit.serviceIndex]
@@ -163,313 +165,334 @@ class _MySubscribeViewState extends State<SubscribeView> {
                   ?.length !=
                   0
                   ? Expanded(
-                child: AnimatedBuilder(
-                  animation: pc,
-                  builder: (context, child) {
-                    final payment = subscribeCubit
-                        .servicesResponse
-                        .data?[subscribeCubit.serviceIndex]
-                        .packages;
-                    return PageView.builder(
-                      controller: pc,
-                      onPageChanged: (value) {
-                        subscribeCubit.currentPageIndex =
-                            pc.page!.round();
-                      },
-                      itemCount: subscribeCubit
-                          .servicesResponse
-                          .data?[subscribeCubit.serviceIndex]
-                          .packages
-                          ?.length,
-                      itemBuilder: (ctx, i) {
-                        return Container(
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                              BorderRadius.circular(32),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey[200]!,
-                                  offset: Offset(3, 3),
-                                  spreadRadius: 6,
-                                  blurRadius: 6,
-                                )
-                              ]),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: deviceHeight / 14),
-                          width: double.infinity,
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: AnimatedBuilder(
+                        animation: pc,
+                        builder: (context, child) {
+                          final payment = subscribeCubit
+                              .servicesResponse
+                              .data?[subscribeCubit.serviceIndex]
+                              .packages;
+                          return PageView.builder(
+                            controller: pc,
+                            onPageChanged: (value) {
+                              subscribeCubit.currentPageIndex =
+                                  pc.page!.round();
+                            },
+                            itemCount: subscribeCubit
+                                .servicesResponse
+                                .data?[subscribeCubit.serviceIndex]
+                                .packages
+                                ?.length,
+                            itemBuilder: (ctx, i) {
+                              return Container(
                                 decoration: BoxDecoration(
+                                    color: Colors.white,
                                     borderRadius:
-                                    BorderRadius.only(
-                                      topLeft:
-                                      Radius.circular(32),
-                                      topRight:
-                                      Radius.circular(32),
-                                    ),
-                                    color: Colors.grey[900]),
-                                child: Row(
+                                    BorderRadius.circular(32),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey[200]!,
+                                        offset: Offset(3, 3),
+                                        spreadRadius: 6,
+                                        blurRadius: 6,
+                                      )
+                                    ]),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: AppSize.s40),
+                                width: double.infinity,
+                                child: Column(
                                   children: [
-                                    Spacer(),
-                                    Column(
-                                      children: [
-                                        SizedBox(height: 8),
-                                        Row(
-                                          children: [
-                                            kTextHeader(
-                                                "${subscribeCubit
-                                                    .servicesResponse
-                                                    .data?[subscribeCubit
-                                                    .serviceIndex]
-                                                    .packages?[i].price ??
-                                                    ""}",
-                                                size: 22,
-                                                bold: true,
-                                                white: true),
-                                            kTextHeader(
-                                                subscribeCubit
-                                                    .servicesResponse
-                                                    .data?[subscribeCubit
-                                                    .serviceIndex]
-                                                    .packages?[
-                                                i]
-                                                    .currency ??
-                                                    "",
-                                                color:
-                                                kColorPrimary,
-                                                bold: true,
-                                                paddingV: 0,
-                                                paddingH: 0),
-                                          ],
-                                        ),
-                                        kTextHeader(
-                                            subscribeCubit
-                                                .servicesResponse
-                                                .data?[subscribeCubit
-                                                .serviceIndex
-                                            ]
-                                                .packages?[
-                                            i]
-                                                .duration ??
-                                                "",
-                                            white: true,
-                                            paddingV: 12)
-                                      ],
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.only(
+                                            topLeft:
+                                            Radius.circular(32),
+                                            topRight:
+                                            Radius.circular(32),
+                                          ),
+                                          color: Colors.grey[900]),
+                                      child: Row(
+                                        children: [
+                                          Spacer(),
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 8),
+                                              Row(
+                                                children: [
+                                                  kTextHeader(
+                                                      "${subscribeCubit
+                                                          .servicesResponse
+                                                          .data?[subscribeCubit
+                                                          .serviceIndex]
+                                                          .packages?[i].price ??
+                                                          ""}",
+                                                      size: 22,
+                                                      bold: true,
+                                                      white: true),
+                                                  kTextHeader(
+                                                      subscribeCubit
+                                                          .servicesResponse
+                                                          .data?[subscribeCubit
+                                                          .serviceIndex]
+                                                          .packages?[
+                                                      i]
+                                                          .currency ??
+                                                          "",
+                                                      color:
+                                                      kColorPrimary,
+                                                      bold: true,
+                                                      paddingV: 0,
+                                                      paddingH: 0),
+                                                ],
+                                              ),
+                                              kTextHeader(
+                                                  subscribeCubit
+                                                      .servicesResponse
+                                                      .data?[subscribeCubit
+                                                      .serviceIndex
+                                                  ]
+                                                      .packages?[
+                                                  i]
+                                                      .duration ??
+                                                      "",
+                                                  white: true,
+                                                  paddingV: 12)
+                                            ],
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
                                     ),
-                                    Spacer(),
+                                    Expanded(
+                                      child: Html(
+                                        data: subscribeCubit
+                                            .servicesResponse
+                                            .data?[subscribeCubit
+                                            .serviceIndex
+                                        ]
+                                            .packages?[i]
+                                            .description ??
+                                            "",
+                                      ),
+                                    ),
+                                    if (payment?[i].visaPayments !=
+                                        null &&
+                                        payment?[i].visaPayments ==
+                                            true)
+                                      subscribeCubit.isPaymentVisaClicked
+                                          ==
+                                          false
+                                          ? kButton("Payment",
+                                          color: kColorPrimary,
+                                          func: subscribeCubit
+                                              .servicesResponse
+                                              .data?[subscribeCubit
+                                              .serviceIndex
+                                          ]
+                                              .packages?[i]
+                                              .paymentStatus ==
+                                              true
+                                              ?
+                                              () async {
+                                            if (await subscribeCubit
+                                                .getFromCash() ==
+                                                "haveAllData") {
+                                              subscribeCubit
+                                                  .makePackagePayment(
+                                                  name: currentUser!.data!.name??'',
+                                                  phone: currentUser!.data!.phone??'',
+                                                  lastName: currentUser!.data!.lastName??'',
+                                                  email: currentUser!.data!.email??'',
+                                                  packageId: subscribeCubit
+                                                      .servicesResponse
+                                                      .data![subscribeCubit
+                                                      .serviceIndex
+                                                  ]
+                                                      .packages![
+                                                  i]
+                                                      .id!,
+                                                  payMethod:
+                                                  "visa",
+                                                  isGuest: false)
+                                                  .then((value) {
+                                                Navigator
+                                                    .pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        WebViewScreen(
+                                                          url: subscribeCubit
+                                                              .packagePaymentResponse
+                                                              .data!
+                                                              .paymentUrl!,
+                                                          packageId:
+                                                          subscribeCubit
+                                                              .packagePaymentResponse
+                                                              .data!
+                                                              .id!,
+                                                        ),
+                                                  ),
+                                                );
+                                              });
+                                            } else if (await subscribeCubit
+                                                .getFromCash() ==
+                                                "noLastName") {
+                                              NavigationService.push(context,
+                                                  Routes.editProfileScreen);
+                                            } else {
+                                              _navigateAndDisplaySelection(
+                                                  context: context,
+                                                  i: i);
+                                            }
+                                          }
+                                              : () {
+                                            Fluttertoast
+                                                .showToast(
+                                                msg:
+                                                "  Payment is deactivated  ");
+                                          }
+                                      )
+                                          : Container(
+                                        height: 40,
+                                        child: Lottie.asset(
+                                            'assets/loader.json'),
+                                      ),
+                                    if (Platform.isIOS &&
+                                        payment?[i]
+                                            .applePayPayments !=
+                                            null &&
+                                        payment?[i]
+                                            .applePayPayments ==
+                                            true)
+                                      subscribeCubit.isPaymentAppleClicked
+                                          ==
+                                          false
+                                          ? kButton("Check out with",
+                                          color: Colors.black,
+                                          func: subscribeCubit
+                                              .servicesResponse
+                                              .data?[subscribeCubit
+                                              .serviceIndex
+                                          ]
+                                              .packages?[i]
+                                              .paymentStatus ==
+                                              true
+                      
+                                              ? () async {
+                                            if (await subscribeCubit
+                                                .getFromCash() ==
+                                                "haveAllData") {
+                                              subscribeCubit
+                                                  .makePackagePayment(
+                                                  name: currentUser!.data!.name??'',
+                                                  phone: currentUser!.data!.phone??'',
+                                                  lastName: currentUser!.data!.lastName??'',
+                                                  email: currentUser!.data!.email??'',
+                      
+                                                  packageId: subscribeCubit
+                                                      .servicesResponse
+                                                      .data![subscribeCubit
+                                                      .serviceIndex
+                                                  ]
+                                                      .packages![
+                                                  i]
+                                                      .id!,
+                                                  payMethod:
+                                                  "apple_pay",
+                                                  isGuest: false
+                                              )
+                                                  .then((value) {
+                                                ///TODO HandleApplePay
+                      
+                      
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                    " HandleApplePay ");
+                                              });
+                                            } else if (await subscribeCubit
+                                                .getFromCash() ==
+                                                "noLastName") {
+                                              NavigationService.push(context,
+                                                  Routes.editProfileScreen);
+                                            } else {
+                                              _navigateAndDisplaySelection(
+                                                  context: context,
+                                                  i: i);
+                                            }
+                                          } : () {
+                                            Fluttertoast
+                                                .showToast(
+                                                msg:
+                                                "  Payment is deactivated  ");
+                                          },
+                                          child: Row(
+                                            children: [
+                                              const Spacer(),
+                                              Center(
+                                                child: Padding(
+                                                  padding:
+                                                  const EdgeInsets
+                                                      .only(
+                                                      left:
+                                                      16),
+                                                  child: Text(
+                                                    "Check out with",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .normal,
+                                                        fontSize: 16,
+                                                        color: Colors
+                                                            .white),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 4,),
+                                              SvgPicture.asset(
+                                                "assets/img/apple-pay.svg",
+                                                width: 40,
+                                                color:
+                                                Colors.white,
+                                                height: 40,
+                                              ),
+                                              const Spacer(),
+                                            ],
+                                          ))
+                                          : Container(
+                                        height: 40,
+                                        child: Lottie.asset(
+                                            'assets/loader.json'),
+                                      )
                                   ],
                                 ),
-                              ),
-                              Expanded(
-                                child: Html(
-                                  data: subscribeCubit
-                                      .servicesResponse
-                                      .data?[subscribeCubit
-                                      .serviceIndex
-                                  ]
-                                      .packages?[i]
-                                      .description ??
-                                      "",
-                                ),
-                              ),
-                              if (payment?[i].visaPayments !=
-                                  null &&
-                                  payment?[i].visaPayments ==
-                                      true)
-                                subscribeCubit.isPaymentVisaClicked
-                                    ==
-                                    false
-                                    ? kButton("Payment",
-                                    color: kColorPrimary,
-                                    func: subscribeCubit
-                                        .servicesResponse
-                                        .data?[subscribeCubit
-                                        .serviceIndex
-                                    ]
-                                        .packages?[i]
-                                        .paymentStatus ==
-                                        true
-                                        ?
-                                        () async {
-                                      if (await subscribeCubit
-                                          .getFromCash() ==
-                                          "haveAllData") {
-                                        subscribeCubit
-                                            .makePackagePayment(
-                                            name: currentUser!.data!.name??'',
-                                            phone: currentUser!.data!.phone??'',
-                                            lastName: currentUser!.data!.lastName??'',
-                                            email: currentUser!.data!.email??'',
-                                            packageId: subscribeCubit
-                                                .servicesResponse
-                                                .data![subscribeCubit
-                                                .serviceIndex
-                                            ]
-                                                .packages![
-                                            i]
-                                                .id!,
-                                            payMethod:
-                                            "visa",
-                                            isGuest: false)
-                                            .then((value) {
-                                          Navigator
-                                              .pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                                  WebViewScreen(
-                                                    url: subscribeCubit
-                                                        .packagePaymentResponse
-                                                        .data!
-                                                        .paymentUrl!,
-                                                    packageId:
-                                                    subscribeCubit
-                                                        .packagePaymentResponse
-                                                        .data!
-                                                        .id!,
-                                                  ),
-                                            ),
-                                          );
-                                        });
-                                      } else if (await subscribeCubit
-                                          .getFromCash() ==
-                                          "noLastName") {
-                                        NavigationService.push(context,
-                                            Routes.editProfileScreen);
-                                      } else {
-                                        _navigateAndDisplaySelection(
-                                            context: context,
-                                            i: i);
-                                      }
-                                    }
-                                        : () {
-                                      Fluttertoast
-                                          .showToast(
-                                          msg:
-                                          "  Payment is deactivated  ");
-                                    }
-                                )
-                                    : Container(
-                                  height: 40,
-                                  child: Lottie.asset(
-                                      'assets/loader.json'),
-                                ),
-                              if (Platform.isIOS &&
-                                  payment?[i]
-                                      .applePayPayments !=
-                                      null &&
-                                  payment?[i]
-                                      .applePayPayments ==
-                                      true)
-                                subscribeCubit.isPaymentAppleClicked
-                                    ==
-                                    false
-                                    ? kButton("Check out with",
-                                    color: Colors.black,
-                                    func: subscribeCubit
-                                        .servicesResponse
-                                        .data?[subscribeCubit
-                                        .serviceIndex
-                                    ]
-                                        .packages?[i]
-                                        .paymentStatus ==
-                                        true
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    SmoothPageIndicator(
+                      controller: pc,
+                      count: subscribeCubit
+                          .servicesResponse
+                          .data?[subscribeCubit.serviceIndex]
+                          .packages?.length??0,
+                      effect: const ColorTransitionEffect(
+                        activeDotColor: AppColors.primary,
+                        dotColor: AppColors.lightGrey,
+                        dotWidth: AppSize.s8,
+                        spacing: AppSize.s4,
+                        dotHeight: AppSize.s8,
+                      ),
+                    ),
 
-                                        ? () async {
-                                      if (await subscribeCubit
-                                          .getFromCash() ==
-                                          "haveAllData") {
-                                        subscribeCubit
-                                            .makePackagePayment(
-                                            name: currentUser!.data!.name??'',
-                                            phone: currentUser!.data!.phone??'',
-                                            lastName: currentUser!.data!.lastName??'',
-                                            email: currentUser!.data!.email??'',
-
-                                            packageId: subscribeCubit
-                                                .servicesResponse
-                                                .data![subscribeCubit
-                                                .serviceIndex
-                                            ]
-                                                .packages![
-                                            i]
-                                                .id!,
-                                            payMethod:
-                                            "apple_pay",
-                                            isGuest: false
-                                        )
-                                            .then((value) {
-                                          ///TODO HandleApplePay
-
-
-                                          Fluttertoast.showToast(
-                                              msg:
-                                              " HandleApplePay ");
-                                        });
-                                      } else if (await subscribeCubit
-                                          .getFromCash() ==
-                                          "noLastName") {
-                                        NavigationService.push(context,
-                                            Routes.editProfileScreen);
-                                      } else {
-                                        _navigateAndDisplaySelection(
-                                            context: context,
-                                            i: i);
-                                      }
-                                    } : () {
-                                      Fluttertoast
-                                          .showToast(
-                                          msg:
-                                          "  Payment is deactivated  ");
-                                    },
-                                    child: Row(
-                                      children: [
-                                        const Spacer(),
-                                        Center(
-                                          child: Padding(
-                                            padding:
-                                            const EdgeInsets
-                                                .only(
-                                                left:
-                                                16),
-                                            child: Text(
-                                              "Check out with",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .normal,
-                                                  fontSize: 16,
-                                                  color: Colors
-                                                      .white),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 4,),
-                                        SvgPicture.asset(
-                                          "assets/img/apple-pay.svg",
-                                          width: 40,
-                                          color:
-                                          Colors.white,
-                                          height: 40,
-                                        ),
-                                        const Spacer(),
-                                      ],
-                                    ))
-                                    : Container(
-                                  height: 40,
-                                  child: Lottie.asset(
-                                      'assets/loader.json'),
-                                )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
+                  ],
                 ),
               )
                   : Padding(
@@ -487,7 +510,8 @@ class _MySubscribeViewState extends State<SubscribeView> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+
+              SizedBox(height: AppSize.s48),
             ],
           ),
         );

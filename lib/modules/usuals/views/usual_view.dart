@@ -64,7 +64,7 @@ class _UsualViewState extends State<UsualView> {
             }
           },
           builder: (context, state){
-            if (state is UsualLoading)
+            if (state is UsualLoading || usualCubit.deleteLoading.value)
               return Container(child: CircularLoadingWidget(), color: Colors.white);
             MealsLoading;
             if (usualCubit.isLoading.value)
@@ -102,6 +102,11 @@ class _UsualViewState extends State<UsualView> {
                                   return FractionallySizedBox(
                                     heightFactor: 0.8,  // Adjust the height factor to control how much space the bottom sheet takes
                                     child: MakeAMealView(
+                                      refresh: (){
+                                        setState(() {
+
+                                        });
+                                      },
                                     ),
                                   );
                                 },

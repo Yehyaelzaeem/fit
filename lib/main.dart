@@ -103,6 +103,14 @@ class MyApp extends StatelessWidget {
       initialRoute: Routes.splashScreen,
       navigatorKey: NavigationService.navigationKey,
       onGenerateRoute: RouteGenerator.onGenerateRoute,
+      builder: (context, child) =>Builder(builder: (context) =>
+          MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+                textScaleFactor: 1.0,
+                devicePixelRatio: 1
+            ),
+            child:  child!
+          )),
       // localizationsDelegates: L10n.localizationDelegates,
       // supportedLocales: L10n.supportedLocales,
       // localeResolutionCallback: L10n.setFallbackLocale,

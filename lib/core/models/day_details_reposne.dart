@@ -31,8 +31,10 @@ class Data {
   int? water;
   List<Workouts>? workouts;
   DayWorkouts? dayWorkouts;
+  String? clinicNote;
   String? pdf;
   String? workoutDetails;
+  String? dayClinicNote;
   String? workoutDetailsType;
   SleepingTime? sleepingTime;
 
@@ -45,6 +47,7 @@ class Data {
       this.dayWorkouts,
       this.pdf,
       this.workoutDetails,
+      this.dayClinicNote,
       this.days,
       this.workoutDetailsType,
       this.sleepingTime});
@@ -75,6 +78,7 @@ class Data {
         : null;
     pdf = json['pdf'];
     workoutDetails = json['workout_details'] ?? "";
+    dayClinicNote = json['day_clinic_note'] ?? "";
     workoutDetailsType = json['workout_details_type'] ?? "";
     sleepingTime = json['sleeping_time'] != null
         ? new SleepingTime.fromJson(json['sleeping_time'])
@@ -101,6 +105,7 @@ class Data {
     }
     data['pdf'] = this.pdf;
     data['workout_details'] = this.workoutDetails;
+    data['day_clinic_note'] = this.dayClinicNote;
     data['workout_details_type'] = this.workoutDetailsType;
     data['sleeping_time'] = this.sleepingTime?.toJson();
 
@@ -270,6 +275,7 @@ class Food {
   var caloriePerUnit;
   String? color;
   bool? isSellected;
+  bool? isFavourite;
   double? qty;
 
   Food(
@@ -279,7 +285,8 @@ class Food {
       this.unit,
       this.caloriePerUnit,
       this.color,
-      this.isSellected});
+      this.isSellected,
+      this.isFavourite});
 
   Food.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -287,6 +294,7 @@ class Food {
     unit = json['unit'];
     caloriePerUnit = json['calorie_per_unit'].toDouble();
     color = json['color'];
+    isFavourite = json['is_favourite'];
     isSellected = false;
   }
 
@@ -297,6 +305,7 @@ class Food {
     data['unit'] = this.unit;
     data['calorie_per_unit'] = this.caloriePerUnit;
     data['color'] = this.color;
+    data['is_favourite'] = this.isFavourite;
     return data;
   }
 }

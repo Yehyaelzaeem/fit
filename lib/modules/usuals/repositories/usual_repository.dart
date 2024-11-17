@@ -81,15 +81,45 @@ class UsualRepository extends BaseRepository {
   }
 
   Future<void> createUsualMealLocally(UsualMealData data) async {
-    List<String> mealDataListJson = (await _cacheClient.get(StorageKeys.MealsCreationList)) ?? [];
-    mealDataListJson.add(jsonEncode(data.toJson()));
-    await _cacheClient.save(StorageKeys.MealsCreationList, mealDataListJson);
+    List<Map<String, dynamic>> mealDataListJson = [];
+
+    // Retrieve the data from storage
+    final rawJson = await _cacheClient.get(StorageKeys.MealsCreationList);
+
+    if (rawJson != null) {
+      try {
+        // Check if rawJson is already a List
+        if (rawJson is String) {
+          mealDataListJson = List<Map<String, dynamic>>.from(jsonDecode(rawJson));
+        } else if (rawJson is List) {
+          // If it's already a list, make sure to map it correctly
+          mealDataListJson = List<Map<String, dynamic>>.from(rawJson);
+        } else {
+          print('Unexpected data format');
+        }
+      } catch (e) {
+        print('Error parsing stored data: $e');
+      }
+    }
+
+    // Add the new meal data and save it back as a JSON string
+    mealDataListJson.add(data.toJson());
+    await _cacheClient.save(StorageKeys.MealsCreationList, jsonEncode(mealDataListJson));
   }
 
   Future<void> sendLocallySavedUsualMeals() async {
-    List<String> mealDataList = (await _cacheClient.get(StorageKeys.MealsCreationList)) ?? [];
-    for (String mealDataJson in mealDataList) {
-      UsualMealData mealData = UsualMealData.fromJson(jsonDecode(mealDataJson));
+    List<Map<String, dynamic>> mealDataList = [];
+    final rawJson = await _cacheClient.get(StorageKeys.MealsCreationList);
+
+    if (rawJson != null) {
+      try {
+        mealDataList = List<Map<String, dynamic>>.from(jsonDecode(rawJson));
+      } catch (e) {
+        print('Error parsing stored data: $e');
+      }
+    }
+    for (Map<String, dynamic> mealDataJson in mealDataList) {
+      UsualMealData mealData = UsualMealData.fromJson(mealDataJson);
 
       if (mealData.id == null) {
         await createUsualMeal( mealData.toJson());

@@ -51,8 +51,7 @@ class _AboutViewState extends State<AboutView> {
           builder: (context, state) {
             if (state is AboutLoading) {
               return SizedBox(
-                  height: 32,
-                  width: 48,
+
                   child: CircularLoadingWidget());
             } else if (state is AboutLoaded) {
               AboutResponse response = state.aboutData;

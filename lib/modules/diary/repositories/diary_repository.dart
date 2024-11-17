@@ -34,23 +34,26 @@ class DiaryRepository extends BaseRepository {
 
         // If the device is connected and the data is live, make an API call
         if (result != ConnectivityResult.none && isNotSending && isLive) {
-          print('From live');
           final response = await _apiClient.get(url: "${EndPoints.caloriesDayDetails}?date=$date", requestBody: {});
 
           // Save locally if applicable
           if (!notSave) {
             await saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
           }
+          await saveDairyLocally(DayDetailsResponse.fromJson(response.data),date);
 
           return response; // Returning API response
         } else {
           // If offline or data not live, return cached data
+
+
           final DayDetailsResponse? cachedData = await readDairyTempLocally();
 
-          print('from Local');
+           DayDetailsResponse? offlineData=  await _getCachedDiaryData(date,cachedData);
 
-          if (cachedData != null) {
-            return Response(data: cachedData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+
+          if (offlineData != null) {
+            return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
           }
 
           return Response(data: {}, statusCode: 500, requestOptions: RequestOptions(path: 'diary'));
@@ -62,7 +65,7 @@ class DiaryRepository extends BaseRepository {
 
   Future<void> saveDairyLocally(DayDetailsResponse dayDetailsResponse, String date) async {
     Map<String, dynamic> existingData = await readDairyLocally();
-    print('saveDairyLocally');
+
 
     existingData[date] = dayDetailsResponse.toJson();
     await _cacheClient.save(StorageKeys.DIARY, jsonEncode(existingData));
@@ -71,10 +74,8 @@ class DiaryRepository extends BaseRepository {
 
   Future<void> saveDairyToSendLocally(DayDetailsResponse dayDetailsResponse, String date) async {
     // Read existing data
-    print('DAIRY_TO_SEND saving');
     Map<String, dynamic> existingData = await readDairyToSendLocally();
 
-    print('saveDairyToSendLocally');
 
     // Check if the response date exists in the existing data
     if (existingData.containsKey(date)) {
@@ -94,7 +95,7 @@ class DiaryRepository extends BaseRepository {
   }
 
   Future<Map<String, dynamic>> readDairyLocally() async {
-    String? dairy = await SharedHelper().readString(CachingKey.DAIRY);
+    String? dairy = await _cacheClient.get(StorageKeys.DIARY,);
     return dairy != null && dairy.isNotEmpty ? jsonDecode(dairy) : {};
   }
 
@@ -106,8 +107,12 @@ class DiaryRepository extends BaseRepository {
   Future<DayDetailsResponse> _getCachedDiaryData(String? date, DayDetailsResponse? dayDetailsResponseTemp) async {
     Map<String, dynamic> dairy = await readDairyLocally();
     dynamic data = dairy[date];
+
+
     if (data != null) {
-      return DayDetailsResponse.fromJson(data);
+      DayDetailsResponse dayDetailsResponseaa = DayDetailsResponse.fromJson(data);
+
+      return dayDetailsResponseaa;
     } else {
       if (dayDetailsResponseTemp != null) {
         dayDetailsResponseTemp.data?.days = List.generate(3, (index) {
@@ -127,6 +132,18 @@ class DiaryRepository extends BaseRepository {
             );
           }
         });
+        dayDetailsResponseTemp.data?.proteins?.caloriesDetails = [];
+        dayDetailsResponseTemp.data?.carbs?.caloriesDetails = [];
+        dayDetailsResponseTemp.data?.fats?.caloriesDetails = [];
+        dayDetailsResponseTemp.data?.proteins?.caloriesTotal?.progress?.percentage = 0;
+        dayDetailsResponseTemp.data?.carbs?.caloriesTotal?.progress?.percentage = 0;
+        dayDetailsResponseTemp.data?.fats?.caloriesTotal?.progress?.percentage = 0;
+        dayDetailsResponseTemp.data?.proteins?.caloriesTotal?.taken = 0;
+        dayDetailsResponseTemp.data?.carbs?.caloriesTotal?.taken = 0;
+        dayDetailsResponseTemp.data?.fats?.caloriesTotal?.taken = 0;
+        dayDetailsResponseTemp.data?.sleepingTime?.sleepingDuration = '';
+        dayDetailsResponseTemp.data?.sleepingTime?.sleepingStatus = null;
+
         await saveDairyLocally(dayDetailsResponseTemp, date!);
       }
       return dayDetailsResponseTemp ?? DayDetailsResponse();
@@ -195,10 +212,8 @@ class DiaryRepository extends BaseRepository {
       sendingOffline = true;
 
       Map<String, dynamic> existingData = await readDairyToSendLocally();
-      print("await readDairyToSendLocally");
 
       final eitherResult = await getDiaryView(getEgyptTime().toString().substring(0, 10), true, true, true);
-      print("eitherResult");
 
       eitherResult.fold(
               (failure) {
@@ -206,8 +221,8 @@ class DiaryRepository extends BaseRepository {
             print("Failed to fetch day details: $failure");
           },
               (dayDetailsResponse) async {
-                print("savingsaving");
-            // Proceed with the day details response
+
+                // Proceed with the day details response
             List<DiaryEntry> diarySendList = _prepareDiarySendList(existingData, dayDetailsResponse);
 
             // The rest of your send logic goes here...
@@ -253,10 +268,7 @@ class DiaryRepository extends BaseRepository {
 
   Future<Map<String, dynamic>> readDairyToSendLocally() async {
     String? dairy = await _cacheClient.get(StorageKeys.DAIRY_TO_SEND);
-    print('dairy$dairy');
     if (dairy != null&&dairy!='') {
-      print(dairy);
-      print(jsonDecode(dairy));
       return jsonDecode(dairy);
     } else {
       return {};
@@ -280,22 +292,34 @@ class DiaryRepository extends BaseRepository {
               qty: [],
               createdAt: [])
       );
+
       if (dayDetailsToSend.data!.water != null) {
         diarySendList
             .firstWhere((element) => element.date == key)
             .water = dayDetailsToSend.data!.water!;
       }
       if (dayDetailsToSend.data!.dayWorkouts != null) {
-        diarySendList
-            .firstWhere((element) => element.date == key)
-            .workout =
-        dayDetailsToSend.data!.workouts!.firstWhere((wItem) => wItem.title ==
-            dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+        if(dayDetailsToSend.data!.dayWorkouts!.workoutType!=null) {
+
+          dayDetailsToSend.data!.dayWorkouts!.workoutType= dayDetailsToSend.data?.workouts?.last.title??'';
+          diarySendList
+              .firstWhere((element) => element.date == key)
+              .workout =
+          dayDetailsToSend.data!.workouts?.firstWhere((wItem) =>
+          wItem.title ==
+              dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+        }
         diarySendList
             .firstWhere((element) => element.date == key)
             .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
             ? " "
             : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+        diarySendList
+            .firstWhere((element) => element.date == key)
+            .clinicDesc = dayDetailsToSend.data!.dayClinicNote == null
+            ? " "
+            : dayDetailsToSend.data!.dayClinicNote!;
+
       }
       dayDetailsToSend.data!.proteins!.caloriesDetails!.forEach((item) {
         if (dayDetailsResponse.data!.proteins!.food!.any((element) =>
@@ -368,11 +392,15 @@ class DiaryRepository extends BaseRepository {
   }
 
   FormData _prepareFormData(DiaryEntry entry) {
+    print('clinic_desc');
+    print(entry.workoutDesc);
+    print(entry.clinicDesc);
     FormData formData = FormData.fromMap({
       'date': entry.date,
       'water': entry.water,
-      if (entry.workout != null) 'workout': entry.workout ?? '',
-      if (entry.workoutDesc != null) 'workout_desc': entry.workoutDesc ?? '',
+      if (entry.workout != null && entry.workout != "") 'workout': entry.workout ?? '',
+      if (entry.workoutDesc != null && entry.workoutDesc != "") 'workout_desc': entry.workoutDesc ?? '',
+      if (entry.clinicDesc != null && entry.clinicDesc != "") 'clinic_desc': entry.clinicDesc ?? '',
     });
 
     for (int i = 0; i < entry.food.length; i++) {
@@ -445,6 +473,7 @@ class DiaryRepository extends BaseRepository {
       if (qtyProtiene != null) "qty": qtyProtiene,
       if (workOut != null) "workout": workOut,
       if (workoutDesc != null) "workout_desc": workoutDesc,
+      // if (workoutDesc != null) "clinic_desc": workoutDesc,
     });
 
     return super.call<GeneralResponse>(
@@ -517,5 +546,62 @@ class DiaryRepository extends BaseRepository {
     await _cacheClient.save(StorageKeys.DAIRY_DATA_LIST, diaryDataListJson);
   }
 
+// Method to add a favorite calorie
+  Future<Either<Failure, void>> addFavoriteCalorie(int calorieId) async {
+    final body = FormData.fromMap({
+      'calorie_id': calorieId,
+    });
 
+    return super.call<void>(
+      httpRequest: () async {
+        final response = await _apiClient.post(
+          url: EndPoints.addFavoriteCalorie,
+          requestBody: body,
+        );
+        return response;
+      },
+      successReturn: (data) => null, // No need to return anything
+    );
+  }
+
+  // Method to delete a favorite calorie
+  Future<Either<Failure, void>> deleteFavoriteCalorie(int calorieId) async {
+    final body = FormData.fromMap({
+      'calorie_id': calorieId,
+    });
+
+    return super.call<void>(
+      httpRequest: () async {
+        final response = await _apiClient.post(
+          url: EndPoints.deleteFavouriteCalorie,
+          requestBody: body,
+        );
+        return response;
+      },
+      successReturn: (data) => null, // No need to return anything
+    );
+  }
+
+  // Save favorite actions offline
+  Future<void> saveFavoriteActionOffline(String actionType, int calorieId) async {
+    final data = {'action': actionType, 'calorie_id': calorieId};
+    final cachedData = await _cacheClient.get(StorageKeys.FAVORITE_ACTIONS) ?? [];
+    cachedData.add(data);
+    await _cacheClient.save(StorageKeys.FAVORITE_ACTIONS, jsonEncode(cachedData));
+  }
+
+  // Send cached favorite actions when back online
+  Future<void> sendCachedFavoriteActions() async {
+    final cachedData = await _cacheClient.get(StorageKeys.FAVORITE_ACTIONS);
+    if (cachedData != null) {
+      for (var action in cachedData) {
+        if (action['action'] == 'add') {
+          await addFavoriteCalorie(action['calorie_id']);
+        } else if (action['action'] == 'delete') {
+          await deleteFavoriteCalorie(action['calorie_id']);
+        }
+      }
+      await _cacheClient.delete(StorageKeys.FAVORITE_ACTIONS);
+    }
+  }
 }

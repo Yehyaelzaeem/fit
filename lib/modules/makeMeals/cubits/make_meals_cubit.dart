@@ -109,16 +109,11 @@ class MakeMealsCubit extends Cubit<MakeMealsStates> {
                 Food? food;
                 Amount? amount;
                 meal.food.forEach((item) {
-                  Echo(
-                      'arguments item ${item.title} ${item.id} element ${element.title} ${element.id}');
                   if (item.id == element.id) {
                     item.amounts.forEach((amountItem) {
                       if (element.amount == amountItem.name)
                         amount = amountItem;
                     });
-                    if (amount != null) Echo('amount ${amount!.name}');
-                    if (amount != null)
-                      Echo('item.mealTitle ${item.mealTitle}');
                     if (amount != null)
                       food = Food(
                         mealTitle: item.mealTitle,

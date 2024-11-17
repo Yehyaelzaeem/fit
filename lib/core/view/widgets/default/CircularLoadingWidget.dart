@@ -1,9 +1,5 @@
 import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:lottie/lottie.dart';
-
-import '../../../resources/app_assets.dart';
 
 class CircularLoadingWidget extends StatefulWidget {
   final bool white;
@@ -24,12 +20,12 @@ class _CircularLoadingWidgetState extends State<CircularLoadingWidget> with Sing
 
     // Set up the animation controller
     _controller = AnimationController(
-      duration: const Duration(seconds: 1), // One second for a complete cycle
+      duration: const Duration(milliseconds: 500), // One second for a complete cycle
       vsync: this,
     )..repeat(reverse: true); // Repeat the animation and reverse each time
 
     // Set up the fade animation (opacity between 0 and 1)
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+    _animation = Tween<double>(begin: .5, end: 1).animate(_controller);
   }
 
   @override
@@ -40,25 +36,37 @@ class _CircularLoadingWidgetState extends State<CircularLoadingWidget> with Sing
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: double.infinity,
-      width: double.infinity,
+      height:deviceHeight - 100,
+      width: deviceWidth,
       color: Colors.white,
 
       child: Center(
         child:
-        FadeTransition(
-          opacity: _animation, // Use the animated opacity
-          child: Padding(
-            padding: const EdgeInsets.only(bottom:AppSize.s64),
+        Padding(
+            padding: const EdgeInsets.only(bottom: AppSize.s82),
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 100),
+              margin: const EdgeInsets.symmetric(horizontal: AppSize.s64),
               child: Image.asset(
-                AppImages.kLogoColumn,
-                width: double.infinity,
+                'assets/img/fit_loader.gif',
+                // AppImages.kLogoColumn,
+                // width: double.infinity,
               ),
             ),
           ),
-        ),
+        // ScaleTransition(
+        //   scale: _animation,
+        // child: Padding(
+        //     padding: const EdgeInsets.only(bottom: AppSize.s64),
+        //     child: Container(
+        //       margin: const EdgeInsets.symmetric(horizontal: 100),
+        //       child: Image.asset(
+        //         // 'assets/img/loader.gif',
+        //         AppImages.kLogoColumn,
+        //         width: double.infinity,
+        //       ),
+        //     ),
+        //   ),
+        // ),
 
         // Lottie.asset(
         //   'assets/loader.json',

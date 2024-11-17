@@ -186,7 +186,7 @@ final String type;
                      child: FittedBox(
                        fit: BoxFit.scaleDown,
                        child: kTextbody(
-                         (usualProteins.items?[index].calories).toStringAsFixed(2),
+                         usualProteins.items?[index].calories!=null?(usualProteins.items?[index].calories).toStringAsFixed(2):'0',
                          color: Colors.black,
                        ),
                      ),

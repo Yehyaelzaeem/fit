@@ -61,9 +61,7 @@ class _SessionDetailsState extends State<SessionDetails> {
       body: ListView(
         children: [
 
-          FitNewAppBar(
-            title: "Body composition",
-          ),
+
           BlocConsumer<SessionCubit, SessionStates>(
           listener: (context, state) {
             if (state is GetSessionDetailsFailureState) {
@@ -75,12 +73,25 @@ class _SessionDetailsState extends State<SessionDetails> {
 
             }
           },
-          builder: (context, state) => state is GetSessionDetailsLoadingState? SizedBox(
-              height: 100,
-              child: CircularLoadingWidget())
+          builder: (context, state) => state is GetSessionDetailsLoadingState?
+          Container(
+            color: AppColors.white,
+            child: Column(
+              children: [
+                FitNewAppBar(
+                  title: "Body composition",
+
+                ),
+                CircularLoadingWidget(),
+              ],
+            ),
+          )
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    FitNewAppBar(
+                      title: "Body composition",
+                    ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     //   children: [
@@ -149,7 +160,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     CustomText(
                                       'Session',
@@ -157,14 +168,10 @@ class _SessionDetailsState extends State<SessionDetails> {
                                       fontSize: FontSize.s20,
                                       fontWeight: FontWeightManager.semiBold,
                                     ),
-                                    VerticalSpace(AppSize.s12),
-                                    Container(
-                                      width: AppSize.s150,
-                                      alignment: Alignment.center,
-                                      child: CustomText(DateFormat('EEEE').format(DateFormat("EEEE, dd/MM/yyyy hh:mm a").parse(sessionCubit.sessionDetailsResponse!.data!.date!)),
-                                        color: AppColors.black, fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s20,),
-                                    ),
-                                    VerticalSpace(AppSize.s6),
+                                    VerticalSpace(AppSize.s8),
+                                    CustomText(DateFormat('EEEE').format(DateFormat("EEEE, dd/MM/yyyy hh:mm a").parse(sessionCubit.sessionDetailsResponse!.data!.date!)),
+                                      color: AppColors.black, fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s20,),
+                                    VerticalSpace(AppSize.s8),
                                     CustomText(DateFormat('dd/MM/yyyy  hh:mm a').format(DateFormat("EEEE, dd/MM/yyyy hh:mm a").parse(sessionCubit.sessionDetailsResponse!.data!.date!)),
                                       color: AppColors.white, fontWeight: FontWeightManager.medium, fontSize: FontSize.s18,),
                                   ],
@@ -194,45 +201,133 @@ class _SessionDetailsState extends State<SessionDetails> {
                         decoration: BoxDecoration(color: AppColors.white,
                           borderRadius: BorderRadius.circular(AppSize.s16)
                         ),
-                        child: GridView(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 2.5,
-                              crossAxisCount: 2, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            infoRow("Height :", "${sessionCubit.sessionDetailsResponse!.data!.height} "),
-                            infoRow("Total Weight :",
-                                "${sessionCubit.sessionDetailsResponse!.data!.totalWeight}"),
-                            infoRow(
-                                "Fats Percentage :", "${sessionCubit.sessionDetailsResponse!.data!.fats}"),
-                            infoRow("Muscles Percentage :",
-                                "${sessionCubit.sessionDetailsResponse!.data!.muscles}"),
-                            infoRow(
-                                "Water Percentage :", "${sessionCubit.sessionDetailsResponse!.data!.water}"),
+                            Expanded(
+                              flex: 6,
+                              child: ListView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                //   childAspectRatio: 1.4,
+                                //     crossAxisCount: 3, crossAxisSpacing: 4.0, mainAxisSpacing: 4.0),
+                                children: [
+                                  // infoRow("Height :", "${sessionCubit.sessionDetailsResponse!.data!.height} "),
+                                  infoRow("Total Weight :",
+                                      "${sessionCubit.sessionDetailsResponse!.data!.totalWeight}"),
+                                  infoRow(
+                                      "Fats % :", "${sessionCubit.sessionDetailsResponse!.data!.fats}"),
+                                  infoRow("Muscles % :",
+                                      "${sessionCubit.sessionDetailsResponse!.data!.muscles}"),
+                                  infoRow(
+                                      "Water % :", "${sessionCubit.sessionDetailsResponse!.data!.water}"),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Column(
+                                // crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  VerticalSpace(AppSize.s20),
+                                  InkWell(
+
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => CustomImageViewer(
+                                                image:
+                                                "${sessionCubit.sessionDetailsResponse!.data!.bodyComposition}",
+                                                tite: "Body Composition",
+                                              )));
+                                      // downloadFile(sessionResponse.data!.bodyComposition!);
+                                    },
+                                    child: Container(
+                                      width: 70,
+                                      height: 50,
+                                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 4, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        // color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(64),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/paper.svg",
+                                        color: kColorPrimary,
+                                      ),
+                                    ),
+                                  ),
+
+                                  VerticalSpace(AppSize.s24),
+
+                                  Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CustomButton(text: "Follow up",
+                                            height: 42,
+                                            borderRadius: AppSize.s24,
+                                            padding: EdgeInsets.all(6),
+                                            onPressed: () {
+                                              _launchURL(sessionCubit.sessionDetailsResponse!.data!.followUp!);
+                                            }),
+                                      )),
+                                ],
+                              ),
+                            ),
+
                           ],
                         ),
                       ),
                     ),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(),
-                        Center(
-                            child: kButton("Follow up", hight: 45, func: () {
-                          _launchURL(sessionCubit.sessionDetailsResponse!.data!.followUp!);
-                        })),
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     SizedBox(),
+                    //     Center(
+                    //         child: kButton("Follow up", hight: 45, func: () {
+                    //       _launchURL(sessionCubit.sessionDetailsResponse!.data!.followUp!);
+                    //     })),
+                    //   ],
+                    // ),
 
+                    VerticalSpace(AppSize.s16),
+                    
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: AppSize.s12,horizontal: AppSize.s12),
-                        child: CustomText(
-                          "Day to Day Details",
-                              color: AppColors.black,
-                            fontSize: AppSize.s16
+                        padding: const EdgeInsets.symmetric(vertical: AppSize.s4),
+                        child: Container(
+                          padding: EdgeInsets.all(AppSize.s8),
+                          decoration: BoxDecoration(
+                              color: AppColors.customBlack,
+                              // borderRadius: BorderRadius.circular(AppSize.s8),
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.grey.withOpacity(0.1),
+                              //     blurRadius: 2,
+                              //     spreadRadius: 2,
+                              //     offset: Offset(0, 0),
+                              //   ),
+                              // ]
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              Icon(Icons.calendar_month_outlined,color: AppColors.primary,),
+                              HorizontalSpace(AppSize.s12),
+
+                              CustomText(
+                                "Day to Day Details",
+                                    color: AppColors.white,
+                                  fontSize: AppSize.s16
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -258,8 +353,8 @@ class _SessionDetailsState extends State<SessionDetails> {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomText(
               "${lable}",
@@ -267,7 +362,7 @@ class _SessionDetailsState extends State<SessionDetails> {
                 color: AppColors.customBlack,
                 fontSize: FontSize.s14
             ),
-            VerticalSpace(AppSize.s4),
+            HorizontalSpace(AppSize.s4),
             CustomText(
               "${value}",
                   fontWeight: FontWeightManager.semiBold,
@@ -419,17 +514,25 @@ class TableWidget extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomText(DateFormat('EEEE').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
-                            color: AppColors.primary, fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s18,),
-                          VerticalSpace(AppSize.s6),
-                          CustomText(DateFormat('dd/MM/yyyy  hh:mm a').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
-                            color: AppColors.black, fontWeight: FontWeightManager.medium, fontSize: FontSize.s16,),
-                        ],
-                      ),
+                      CustomText(DateFormat('EEEE,').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
+                        color: AppColors.primary, fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s18,),
+                      HorizontalSpace(AppSize.s6),
+                      CustomText(DateFormat('dd/MM/yyyy').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
+                        color: AppColors.black, fontWeight: FontWeightManager.medium, fontSize: FontSize.s16,),
+
+                      Spacer(),
+
+                      // Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     CustomText(DateFormat('EEEE,').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
+                      //       color: AppColors.primary, fontWeight: FontWeightManager.semiBold, fontSize: FontSize.s18,),
+                      //     VerticalSpace(AppSize.s6),
+                      //     CustomText(DateFormat('dd/MM/yyyy').format(DateFormat("EEEE, dd/MM/yyyy").parse(table.date!)),
+                      //       color: AppColors.black, fontWeight: FontWeightManager.medium, fontSize: FontSize.s16,),
+                      //   ],
+                      // ),
                           if(table.caloriesTable!=null)
                             table.caloriesTable!.carbsFatsTable!.isNotEmpty ||
                                 table.caloriesTable!.fatsTable!.isNotEmpty ||
@@ -500,7 +603,18 @@ class TableWidget extends StatelessWidget {
                     ),
                     Center(
                         child: InkWell(
-                        child: Image.asset(AppIcons.buttonVariants), onTap: () {
+                        child: Container(
+                            width: 38,
+                            height: 38,
+                            padding: const EdgeInsets.all(9),
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(width: 1, color: Color(0xFF7FC902)),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: SvgPicture.asset(AppIcons.arrowRight)), onTap: () {
                           CustomSheet(
                               hight: MediaQuery.of(context).size.height * 0.4,
                               context: context,
@@ -515,20 +629,40 @@ class TableWidget extends StatelessWidget {
                                   child: ListView(
                                     children: [
                                       VerticalSpace(AppSize.s6),
-                                      CustomText(
-                                        "Water : ${table.water} ml",
-                                            fontSize: FontSize.s18,
-                                            fontWeight: FontWeightManager.semiBold
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                            "Water : ",
+                                                fontSize: FontSize.s18,
+                                                fontWeight: FontWeight.w600,
+                                            color: AppColors.primary,
+                                          ),
+                                          CustomText(
+                                            "${table.water} ml",
+                                                fontSize: FontSize.s18,
+                                                fontWeight: FontWeight.w500,
+                                          ),
+                                        ],
                                       ),
                                       VerticalSpace(AppSize.s6),
                                       Divider(),
-                                      CustomText(
-                                        "Workout : ${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                            "Workout : ",
 
-                                            color: kColorPrimary,
                                             fontSize: FontSize.s18,
-                                            fontWeight: FontWeightManager.semiBold
-                                        ),
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.primary,
+                                            ),
+                                          CustomText(
+                                            "${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
+
+                                                fontSize: FontSize.s18,
+                                                fontWeight: FontWeight.w500
+                                            ),
+                                        ],
+                                      ),
                                       CustomText(
                                         "${table.workout != null ? table.workout!.workoutDesc : "   "}",
                                           color: kColorPrimary,
@@ -538,15 +672,24 @@ class TableWidget extends StatelessWidget {
                                       ),
                                       VerticalSpace(AppSize.s6),
                                       Divider(),
-                                      CustomText(
-                                        "Sleep time : ${table.sleepingTime != null ? table.sleepingTime?.sleepingDuration : "Not Yet"}",
-                                          color: kColorPrimary,
-                                          fontSize: FontSize.s18,
-                                          fontWeight: FontWeightManager.semiBold
+                                      Row(
+                                        children: [
+                                          CustomText(
+                                            "Sleep time : ",
+                                              color: kColorPrimary,
+                                              fontSize: FontSize.s18,
+                                              fontWeight: FontWeight.w600
+                                          ),
+                                          CustomText(
+                                            "${table.sleepingTime != null ? table.sleepingTime?.sleepingDuration : "Not Yet"}",
+                                              fontSize: FontSize.s18,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                        ],
                                       ),
+                                      VerticalSpace(AppSize.s4),
                                       CustomText(
                                         "${table.sleepingTime != null ? table.sleepingTime?.sleepingStatus?.name : "   "}",
-                                          color: kColorPrimary,
                                           fontSize: FontSize.s14,
                                           fontWeight: FontWeightManager.medium
                                       ),
@@ -555,7 +698,8 @@ class TableWidget extends StatelessWidget {
                                       CustomText(
                                         "Proteins",
                                           fontSize: FontSize.s18,
-                                          fontWeight: FontWeightManager.semiBold
+                                          fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
                                       ),
                                       table.caloriesTable!.proteinsCaloriesTable!
                                           .isEmpty
@@ -580,7 +724,8 @@ class TableWidget extends StatelessWidget {
                                       CustomText(
                                         "Carbs",
                                           fontSize: FontSize.s18,
-                                          fontWeight: FontWeightManager.semiBold
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
                                       ),
                                       table.caloriesTable!.carbsFatsTable!.isEmpty
                                           ? Padding(
@@ -604,7 +749,8 @@ class TableWidget extends StatelessWidget {
                                       CustomText(
                                         "Fats",
                                           fontSize: FontSize.s18,
-                                          fontWeight: FontWeightManager.semiBold
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColors.primary,
                                       ),
                                       // table.caloriesTable!.fatsTable!.isEmpty
                                       table.caloriesTable!.fatsTable!.isEmpty

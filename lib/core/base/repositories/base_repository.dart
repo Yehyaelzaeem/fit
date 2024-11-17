@@ -14,18 +14,22 @@ abstract class BaseRepository {
     required Future<Response<dynamic>> Function() httpRequest,
     required R Function(dynamic data) successReturn,
   }) async {
-    final bool hasConnection = await networkInfo.hasConnection;
-    if (hasConnection) {
+    // final bool hasConnection = await networkInfo.hasConnection;
+    // if (hasConnection) {
       try {
         final response = await httpRequest();
-        // if (!response.data["status"]) throw Exception(response.data["message"]);
+        // print(response);
+        // print(response.data);
+        // if(response.data["success"]!=null)
+        // if (!response.data["success"]) throw Exception(response.data["message"]);
+
         final data = successReturn(response.data); // Used callback to use the response data in repositories
         return Right(data);
       } on Exception catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }
-    } else {
-      return Left(ErrorType.noInternetConnection.getFailure());
-    }
+    // } else {
+    //   return Left(ErrorType.noInternetConnection.getFailure());
+    // }
   }
 }

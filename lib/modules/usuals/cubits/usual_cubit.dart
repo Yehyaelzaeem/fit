@@ -77,7 +77,15 @@ class UsualCubit extends Cubit<UsualStates> {
     );
   }
 
+  Future<void> sendCachedUsualMeals() async {
+    // emit(UsualSyncLoading()); // Emit loading state
+    await _usualRepository.sendLocallySavedUsualMeals();
+
+
+  }
+
   Future<void> _updateDiaryWithMealData(Map<String, dynamic> mealParameters, DiaryCubit _diaryCubit) async {
+    emit(UsualLoading());  // Emits loading state
     // Assuming similar logic to what you have in your provided code for meal data update
     List<int> foodIds = mealParameters["food_id"].toString().split(',').map((value) => int.parse(value.trim())).toList();
     List<double> qtys = mealParameters["qty"].toString().split(',').map((value) => double.parse(value.trim())).toList();
@@ -124,8 +132,10 @@ class UsualCubit extends Cubit<UsualStates> {
     });
 
     mealData.totalCalories = totalCalories;
-    print(totalCalories);
     // Optionally save locally or update Cubit state with the new meal data.
+    emit(UsualLoaded());
+
+
   }
 
 
@@ -226,7 +236,7 @@ class UsualCubit extends Cubit<UsualStates> {
   // }
   Future<void> updateCurrentUsualMeal(
       {required Map<String, dynamic> mealParameters,required DiaryCubit diaryCubit}) async {
-
+    emit(UsualMealCreating());
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
       addLoading.value = true;
@@ -295,29 +305,32 @@ class UsualCubit extends Cubit<UsualStates> {
       isLoading.value = false;
 
     }
+
+    emit(UsualLoaded());
   }
 
-  Future addMealToDiary({required int mealId,required MealData? meal,required DiaryCubit diaryCubit}) async {
+  Future addMealToDiary({required int mealId,required MealData? meal, double? fraction,required DiaryCubit diaryCubit}) async {
 
 
       meal?.proteins?.items?.forEach((element) async{
-        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'proteins');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString())*((fraction??1)),type: 'proteins',isUsual:true);
       });
       meal?.carbs?.items?.forEach((element) async{
-        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'carbs');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString())*((fraction??1)),type: 'carbs',isUsual:true);
       });
       meal?.fats?.items?.forEach((element) async{
-        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString()),type: 'fats');
+        diaryCubit.createOrUpdateFoodData(Food.fromJson(element.food!.toJson()),double.parse(element.qty.toString())*((fraction??1)),type: 'fats',isUsual:true);
       });
       Fluttertoast.showToast(fontSize: 10, msg: "Meal is added to diary successfully");
 
 
   }
 
-  Future<void> getMyUsualMeals() async {
+  Future<void> getMyUsualMeals({bool isLoad = true}) async {
     // emit(MealsLoading());
-    emit(UsualLoading());  // Emits loading state
-
+    if(isLoad) {
+      emit(UsualLoading()); // Emits loading state
+    }
     final result = await _usualRepository.getMyUsualMeals();
     result.fold(
           (failure) {
@@ -336,16 +349,21 @@ class UsualCubit extends Cubit<UsualStates> {
   Future<void> deleteUserUsualMeal(int mealId) async {
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
-      deleteLoading.value = true;
+      // emit(UsualLoading());  // Emits loading state
+      mealsResponse.data?.removeWhere((element) => element.id==mealId);
+      Fluttertoast.showToast(fontSize: 8, msg: "Meal Deleted Successfully");
+      emit(UsualLoaded());
+
       try {
         final response = await _usualRepository.deleteUsualMeal(mealId: mealId);
         if (response.success == true) {
           mealsResponse = UsualMealsResponse();
-          await getMyUsualMeals();
+          await getMyUsualMeals(isLoad: false);
+
           // update();
           // mealsResponse.refresh();
           deleteLoading.value = false;
-          Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
+          // Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
         } else {
           Fluttertoast.showToast(fontSize: 8, msg: "${response.message}");
         }
@@ -361,42 +379,42 @@ class UsualCubit extends Cubit<UsualStates> {
     }
   }
 
-  Future<void> deleteItemCalories(int id, String _date, String type) async {
-    await ApiProvider()
-        .deleteCalorie("delete_calories_details", id)
-        .then((value) {
-      if (value.success == true) {
-        caloriesDetails.removeWhere((element) => element.id == id);
-      } else {
-        caloriesDetails.removeWhere((element) => element.id == id);
-      }
-    });
-  }
-
-  Future<void> deleteItemCarbs(int id, String _date, String type) async {
-    await ApiProvider()
-        .deleteCalorie("delete_calories_details", id)
-        .then((value) {
-      if (value.success == true) {
-        carbsDetails.removeWhere((element) => element.id == id);
-      } else {
-        carbsDetails.removeWhere((element) => element.id == id);
-      }
-    });
-  }
-
-  Future<void> deleteItemFats(int id, String _date, String type) async {
-    await ApiProvider()
-        .deleteCalorie("delete_calories_details", id)
-        .then((value) {
-      if (value.success == true) {
-        fatsDetails.removeWhere((element) => element.id == id);
-      } else {
-        fatsDetails.removeWhere((element) => element.id == id);
-        Fluttertoast.showToast(fontSize: 8, msg: "${value.message}");
-      }
-    });
-  }
+  // Future<void> deleteItemCalories(int id, String _date, String type) async {
+  //   await ApiProvider()
+  //       .deleteCalorie("delete_calories_details", id)
+  //       .then((value) {
+  //     if (value.success == true) {
+  //       caloriesDetails.removeWhere((element) => element.id == id);
+  //     } else {
+  //       caloriesDetails.removeWhere((element) => element.id == id);
+  //     }
+  //   });
+  // }
+  //
+  // Future<void> deleteItemCarbs(int id, String _date, String type) async {
+  //   await ApiProvider()
+  //       .deleteCalorie("delete_calories_details", id)
+  //       .then((value) {
+  //     if (value.success == true) {
+  //       carbsDetails.removeWhere((element) => element.id == id);
+  //     } else {
+  //       carbsDetails.removeWhere((element) => element.id == id);
+  //     }
+  //   });
+  // }
+  //
+  // Future<void> deleteItemFats(int id, String _date, String type) async {
+  //   await ApiProvider()
+  //       .deleteCalorie("delete_calories_details", id)
+  //       .then((value) {
+  //     if (value.success == true) {
+  //       fatsDetails.removeWhere((element) => element.id == id);
+  //     } else {
+  //       fatsDetails.removeWhere((element) => element.id == id);
+  //       Fluttertoast.showToast(fontSize: 8, msg: "${value.message}");
+  //     }
+  //   });
+  // }
 
 }
 

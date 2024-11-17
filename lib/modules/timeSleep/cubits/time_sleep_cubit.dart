@@ -67,29 +67,29 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
         },
       );
     } else {
-      await _saveSleepTimeOffline(sleepTimeFrom, sleepTimeTo, isToday,diaryCubit);
+      await _saveSleepTimeOffline(sleepTimeFrom, sleepTimeTo, diaryCubit.lastSelectedDate.value,diaryCubit);
     }
+    emit(TimeSleepSuccessState());
+
   }
 
   // Save sleep time locally and refresh diary
-  Future<void> _saveSleepTimeOffline(String sleepTimeFrom, String sleepTimeTo, bool isToday,DiaryCubit diaryCubit) async {
+  Future<void> _saveSleepTimeOffline(String sleepTimeFrom, String sleepTimeTo, String date,DiaryCubit diaryCubit) async {
     emit(TimeSleepLoadingState());
 
-    final date = isToday
-        ? DateTime.now().toString().substring(0, 10)
-        : DateTime.now().subtract(Duration(days: 1)).toString().substring(0, 10);
+    // final date = isToday
+    //     ? DateTime.now().toString().substring(0, 10)
+    //     : DateTime.now().subtract(Duration(days: 1)).toString().substring(0, 10);
 
 
     final sleepTime = SleepTime(sleepTimeFrom: sleepTimeFrom, sleepTimeTo: sleepTimeTo, date: date);
 
     print('sleepingStatus?.name');
     await _timeSleepRepository.saveSleepTimeLocally(sleepTime);
-    print('sleepingStatus?');
 
     // final sleepingStatus = await diaryCubit.getSleepTimeStatus(sleepTimeFrom, sleepTimeTo);
     // diaryCubit.updateSleepingData(sleepTimeFrom, sleepTimeTo, sleepingStatus);
     SleepingStatus? sleepingStatus=await getSleepTimeName(calculateTimeDifference(sleepTimeFrom,sleepTimeTo));
-    print(sleepingStatus?.name);
     diaryCubit.dayDetailsResponse!.data?.sleepingTime = SleepingTime(
         sleepingFrom: sleepTimeFrom,
         sleepingTo: sleepTimeTo,
@@ -98,11 +98,10 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
 
         )
     );
-    print(sleepTimeFrom);
-    print(sleepTimeTo);
 
-    await diaryCubit.saveDiaryLocally(diaryCubit.dayDetailsResponse!, diaryCubit.apiDate.value);
-    await diaryCubit.saveDiaryToSend(diaryCubit.dayDetailsResponse!, diaryCubit.apiDate.value);
+
+    await diaryCubit.saveDiaryLocally(diaryCubit.dayDetailsResponse!, diaryCubit.lastSelectedDate.value);
+    await diaryCubit.saveDiaryToSend(diaryCubit.dayDetailsResponse!, diaryCubit.lastSelectedDate.value);
 
     Fluttertoast.showToast(msg: 'Saved successfully');
     emit(TimeSleepOfflineSavedState());
@@ -213,7 +212,7 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
 
     int totalMinutes = hour * 60 + minute;
 
-    SleepingTimesResponse? sleepingTimesResponse = await ApiProvider().readSleepingTimesLocally();
+    SleepingTimesResponse? sleepingTimesResponse = await _timeSleepRepository.readSleepingTimesLocally();
 
     if(sleepingTimesResponse!=null){
       for (int i=0; i<sleepingTimesResponse.data!.length;i++) {
@@ -225,7 +224,6 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
           );
         }
       }}else{
-      print("plan2");
       await _timeSleepRepository.getSleepingTimesData();
       sleepingTimesResponse = await _timeSleepRepository.readSleepingTimesLocally();
       for (int i=0; i<sleepingTimesResponse!.data!.length;i++) {
@@ -337,7 +335,6 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
     error.value = '';
     loading.value = true;
     try {} catch (e) {
-      Echo('error response $e');
       error.value = '$e';
     }
     loading.value = false;

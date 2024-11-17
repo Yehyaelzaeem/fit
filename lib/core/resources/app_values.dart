@@ -37,6 +37,7 @@ class AppSize {
   static const double s24 = 24.0;
   static const double s28 = 28.0;
   static const double s32 = 32.0;
+  static const double s36 = 36.0;
   static const double s40 = 40.0;
   static const double s48 = 48.0;
   static const double s56 = 56.0;
@@ -59,6 +60,9 @@ class Time {
   static const Duration t300ms = Duration(milliseconds: 300);
   static const Duration t500ms = Duration(milliseconds: 500);
   static const Duration t2s = Duration(seconds: 2);
+  static const Duration t4s = Duration(seconds: 4);
+  static const Duration t3s = Duration(seconds: 3);
+  static const Duration t2_5s = Duration(milliseconds: 2400);
   static const Duration t30s = Duration(seconds: 30);
   static const Duration longTime = Duration(hours: 1);
 }

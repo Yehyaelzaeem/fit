@@ -2,19 +2,12 @@ import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/view/views.dart';
 import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:app/modules/usuals/cubits/usual_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:pull_down_button/pull_down_button.dart';
-
 import '../../../core/models/usual_meals_reposne.dart';
-import '../../../core/resources/app_colors.dart';
 import '../../../core/resources/resources.dart';
 import '../../../core/view/widgets/app_dialog.dart';
-import '../../../core/view/widgets/default/text.dart';
-import '../controllers/usual_controller.dart';
 import '../views/make_a_meal_view.dart';
 import 'calories_type_item_widget.dart';
 
@@ -97,8 +90,10 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                     children: [
                       InkWell(
                         onTap: ()async{
-                          await usualCubit.addMealToDiary(mealId: widget.mealId!,meal: widget.meal,diaryCubit:diaryCubit);
+                          showAddOptionsDialog(context);
+                          // await usualCubit.addMealToDiary(mealId: widget.mealId!,meal: widget.meal,diaryCubit:diaryCubit);
 
+                          // NavigationService.goBack(context);
                         },
                         child: Container(
                           padding: EdgeInsets.all(AppSize.s8),
@@ -131,10 +126,18 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                                   mealData: widget.meal,
                                   mealId: widget.mealId,
                                   mealName: widget.mealName,
+                                  refresh: (){
+                                    setState(() {
+
+                                    });
+                                  },
                                 ),
                               );
                             },
-                          );
+                          ).then((value) async{
+                            await usualCubit.fetchUsualMealsData();
+
+                          });
                         },
                         child: Container(
                           padding: EdgeInsets.all(AppSize.s8),
@@ -157,7 +160,11 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                           onTap: () async {
                             appDialog(
                               title: "Do you want to delete ${widget.mealName}?",
-                              image: Icon(Icons.delete, size: 24, color: Colors.red),
+                              image:  Padding(
+                                padding: const EdgeInsets.only(top:8.0),
+                                child: SvgPicture.asset(AppIcons.trashSvg,height: AppSize.s32,width: AppSize.s32,),
+                              ),
+                              // image: Icon(Icons.de, size: 32, color: Colors.red),
                               context: context,
                               cancelAction: () {
                                 NavigationService.goBack(context);
@@ -166,7 +173,11 @@ class _MealItemWidgetState extends State<MealItemWidget> {
                               confirmAction: () async {
                                 NavigationService.goBack(context);
                                 usualCubit
-                                    .deleteUserUsualMeal(widget.mealId!);
+                                    .deleteUserUsualMeal(widget.mealId!).then((value){
+                                      setState(() {
+
+                                      });
+                                });
                               },
                               confirmText: "Yes",
                             );
@@ -201,21 +212,51 @@ class _MealItemWidgetState extends State<MealItemWidget> {
               if (widget.meal?.proteins != null)
 
                 CaloriesTypeItemWidget(
-                  icon: AppIcons.proteins,
                   caloriesTypeName: 'Proteins',
                   usualProteins: widget.meal!.proteins!,
                   mealCalories: widget.mealCalories,
+                  icon: Container(
+                    width: 35,
+                    height: 28,
+                    decoration: ShapeDecoration(
+                      color: Color(0x4C7FC902),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(AppImages.proteins,width: 20,
+                      height: 20,),
+                  ),
                 ),
               if (widget.meal?.carbs != null)
                 CaloriesTypeItemWidget(
-                  icon: AppIcons.carbs,
+                  icon: Container(
+                    width: 35,
+                    height: 28,
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFB9E5F9),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(AppImages.carbs,width: 20,
+                      height: 20,),
+                  ),
                   caloriesTypeName: 'Carbs',
                   usualProteins: widget.meal!.carbs!,
                   mealCalories: widget.mealCalories,
                 ),
               if (widget.meal?.fats != null)
                 CaloriesTypeItemWidget(
-                  icon: AppIcons.fats,
+                  icon: Container(
+                    width: 35,
+                    height: 28,
+                    decoration: ShapeDecoration(
+                      color: Color(0x3FCFC928),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Image.asset(AppImages.fats,width: 20,
+                      height: 20,),
+                  ),
                   caloriesTypeName: 'Fats',
                   usualProteins: widget.meal!.fats!,
                   mealCalories: widget.mealCalories,
@@ -227,7 +268,119 @@ class _MealItemWidgetState extends State<MealItemWidget> {
           )),
       ));
 
+  }
+
+  void showAddOptionsDialog(BuildContext context) {
+    TextEditingController fractionController = TextEditingController();
+    int selectedOption = 1; // 1 for "Add to Diary", 2 for "Add Fraction"
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              child: AddToDiaryDialog(mealId: widget.mealId!,meal: widget.meal,)
+            );
+          },
+        );
+      },
+    );
+  }
+}
 
 
+class AddToDiaryDialog extends StatefulWidget {
+  final int mealId;
+  final MealData? meal;
+  const AddToDiaryDialog({super.key,required this.meal,required this.mealId});
+
+  @override
+  State<AddToDiaryDialog> createState() => _AddToDiaryDialogState();
+}
+
+class _AddToDiaryDialogState extends State<AddToDiaryDialog> {
+  TextEditingController fractionController = TextEditingController();
+  bool selectedOption = false; // 1 for "Add to Diary", 2 for "Add Fraction"
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppSize.s12),
+          color: Colors.white
+        ),
+        child: selectedOption ?
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Enter a fraction'),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomTextField(
+                controller: fractionController,
+                keyBoardType: TextInputType.number,
+                onChanged: (val){
+
+                },
+                hintText: 'Enter a number',
+
+              ),
+            ),
+
+            VerticalSpace(AppSize.s12),
+            CustomButton(
+              text: 'Save',
+              height: AppSize.s40,
+              width: AppSize.s100,
+              onPressed: ()async{
+                if(fractionController.text!= ''){
+                  double fraction = double.tryParse(fractionController.text)??0;
+                  await BlocProvider.of<UsualCubit>(context).addMealToDiary(mealId: widget.mealId,meal: widget.meal,fraction: fraction,diaryCubit:BlocProvider.of<DiaryCubit>(context));
+                  NavigationService.goBack(context);
+                  NavigationService.goBack(context);
+
+                }
+              },
+
+            ),
+          ],
+        ):Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Radio button for "Add to Diary"
+            CustomButton(
+              text: 'Add to diary',
+              height: AppSize.s40,
+              width: AppSize.s200,
+              onPressed: ()async{
+                await BlocProvider.of<UsualCubit>(context).addMealToDiary(mealId: widget.mealId,meal: widget.meal,diaryCubit:BlocProvider.of<DiaryCubit>(context));
+                NavigationService.goBack(context);
+                NavigationService.goBack(context);
+              },
+
+            ),
+            VerticalSpace(AppSize.s12),
+            CustomButton(
+              text: 'Add fraction',
+              height: AppSize.s40,
+              width: AppSize.s200,
+              onPressed: (){
+                setState(() {
+                  selectedOption = true;
+                });
+                },
+            ),
+
+
+          ],
+        ),
+      ),
+    );
   }
 }

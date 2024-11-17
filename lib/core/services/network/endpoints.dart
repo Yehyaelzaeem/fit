@@ -56,9 +56,8 @@ class EndPoints {
   static const String getAreas = "/areas";
 
   // Wishlist
-  static const String addWishlist = "/add-wishlist";
-  static const String getWishlist = "/wishlist";
-  static const String removeWishlist = "/remove-wishlist";
+  static const String addFavoriteCalorie = "/new_favourite_calorie";
+  static const String deleteFavouriteCalorie = "/delete_favourite_calorie";
 
   // Ads
   static const String getUserAds = "/user-ads";

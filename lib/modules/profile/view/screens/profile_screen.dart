@@ -213,43 +213,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: AppColors.white,
                                   ),
                                 ),
+                                VerticalSpace(AppSize.s8),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: CustomText(
-                                    'Next Sessions',
-                                    color: Colors.white,
-                                    fontSize: FontSize.s20,
-                                    fontWeight: FontWeightManager.semiBold,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: AppSize.s32),
-                                  child: CustomText(
-                                      '${currentUser!.data!.nextSession!.day}',
-                                      color: AppColors.black,
-                                      fontSize: FontSize.s20,
-                                      fontWeight: FontWeightManager.semiBold),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       CustomText(
-                                        DateFormat('dd, MMM, yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
-                                        color: Colors
-                                            .white,
-                                        fontSize: FontSize.s16,
+                                        'Next Session',
+                                        color: Colors.white,
+                                        fontSize: FontSize.s20,
+                                        fontWeight: FontWeightManager.semiBold,
                                       ),
-                                      HorizontalSpace(AppSize.s12),
+                                      VerticalSpace(AppSize.s8),
                                       CustomText(
-                                        DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
-                                        color: Colors
-                                            .white,
-                                        fontSize: FontSize.s16,
+                                          '${currentUser!.data!.nextSession!.day}',
+                                          color: AppColors.black,
+                                          fontSize: FontSize.s20,
+                                          fontWeight: FontWeightManager.semiBold),
+                                      VerticalSpace(AppSize.s8),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CustomText(
+                                            DateFormat('dd/MM/yyyy').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                            color: Colors
+                                                .white,
+                                            fontSize: FontSize.s16,
+                                          ),
+                                          HorizontalSpace(AppSize.s12),
+                                          CustomText(
+                                            DateFormat('hh:mm a').format(DateFormat("dd/MM/yyyy hh:mm a").parse(currentUser!.data!.nextSession!.sessionDate!)),
+                                            color: Colors
+                                                .white,
+                                            fontSize: FontSize.s16,
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
+
 
 
                               ],

@@ -80,10 +80,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
         },
         builder: (context, state) => state is MessagesLoading
-             ? SizedBox(
-                    height: 32,
-                    width: 48,
-                    child: CircularLoadingWidget())
+             ? CircularLoadingWidget(
+
+             )
                     : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),

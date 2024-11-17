@@ -38,7 +38,7 @@ appDialog({
                 if (image != null) image,
                 SizedBox(height: 4),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(200),
                   ),
@@ -54,7 +54,7 @@ appDialog({
                 if (child != null) child,
                 if (body != null)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 2),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(200),
                     ),
@@ -66,7 +66,7 @@ appDialog({
                   ),
                 SizedBox(height: AppSize.s12),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     mainAxisSize: MainAxisSize.min,
@@ -75,9 +75,9 @@ appDialog({
                         GestureDetector(
                           onTap: () => cancelAction(),
                           child: Container(
-                            width: deviceWidth / 4,
+                            width: deviceWidth / 5,
                             height: AppSize.s40,
-                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            margin: EdgeInsets.symmetric(horizontal: 6),
                             alignment: Alignment.centerLeft,
                             decoration: BoxDecoration(
                               color: Color(0xFF7FC902),
@@ -100,9 +100,9 @@ appDialog({
                         GestureDetector(
                           onTap: () => confirmAction(),
                           child: Container(
-                            width: deviceWidth / 4,
+                            width: deviceWidth / 5,
                             height: AppSize.s40,
-                            margin: EdgeInsets.symmetric(horizontal: 12),
+                            margin: EdgeInsets.symmetric(horizontal: 6),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(color: AppColors.PRIMART_COLOR),

@@ -11,7 +11,7 @@ import '../my_other_calories.dart';
 import '../../../core/models/day_details_reposne.dart' as dayDetails;
 
 class CategoryTile extends StatefulWidget {
-  final String icon;
+  final Widget icon;
   final String title;
   final int type;
   const CategoryTile({super.key,
@@ -32,7 +32,7 @@ class _CategoryTileState extends State<CategoryTile> {
       padding: const EdgeInsets.all(8.0),
       child: Row(
           children: [
-            Image.asset(widget.icon),
+            widget.icon,
             HorizontalSpace(AppSize.s8),
             SizedBox(
                 child: CustomText(widget.title,fontSize: FontSize.s18,fontWeight: FontWeightManager.medium,)),

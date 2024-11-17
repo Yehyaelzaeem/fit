@@ -62,8 +62,6 @@ class _OrientationViewState extends State<OrientationView> {
             },
             builder: (context, state) => state is OrientationLoading
                 ? Container(
-              height: AppSize.s250,
-              padding: const EdgeInsets.symmetric(vertical: 100),
               child: Center(child: CircularLoadingWidget()),
             )
                 : homeCubit.orientationVideosResponse.data == null

@@ -13,6 +13,7 @@ import '../../../config/navigation/navigation_services.dart';
 import '../../../core/models/usual_meals_data_reposne.dart';
 import '../../../core/models/usual_meals_reposne.dart';
 import '../../../core/resources/app_colors.dart';
+import '../../../core/view/widgets/default/CircularLoadingWidget.dart';
 import '../../../core/view/widgets/default/app_buttons.dart';
 import '../../../core/view/widgets/default/edit_text.dart';
 import '../../../core/view/widgets/default/text.dart';
@@ -23,11 +24,12 @@ import '../save_new_meal.dart';
 import '../widget/section_meals.dart';
 
 class MakeAMealView extends StatefulWidget {
-  MakeAMealView({this.mealData, this.mealName, this.mealId});
+  MakeAMealView({this.mealData, this.mealName, this.mealId,required this.refresh});
 
   late MealData? mealData;
   final String? mealName;
   final int? mealId;
+  final VoidCallback refresh;
 
   @override
   State<MakeAMealView> createState() => _MakeAMealViewState();
@@ -142,7 +144,18 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                     SizedBox(height: 4),
                     // rowWithProgressBar("Proteins", ),
                     MealsSection(
-                      icon: AppIcons.proteins,
+                      iconWidget: Container(
+                        width: 35,
+                        height: 28,
+                        decoration: ShapeDecoration(
+                          color: Color(0x4C7FC902),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Image.asset(AppImages.proteins,width: 20,
+                          height: 20,),
+                      ),
+
                       title: 'Proteins',
                       type: 'proteins',
                       usualCubit: usualCubit,
@@ -151,8 +164,19 @@ class _MakeAMealViewState extends State<MakeAMealView> {
 
                     SizedBox(height: 4),
                     MealsSection(
-                      icon: AppIcons.carbs,
                       title: 'Carbs',
+                      iconWidget: Container(
+                        width: 35,
+                        height: 28,
+                        decoration: ShapeDecoration(
+                          color: Color(0xFFB9E5F9),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Image.asset(AppImages.carbs,width: 20,
+                          height: 20,),
+                      ),
+
                       type: 'carbs',
                       usualCubit: usualCubit,
                       caloriesDetails: usualCubit.carbsDetails,
@@ -160,9 +184,20 @@ class _MakeAMealViewState extends State<MakeAMealView> {
 
                     SizedBox(height: 4),
                     MealsSection(
-                      icon: AppIcons.fats,
                       title: 'Fats',
                       type: 'fats',
+                      iconWidget: Container(
+                        width: 35,
+                        height: 28,
+                        decoration: ShapeDecoration(
+                          color: Color(0x3FCFC928),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Image.asset(AppImages.fats,width: 20,
+                          height: 20,),
+                      ),
+
                       usualCubit: usualCubit,
                       caloriesDetails: usualCubit.fatsDetails,
                     ),
@@ -172,12 +207,19 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               ],
             ),
           ),
-          usualCubit.addLoading == true
-              ? Container(
-            height: 40,
-            child: Lottie.asset('assets/loader.json'),
-          )
-              :
+
+              BlocConsumer<UsualCubit, UsualStates>(
+
+    builder: (context, state) => state is UsualMealCreating || state is UsualLoading
+    ? Container(
+      height: 40,
+      child: Image.asset(
+        'assets/img/fit_loader.gif',
+        // AppImages.kLogoColumn,
+        // width: double.infinity,
+      ),
+    )
+        :
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16,horizontal: AppSize.s24),
             child: CustomButton(
@@ -213,7 +255,13 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                                   usualCubit.fatsDetails.any((a) => element.foodId==a.id)?
                                   usualCubit.fatsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
                                   usualCubit.carbsDetails.any((a) => element.foodId==a.id)?
-                                  usualCubit.carbsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:0)
+                                  usualCubit.carbsDetails.firstWhere((a) => element.foodId==a.id).caloriePerUnit:
+                                  usualCubit.caloriesDetails.any((a) => element.mealName==a.title)?
+                                  usualCubit.caloriesDetails.firstWhere((a) => element.mealName==a.title).caloriePerUnit:
+                                  usualCubit.fatsDetails.any((a) => element.mealName==a.title)?
+                                  usualCubit.fatsDetails.firstWhere((a) => element.mealName==a.title).caloriePerUnit:
+                                  usualCubit.carbsDetails.any((a) => element.mealName==a.title)?
+                                  usualCubit.carbsDetails.firstWhere((a) => element.mealName==a.title).caloriePerUnit:0)
                           )
                       )
                     },diaryCubit: diaryCubit).then((value) async {
@@ -248,7 +296,9 @@ class _MakeAMealViewState extends State<MakeAMealView> {
               borderRadius: AppSize.s24,
               text: widget.mealData == null ? 'Save Meal' : 'Update Meal',
             ),
-          )
+          ), listener: (BuildContext context, UsualStates state) {
+
+              },),
         ],
       ),
     );
@@ -431,6 +481,7 @@ class _MakeAMealViewState extends State<MakeAMealView> {
                   child: DeleteItemWidget(
                     controller: usualCubit,
                     item: item,
+                    refresh: widget.refresh,
                     type: type == 'proteins'
                         ? 'proteins'
                         : type == 'carbs'
@@ -598,8 +649,6 @@ class _MakeAMealViewState extends State<MakeAMealView> {
 
   void showQualityDialog(List<FoodDataItem> food, FoodDataItem item,
       String type) async {
-    print("Item Data => ${item.title}");
-    print("Item Data => ${item.id}");
     // show screen dialog
     result = await showDialog(
         context: context,
@@ -633,12 +682,14 @@ class DeleteItemWidget extends StatefulWidget {
   final FoodDataItem item;
   final UsualCubit controller;
   final String type;
+  final VoidCallback refresh;
 
   DeleteItemWidget({
     Key? key,
     required this.item,
     required this.controller,
     required this.type,
+    required this.refresh,
   }) : super(key: key);
 
   @override
@@ -694,7 +745,13 @@ class _DeleteItemWidgetState extends State<DeleteItemWidget> {
             widget.controller.fatsDetails.removeWhere((element) =>
             widget.item.title == element.title);
           }
+
         }
+        print("delll");
+        widget.refresh();
+        setState(() {
+
+        });
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: SvgPicture.asset(

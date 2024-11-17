@@ -40,19 +40,24 @@ class _WaterWidgetState extends State<WaterWidget> {
         ),
           child: Column(
             children: [
+
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomText('Water',fontSize: FontSize.s14,fontWeight: FontWeight.w600,),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText('Water',fontSize: FontSize.s14,fontWeight: FontWeight.w600,),
+                    ],
+                  ),
+
+                  SizedBox(),
                   Padding(
                     padding: const EdgeInsets.all(AppSize.s24),
                     child: Column(
                       children: [
+                        VerticalSpace(AppSize.s20),
                         InkWell(
                             onTap: (){
                               showWaterBottomSheet(context,diaryCubit,false);
@@ -63,7 +68,6 @@ class _WaterWidgetState extends State<WaterWidget> {
                               // }
                             },
                             child: SvgPicture.asset(AppIcons.minus)),
-                        VerticalSpace(AppSize.s24)
                       ],
                     ),
                   ),
@@ -72,12 +76,12 @@ class _WaterWidgetState extends State<WaterWidget> {
                     children: [
                       Lottie.asset(
                         'assets/animations/water.json', // Your animation file path
-                        width: AppSize.s90,
+                        width: AppSize.s82,
                         height:  AppSize.s90,
                         fit: BoxFit.cover,
                       ),
-                      CustomText('${(diaryCubit.dayDetailsResponse?.data?.water??0)*200} ml',fontSize: FontSize.s16,fontWeight: FontWeight.w600,)
-                      ,VerticalSpace(AppSize.s6),
+                      CustomText('${(diaryCubit.dayDetailsResponse?.data?.water??0)} ml',fontSize: FontSize.s16,fontWeight: FontWeight.w600,)
+                      ,VerticalSpace(AppSize.s2),
                     ],
                   ),
 
@@ -85,15 +89,22 @@ class _WaterWidgetState extends State<WaterWidget> {
                     padding: const EdgeInsets.all(AppSize.s24),
                     child: Column(
                       children: [
+                        VerticalSpace(AppSize.s20),
                         InkWell(
                             onTap: (){
                               showWaterBottomSheet(context,diaryCubit,true);
                             },
                             child: SvgPicture.asset(AppIcons.plus)),
-                        VerticalSpace(AppSize.s24)
                       ],
                     ),
-                  )
+                  ),
+                  SizedBox(),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText('Water',fontSize: FontSize.s14,fontWeight: FontWeight.w600,color: AppColors.primary.withOpacity(0.08),),
+                    ],
+                  ),
                 ],
               )
             ],
@@ -256,14 +267,18 @@ class _WaterSheetState extends State<WaterSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(AppIcons.w),
-              SvgPicture.asset(AppIcons.wb),
-              HorizontalSpace(AppSize.s16),
-              CustomText('${(widget.diaryCubit.waterSheetVal)*200} ml',fontSize: FontSize.s20,)
+              // Padding(
+              //   padding: const EdgeInsets.only(bottom:10.0),
+              //   child: SvgPicture.asset(AppIcons.w),
+              // ),
+              // SvgPicture.asset(AppIcons.wb),
+              // HorizontalSpace(AppSize.s16),
+              CustomText('${(widget.diaryCubit.waterSheetVal)} ml',fontSize: FontSize.s20,)
 
             ],
           ),
 
+          VerticalSpace(AppSize.s12),
           GridView(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 12,
@@ -272,19 +287,20 @@ class _WaterSheetState extends State<WaterSheet> {
             physics: NeverScrollableScrollPhysics(),
             children: [
               WaterItemWidget(
-                title: '200 ml',
+                title: '250 ml',
                 icon: AppIcons.water200,
+                heightIcon: AppSize.s40,
                 isAdd: widget.isAdd,
                 onTap: (){
 
                   if(widget.isAdd) {
                     widget.diaryCubit.changeWaterSheetVal(
-                        widget.diaryCubit.waterSheetVal + 1);
+                        widget.diaryCubit.waterSheetVal + 250);
                   }else{
-                    if((widget.diaryCubit.waterSheetVal - 1)>=0){
+                    if((widget.diaryCubit.waterSheetVal - 250)>=0){
 
                       widget.diaryCubit.changeWaterSheetVal(
-                          widget.diaryCubit.waterSheetVal - 1);
+                          widget.diaryCubit.waterSheetVal - 250);
                     }
                   }
                   setState(() {
@@ -293,18 +309,19 @@ class _WaterSheetState extends State<WaterSheet> {
                 },
               ),
               WaterItemWidget(
-                title: '400 ml',
+                title: '600 ml',
                 isAdd: widget.isAdd,
+                heightIcon:AppSize.s56 - 4,
                 icon: AppIcons.water400,
                 onTap: (){
                   if(widget.isAdd) {
                     widget.diaryCubit.changeWaterSheetVal(
-                        widget.diaryCubit.waterSheetVal + 2);
+                        widget.diaryCubit.waterSheetVal + 600);
                   }else{
-                    if((widget.diaryCubit.waterSheetVal - 2)>=0){
+                    if((widget.diaryCubit.waterSheetVal - 600)>=0){
 
                       widget.diaryCubit.changeWaterSheetVal(
-                          widget.diaryCubit.waterSheetVal - 2);
+                          widget.diaryCubit.waterSheetVal - 600);
                     }
                   }
                   setState(() {
@@ -315,18 +332,19 @@ class _WaterSheetState extends State<WaterSheet> {
 
 
               WaterItemWidget(
-                title: '600 ml',
+                title: '1 litre',
                 isAdd: widget.isAdd,
+                heightIcon:AppSize.s68,
                 icon: AppIcons.water600,
                 onTap: (){
                   if(widget.isAdd) {
                     widget.diaryCubit.changeWaterSheetVal(
-                        widget.diaryCubit.waterSheetVal + 3);
+                        widget.diaryCubit.waterSheetVal + 1000);
                   }else{
-                    if((widget.diaryCubit.waterSheetVal - 3)>=0){
+                    if((widget.diaryCubit.waterSheetVal - 1000)>=0){
 
                       widget.diaryCubit.changeWaterSheetVal(
-                          widget.diaryCubit.waterSheetVal - 3);
+                          widget.diaryCubit.waterSheetVal - 1000);
                     }
                   }
                   setState(() {
@@ -335,7 +353,7 @@ class _WaterSheetState extends State<WaterSheet> {
                 },
               ),
               WaterItemWidget(
-                title: '800 ml',
+                title: '1500 ml',
                 icon: AppIcons.water800,
                 isAdd: widget.isAdd,
                 isLarge: true,
@@ -344,11 +362,11 @@ class _WaterSheetState extends State<WaterSheet> {
                   wVal = int.tryParse(val!)??0;
                   if(wVal!=0){
                       if(widget.isAdd) {
-                        widget.diaryCubit.waterSheetVal = (wVal / 200) +
+                        widget.diaryCubit.waterSheetVal = (wVal).toDouble() +
                             (widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0);
                       }else{
-                            if((widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0)>(wVal / 200)){
-                              widget.diaryCubit.waterSheetVal = (widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0) -(wVal / 200)
+                            if((widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0)>(wVal )){
+                              widget.diaryCubit.waterSheetVal = (widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0) -(wVal).toDouble()
                                   ;
                             }else{
                               widget.diaryCubit.changeWaterSheetVal((widget.diaryCubit.dayDetailsResponse?.data?.water??0).toDouble());
@@ -380,6 +398,7 @@ class WaterItemWidget extends StatelessWidget {
   final String icon;
   final bool isAdd;
   final bool isLarge;
+  final double? heightIcon;
   final VoidCallback? onTap;
   final Function(String?)? onChange;
 
@@ -389,6 +408,7 @@ class WaterItemWidget extends StatelessWidget {
     required this.icon,
     required this.isAdd,
     this.isLarge = false,
+    this.heightIcon,
      this.onTap,
     this.onChange,
   });
@@ -409,20 +429,34 @@ class WaterItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                if(isLarge)
+                  VerticalSpace(AppSize.s16),
+                if(heightIcon!=null)
+                if(heightIcon! < AppSize.s64)
+                  VerticalSpace((AppSize.s64 - heightIcon! )),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: icon.contains('svg')?SvgPicture.asset(icon,width: AppSize.s48,height: AppSize.s48):Image.asset(icon,width: AppSize.s48,height: AppSize.s48,fit: isLarge?BoxFit.cover:null,),
+                  padding: const EdgeInsets.all(4.0),
+                  child: icon.contains('svg')?Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: SvgPicture.asset(icon,width: AppSize.s48,height: AppSize.s48,fit: isLarge?BoxFit.cover:BoxFit.contain,),
+                  ):Image.asset(icon,width: AppSize.s48,height: heightIcon??AppSize.s64,fit: isLarge?BoxFit.cover:null,),
                 ),
+
+                if(!isLarge)
+                  VerticalSpace(AppSize.s8),
                 if(!isLarge)
 
                   Center(child: CustomText(title,fontSize: FontSize.s16,)),
+
+                if(heightIcon!=null)
+                    VerticalSpace(AppSize.s8),
                 if(isLarge)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextField(
                       keyBoardType: TextInputType.number,
                       onChanged: onChange,
-                      hintText: '800 ml',
+                      hintText: 'Custom ml',
 
                     ),
                   )

@@ -134,10 +134,12 @@ class _HomePageViewState extends State<HomePageView> {
                                     borderRadius: BorderRadius.circular(64),
                                   ),
                                   child: Center(
-                                    child: kTextHeader(
+                                    child: CustomText(
                                       "${homeCubit.homeResponse!.data!.services![index].title}",
                                       color:  Colors.white,
-                                      bold: pageIndex == index,
+
+                                      fontWeight: pageIndex == index?FontWeight.w600:FontWeight.w400,
+                                      fontSize: pageIndex == index?FontSize.s18:FontSize.s16,
                                     ),
                                   ),
                                 ),
@@ -151,13 +153,13 @@ class _HomePageViewState extends State<HomePageView> {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal:AppSize.s20),
-                    child: CustomText('What are you up to do?',fontSize: FontSize.s16,fontWeight: FontWeightManager.semiBold,),
+                    child: CustomText('What are you up to do?',fontSize: FontSize.s16,fontWeight: FontWeight.w700,color: AppColors.customBlack,),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(AppSize.s12),
+                    padding: const EdgeInsets.all(AppSize.s8),
                     child: Container(
                       height: AppSize.s150,
-                      child: ListView.builder(
+                      child:ListView.builder(
                           itemCount: homeCubit.homeResponse!.data!.services![pageIndex].items!.length,
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
@@ -175,7 +177,7 @@ class _HomePageViewState extends State<HomePageView> {
                                   children: [
                                     Container(
                                       height: AppSize.s125,
-                                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                      padding: EdgeInsets.symmetric(horizontal: AppSize.s4, vertical: AppSize.s4),
                                       margin: EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -202,7 +204,7 @@ class _HomePageViewState extends State<HomePageView> {
                                       ),
                                       child: Column(
                                         children: [
-                                          SizedBox(height: 4,),
+                                          SizedBox(height: AppSize.s12,),
                                           CachedNetworkImage(
                                             imageUrl:"${homeCubit.homeResponse!.data!.services![pageIndex].items![index].image}",
                                             width: 50,
@@ -220,8 +222,9 @@ class _HomePageViewState extends State<HomePageView> {
                                                 child: CustomText(
                                                   homeCubit.homeResponse!.data!.services![pageIndex].items![index].title!,
                                                   textAlign: TextAlign.center,
-                                                  color: serviceIndex == index ? kColorPrimary : Colors.black87,
-                                                  fontWeight: FontWeightManager.semiBold,
+                                                  color: serviceIndex == index ? kColorPrimary : AppColors.customBlack,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: FontSize.s12,
 
                                                 ),
                                               ),
@@ -400,7 +403,6 @@ class _HomePageViewState extends State<HomePageView> {
                                       width: AppSize.s24,
                                       height: AppSize.s24,
                                     ),
-                                    HorizontalSpace(AppSize.s24),
                                     kTextHeader('Subscribe', size: 16, color: Colors.white, bold: true, paddingH: 16, paddingV: 4),
                                   ],
                                 ),

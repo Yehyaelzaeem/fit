@@ -29,7 +29,7 @@ class SessionRepository extends BaseRepository {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
           Response response = await _apiClient.get(url: EndPoints.getSessions,requestBody: {});
-
+          saveSessionsLocally(SessionResponse.fromJson(response.data));
           return response; // Return the Response object here
         } else {
           SessionResponse? cachedSession = await readSessionsLocally();

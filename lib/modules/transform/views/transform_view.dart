@@ -58,8 +58,7 @@ class _TransformViewState extends State<TransformView> {
 
       isLoading == true
           ? SizedBox(
-          height: 32,
-          width: 48,
+
           child: CircularLoadingWidget())
           : GridView.builder(
               shrinkWrap: true,

@@ -11,6 +11,7 @@ import '../../../diary/controllers/diary_controller.dart';
 import '../../../diary/cubits/diary_cubit.dart';
 import '../../cubits/home_cubit.dart';
 
+
 class HomeBottomNavigationBar extends StatefulWidget {
    HomeBottomNavigationBar({super.key});
 
@@ -72,13 +73,14 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
               // controllerHome.onInit();
             },
             child: Container(
-              height: AppSize.s68,
+              height: AppSize.s82,
               width: 100,
               child: Center(
                 child: Column(
                   children: [
+                    SizedBox(height: homeCubit.currentIndex.value == 0?AppSize.s12:AppSize.s20,),
                     Container(
-                      padding: const EdgeInsets.all(10.0),
+                      padding:  EdgeInsets.all(homeCubit.currentIndex.value == 0?8.0:4),
                       decoration: BoxDecoration(
                         color: AppColors.customBlack,
                         shape: BoxShape.circle,
@@ -111,18 +113,18 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
           InkWell(
             onTap: () {
               homeCubit.currentIndex.value = 1;
-              // final controllerDiary = Get.find<DiaryController>(tag: 'diary');
               BlocProvider.of<DiaryCubit>(context).onInit();
+              // final controllerDiary = Get.find<DiaryController>(tag: 'diary');
             },
             child: Container(
-              height: AppSize.s82,
+              height: AppSize.s90,
               width: 100,
               child: Center(
                 child: Column(
                   children: [
 
                          Container(
-                           padding: const EdgeInsets.all(10.0),
+                           padding:  EdgeInsets.all(homeCubit.currentIndex.value == 1?10.0:5),
                            decoration: BoxDecoration(
                                color: AppColors.customBlack,
                                shape: BoxShape.circle,
@@ -156,13 +158,14 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
               homeCubit.currentIndex.value = 2;
             },
             child: Container(
-              height: AppSize.s68,
+              height: AppSize.s82,
               width: 100,
               child: Center(
                 child: Column(
                   children: [
+                    SizedBox(height: homeCubit.currentIndex.value == 2?AppSize.s12:AppSize.s20,),
                      Container(
-                       padding: const EdgeInsets.all(10.0),
+                       padding: EdgeInsets.all(homeCubit.currentIndex.value == 2?8.0:4),
                        decoration: BoxDecoration(
                          color: AppColors.customBlack,
                          shape: BoxShape.circle,

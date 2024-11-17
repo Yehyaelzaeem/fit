@@ -69,7 +69,7 @@ class PaymentController extends GetxController {
     error.value = '';
     loading.value = true;
     try {} catch (e) {
-      Echo('error response $e');
+      // Echo('error response $e');
       error.value = '$e';
     }
     loading.value = false;

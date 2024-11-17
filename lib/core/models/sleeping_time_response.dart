@@ -47,7 +47,7 @@ class Data {
     name: json["name"],
     from: json["from"],
     to: json["to"],
-    image: json["image"],
+    image: json["image"]??'',
   );
 
   Map<String, dynamic> toJson() => {

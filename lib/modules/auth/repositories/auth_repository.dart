@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app/core/utils/alerts.dart';
 import 'package:dartz/dartz.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
@@ -17,6 +18,7 @@ import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/local/storage_keys.dart';
 import '../../../core/services/network/api_client.dart';
 import '../../../core/services/network/endpoints.dart';
+import '../../../core/utils/globals.dart';
 import '../../../core/utils/shared_helper.dart';
 import '../../profile/models/responses/user_model.dart';
 import '../models/requests/login_body.dart';
@@ -39,19 +41,33 @@ class AuthRepository extends BaseRepository {
       'device_id': deviceId + id,
       'fcm_token': deviceToken,
     });
-    print(body.fields);
     return super.call<UserResponse>(
       httpRequest: () async {
         final response = await _apiClient.post(url: EndPoints.login, requestBody: body);
 
         print(response.data);
-        await _cacheClient.saveSecuredData(StorageKeys.token, response.data["data"]["access_token"]);
-        await _cacheClient.save(StorageKeys.isAuthed, true);
+        if(response.data["data"]!=null) {
+          await _cacheClient.saveSecuredData(
+              StorageKeys.token, response.data["data"]["access_token"]);
+          await _cacheClient.save(StorageKeys.isAuthed, true);
+          return response;
+        }
+          // else{
+          // Alerts.showToast(response.data["message"]);
+          // final failureMessage = response.data["message"] ?? "An error occurred";
+          //
+          // throw
+          // return Left(Failure(message: failureMessage));
+        // }
+        // Alerts.showToast(response.data["message"]);
+
         return response;
       },
       successReturn: (data) => UserResponse.fromJson(data),
     );
   }
+
+
 
   Future<Either<Failure, GeneralResponse>> register(String id,
       String password,
@@ -166,8 +182,9 @@ class AuthRepository extends BaseRepository {
 
   Future<void> clearCache() async {
     await _cacheClient.delete(StorageKeys.isAuthed);
-    // await _cacheClient.delete(StorageKeys.countryId);
+    await _cacheClient.delete(StorageKeys.USER);
     await _cacheClient.deleteSecuredData();
+    currentUser = null;
   }
 
 

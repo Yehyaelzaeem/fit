@@ -6,6 +6,7 @@ import 'package:app/core/resources/app_values.dart';
 import 'package:app/core/resources/font_manager.dart';
 import 'package:app/core/view/views.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +14,7 @@ import '../../core/models/day_details_reposne.dart';
 import '../../core/resources/app_colors.dart';
 import '../../core/view/widgets/default/app_buttons.dart';
 import '../../core/view/widgets/default/edit_text.dart';
+import 'cubits/diary_cubit.dart';
 
 class AddNewFood extends StatefulWidget {
   final String? date;
@@ -40,6 +42,8 @@ class _AddNewFoodState extends State<AddNewFood> {
   List<Food>? data;
   late String keyword;
 
+
+
   void search(String keyWord) {
     for (int i = 0; i < widget.list.length; i++) {
       if (widget.list[i].title!.toUpperCase().contains(keyWord.toUpperCase())) {
@@ -58,6 +62,9 @@ class _AddNewFoodState extends State<AddNewFood> {
   void initState() {
     data = widget.list;
     super.initState();
+    data?.forEach((element) {
+      element.isSellected = false;
+    });
   }
 
   TextEditingController _controller = new TextEditingController();
@@ -117,9 +124,44 @@ class _AddNewFoodState extends State<AddNewFood> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical:AppSize.s8,horizontal: AppSize.s4),
-                                  child: SvgPicture.asset(AppIcons.heartEmpty,),
+                                  child: (data![index].isFavourite)??false?InkWell(
+                                      onTap: (){
+                                        BlocProvider.of<DiaryCubit>(context).deleteFavoriteCalorie(data![index].id!);
+                                        data![index].isFavourite = false;
+                                        data!.sort((a, b) {
+                                          // Prioritize isFavourite items
+                                          if (a.isFavourite != b.isFavourite) {
+                                            return a.isFavourite! ? -1 : 1;
+                                          }
+                                          // Then sort alphabetically by title
+                                          return a.title!.compareTo(b.title!);
+                                        });
+
+                                        setState(() {
+
+                                        });
+                                      },
+                                      child: SvgPicture.asset(AppIcons.heart,)):
+                                  InkWell(
+                                      onTap: (){
+                                        BlocProvider.of<DiaryCubit>(context).addFavoriteCalorie(data![index].id!);
+                                        data![index].isFavourite = true;
+
+                                        data!.sort((a, b) {
+                                          // Prioritize isFavourite items
+                                          if (a.isFavourite != b.isFavourite) {
+                                            return a.isFavourite! ? -1 : 1;
+                                          }
+                                          // Then sort alphabetically by title
+                                          return a.title!.compareTo(b.title!);
+                                        });
+
+                                        setState(() {
+                                        });
+                                      },
+                                      child: SvgPicture.asset(AppIcons.heartEmpty,)),
                                 ),
-        
+
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -130,7 +172,7 @@ class _AddNewFoodState extends State<AddNewFood> {
                                         children: [
                                           CustomText(
                                             "${data![index].title}",
-        
+
                                                 color: Color(int.parse(
                                                     "0xFF${data![index].color}")),
                                                 fontSize: FontSize.s16,
@@ -227,8 +269,9 @@ class _AddNewFoodState extends State<AddNewFood> {
                                                           func: () {
                                                             selectedFood?.qty =
                                                                 quantity;
+                                                            data![index].isSellected = false;
                                                             NavigationService.goBack(context,
-        
+
                                                                     selectedFood);
                                                           },
                                                           shadow: true,

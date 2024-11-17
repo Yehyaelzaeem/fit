@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/base/repositories/base_repository.dart';
 import '../../../core/models/general_response.dart';
+import '../../../core/models/my_other_calories_response.dart';
 import '../../../core/services/error/failure.dart';
 import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/local/storage_keys.dart';
@@ -125,7 +126,7 @@ class OtherCaloriesRepository extends BaseRepository {
     await _cacheClient.save(StorageKeys.OTHER_CALORIES_CREATION, mealDataListJson);
   }
 
-  Future<void> createOtherCaloriesData() async {
+  Future<void> createOtherCaloriesData(MyOtherCaloriesResponse myOtherCaloriesResponse) async {
     final cachedData = await _cacheClient.get(StorageKeys.OTHER_CALORIES_CREATION);
 
     List<String> mealDataList = [];
@@ -146,14 +147,19 @@ class OtherCaloriesRepository extends BaseRepository {
       OtherMealData otherCaloriesData = OtherMealData.fromJson(jsonDecode(mealDataJson));
 
       if (otherCaloriesData.id == null) {
-        await addOtherCalories(
-          title: otherCaloriesData.title,
-          calPerUnit: otherCaloriesData.calPerUnit,
-          unit: otherCaloriesData.unit,
-          unitQuantity: otherCaloriesData.unitQuantity,
-          unitName: otherCaloriesData.unitName,
-          type: otherCaloriesData.type,
-        );
+        if(myOtherCaloriesResponse.data!.proteins!.any((element) => element.title == otherCaloriesData.title)||myOtherCaloriesResponse.data!.carbs!.any((element) => element.title == otherCaloriesData.title)||myOtherCaloriesResponse.data!.fats!.any((element) => element.title == otherCaloriesData.title)){
+
+        }else{
+          await addOtherCalories(
+            title: otherCaloriesData.title,
+            calPerUnit: otherCaloriesData.calPerUnit,
+            unit: otherCaloriesData.unit,
+            unitQuantity: otherCaloriesData.unitQuantity,
+            unitName: otherCaloriesData.unitName,
+            type: otherCaloriesData.type,
+          );
+        }
+
       } else {
         await updateOtherCalories(
           title: otherCaloriesData.title,

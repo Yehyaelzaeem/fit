@@ -50,6 +50,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
 
     final result = await Connectivity().checkConnectivity();
     if (result != ConnectivityResult.none) {
+    // if (result != ConnectivityResult.none) {
       setState(() {
         showLoader = true;
       });
@@ -62,6 +63,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
           unitName: unit_name,
           type: widget.type)
           .then((value) {
+        BlocProvider.of<DiaryCubit>(context).fetchOtherCalories();
         setState(() {
           showLoader = false;
         });
@@ -179,8 +181,8 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                 CustomSheet(
                     context: context,
                     widget: ListView.builder(
-                      shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                      // shrinkWrap: true,
+                      //   physics: NeverScrollableScrollPhysics(),
                         itemCount: BlocProvider.of<DiaryCubit>(context).myOtherCaloriesUnitsResponse.data!.length,
                         itemBuilder: (context, index) {
                           return Padding(
@@ -229,7 +231,11 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   enable: false,
                   type: TextInputType.emailAddress,
                   updateFunc: (text) {},
-                  validateFunc: (text) {},
+                  validateFunc: (text) {
+                    // if (text.toString().isEmpty) {
+                    //   return "Enter Unit";
+                    // }
+                  },
                 ),
               ),
             ),
@@ -246,7 +252,6 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                         setState(() {
                           unit_qty = text;
                         });
-                        print(unit_qty);
                       },
                       validateFunc: (text) {
                         if (text.toString().isEmpty) {
@@ -287,7 +292,11 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
                   print("Ererer");
                   return;
                 } else {
-                if(showLoader==false)  addItem();
+                  if(unitName=='Choose Unit'){
+                    Alerts.showToast('Please enter unit');
+                  }else{
+                    if(showLoader==false)  addItem();
+                  }
                 }
               },
               shadow: true,

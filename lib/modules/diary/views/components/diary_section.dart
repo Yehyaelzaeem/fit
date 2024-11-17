@@ -20,7 +20,6 @@ import '../../../../core/view/widgets/default/text.dart';
 import '../../add_new_food.dart';
 
 class DiarySection extends StatefulWidget {
-  final String icon;
   final Widget iconWidget;
   final String title;
   final String type;
@@ -28,7 +27,6 @@ class DiarySection extends StatefulWidget {
   final DiaryCubit diaryCubit;
   final List<CaloriesDetails> caloriesDetails;
   const DiarySection({super.key,
-    required this.icon,
     required this.iconWidget,
     required this.title,
     required this.type,
@@ -42,7 +40,41 @@ class DiarySection extends StatefulWidget {
   State<DiarySection> createState() => _DiarySectionState();
 }
 
-class _DiarySectionState extends State<DiarySection> {
+class _DiarySectionState extends State<DiarySection>  with SingleTickerProviderStateMixin{
+  late AnimationController _animationController;
+  late Animation<double> _iconTurns;
+  bool isExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 200),
+      vsync: this,
+    );
+
+    _iconTurns = Tween<double>(begin: 0.0, end: 0.5).animate(_animationController);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _handleExpansionChanged(bool expanded) {
+    setState(() {
+      isExpanded = expanded;
+      if (expanded) {
+        _animationController.forward(); // Rotate icon downwards
+      } else {
+        _animationController.reverse(); // Rotate icon back upwards
+      }
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -56,32 +88,58 @@ class _DiarySectionState extends State<DiarySection> {
           child: ExpansionTile(
             backgroundColor: AppColors.white,
             collapsedBackgroundColor: AppColors.white,
-            initiallyExpanded: true,
-            tilePadding: EdgeInsets.only(left: AppSize.s8,right: AppSize.s8),
-            title: Row(
+            initiallyExpanded: false,
+            expandedAlignment: Alignment.centerRight,
+            onExpansionChanged: _handleExpansionChanged,
+            trailing: Padding(
+              padding: const EdgeInsets.only(top: AppSize.s24),
+              child: RotationTransition(
+                turns: _iconTurns,
+                child: const Icon(Icons.expand_more),
+              ),
+            ),
+            tilePadding: EdgeInsets.only(left: AppSize.s6,right: AppSize.s2),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Image.asset(icon),
-                widget.iconWidget,
-                HorizontalSpace(AppSize.s6),
-                SizedBox(
-                    width: AppSize.s60,
-                    child: CustomText(widget.title,fontSize: FontSize.s14,fontWeight: FontWeight.w600,)),
+                Row(
+
+                  children: [
+                    // Image.asset(icon),
+                    widget.iconWidget,
+                    HorizontalSpace(AppSize.s6),
+                    CustomText(widget.title,
+                      fontSize: FontSize.s18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    Spacer(),
+
+                    CustomText(
+                      widget.item!=null?'${widget.item!.caloriesTotal!.taken} / ${widget.item!.caloriesTotal!.imposed}':'',
+
+                        fontWeight: FontWeightManager.medium,
+                        fontSize: FontSize.s18,
+                      ),
+                  ],
+                ),
                 Padding(
-                  padding: EdgeInsets.all(AppSize.s4),
+                  padding: EdgeInsets.symmetric(horizontal:0,vertical: AppSize.s12),
                   child: new LinearPercentIndicator(
-                    width: AppSize.s150,
+                    // width: AppSize.s150,
                     animation: true,
                     lineHeight: AppSize.s20,
-                    animationDuration: 2000,
+                    animationDuration: 500,
+                    padding: EdgeInsets.zero,
                     percent: widget.item==null?0:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100)>1?1:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
                     center: Text(""),
                     curve: Curves.easeInCirc,
+
                     barRadius: Radius.circular(AppSize.s24),
-                    progressColor: AppColors.primary,
+                    progressColor: widget.item?.caloriesTotal?.progress?.bg!=null?Color(
+                        int.parse("0xFF${widget.item!.caloriesTotal!.progress!.bg}")):AppColors.primary,
                     backgroundColor: AppColors.lightGrey,
                   ),
                 ),
-                FittedBox(child: CustomText(widget.item!=null?'${widget.item!.caloriesTotal!.taken} / ${widget.item!.caloriesTotal!.imposed}':'',fontSize: FontSize.s14,fontWeight: FontWeight.w600,)),
               ],
             ),
             children: [
@@ -155,7 +213,7 @@ class _DiarySectionState extends State<DiarySection> {
                       ),
                     ),
                   ),
-                  SizedBox(width: AppSize.s32,)
+                  SizedBox(width: AppSize.s36,)
 
                 ],
               ),
@@ -167,16 +225,18 @@ class _DiarySectionState extends State<DiarySection> {
                   itemCount: widget.caloriesDetails.length,
                   itemBuilder: (context, indedx) {
                     return CaloriesRowItem(item:widget.caloriesDetails[indedx],
-                        type:widget.type, diaryCubit: widget.diaryCubit,refreshParent: (){
+                        type:widget.type, diaryCubit: widget.diaryCubit,
+                      index: indedx,
+                      refreshParent: (){
                       switch (widget.type) {
                         case 'proteins':
-                          widget.diaryCubit.caloriesDetails.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.proteins?.caloriesDetails?.last.randomId;
+                          widget.diaryCubit.dayDetailsResponse!.data!.proteins!.caloriesDetails!.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.proteins?.caloriesDetails?.last.randomId;
                           break;
                         case 'carbs':
-                          widget.diaryCubit.carbsDetails.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.carbs?.caloriesDetails?.last.randomId;
+                          widget.diaryCubit.dayDetailsResponse!.data!.carbs!.caloriesDetails!.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.carbs?.caloriesDetails?.last.randomId;
                           break;
                         case 'fats':
-                          widget.diaryCubit.fatsDetails.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.fats?.caloriesDetails?.last.randomId;
+                          widget.diaryCubit.dayDetailsResponse!.data!.fats!.caloriesDetails!.last.randomId=widget.diaryCubit.dayDetailsResponse?.data?.fats?.caloriesDetails?.last.randomId;
                           break;
                         default:
                           throw Exception('Unknown type: ${widget.type}');
@@ -217,7 +277,8 @@ class CaloriesRowItem extends StatelessWidget {
   final String type;
   final DiaryCubit diaryCubit;
   final VoidCallback refreshParent;
-  const CaloriesRowItem({super.key,required this.item,required this.type,required this.diaryCubit,required this.refreshParent});
+  final int index;
+  const CaloriesRowItem({super.key,required this.item,required this.type,required this.diaryCubit,required this.refreshParent,required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -345,23 +406,30 @@ class CaloriesRowItem extends StatelessWidget {
                                                 (element) => element.title == item.quality);
                                       }
 
+                                      item.calories = (food.caloriePerUnit * qty).toStringAsFixed(2);
+
                                       // Check if it's a new item or an existing one
                                       if (item.id == null && item.randomId != null) {
                                         // Create a new entry if id is null
+
                                         diaryCubit.createOrUpdateFoodData(
                                           food,
                                           qty,
                                           type: type, // Directly pass the type
                                           randomId: item.randomId,
+                                            itemIndex:index,
                                         );
+
                                       } else {
                                         // Update existing item
+
                                         diaryCubit.createOrUpdateFoodData(
                                           food,
                                           qty,
                                           type: type, // Directly pass the type
                                           index: item.id, // Make sure index is correct for updating
                                           randomId: item.randomId, // Pass the randomId for extra safety
+                                          itemIndex: index
                                         );
 
                                         // Avoid manual updates to `item.qty` and `item.calories` here
@@ -520,15 +588,17 @@ class CaloriesRowItem extends StatelessWidget {
               ),
               Center(
                 child: SizedBox(
-                  width: AppSize.s32,
+                  width: AppSize.s36,
                   child: DeleteItemWidget(
                     controller: diaryCubit,
                     item: item,
+                    index:index,
                     type: type == 'proteins'
                         ? 'proteins'
                         : type == 'carbs'
                         ? 'carbs'
                         : 'fats',
+
                   ),
                 ),
               ),
@@ -589,7 +659,7 @@ class CaloriesRowItem extends StatelessWidget {
         builder: (context) {
           return Dialog(
             child: AddNewFood(
-              date: diaryCubit.apiDate.value,
+              date: diaryCubit.lastSelectedDate.value,
               list: food,
             ),
           );
@@ -608,10 +678,6 @@ class CaloriesRowItem extends StatelessWidget {
         item.calories = (food.qty! * food.caloriePerUnit).toStringAsFixed(2);
         item.unit = food.unit;
       }
-
-      print("Stopaaaaaaaaa");
-      print(diaryCubit.caloriesDetails);
-      print(diaryCubit.dayDetailsResponse?.data?.proteins?.caloriesDetails?.length);
 
 
       // Call createOrUpdateFoodData for updating or creating the item

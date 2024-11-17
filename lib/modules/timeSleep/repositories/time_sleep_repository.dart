@@ -100,6 +100,8 @@ class TimeSleepRepository extends BaseRepository {
           }
         } else {
           SleepingTimesResponse? cachedResponse = await readSleepingTimesLocally();
+         print('cachedResponse?.toJson() ');
+         print(cachedResponse?.toJson() );
           return Response(
             requestOptions: RequestOptions(path: ''),
             data: cachedResponse?.toJson() ?? {},
