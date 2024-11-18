@@ -63,7 +63,7 @@ class _AddNewCalorieState extends State<AddNewCalorie> {
           unitName: unit_name,
           type: widget.type)
           .then((value) {
-        BlocProvider.of<DiaryCubit>(context).fetchOtherCalories();
+        BlocProvider.of<DiaryCubit>(context).fetchOtherCalories(isChangeState: true);
         setState(() {
           showLoader = false;
         });

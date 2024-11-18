@@ -36,6 +36,8 @@ class Data {
   String? workoutDetails;
   String? dayClinicNote;
   String? workoutDetailsType;
+  String? clinicDetails;
+  String? clinicDetailsType;
   SleepingTime? sleepingTime;
 
   Data(
@@ -46,10 +48,12 @@ class Data {
       this.workouts,
       this.dayWorkouts,
       this.pdf,
-      this.workoutDetails,
       this.dayClinicNote,
       this.days,
+      this.workoutDetails,
       this.workoutDetailsType,
+      this.clinicDetails,
+      this.clinicDetailsType,
       this.sleepingTime});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -78,8 +82,10 @@ class Data {
         : null;
     pdf = json['pdf'];
     workoutDetails = json['workout_details'] ?? "";
-    dayClinicNote = json['day_clinic_note'] ?? "";
     workoutDetailsType = json['workout_details_type'] ?? "";
+    clinicDetails = json['clinic_details'] ?? "";
+    clinicDetailsType = json['clinic_details_type'] ?? "";
+    dayClinicNote = json['day_clinic_note'] ?? "";
     sleepingTime = json['sleeping_time'] != null
         ? new SleepingTime.fromJson(json['sleeping_time'])
         : null;
@@ -104,9 +110,11 @@ class Data {
           this.dayWorkouts!.toJson();
     }
     data['pdf'] = this.pdf;
-    data['workout_details'] = this.workoutDetails;
     data['day_clinic_note'] = this.dayClinicNote;
+    data['workout_details'] = this.workoutDetails;
     data['workout_details_type'] = this.workoutDetailsType;
+    data['clinic_details'] = this.workoutDetails;
+    data['clinic_details_type'] = this.workoutDetailsType;
     data['sleeping_time'] = this.sleepingTime?.toJson();
 
     return data;

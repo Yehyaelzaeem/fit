@@ -324,7 +324,7 @@ class _AddToDiaryDialogState extends State<AddToDiaryDialog> {
               padding: const EdgeInsets.all(8.0),
               child: CustomTextField(
                 controller: fractionController,
-                keyBoardType: TextInputType.number,
+                keyBoardType: TextInputType.numberWithOptions(decimal: true),
                 onChanged: (val){
 
                 },

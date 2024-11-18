@@ -121,7 +121,7 @@ class _MealsSectionState extends State<MealsSection> {
                       child: Padding(
                         padding:  EdgeInsets.symmetric(horizontal:AppSize.s6),
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal:AppSize.s8,vertical: AppSize.s12),
+                          padding: EdgeInsets.symmetric(horizontal:AppSize.s6-1,vertical: AppSize.s12),
                           decoration: BoxDecoration(
                               color: AppColors.customBlack,
                               borderRadius: BorderRadius.circular(AppSize.s8)

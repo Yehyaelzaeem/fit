@@ -1295,7 +1295,8 @@ class _DiaryViewState extends State<DiaryView> {
             right: 16,
           ),
           child: Container(
-            height: deviceWidth*3/2,
+            height: diaryCubit.dayDetailsResponse!.data!.clinicDetailsType ==
+                "link"?AppSize.s350:deviceWidth*3/2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -1346,19 +1347,66 @@ class _DiaryViewState extends State<DiaryView> {
                     ],
                   ),
                 ),
-                    Expanded(
-                      child: ScrollFader(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
-                            child: CustomText(
-                              diaryCubit.dayDetailsResponse!.data!.workoutDetails!,
-                              fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
-                            ),
+                diaryCubit.dayDetailsResponse!.data!.clinicDetailsType ==
+                    "link"?InkWell(
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    if (diaryCubit.dayDetailsResponse!.data!.clinicDetailsType == "") {
+                      Fluttertoast.showToast(msg: "Nothing To Show ");
+                    } else if (diaryCubit.dayDetailsResponse!.data!.clinicDetailsType ==
+                        "link") {
+                      diaryCubit
+                          .launchURL(diaryCubit.dayDetailsResponse!.data!.clinicDetails);
+                    } else {
+                      diaryCubit
+                          .showPobUp(context,diaryCubit.dayDetailsResponse!.data!.clinicDetails!);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 16,
+                        ),
+                        Text(
+                          "Clinic Details",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(
+                            Icons.upload_sharp,
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    height: 45,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 72,
+                    ),
+                    decoration: BoxDecoration(
+                        color: Color(0xFF414042),
+                        borderRadius: BorderRadius.circular(50)),
+                  ),
+                ):Expanded(
+                    child: ScrollFader(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
+                          child: CustomText(
+                            diaryCubit.dayDetailsResponse!.data!.clinicDetails!,
+                            fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
                           ),
                         ),
-                      )
-                    ),
+                      ),
+                    )
+                ),
 
                 // Description input field
                 Container(

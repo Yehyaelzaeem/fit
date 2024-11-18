@@ -129,7 +129,7 @@ class _CategoryTileState extends State<CategoryTile> {
   }
 
   void getDiaryData(BuildContext context) async {
-    await BlocProvider.of<DiaryCubit>(context).fetchOtherCalories().then((value) {
+    await BlocProvider.of<DiaryCubit>(context).fetchOtherCalories(isChangeState: true).then((value) {
       // if (value.success == true) {
       //   setState(() {
       //     diaryCubit.otherCaloriesResponse = value;

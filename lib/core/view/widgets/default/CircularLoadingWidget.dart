@@ -45,7 +45,7 @@ class _CircularLoadingWidgetState extends State<CircularLoadingWidget> with Sing
         Padding(
             padding: const EdgeInsets.only(bottom: AppSize.s82),
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: AppSize.s64),
+              margin: const EdgeInsets.symmetric(horizontal: AppSize.s72),
               child: Image.asset(
                 'assets/img/fit_loader.gif',
                 // AppImages.kLogoColumn,
