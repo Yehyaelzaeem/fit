@@ -97,6 +97,7 @@ class AppIcons {
   static const String transformation = "$_iconsPath/transformation.svg";
   static const String orientation = "$_iconsPath/orientation.svg";
   static const String send = "$_iconsPath/send.svg";
+  static const String sync = "$_iconsPath/sync.svg";
   static const String logout = "$_iconsPath/logout.svg";
   static const String cheerful = "$_iconsPath/ep--food 1.svg";
   static const String exit = "$_iconsPath/exit.svg";

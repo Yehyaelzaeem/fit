@@ -11,6 +11,7 @@ import '../../../core/models/cheer_full_response.dart';
 import '../../../core/models/faq_response.dart';
 import '../../../core/models/general_response.dart';
 import '../../../core/models/home_page_response.dart';
+import '../../../core/models/message_details_response.dart';
 import '../../../core/models/messages_response.dart';
 import '../../../core/models/orientation_videos_response.dart';
 import '../../../core/services/api_provider.dart';
@@ -253,6 +254,77 @@ class HomeRepository extends BaseRepository {
     } else {
       return null;
     }
+  }
+
+
+// Get message details
+  Future<Either<Failure, MessageDetailsResponse>> getMessageDetailsData(int id) async {
+    return super.call<MessageDetailsResponse>(
+      httpRequest: () async {
+        final result = await Connectivity().checkConnectivity();
+        if (result != ConnectivityResult.none) {
+          // Fetch message details from API
+          Response response = await _apiClient.get(url: "message/$id");
+          if (response.statusCode == 200) {
+            // Save message details locally with ID as key
+            await saveMessageDetailsLocally(
+              MessageDetailsResponse.fromJson(response.data),
+              id.toString(),
+            );
+            return response;
+          } else {
+            return response; // Handle error response
+          }
+        } else {
+          // Fetch message details from local cache
+          MessageDetailsResponse? cachedResponse = await getMessageDetailById(id.toString());
+          if (cachedResponse != null) {
+            return Response(
+              requestOptions: RequestOptions(path: ''),
+              data: cachedResponse.toJson(),
+            );
+          } else {
+            return Response(
+              requestOptions: RequestOptions(path: ''),
+              data: {}, // Return empty data if not cached
+            );
+          }
+        }
+      },
+      successReturn: (data) => MessageDetailsResponse.fromJson(data),
+    );
+  }
+// Save message details locally
+  Future<void> saveMessageDetailsLocally(MessageDetailsResponse response, String id) async {
+    // Read existing message details
+    Map<String, dynamic> existingData = await readMessageDetailsLocally();
+
+    // Add or update the specific message detail by ID
+    existingData[id] = response.toJson();
+
+    // Save the updated data back to storage
+    await _cacheClient.save(StorageKeys.MESSAGE_DETAILS, jsonEncode(existingData));
+  }
+
+
+// Read message details locally
+  Future<Map<String, dynamic>> readMessageDetailsLocally() async {
+    // Retrieve the stored data
+    String? details = await _cacheClient.get(StorageKeys.MESSAGE_DETAILS);
+
+    // Decode the JSON or return an empty map if no data exists
+    return details != null && details.isNotEmpty ? jsonDecode(details) : {};
+  }
+
+  Future<MessageDetailsResponse?> getMessageDetailById(String id) async {
+    // Fetch all cached message details
+    Map<String, dynamic> allDetails = await readMessageDetailsLocally();
+
+    // Check if the requested ID exists and return its data
+    if (allDetails.containsKey(id)) {
+      return MessageDetailsResponse.fromJson(allDetails[id]);
+    }
+    return null; // Return null if the ID is not found
   }
 
   Future<Either<Failure, GeneralResponse>> deleteMessage(int id) async {

@@ -9,6 +9,7 @@ import 'package:app/modules/other_calories/cubits/other_calories_cubit.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -128,39 +129,69 @@ class _DiaryViewState extends State<DiaryView> {
                   DiaryDatesWidget(),
 
                   SizedBox(height: 16),
-                  InkWell(
-                    onTap: () {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                      diaryCubit.downloadFile(context,diaryCubit.dayDetailsResponse!.data!.pdf!);
-                    },  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12),
+                  Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(AppSize.s8),
-                    ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomText('Calories calculator'),
-                        Container(
-                          height: 40,
-                          padding: const EdgeInsets.symmetric(horizontal: 0),
-                          margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
-                          // height: double.infinity,
-                          decoration: BoxDecoration(
-                            // color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(64),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              diaryCubit.downloadFile(context,diaryCubit.dayDetailsResponse!.data!.pdf!);
+                            },  child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(AppSize.s8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CustomText('Calories calculator'),
+                                Container(
+                                  height: 40,
+                                  padding: const EdgeInsets.symmetric(horizontal: 0),
+                                  margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                                  // height: double.infinity,
+                                  decoration: BoxDecoration(
+                                    // color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(64),
+                                  ),
+                                  child: Image.asset(
+                                    "assets/img/view.png",
+                                    color: kColorPrimary,
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          child: Image.asset(
-                            "assets/img/view.png",
-                            color: kColorPrimary,
-                            fit: BoxFit.contain,
                           ),
                         ),
+                        HorizontalSpace(AppSize.s12),
+                        InkWell(
+                          onTap: (){
+                            diaryCubit.sendAndRefresh();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(AppSize.s8),
+                            ),
+                            child: Container(
+                              height: 40,
+                              padding: const EdgeInsets.symmetric(horizontal: 0),
+                              margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+
+                              child: SvgPicture.asset(
+                                AppIcons.sync,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ),
                   ),
                   SizedBox(height: 16),
                   //* Sleep
@@ -1238,10 +1269,15 @@ class _DiaryViewState extends State<DiaryView> {
                         child: SingleChildScrollView(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
-                            child: CustomText(
+                            child:
+                            SelectableText(
                               diaryCubit.dayDetailsResponse!.data!.workoutDetails!,
-                              fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
+                              // textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
+                              ),
                             ),
+
                           ),
                         ),
                       )
@@ -1399,9 +1435,12 @@ class _DiaryViewState extends State<DiaryView> {
                       child: SingleChildScrollView(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: AppSize.s16),
-                          child: CustomText(
+                          child: SelectableText(
                             diaryCubit.dayDetailsResponse!.data!.clinicDetails!,
-                            fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
+                            // textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeightManager.regular, fontSize: FontSize.s14,
+                            ),
                           ),
                         ),
                       ),

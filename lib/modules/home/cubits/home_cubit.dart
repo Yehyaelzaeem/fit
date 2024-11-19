@@ -11,6 +11,7 @@ import '../../../core/models/cheer_full_response.dart';
 import '../../../core/models/faq_response.dart';
 import '../../../core/models/general_response.dart';
 import '../../../core/models/home_page_response.dart';
+import '../../../core/models/message_details_response.dart';
 import '../../../core/models/messages_response.dart';
 import '../../../core/models/orientation_videos_response.dart';
 import '../../../core/models/user_response.dart';
@@ -185,6 +186,20 @@ class HomeCubit extends Cubit<HomeStates> {
             this.messagesResponse = messagesResponse;
             emit(MessagesLoaded());
           },
+    );
+  }
+  MessageDetailsResponse messageDetails = MessageDetailsResponse();
+  // Fetch message details
+  Future<void> fetchMessageDetails(int id) async {
+    emit(MessageDetailsLoading());
+    final result = await _homeRepository.getMessageDetailsData(id);
+    result.fold(
+          (failure) => emit(MessageDetailsError(failure.message)),
+          (messageDetailsResponse) {
+        // Optionally save the fetched data locally
+            messageDetails = messageDetailsResponse;
+        emit(MessageDetailsLoaded());
+      },
     );
   }
 

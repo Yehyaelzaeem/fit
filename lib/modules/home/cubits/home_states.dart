@@ -115,6 +115,17 @@ class MessagesError extends HomeStates {
   final String message;
   MessagesError(this.message);
 }
+
+
+class MessageDetailsLoading extends HomeStates {}
+
+class MessageDetailsLoaded extends HomeStates {}
+
+class MessageDetailsError extends HomeStates {
+  final String errorMessage;
+  MessageDetailsError(this.errorMessage);
+}
+
 class MessagesDeleting extends HomeStates {}
 
 class MessagesDeleted extends HomeStates {

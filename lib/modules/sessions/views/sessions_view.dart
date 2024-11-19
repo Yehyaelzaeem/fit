@@ -2,6 +2,7 @@
 import 'package:app/core/resources/app_assets.dart';
 import 'package:app/core/resources/font_manager.dart';
 import 'package:app/core/view/views.dart';
+import 'package:app/modules/diary/cubits/diary_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -117,10 +118,13 @@ class _SessionsViewState extends State<SessionsView> {
     profileCubit = BlocProvider.of<ProfileCubit>(context);
     authCubit = BlocProvider.of<AuthCubit>(context);
     homeCubit = BlocProvider.of<HomeCubit>(context);
-    sessionCubit.getSessions();
+    getData();
     super.initState();
   }
-
+  getData()async{
+    sessionCubit.getSessions();
+    await BlocProvider.of<DiaryCubit>(context).sendAndRefresh();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

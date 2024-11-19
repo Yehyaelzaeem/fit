@@ -6,7 +6,10 @@ import 'package:dartz/dartz.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 
+import '../../../config/navigation/navigation_services.dart';
+import '../../../config/navigation/routes.dart';
 import '../../../core/base/repositories/base_repository.dart';
 import '../../../core/models/user_response.dart';
 import '../../../core/services/api_provider.dart';
@@ -15,7 +18,9 @@ import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/local/storage_keys.dart';
 import '../../../core/services/network/api_client.dart';
 import '../../../core/services/network/endpoints.dart';
+import '../../../core/utils/globals.dart';
 import '../../../core/utils/shared_helper.dart';
+import '../../../core/view/widgets/app_dialog.dart';
 import '../models/requests/update_profile_body.dart';
 
 class ProfileRepository extends BaseRepository {
@@ -41,8 +46,7 @@ class ProfileRepository extends BaseRepository {
         bool isGuestLogin = await  await _cacheClient.get(StorageKeys.IS_GUEST_SAVED)??false;
 
         final result = await Connectivity().checkConnectivity();
-        print('profileget');
-        print('cachedUser');
+
 
         if (result != ConnectivityResult.none) {
           print('cachedUser.da');
@@ -52,6 +56,33 @@ class ProfileRepository extends BaseRepository {
               : "/profile?fcm_token=$deviceToken";
           Response response = await _apiClient.get(url: url,requestBody: {});
           _saveUserLocally(UserResponse.fromJson(response.data));
+          if (response.data["success"] == true) {
+            UserResponse ur = UserResponse.fromJson(response.data);
+            if (shoNewMessage) {
+              if (ur.data != null &&
+                  ur.data!.newMessages != null &&
+                  ur.data!.newMessages! > 0) {
+                shoNewMessage = false;
+
+                appDialog(
+                  context: NavigationService.navigationKey.currentState!.context,
+                  title: 'You have a new message from \n Dr/ Ramy Mansour',
+                  image: Icon(Icons.chat, size: 50, color: Colors.grey),
+                  barrierDismissible: false,
+                  cancelAction: null,
+                  confirmAction: () {
+                    canDismissNewMessageDialog = true;
+                    removeNotificationsCount = true;
+                    NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
+                    NavigationService.push(NavigationService.navigationKey.currentState!.context,Routes.notificationScreen);
+                  },
+                  cancelText: '',
+                  confirmText: 'Check it',
+                );
+              }
+            }
+          }
+
 
           return response; // Return the Response object here
         } else {

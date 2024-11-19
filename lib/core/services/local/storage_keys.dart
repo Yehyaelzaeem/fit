@@ -29,5 +29,6 @@ class StorageKeys {
   static const String ORIENTATION_VIDEOS = "ORIENTATION_VIDEOS";
   static const String MY_USUAL_MEALS = "MY_USUAL_MEALS";
   static const String MESSAGES = "MESSAGES";
+  static const String MESSAGE_DETAILS = "MESSAGE_DETAILS";
   static const String FAVORITE_ACTIONS = "FAVORITE_ACTIONS";
 }

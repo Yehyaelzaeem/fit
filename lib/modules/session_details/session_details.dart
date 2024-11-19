@@ -649,25 +649,25 @@ class TableWidget extends StatelessWidget {
                                       Row(
                                         children: [
                                           CustomText(
-                                            "Workout : ",
+                                            "Workout Details: ",
 
                                             fontSize: FontSize.s18,
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.primary,
                                             ),
-                                          CustomText(
-                                            "${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
-
-                                                fontSize: FontSize.s18,
-                                                fontWeight: FontWeight.w500
-                                            ),
+                                          // CustomText(
+                                          //   "${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
+                                          //
+                                          //       fontSize: FontSize.s18,
+                                          //       fontWeight: FontWeight.w500
+                                          //   ),
                                         ],
                                       ),
                                       CustomText(
                                         "${table.workout != null ? table.workout!.workoutDesc : "   "}",
-                                          color: kColorPrimary,
-                                          fontSize: FontSize.s18,
-                                          fontWeight: FontWeightManager.semiBold
+                                          // color: kColorPrimary,
+                                          fontSize: FontSize.s16,
+                                          fontWeight: FontWeight.w500
 
                                       ),
                                       VerticalSpace(AppSize.s6),

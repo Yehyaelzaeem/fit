@@ -1,6 +1,7 @@
 
 import 'package:app/config/navigation/navigation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -9,8 +10,11 @@ import '../../../../config/navigation/routes.dart';
 import '../../../../core/models/message_details_response.dart';
 import '../../../../core/resources/app_colors.dart';
 import '../../../../core/services/api_provider.dart';
+import '../../../../core/utils/alerts.dart';
 import '../../../../core/view/widgets/default/CircularLoadingWidget.dart';
+import '../../../../core/view/widgets/fit_new_app_bar.dart';
 import '../../../../core/view/widgets/page_lable.dart';
+import '../../../home/cubits/home_cubit.dart';
 import '../../../home/view/widgets/home_appbar.dart';
 import '../../../pdf_viewr.dart';
 
@@ -25,32 +29,36 @@ class NotificationDetailsView extends StatefulWidget {
 }
 
 class _NotificationDetailsViewState extends State<NotificationDetailsView> {
-  bool isLoading = true;
 
-  MessageDetailsResponse ressponse = MessageDetailsResponse();
+  // MessageDetailsResponse ressponse = MessageDetailsResponse();
+  //
+  // void getData() async {
+  //   await ApiProvider()
+  //       .getMessagesDetailsData(widget.id ?? 0)
+  //       .then((value) async {
+  //     if (value.success == true) {
+  //       setState(() {
+  //         ressponse = value;
+  //         isLoading = false;
+  //       });
+  //     } else {
+  //       setState(() {
+  //         ressponse = value;
+  //       });
+  //       Fluttertoast.showToast(msg: "Check Internet Connection");
+  //       print("error");
+  //     }
+  //   });
+  // }
 
-  void getData() async {
-    await ApiProvider()
-        .getMessagesDetailsData(widget.id ?? 0)
-        .then((value) async {
-      if (value.success == true) {
-        setState(() {
-          ressponse = value;
-          isLoading = false;
-        });
-      } else {
-        setState(() {
-          ressponse = value;
-        });
-        Fluttertoast.showToast(msg: "Check Internet Connection");
-        print("error");
-      }
-    });
-  }
+
+  late final HomeCubit homeCubit;
+
 
   @override
   void initState() {
-    getData();
+    homeCubit = BlocProvider.of<HomeCubit>(context);
+    homeCubit.fetchMessageDetails(widget.id!);
     super.initState();
   }
 
@@ -66,40 +74,45 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
     return WillPopScope(
       onWillPop: _willPopCallback,
       child: Scaffold(
-        body: ListView(
+        body: BlocConsumer<HomeCubit, HomeStates>(
+          listener: (context, state) {
+            if (state is HomePageFailureState) {
+              Alerts.showToast(state.failure.message);
+            }
+
+          },
+          builder: (context, state) => ListView(
           children: [
-            HomeAppbar(
-              type: null,
-              removeNotificationsCount: true,
-              onBack: () {
-                Get.offAllNamed(Routes.homeScreen);
-              },
+            // HomeAppbar(
+            //   type: null,
+            //   removeNotificationsCount: true,
+            //   onBack: () {
+            //     Get.offAllNamed(Routes.homeScreen);
+            //   },
+            // ),
+            // SizedBox(height: 10),
+            FitNewAppBar(
+              title: "Messages",
             ),
-            SizedBox(height: 10),
-            Row(
-              children: [
-                PageLable(name: "Messages"),
-              ],
-            ),
-            isLoading == true
+            state is MessageDetailsLoading
                 ? CircularLoadingWidget()
                 : Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 24),
                       child: Text(
-                        "${ressponse.data!.subject}",
+                        "${homeCubit.messageDetails.data!.subject}",
                         style: TextStyle(color: kColorPrimary, fontSize: 20),
                       ),
                     ),
                   ),
-            isLoading == true
+            state is MessageDetailsLoading
                 ? SizedBox()
                 : Center(
                     child: Html(
-                      data: """${ressponse.data!.message}""",
+                      data: """${homeCubit.messageDetails.data!.message}""",
                     ),
                   ),
-            ressponse.data?.hasPlan == true
+            homeCubit.messageDetails.data?.hasPlan == true
                 ? GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -107,7 +120,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                           MaterialPageRoute(
                               builder: (context) =>
                                   PDFPreview(
-                                      res: ressponse.data?.planUrl??"",
+                                      res: homeCubit.messageDetails.data?.planUrl??"",
                                       name: "Plan Details")));
                   /*    Navigator.push(
                           context,
@@ -124,7 +137,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                   )
                 : SizedBox()
           ],
-        ),
+        ),),
       ),
     );
   }
