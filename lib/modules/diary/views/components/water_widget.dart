@@ -377,6 +377,11 @@ class _WaterSheetState extends State<WaterSheet> {
                     setState(() {
 
                     });
+                  }else{
+                    widget.diaryCubit.waterSheetVal = (widget.diaryCubit.dayDetailsResponse?.data?.water ?? 0).toDouble();
+                    setState(() {
+
+                    });
                   }
 
 

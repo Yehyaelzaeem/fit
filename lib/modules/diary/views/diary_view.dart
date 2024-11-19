@@ -150,8 +150,8 @@ class _DiaryViewState extends State<DiaryView> {
                                 CustomText('Calories calculator'),
                                 Container(
                                   height: 40,
-                                  padding: const EdgeInsets.symmetric(horizontal: 0),
-                                  margin: EdgeInsets.symmetric(horizontal: 18, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(vertical: AppSize.s6),
+                                  margin: EdgeInsets.symmetric(horizontal: AppSize.s12, vertical: 4),
                                   // height: double.infinity,
                                   decoration: BoxDecoration(
                                     // color: Colors.grey[200],

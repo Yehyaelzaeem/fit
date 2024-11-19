@@ -647,14 +647,23 @@ class TableWidget extends StatelessWidget {
                                       VerticalSpace(AppSize.s6),
                                       Divider(),
                                       Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           CustomText(
                                             "Workout Details: ",
-
                                             fontSize: FontSize.s18,
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.primary,
                                             ),
+                                          Expanded(
+                                            child: CustomText(
+                                                "${table.workout != null ? table.workout!.workoutDesc : "   "}",
+                                                // color: kColorPrimary,
+                                                fontSize: FontSize.s16,
+                                                fontWeight: FontWeight.w500
+                                            
+                                            ),
+                                          ),
                                           // CustomText(
                                           //   "${table.workout != null ? table.workout!.workoutType : "Not Yet"}",
                                           //
@@ -663,13 +672,13 @@ class TableWidget extends StatelessWidget {
                                           //   ),
                                         ],
                                       ),
-                                      CustomText(
-                                        "${table.workout != null ? table.workout!.workoutDesc : "   "}",
-                                          // color: kColorPrimary,
-                                          fontSize: FontSize.s16,
-                                          fontWeight: FontWeight.w500
-
-                                      ),
+                                      // CustomText(
+                                      //   "${table.workout != null ? table.workout!.workoutDesc : "   "}",
+                                      //     // color: kColorPrimary,
+                                      //     fontSize: FontSize.s16,
+                                      //     fontWeight: FontWeight.w500
+                                      //
+                                      // ),
                                       VerticalSpace(AppSize.s6),
                                       Divider(),
                                       Row(

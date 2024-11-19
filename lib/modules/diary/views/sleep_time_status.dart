@@ -272,8 +272,11 @@ class _SleepTimeStatusState extends State<SleepTimeStatus> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
 
+                                if(diaryCubit.dayDetailsResponse?.data
+                                    ?.sleepingTime
+                                    ?.sleepingDuration!=null)
                                 CustomTimeWidget(
-                                  time: diaryCubit.dayDetailsResponse!.data
+                                  time: diaryCubit.dayDetailsResponse?.data
                                       ?.sleepingTime
                                       ?.sleepingDuration ??
                                       "",),
@@ -500,9 +503,10 @@ class CustomTimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
 
 // Split the time into hours and minutes
+
     List<String> timeParts = time.split(':');
-    String hours = timeParts[0]; // "05"
-    String minutes = timeParts[1]; // "00"
+    String hours = time == ""?'00':timeParts[0]; // "05"
+    String minutes = time == ""?'00':timeParts[1]; // "00"
 
 // Convert "05" to "5" to remove leading zero
     int hoursInt = int.parse(hours);
