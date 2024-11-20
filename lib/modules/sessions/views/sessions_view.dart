@@ -123,7 +123,7 @@ class _SessionsViewState extends State<SessionsView> {
   }
   getData()async{
     sessionCubit.getSessions();
-    await BlocProvider.of<DiaryCubit>(context).sendAndRefresh();
+    await BlocProvider.of<DiaryCubit>(context).onInit();
   }
   @override
   Widget build(BuildContext context) {

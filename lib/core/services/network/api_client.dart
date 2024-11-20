@@ -49,7 +49,7 @@ class ApiClient {
     required String url,
     Map<String, dynamic>? queryParameters, requestBody,
   }) async {
-    final String? token = await _cacheClient.getSecuredData(StorageKeys.token);
+    final String? token = await _cacheClient.get(StorageKeys.token);
     return await _dio.get(
       url,
       queryParameters: queryParameters,
@@ -67,7 +67,7 @@ class ApiClient {
      var requestBody,
     Map<String, dynamic>? queryParameters,
   }) async {
-    final String? token = await _cacheClient.getSecuredData(StorageKeys.token);
+    final String? token = await _cacheClient.get(StorageKeys.token);
 
     return await _dio.post(
       url,

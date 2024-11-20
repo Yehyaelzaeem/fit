@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:app/config/navigation/navigation.dart';
 import 'package:app/core/resources/resources.dart';
@@ -72,13 +73,13 @@ class _DiaryViewState extends State<DiaryView> {
   load()async{
     homeCubit.loadHomePage();
     await diaryCubit.onInit();
-    if(first){
-      BlocProvider.of<TimeSleepCubit>(context).getSleepingTimesData();
-      // BlocProvider.of<SessionCubit>(context).getSessionsAll();
-      BlocProvider.of<UsualCubit>(context).getMyUsualMeals();
-      diaryCubit.fetchOtherCalories();
-      first = false;
-    }
+      if(first){
+        BlocProvider.of<TimeSleepCubit>(context).getSleepingTimesData();
+        // BlocProvider.of<SessionCubit>(context).getSessionsAll();
+        BlocProvider.of<UsualCubit>(context).getMyUsualMeals();
+        diaryCubit.fetchOtherCalories();
+        first = false;
+      }
   }
 
 

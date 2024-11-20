@@ -38,6 +38,7 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   DiaryCubit(this._diaryRepository,this._timeSleepCubit,this._otherCaloriesRepository,this._usualRepository) : super(DiaryInitial());
   static const String lastBackgroundTimeKey = "LAST_BACKGROUND_TIME";
+  bool isOnInit = false;
 
   void handleLifecycleChange(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
@@ -128,7 +129,6 @@ class DiaryCubit extends Cubit<DiaryState> {
     });
   }
 
-  bool isOnInit = false;
 
 
   /// Start
@@ -137,6 +137,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     final connectivityStatus = await Connectivity().checkConnectivity();
 
     if (connectivityStatus != ConnectivityResult.none) {
+      print("isOnInit$isOnInit");
       if (!isOnInit) {
         isOnInit = true;
         isSending = true;
@@ -187,7 +188,7 @@ class DiaryCubit extends Cubit<DiaryState> {
       //     ? lastSelectedDate.value
       //     : getEgyptTime().toString().substring(0, 10), isSending);
 
-      emit(DiaryLoaded());
+      // emit(DiaryLoaded());
     }
   }
 

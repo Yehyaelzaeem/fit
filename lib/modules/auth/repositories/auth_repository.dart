@@ -47,7 +47,7 @@ class AuthRepository extends BaseRepository {
 
         print(response.data);
         if(response.data["data"]!=null) {
-          await _cacheClient.saveSecuredData(
+          await _cacheClient.save(
               StorageKeys.token, response.data["data"]["access_token"]);
           await _cacheClient.save(StorageKeys.isAuthed, true);
           return response;
@@ -183,7 +183,7 @@ class AuthRepository extends BaseRepository {
   Future<void> clearCache() async {
     await _cacheClient.delete(StorageKeys.isAuthed);
     await _cacheClient.delete(StorageKeys.USER);
-    await _cacheClient.deleteSecuredData();
+    // await _cacheClient.deleteSecuredData();
     currentUser = null;
   }
 
