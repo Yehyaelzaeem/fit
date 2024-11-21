@@ -151,6 +151,7 @@ class DiaryCubit extends Cubit<DiaryState> {
         // Perform asynchronous tasks sequentially
         await _initializeAppData();
         await _syncOfflineData();
+        await Future.delayed(Duration(seconds: 2));
         await _loadDiaryData();
         isOnInit = false;
       }
@@ -186,9 +187,8 @@ class DiaryCubit extends Cubit<DiaryState> {
       isSending = false;
       // await getDiaryData(lastSelectedDate.value != ''
       //     ? lastSelectedDate.value
-      //     : getEgyptTime().toString().substring(0, 10), isSending);
+      //     : getEgyptTime().toString().substring(0, 10), isSending,refresh: false);
 
-      // emit(DiaryLoaded());
     }
   }
 
@@ -205,7 +205,7 @@ class DiaryCubit extends Cubit<DiaryState> {
   }
 
 // Example function to handle diary data retrieval (getDiaryData)
-  Future getDiaryData(String _date, bool isSending, {bool reset = true}) async {
+  Future getDiaryData(String _date, bool isSending, {bool reset = true,bool refresh = true}) async {
     print("Fetching diary for date: $_date");
 
 
@@ -226,6 +226,7 @@ class DiaryCubit extends Cubit<DiaryState> {
 
             clinicDesc = dayDetailsResponse?.data?.dayClinicNote ;
             workDesc = dayDetailsResponse?.data?.dayWorkouts?.workoutDesc;
+            if(refresh)
             _handleSuccessfulDiaryData(reset);
           } else {
             print("Error: no data returned.");
@@ -236,13 +237,13 @@ class DiaryCubit extends Cubit<DiaryState> {
   }
 
 // Handle successful diary data retrieval
-  void _handleSuccessfulDiaryData(bool reset) {
+  void _handleSuccessfulDiaryData(bool reset) async{
     isLoading.value = false;
     showLoader.value = false;
 
     if (reset) emit(DiaryLoaded());
 
-    length.value = dayDetailsResponse!.data!.water! + 3;
+    // length.value = dayDetailsResponse!.data!.water! + 3;
     // ... (additional handling code)
 
     // refreshCaloriesList(dayDetailsResponse!.data!.proteins!.caloriesDetails ?? []);
@@ -744,6 +745,11 @@ class DiaryCubit extends Cubit<DiaryState> {
         await calculateFats();
         break;
     }
+
+
+    // Save updated data locally
+    await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, lastSelectedDate.value);
+    await _diaryRepository.saveDairyLocally(dayDetailsResponse!, lastSelectedDate.value);
 
     emit(DiaryLoaded());
   }
