@@ -209,7 +209,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     print("Fetching diary for date: $_date");
 
 
-    if (dayDetailsResponse?.data != null && isLoading.value) return;
+    // if (dayDetailsResponse?.data != null && isLoading.value) return;
 
     lastSelectedDate.value = _date;
     isLoading.value = true;
