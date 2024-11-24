@@ -105,6 +105,30 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                       ),
                     ),
                   ),
+            homeCubit.messageDetails.data?.hasPlan == true
+                ? GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PDFPreview(
+                                res: homeCubit.messageDetails.data?.planUrl??"",
+                                name: "Plan Details")));
+                /*    Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => NotificationPlan(
+                                    link: ressponse.data?.planUrl ??
+                                        "https://fofclinic.com/",
+                                  )));*/
+              },
+              child: Image.asset(
+                "assets/messages_icon.png",
+                scale: 8,
+              ),
+            )
+                : SizedBox(),
             state is MessageDetailsLoading
                 ? SizedBox()
                 : Center(
@@ -112,30 +136,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                       data: """${homeCubit.messageDetails.data!.message}""",
                     ),
                   ),
-            homeCubit.messageDetails.data?.hasPlan == true
-                ? GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  PDFPreview(
-                                      res: homeCubit.messageDetails.data?.planUrl??"",
-                                      name: "Plan Details")));
-                  /*    Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => NotificationPlan(
-                                    link: ressponse.data?.planUrl ??
-                                        "https://fofclinic.com/",
-                                  )));*/
-                    },
-                    child: Image.asset(
-                      "assets/messages_icon.png",
-                      scale: 8,
-                    ),
-                  )
-                : SizedBox()
+
           ],
         ),),
       ),

@@ -895,7 +895,17 @@ class _DiaryViewState extends State<DiaryView> {
               HorizontalSpace(AppSize.s12),
               Expanded(
                     child: CustomButton(
-                      text: 'My other calories',
+                      // text: 'My other calories',
+                      child: Center(
+                        child: FittedBox(
+                          child: CustomText(
+                            'My other calories',
+                            fontWeight: FontWeightManager.medium,
+                            color: Colors.white,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                       height: AppSize.s48,
                       onPressed:  () async {
 

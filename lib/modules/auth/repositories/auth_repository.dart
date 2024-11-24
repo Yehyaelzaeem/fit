@@ -32,6 +32,13 @@ class AuthRepository extends BaseRepository {
 
   bool get isAuthed => _cacheClient.get(StorageKeys.isAuthed) ?? false;
 
+
+  saveAuth(String token) async{
+    await _cacheClient.save(
+        StorageKeys.token, token);
+    await _cacheClient.save(StorageKeys.isAuthed, true);
+    print("saved"); 
+  }
   Future<Either<Failure, UserResponse>> login(String id, String password) async {
     String deviceId = await _getDeviceInfo();
     String deviceToken = await _getDeviceToken();

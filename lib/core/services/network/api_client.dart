@@ -9,7 +9,7 @@ import '../local/cache_client.dart';
 import '../local/storage_keys.dart';
 
 // const String _baseURL = "https://fofclinic.com/api";
-const String _baseURL = "https://dev02.matrix-clouds.com/fofclinic/public/api/";
+const String _baseURL = "https://dev02.matrix-clouds.com/fofclinic/public/api";
 const String _xApiKey = "FitoverfaT_clinic_api_key";
 const String _apiKey = "";
 const String _contentType = "Content-Type";

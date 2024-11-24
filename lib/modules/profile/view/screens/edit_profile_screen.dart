@@ -126,11 +126,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             BlocListener<ProfileCubit, ProfileState>(
               listenWhen: (prevState, state) => state.profileRequestType == ProfileRequestType.deleteAccount,
               listener: (context, state) {
-                if (state.httpRequestState == HttpRequestState.success) {
-                  BlocProvider.of<AuthCubit>(context).clearCache();
-                  NavigationService.pushReplacementAll(context, Routes.splashScreen);
-
+                if (state.httpRequestState == HttpRequestState.success ) {
                   Alerts.showToast(state.message!);
+                  if(state.profileRequestType == ProfileRequestType.deleteAccount) {
+                    BlocProvider.of<AuthCubit>(context).clearCache();
+                    NavigationService.pushReplacementAll(
+                        context, Routes.splashScreen);
+                  }
                 }
                 if (state.httpRequestState == HttpRequestState.failure) {
                   NavigationService.goBack(context);

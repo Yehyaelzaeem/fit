@@ -9,6 +9,7 @@ import '../../../../config/navigation/navigation_services.dart';
 import '../../../../config/navigation/routes.dart';
 import '../../../../core/resources/resources.dart';
 import '../../../auth/cubit/auth_cubit/auth_cubit.dart';
+import '../../../notification_api.dart';
 import '../../../profile/cubits/profile_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,17 +43,38 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> fetchAndRedirect() async {
 
+    initLocalNotification();
 
     if (authCubit.isAuthed) {
       profileCubit.getProfile();
       NavigationService.pushReplacementAll(context, Routes.homeScreen);
 
     } else {
-      NavigationService.pushReplacementAll(context, Routes.authScreen);
 
+      bool isSaved = await authCubit.isDataSaved();
+
+      if(isSaved){
+        if (authCubit.isAuthed) {
+          await profileCubit.getProfile();
+          NavigationService.pushReplacementAll(context, Routes.homeScreen);
+
+        } else {
+          NavigationService.pushReplacementAll(context, Routes.authScreen);
+
+        }
+      }else {
+        NavigationService.pushReplacementAll(context, Routes.authScreen);
+      }
     }
   }
 
+  initLocalNotification() {
+    NotificationApi.init(isScheduled: true);
+
+
+    NotificationApi.scheduleDailyNotifications();
+
+  }
 
 
 

@@ -105,6 +105,19 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
 
+  Future<bool> isDataSaved() async {
+    SharedHelper _shared = SharedHelper();
+    String? token = await _shared.readString(CachingKey.TOKEN);
+    print('tokentoken$token');
+    if(token.isNotEmpty){
+      await _authRepository.saveAuth(token);
+    }
+
+    // Ensure essential data is saved
+    return token.isNotEmpty;
+  }
+
+
 
 
   Future<void> login( String pin,
