@@ -48,7 +48,7 @@ class MyMealsRepository extends BaseRepository {
     });
 
     try {
-      Response response = await _apiClient.post(url: "meal_details/$id", requestBody: body);
+      Response response = await _apiClient.post(url: "/meal_details/$id", requestBody: body);
       if (response.statusCode == 200) {
         return MealDetailsResponse.fromJson(response.data);
       } else {

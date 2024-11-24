@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:app/core/services/local/storage_keys.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -14,11 +15,13 @@ import '../../../core/models/home_page_response.dart';
 import '../../../core/models/message_details_response.dart';
 import '../../../core/models/messages_response.dart';
 import '../../../core/models/orientation_videos_response.dart';
+import '../../../core/models/version_response.dart';
 import '../../../core/services/api_provider.dart';
 import '../../../core/services/error/failure.dart';
 import '../../../core/services/local/cache_client.dart';
 import '../../../core/services/network/api_client.dart';
 import '../../../core/services/network/endpoints.dart';
+import '../../../core/utils/const_strings.dart';
 import '../../../core/utils/shared_helper.dart';
 
 
@@ -119,6 +122,29 @@ class HomeRepository extends BaseRepository {
       bool? cachedVideoStatus = await _cacheClient.get(StorageKeys.ORIENTATION_VIDEOS_STATUS);
       return cachedVideoStatus ?? false;
     }
+  }
+
+  Future<Either<Failure, VersionResponse>> fetchAppVersion() async {
+    FormData body = FormData.fromMap({
+      'type': 'production',
+      'platform': Platform.isAndroid ? 'android' : 'ios',
+      'version': Platform.isAndroid
+          ? StringConst.APP_Android_VERSION
+          : StringConst.APP_IOS_VERSION,
+    });
+
+    return super.call<VersionResponse>(
+      httpRequest: () async {
+        final response = await _apiClient.post(url:"/api_version", requestBody: body);
+
+        if (response.data["success"] == true) {
+          return response;
+        } else {
+          throw Failure(500, response.data["message"] ?? "Failed to fetch version");
+        }
+      },
+      successReturn: (data) => VersionResponse.fromJson(data),
+    );
   }
 
   // Fetch CheerFull status, handling online and offline scenarios
@@ -264,7 +290,7 @@ class HomeRepository extends BaseRepository {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
           // Fetch message details from API
-          Response response = await _apiClient.get(url: "message/$id");
+          Response response = await _apiClient.get(url: "/message/$id");
           if (response.statusCode == 200) {
             // Save message details locally with ID as key
             await saveMessageDetailsLocally(

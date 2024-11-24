@@ -105,8 +105,9 @@ class _MyPackagesViewState extends State<MyPackagesView> {
   @override
   void initState() {
     packagesCubit = BlocProvider.of<PackagesCubit>(context);
-
-    packagesCubit.fetchMyPackagesList();
+    if(currentUser!=null) {
+      packagesCubit.fetchMyPackagesList();
+    }
     // getMyPackagesList();
     // if (Get.arguments != null) myPackagesResponse = Get.arguments;
     // getFromCash();

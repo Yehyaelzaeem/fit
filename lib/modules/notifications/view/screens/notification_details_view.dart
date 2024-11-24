@@ -1,5 +1,6 @@
 
 import 'package:app/config/navigation/navigation.dart';
+import 'package:app/core/resources/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -100,7 +101,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 24),
                       child: Text(
-                        "${homeCubit.messageDetails.data!.subject}",
+                        "${homeCubit.messageDetails.data?.subject}",
                         style: TextStyle(color: kColorPrimary, fontSize: 20),
                       ),
                     ),
@@ -125,7 +126,8 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
               },
               child: Image.asset(
                 "assets/messages_icon.png",
-                scale: 8,
+                height: AppSize.s132,
+                width: AppSize.s132,
               ),
             )
                 : SizedBox(),

@@ -96,7 +96,7 @@ class OtherCaloriesRepository extends BaseRepository {
           "type": type,
         });
 
-        Response response = await _apiClient.post(url: "update_other_calories/$id", requestBody: body);
+        Response response = await _apiClient.post(url: "/update_other_calories/$id", requestBody: body);
         if (response.statusCode == 200) {
           return response;
         } else {

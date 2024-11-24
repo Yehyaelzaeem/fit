@@ -81,6 +81,7 @@ dependencies:
   flutter_time_picker_spinner: ^2.0.0
   flutter_analog_clock: ^1.0.3
   smooth_page_indicator: ^1.1.0
+  progressive_time_picker: ^1.0.1
 
 
 #H

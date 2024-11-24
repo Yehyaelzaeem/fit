@@ -8,10 +8,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../../config/navigation/navigation_services.dart';
+import '../../../../core/utils/alerts.dart';
 import '../../../../core/utils/const_strings.dart';
 import '../../../../core/view/widgets/app_dialog.dart';
 import '../../../../core/view/widgets/default/app_buttons.dart';
 import '../../../../core/view/widgets/default/text.dart';
+import '../../../diary/cubits/diary_cubit.dart';
 import '../../../diary/views/diary_view.dart';
 import '../../../sessions/views/sessions_view.dart';
 import '../../cubits/home_cubit.dart';
@@ -38,65 +40,75 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     homeCubit = BlocProvider.of<HomeCubit>(context);
-    // homeCubit.onInit(BlocProvider.of<DiaryCubit>(context));
+    homeCubit.getAppVersion();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (BlocProvider.of<HomeCubit>(context).response.value.forceUpdate)
-      return Scaffold(
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 40),
-              height: deviceHeight / 3.4,
-              child: Image.asset(
-                AppImages.kLogoColumn,
-                width: double.infinity,
-              ),
-            ),
-            SizedBox(height: 26),
-            kTextHeader('Update required', size: 24),
-            kTextHeader('${homeCubit.response.value.message}', paddingH: 20),
-            SizedBox(height: 30),
-            kButtonDefault(
-              "Update",
-              func: () async {
-                String url = Platform.isAndroid
-                    ? StringConst.PLAY_STORE
-                    : StringConst.APP_STORE;
-                bool canLaun = await canLaunch(url);
-                if (canLaun) launch(url);
-              },
-            ),
-            SizedBox(height: 50),
-          ],
-        ),
-      );
-    return WillPopScope(
-        child: SafeArea(
-          child: Scaffold(
-            extendBody: true,
-            backgroundColor: AppColors.offWhite,
-            // drawer: HomeDrawer(),
-            body: Obx(
-                  () => Column(
+    return BlocConsumer<HomeCubit, HomeStates>(
+        listener: (context, state) {
+          if (state is HomePageFailureState) {
+            Alerts.showToast(state.failure.message);
+          }
+
+        },
+        builder: (context, state){
+          if (state is HomeForceUpdate)
+            return Scaffold(
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  HomeAppbar(
-                    type: "home",
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 40),
+                    height: deviceHeight / 3.4,
+                    child: Image.asset(
+                      AppImages.kLogoColumn,
+                      width: double.infinity,
+                    ),
                   ),
-                  Expanded(child: currentPage()),
-                  // HomeBottomNavigationBar()
+                  SizedBox(height: 26),
+                  kTextHeader('Update required', size: 24),
+                  kTextHeader('${homeCubit.response.value.message}', paddingH: 20),
+                  SizedBox(height: 30),
+                  kButtonDefault(
+                    "Update",
+                    func: () async {
+                      String url = Platform.isAndroid
+                          ? StringConst.PLAY_STORE
+                          : StringConst.APP_STORE;
+                      bool canLaun = await canLaunch(url);
+                      if (canLaun) launch(url);
+                    },
+                  ),
+                  SizedBox(height: 50),
                 ],
               ),
-            ),
-            bottomNavigationBar: HomeBottomNavigationBar(),
-          ),
-        ),
-        onWillPop: () async {
-          return _willPopCallback(context);
-        });  }
+            );
+          return WillPopScope(
+              child: SafeArea(
+                child: Scaffold(
+                  extendBody: true,
+                  backgroundColor: AppColors.offWhite,
+                  // drawer: HomeDrawer(),
+                  body: Obx(
+                        () => Column(
+                      children: [
+                        HomeAppbar(
+                          type: "home",
+                        ),
+                        Expanded(child: currentPage()),
+                        // HomeBottomNavigationBar()
+                      ],
+                    ),
+                  ),
+                  bottomNavigationBar: HomeBottomNavigationBar(),
+                ),
+              ),
+              onWillPop: () async {
+                return _willPopCallback(context);
+              });
+    });
+  }
 
 
   Future<bool> _willPopCallback(BuildContext context) async {

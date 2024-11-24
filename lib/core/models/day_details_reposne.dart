@@ -113,8 +113,8 @@ class Data {
     data['day_clinic_note'] = this.dayClinicNote;
     data['workout_details'] = this.workoutDetails;
     data['workout_details_type'] = this.workoutDetailsType;
-    data['clinic_details'] = this.workoutDetails;
-    data['clinic_details_type'] = this.workoutDetailsType;
+    data['clinic_details'] = this.clinicDetails;
+    data['clinic_details_type'] = this.clinicDetailsType;
     data['sleeping_time'] = this.sleepingTime?.toJson();
 
     return data;

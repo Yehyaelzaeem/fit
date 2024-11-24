@@ -49,11 +49,13 @@ class AppSize {
   static const double s90 = 90.0;
   static const double s100 = 100.0;
   static const double s125 = 125.0;
+  static const double s132 = 132.0;
   static const double s150 = 150.0;
   static const double s175 = 175.0;
   static const double s200 = 200.0;
   static const double s250 = 250.0;
   static const double s350 = 350.0;
+  static const double s300 = 300.0;
 }
 
 class Time {

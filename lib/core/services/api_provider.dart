@@ -168,7 +168,7 @@ class ApiProvider {
   }
 
   Future<MessageDetailsResponse> getMessagesDetailsData(int id) async {
-    Response response = await _utils.get("message/$id");
+    Response response = await _utils.get("/message/$id");
     if (response.statusCode == 200) {
       return MessageDetailsResponse.fromJson(response.data);
     } else {
@@ -1991,7 +1991,7 @@ class ApiProvider {
           ? StringConst.APP_Android_VERSION
           : StringConst.APP_IOS_VERSION,
     });
-    Response response = await _utils.post("api_version", body: body);
+    Response response = await _utils.post("/api_version", body: body);
     if (response.data["success"] == true) {
       return VersionResponse.fromJson(response.data);
     } else {

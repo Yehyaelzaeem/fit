@@ -76,7 +76,7 @@ class CheerFullRepository extends BaseRepository {
       httpRequest: () async {
         final result = await Connectivity().checkConnectivity();
         if (result != ConnectivityResult.none) {
-          Response response = await _apiClient.post(url: "faq_status");
+          Response response = await _apiClient.post(url: "/faq_status");
           if (response.statusCode == 200) {
             bool status = response.data['data']['show_faq_page'];
             await SharedHelper().writeData(CachingKey.FAQ_STATUS, status);
