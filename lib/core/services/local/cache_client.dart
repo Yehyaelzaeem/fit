@@ -28,6 +28,7 @@ class CacheClient {
   }
 
   Future<bool> delete(String key) async => await _sharedPreferences.remove(key);
+  Future<bool> deleteAll() async => await _sharedPreferences.clear();
 
   Future<String?> getSecuredData(String key) async => await _secureStorage.read(key: key);
 

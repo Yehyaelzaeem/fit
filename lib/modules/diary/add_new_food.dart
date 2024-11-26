@@ -65,6 +65,18 @@ class _AddNewFoodState extends State<AddNewFood> {
     data?.forEach((element) {
       element.isSellected = false;
     });
+    data!.sort((a, b) {
+      // Prioritize isFavourite items
+      if (a.isFavourite != b.isFavourite) {
+        return a.isFavourite! ? -1 : 1;
+      }
+      // Then sort alphabetically by title
+      return a.title!.compareTo(b.title!);
+    });
+
+    setState(() {
+
+    });
   }
 
   TextEditingController _controller = new TextEditingController();
@@ -85,6 +97,18 @@ class _AddNewFoodState extends State<AddNewFood> {
                     searchResult.clear();
                   });
                   search(val.toString());
+                  data!.sort((a, b) {
+                    // Prioritize isFavourite items
+                    if (a.isFavourite != b.isFavourite) {
+                      return a.isFavourite! ? -1 : 1;
+                    }
+                    // Then sort alphabetically by title
+                    return a.title!.compareTo(b.title!);
+                  });
+
+                  setState(() {
+
+                  });
                 },
                 value: null,
                 hint: 'Search',

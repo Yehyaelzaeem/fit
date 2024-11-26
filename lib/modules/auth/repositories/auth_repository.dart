@@ -188,10 +188,12 @@ class AuthRepository extends BaseRepository {
   }
 
   Future<void> clearCache() async {
+    currentUser = null;
     await _cacheClient.delete(StorageKeys.isAuthed);
     await _cacheClient.delete(StorageKeys.USER);
+    await _cacheClient.delete(StorageKeys.DAIRY);
+    await _cacheClient.deleteAll();
     // await _cacheClient.deleteSecuredData();
-    currentUser = null;
   }
 
 

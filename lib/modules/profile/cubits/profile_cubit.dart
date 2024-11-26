@@ -33,7 +33,9 @@ class ProfileCubit extends Cubit<ProfileState> {
     result.fold(
           (failure) => emit(state.copyWith(failure: failure, httpRequestState: HttpRequestState.failure)),
           (userModel) {
-        currentUser = userModel;
+            if(userModel.data!=null) {
+              currentUser = userModel;
+            }
         emit(state.copyWith(user: userModel, httpRequestState: HttpRequestState.success));
       },
     );

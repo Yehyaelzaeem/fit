@@ -105,9 +105,9 @@ class _MyPackagesViewState extends State<MyPackagesView> {
   @override
   void initState() {
     packagesCubit = BlocProvider.of<PackagesCubit>(context);
-    if(currentUser!=null) {
+    // if(currentUser!=null) {
       packagesCubit.fetchMyPackagesList();
-    }
+    // }
     // getMyPackagesList();
     // if (Get.arguments != null) myPackagesResponse = Get.arguments;
     // getFromCash();
@@ -565,7 +565,9 @@ class _MyPackagesViewState extends State<MyPackagesView> {
             ,
           ],
         ):
+
             currentUser!=null?
+
             Column(
               children: [
                 //App bar
