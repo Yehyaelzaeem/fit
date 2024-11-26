@@ -141,6 +141,7 @@ class DiaryRepository extends BaseRepository {
         dayDetailsResponseTemp.data?.proteins?.caloriesTotal?.taken = 0;
         dayDetailsResponseTemp.data?.carbs?.caloriesTotal?.taken = 0;
         dayDetailsResponseTemp.data?.fats?.caloriesTotal?.taken = 0;
+        dayDetailsResponseTemp.data?.water= 0;
         dayDetailsResponseTemp.data?.sleepingTime?.sleepingDuration = '';
         dayDetailsResponseTemp.data?.sleepingTime?.sleepingStatus = null;
 
