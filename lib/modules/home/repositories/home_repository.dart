@@ -124,28 +124,6 @@ class HomeRepository extends BaseRepository {
     }
   }
 
-  Future<Either<Failure, VersionResponse>> fetchAppVersion() async {
-    FormData body = FormData.fromMap({
-      'type': 'production',
-      'platform': Platform.isAndroid ? 'android' : 'ios',
-      'version': Platform.isAndroid
-          ? StringConst.APP_Android_VERSION
-          : StringConst.APP_IOS_VERSION,
-    });
-
-    return super.call<VersionResponse>(
-      httpRequest: () async {
-        final response = await _apiClient.post(url:"/api_version", requestBody: body);
-
-        if (response.data["success"] == true) {
-          return response;
-        } else {
-          throw Failure(500, response.data["message"] ?? "Failed to fetch version");
-        }
-      },
-      successReturn: (data) => VersionResponse.fromJson(data),
-    );
-  }
 
   // Fetch CheerFull status, handling online and offline scenarios
   Future<CheerFullResponse> getCheerFullStatus() async {

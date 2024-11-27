@@ -66,24 +66,7 @@ class HomeCubit extends Cubit<HomeStates> {
   MessagesResponse messagesResponse = MessagesResponse();
 
 
-  Future<void> getAppVersion() async {
-    emit(HomeLoading());
 
-    final result = await _homeRepository.fetchAppVersion();
-
-    result.fold(
-          (failure) {
-        emit(HomePageFailureState(failure));
-      },
-          (versionResponse) {
-        if (versionResponse.forceUpdate) {
-          emit(HomeForceUpdate(versionResponse));
-        } else {
-          emit(HomeVersionFetched(versionResponse));
-        }
-      },
-    );
-  }
 
   void onInit(DiaryCubit diaryCubit) async {
     emit(GetHomeLoadingState());

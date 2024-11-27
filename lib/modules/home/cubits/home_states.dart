@@ -25,17 +25,7 @@ class GetHomeFailureState extends HomeStates {
 }
 class HomeLoading extends HomeStates {}
 
-class HomeVersionFetched extends HomeStates {
-  final VersionResponse versionResponse;
 
-  HomeVersionFetched(this.versionResponse);
-}
-
-class HomeForceUpdate extends HomeStates {
-  final VersionResponse versionResponse;
-
-  HomeForceUpdate(this.versionResponse);
-}
 
 class HomePageLoadingState extends HomeStates {
   HomePageLoadingState();

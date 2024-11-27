@@ -15,6 +15,7 @@ import '../../../../core/view/widgets/default/app_buttons.dart';
 import '../../../../core/view/widgets/default/text.dart';
 import '../../../diary/cubits/diary_cubit.dart';
 import '../../../diary/views/diary_view.dart';
+import '../../../force_update/cubits/force_update_cubit.dart';
 import '../../../sessions/views/sessions_view.dart';
 import '../../cubits/home_cubit.dart';
 import '../widgets/home_appbar.dart';
@@ -34,26 +35,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController pageController = PageController();
   late final HomeCubit homeCubit;
+  late final ForceUpdateCubit forceUpdateCubit;
 
 
   @override
   void initState() {
     super.initState();
     homeCubit = BlocProvider.of<HomeCubit>(context);
-    homeCubit.getAppVersion();
+    forceUpdateCubit = BlocProvider.of<ForceUpdateCubit>(context);
+    forceUpdateCubit.getAppVersion();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit, HomeStates>(
-        listener: (context, state) {
-          if (state is HomePageFailureState) {
-            Alerts.showToast(state.failure.message);
-          }
+    return BlocConsumer<ForceUpdateCubit, ForceUpdateState>(
+        listener: (context, state1) {
+      if (state1 is ForceUpdateFailureState) {
+        Alerts.showToast(state1.failure.message);
+      }
 
-        },
-        builder: (context, state){
-          if (state is HomeForceUpdate)
+    },
+        builder: (context, state1){
+          if (state1 is HomeForceUpdate)
             return Scaffold(
               body: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -84,31 +87,70 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             );
-          return WillPopScope(
-              child: SafeArea(
-                child: Scaffold(
-                  extendBody: true,
-                  backgroundColor: AppColors.offWhite,
-                  // drawer: HomeDrawer(),
-                  body: Obx(
-                        () => Column(
+          return BlocConsumer<HomeCubit, HomeStates>(
+              listener: (context, state) {
+                if (state is HomePageFailureState) {
+                  Alerts.showToast(state.failure.message);
+                }
+
+              },
+              builder: (context, state){
+                if (state is HomeForceUpdate)
+                  return Scaffold(
+                    body: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        HomeAppbar(
-                          type: "home",
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 40),
+                          height: deviceHeight / 3.4,
+                          child: Image.asset(
+                            AppImages.kLogoColumn,
+                            width: double.infinity,
+                          ),
                         ),
-                        Expanded(child: currentPage()),
-                        // HomeBottomNavigationBar()
+                        SizedBox(height: 26),
+                        kTextHeader('Update required', size: 24),
+                        kTextHeader('${homeCubit.response.value.message}', paddingH: 20),
+                        SizedBox(height: 30),
+                        kButtonDefault(
+                          "Update",
+                          func: () async {
+                            String url = Platform.isAndroid
+                                ? StringConst.PLAY_STORE
+                                : StringConst.APP_STORE;
+                            bool canLaun = await canLaunch(url);
+                            if (canLaun) launch(url);
+                          },
+                        ),
+                        SizedBox(height: 50),
                       ],
                     ),
-                  ),
-                  bottomNavigationBar: HomeBottomNavigationBar(),
-                ),
-              ),
-              onWillPop: () async {
-                return _willPopCallback(context);
+                  );
+                return WillPopScope(
+                    child: SafeArea(
+                      child: Scaffold(
+                        extendBody: true,
+                        backgroundColor: AppColors.offWhite,
+                        // drawer: HomeDrawer(),
+                        body: Obx(
+                              () => Column(
+                            children: [
+                              HomeAppbar(
+                                type: "home",
+                              ),
+                              Expanded(child: currentPage()),
+                              // HomeBottomNavigationBar()
+                            ],
+                          ),
+                        ),
+                        bottomNavigationBar: HomeBottomNavigationBar(),
+                      ),
+                    ),
+                    onWillPop: () async {
+                      return _willPopCallback(context);
+                    });
               });
-    });
-  }
+        });}
 
 
   Future<bool> _willPopCallback(BuildContext context) async {

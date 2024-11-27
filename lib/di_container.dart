@@ -24,6 +24,8 @@ import 'modules/cheerful/cubits/cheerfull_cubit.dart';
 import 'modules/cheerful/repositories/cheerfull_repository.dart';
 import 'modules/diary/cubits/diary_cubit.dart';
 import 'modules/diary/repositories/diary_repository.dart';
+import 'modules/force_update/cubits/force_update_cubit.dart';
+import 'modules/force_update/repositories/force_update_repository.dart';
 import 'modules/general/cubits/general_data_cubit.dart';
 import 'modules/general/repositories/general_data_repository.dart';
 import 'modules/home/cubits/home_cubit.dart';
@@ -76,6 +78,7 @@ Future<void> init() async {
   sl.registerLazySingleton<OrdersRepository>(() => OrdersRepository(sl<ApiClient>(),));
   sl.registerLazySingleton<PackagesRepository>(() => PackagesRepository(sl<ApiClient>(),));
   sl.registerLazySingleton<SubscribeRepository>(() => SubscribeRepository(sl<ApiClient>(),));
+  sl.registerLazySingleton<AppUpdateRepository>(() => AppUpdateRepository(sl<ApiClient>(),sl<NetworkInfo>()));
 
   // Cubits
   sl.registerFactory<L10nCubit>(() => L10nCubit(sl<CacheClient>())..initLocale());
@@ -96,5 +99,6 @@ Future<void> init() async {
   sl.registerFactory<OrdersCubit>(() => OrdersCubit( sl<OrdersRepository>()));
   sl.registerFactory<PackagesCubit>(() => PackagesCubit( sl<PackagesRepository>()));
   sl.registerFactory<SubscribeCubit>(() => SubscribeCubit( sl<SubscribeRepository>()));
+  sl.registerFactory<ForceUpdateCubit>(() => ForceUpdateCubit( sl<AppUpdateRepository>()));
 
 }

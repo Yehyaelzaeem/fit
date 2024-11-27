@@ -68,20 +68,22 @@ class _MealItemWidgetState extends State<MealItemWidget> {
             initiallyExpanded: false,
             title: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomText(
-                        widget.mealName,
-                      fontWeight: FontWeightManager.semiBold,
-                      fontSize: FontSize.s18,
-                    ),
-                    CustomText(
-                      "${widget.mealCalories} Cal.",
-                      fontSize: FontSize.s14,
-                      fontWeight: FontWeightManager.medium,
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                          widget.mealName,
+                        fontWeight: FontWeightManager.semiBold,
+                        fontSize: FontSize.s18,
+                      ),
+                      CustomText(
+                        "${widget.mealCalories} Cal.",
+                        fontSize: FontSize.s14,
+                        fontWeight: FontWeightManager.medium,
+                      ),
+                    ],
+                  ),
                 ),
                 Expanded(
                   child: Row(

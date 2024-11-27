@@ -16,6 +16,7 @@ import 'modules/about/cubits/about_cubit.dart';
 import 'modules/auth/cubit/auth_cubit/auth_cubit.dart';
 import 'modules/cheerful/cubits/cheerfull_cubit.dart';
 import 'modules/diary/cubits/diary_cubit.dart';
+import 'modules/force_update/cubits/force_update_cubit.dart';
 import 'modules/general/cubits/general_data_cubit.dart';
 import 'di_container.dart' as di;
 import 'package:permission_handler/permission_handler.dart';
@@ -84,6 +85,7 @@ void main() async {
         BlocProvider(create: (_) => di.sl<MakeMealsCubit>()),
         BlocProvider(create: (_) => di.sl<PackagesCubit>()),
         BlocProvider(create: (_) => di.sl<SubscribeCubit>()),
+        BlocProvider(create: (_) => di.sl<ForceUpdateCubit>()),
 
       ],
       child: const MyApp(),
