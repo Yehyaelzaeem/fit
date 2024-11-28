@@ -197,7 +197,10 @@ class ProfileRepository extends BaseRepository {
   Future<Either<Failure, String>> deleteAccount() async {
     return super.call<String>(
       httpRequest: () => _apiClient.post(url: EndPoints.deleteAccount, requestBody: {}),
-      successReturn: (data)=> "success",
+      successReturn: (data){
+        _cacheClient.deleteAll();
+        return "success";
+      },
     );
   }
 

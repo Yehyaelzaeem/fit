@@ -500,7 +500,7 @@ class ApiProvider {
   }
 
   Future<void> deleteAccount() async {
-    await _utils.post("delete_account");
+    // await _utils.post("delete_account");
   }
 
   Future<SleepTimeResponse> addSleepTime({

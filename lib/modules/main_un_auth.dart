@@ -49,6 +49,7 @@ class MainUnAuth extends StatelessWidget {
                           child: Text(
                         "Sorry, No packages available,\n\Please subscribe first",
                         style: TextStyle(color: kColorPrimary, fontSize: 22),
+                            textAlign: TextAlign.center,
                       )),
                     ),
                    Padding(

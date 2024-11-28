@@ -75,7 +75,10 @@ class SubscribeCubit extends Cubit<SubscribeState> {
     // userName.value = await SharedHelper().readString(CachingKey.USER_NAME);
     // userLastName.value =
     // await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    if (currentUser!.data!.phone!.isEmpty &&
+    if (currentUser?.data==null) {
+      // Fluttertoast.showToast(msg: "Kindly enter your all data!");
+      return await "noPhone";
+    } else if (currentUser!.data!.phone!.isEmpty &&
         (currentUser!.data!.email??'').isEmpty &&
         (currentUser!.data!.name??'').isEmpty) {
       // Fluttertoast.showToast(msg: "Kindly enter your all data!");

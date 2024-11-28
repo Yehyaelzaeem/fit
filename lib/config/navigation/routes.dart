@@ -26,6 +26,7 @@ class Routes {
   static const String cart = "/cartView";
   static const String timeSleep = "/timeSleep";
   static const String usual = "/usual";
+  static const String webView = "/webView";
 
 
   static const String locationScreen = "/locationScreen";

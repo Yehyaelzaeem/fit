@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../config/localization/l10n/l10n.dart';
 import '../../../../config/navigation/navigation_services.dart';
 import '../../../../config/navigation/routes.dart';
+import '../../../../core/database/shared_pref.dart';
 import '../../../../core/enums/http_request_state.dart';
 import '../../../../core/resources/resources.dart';
 import '../../../../core/utils/alerts.dart';
@@ -146,7 +147,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       builder: (context) => ConfirmationDialog(
                         title: 'هل أنت متأكد من حذف الحساب؟',
                         // title: L10n.tr(context).areYouSure,
-                        onConfirm: () => profileCubit.deleteAccount(),
+                        onConfirm: () {
+                          profileCubit.deleteAccount();
+                          YemenyPrefs prefs = YemenyPrefs();
+                          prefs.logout();
+                          NavigationService.pushReplacementAll(context, Routes.authScreen);
+                        },
                       ),
                     );
                   },

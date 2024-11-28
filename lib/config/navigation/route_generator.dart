@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import '../../core/view/screens/undefined_route_screen.dart';
 import '../../modules/auth/view/screens/forget_password.dart';
 import '../../modules/cart/views/cart_view.dart';
+import '../../modules/cart/views/web_view.dart';
 import '../../modules/faq/views/faq_view.dart';
 import '../../modules/home/view/widgets/home_drawer.dart';
 import '../../modules/layout/view/screens/layout_screen.dart';
@@ -100,6 +101,12 @@ class RouteGenerator {
         return platformPageRoute(
             TimeSleepView(
               isToday: arguments?["isToday"],
+            ));
+      case Routes.webView:
+        return platformPageRoute(
+            WebViewScreen(
+              url: arguments?["url"],
+              packageId: arguments?["packageId"],
             ));
       case Routes.notificationScreen:
         return platformPageRoute( NotificationScreen());

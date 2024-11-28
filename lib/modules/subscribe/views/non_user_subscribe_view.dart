@@ -240,7 +240,7 @@ class _NonUserSubscribeViewState extends State<NonUserSubscribeView> {
                                           } else if(widget.save==true){
                                             Navigator.pop(context, true);
                                           }else {
-                                            Get.toNamed(Routes.myPackagesView);
+                                            NavigationService.push(context,Routes.myPackagesView);
                                            }
                                         } else {
                                           Navigator.pop(context, [

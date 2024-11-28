@@ -79,6 +79,9 @@ class _MySubscribeViewState extends State<SubscribeView> {
                       return InkWell(
                         onTap: () {
                           subscribeCubit.selectedIndex(index);
+                          setState(() {
+
+                          });
                         },
                         child: Container(
                           height: deviceHeight * 0.12,
@@ -170,7 +173,7 @@ class _MySubscribeViewState extends State<SubscribeView> {
                     Expanded(
                       child: AnimatedBuilder(
                         animation: pc,
-                        builder: (context, child) {
+                        builder: (context1, child) {
                           final payment = subscribeCubit
                               .servicesResponse
                               .data?[subscribeCubit.serviceIndex]
@@ -311,33 +314,30 @@ class _MySubscribeViewState extends State<SubscribeView> {
                                                   email: currentUser!.data!.email??'',
                                                   packageId: subscribeCubit
                                                       .servicesResponse
-                                                      .data![subscribeCubit
-                                                      .serviceIndex
-                                                  ]
-                                                      .packages![
-                                                  i]
+                                                      .data![subscribeCubit.serviceIndex]
+                                                      .packages![i]
                                                       .id!,
                                                   payMethod:
                                                   "visa",
                                                   isGuest: false)
-                                                  .then((value) {
-                                                Navigator
+                                                  .then((value) async{
+
+                                                NavigationService
                                                     .pushReplacement(
                                                   context,
-                                                  MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        WebViewScreen(
-                                                          url: subscribeCubit
-                                                              .packagePaymentResponse
-                                                              .data!
-                                                              .paymentUrl!,
-                                                          packageId:
-                                                          subscribeCubit
-                                                              .packagePaymentResponse
-                                                              .data!
-                                                              .id!,
-                                                        ),
-                                                  ),
+                                                    Routes.webView
+                                                    ,
+                                                  arguments: {
+                                                    "url": subscribeCubit
+                                                        .packagePaymentResponse
+                                                        .data!
+                                                        .paymentUrl!,
+                                                    "packageId":
+                                                    subscribeCubit
+                                                        .packagePaymentResponse
+                                                        .data!
+                                                        .id!,
+                                                  }
                                                 );
                                               });
                                             } else if (await subscribeCubit

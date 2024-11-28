@@ -475,7 +475,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title: 'Delete Account',
                         body: 'Are you sure you want to delete your account?',
                         confirmAction: () {
-                          ApiProvider().deleteAccount();
+                          profileCubit.deleteAccount();
                           YemenyPrefs prefs = YemenyPrefs();
                           prefs.logout();
                           NavigationService.pushReplacementAll(context, Routes.authScreen);
