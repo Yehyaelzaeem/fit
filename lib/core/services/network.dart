@@ -8,8 +8,8 @@ class NetworkUtil {
 
   NetworkUtil.internal();
 
-  // String base_url = "https://fofclinic.com/api/";
-  String base_url = "https://dev02.matrix-clouds.com/fofclinic/public/api/";
+  String base_url = "https://fofclinic.com/api/";
+  // String base_url = "https://dev02.matrix-clouds.com/fofclinic/public/api/";
   Dio dio = Dio();
 
   factory NetworkUtil() => _instance;

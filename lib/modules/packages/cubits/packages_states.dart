@@ -17,3 +17,17 @@ class PackagesError extends PackagesState {
 
   PackagesError({required this.message});
 }
+
+class PackageLoading extends PackagesState {}
+
+class PackageDetailsLoaded extends PackagesState {
+  final PackageDetailsResponse packageDetails;
+
+  PackageDetailsLoaded({required this.packageDetails});
+}
+
+class PackageError extends PackagesState {
+  final String message;
+
+  PackageError({required this.message});
+}

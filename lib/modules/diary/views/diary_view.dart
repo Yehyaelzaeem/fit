@@ -172,7 +172,7 @@ class _DiaryViewState extends State<DiaryView> {
                         HorizontalSpace(AppSize.s12),
                         InkWell(
                           onTap: (){
-                            diaryCubit.sendAndRefresh();
+                            diaryCubit.onInit();
                           },
                           child: Container(
                             decoration: BoxDecoration(

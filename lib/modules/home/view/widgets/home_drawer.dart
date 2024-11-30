@@ -219,7 +219,7 @@ checkIfUserIsLogged();
                                   fontSize: FontSize.s20,
                                fontWeight: FontWeightManager.semiBold,
                              ),
-                            CustomText('ID : ${currentUser?.data?.id}',
+                            CustomText('ID : ${currentUser!.data!.patientId!}',
                                 fontSize: FontSize.s16, fontWeight: FontWeightManager.regular, ),
                             SizedBox(
                               height: 30,
