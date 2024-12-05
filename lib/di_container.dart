@@ -8,6 +8,7 @@ import 'package:app/modules/other_calories/repositories/other_calories_repositor
 import 'package:app/modules/packages/repositories/packages_repository.dart';
 import 'package:app/modules/subscribe/repositories/subscribe_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -48,6 +49,8 @@ final GetIt sl = GetIt.instance;
 Future<void> init() async {
   // external
   final SharedPreferences sharedPrefs = await SharedPreferences.getInstance();
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
   sl.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
   sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage(aOptions: AndroidOptions(encryptedSharedPreferences: true,)));
   sl.registerLazySingleton<Dio>(() => Dio());

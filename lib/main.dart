@@ -2,10 +2,12 @@ import 'package:app/modules/home/cubits/home_cubit.dart';
 import 'package:app/modules/myMeals/cubits/my_meals_cubit.dart';
 import 'package:app/modules/profile/cubits/profile_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:notification_permissions/notification_permissions.dart';
 
 import 'config/localization/cubit/l10n_cubit.dart';
 import 'config/navigation/navigation.dart';
@@ -43,6 +45,14 @@ void main() async {
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
   // debugPaintSizeEnabled = false; // Show layout gridlines
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+  getFireBaseNotifications();
+  getNotificationPermission();
 
   await di.init();
   Bloc.observer = MyBlocObserver();
@@ -137,3 +147,56 @@ final ThemeData lightTheme = ThemeData(
   //   headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
   // ),
 );
+
+
+
+void getFireBaseNotifications() {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  print("messaging ${messaging.app.name}");
+  // while app is opened
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    // NotificationApi.showNotification(
+    //   id: 0,
+    //   title: message.notification?.title ?? "",
+    //   body: message.notification?.body ?? "",
+    // );
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.data}');
+      print("message $message");
+      print("data ${message.data}");
+    }
+  });
+  // while app is closed
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print("message $message");
+    print("data ${message.data}");
+  });
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print("onBackgroundMessage");
+    print("message $message");
+    print("data ${message.data}");
+  });
+}
+
+Future getNotificationPermission() async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestNotificationsPermission();
+  var permissionStatus =
+  NotificationPermissions.getNotificationPermissionStatus();
+  permissionStatus.then((value) {
+    if (value.name != 'granted') {
+      Future.delayed(const Duration(seconds: 5), () {
+        NotificationPermissions.requestNotificationPermissions();
+      });
+    }
+  });
+}

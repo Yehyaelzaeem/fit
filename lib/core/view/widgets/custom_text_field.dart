@@ -26,6 +26,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final AutovalidateMode? autoValidateMode;
   final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
 
   const CustomTextField({
     this.hintText,
@@ -39,6 +40,7 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.enabled,
     this.formatters,
+    this.focusNode,
     this.onChanged,
     this.onTap,
     this.onSaved,
@@ -65,6 +67,7 @@ class CustomTextField extends StatelessWidget {
       inputFormatters: formatters,
       onChanged: onChanged,
       onTap: onTap,
+      focusNode: focusNode,
       onSaved: onSaved,
       maxLength: maxLength,
       onFieldSubmitted: onSubmitted,

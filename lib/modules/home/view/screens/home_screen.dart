@@ -44,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     homeCubit = BlocProvider.of<HomeCubit>(context);
     forceUpdateCubit = BlocProvider.of<ForceUpdateCubit>(context);
     forceUpdateCubit.getAppVersion();
+    homeCubit.onInit();
   }
 
   @override

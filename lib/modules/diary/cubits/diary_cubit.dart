@@ -667,7 +667,7 @@ class DiaryCubit extends Cubit<DiaryState> {
       // await getDiaryData(selectedDate, isSending);
       // await sendSavedSleepTimes();
       // await sendSavedDiaryDataByDay();
-      sendAndRefresh();
+      onInit();
       // await refreshDiaryDataLive(selectedDate);
     } else {
       await getDiaryData(selectedDate, false);

@@ -1,17 +1,22 @@
 
 import 'package:analog_clock/analog_clock.dart';
-import 'package:app/core/resources/resources.dart';
 import 'package:app/core/utils/alerts.dart';
 import 'package:app/core/view/views.dart';
-import 'package:app/core/view/widgets/fit_new_app_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:progressive_time_picker/progressive_time_picker.dart';
-import 'package:simple_time_range_picker/simple_time_range_picker.dart';
+import '../../../core/resources/app_assets.dart';
+import '../../../core/resources/app_colors.dart';
+import '../../../core/resources/app_values.dart';
+import '../../../core/resources/font_manager.dart';
 import '../../timeSleep/cubits/time_sleep_cubit.dart';
 import '../cubits/diary_cubit.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart';
+import 'package:day_night_time_picker/day_night_time_picker.dart' as timeT;
+
 
 class SleepTimeStatus extends  StatefulWidget {
   SleepTimeStatus({required this.isToday});
@@ -409,7 +414,12 @@ class _SleepTimeStatusState extends State<SleepTimeStatus> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          child: TimePickerScreen(),
+          child: TimePickerScreen(
+            fromTime: diaryCubit.dayDetailsResponse?.data
+                ?.sleepingTime?.sleepingFrom??'12:00 AM',
+            toTime: diaryCubit.dayDetailsResponse?.data
+                ?.sleepingTime?.sleepingTo??'08:00 AM',
+          ),
         );
       },
     );
@@ -810,235 +820,843 @@ class _TimeTabsWidgetState extends State<TimeTabsWidget> {
 
 
 class TimePickerScreen extends StatefulWidget {
+  final String fromTime;
+  final String toTime;
+
+  const TimePickerScreen({super.key, required this.fromTime, required this.toTime});
   @override
   _TimePickerScreenState createState() => _TimePickerScreenState();
 }
-
 class _TimePickerScreenState extends State<TimePickerScreen> {
-  PickedTime? _startTime = PickedTime(h: 0, m: 0); // Initial start time
-  PickedTime? _endTime = PickedTime(h: 8, m: 0);   // Initial end time
+  timeT.Time _startTime = timeT.Time(hour: 0, minute: 0); // Initial start time
+  timeT.Time _endTime = timeT.Time(hour: 8, minute: 0);   // Initial end time
+
+  final TextEditingController _startController = TextEditingController();
+  final TextEditingController _endController = TextEditingController();
   ClockTimeFormat _clockTimeFormat = ClockTimeFormat.twentyFourHours;
   ClockIncrementTimeFormat _clockIncrementTimeFormat =
       ClockIncrementTimeFormat.oneMin;
 
+
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    _startTime = _parseTime(widget.fromTime);
+    _endTime = _parseTime(widget.toTime);
 
+    _startController.text = _formatTime(_startTime);
+    _endController.text = _formatTime(_endTime);
   }
 
-  // updateTime(){
-  //   print("sleepingTo");
-  //   if(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse?.data?.sleepingTime?.sleepingTo !=null){
-  //     selectedTimeTo = convertStringToTimeOfDay(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse?.data!.sleepingTime!.sleepingTo!);
-  //   }
-  //   if(controllerDiary.response.value.data?.sleepingTime?.sleepingFrom !=null){
-  //     selectedTimeFrom = convertStringToTimeOfDay(controllerDiary.response.value.data!.sleepingTime!.sleepingFrom!);
-  //   }
-  //   update();
-  // }
+  /// Helper to parse a time string with AM/PM into timeT.Time
+  timeT.Time _parseTime(String timeString) {
+    final parts = timeString.split(' '); // Split time and AM/PM
+    if (parts.length < 2) return timeT.Time(hour: 0, minute: 0);
+
+    final timeParts = parts[0].split(':'); // Split hours and minutes
+    final isPM = parts[1].toUpperCase() == 'PM';
+
+    int hour = int.tryParse(timeParts[0]) ?? 0;
+    int minute = int.tryParse(timeParts[1]) ?? 0;
+
+    // Convert to 24-hour format if PM and not 12 PM
+    if (isPM && hour != 12) hour += 12;
+
+    // Handle midnight (12 AM)
+    if (!isPM && hour == 12) hour = 0;
+
+    return timeT.Time(hour: hour, minute: minute);
+  }
+
+  void _showTimePicker({required bool isStart}) {
+    Navigator.of(context).push(
+      showPicker(
+        context: context,
+        value: isStart ? _startTime : _endTime,
+        onChange: (selectedTime) {
+          setState(() {
+            if (isStart) {
+              _startTime = selectedTime;
+              _startController.text = _formatTime(_startTime);
+            } else {
+              _endTime = selectedTime;
+              _endController.text = _formatTime(_endTime);
+            }
+          });
+        },
+        is24HrFormat: false, // Use 12-hour format with AM/PM
+      ),
+    );
+  }
+
+  String _formatTime(timeT.Time time) {
+    final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+    final minute = time.minute.toString().padLeft(2, '0');
+    final period = time.hour < 12 ? "AM" : "PM";
+    return "$hour:$minute $period";
+  }
+
+  PickedTime _convertToPickedTime(timeT.Time time) {
+    return PickedTime(h: time.hour, m: time.minute);
+  }
+
+  timeT.Time _convertToTimeT(PickedTime pickedTime) {
+    return timeT.Time(hour: pickedTime.h, minute: pickedTime.m);
+  }
+
+  String _formatTimeToAmPm(int hour, int minute) {
+    final int adjustedHour = hour % 12 == 0 ? 12 : hour % 12; // Adjust for 12-hour clock
+    final String period = hour < 12 ? "AM" : "PM"; // Determine AM/PM
+    final String formattedMinute = minute.toString().padLeft(2, '0'); // Pad minutes with 0 if necessary
+
+    return "$adjustedHour:$formattedMinute $period";
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+        return Container(
       width: deviceWidth,
       decoration: BoxDecoration(
         color: AppColors.offWhite,
-        borderRadius: BorderRadius.circular(AppSize.s12)
+        borderRadius: BorderRadius.circular(AppSize.s12),
       ),
-      
-      child: Column(
-        mainAxisSize: MainAxisSize.min, // Shrink the popup to fit its contents
-        children: [
-
-          VerticalSpace(AppSize.s16),
-
-          CustomText('Sleep Time',fontSize: AppSize.s20,),
-
-          VerticalSpace(AppSize.s32),
-          // TimePicker Widget
-          TimePicker(
-            width: AppSize.s250,
-            height: AppSize.s250,
-            initTime: _startTime!,
-            endTime: _endTime!,
-            decoration: TimePickerDecoration(
-              baseColor: AppColors.customBlack,
-              pickerBaseCirclePadding: 15.0,
-              sweepDecoration: TimePickerSweepDecoration(
-                pickerStrokeWidth: 30.0,
-                pickerColor:  AppColors.primary,
-                showConnector: true,
-              ),
-              initHandlerDecoration: TimePickerHandlerDecoration(
-                color: AppColors.customBlack,
-                shape: BoxShape.circle,
-                radius: 12.0,
-                icon: Icon(
-                  Icons.power_settings_new_outlined,
-                  size: 20.0,
-                  color: AppColors.white,
-
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            VerticalSpace(AppSize.s16),
+            CustomText('Sleep Time', fontSize: AppSize.s20),
+            VerticalSpace(AppSize.s32),
+            TimePicker(
+              width: AppSize.s250,
+              height: AppSize.s250,
+              initTime: _convertToPickedTime(_startTime), // Convert here
+              endTime: _convertToPickedTime(_endTime),
+              onSelectionChange: (start, end, isDisableRange) {
+                setState(() {
+                  _startTime = _convertToTimeT(start);
+                  _endTime = _convertToTimeT(end);
+                  // _startController.text = "${start.h.toString().padLeft(2, '0')}:${start.m.toString().padLeft(2, '0')}";
+                  // _endController.text = "${end.h.toString().padLeft(2, '0')}:${end.m.toString().padLeft(2, '0')}";
+                  _startController.text = _formatTimeToAmPm(start.h, start.m);
+                  _endController.text = _formatTimeToAmPm(end.h, end.m);
+                });
+              },
+              // decoration: TimePickerDecoration(
+              //   baseColor: AppColors.customBlack,
+              //   pickerBaseCirclePadding: 15.0,
+              //   sweepDecoration: TimePickerSweepDecoration(
+              //     pickerStrokeWidth: 30.0,
+              //     pickerColor: AppColors.primary,
+              //     showConnector: true,
+              //   ),
+              //
+              //   // Other decorations...
+              // ),
+                          decoration: TimePickerDecoration(
+                baseColor: AppColors.customBlack,
+                pickerBaseCirclePadding: 15.0,
+                sweepDecoration: TimePickerSweepDecoration(
+                  pickerStrokeWidth: 30.0,
+                  pickerColor:  AppColors.primary,
+                  showConnector: true,
                 ),
-              ),
-              endHandlerDecoration: TimePickerHandlerDecoration(
-                color: AppColors.customBlack,
-                shape: BoxShape.circle,
-                radius: 12.0,
-                icon: Icon(
-                  Icons.notifications_active_outlined,
-                  size: 20.0,
-                  color: AppColors.white,
-                ),
+                initHandlerDecoration: TimePickerHandlerDecoration(
+                  color: AppColors.customBlack,
+                  shape: BoxShape.circle,
+                  radius: 12.0,
+                  icon: Icon(
+                    Icons.power_settings_new_outlined,
+                    size: 20.0,
+                    color: AppColors.white,
 
-              ),
-              primarySectorsDecoration: TimePickerSectorDecoration(
-                color: AppColors.primary,
-                width: 1.0,
-                size: 4.0,
-                radiusPadding: 1.0,
-              ),
-              secondarySectorsDecoration: TimePickerSectorDecoration(
-                color: AppColors.primary,
-                width: 1.0,
-                size: 2.0,
-                radiusPadding: 1.0,
-              ),
-              clockNumberDecoration: TimePickerClockNumberDecoration(
-                defaultTextColor: AppColors.primary,
-                defaultFontSize: 12.0,
-                scaleFactor: 1.5,
-                showNumberIndicators: true,
-                  positionFactor:0.58,
-                clockTimeFormat: _clockTimeFormat,
-
-                clockIncrementTimeFormat: _clockIncrementTimeFormat,
-                clockIncrementHourFormat: ClockIncrementHourFormat.one
-              ),
-            ),
-            onSelectionChange: (start, end, isDisableRange) {
-              setState(() {
-                _startTime = start;
-                _endTime = end;
-              });
-              print(
-                'onSelectionChange => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
-              );
-            },
-            onSelectionEnd: (start, end, isDisableRange) {
-              print(
-                'onSelectionEnd => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
-              );
-            },
-            child: Padding(
-              padding: EdgeInsets.all(AppSize.s72),
-            ),
-          ),
-          SizedBox(height: AppSize.s48),
-          // Display Selected Time
-
-          Container(
-            width: AppSize.s250,
-            height: AppSize.s48,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 2,
-                    spreadRadius: 2,
-                    offset: Offset(0, 0),
                   ),
-                ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                endHandlerDecoration: TimePickerHandlerDecoration(
+                  color: AppColors.customBlack,
+                  shape: BoxShape.circle,
+                  radius: 12.0,
+                  icon: Icon(
+                    Icons.notifications_active_outlined,
+                    size: 20.0,
+                    color: AppColors.white,
+                  ),
+
+                ),
+                primarySectorsDecoration: TimePickerSectorDecoration(
+                  color: AppColors.primary,
+                  width: 1.0,
+                  size: 4.0,
+                  radiusPadding: 1.0,
+                ),
+                secondarySectorsDecoration: TimePickerSectorDecoration(
+                  color: AppColors.primary,
+                  width: 1.0,
+                  size: 2.0,
+                  radiusPadding: 1.0,
+                ),
+                clockNumberDecoration: TimePickerClockNumberDecoration(
+                  defaultTextColor: AppColors.primary,
+                  defaultFontSize: 12.0,
+                  scaleFactor: 1.5,
+                  showNumberIndicators: true,
+                    positionFactor:0.58,
+                  clockTimeFormat: _clockTimeFormat,
+
+                  clockIncrementTimeFormat: _clockIncrementTimeFormat,
+                  clockIncrementHourFormat: ClockIncrementHourFormat.one
+                ),
+              ),
+                          onSelectionEnd: (start, end, isDisableRange) {
+                print(
+                  'onSelectionEnd => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
+                );
+              },
+            ),
+            SizedBox(height: AppSize.s48),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  width: AppSize.s100,
-                  child: CustomText(
-                    "Start: ",
+
+          InkWell(
+            onTap: () => _showTimePicker(isStart: true),
+            child: Container(
+              width: AppSize.s125,
+              height: AppSize.s132,
+              padding: EdgeInsets.all(AppSize.s8),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 2,
+                      spreadRadius: 2,
+                      offset: Offset(0, 0),
+                    ),
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomText(
+                    "${_startController.text}",
+                    fontSize: FontSize.s20,
+                    fontWeight: FontWeightManager.medium,
+            
+                  ),
+                  VerticalSpace(AppSize.s12),
+                  CustomText(
+                    "BedTime",
                     fontSize: FontSize.s20,
                     color: AppColors.primary,
                     fontWeight: FontWeightManager.medium,
-
+                  
                   ),
-                ),
-                CustomText(
-                  "${_startTime!.h.toString().padLeft(2,'0')}:${_startTime!.m.toString().padLeft(2,'0')}",
-                  fontSize: FontSize.s20,
-                  fontWeight: FontWeightManager.medium,
-
-                ),
-              ],
+                  VerticalSpace(AppSize.s12),
+            
+                  Icon(Icons.power_settings_new,color: AppColors.primary,)
+            
+                ],
+              ),
             ),
           ),
-          SizedBox(height: AppSize.s16),
-
-          Container(
-            width: AppSize.s250,
-            height: AppSize.s48,
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    blurRadius: 2,
-                    spreadRadius: 2,
-                    offset: Offset(0, 0),
+          InkWell(
+            onTap: () => _showTimePicker(isStart: false),
+            child: Container(
+              width: AppSize.s125,
+              height: AppSize.s132,
+              padding: EdgeInsets.all(AppSize.s8),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 2,
+                      spreadRadius: 2,
+                      offset: Offset(0, 0),
+                    ),
+                  ]),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomText(
+                    "${_endController.text}",
+                    fontSize: FontSize.s20,
+                    fontWeight: FontWeightManager.medium,
+            
                   ),
-                ]),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-
-              children: [
-                SizedBox(
-                  width: AppSize.s100,
-                  child: CustomText(
-                    "End: ",
+                  VerticalSpace(AppSize.s12),
+                  CustomText(
+                    "WakeUp",
                     fontSize: FontSize.s20,
                     color: AppColors.primary,
                     fontWeight: FontWeightManager.medium,
-
+            
                   ),
-                ),
-                CustomText(
-                  "${_endTime!.h.toString().padLeft(2,'0')}:${_endTime!.m.toString().padLeft(2,'0')}",
-                  fontSize: FontSize.s20,
-                  fontWeight: FontWeightManager.medium,
-
-                ),
-              ],
+                  VerticalSpace(AppSize.s12),
+            
+                  Icon(Icons.notifications_active_outlined,color: AppColors.primary,)
+            
+                ],
+              ),
             ),
           ),
-          SizedBox(height: AppSize.s32),
-          // Submit Button
-          CustomButton(
-            onPressed: () async {
-              final formattedStartTime = TimeOfDay(hour: _startTime!.h, minute: _startTime!.m);
-              final formattedEndTime = TimeOfDay(hour: _endTime!.h, minute: _endTime!.m);
-
-              // Example: Send data to TimeSleepCubit
-              await BlocProvider.of<TimeSleepCubit>(context).addSleepTime(
-                sleepTimeFrom: formattedStartTime.format(context),
-                sleepTimeTo: formattedEndTime.format(context),
-                isToday: true,
-                diaryCubit: BlocProvider.of<DiaryCubit>(context),
-              );
-              // Update UI or perform other actions
-              setState(() {});
-              Navigator.pop(context);
-            },
-            text: "Submit",
-            width: AppSize.s150,
-            height: AppSize.s40,
-            borderRadius: FontSize.s24,
-          ),
-          VerticalSpace(AppSize.s16)
-        ],
+            ],),
+            const SizedBox(height: AppSize.s32),
+            CustomButton(
+              onPressed: () async {
+                // Use _startTime and _endTime directly
+                await BlocProvider.of<TimeSleepCubit>(context).addSleepTime(
+                  sleepTimeFrom: _startTime.format(context),
+                  sleepTimeTo: _endTime.format(context),
+                  isToday: true,
+                  diaryCubit: BlocProvider.of<DiaryCubit>(context),
+                );
+                Navigator.pop(context);
+              },
+              text: "Submit",
+              width: AppSize.s150,
+              height: AppSize.s40,
+              borderRadius: FontSize.s24,
+            ),
+            const SizedBox(height: AppSize.s16),
+          ],
+        ),
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _startController.dispose();
+    _endController.dispose();
+    super.dispose();
+  }
+}
+
+// class _TimePickerScreenState extends State<TimePickerScreen> {
+//   PickedTime? _startTime = PickedTime(h: 0, m: 0); // Initial start time
+//   PickedTime? _endTime = PickedTime(h: 8, m: 0);   // Initial end time
+//
+//   final TextEditingController _startController = TextEditingController();
+//   final TextEditingController _endController = TextEditingController();
+//   ClockTimeFormat _clockTimeFormat = ClockTimeFormat.twentyFourHours;
+//   ClockIncrementTimeFormat _clockIncrementTimeFormat =
+//       ClockIncrementTimeFormat.oneMin;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     _startController.text = "${_startTime!.h.toString().padLeft(2, '0')}:${_startTime!.m.toString().padLeft(2, '0')}";
+//     _endController.text = "${_endTime!.h.toString().padLeft(2, '0')}:${_endTime!.m.toString().padLeft(2, '0')}";
+//   }
+//
+//   // void _updateTimeFromInput() {
+//   //   setState(() {
+//   //     final startParts = _startController.text.split(':');
+//   //     if (startParts.length == 2) {
+//   //       _startTime = PickedTime(h: int.tryParse(startParts[0]) ?? 0, m: int.tryParse(startParts[1]) ?? 0);
+//   //     }
+//   //
+//   //     final endParts = _endController.text.split(':');
+//   //     if (endParts.length == 2) {
+//   //       _endTime = PickedTime(h: int.tryParse(endParts[0]) ?? 0, m: int.tryParse(endParts[1]) ?? 0);
+//   //     }
+//   //   });
+//   // }
+//
+//
+//   void _showTimePicker({required bool isStart}) {
+//     Navigator.of(context).push(
+//         showPicker(
+//       context: context,
+//       value: isStart ? _startTime : _endTime,
+//       onChange: (selectedTime) {
+//         setState(() {
+//           if (isStart) {
+//             _startTime = selectedTime;
+//             _startController.text = _formatTime(selectedTime);
+//           } else {
+//             _endTime = selectedTime;
+//             _endController.text = _formatTime(selectedTime);
+//           }
+//         });
+//       },
+//       is24HrFormat: false, // Use 12-hour format with AM/PM
+//     ));
+//   }
+//
+//   String _formatTime(TimeOfDay time) {
+//     final hour = time.hourOfPeriod == 0 ? 12 : time.hourOfPeriod;
+//     final minute = time.minute.toString().padLeft(2, '0');
+//     final period = time.period == DayPeriod.am ? "AM" : "PM";
+//     return "$hour:$minute $period";
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: deviceWidth,
+//       decoration: BoxDecoration(
+//         color: AppColors.offWhite,
+//         borderRadius: BorderRadius.circular(AppSize.s12),
+//       ),
+//       child: SingleChildScrollView(
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             VerticalSpace(AppSize.s16),
+//             CustomText('Sleep Time', fontSize: AppSize.s20),
+//             VerticalSpace(AppSize.s32),
+//             TimePicker(
+//               width: AppSize.s250,
+//               height: AppSize.s250,
+//               initTime: _startTime!,
+//               endTime: _endTime!,
+//               onSelectionChange: (start, end, isDisableRange) {
+//                 setState(() {
+//                   _startTime = start;
+//                   _endTime = end;
+//                   _startController.text = "${start.h.toString().padLeft(2, '0')}:${start.m.toString().padLeft(2, '0')}";
+//                   _endController.text = "${end.h.toString().padLeft(2, '0')}:${end.m.toString().padLeft(2, '0')}";
+//                 });
+//               },
+//               // decoration: TimePickerDecoration(
+//               //   baseColor: AppColors.customBlack,
+//               //   pickerBaseCirclePadding: 15.0,
+//               //   sweepDecoration: TimePickerSweepDecoration(
+//               //     pickerStrokeWidth: 30.0,
+//               //     pickerColor: AppColors.primary,
+//               //     showConnector: true,
+//               //   ),
+//               //
+//               //   // Other decorations...
+//               // ),
+//                           decoration: TimePickerDecoration(
+//                 baseColor: AppColors.customBlack,
+//                 pickerBaseCirclePadding: 15.0,
+//                 sweepDecoration: TimePickerSweepDecoration(
+//                   pickerStrokeWidth: 30.0,
+//                   pickerColor:  AppColors.primary,
+//                   showConnector: true,
+//                 ),
+//                 initHandlerDecoration: TimePickerHandlerDecoration(
+//                   color: AppColors.customBlack,
+//                   shape: BoxShape.circle,
+//                   radius: 12.0,
+//                   icon: Icon(
+//                     Icons.power_settings_new_outlined,
+//                     size: 20.0,
+//                     color: AppColors.white,
+//
+//                   ),
+//                 ),
+//                 endHandlerDecoration: TimePickerHandlerDecoration(
+//                   color: AppColors.customBlack,
+//                   shape: BoxShape.circle,
+//                   radius: 12.0,
+//                   icon: Icon(
+//                     Icons.notifications_active_outlined,
+//                     size: 20.0,
+//                     color: AppColors.white,
+//                   ),
+//
+//                 ),
+//                 primarySectorsDecoration: TimePickerSectorDecoration(
+//                   color: AppColors.primary,
+//                   width: 1.0,
+//                   size: 4.0,
+//                   radiusPadding: 1.0,
+//                 ),
+//                 secondarySectorsDecoration: TimePickerSectorDecoration(
+//                   color: AppColors.primary,
+//                   width: 1.0,
+//                   size: 2.0,
+//                   radiusPadding: 1.0,
+//                 ),
+//                 clockNumberDecoration: TimePickerClockNumberDecoration(
+//                   defaultTextColor: AppColors.primary,
+//                   defaultFontSize: 12.0,
+//                   scaleFactor: 1.5,
+//                   showNumberIndicators: true,
+//                     positionFactor:0.58,
+//                   clockTimeFormat: _clockTimeFormat,
+//
+//                   clockIncrementTimeFormat: _clockIncrementTimeFormat,
+//                   clockIncrementHourFormat: ClockIncrementHourFormat.one
+//                 ),
+//               ),
+//                           onSelectionEnd: (start, end, isDisableRange) {
+//                 print(
+//                   'onSelectionEnd => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
+//                 );
+//               },
+//             ),
+//             SizedBox(height: AppSize.s48),
+//             Container(
+//               width: AppSize.s250,
+//               height: AppSize.s48,
+//               child: Row(
+//                 children: [
+//                SizedBox(
+//                   width: AppSize.s100,
+//                   child: CustomText(
+//                     "Start: ",
+//                     fontSize: FontSize.s20,
+//                     color: AppColors.primary,
+//                     fontWeight: FontWeightManager.medium,
+//
+//                   ),
+//                 ),
+//               Expanded(
+//                 child: GestureDetector(
+//                   onTap: () => _showTimePicker(isStart: true),
+//                   child: AbsorbPointer(
+//                     child: TextFormField(
+//                       controller: _startController,
+//                       decoration: InputDecoration(
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(16),
+//                         ),
+//                         hintText: "Select Start Time",
+//                       ),
+//                     ),
+//                   ),
+//                 ),),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(height: AppSize.s16),
+//             Container(
+//               width: AppSize.s250,
+//               height: AppSize.s48,
+//               child: Row(
+//                 children: [
+//                  SizedBox(
+//                   width: AppSize.s100,
+//                   child: CustomText(
+//                     "End: ",
+//                     fontSize: FontSize.s20,
+//                     color: AppColors.primary,
+//                     fontWeight: FontWeightManager.medium,
+//
+//                   ),
+//                 ),
+//                   Expanded(
+//                     child: GestureDetector(
+//                       onTap: () => _showTimePicker(isStart: false),
+//                       child: AbsorbPointer(
+//                         child: TextFormField(
+//                           controller: _endController,
+//                           decoration: InputDecoration(
+//                             border: OutlineInputBorder(
+//                               borderRadius: BorderRadius.circular(16),
+//                             ),
+//                             hintText: "Select End Time",
+//                           ),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             SizedBox(height: AppSize.s32),
+//             CustomButton(
+//               onPressed: () async {
+//                 final formattedStartTime = TimeOfDay(hour: _startTime!.h, minute: _startTime!.m);
+//                 final formattedEndTime = TimeOfDay(hour: _endTime!.h, minute: _endTime!.m);
+//                 await BlocProvider.of<TimeSleepCubit>(context).addSleepTime(
+//                   sleepTimeFrom: formattedStartTime.format(context),
+//                   sleepTimeTo: formattedEndTime.format(context),
+//                   isToday: true,
+//                   diaryCubit: BlocProvider.of<DiaryCubit>(context),
+//                 );
+//                 Navigator.pop(context);
+//               },
+//               text: "Submit",
+//               width: AppSize.s150,
+//               height: AppSize.s40,
+//               borderRadius: FontSize.s24,
+//             ),
+//             VerticalSpace(AppSize.s16),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   @override
+//   void dispose() {
+//     _startController.dispose();
+//     _endController.dispose();
+//     super.dispose();
+//   }
+// }
+
+
+
+
+///------------------------------------------------------------------------------
+// class _TimePickerScreenState extends State<TimePickerScreen> {
+//   PickedTime? _startTime = PickedTime(h: 0, m: 0); // Initial start time
+//   PickedTime? _endTime = PickedTime(h: 8, m: 0);   // Initial end time
+//   ClockTimeFormat _clockTimeFormat = ClockTimeFormat.twentyFourHours;
+//   ClockIncrementTimeFormat _clockIncrementTimeFormat =
+//       ClockIncrementTimeFormat.oneMin;
+//
+//   @override
+//   void initState() {
+//     // TODO: implement initState
+//     super.initState();
+//
+//   }
+//
+//   // updateTime(){
+//   //   print("sleepingTo");
+//   //   if(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse?.data?.sleepingTime?.sleepingTo !=null){
+//   //     selectedTimeTo = convertStringToTimeOfDay(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse?.data!.sleepingTime!.sleepingTo!);
+//   //   }
+//   //   if(controllerDiary.response.value.data?.sleepingTime?.sleepingFrom !=null){
+//   //     selectedTimeFrom = convertStringToTimeOfDay(controllerDiary.response.value.data!.sleepingTime!.sleepingFrom!);
+//   //   }
+//   //   update();
+//   // }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: deviceWidth,
+//       decoration: BoxDecoration(
+//         color: AppColors.offWhite,
+//         borderRadius: BorderRadius.circular(AppSize.s12)
+//       ),
+//
+//       child: Column(
+//         mainAxisSize: MainAxisSize.min, // Shrink the popup to fit its contents
+//         children: [
+//
+//           VerticalSpace(AppSize.s16),
+//
+//           CustomText('Sleep Time',fontSize: AppSize.s20,),
+//
+//           VerticalSpace(AppSize.s32),
+//           // TimePicker Widget
+//           TimePicker(
+//             width: AppSize.s250,
+//             height: AppSize.s250,
+//             initTime: _startTime!,
+//             endTime: _endTime!,
+//             decoration: TimePickerDecoration(
+//               baseColor: AppColors.customBlack,
+//               pickerBaseCirclePadding: 15.0,
+//               sweepDecoration: TimePickerSweepDecoration(
+//                 pickerStrokeWidth: 30.0,
+//                 pickerColor:  AppColors.primary,
+//                 showConnector: true,
+//               ),
+//               initHandlerDecoration: TimePickerHandlerDecoration(
+//                 color: AppColors.customBlack,
+//                 shape: BoxShape.circle,
+//                 radius: 12.0,
+//                 icon: Icon(
+//                   Icons.power_settings_new_outlined,
+//                   size: 20.0,
+//                   color: AppColors.white,
+//
+//                 ),
+//               ),
+//               endHandlerDecoration: TimePickerHandlerDecoration(
+//                 color: AppColors.customBlack,
+//                 shape: BoxShape.circle,
+//                 radius: 12.0,
+//                 icon: Icon(
+//                   Icons.notifications_active_outlined,
+//                   size: 20.0,
+//                   color: AppColors.white,
+//                 ),
+//
+//               ),
+//               primarySectorsDecoration: TimePickerSectorDecoration(
+//                 color: AppColors.primary,
+//                 width: 1.0,
+//                 size: 4.0,
+//                 radiusPadding: 1.0,
+//               ),
+//               secondarySectorsDecoration: TimePickerSectorDecoration(
+//                 color: AppColors.primary,
+//                 width: 1.0,
+//                 size: 2.0,
+//                 radiusPadding: 1.0,
+//               ),
+//               clockNumberDecoration: TimePickerClockNumberDecoration(
+//                 defaultTextColor: AppColors.primary,
+//                 defaultFontSize: 12.0,
+//                 scaleFactor: 1.5,
+//                 showNumberIndicators: true,
+//                   positionFactor:0.58,
+//                 clockTimeFormat: _clockTimeFormat,
+//
+//                 clockIncrementTimeFormat: _clockIncrementTimeFormat,
+//                 clockIncrementHourFormat: ClockIncrementHourFormat.one
+//               ),
+//             ),
+//             onSelectionChange: (start, end, isDisableRange) {
+//               setState(() {
+//                 _startTime = start;
+//                 _endTime = end;
+//               });
+//               print(
+//                 'onSelectionChange => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
+//               );
+//             },
+//             onSelectionEnd: (start, end, isDisableRange) {
+//               print(
+//                 'onSelectionEnd => init: ${start.h}:${start.m}, end: ${end.h}:${end.m}, isDisableRange: $isDisableRange',
+//               );
+//             },
+//             child: Padding(
+//               padding: EdgeInsets.all(AppSize.s72),
+//             ),
+//           ),
+//           SizedBox(height: AppSize.s48),
+//           // Display Selected Time
+//
+//           Container(
+//             width: AppSize.s250,
+//             height: AppSize.s48,
+//             decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(16),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.grey.withOpacity(0.1),
+//                     blurRadius: 2,
+//                     spreadRadius: 2,
+//                     offset: Offset(0, 0),
+//                   ),
+//                 ]),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 SizedBox(
+//                   width: AppSize.s100,
+//                   child: CustomText(
+//                     "Start: ",
+//                     fontSize: FontSize.s20,
+//                     color: AppColors.primary,
+//                     fontWeight: FontWeightManager.medium,
+//
+//                   ),
+//                 ),
+//                 CustomText(
+//                   "${_startTime!.h.toString().padLeft(2,'0')}:${_startTime!.m.toString().padLeft(2,'0')}",
+//                   fontSize: FontSize.s20,
+//                   fontWeight: FontWeightManager.medium,
+//
+//                 ),
+//               ],
+//             ),
+//           ),
+//           SizedBox(height: AppSize.s16),
+//
+//           Container(
+//             width: AppSize.s250,
+//             height: AppSize.s48,
+//             decoration: BoxDecoration(
+//                 color: Colors.white,
+//                 borderRadius: BorderRadius.circular(16),
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: Colors.grey.withOpacity(0.1),
+//                     blurRadius: 2,
+//                     spreadRadius: 2,
+//                     offset: Offset(0, 0),
+//                   ),
+//                 ]),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//
+//               children: [
+//                 SizedBox(
+//                   width: AppSize.s100,
+//                   child: CustomText(
+//                     "End: ",
+//                     fontSize: FontSize.s20,
+//                     color: AppColors.primary,
+//                     fontWeight: FontWeightManager.medium,
+//
+//                   ),
+//                 ),
+//                 CustomText(
+//                   "${_endTime!.h.toString().padLeft(2,'0')}:${_endTime!.m.toString().padLeft(2,'0')}",
+//                   fontSize: FontSize.s20,
+//                   fontWeight: FontWeightManager.medium,
+//
+//                 ),
+//               ],
+//             ),
+//           ),
+//           SizedBox(height: AppSize.s32),
+//           // Submit Button
+//           CustomButton(
+//             onPressed: () async {
+//               final formattedStartTime = TimeOfDay(hour: _startTime!.h, minute: _startTime!.m);
+//               final formattedEndTime = TimeOfDay(hour: _endTime!.h, minute: _endTime!.m);
+//
+//               // Example: Send data to TimeSleepCubit
+//               await BlocProvider.of<TimeSleepCubit>(context).addSleepTime(
+//                 sleepTimeFrom: formattedStartTime.format(context),
+//                 sleepTimeTo: formattedEndTime.format(context),
+//                 isToday: true,
+//                 diaryCubit: BlocProvider.of<DiaryCubit>(context),
+//               );
+//               // Update UI or perform other actions
+//               setState(() {});
+//               Navigator.pop(context);
+//             },
+//             text: "Submit",
+//             width: AppSize.s150,
+//             height: AppSize.s40,
+//             borderRadius: FontSize.s24,
+//           ),
+//           VerticalSpace(AppSize.s16)
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+
+class TimeInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Prevent input beyond 5 characters (HH:mm)
+    if (newValue.text.length > 5) return oldValue;
+
+    String input = newValue.text.replaceAll(":", ""); // Remove any existing colons
+    String formatted = "";
+
+    if (input.length >= 1) {
+      formatted = input.substring(0, 1);
+    }
+    if (input.length >= 2) {
+      formatted += input.substring(1, 2);
+    }
+    if (input.length >= 3) {
+      formatted += ":" + input.substring(2, 3);
+    }
+    if (input.length >= 4) {
+      formatted += input.substring(3, 4);
+    }
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
     );
   }
 }

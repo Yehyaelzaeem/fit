@@ -47,12 +47,7 @@ class HomeCubit extends Cubit<HomeStates> {
   bool? faqStatus;
   RxList<String> slider = RxList();
   RxList<Services> servicesList = RxList();
-  // var name = "".obs;
-  // var lastName = "".obs;
-  // var phone = "".obs;
-  // var avatar = "".obs;
-  // var isLogggd = false.obs;
-  // var id = "".obs;
+
   var isGuest = false.obs;
   late int newMessage = 0;
   final response =
@@ -68,40 +63,12 @@ class HomeCubit extends Cubit<HomeStates> {
 
 
 
-  void onInit(DiaryCubit diaryCubit) async {
+  void onInit() async {
     emit(GetHomeLoadingState());
     await SharedHelper().removeData(CachingKey.INVOICE);
-    getNetworkData();
-    // isLogggd.value = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    // name.value = await SharedHelper().readString(CachingKey.USER_NAME);
-    // phone.value = await SharedHelper().readString(CachingKey.PHONE);
-    // avatar.value = await SharedHelper().readString(CachingKey.AVATAR);
-    // id.value = await SharedHelper().readString(CachingKey.USER_ID);
-    // login = await SharedHelper().readBoolean(CachingKey.IS_LOGGED);
-    // lastName.value = await SharedHelper().readString(CachingKey.USER_LAST_NAME);
-    // isGuest.value=await SharedHelper().readBoolean(CachingKey.IS_GUEST_SAVED);
-    cheerfulResponse.value = await _homeRepository.getCheerFullStatus();
+      cheerfulResponse.value = await _homeRepository.getCheerFullStatus();
     faqStatus = await _homeRepository.getFaqStatus();
     if(currentUser!=null)  orientationStatus = await _homeRepository.getOrientationVideosStatus();
-    final result = await Connectivity().checkConnectivity();
-    if (result != ConnectivityResult.none) {
-
-      await _diaryCubit.sendSavedDiaryDataByDay();
-      /// important
-      // await _diaryCubit.sendSavedSleepTimes();
-
-      diaryCubit.getDiaryData(
-        diaryCubit.lastSelectedDate.value != '' ? diaryCubit.lastSelectedDate.value : DateTime
-            .now().toString().substring(0, 10),true);
-
-    }
-
-    if (homeResponse?.success == false && (homeResponse?.code == 200 || homeResponse?.code == 401)) {
-      // SharedHelper().logout();
-      // NavigationService.pushReplacementAll(context,Routes.splashScreen);
-    }
-    //   Get.put(SessionsController(), tag: 'SessionsController');
-    onInit(diaryCubit);
 
 
     emit(GetHomeSuccessState());

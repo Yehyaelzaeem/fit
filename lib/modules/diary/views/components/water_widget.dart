@@ -398,7 +398,7 @@ class _WaterSheetState extends State<WaterSheet> {
 }
 
 
-class WaterItemWidget extends StatelessWidget {
+class WaterItemWidget extends StatefulWidget {
   final String title;
   final String icon;
   final bool isAdd;
@@ -419,6 +419,28 @@ class WaterItemWidget extends StatelessWidget {
   });
 
   @override
+  State<WaterItemWidget> createState() => _WaterItemWidgetState();
+}
+
+class _WaterItemWidgetState extends State<WaterItemWidget> {
+  final FocusNode _textFieldFocusNode = FocusNode();
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _textFieldFocusNode.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _focusTextField() {
+    if (!_textFieldFocusNode.hasFocus) {
+      _textFieldFocusNode.requestFocus(); // Programmatically focus the text field
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -434,33 +456,39 @@ class WaterItemWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if(isLarge)
+                if(widget.isLarge)
                   VerticalSpace(AppSize.s16),
-                if(heightIcon!=null)
-                if(heightIcon! < AppSize.s64)
-                  VerticalSpace((AppSize.s64 - heightIcon! )),
+                if(widget.heightIcon!=null)
+                if(widget.heightIcon! < AppSize.s64)
+                  VerticalSpace((AppSize.s64 - widget.heightIcon! )),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: icon.contains('svg')?Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: SvgPicture.asset(icon,width: AppSize.s48,height: AppSize.s48,fit: isLarge?BoxFit.cover:BoxFit.contain,),
-                  ):Image.asset(icon,width: AppSize.s48,height: heightIcon??AppSize.s64,fit: isLarge?BoxFit.cover:null,),
+                  child: InkWell(
+                    onTap: widget.isLarge?_focusTextField:widget.onTap,
+                    child: widget.icon.contains('svg')?Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: SvgPicture.asset(widget.icon,width: AppSize.s48,height: AppSize.s48,fit: widget.isLarge?BoxFit.cover:BoxFit.contain,),
+                    ):Image.asset(widget.icon,width: AppSize.s48,height: widget.heightIcon??AppSize.s64,fit: widget.isLarge?BoxFit.cover:null,),
+                  ),
                 ),
 
-                if(!isLarge)
+                if(!widget.isLarge)
                   VerticalSpace(AppSize.s8),
-                if(!isLarge)
+                if(!widget.isLarge)
 
-                  Center(child: CustomText(title,fontSize: FontSize.s16,)),
+                  Center(child: InkWell(
+                      onTap: widget.onTap,
+                      child: CustomText(widget.title,fontSize: FontSize.s16,))),
 
-                if(heightIcon!=null)
+                if(widget.heightIcon!=null)
                     VerticalSpace(AppSize.s8),
-                if(isLarge)
+                if(widget.isLarge)
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: CustomTextField(
+                      focusNode: _textFieldFocusNode, // Attach the focus node
                       keyBoardType: TextInputType.number,
-                      onChanged: onChange,
+                      onChanged: widget.onChange,
                       hintText: 'Custom ml',
 
                     ),
@@ -468,12 +496,12 @@ class WaterItemWidget extends StatelessWidget {
               ],
             ),
           ),
-          if(!isLarge)
+          if(!widget.isLarge)
           Positioned(
             bottom: 0,
             right: 0,
             child: InkWell(
-              onTap: onTap,
+              onTap: widget.onTap,
               child: Container(
                 padding: EdgeInsets.all(AppSize.s8),
                 decoration: BoxDecoration(
@@ -483,7 +511,7 @@ class WaterItemWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Center(
                   child: Icon(
-                    isAdd?Icons.add:Icons.minimize,
+                    widget.isAdd?Icons.add:Icons.minimize,
                     color: AppColors.white,
                   ),
                 ),
