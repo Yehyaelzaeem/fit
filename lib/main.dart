@@ -171,7 +171,13 @@ void getFireBaseNotifications() {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print("message $message");
-    print("data ${message.data}");
+    if (message.notification != null) {
+      _showLocalNotification(message); // Show the notification
+    }  });
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      _showLocalNotification(message); // Show the notification
+    }
   });
 }
 
@@ -179,7 +185,14 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     print("onBackgroundMessage");
     print("message $message");
-    print("data ${message.data}");
+    if (message.notification != null) {
+      _showLocalNotification(message); // Show the notification
+    }
+  });
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      _showLocalNotification(message); // Show the notification
+    }
   });
 }
 
@@ -200,3 +213,30 @@ Future getNotificationPermission() async {
     }
   });
 }
+
+void _showLocalNotification(RemoteMessage message) async {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'high_importance_channel', // Channel ID
+    'High Importance Notifications', // Channel name
+    channelDescription: 'This channel is used for important notifications.',
+    importance: Importance.max,
+    priority: Priority.high,
+    ticker: 'ticker',
+  );
+
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    message.notification.hashCode,
+    message.notification?.title,
+    message.notification?.body,
+    platformChannelSpecifics,
+  );
+}
+
+
