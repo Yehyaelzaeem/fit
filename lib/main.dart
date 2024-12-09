@@ -51,7 +51,6 @@ void main() async {
       .resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()
       ?.requestNotificationsPermission();
-  getFireBaseNotifications();
   getNotificationPermission();
 
   await di.init();
@@ -150,52 +149,52 @@ final ThemeData lightTheme = ThemeData(
 
 
 
-void getFireBaseNotifications() {
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  print("messaging ${messaging.app.name}");
-  // while app is opened
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    // NotificationApi.showNotification(
-    //   id: 0,
-    //   title: message.notification?.title ?? "",
-    //   body: message.notification?.body ?? "",
-    // );
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.data}');
-      print("message $message");
-      print("data ${message.data}");
-    }
-  });
-  // while app is closed
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("message $message");
-    if (message.notification != null) {
-      _showLocalNotification(message); // Show the notification
-    }  });
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      _showLocalNotification(message); // Show the notification
-    }
-  });
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print("onBackgroundMessage");
-    print("message $message");
-    if (message.notification != null) {
-      _showLocalNotification(message); // Show the notification
-    }
-  });
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      _showLocalNotification(message); // Show the notification
-    }
-  });
-}
-
+// void getFireBaseNotifications() {
+//   FirebaseMessaging messaging = FirebaseMessaging.instance;
+//   print("messaging ${messaging.app.name}");
+//   // while app is opened
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     print('Got a message whilst in the foreground!');
+//     // NotificationApi.showNotification(
+//     //   id: 0,
+//     //   title: message.notification?.title ?? "",
+//     //   body: message.notification?.body ?? "",
+//     // );
+//     if (message.notification != null) {
+//       print('Message also contained a notification: ${message.data}');
+//       print("message $message");
+//       print("data ${message.data}");
+//     }
+//   });
+//   // while app is closed
+//   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+//     print("message $message");
+//     if (message.notification != null) {
+//       _showLocalNotification(message); // Show the notification
+//     }  });
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     if (message.notification != null) {
+//       _showLocalNotification(message); // Show the notification
+//     }
+//   });
+// }
+//
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+//     print("onBackgroundMessage");
+//     print("message $message");
+//     if (message.notification != null) {
+//       _showLocalNotification(message); // Show the notification
+//     }
+//   });
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     if (message.notification != null) {
+//       _showLocalNotification(message); // Show the notification
+//     }
+//   });
+// }
+//
 Future getNotificationPermission() async {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
@@ -213,30 +212,31 @@ Future getNotificationPermission() async {
     }
   });
 }
-
-void _showLocalNotification(RemoteMessage message) async {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
-    'high_importance_channel', // Channel ID
-    'High Importance Notifications', // Channel name
-    channelDescription: 'This channel is used for important notifications.',
-    importance: Importance.max,
-    priority: Priority.high,
-    ticker: 'ticker',
-  );
-
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  await flutterLocalNotificationsPlugin.show(
-    message.notification.hashCode,
-    message.notification?.title,
-    message.notification?.body,
-    platformChannelSpecifics,
-  );
-}
+//
+// void _showLocalNotification(RemoteMessage message) async {
+//   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//   FlutterLocalNotificationsPlugin();
+//
+//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//   AndroidNotificationDetails(
+//     'high_importance_channel', // Channel ID
+//     'High Importance Notifications', // Channel name
+//     channelDescription: 'This channel is used for important notifications.',
+//     importance: Importance.max,
+//     priority: Priority.high,
+//     ticker: 'ticker',
+//     icon: '@drawable/ic_notification', // Custom icon
+//   );
+//
+//   const NotificationDetails platformChannelSpecifics =
+//   NotificationDetails(android: androidPlatformChannelSpecifics);
+//
+//   await flutterLocalNotificationsPlugin.show(
+//     message.notification.hashCode,
+//     message.notification?.title,
+//     message.notification?.body,
+//     platformChannelSpecifics,
+//   );
+// }
 
 

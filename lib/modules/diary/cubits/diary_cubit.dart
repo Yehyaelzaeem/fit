@@ -151,6 +151,7 @@ class DiaryCubit extends Cubit<DiaryState> {
         // Perform asynchronous tasks sequentially
         await _initializeAppData();
         await _syncOfflineData();
+        await Future.delayed(Duration(seconds: 1));
         await _loadDiaryData();
         isOnInit = false;
       }

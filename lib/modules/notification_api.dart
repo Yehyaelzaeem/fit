@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,7 +14,7 @@ class NotificationApi {
       android: AndroidNotificationDetails(
         'water id',
         'water name',
-        icon: '@drawable/applogo',
+        icon: '@drawable/ic_notification', // Custom icon
         priority: Priority.max,
         importance: Importance.max,
         largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
@@ -36,6 +37,42 @@ class NotificationApi {
       final locationName = await FlutterNativeTimezone.getLocalTimezone();
       tz.setLocalLocation(tz.getLocation(locationName));
     }
+    _initializeFirebaseMessaging();
+  }
+
+  /// Firebase Messaging Initialization
+  static Future _initializeFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Foreground message received');
+      _showFirebaseNotification(message);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Message clicked');
+      _showFirebaseNotification(message);
+    });
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    print('Background message received');
+    _showFirebaseNotification(message);
+  }
+
+  /// Display Firebase Notification
+  static void _showFirebaseNotification(RemoteMessage message) async {
+    if (message.notification != null) {
+      await _notifications.show(
+        message.notification.hashCode,
+        message.notification?.title,
+        message.notification?.body,
+        await _notificationDetails(),
+        payload: message.data.toString(),
+      );
+    }
   }
 
   static Future<void> scheduleDailyNotifications() async {
@@ -48,13 +85,13 @@ class NotificationApi {
           i+6, // Ensure each notification has a unique ID
           '💧 Water 💧',
           "Do not forget to drink water",
-          _scheduleDaily(TimeInterval(times[i], 00)), // Schedule at specified hours
+          _scheduleDaily(TimeInterval(times[i], 10)), // Schedule at specified hours
           await NotificationDetails(
           android: AndroidNotificationDetails(
           'water',
           'water name',
-          icon: '@drawable/applogo',
-          priority: Priority.max,
+            icon: '@drawable/ic_notification', // Custom icon
+            priority: Priority.max,
           importance: Importance.max,
           largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
         ),
