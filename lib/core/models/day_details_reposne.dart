@@ -379,19 +379,21 @@ class Workouts {
 }
 
 class DayWorkouts {
-  String? workoutType;
+  // String? workoutType;
   String? workoutDesc;
 
-  DayWorkouts({this.workoutType, this.workoutDesc});
+  DayWorkouts({
+    // this.workoutType,
+    this.workoutDesc});
 
   DayWorkouts.fromJson(Map<String, dynamic> json) {
-    workoutType = json['workout_type'];
+    // workoutType = json['workout_type'];
     workoutDesc = json['workout_desc'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['workout_type'] = this.workoutType;
+    // data['workout_type'] = this.workoutType;
     data['workout_desc'] = this.workoutDesc;
     return data;
   }

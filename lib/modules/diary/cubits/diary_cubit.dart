@@ -927,7 +927,7 @@ class DiaryCubit extends Cubit<DiaryState> {
     print(lastSelectedDate.value);
 
     dayDetailsResponse!.data!.dayWorkouts = DayWorkouts(
-        workoutType: workOutData.value??dayDetailsResponse?.data?.workouts?.last.title,
+        // workoutType: workOutData.value??dayDetailsResponse?.data?.workouts?.last.title,
         workoutDesc: workDesc
     );
 
@@ -935,8 +935,6 @@ class DiaryCubit extends Cubit<DiaryState> {
     await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, lastSelectedDate.value);
     await _diaryRepository.saveDairyLocally(dayDetailsResponse!, lastSelectedDate.value);
 
-    print('dayDetailsResponse?.data?.dayWorkouts?.workoutDesc');
-    print(dayDetailsResponse?.data?.dayWorkouts?.workoutDesc);
 
     refreshDiaryData(lastSelectedDate.value, "carbs");
 

@@ -122,24 +122,46 @@ class _DiarySectionState extends State<DiarySection>  with SingleTickerProviderS
                       ),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal:0,vertical: AppSize.s12),
-                  child: new LinearPercentIndicator(
-                    // width: AppSize.s150,
-                    animation: true,
-                    lineHeight: AppSize.s20,
-                    animationDuration: 500,
-                    padding: EdgeInsets.zero,
-                    percent: widget.item==null?0:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100)>1?1:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
-                    center: Text(""),
-                    curve: Curves.easeInCirc,
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal:0,vertical: AppSize.s12),
+                //   child: new LinearPercentIndicator(
+                //     // width: AppSize.s150,
+                //     animation: true,
+                //     lineHeight: AppSize.s20,
+                //     animationDuration: 500,
+                //     padding: EdgeInsets.zero,
+                //     percent: widget.item==null?0:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100)>1?1:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+                //     center: Text(""),
+                //     curve: Curves.easeInCirc,
+                //
+                //     barRadius: Radius.circular(AppSize.s24),
+                //     progressColor: widget.item?.caloriesTotal?.progress?.bg!=null?Color(
+                //         int.parse("0xFF${widget.item!.caloriesTotal!.progress!.bg}")):AppColors.primary,
+                //     backgroundColor: AppColors.lightGrey,
+                //   ),
+                // ),
 
-                    barRadius: Radius.circular(AppSize.s24),
-                    progressColor: widget.item?.caloriesTotal?.progress?.bg!=null?Color(
-                        int.parse("0xFF${widget.item!.caloriesTotal!.progress!.bg}")):AppColors.primary,
-                    backgroundColor: AppColors.lightGrey,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0, vertical: AppSize.s12),
+                  child: AnimatedPercentIndicator(
+                        percent: widget.item==null?0:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100)>1?1:(widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100),
+
+                  progressColor: widget.item?.caloriesTotal?.progress?.bg!=null?Color(
+                            int.parse("0xFF${widget.item!.caloriesTotal!.progress!.bg}")):AppColors.primary,
                   ),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(horizontal: 0, vertical: AppSize.s12),
+                //   child: AnimatedPercentIndicator(
+                //     percent: widget.item == null
+                //         ? 0
+                //         : (widget.item!.caloriesTotal!.progress!.percentage!.toDouble() / 100)
+                //         .clamp(0.0, 1.0), // Ensure it's within valid range
+                //     progressColor: widget.item?.caloriesTotal?.progress?.bg != null
+                //         ? Color(int.parse("0xFF${widget.item!.caloriesTotal!.progress!.bg}"))
+                //         : AppColors.primary,
+                //   ),
+                // ),
               ],
             ),
             children: [
@@ -732,4 +754,103 @@ class CaloriesRowItem extends StatelessWidget {
   //   FocusScope.of(context).requestFocus(FocusNode());
   // }
 
+}
+
+
+
+// class AnimatedPercentIndicator extends StatefulWidget {
+//   final double percent; // The current percentage value
+//   final Color progressColor;
+//
+//   const AnimatedPercentIndicator({
+//     Key? key,
+//     required this.percent,
+//     required this.progressColor,
+//   }) : super(key: key);
+//
+//   @override
+//   State<AnimatedPercentIndicator> createState() => _AnimatedPercentIndicatorState();
+// }
+//
+// class _AnimatedPercentIndicatorState extends State<AnimatedPercentIndicator> {
+//   double _currentPercent = 0.0; // Initial value
+//
+//   @override
+//   void didUpdateWidget(covariant AnimatedPercentIndicator oldWidget) {
+//     super.didUpdateWidget(oldWidget);
+//
+//     // Update the current percent only if it changes
+//     if (oldWidget.percent != widget.percent) {
+//       setState(() {
+//         _currentPercent = widget.percent.clamp(0.0, 1.0); // Clamp value between 0 and 1
+//       });
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 12.0),
+//       child: LinearPercentIndicator(
+//         animation: true,
+//         lineHeight: 20.0,
+//         animationDuration: 500, // Animation duration
+//         percent: _currentPercent, // Use the tracked percent value
+//         curve: Curves.easeInCirc,
+//         barRadius: const Radius.circular(24.0),
+//         progressColor: widget.progressColor,
+//         backgroundColor: Colors.grey.shade300,
+//         center: Text("${(_currentPercent * 100).toStringAsFixed(0)}%"),
+//       ),
+//     );
+//   }
+// }
+
+class AnimatedPercentIndicator extends StatefulWidget {
+  final double percent; // Current percent value
+  final Color progressColor;
+
+  const AnimatedPercentIndicator({
+    Key? key,
+    required this.percent,
+    required this.progressColor,
+  }) : super(key: key);
+
+  @override
+  _AnimatedPercentIndicatorState createState() =>
+      _AnimatedPercentIndicatorState();
+}
+
+class _AnimatedPercentIndicatorState extends State<AnimatedPercentIndicator> {
+  double _previousPercent = 0.0; // Tracks the previous value
+
+  @override
+  void didUpdateWidget(covariant AnimatedPercentIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Update only if the new percent value is different
+    if (oldWidget.percent != widget.percent) {
+      setState(() {
+        _previousPercent = oldWidget.percent.clamp(0.0, 1.0);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: LinearPercentIndicator(
+        animation: false,
+        lineHeight: 20.0,
+        animationDuration: 500, // Animation duration
+        percent: widget.percent, // Use current percent
+        curve: Curves.linear,
+        barRadius: const Radius.circular(24.0),
+        progressColor: widget.progressColor,
+        backgroundColor: Colors.grey.shade300,
+        // center: Text("${(widget.percent * 100).toStringAsFixed(0)}%"),
+      ),
+    );
+  }
 }

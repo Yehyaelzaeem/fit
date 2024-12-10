@@ -85,7 +85,7 @@ class NotificationApi {
           i+6, // Ensure each notification has a unique ID
           '💧 Water 💧',
           "Do not forget to drink water",
-          _scheduleDaily(TimeInterval(times[i], 10)), // Schedule at specified hours
+          _scheduleDaily(TimeInterval(times[i], 00)), // Schedule at specified hours
           await NotificationDetails(
           android: AndroidNotificationDetails(
           'water',

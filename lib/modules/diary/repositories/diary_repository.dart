@@ -299,22 +299,29 @@ class DiaryRepository extends BaseRepository {
             .firstWhere((element) => element.date == key)
             .water = dayDetailsToSend.data!.water!;
       }
+      print("aaaa");
       if (dayDetailsToSend.data!.dayWorkouts != null) {
-        if(dayDetailsToSend.data!.dayWorkouts!.workoutType!=null) {
-
-          dayDetailsToSend.data!.dayWorkouts!.workoutType= dayDetailsToSend.data?.workouts?.last.title??'';
-          diarySendList
-              .firstWhere((element) => element.date == key)
-              .workout =
-          dayDetailsToSend.data!.workouts?.firstWhere((wItem) =>
-          wItem.title ==
-              dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
-        }
+        // if(dayDetailsToSend.data!.dayWorkouts!.workoutType!=null) {
+        //
+        //   if(dayDetailsToSend.data?.workouts!=null) {
+        //     if(dayDetailsToSend.data!.workouts!.isNotEmpty) {
+        //       dayDetailsToSend.data!.dayWorkouts!.workoutType =
+        //           dayDetailsToSend.data?.workouts?.last.title ?? '';
+        //       diarySendList
+        //           .firstWhere((element) => element.date == key)
+        //           .workout =
+        //       dayDetailsToSend.data!.workouts?.firstWhere((wItem) =>
+        //       wItem.title ==
+        //           dayDetailsToSend.data!.dayWorkouts!.workoutType).id!;
+        //     }
+        //   }
+        // }
         diarySendList
             .firstWhere((element) => element.date == key)
             .workoutDesc = dayDetailsToSend.data!.dayWorkouts == null
             ? " "
             : dayDetailsToSend.data!.dayWorkouts!.workoutDesc!;
+
         diarySendList
             .firstWhere((element) => element.date == key)
             .clinicDesc = dayDetailsToSend.data!.dayClinicNote == null
@@ -393,9 +400,7 @@ class DiaryRepository extends BaseRepository {
   }
 
   FormData _prepareFormData(DiaryEntry entry) {
-    print('clinic_desc');
-    print(entry.workoutDesc);
-    print(entry.clinicDesc);
+
     FormData formData = FormData.fromMap({
       'date': entry.date,
       'water': entry.water,
