@@ -86,7 +86,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     : ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: homeCubit.messagesResponse.data!.length,
+                    itemCount: homeCubit.messagesResponse.data?.length??0,
                     itemBuilder: (context, index) {
                       return messageRow(homeCubit.messagesResponse.data![index], index);
                     })),
