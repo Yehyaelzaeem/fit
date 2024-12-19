@@ -72,9 +72,7 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _willPopCallback,
-      child: Scaffold(
+    return Scaffold(
         body: BlocConsumer<HomeCubit, HomeStates>(
           listener: (context, state) {
             if (state is HomePageFailureState) {
@@ -138,10 +136,8 @@ class _NotificationDetailsViewState extends State<NotificationDetailsView> {
                       data: """${homeCubit.messageDetails.data!.message}""",
                     ),
                   ),
-
           ],
         ),),
-      ),
-    );
+      );
   }
 }

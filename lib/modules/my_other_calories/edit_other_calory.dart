@@ -76,6 +76,7 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
     title = widget.proteins.title;
     calorie_per_unit = "${widget.proteins.calories}";
     unitName = "${widget.proteins.qty}";
+    unit_name = "${widget.proteins.qty}";
 
     unitID = 1000000002130;
     getUnits();
@@ -125,7 +126,7 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
                   value: '${widget.proteins.title}',
                   hint: 'Title',
                   radius: 12,
-                  type: TextInputType.emailAddress,
+                  type: TextInputType.text,
                   updateFunc: (text) => setState(() => title = text),
                   validateFunc: (text) {
                     if (text.toString().isEmpty) {
@@ -253,13 +254,28 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
                         },
                       ),
                     ),
-              kButtonDefault(
+              BlocConsumer<OtherCaloriesCubit, OtherCaloriesStates>(
+                listener: (context, state) {
+                  if (state is OtherCaloriesError) {
+                    Alerts.showToast(state.message);
+                  }
+
+                },
+                builder: (context, state) => state is OtherCaloriesLoading
+                    ? SizedBox(
+                  height: 150,
+                      child: CircularLoadingWidget(
+                                        white: false,
+
+                                      ),
+                    )
+                    :kButtonDefault(
                 '  Save  ',
                 marginH: MediaQuery.of(context).size.width / 4.5,
                 paddingV: 0,
                 func: () {
                   if (!key.currentState!.validate()) {
-                    print("Ererer");
+                    print("Error");
                     return;
                   } else {
                     addItem();
@@ -268,7 +284,7 @@ class _EditNewCalorieState extends State<EditNewCalorie> {
                 },
                 shadow: true,
                 paddingH: 30,
-              ),
+              ),),
             ],
           ),
         );}),

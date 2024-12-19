@@ -33,7 +33,7 @@ class OtherCaloriesCubit  extends Cubit<OtherCaloriesStates> {
     result.fold(
           (failure) {
         // Handle failure case, emit failure state
-        emit(DiaryError("Failed to add other calories."));
+        emit(OtherCaloriesError("Failed to add other calories."));
       },
           (response) {
         // Handle success case, emit success state
@@ -68,7 +68,7 @@ class OtherCaloriesCubit  extends Cubit<OtherCaloriesStates> {
     result.fold(
           (failure) {
         // Handle failure case, emit failure state
-        emit(DiaryError("Failed to update other calories."));
+        emit(OtherCaloriesError("Failed to update other calories."));
       },
           (response) {
         // Handle success case, emit success state

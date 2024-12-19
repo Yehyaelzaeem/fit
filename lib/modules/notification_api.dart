@@ -77,10 +77,11 @@ class NotificationApi {
 
   static Future<void> scheduleDailyNotifications() async {
     await _notifications.cancelAll();
-    final times = [ 11, 14, 17, 20 ]; // Hours for 11 AM, 2 PM, 5 PM, 8 PM
+    final times = [11, 14, 17, 20 ]; // Hours for 11 AM, 2 PM, 5 PM, 8 PM
 
     for (int i = 0; i < times.length; i++) {
       await Future.delayed(Duration(seconds: 1)).then((value) async{
+        print("aaaa$i");
         _notifications.zonedSchedule(
           i+6, // Ensure each notification has a unique ID
           '💧 Water 💧',
@@ -93,13 +94,13 @@ class NotificationApi {
             icon: '@drawable/ic_notification', // Custom icon
             priority: Priority.max,
           importance: Importance.max,
-          largeIcon: const DrawableResourceAndroidBitmap('@drawable/applogo'),
+          largeIcon: const DrawableResourceAndroidBitmap('@drawable/ic_notification'),
         ),
         iOS: DarwinNotificationDetails(),
         ),
         payload: 'water_notification',
-        androidAllowWhileIdle: true,
-        uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, // Use the new parameter
+          uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
         matchDateTimeComponents: DateTimeComponents.time,
         );
       });

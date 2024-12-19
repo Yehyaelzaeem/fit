@@ -12,8 +12,8 @@ class DiarySuccess extends OtherCaloriesStates {
   DiarySuccess(this.message);
 }
 
-class DiaryError extends OtherCaloriesStates {
+class OtherCaloriesError extends OtherCaloriesStates {
   final String message;
 
-  DiaryError(this.message);
+  OtherCaloriesError(this.message);
 }

@@ -36,7 +36,7 @@ class OtherCaloriesRepository extends BaseRepository {
             "title": title,
             "calorie_per_unit": calPerUnit,
             "unit": unit,
-            "unit_qty": unitQuantity,
+            "unit_qty": unitQuantity??1,
             "unit_name": unitName,
             "type": type,
           });
@@ -90,8 +90,8 @@ class OtherCaloriesRepository extends BaseRepository {
         FormData body = FormData.fromMap({
           "title": title,
           "calorie_per_unit": calPerUnit,
-          "unit": unit,
-          "unit_qty": unitQuantity,
+          "unit": 0,
+          "unit_qty": unitQuantity??1,
           "unit_name": unitName,
           "type": type,
         });

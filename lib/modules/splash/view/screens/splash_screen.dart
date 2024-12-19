@@ -3,11 +3,13 @@ import 'dart:async';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:permission_handler/permission_handler.dart' as permission;
 
 import '../../../../config/navigation/navigation_services.dart';
 import '../../../../config/navigation/routes.dart';
 import '../../../../core/resources/resources.dart';
+import '../../../../main.dart';
 import '../../../auth/cubit/auth_cubit/auth_cubit.dart';
 import '../../../notification_api.dart';
 import '../../../profile/cubits/profile_cubit.dart';
@@ -68,8 +70,24 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  initLocalNotification() {
-    NotificationApi.init(isScheduled: true);
+  initLocalNotification() async{
+    await permission.Permission.notification.isDenied.then((value) {
+      if (value) {
+        permission.Permission.notification.request();
+      }
+    });
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestExactAlarmsPermission();
+    // flutterLocalNotificationsPlugin
+    //     .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+    //     ?.requestNotificationsPermission();
+
+    getNotificationPermission();
+
+    await NotificationApi.init(isScheduled: true);
 
 
     NotificationApi.scheduleDailyNotifications();

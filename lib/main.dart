@@ -44,31 +44,22 @@ void main() async {
   tz.initializeTimeZones();
   final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
   tz.setLocalLocation(tz.getLocation(currentTimeZone));
-  // debugPaintSizeEnabled = false; // Show layout gridlines
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-  flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.requestNotificationsPermission();
-  getNotificationPermission();
+
 
   await di.init();
   Bloc.observer = MyBlocObserver();
-  await Permission.notification.isDenied.then((value) {
-    if (value) {
-      Permission.notification.request();
-    }
-  });
 
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-  await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  int _orderID;
-  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
-    _orderID = ((notificationAppLaunchDetails!.notificationResponse!.payload != null && notificationAppLaunchDetails.notificationResponse!.payload!.isNotEmpty)
-        ? int.parse(notificationAppLaunchDetails.notificationResponse!.payload!)
-        : null)!;
-  }
+  // debugPaintSizeEnabled = false; // Show layout gridlines
+
+
+  // final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+  // await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  // int _orderID;
+  // if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+  //   _orderID = ((notificationAppLaunchDetails!.notificationResponse!.payload != null && notificationAppLaunchDetails.notificationResponse!.payload!.isNotEmpty)
+  //       ? int.parse(notificationAppLaunchDetails.notificationResponse!.payload!)
+  //       : null)!;
+  // }
   // await MyNotification.initialize(flutterLocalNotificationsPlugin);
   // FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 

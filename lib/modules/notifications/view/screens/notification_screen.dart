@@ -110,7 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Widget messageRow(Data element, int index) {
     return InkWell(
       onTap: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => NotificationDetailsView(

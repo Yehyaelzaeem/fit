@@ -841,11 +841,11 @@ class _AnimatedPercentIndicatorState extends State<AnimatedPercentIndicator> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: LinearPercentIndicator(
-        animation: false,
+        animation: true,
         lineHeight: 20.0,
         animationDuration: 500, // Animation duration
         percent: widget.percent, // Use current percent
-        curve: Curves.linear,
+        curve: Curves.linearToEaseOut,
         barRadius: const Radius.circular(24.0),
         progressColor: widget.progressColor,
         backgroundColor: Colors.grey.shade300,
