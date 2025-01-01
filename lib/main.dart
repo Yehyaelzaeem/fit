@@ -41,9 +41,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  tz.initializeTimeZones();
-  final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
-  tz.setLocalLocation(tz.getLocation(currentTimeZone));
+  // tz.initializeTimeZones();
+  // final String currentTimeZone = await FlutterNativeTimezone.getLocalTimezone();
+  // tz.setLocalLocation(tz.getLocation(currentTimeZone));
 
 
   await di.init();

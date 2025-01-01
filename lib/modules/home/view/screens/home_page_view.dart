@@ -93,9 +93,11 @@ class _HomePageViewState extends State<HomePageView> {
           }
 
         },
-        builder: (context, state) => state is HomePageLoadingState
-            ? CircularLoadingWidget()
-        : Container(
+        builder: (context, state) =>
+        // state is HomePageLoadingState
+        //     ? CircularLoadingWidget()
+        // :
+        Container(
           color: AppColors.offWhite,
           child: ListView(
               children: [
@@ -265,7 +267,7 @@ class _HomePageViewState extends State<HomePageView> {
                 backgroundColor: AppColors.white,
                 collapsedBackgroundColor: AppColors.white,
                 title: CustomText(
-          '${homeCubit.homeResponse!.data!.services![pageIndex].items![serviceIndex].title}',
+          '${homeCubit.homeResponse?.data?.services?[pageIndex].items?[serviceIndex].title}',
             fontSize: AppSize.s16,
             fontWeight: FontWeightManager.medium,
                 ),
@@ -275,7 +277,7 @@ class _HomePageViewState extends State<HomePageView> {
               padding: EdgeInsets.all(8),
               // color: Colors.grey[300],
               width: double.infinity,
-              child: kTextbody('${homeCubit.homeResponse!.data!.services![pageIndex].items![serviceIndex].text}', align: TextAlign.start, size: 15),
+              child: kTextbody('${homeCubit.homeResponse?.data?.services?[pageIndex].items?[serviceIndex].text}', align: TextAlign.start, size: 15),
             ),
             homeCubit.homeResponse!.data!.services![pageIndex].items![serviceIndex].cover!.type == "image"
                 ? CachedNetworkImage(

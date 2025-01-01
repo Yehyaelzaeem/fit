@@ -222,135 +222,138 @@ class _HomeAppbarState extends State<HomeAppbar> {
                     )
                   ],
                 )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    widget.type == null
-                        ? GestureDetector(
-                            onTap: () {
-                              if (widget.onBack == null) {
-                                Navigator.pop(context);
-                              } else {
-                                widget.fromInvoice == true
-                                    ? NavigationService.pushReplacement(context,Routes.myPackagesView)
-                                    : NavigationService.pushReplacementAll(context,Routes.homeScreen);
-                                BlocProvider.of<HomeCubit>(context).currentIndex.value = 0;
-                              }
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 6),
-                              padding: EdgeInsets.all(4),
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                size: 30,
-                                color: Colors.black87,
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              // Scaffold.of(context).openDrawer();
-                              NavigationService.push(context, Routes.homeDrawer);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                AppIcons.drawerIcon,
-                              ),
-                            ),
-                          ),
-                    SizedBox(
-                      width: AppSize.s24,
-                    ),
-                    SvgPicture.asset(
-                      AppImages.logoAppbar,
-                      height: 50,
-                    ),
+              :
+         FittedBox(
+           child:  Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
+               widget.type == null
+                   ? GestureDetector(
+                 onTap: () {
+                   if (widget.onBack == null) {
+                     Navigator.pop(context);
+                   } else {
+                     widget.fromInvoice == true
+                         ? NavigationService.pushReplacement(context,Routes.myPackagesView)
+                         : NavigationService.pushReplacementAll(context,Routes.homeScreen);
+                     BlocProvider.of<HomeCubit>(context).currentIndex.value = 0;
+                   }
+                 },
+                 child: Container(
+                   margin: EdgeInsets.symmetric(horizontal: 6),
+                   padding: EdgeInsets.all(4),
+                   child: Icon(
+                     Icons.arrow_back_ios,
+                     size: 30,
+                     color: Colors.black87,
+                   ),
+                 ),
+               )
+                   : GestureDetector(
+                 onTap: () {
+                   // Scaffold.of(context).openDrawer();
+                   NavigationService.push(context, Routes.homeDrawer);
+                 },
+                 child: Container(
+                   padding: const EdgeInsets.all(8.0),
+                   child: SvgPicture.asset(
+                     AppIcons.drawerIcon,
+                   ),
+                 ),
+               ),
+               SizedBox(
+                 width: AppSize.s24,
+               ),
+               SvgPicture.asset(
+                 AppImages.logoAppbar,
+                 height: 50,
+               ),
 
-                    Row(
-                      children: [
-                        currentUser?.data == null
-                            ? SizedBox(
-                                width: AppSize.s48,
-                              )
-                            : Container(
-                          width: AppSize.s48,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    newMessage = 0;
-                                    setState(() {});
-                                    NavigationService.push(context,Routes.notificationScreen);
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(AppSize.s4),
-                                        child: SvgPicture.asset(
-                                          AppIcons.messages,
-                                          width: AppSize.s28,
-                                          color: AppColors.customBlack,
-                                        ),
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        right: 8,
-                                        child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(4.0),
-                                            child: Text(
-                                              widget.removeNotificationsCount
-                                                  ? "0"
-                                                  : "$newMessage",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: FontSize.s14),
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              color: Color(0xFFFF6466),
-                                              shape: BoxShape.circle),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                        HorizontalSpace(AppSize.s20),
+               Row(
+                 children: [
+                   currentUser?.data == null
+                       ? SizedBox(
+                     width: AppSize.s48,
+                   )
+                       : Container(
+                     width: AppSize.s48,
+                     child: GestureDetector(
+                       onTap: () {
+                         newMessage = 0;
+                         setState(() {});
+                         NavigationService.push(context,Routes.notificationScreen);
+                       },
+                       child: Stack(
+                         children: [
+                           Padding(
+                             padding: const EdgeInsets.all(AppSize.s4),
+                             child: SvgPicture.asset(
+                               AppIcons.messages,
+                               width: AppSize.s28,
+                               color: AppColors.customBlack,
+                             ),
+                           ),
+                           Positioned(
+                             top: 0,
+                             right: 8,
+                             child: Container(
+                               child: Padding(
+                                 padding: const EdgeInsets.all(4.0),
+                                 child: Text(
+                                   widget.removeNotificationsCount
+                                       ? "0"
+                                       : "$newMessage",
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: FontSize.s14),
+                                 ),
+                               ),
+                               decoration: BoxDecoration(
+                                   color: Color(0xFFFF6466),
+                                   shape: BoxShape.circle),
+                             ),
+                           )
+                         ],
+                       ),
+                     ),
+                   ),
+                   HorizontalSpace(AppSize.s20),
 
-                        currentUser?.data == null
-                            ? SizedBox(
-                                width: 40,
-                              )
-                            : GestureDetector(
-                                onTap: () {
-                                  FocusScope.of(context)
-                                      .requestFocus(FocusNode());
+                   currentUser?.data == null
+                       ? SizedBox(
+                     width: 40,
+                   )
+                       : GestureDetector(
+                     onTap: () {
+                       FocusScope.of(context)
+                           .requestFocus(FocusNode());
 
-                                  if (currentUser!=null)
-                                    NavigationService.push(context,Routes.profile);
-                                },
-                                child: Container(
-                                  width: 40,
-                                  height: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(200),
-                                    child: CachedNetworkImage(
-                                      imageUrl: "${currentUser!.data!.image}",
-                                      fit: BoxFit.cover,
-                                      placeholder: (ctx, url) {
-                                        return profileImageHolder();
-                                      },
-                                      errorWidget: (context, url, error) {
-                                        return profileImageHolder();
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    )
-                  ],
-                ),
+                       if (currentUser!=null)
+                         NavigationService.push(context,Routes.profile);
+                     },
+                     child: Container(
+                       width: 40,
+                       height: 40,
+                       child: ClipRRect(
+                         borderRadius: BorderRadius.circular(200),
+                         child: CachedNetworkImage(
+                           imageUrl: "${currentUser!.data!.image}",
+                           fit: BoxFit.cover,
+                           placeholder: (ctx, url) {
+                             return profileImageHolder();
+                           },
+                           errorWidget: (context, url, error) {
+                             return profileImageHolder();
+                           },
+                         ),
+                       ),
+                     ),
+                   ),
+                 ],
+               )
+             ],
+           ),
+         )
         ),
       ),
     );

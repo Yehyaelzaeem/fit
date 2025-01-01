@@ -54,7 +54,7 @@ class SessionCubit extends Cubit<SessionStates> {
       },
     );
   }
-
+  
   Future<void> fetchSessionDetails(int? id) async {
     emit(GetSessionDetailsLoadingState());
 

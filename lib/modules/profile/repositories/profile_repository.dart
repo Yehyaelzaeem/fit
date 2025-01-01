@@ -64,21 +64,21 @@ class ProfileRepository extends BaseRepository {
                   ur.data!.newMessages! > 0) {
                 shoNewMessage = false;
 
-                appDialog(
-                  context: NavigationService.navigationKey.currentState!.context,
-                  title: 'You have a new message from \n Dr/ Ramy Mansour',
-                  image: Icon(Icons.chat, size: 50, color: Colors.grey),
-                  barrierDismissible: false,
-                  cancelAction: null,
-                  confirmAction: () {
-                    canDismissNewMessageDialog = true;
-                    removeNotificationsCount = true;
-                    NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
-                    NavigationService.push(NavigationService.navigationKey.currentState!.context,Routes.notificationScreen);
-                  },
-                  cancelText: '',
-                  confirmText: 'Check it',
-                );
+                // appDialog(
+                //   context: NavigationService.navigationKey.currentState!.context,
+                //   title: 'You have a new message from \n Dr/ Ramy Mansour',
+                //   image: Icon(Icons.chat, size: 50, color: Colors.grey),
+                //   barrierDismissible: false,
+                //   cancelAction: null,
+                //   confirmAction: () {
+                //     canDismissNewMessageDialog = true;
+                //     removeNotificationsCount = true;
+                //     NavigationService.goBack(NavigationService.navigationKey.currentState!.context);
+                //     NavigationService.push(NavigationService.navigationKey.currentState!.context,Routes.notificationScreen);
+                //   },
+                //   cancelText: '',
+                //   confirmText: 'Check it',
+                // );
               }
             }
           }

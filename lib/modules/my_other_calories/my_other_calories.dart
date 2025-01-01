@@ -403,7 +403,7 @@ class _MyOtherCaloriesState extends State<MyOtherCalories> {
                 color: 'F00000'
             ));
             await BlocProvider.of<DiaryCubit>(context).saveDiaryLocally(BlocProvider.of<DiaryCubit>(context).dayDetailsResponse!,BlocProvider.of<DiaryCubit>(context).lastSelectedDate.value);
-
+            //My Meals
             await BlocProvider.of<DiaryCubit>(context).saveMyOtherCaloriesLocally(diaryCubit.otherCaloriesResponse);
           }
 

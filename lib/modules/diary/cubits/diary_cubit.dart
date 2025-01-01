@@ -133,10 +133,18 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   /// Start
   ///
-  onInit() async {
-    final connectivityStatus = await Connectivity().checkConnectivity();
+  ///
 
+  String isFirstLoading ='';
+  onInit() async {
+
+
+    final connectivityStatus = await Connectivity().checkConnectivity();
     if (connectivityStatus != ConnectivityResult.none) {
+      if(isFirstLoading==''){
+        isFirstLoading='true';
+        emit(DiaryCachingLoading());
+      }
       print("isOnInit$isOnInit");
       if (!isOnInit) {
         isOnInit = true;
@@ -154,11 +162,15 @@ class DiaryCubit extends Cubit<DiaryState> {
         await Future.delayed(Duration(seconds: 2));
         await _loadDiaryData();
         isOnInit = false;
+        isFirstLoading='false';
+        emit(DiaryCachingLoading());
       }
     }else{
       await _loadDiaryData();
     }
+
   }
+
 
 // Split initialization logic
   Future<void> _initializeAppData() async {
@@ -206,34 +218,36 @@ class DiaryCubit extends Cubit<DiaryState> {
 
 // Example function to handle diary data retrieval (getDiaryData)
   Future getDiaryData(String _date, bool isSending, {bool reset = true,bool refresh = true}) async {
-    print("Fetching diary for date: $_date");
-
-
-    // if (dayDetailsResponse?.data != null && isLoading.value) return;
-
     lastSelectedDate.value = _date;
     isLoading.value = true;
     emit(DiaryLoading());
 
-    // Fetch data from the repository
-    final result = await _diaryRepository.getDiaryView(_date, !isSending, false, true);
+    final result = await _diaryRepository.getDiaryViewCashing(_date, !isSending, false, true);
 
     result.fold(
             (failure) => emit(DiaryFailure(failure)),
             (value) {
           if (value.data != null) {
-            dayDetailsResponse = value;
 
+            dayDetailsResponse = value;
+                  print('sdfsfsdfsdf ${dayDetailsResponse?.toJson()}');
             clinicDesc = dayDetailsResponse?.data?.dayClinicNote ;
             workDesc = dayDetailsResponse?.data?.dayWorkouts?.workoutDesc;
             if(refresh)
             _handleSuccessfulDiaryData(reset);
           } else {
-            print("Error: no data returned.");
+            print("Error: no data returned. ${value.toJson()}");
             emit(DiaryFailure(Failure(500,'"No data available"')));
           }
         }
     );
+
+
+
+
+   await _diaryRepository.getDiaryViewOnline(_date, !isSending, false, true);
+
+
   }
 
 // Handle successful diary data retrieval
@@ -256,12 +270,11 @@ class DiaryCubit extends Cubit<DiaryState> {
 
 
   sendAndRefresh()async{
+
     isLoading.value = true;
     emit(DiaryLoading());
     await sendSavedDiaryDataByDay();
-
     await sendSavedSleepTimes();
-
     refreshDiaryDataLive(
         lastSelectedDate.value);
   }
@@ -366,9 +379,14 @@ class DiaryCubit extends Cubit<DiaryState> {
 
   void getDiaryDataRefreshResponse(String _date) async {
     if(chosenDay=='today'){
-      _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
+      // _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
+      _diaryRepository.getDiaryViewCashing(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
+      _diaryRepository.getDiaryViewOnline(dayDetailsResponse!.data!.days![1].date!.toString(),!isSending,false,true);
+
     }else{
-      _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
+      // _diaryRepository.getDiaryView(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
+      _diaryRepository.getDiaryViewCashing(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
+      _diaryRepository.getDiaryViewOnline(dayDetailsResponse!.data!.days![0].date!.toString(),!isSending,false,true);
     }
   }
 
@@ -416,8 +434,8 @@ class DiaryCubit extends Cubit<DiaryState> {
     emit(DiaryLoading());
 
 
-    final result = await _diaryRepository.getDiaryView(date, !isSending, false, false);
-
+    // final result = await _diaryRepository.getDiaryView(date, !isSending, false, false);
+    final result = await _diaryRepository.getDiaryViewCashing(date, !isSending, false, false);
     result.fold(
           (failure) => emit(DiaryFailure(failure)),
           (data) {
@@ -427,6 +445,8 @@ class DiaryCubit extends Cubit<DiaryState> {
         emit(DiarySuccess());
       },
     );
+    await _diaryRepository.getDiaryViewOnline(date, !isSending, false, false);
+
   }
 
   void _updateCalorieLists(DayDetailsResponse data) {
@@ -510,7 +530,8 @@ class DiaryCubit extends Cubit<DiaryState> {
     }
 
     // await checkDeletion();
-    final result = await _diaryRepository.getDiaryView(lastSelectedDate.value,true,false,true);
+    // final result = await _diaryRepository.getDiaryView(lastSelectedDate.value,true,false,true);
+    final result = await _diaryRepository.getDiaryViewCashing(lastSelectedDate.value,true,false,true);
 
     result.fold(
             (failure) => emit(DiaryFailure(failure)),
@@ -593,6 +614,7 @@ class DiaryCubit extends Cubit<DiaryState> {
       isLoading.value = false;
 
     });
+    await _diaryRepository.getDiaryViewOnline(lastSelectedDate.value,true,false,true);
 
 
   }
@@ -662,17 +684,19 @@ class DiaryCubit extends Cubit<DiaryState> {
     final result = await Connectivity().checkConnectivity();
     final selectedDate = getDateForDay(day);
     lastSelectedDate.value = selectedDate;
-    if (result != ConnectivityResult.none) {
-
-      // await getDiaryData(selectedDate, isSending);
-      // await sendSavedSleepTimes();
-      // await sendSavedDiaryDataByDay();
-      onInit();
-      // await refreshDiaryDataLive(selectedDate);
-    } else {
-      await getDiaryData(selectedDate, false);
-      emit(DiaryLoaded());
-    }
+    // if (result != ConnectivityResult.none) {
+    //
+    //   // await getDiaryData(selectedDate, isSending);
+    //   // await sendSavedSleepTimes();
+    //   // await sendSavedDiaryDataByDay();
+    //   onInit();
+    //   // await refreshDiaryDataLive(selectedDate);
+    // } else {
+    //   await getDiaryData(selectedDate, false);
+    //   emit(DiaryLoaded());
+    // }
+    await getDiaryData(selectedDate, false);
+    emit(DiaryLoaded());
   }
 
   // Future<void> switchDay(String day) async {
@@ -1063,8 +1087,11 @@ class DiaryCubit extends Cubit<DiaryState> {
         dayDetailsResponse!.data!.fats!.caloriesDetails = detailsList;
         await calculateFats();
     }
+
+
       // Save data locally and refresh the diary
       await _diaryRepository.saveDairyLocally(dayDetailsResponse!, lastSelectedDate.value);
+
       await _diaryRepository.saveDairyToSendLocally(dayDetailsResponse!, lastSelectedDate.value);
         // await refreshDiaryData(lastSelectedDate.value, type);
 

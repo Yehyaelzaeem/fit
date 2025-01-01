@@ -85,6 +85,7 @@ class _DiaryViewState extends State<DiaryView> {
 
   @override
   Widget build(BuildContext context) {
+    final cubit =context.read<DiaryCubit>();
     return Scaffold(
       backgroundColor: AppColors.offWhite,
         // drawer: Obx(() => Container(
@@ -104,9 +105,10 @@ class _DiaryViewState extends State<DiaryView> {
             builder: (context, state) {
           if (!authCubit.isAuthed) return MainUnAuth();
           if (diaryCubit.showLoader.value || diaryCubit.isLoading.value)
-            if(state is DiaryLoading)
+            if(cubit.isFirstLoading=='true')
             return Container(
-                child: CircularLoadingWidget(), color: Colors.white);
+                child: CircularLoadingWidget(),
+                color: Colors.white);
           if (!diaryCubit.isLoading.value &&
               diaryCubit.noSessions.value == true)
             Padding(

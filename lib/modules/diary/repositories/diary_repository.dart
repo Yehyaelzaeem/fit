@@ -26,8 +26,99 @@ class DiaryRepository extends BaseRepository {
 
   DiaryRepository(this._apiClient, this._cacheClient, super.networkInfo);
 
+  Future<Either<Failure, DayDetailsResponse>> getDiadryView(String date, bool isNotSending, bool notSave, bool isLive) async {
+    return super.call<DayDetailsResponse>(
+      httpRequest: () async {
+        final result = await Connectivity().checkConnectivity();
+        final DayDetailsResponse? cachedData = await readDairyTempLocally();
+        final DayDetailsResponse? offlineData = await _getCachedDiaryData(date, cachedData);
+        if (offlineData != null) {
+          return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+        }
 
-  Future<Either<Failure, DayDetailsResponse>> getDiaryView(String date, bool isNotSending, bool notSave, bool isLive) async {
+        if (offlineData != null) {
+          // عرض البيانات من الكاش مباشرة
+          return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+        }
+
+        // If the device is connected and the data is live, make an API call
+        if (result != ConnectivityResult.none && isNotSending && isLive) {
+          final response = await _apiClient.get(url: "${EndPoints.caloriesDayDetails}?date=$date", requestBody: {});
+
+          // Save locally if applicable
+          if (!notSave) {
+            await saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
+          }
+          await saveDairyLocally(DayDetailsResponse.fromJson(response.data),date);
+
+          return response; // Returning API response
+        } else {
+          // If offline or data not live, return cached data
+
+
+          final DayDetailsResponse? cachedData = await readDairyTempLocally();
+
+          DayDetailsResponse? offlineData=  await _getCachedDiaryData(date,cachedData);
+
+
+          if (offlineData != null) {
+            return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+          }
+
+          return Response(data: {}, statusCode: 500, requestOptions: RequestOptions(path: 'diary'));
+        }
+      },
+      successReturn: (data) => DayDetailsResponse.fromJson(data),
+    );
+  }
+
+  Future<Either<Failure, DayDetailsResponse>> getDiaryViewCashing(String date, bool isNotSending, bool notSave, bool isLive) async {
+    return super.call<DayDetailsResponse>(
+      httpRequest: () async {
+        final result = await Connectivity().checkConnectivity();
+        final DayDetailsResponse? cachedData = await readDairyTempLocally();
+        final DayDetailsResponse? offlineData = await _getCachedDiaryData(date, cachedData);
+        if (offlineData != null) {
+          return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+        }
+
+        if (offlineData != null) {
+          // عرض البيانات من الكاش مباشرة
+          return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+        }
+
+        // If the device is connected and the data is live, make an API call
+        if (result != ConnectivityResult.none && isNotSending && isLive) {
+          final response = await _apiClient.get(url: "${EndPoints.caloriesDayDetails}?date=$date", requestBody: {});
+
+          // Save locally if applicable
+          if (!notSave) {
+            await saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
+          }
+          await saveDairyLocally(DayDetailsResponse.fromJson(response.data),date);
+
+          return response; // Returning API response
+        } else {
+          // If offline or data not live, return cached data
+
+
+          final DayDetailsResponse? cachedData = await readDairyTempLocally();
+
+          DayDetailsResponse? offlineData=  await _getCachedDiaryData(date,cachedData);
+
+
+          if (offlineData != null) {
+            return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+          }
+
+          return Response(data: {}, statusCode: 500, requestOptions: RequestOptions(path: 'diary'));
+        }
+      },
+      successReturn: (data) => DayDetailsResponse.fromJson(data),
+    );
+  }
+
+  Future<Either<Failure, DayDetailsResponse>> getDiaryViewOnline(String date, bool isNotSending, bool notSave, bool isLive) async {
     return super.call<DayDetailsResponse>(
       httpRequest: () async {
         final result = await Connectivity().checkConnectivity();
@@ -49,7 +140,7 @@ class DiaryRepository extends BaseRepository {
 
           final DayDetailsResponse? cachedData = await readDairyTempLocally();
 
-           DayDetailsResponse? offlineData=  await _getCachedDiaryData(date,cachedData);
+          DayDetailsResponse? offlineData=  await _getCachedDiaryData(date,cachedData);
 
 
           if (offlineData != null) {
@@ -62,6 +153,47 @@ class DiaryRepository extends BaseRepository {
       successReturn: (data) => DayDetailsResponse.fromJson(data),
     );
   }
+
+  // Future<Either<Failure, DayDetailsResponse>> getDiaryView(String date, bool isNotSending, bool notSave, bool isLive) async {
+  //   return super.call<DayDetailsResponse>(
+  //     httpRequest: () async {
+  //       // أولًا: جلب البيانات من الكاش دائمًا
+  //       final DayDetailsResponse? cachedData = await readDairyTempLocally();
+  //       final DayDetailsResponse? offlineData = await _getCachedDiaryData(date, cachedData);
+  //
+  //       if (offlineData != null) {
+  //         // عرض البيانات من الكاش مباشرة
+  //         return Response(data: offlineData.toJson(), statusCode: 200, requestOptions: RequestOptions(path: 'diary'));
+  //       }
+  //
+  //       // ثانيًا: التحقق من الاتصال بالإنترنت
+  //       final result = await Connectivity().checkConnectivity();
+  //
+  //       if (result != ConnectivityResult.none && isLive && isNotSending) {
+  //         try {
+  //           // جلب البيانات من السيرفر
+  //           final response = await _apiClient.get(url: "${EndPoints.caloriesDayDetails}?date=$date", requestBody: {});
+  //
+  //           // حفظ البيانات الجديدة في الكاش
+  //           if (!notSave) {
+  //             await saveDairyTempLocally(DayDetailsResponse.fromJson(response.data));
+  //           }
+  //           await saveDairyLocally(DayDetailsResponse.fromJson(response.data), date);
+  //
+  //           // لا تحتاج إلى إعادة العرض هنا لأن البيانات في الكاش بالفعل
+  //           return response; // إرسال البيانات إذا كان هذا الطلب يعتمد على الإرجاع.
+  //         } catch (e) {
+  //           // في حالة وجود خطأ، أعد الخطأ أو احتفظ بالبيانات الحالية
+  //           return Response(data: {}, statusCode: 500, requestOptions: RequestOptions(path: 'diary'));
+  //         }
+  //       }
+  //
+  //       // إذا لم يكن هناك اتصال ولا كاش
+  //       return Response(data: {}, statusCode: 500, requestOptions: RequestOptions(path: 'diary'));
+  //     },
+  //     successReturn: (data) => DayDetailsResponse.fromJson(data),
+  //   );
+  // }
 
   Future<void> saveDairyLocally(DayDetailsResponse dayDetailsResponse, String date) async {
     Map<String, dynamic> existingData = await readDairyLocally();
@@ -214,7 +346,8 @@ class DiaryRepository extends BaseRepository {
 
       Map<String, dynamic> existingData = await readDairyToSendLocally();
 
-      final eitherResult = await getDiaryView(getEgyptTime().toString().substring(0, 10), true, true, true);
+      // final eitherResult = await getDiaryView(getEgyptTime().toString().substring(0, 10), true, true, true);
+      final eitherResult = await getDiaryViewCashing(getEgyptTime().toString().substring(0, 10), true, true, true);
 
       eitherResult.fold(
               (failure) {
@@ -245,6 +378,8 @@ class DiaryRepository extends BaseRepository {
             await _cacheClient.delete(StorageKeys.DAIRY_TO_SEND);
           }
       );
+      await getDiaryViewOnline(getEgyptTime().toString().substring(0, 10), true, true, true);
+
     }
   }
 

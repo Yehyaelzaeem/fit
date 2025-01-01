@@ -64,9 +64,9 @@ class _UsualViewState extends State<UsualView> {
             }
           },
           builder: (context, state){
-            if (state is UsualLoading || usualCubit.deleteLoading.value)
-              return Container(child: CircularLoadingWidget(), color: Colors.white);
-            MealsLoading;
+            // if (state is UsualLoading || usualCubit.deleteLoading.value)
+            //   return Container(child: CircularLoadingWidget(), color: Colors.white);
+            // MealsLoading;
             if (usualCubit.isLoading.value)
               return Container(child: CircularLoadingWidget(), color: Colors.white);
             if (usualCubit.addLoading.value)

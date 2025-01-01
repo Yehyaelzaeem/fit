@@ -90,7 +90,7 @@ class TimeSleepCubit extends Cubit<TimeSleepStates> {
     // final sleepingStatus = await diaryCubit.getSleepTimeStatus(sleepTimeFrom, sleepTimeTo);
     // diaryCubit.updateSleepingData(sleepTimeFrom, sleepTimeTo, sleepingStatus);
     SleepingStatus? sleepingStatus=await getSleepTimeName(calculateTimeDifference(sleepTimeFrom,sleepTimeTo));
-    diaryCubit.dayDetailsResponse!.data?.sleepingTime = SleepingTime(
+    diaryCubit.dayDetailsResponse?.data?.sleepingTime = SleepingTime(
         sleepingFrom: sleepTimeFrom,
         sleepingTo: sleepTimeTo,
         sleepingDuration: calculateTimeDifference(sleepTimeFrom,sleepTimeTo),

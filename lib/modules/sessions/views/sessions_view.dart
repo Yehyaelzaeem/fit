@@ -142,9 +142,11 @@ class _SessionsViewState extends State<SessionsView> {
 
                     }
                     },
-                    builder: (context, state) => state is GetSessionLoadingState
-                    ? Container(child: CircularLoadingWidget())
-                    : ListView(
+                    builder: (context, state) =>
+                    // state is GetSessionLoadingState
+                    // ? Container(child: CircularLoadingWidget())
+                    // :
+                    ListView(
                         children: [
                           SizedBox(height: 6),
 
@@ -265,7 +267,7 @@ class _SessionsViewState extends State<SessionsView> {
                                   fontSize: FontSize.s20,
                                 ),
                               ),
-                              sessionCubit.sessionResponse!.data!.isEmpty
+                              (sessionCubit.sessionResponse?.data?.isEmpty??true)
                                   ? Padding(
                                       padding: const EdgeInsets.symmetric(horizontal:AppSize.s16,vertical: AppSize.s8),
                                       child: Center(
@@ -367,9 +369,7 @@ class _SessionsViewState extends State<SessionsView> {
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (context) => SessionDetails(
-                                                                            id: sessionCubit.sessionResponse
-                                                                            !.data![i]
-                                                                                .id)));
+                                                                            id: sessionCubit.sessionResponse!.data![i].id)));
                                                               },
                                                               child: Container(
                                                                   width: 38,
@@ -394,8 +394,7 @@ class _SessionsViewState extends State<SessionsView> {
                                                                   ? Colors.grey
                                                                   : kColorPrimary,
                                                               func: () {
-                                                            if (sessionCubit.sessionResponse
-                                                                    !.data![i]
+                                                            if (sessionCubit.sessionResponse!.data![i]
                                                                     .status ==
                                                                 "Pending") {
                                                               print(

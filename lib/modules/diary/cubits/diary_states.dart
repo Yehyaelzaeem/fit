@@ -6,6 +6,7 @@ abstract class DiaryState {}
 class DiaryInitial extends DiaryState {}
 
 class DiaryLoading extends DiaryState {}
+class DiaryCachingLoading extends DiaryState {}
 
 class DiarySuccess extends DiaryState {
   DiarySuccess();
